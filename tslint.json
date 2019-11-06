@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "./tslint-dotsub.json"
+  ],
+  "linterOptions": {
+    "exclude": [ "src/styles.css" ]
+  }
+}

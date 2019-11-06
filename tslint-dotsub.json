@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "file-name-casing": [true, { "index.tsx": "ignore", ".tsx": "pascal-case", ".ts": "camel-case" }],
+    "indent": [true, "tabs", 4]
+  }
+}

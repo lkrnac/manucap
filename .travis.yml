@@ -2,3 +2,9 @@ language: node_js
 node_js:
   - 9
   - 8
+
+script:
+  - npm run-script build lint
+
+after_success:
+  - ./scripts/post-build.sh
