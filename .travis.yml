@@ -8,7 +8,8 @@ notifications:
     secure: H+pqyBxWL5SgSLclj5MBewEbhXaeRmvVT1xrAsunMfxIE0BBIa/XnuHFBqoRkAADf67Nf412EF5gAfV+TrJaKcxEwai3a0unVJn8dQaPgEymat0immf+jXzWY5sIW/zWZJ6qCofVz2D4BBfddunOsW9ErzrejQzlwLDfHzVdgo71QpAVNtCLaKcyl9E+N7pKrZIV6OA6wUBYbs7zRh1875RF3beLlmTYYGQSIslcWA+79R+kjuvZYJzWwlQpyFWo9dXUukv3DlOwV5aKDhQOJWF4z16ad/Ucd0xcOyLIZ7ozR3IvDY6Y+ztL03my4ZS9D6dmMPTZMmioS+LlpwKO1npacbPoz4rEk9lnfy5GXoa9jIKg7hGQQLEa/+3KbRjet0VNL8vrSESKHGTdR0Z9RAN2ANuM8dVhER0iXUCIQo/aMvchB1+2uAgMU5qAF8TwF3GzHoFBR87VdNg98+h41mujkqGA2/LbiEYzPEYP8m5+hgexbEX6StNrIi3O4hoSIuaeKkkspqdDh/3q7YW5v2P0n7xJCI0t7NOBGAdv7lf+I1qGOfvFDNRJSYxBKf/b7zIKbUSKjG/ZfpQFeej1su8af9i1OZKu1mpeJ/4Z7THYIFCngXceraZpfrrnTppLGaBPqEIXX85JGOciqH+VhnqFkPixhg7BbtHutVcjFHA=
 
 script:
-  - npm run-script build lint
+  - npm run-script build
 
 after_success:
+  - npm run-script lint
   - ./scripts/post-build.sh
