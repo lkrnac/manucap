@@ -9,6 +9,7 @@ notifications:
 
 script:
   - npm run-script build
+  - npm run-script test
 
 after_success:
   - npm run-script lint
