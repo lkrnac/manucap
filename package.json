@@ -27,6 +27,13 @@
     "react": "^15.0.0 || ^16.0.0",
     "react-dom": "^15.0.0 || ^16.0.0"
   },
+  "dependencies": {
+    "mousetrap": "1.6.3",
+    "video.js": "5.20.4",
+    "videojs-dotsub-captions": "0.1.1",
+    "videojs-dotsub-selector": "0.2.1",
+    "videojs-watermark": "1.0.1"
+  },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
     "@types/jest": "^23.1.5",
