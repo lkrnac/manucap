@@ -39,30 +39,36 @@ enzyme.configure({ adapter: new Adapter() });
 //     };
 // };
 
-test("VideoPlayer renders correctly with viewportHeightPerc prop", () => {
-    // GIVEN
-    const expectedVideoView = enzyme.mount(
-        <div>
-            <VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url" />
-        </div>
-    );
+describe("VideoPlayer", () => {
+    it("renders", () => {
+        // GIVEN
+        // noinspection HtmlUnknownTarget Dummy URL is OK for testing
+        const expectedVideoView = enzyme.mount(
+            <video
+                style={{ margin: "auto" }}
+                className="vjs-tech"
+                id="testvpid_html5_api"
+                poster="dummyPosterUrl"
+                preload="none"
+                data-setup="{}"
+                tabIndex={-1}
+            />
+        );
 
-    // WHEN
-    const actualVideoView = enzyme.mount(
-        <div>
+        // WHEN
+        const actualVideoView = enzyme.mount(
             <VideoPlayer
                 id="testvpid"
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 viewportHeightPerc={0.5}
             />
-        </div>
-    );
+        );
 
-    // THEN
-    expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
-        .to.deep.equal(removeVideoPlayerDynamicValue(expectedVideoView.html()));
-});
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
+            .to.deep.equal(removeVideoPlayerDynamicValue(expectedVideoView.html()));
+    });
 
     // it("calls captions trigger on videojs player if mediaId not present when captions change", () => {
     //     // GIVEN
@@ -155,4 +161,4 @@ test("VideoPlayer renders correctly with viewportHeightPerc prop", () => {
     //     // THEN
     //     assert.deepEqual(videoJsFake.getCall(0).args[1].playbackRates, [ 0.5, 0.75, 1, 1.25 ]);
     // });
-// });
+});

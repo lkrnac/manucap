@@ -1,7 +1,5 @@
 import * as Mousetrap from "mousetrap";
 import * as React from "react";
-// import * as videojs from "video.js";
-// import { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import * as videojs from "video.js";
 import "videojs-dotsub-captions";
 import "videojs-dotsub-selector";
@@ -30,9 +28,9 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer) => {
 
 export interface Props {
     id: string;
-    mediaId?: string;
     mp4: string;
     poster: string;
+    mediaId?: string;
     captions?: object[];
     language?: object;
     viewportHeightPerc?: number;
