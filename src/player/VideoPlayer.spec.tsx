@@ -8,7 +8,7 @@ import * as Adapter from "enzyme-adapter-react-16";
 // import * as proxyquire from "proxyquire";
 import * as React from "react";
 // import * as sinon from "sinon";
-import { removeVideoPlayerDynamicValue } from "../testUtils.spec";
+import { removeVideoPlayerDynamicValue } from "../testUtils";
 import VideoPlayer from "./VideoPlayer";
 
 enzyme.configure({ adapter: new Adapter() });
