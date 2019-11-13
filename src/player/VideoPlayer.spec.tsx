@@ -2,7 +2,7 @@
 import * as jsdomGlobal from "jsdom-global";
 jsdomGlobal();
 
-import { assert } from "chai";
+import { expect } from "chai";
 import * as enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 // import * as proxyquire from "proxyquire";
@@ -60,8 +60,8 @@ test("VideoPlayer renders correctly with viewportHeightPerc prop", () => {
     );
 
     // THEN
-    assert.deepEqual(removeVideoPlayerDynamicValue(actualVideoView.html()),
-        removeVideoPlayerDynamicValue(expectedVideoView.html()));
+    expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
+        .to.deep.equal(removeVideoPlayerDynamicValue(expectedVideoView.html()));
 });
 
     // it("calls captions trigger on videojs player if mediaId not present when captions change", () => {
