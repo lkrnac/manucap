@@ -33,7 +33,6 @@
     "@types/video.js": "7.3.2",
     "jsdom-global": "^3.0.2",
     "mousetrap": "1.6.3",
-    "ts-mock-imports": "^1.2.6",
     "video.js": "7.6.5",
     "videojs-dotsub-captions": "0.1.1",
     "videojs-dotsub-selector": "0.2.1",
