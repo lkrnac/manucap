@@ -4,6 +4,7 @@ import * as videojs from "video.js";
 import "videojs-dotsub-captions";
 import "videojs-dotsub-selector";
 import "videojs-watermark";
+import { getParentOffsetWidth } from "../htmlUtils";
 
 const SECOND = 1000;
 const WIDTH = 16;
@@ -85,7 +86,7 @@ export default class VideoPlayer extends React.Component<Props> {
         // this line is causing issues in FF (not dev edition)
         this._resizeVideoPlayer();
 
-        window.addEventListener("resize", this._resizeVideoPlayer);
+        window.addEventListener("resize", this._resizeVideoPlayer.bind(this));
         registerPlayerShortcuts(this);
     }
 
@@ -100,9 +101,9 @@ export default class VideoPlayer extends React.Component<Props> {
             this.player.poster(nextProps.poster);
         }
 
-        if (!this.props.mediaId) {
-            this.player.trigger("captions", nextProps.captions);
-        }
+        // if (!this.props.mediaId) {
+        //     this.player.trigger("captions", nextProps.captions);
+        // }
     }
 
     // ESLint rule is suppressed because it is React hook and doesn't need to use this
@@ -111,7 +112,7 @@ export default class VideoPlayer extends React.Component<Props> {
     }
 
     public componentWillUnmount() {
-        window.removeEventListener("resize", this._resizeVideoPlayer);
+        window.removeEventListener("resize", this._resizeVideoPlayer.bind(this));
         this.player.dispose();
     }
 
@@ -151,16 +152,11 @@ export default class VideoPlayer extends React.Component<Props> {
         );
     }
 
-    private _getVideoViewportHeight() {
-        return (Math.max(document.documentElement.clientHeight, window.innerHeight || 0) * this.viewportHeightPerc);
-    }
-
-    private _resizeVideoPlayer(dynVpHeight?: Event) {
+    private _resizeVideoPlayer() {
         const aspectRatio = WIDTH / HEIGHT;
-        // @ts-ignore TODO, try to refactor to remove this
-        const width = this.player.el().parentElement.offsetWidth;
+        const width = getParentOffsetWidth(this.player.el());
         const height = width / aspectRatio;
-        const vpHeight = (typeof dynVpHeight === "number" ? dynVpHeight : this._getVideoViewportHeight());
+        const vpHeight = (window.innerHeight || 0) * this.viewportHeightPerc;
         if (height < vpHeight) {
             this.player.width(width);
             this.player.height(height);

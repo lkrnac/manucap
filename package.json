@@ -28,8 +28,10 @@
     "react-dom": "^15.0.0 || ^16.0.0"
   },
   "dependencies": {
+    "@types/jest-each": "^24.3.0",
     "@types/mousetrap": "1.6.3",
     "@types/video.js": "7.3.2",
+    "jest-each": "^24.9.0",
     "mousetrap": "1.6.3",
     "video.js": "7.6.5",
     "videojs-dotsub-captions": "0.1.1",
@@ -37,10 +39,10 @@
     "videojs-watermark": "1.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.23",
     "@svgr/rollup": "^2.4.1",
     "@types/enzyme": "^3.10.3",
     "@types/enzyme-adapter-react-16": "^1.0.5",
-    "@types/jest": "^23.1.5",
     "@types/jsdom-global": "^3.0.1",
     "@types/react": "^16.3.13",
     "@types/react-dom": "^16.0.5",
