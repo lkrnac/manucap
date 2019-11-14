@@ -2,7 +2,6 @@
 import * as jsdomGlobal from "jsdom-global";
 jsdomGlobal();
 
-import { expect } from "chai";
 import * as enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
@@ -32,7 +31,7 @@ describe("VideoPlayer", () => {
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
-            .to.deep.equal(removeVideoPlayerDynamicValue(expectedVideoView.html()));
+            .toEqual(removeVideoPlayerDynamicValue(expectedVideoView.html()));
     });
 
     it("initializes videoJs with correct playback rates", () => {
@@ -41,7 +40,7 @@ describe("VideoPlayer", () => {
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
-        expect(actualComponent.player.options_.playbackRates).to.deep.equal([ 0.5, 0.75, 1, 1.25 ]);
+        expect(actualComponent.player.options_.playbackRates).toEqual([ 0.5, 0.75, 1, 1.25 ]);
     });
 
     it("initializes videoJs with correct playback rates", () => {
@@ -53,8 +52,8 @@ describe("VideoPlayer", () => {
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
-        expect(actualComponent.player.src()).to.equal("newMp4Url");
-        expect(actualComponent.player.poster()).to.equal("newPosterUrl");
+        expect(actualComponent.player.src()).toEqual("newMp4Url");
+        expect(actualComponent.player.poster()).toEqual("newPosterUrl");
     });
 
 });
