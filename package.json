@@ -35,8 +35,7 @@
     "mousetrap": "1.6.3",
     "video.js": "7.6.5",
     "videojs-dotsub-captions": "0.1.1",
-    "videojs-dotsub-selector": "0.2.1",
-    "videojs-watermark": "1.0.1"
+    "videojs-dotsub-selector": "0.2.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",

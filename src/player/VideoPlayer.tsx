@@ -3,7 +3,6 @@ import * as React from "react";
 import * as videojs from "video.js";
 import "videojs-dotsub-captions";
 import "videojs-dotsub-selector";
-import "videojs-watermark";
 import { getParentOffsetWidth } from "../htmlUtils";
 
 const SECOND = 1000;
