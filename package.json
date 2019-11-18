@@ -64,6 +64,7 @@
     "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-typescript2": "^0.17.0",
     "rollup-plugin-url": "^1.4.0",
+    "simulant": "^0.2.2",
     "tslint": "^5.20.1",
     "typescript": "^2.8.3"
   },
