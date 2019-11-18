@@ -2,6 +2,18 @@
 import * as jsdomGlobal from "jsdom-global";
 jsdomGlobal();
 
+// Simulate window resize event
+const resizeEvent = document.createEvent("Event");
+resizeEvent.initEvent("resize", true, true);
+
+// @ts-ignore - Not sure how to get rid of this
+const window = global.window;
+window.resizeTo = (width: number, height: number) => {
+    window.innerWidth = width ||  window.innerWidth;
+    window.innerHeight = height ||  window.innerHeight;
+    window.dispatchEvent(resizeEvent);
+};
+
 import * as enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
@@ -142,5 +154,31 @@ describe("VideoPlayer", () => {
 
         // THEN
         expect(currentTime).toBeCalledWith(5.6);
+    });
+
+    it("unmounts correctly", () => {
+        // GIVEN
+        const dispose = jest.fn();
+        const playerMock = {
+            dispose,
+            el: () => ({ parentElement: undefined }),
+            height: jest.fn(),
+            width: jest.fn(),
+        };
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        // const component = actualNode.instance() as VideoPlayer;
+        playerMock.width.mockReset();
+        playerMock.height.mockReset();
+
+        // WHEN
+        actualNode.unmount();
+        window.resizeTo(800, 600);
+
+        // THEN
+        expect(dispose).toBeCalled();
+        expect(playerMock.height).not.toBeCalled();
+        expect(playerMock.width).not.toBeCalled();
     });
 });

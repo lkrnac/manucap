@@ -46,10 +46,12 @@ export default class VideoPlayer extends React.Component<Props> {
     public readonly player: DotsubPlayer;
     private readonly viewportHeightPerc: number;
     private videoNode?: Node;
+    private readonly resizeVideoPlayer: () => void;
 
     constructor(props: Props) {
         super(props);
 
+        this.resizeVideoPlayer = () => this._resizeVideoPlayer();
         this.viewportHeightPerc = props.viewportHeightPerc
             ? props.viewportHeightPerc
             : VIEWPORT_HEIGHT_PERC;
@@ -86,7 +88,7 @@ export default class VideoPlayer extends React.Component<Props> {
         // this line is causing issues in FF (not dev edition)
         this._resizeVideoPlayer();
 
-        window.addEventListener("resize", this._resizeVideoPlayer.bind(this));
+        window.addEventListener("resize", this.resizeVideoPlayer);
         registerPlayerShortcuts(this);
     }
 
@@ -106,13 +108,12 @@ export default class VideoPlayer extends React.Component<Props> {
         // }
     }
 
-    // ESLint rule is suppressed because it is React hook and doesn't need to use this
-    public shouldComponentUpdate() { // eslint-disable-line class-methods-use-this
+    public shouldComponentUpdate() {
         return false;
     }
 
     public componentWillUnmount() {
-        window.removeEventListener("resize", this._resizeVideoPlayer.bind(this));
+        window.removeEventListener("resize", this.resizeVideoPlayer);
         this.player.dispose();
     }
 
