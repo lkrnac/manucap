@@ -1,6 +1,7 @@
 import "../initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
+// @ts-ignore I didn't figure out way how to overcome this TS warning
 import Adapter from "enzyme-adapter-react-16";
 import each from "jest-each";
 import * as React from "react";
@@ -72,12 +73,14 @@ describe("VideoPlayer", () => {
                 />
             );
 
+            // @ts-ignore // We are mocking here
             getParentOffsetWidth = jest.fn().mockReturnValue(offsetWidth);
 
             // WHEN
             window.resizeTo(width, height);
 
             // THEN
+            // @ts-ignore - restoring original function
             getParentOffsetWidth.mockRestore();
             const actualComponent = actualNode.instance() as VideoPlayer;
             expect(actualComponent.player.width()).toEqual(expectedWidth);
