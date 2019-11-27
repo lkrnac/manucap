@@ -28,4 +28,4 @@ class Example extends React.Component {
 
 ## License
 
- © [lkrnac](https://github.com/lkrnac)
+ © [Dotsub](https://github.com/dotsub)
