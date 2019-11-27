@@ -29,7 +29,23 @@ class Example extends React.Component {
 ## Development
 
 ### Auto-reload in browser
-``````
+When code is changed, it will rerender components in browser
+```bash
+npm run-script autoreload
+```
+
+### Auto-build library
+When code is changed, it will automatically create distribution package  
+```bash
+npm start
+```
+
+### Continuous unit testing
+When code is changed, all tests are rerun
+```bash
+npm test
+```
+
 
 ## License
 
