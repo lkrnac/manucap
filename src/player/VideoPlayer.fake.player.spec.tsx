@@ -1,8 +1,6 @@
 import "../initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
-// @ts-ignore - Can't figure out how to fix this TS warning
-import Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
@@ -13,8 +11,6 @@ jest.mock("video.js");
 const O_CHAR = 79;
 const LEFT = 37;
 const RIGHT = 39;
-
-enzyme.configure({ adapter: new Adapter() });
 
 describe("VideoPlayer", () => {
     it("executes play via keyboard shortcut", () => {

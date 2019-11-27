@@ -1,15 +1,11 @@
 import "../initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
-// @ts-ignore I didn't figure out way how to overcome this TS warning
-import Adapter from "enzyme-adapter-react-16";
 import each from "jest-each";
 import * as React from "react";
 import { getParentOffsetWidth } from "../htmlUtils";
 import { removeVideoPlayerDynamicValue } from "../testUtils";
 import VideoPlayer from "./VideoPlayer";
-
-enzyme.configure({ adapter: new Adapter() });
 
 describe("VideoPlayer", () => {
     it("renders", () => {

@@ -1,3 +1,6 @@
+import * as enzyme from "enzyme";
+// @ts-ignore - Can't figure out how to fix this TS warning
+import Adapter from "enzyme-adapter-react-16";
 import {JSDOM} from "jsdom";
 
 // Following declarations are here to maintain type safety of JSON initialization
@@ -33,3 +36,5 @@ window.resizeTo = (width: number, height: number) => {
     window.innerHeight = height ||  window.innerHeight;
     window.dispatchEvent(resizeEvent);
 };
+
+enzyme.configure({ adapter: new Adapter() });
