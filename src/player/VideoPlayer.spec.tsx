@@ -15,7 +15,7 @@ window.resizeTo = (width: number, height: number) => {
 };
 
 import * as enzyme from "enzyme";
-import * as Adapter from "enzyme-adapter-react-16";
+import Adapter from "enzyme-adapter-react-16";
 import each from "jest-each";
 import * as React from "react";
 // @ts-ignore - We are mocking this with jest

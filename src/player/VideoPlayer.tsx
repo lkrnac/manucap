@@ -42,7 +42,7 @@ interface DotsubPlayer extends videojs.VideoJsPlayer {
 }
 
 export default class VideoPlayer extends React.Component<Props> {
-    public readonly player: DotsubPlayer;
+    public readonly player: any;
     private readonly viewportHeightPerc: number;
     private videoNode?: Node;
     private readonly resizeVideoPlayer: () => void;

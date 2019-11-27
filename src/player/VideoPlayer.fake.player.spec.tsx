@@ -15,7 +15,7 @@ window.resizeTo = (width: number, height: number) => {
 };
 
 import * as enzyme from "enzyme";
-import * as Adapter from "enzyme-adapter-react-16";
+import Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";

@@ -1,25 +1,13 @@
-/**
- * @class ExampleComponent
- */
-
-import * as React from "react";
-
+import React from "react";
+import ReactDOM from "react-dom";
 import styles from "./styles.css";
 
-export interface Props {
-    text: string;
-}
+const TestApp = () => (
+    <div className={styles.test}>
+        Example Component: lala
+    </div>
+);
 
-export default class ExampleComponent extends React.Component<Props> {
-    public render() {
-        const {
-            text,
-        } = this.props;
+ReactDOM.render(<TestApp />, document.getElementById("root"));
 
-        return (
-            <div className={styles.test}>
-                Example Component: {text}
-            </div>
-        );
-    }
-}
+export default TestApp;

@@ -26,6 +26,11 @@ class Example extends React.Component {
 }
 ```
 
+## Development
+
+### Auto-reload in browser
+``````
+
 ## License
 
  © [Dotsub](https://github.com/dotsub)
