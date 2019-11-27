@@ -1,20 +1,7 @@
-// @ts-ignore I couldn't come up with syntax that would be fine for this import
-import * as jsdomGlobal from "jsdom-global";
-jsdomGlobal();
-
-// Simulate window resize event
-const resizeEvent = document.createEvent("Event");
-resizeEvent.initEvent("resize", true, true);
-
-// @ts-ignore - Not sure how to get rid of this
-const window = global.window;
-window.resizeTo = (width: number, height: number) => {
-    window.innerWidth = width ||  window.innerWidth;
-    window.innerHeight = height ||  window.innerHeight;
-    window.dispatchEvent(resizeEvent);
-};
+import "../initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
+// @ts-ignore - Can't figure out how to fix this TS warning
 import Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 // @ts-ignore - Doesn't have types definitions file

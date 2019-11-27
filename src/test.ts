@@ -1,7 +1,9 @@
-import ExampleComponent from "./";
+import "./initBrowserEnvironment";
 
-describe("ExampleComponent", () => {
+import TestApp from "./";
+
+describe("TestApp", () => {
     it("is truthy", () => {
-        expect(ExampleComponent).toBeTruthy();
+        expect(TestApp).toBeTruthy();
     });
 });

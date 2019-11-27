@@ -1,6 +1,6 @@
 import * as Mousetrap from "mousetrap";
 import * as React from "react";
-import * as videojs from "video.js";
+import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
 import "videojs-dotsub-captions";
 import "videojs-dotsub-selector";
 import { getParentOffsetWidth } from "../htmlUtils";
@@ -36,9 +36,9 @@ export interface Props {
     viewportHeightPerc?: number;
 }
 
-interface DotsubPlayer extends videojs.VideoJsPlayer {
-    dotsubCaptions(options?: videojs.VideoJsPlayerOptions): void;
-    dotsubSelector(options?: videojs.VideoJsPlayerOptions): void;
+interface DotsubPlayer extends VideoJsPlayer {
+    dotsubCaptions(options?: VideoJsPlayerOptions): void;
+    dotsubSelector(options?: VideoJsPlayerOptions): void;
 }
 
 export default class VideoPlayer extends React.Component<Props> {
@@ -57,7 +57,7 @@ export default class VideoPlayer extends React.Component<Props> {
     }
 
     public componentDidMount() {
-        const options = { playbackRates: PLAYBACK_RATES } as any as videojs.VideoJsPlayerOptions;
+        const options = { playbackRates: PLAYBACK_RATES } as any as VideoJsPlayerOptions;
 
         // @ts-ignore I couldn't come up with import syntax that would be without problems.
         // I suspect that type definitions for video.js need to be backward compatible, therefore are exporting
