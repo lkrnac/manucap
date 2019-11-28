@@ -1,8 +1,8 @@
 import * as Mousetrap from "mousetrap";
 import * as React from "react";
 import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
-import "videojs-dotsub-captions";
-import "videojs-dotsub-selector";
+// import "videojs-dotsub-captions";
+// import "videojs-dotsub-selector";
 import { getParentOffsetWidth } from "../htmlUtils";
 
 const SECOND = 1000;
