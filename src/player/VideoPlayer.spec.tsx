@@ -3,9 +3,11 @@ import "../initBrowserEnvironment";
 import * as enzyme from "enzyme";
 import each from "jest-each";
 import * as React from "react";
-import { getParentOffsetWidth } from "../htmlUtils";
+import * as htmlUtils from "../htmlUtils";
 import { removeVideoPlayerDynamicValue } from "../testUtils";
 import VideoPlayer from "./VideoPlayer";
+
+jest.mock("../htmlUtils");
 
 describe("VideoPlayer", () => {
     it("renders", () => {
@@ -69,15 +71,13 @@ describe("VideoPlayer", () => {
                 />
             );
 
-            // @ts-ignore // We are mocking here
-            getParentOffsetWidth = jest.fn().mockReturnValue(offsetWidth);
+            // @ts-ignore We mocked the module (notice __mocks__ directory)
+            htmlUtils.getParentOffsetWidth.mockReturnValue(offsetWidth);
 
             // WHEN
             window.resizeTo(width, height);
 
             // THEN
-            // @ts-ignore - restoring original function
-            getParentOffsetWidth.mockRestore();
             const actualComponent = actualNode.instance() as VideoPlayer;
             expect(actualComponent.player.width()).toEqual(expectedWidth);
             expect(actualComponent.player.height()).toEqual(expectedHeight);
