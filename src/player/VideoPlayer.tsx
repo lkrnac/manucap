@@ -42,7 +42,7 @@ interface DotsubPlayer extends VideoJsPlayer {
 }
 
 export default class VideoPlayer extends React.Component<Props> {
-    public readonly player: any;
+    public readonly player: DotsubPlayer;
     private readonly viewportHeightPerc: number;
     private videoNode?: Node;
     private readonly resizeVideoPlayer: () => void;
@@ -54,10 +54,12 @@ export default class VideoPlayer extends React.Component<Props> {
         this.viewportHeightPerc = props.viewportHeightPerc
             ? props.viewportHeightPerc
             : VIEWPORT_HEIGHT_PERC;
+
+        this.player = {} as DotsubPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
     }
 
     public componentDidMount(): void {
-        const options = { playbackRates: PLAYBACK_RATES } as any as VideoJsPlayerOptions;
+        const options = { playbackRates: PLAYBACK_RATES } as VideoJsPlayerOptions;
 
         // @ts-ignore I couldn't come up with import syntax that would be without problems.
         // I suspect that type definitions for video.js need to be backward compatible, therefore are exporting
