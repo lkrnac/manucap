@@ -34,14 +34,10 @@
     "@types/react-dom": "^16.0.5",
     "@types/redux": "^3.6.0",
     "@types/video.js": "7.3.2",
-    "airbnb-browser-shims": "^3.3.0",
-    "eslint": "^6.7.1",
-    "jsdom-global": "^3.0.2",
     "mousetrap": "1.6.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "redux": "^4.0.4",
-    "tslint-react": "^4.1.0",
     "video.js": "7.6.5",
     "videojs-dotsub-captions": "0.1.1",
     "videojs-dotsub-selector": "0.2.1"
@@ -59,8 +55,10 @@
     "cross-env": "^5.1.4",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
+    "eslint": "^6.7.1",
     "gh-pages": "^1.2.0",
     "jsdom": "^15.2.1",
+    "jsdom-global": "^3.0.2",
     "jest-each": "^24.9.0",
     "react-scripts": "^3.2.0",
     "rollup": "^1.27.5",
@@ -73,6 +71,7 @@
     "rollup-plugin-url": "^3.0.0",
     "simulant": "^0.2.2",
     "tslint": "^5.20.1",
+    "tslint-react": "^4.1.0",
     "typescript": "^3.7.2"
   },
   "files": [
