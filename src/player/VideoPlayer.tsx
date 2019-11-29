@@ -11,7 +11,7 @@ const HEIGHT = 9;
 const VIEWPORT_HEIGHT_PERC = 1;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
-const registerPlayerShortcuts = (videoPlayer: VideoPlayer) => {
+const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind(["mod+shift+o", "alt+shift+o"], () => {
         videoPlayer.playPause();
         return false;
@@ -50,13 +50,13 @@ export default class VideoPlayer extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
 
-        this.resizeVideoPlayer = () => this._resizeVideoPlayer();
+        this.resizeVideoPlayer = (): void => this._resizeVideoPlayer();
         this.viewportHeightPerc = props.viewportHeightPerc
             ? props.viewportHeightPerc
             : VIEWPORT_HEIGHT_PERC;
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const options = { playbackRates: PLAYBACK_RATES } as any as VideoJsPlayerOptions;
 
         // @ts-ignore I couldn't come up with import syntax that would be without problems.
@@ -91,7 +91,7 @@ export default class VideoPlayer extends React.Component<Props> {
         registerPlayerShortcuts(this);
     }
 
-    public UNSAFE_componentWillReceiveProps(nextProps: Readonly<Props>) {
+    public UNSAFE_componentWillReceiveProps(nextProps: Readonly<Props>): void {
         const newMp4Src = nextProps.mp4;
         // set the new source if none is set or it's a different value.
         // allowing this to set the same value multiple times causes playback issues in Firefox
@@ -107,29 +107,29 @@ export default class VideoPlayer extends React.Component<Props> {
         // }
     }
 
-    public shouldComponentUpdate() {
+    public shouldComponentUpdate(): boolean {
         return false;
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         window.removeEventListener("resize", this.resizeVideoPlayer);
         this.player.dispose();
     }
 
-    public getTime() {
+    public getTime(): number {
         return this.player.currentTime() * SECOND;
     }
 
-    public shiftTime(delta: number) {
+    public shiftTime(delta: number): void {
         const deltaInSeconds = delta / SECOND;
         this.player.currentTime(this.player.currentTime() + deltaInSeconds);
     }
 
-    public moveTime(newTime: number) {
+    public moveTime(newTime: number): void {
         this.player.currentTime(newTime / SECOND);
     }
 
-    public playPause() {
+    public playPause(): void {
         if (this.player.paused()) {
             this.player.play();
         } else {
@@ -137,10 +137,10 @@ export default class VideoPlayer extends React.Component<Props> {
         }
     }
 
-    public render() {
+    public render(): object {
         return (
             <video
-                ref={(node: HTMLVideoElement) => this.videoNode = node}
+                ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
                 style={{margin: "auto"}}
                 className="video-js vjs-default-skin vjs-big-play-centered"
                 id={this.props.id}
@@ -152,7 +152,7 @@ export default class VideoPlayer extends React.Component<Props> {
         );
     }
 
-    private _resizeVideoPlayer() {
+    private _resizeVideoPlayer(): void {
         const aspectRatio = WIDTH / HEIGHT;
         const width = getParentOffsetWidth(this.player.el());
         const height = width / aspectRatio;
