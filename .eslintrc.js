@@ -13,6 +13,7 @@ module.exports = {
         "@typescript-eslint/tslint"
     ],
     "rules": {
-        "@typescript-eslint/ban-ts-ignore": "off"
+        "@typescript-eslint/ban-ts-ignore": "off",
+        "quotes": ["error", "double"]
     }
 };
