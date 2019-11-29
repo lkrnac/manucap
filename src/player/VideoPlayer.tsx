@@ -4,6 +4,7 @@ import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
 // import "videojs-dotsub-captions";
 // import "videojs-dotsub-selector";
 import { getParentOffsetWidth } from "../htmlUtils";
+import {ReactElement} from "react";
 
 const SECOND = 1000;
 const WIDTH = 16;
@@ -139,7 +140,7 @@ export default class VideoPlayer extends React.Component<Props> {
         }
     }
 
-    public render(): object {
+    public render(): ReactElement {
         return (
             <video
                 ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
