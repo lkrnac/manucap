@@ -1,4 +1,4 @@
-import * as Mousetrap from "mousetrap";
+import Mousetrap from "mousetrap";
 import * as React from "react";
 import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
 // import "videojs-dotsub-captions";
