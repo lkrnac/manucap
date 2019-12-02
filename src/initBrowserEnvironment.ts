@@ -1,5 +1,4 @@
 import * as enzyme from "enzyme";
-// @ts-ignore - Can't figure out how to fix this TS warning
 import Adapter from "enzyme-adapter-react-16";
 import {JSDOM} from "jsdom";
 
@@ -10,6 +9,8 @@ interface ResizableTestingWindow extends Window {
 }
 
 declare global {
+    // TODO not sure how to get rid of this ESLint suppression so far
+    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace NodeJS {
         interface Global {
             document: Document;
@@ -20,18 +21,13 @@ declare global {
     }
 }
 
-const {document} = (new JSDOM("<!doctype html><html lang=\"en\"><body><div id=\"root\"/></body></html>")).window;
-global.document = document;
-global.window = document.defaultView;
+new JSDOM("<!doctype html><html lang=\"en\"><body><div id=\"root\"/></body></html>");
 
-// Simulate window resize event
 const resizeEvent = new window.Event("resize");
 
 if (global.window) {
-    global.navigator = global.window.navigator;
-    global.location = global.window.location;
     const window = global.window;
-    window.resizeTo = (width: number, height: number) => {
+    window.resizeTo = (width: number, height: number): void => {
         window.innerWidth = width ||  window.innerWidth;
         window.innerHeight = height ||  window.innerHeight;
         window.dispatchEvent(resizeEvent);
