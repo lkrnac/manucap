@@ -10,7 +10,7 @@ notifications:
 script:
   - npm run build
   - npm run test
-  - npm pack
+  - npx react-scripts build # tests if local development browser build is working
 
 after_success:
   - npm run lint
