@@ -31,7 +31,7 @@ const Example = props => (
 ### Auto-reload in browser
 When code is changed, it will rerender components in browser
 ```bash
-npm run-script autoreload
+npm run autoreload
 ```
 
 ### Auto-build library
@@ -45,7 +45,6 @@ When code is changed, all tests are rerun
 ```bash
 npm test
 ```
-
 
 ## License
 
