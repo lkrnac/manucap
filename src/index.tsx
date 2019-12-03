@@ -6,7 +6,7 @@ import styles from "./styles.css";
 import { ReactElement } from "react";
 import { createStore } from "redux";
 import { connect } from "react-redux";
-import subtitleEditReducers from "./reducers/sustitleEditReducer";
+import subtitleEditReducers from "./reducers/subtitleEditReducer";
 import { TestAction } from "./reducers/testReducer";
 
 const store = createStore(subtitleEditReducers);
