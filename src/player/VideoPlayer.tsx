@@ -1,9 +1,10 @@
-import * as Mousetrap from "mousetrap";
+import Mousetrap from "mousetrap";
 import * as React from "react";
-import * as videojs from "video.js";
-import "videojs-dotsub-captions";
-import "videojs-dotsub-selector";
+import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
+// import "videojs-dotsub-captions";
+// import "videojs-dotsub-selector";
 import { getParentOffsetWidth } from "../htmlUtils";
+import {ReactElement} from "react";
 
 const SECOND = 1000;
 const WIDTH = 16;
@@ -11,7 +12,7 @@ const HEIGHT = 9;
 const VIEWPORT_HEIGHT_PERC = 1;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
-const registerPlayerShortcuts = (videoPlayer: VideoPlayer) => {
+const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind(["mod+shift+o", "alt+shift+o"], () => {
         videoPlayer.playPause();
         return false;
@@ -36,9 +37,9 @@ export interface Props {
     viewportHeightPerc?: number;
 }
 
-interface DotsubPlayer extends videojs.VideoJsPlayer {
-    dotsubCaptions(options?: videojs.VideoJsPlayerOptions): void;
-    dotsubSelector(options?: videojs.VideoJsPlayerOptions): void;
+interface DotsubPlayer extends VideoJsPlayer {
+    dotsubCaptions(options?: VideoJsPlayerOptions): void;
+    dotsubSelector(options?: VideoJsPlayerOptions): void;
 }
 
 export default class VideoPlayer extends React.Component<Props> {
@@ -50,14 +51,16 @@ export default class VideoPlayer extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
 
-        this.resizeVideoPlayer = () => this._resizeVideoPlayer();
+        this.resizeVideoPlayer = (): void => this._resizeVideoPlayer();
         this.viewportHeightPerc = props.viewportHeightPerc
             ? props.viewportHeightPerc
             : VIEWPORT_HEIGHT_PERC;
+
+        this.player = {} as DotsubPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
     }
 
-    public componentDidMount() {
-        const options = { playbackRates: PLAYBACK_RATES } as any as videojs.VideoJsPlayerOptions;
+    public componentDidMount(): void {
+        const options = { playbackRates: PLAYBACK_RATES } as VideoJsPlayerOptions;
 
         // @ts-ignore I couldn't come up with import syntax that would be without problems.
         // I suspect that type definitions for video.js need to be backward compatible, therefore are exporting
@@ -91,7 +94,7 @@ export default class VideoPlayer extends React.Component<Props> {
         registerPlayerShortcuts(this);
     }
 
-    public UNSAFE_componentWillReceiveProps(nextProps: Readonly<Props>) {
+    public UNSAFE_componentWillReceiveProps(nextProps: Readonly<Props>): void {
         const newMp4Src = nextProps.mp4;
         // set the new source if none is set or it's a different value.
         // allowing this to set the same value multiple times causes playback issues in Firefox
@@ -107,29 +110,29 @@ export default class VideoPlayer extends React.Component<Props> {
         // }
     }
 
-    public shouldComponentUpdate() {
+    public shouldComponentUpdate(): boolean {
         return false;
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         window.removeEventListener("resize", this.resizeVideoPlayer);
         this.player.dispose();
     }
 
-    public getTime() {
+    public getTime(): number {
         return this.player.currentTime() * SECOND;
     }
 
-    public shiftTime(delta: number) {
+    public shiftTime(delta: number): void {
         const deltaInSeconds = delta / SECOND;
         this.player.currentTime(this.player.currentTime() + deltaInSeconds);
     }
 
-    public moveTime(newTime: number) {
+    public moveTime(newTime: number): void {
         this.player.currentTime(newTime / SECOND);
     }
 
-    public playPause() {
+    public playPause(): void {
         if (this.player.paused()) {
             this.player.play();
         } else {
@@ -137,10 +140,10 @@ export default class VideoPlayer extends React.Component<Props> {
         }
     }
 
-    public render() {
+    public render(): ReactElement {
         return (
             <video
-                ref={(node: HTMLVideoElement) => this.videoNode = node}
+                ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
                 style={{margin: "auto"}}
                 className="video-js vjs-default-skin vjs-big-play-centered"
                 id={this.props.id}
@@ -152,7 +155,7 @@ export default class VideoPlayer extends React.Component<Props> {
         );
     }
 
-    private _resizeVideoPlayer() {
+    private _resizeVideoPlayer(): void {
         const aspectRatio = WIDTH / HEIGHT;
         const width = getParentOffsetWidth(this.player.el());
         const height = width / aspectRatio;

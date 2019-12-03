@@ -1,25 +1,28 @@
-/**
- * @class ExampleComponent
- */
+import "./initBrowserEnvironment";
 
 import * as React from "react";
-
+import * as ReactDOM from "react-dom";
 import styles from "./styles.css";
+import { ReactElement } from "react";
+import { createStore } from "redux";
+import { connect } from "react-redux";
+import subtitleEditReducers from "./reducers/subtitleEditReducer";
+import { TestAction } from "./reducers/testReducer";
 
-export interface Props {
-    text: string;
-}
+const store = createStore(subtitleEditReducers);
+store.subscribe(() => console.log(store.getState()));
 
-export default class ExampleComponent extends React.Component<Props> {
-    public render() {
-        const {
-            text,
-        } = this.props;
+const TestApp = (): ReactElement => (
+    <div className={styles.test}>
+        After clicking on button, Redux event should appear in console.
+        <button onClick={(): void => {store.dispatch({ type: "TEST_ACTION", testValue: "clicked"})}} >
+            Test Redux
+        </button>
+    </div>
+);
 
-        return (
-            <div className={styles.test}>
-                Example Component: {text}
-            </div>
-        );
-    }
-}
+const mapStateToProps = (state: TestAction): object => ({ testValue: state.testValue });
+
+ReactDOM.render(<TestApp />, document.getElementById("root"));
+
+export default connect(mapStateToProps, null)(TestApp);

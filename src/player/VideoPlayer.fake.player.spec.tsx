@@ -1,21 +1,6 @@
-// @ts-ignore I couldn't come up with syntax that would be fine for this import
-import * as jsdomGlobal from "jsdom-global";
-jsdomGlobal();
-
-// Simulate window resize event
-const resizeEvent = document.createEvent("Event");
-resizeEvent.initEvent("resize", true, true);
-
-// @ts-ignore - Not sure how to get rid of this
-const window = global.window;
-window.resizeTo = (width: number, height: number) => {
-    window.innerWidth = width ||  window.innerWidth;
-    window.innerHeight = height ||  window.innerHeight;
-    window.dispatchEvent(resizeEvent);
-};
+import "../initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
-import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
@@ -27,16 +12,14 @@ const O_CHAR = 79;
 const LEFT = 37;
 const RIGHT = 39;
 
-enzyme.configure({ adapter: new Adapter() });
-
 describe("VideoPlayer", () => {
     it("executes play via keyboard shortcut", () => {
         // GIVEN
         const play = jest.fn();
         const playerMock = {
-            el: () => ({ parentElement: undefined }),
+            el: (): object => ({ parentElement: undefined }),
             height: jest.fn(),
-            paused: () => true,
+            paused: (): boolean => true,
             play,
             width: jest.fn(),
         };
@@ -55,10 +38,10 @@ describe("VideoPlayer", () => {
         // GIVEN
         const pause = jest.fn();
         const playerMock = {
-            el: () => ({ parentElement: undefined }),
+            el: (): object => ({ parentElement: undefined }),
             height: jest.fn(),
             pause,
-            paused: () => false,
+            paused: (): boolean => false,
             width: jest.fn(),
         };
         // @ts-ignore - we are mocking the module
@@ -78,7 +61,7 @@ describe("VideoPlayer", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            el: () => ({ parentElement: undefined }),
+            el: (): object => ({ parentElement: undefined }),
             height: jest.fn(),
             width: jest.fn(),
         };
@@ -99,7 +82,7 @@ describe("VideoPlayer", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            el: () => ({ parentElement: undefined }),
+            el: (): object => ({ parentElement: undefined }),
             height: jest.fn(),
             width: jest.fn(),
         };
@@ -117,8 +100,8 @@ describe("VideoPlayer", () => {
     it("returns currentTime", () => {
         // GIVEN
         const playerMock = {
-            currentTime: () => 5,
-            el: () => ({ parentElement: undefined }),
+            currentTime: (): number => 5,
+            el: (): object => ({ parentElement: undefined }),
             height: jest.fn(),
             width: jest.fn(),
         };
@@ -140,7 +123,7 @@ describe("VideoPlayer", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            el: () => ({ parentElement: undefined }),
+            el: (): object => ({ parentElement: undefined }),
             height: jest.fn(),
             width: jest.fn(),
         };
@@ -161,7 +144,7 @@ describe("VideoPlayer", () => {
         const dispose = jest.fn();
         const playerMock = {
             dispose,
-            el: () => ({ parentElement: undefined }),
+            el: (): object => ({ parentElement: undefined }),
             height: jest.fn(),
             width: jest.fn(),
         };

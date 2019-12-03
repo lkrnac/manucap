@@ -1,1 +1,1 @@
-export const getParentOffsetWidth = (element: Element) => element.parentElement ? element.parentElement.offsetWidth : 0;
+export let getParentOffsetWidth = (element: Element) => element.parentElement ? element.parentElement.offsetWidth : 0;
