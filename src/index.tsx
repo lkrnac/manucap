@@ -8,12 +8,18 @@ import { createStore } from "redux";
 import { connect } from "react-redux";
 import subtitleEditReducers from "./reducers/subtitleEditReducer";
 import { TestAction } from "./reducers/testReducer";
+import VideoPlayer from "./player/VideoPlayer";
 
 const store = createStore(subtitleEditReducers);
 store.subscribe(() => console.log(store.getState()));
 
 const TestApp = (): ReactElement => (
     <div className={styles.test}>
+        <VideoPlayer
+            id="testvpid"
+            poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
+            mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+        />
         After clicking on button, Redux event should appear in console.
         <button onClick={(): void => {store.dispatch({ type: "TEST_ACTION", testValue: "clicked"})}} >
             Test Redux
