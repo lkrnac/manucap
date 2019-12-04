@@ -17,16 +17,16 @@ describe("VideoPlayer", () => {
             <video
                 style={{ margin: "auto" }}
                 className="vjs-tech"
-                id="testvpid_html5_api"
                 poster="dummyPosterUrl"
                 preload="none"
                 data-setup="{}"
+                id="vjs_video_3_html5_api"
                 tabIndex={-1}
             />
         );
 
         // WHEN
-        const actualVideoView = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        const actualVideoView = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
@@ -35,7 +35,7 @@ describe("VideoPlayer", () => {
 
     it("initializes videoJs with correct playback rates", () => {
         // WHEN
-        const actualNode = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -44,7 +44,7 @@ describe("VideoPlayer", () => {
 
     it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
-        const actualNode = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -61,7 +61,6 @@ describe("VideoPlayer", () => {
             // GIVEN
             const actualNode = enzyme.mount(
                 <VideoPlayer
-                    id="testvpid"
                     poster="dummyPosterUrl"
                     mp4="dummyMp4Url"
                     viewportHeightPerc={viewPostHeightPerc}
