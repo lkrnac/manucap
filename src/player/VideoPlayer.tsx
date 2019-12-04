@@ -5,6 +5,7 @@ import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
 // import "videojs-dotsub-selector";
 import { getParentOffsetWidth } from "../htmlUtils";
 import {ReactElement} from "react";
+import "../../node_modules/video.js/dist/video-js.css";
 
 const SECOND = 1000;
 const WIDTH = 16;
@@ -60,15 +61,16 @@ export default class VideoPlayer extends React.Component<Props> {
     }
 
     public componentDidMount(): void {
-        const options = { playbackRates: PLAYBACK_RATES } as VideoJsPlayerOptions;
+        const options = {
+            playbackRates: PLAYBACK_RATES,
+            sources: [{ src: this.props.mp4, type: "video/mp4" }],
+            poster: this.props.poster
+        } as VideoJsPlayerOptions;
 
         // @ts-ignore I couldn't come up with import syntax that would be without problems.
         // I suspect that type definitions for video.js need to be backward compatible, therefore are exporting
         // "videojs" as namespace as well as function.
         this.player = videojs(this.videoNode, options) as DotsubPlayer;
-        // this.player.watermark({
-        //     image: "/images/player-logo.png"
-        // });
 
         // this.player.dotsubCaptions();
         //
@@ -92,22 +94,6 @@ export default class VideoPlayer extends React.Component<Props> {
 
         window.addEventListener("resize", this.resizeVideoPlayer);
         registerPlayerShortcuts(this);
-    }
-
-    public UNSAFE_componentWillReceiveProps(nextProps: Readonly<Props>): void {
-        const newMp4Src = nextProps.mp4;
-        // set the new source if none is set or it's a different value.
-        // allowing this to set the same value multiple times causes playback issues in Firefox
-        if (!this.player.currentSrc() || (newMp4Src !== undefined && newMp4Src !== this.props.mp4)) {
-            this.player.src([
-                { src: newMp4Src, type: "video/mp4" }
-            ]);
-            this.player.poster(nextProps.poster);
-        }
-
-        // if (!this.props.mediaId) {
-        //     this.player.trigger("captions", nextProps.captions);
-        // }
     }
 
     public shouldComponentUpdate(): boolean {

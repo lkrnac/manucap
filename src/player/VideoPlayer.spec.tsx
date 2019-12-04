@@ -42,17 +42,14 @@ describe("VideoPlayer", () => {
         expect(actualComponent.player.options_.playbackRates).toEqual([ 0.5, 0.75, 1, 1.25 ]);
     });
 
-    it("initializes videoJs with correct playback rates", () => {
-        // GIVEN
-        const actualNode = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
-
+    it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
-        actualNode.setProps({ poster: "newPosterUrl", mp4: "newMp4Url" });
+        const actualNode = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
-        expect(actualComponent.player.src()).toEqual("newMp4Url");
-        expect(actualComponent.player.poster()).toEqual("newPosterUrl");
+        expect(actualComponent.player.src()).toEqual("dummyMp4Url");
+        expect(actualComponent.player.poster()).toEqual("dummyPosterUrl");
     });
 
     each([
