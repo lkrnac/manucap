@@ -29,7 +29,6 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
 };
 
 export interface Props {
-    id: string;
     mp4: string;
     poster: string;
     mediaId?: string;
@@ -132,7 +131,6 @@ export default class VideoPlayer extends React.Component<Props> {
                 ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
                 style={{margin: "auto"}}
                 className="video-js vjs-default-skin vjs-big-play-centered"
-                id={this.props.id}
                 poster={this.props.poster}
                 controls={true}
                 preload="none"
