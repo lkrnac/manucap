@@ -38,7 +38,7 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "redux": "^4.0.4",
-    "video.js": "7.6.5",
+    "video.js": "7.6.5"
   },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
