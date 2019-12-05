@@ -63,14 +63,27 @@ export default class VideoPlayer extends React.Component<Props> {
         const options = {
             playbackRates: PLAYBACK_RATES,
             sources: [{ src: this.props.mp4, type: "video/mp4" }],
-            poster: this.props.poster
+            poster: this.props.poster,
+            tracks: [{
+                kind: "captions",
+                srclang: "en",
+                mode: "showing",
+                default: true,
+            }],
+            html5: {
+                nativeTextTracks: false
+            }
         } as VideoJsPlayerOptions;
 
         // @ts-ignore I couldn't come up with import syntax that would be without problems.
         // I suspect that type definitions for video.js need to be backward compatible, therefore are exporting
         // "videojs" as namespace as well as function.
         this.player = videojs(this.videoNode, options) as DotsubPlayer;
-
+        this.player.addTextTrack("captions", "English", "en");
+        this.player.textTracks().addEventListener("addtrack", () => {
+            this.player.textTracks()[0].addCue(new VTTCue(0, 1, ""));
+            this.player.textTracks()[0].addCue(new VTTCue(1.5, 3, ""));
+        });
         // this.player.dotsubCaptions();
         //
         // this.player.on("captionsready", () => {
