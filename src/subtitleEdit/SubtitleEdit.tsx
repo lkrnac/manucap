@@ -29,7 +29,7 @@ export default class SubtitleEdit extends React.Component<Props> {
 
     render(): ReactElement {
         return (
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ display: "flex" }}>
                 <VideoPlayer
                     mp4={this.props.mp4}
                     poster={this.props.poster}
