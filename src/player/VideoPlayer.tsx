@@ -1,8 +1,6 @@
 import Mousetrap from "mousetrap";
 import * as React from "react";
 import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
-// import "videojs-dotsub-captions";
-// import "videojs-dotsub-selector";
 import { getParentOffsetWidth } from "../htmlUtils";
 import {ReactElement} from "react";
 import "../../node_modules/video.js/dist/video-js.css";
@@ -85,23 +83,6 @@ export default class VideoPlayer extends React.Component<Props> {
         //     this.player.textTracks()[0].addCue(new VTTCue(0, 1, ""));
         //     this.player.textTracks()[0].addCue(new VTTCue(1.5, 3, ""));
         // });
-
-        // this.player.dotsubCaptions();
-        //
-        // this.player.on("captionsready", () => {
-        //     this.player.trigger("captions", this.props.captions);
-        //     if (this.props.language) {
-        //         this.player.trigger("language", this.props.language);
-        //     }
-        // });
-
-        // if (this.props.mediaId) {
-        //     // only load selector if a media id is sent.
-        //     this.player.dotsubSelector();
-        //     this.player.on("selectorready", () => {
-        //         this.player.trigger("loadtracks", this.props.mediaId);
-        //     });
-        // }
 
         // this line is causing issues in FF (not dev edition)
         this._resizeVideoPlayer();

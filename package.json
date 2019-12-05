@@ -39,8 +39,6 @@
     "react-dom": "^16.4.1",
     "redux": "^4.0.4",
     "video.js": "7.6.5",
-    "videojs-dotsub-captions": "0.1.1",
-    "videojs-dotsub-selector": "0.2.1"
   },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
