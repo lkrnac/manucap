@@ -6,22 +6,6 @@ export interface Props {
     poster: string;
 }
 
-// const SubtitleEdit = (props: Props): ReactElement => (
-//     <div>
-//         <VideoPlayer mp4={props.mp4} poster={props.poster} />
-//
-//     </div>
-// );
-
-// interface State {
-//     line1: string;
-//     line2: string;
-// }
-//
-// const constructVtt = (state: Readonly<State>): string => {
-//     return state.line1.concat("\n").concat(state.line2);
-// };
-
 export default class SubtitleEdit extends React.Component<Props> {
     private videoPlayer: VideoPlayer;
     private updateLine1 = (event: ChangeEvent<HTMLInputElement>): void => this._updateLine1(event);
@@ -29,7 +13,6 @@ export default class SubtitleEdit extends React.Component<Props> {
 
     constructor(props: Props) {
         super(props);
-        // this.state = { line1: "", line2: "" } as Readonly<State>;
 
         this.videoPlayer = {} as VideoPlayer;
     }
@@ -37,13 +20,6 @@ export default class SubtitleEdit extends React.Component<Props> {
     _updateLine1(event: ChangeEvent<HTMLInputElement>): void {
         this.videoPlayer.player.textTracks()[0].cues[0].text = event.target.value;
         this.videoPlayer.player.textTracks()[0].dispatchEvent(new Event("cuechange"));
-
-        // Attempt to style subtitles: Notice there are two modes of text tracks - NOT WORKING so far.
-        // One is handled by VideoJS, other one is native HTML.
-        // This github issue might help: https://github.com/videojs/video.js/issues/4852
-        const htmlNodes = document.getElementsByClassName("vjs-text-track-cue");
-        const htmlNode = htmlNodes[0] as HTMLElement;
-        htmlNode.style.setProperty("font", "caption");
     }
 
     _updateLine2(event: ChangeEvent<HTMLInputElement>): void {
