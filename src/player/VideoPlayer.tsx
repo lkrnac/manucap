@@ -29,10 +29,7 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
 export interface Props {
     mp4: string;
     poster: string;
-    mediaId?: string;
-    captions?: object[];
-    language?: object;
-    viewportHeightPerc?: number;
+    viewportHeightPerc?: number; // TODO: verify if still needed in new layout (there will be flexbox used)
 }
 
 interface DotsubPlayer extends VideoJsPlayer {
