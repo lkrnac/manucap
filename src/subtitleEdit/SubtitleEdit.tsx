@@ -37,6 +37,13 @@ export default class SubtitleEdit extends React.Component<Props> {
     _updateLine1(event: ChangeEvent<HTMLInputElement>): void {
         this.videoPlayer.player.textTracks()[0].cues[0].text = event.target.value;
         this.videoPlayer.player.textTracks()[0].dispatchEvent(new Event("cuechange"));
+
+        // Attempt to style subtitles: Notice there are two modes of text tracks - NOT WORKING so far.
+        // One is handled by VideoJS, other one is native HTML.
+        // This github issue might help: https://github.com/videojs/video.js/issues/4852
+        const htmlNodes = document.getElementsByClassName("vjs-text-track-cue");
+        const htmlNode = htmlNodes[0] as HTMLElement;
+        htmlNode.style.setProperty("font", "caption");
     }
 
     _updateLine2(event: ChangeEvent<HTMLInputElement>): void {
