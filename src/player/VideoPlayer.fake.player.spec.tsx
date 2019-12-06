@@ -126,23 +126,4 @@ describe("VideoPlayer", () => {
         // THEN
         expect(currentTime).toBeCalledWith(5.6);
     });
-
-    it("unmounts correctly", () => {
-        // GIVEN
-        const dispose = jest.fn();
-        const playerMock = {
-            dispose,
-            el: (): object => ({ parentElement: undefined }),
-        };
-        // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
-
-        // WHEN
-        actualNode.unmount();
-        window.resizeTo(800, 600);
-
-        // THEN
-        expect(dispose).toBeCalled();
-    });
 });

@@ -69,10 +69,6 @@ export default class VideoPlayer extends React.Component<Props> {
         registerPlayerShortcuts(this);
     }
 
-    public componentWillUnmount(): void {
-        this.player.dispose();
-    }
-
     public getTime(): number {
         return this.player.currentTime() * SECOND;
     }
