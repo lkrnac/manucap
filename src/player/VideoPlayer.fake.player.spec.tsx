@@ -18,10 +18,8 @@ describe("VideoPlayer", () => {
         const play = jest.fn();
         const playerMock = {
             el: (): object => ({ parentElement: undefined }),
-            height: jest.fn(),
             paused: (): boolean => true,
             play,
-            width: jest.fn(),
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -39,10 +37,8 @@ describe("VideoPlayer", () => {
         const pause = jest.fn();
         const playerMock = {
             el: (): object => ({ parentElement: undefined }),
-            height: jest.fn(),
             pause,
             paused: (): boolean => false,
-            width: jest.fn(),
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -62,8 +58,6 @@ describe("VideoPlayer", () => {
         const playerMock = {
             currentTime,
             el: (): object => ({ parentElement: undefined }),
-            height: jest.fn(),
-            width: jest.fn(),
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -83,8 +77,6 @@ describe("VideoPlayer", () => {
         const playerMock = {
             currentTime,
             el: (): object => ({ parentElement: undefined }),
-            height: jest.fn(),
-            width: jest.fn(),
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -102,8 +94,6 @@ describe("VideoPlayer", () => {
         const playerMock = {
             currentTime: (): number => 5,
             el: (): object => ({ parentElement: undefined }),
-            height: jest.fn(),
-            width: jest.fn(),
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -124,8 +114,6 @@ describe("VideoPlayer", () => {
         const playerMock = {
             currentTime,
             el: (): object => ({ parentElement: undefined }),
-            height: jest.fn(),
-            width: jest.fn(),
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -145,14 +133,10 @@ describe("VideoPlayer", () => {
         const playerMock = {
             dispose,
             el: (): object => ({ parentElement: undefined }),
-            height: jest.fn(),
-            width: jest.fn(),
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
-        playerMock.width.mockReset();
-        playerMock.height.mockReset();
 
         // WHEN
         actualNode.unmount();
@@ -160,7 +144,5 @@ describe("VideoPlayer", () => {
 
         // THEN
         expect(dispose).toBeCalled();
-        expect(playerMock.height).not.toBeCalled();
-        expect(playerMock.width).not.toBeCalled();
     });
 });

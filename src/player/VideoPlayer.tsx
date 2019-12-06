@@ -1,14 +1,10 @@
 import Mousetrap from "mousetrap";
 import * as React from "react";
 import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
-import { getParentOffsetWidth } from "../htmlUtils";
 import {ReactElement} from "react";
 import "../../node_modules/video.js/dist/video-js.css";
 
 const SECOND = 1000;
-const WIDTH = 16;
-const HEIGHT = 9;
-const VIEWPORT_HEIGHT_PERC = 1;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
@@ -29,7 +25,6 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
 export interface Props {
     mp4: string;
     poster: string;
-    viewportHeightPerc?: number; // TODO: verify if still needed in new layout (there will be flexbox used)
 }
 
 interface DotsubPlayer extends VideoJsPlayer {
@@ -39,17 +34,10 @@ interface DotsubPlayer extends VideoJsPlayer {
 
 export default class VideoPlayer extends React.Component<Props> {
     public readonly player: DotsubPlayer;
-    private readonly viewportHeightPerc: number;
     private videoNode?: Node;
-    private readonly resizeVideoPlayer: () => void;
 
     constructor(props: Props) {
         super(props);
-
-        this.resizeVideoPlayer = (): void => this._resizeVideoPlayer();
-        this.viewportHeightPerc = props.viewportHeightPerc
-            ? props.viewportHeightPerc
-            : VIEWPORT_HEIGHT_PERC;
 
         this.player = {} as DotsubPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
     }
@@ -59,15 +47,13 @@ export default class VideoPlayer extends React.Component<Props> {
             playbackRates: PLAYBACK_RATES,
             sources: [{ src: this.props.mp4, type: "video/mp4" }],
             poster: this.props.poster,
-            tracks: [{
-                kind: "captions",
-                srclang: "en",
-                mode: "showing",
-                default: true,
-            }],
-            html5: {
-                nativeTextTracks: false
-            }
+            // tracks: [{
+            //     kind: "captions",
+            //     srclang: "en",
+            //     mode: "showing",
+            //     default: true,
+            // }],
+            fluid: true,
         } as VideoJsPlayerOptions;
 
         // @ts-ignore I couldn't come up with import syntax that would be without problems.
@@ -75,25 +61,15 @@ export default class VideoPlayer extends React.Component<Props> {
         // "videojs" as namespace as well as function.
         this.player = videojs(this.videoNode, options) as DotsubPlayer;
 
-        // this.player.addTextTrack("captions", "English", "en");
         // this.player.textTracks().addEventListener("addtrack", () => {
         //     this.player.textTracks()[0].addCue(new VTTCue(0, 1, ""));
         //     this.player.textTracks()[0].addCue(new VTTCue(1.5, 3, ""));
         // });
 
-        // this line is causing issues in FF (not dev edition)
-        this._resizeVideoPlayer();
-
-        window.addEventListener("resize", this.resizeVideoPlayer);
         registerPlayerShortcuts(this);
     }
 
-    public shouldComponentUpdate(): boolean {
-        return false;
-    }
-
     public componentWillUnmount(): void {
-        window.removeEventListener("resize", this.resizeVideoPlayer);
         this.player.dispose();
     }
 
@@ -130,19 +106,5 @@ export default class VideoPlayer extends React.Component<Props> {
                 data-setup="{}"
             />
         );
-    }
-
-    private _resizeVideoPlayer(): void {
-        const aspectRatio = WIDTH / HEIGHT;
-        const width = getParentOffsetWidth(this.player.el());
-        const height = width / aspectRatio;
-        const vpHeight = (window.innerHeight || 0) * this.viewportHeightPerc;
-        if (height < vpHeight) {
-            this.player.width(width);
-            this.player.height(height);
-        } else if (vpHeight !== 0) {
-            this.player.width((vpHeight * aspectRatio));
-            this.player.height(vpHeight);
-        }
     }
 }
