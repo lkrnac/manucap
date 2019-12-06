@@ -33,12 +33,12 @@
     "@types/react": "^16.3.13",
     "@types/react-dom": "^16.0.5",
     "@types/redux": "^3.6.0",
-    "@types/video.js": "7.3.2",
+    "@types/video.js": "7.3.3",
     "mousetrap": "1.6.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "redux": "^4.0.4",
-    "video.js": "7.6.5"
+    "video.js": "7.7.1"
   },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
