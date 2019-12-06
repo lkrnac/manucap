@@ -27,19 +27,14 @@ export interface Props {
     poster: string;
 }
 
-interface DotsubPlayer extends VideoJsPlayer {
-    dotsubCaptions(options?: VideoJsPlayerOptions): void;
-    dotsubSelector(options?: VideoJsPlayerOptions): void;
-}
-
 export default class VideoPlayer extends React.Component<Props> {
-    public readonly player: DotsubPlayer;
+    public readonly player: VideoJsPlayer;
     private videoNode?: Node;
 
     constructor(props: Props) {
         super(props);
 
-        this.player = {} as DotsubPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
+        this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
     }
 
     public componentDidMount(): void {
