@@ -97,6 +97,7 @@ export default class VideoPlayer extends React.Component<Props> {
     public render(): ReactElement {
         return (
             <video
+                id="video-player"
                 ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
                 style={{margin: "auto"}}
                 className="video-js vjs-default-skin vjs-big-play-centered"

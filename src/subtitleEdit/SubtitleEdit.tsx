@@ -29,13 +29,15 @@ export default class SubtitleEdit extends React.Component<Props> {
 
     render(): ReactElement {
         return (
-            <div style={{ display: "flex" }}>
-                <VideoPlayer
-                    mp4={this.props.mp4}
-                    poster={this.props.poster}
-                    ref={(node: VideoPlayer): VideoPlayer => this.videoPlayer = node}
-                />
-                <div>
+            <div style={{ display: "flex", height: "100%" }}>
+                <div style={{ flex: "1 1 0", padding: "10px" }}>
+                    <VideoPlayer
+                        mp4={this.props.mp4}
+                        poster={this.props.poster}
+                        ref={(node: VideoPlayer): VideoPlayer => this.videoPlayer = node}
+                    />
+                </div>
+                <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px" }}>
                     <input
                         inputMode="text"
                         onChange={this.updateLine1}
