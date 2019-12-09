@@ -1,5 +1,6 @@
 import React, {ChangeEvent, ReactElement} from "react";
 import VideoPlayer from "../player/VideoPlayer";
+import {Track, TrackVersion} from "../player/model";
 
 export interface Props {
     mp4: string;
@@ -28,6 +29,26 @@ export default class SubtitleEdit extends React.Component<Props> {
     }
 
     render(): ReactElement {
+        const tracks = [
+            {
+                type: "CAPTION",
+                language: { id: "en-US" },
+                default: true,
+                currentVersion: { cues: [
+                        new VTTCue(0, 1, "Caption Line 1"),
+                        new VTTCue(1, 2, "Caption Line 2"),
+                    ]} as TrackVersion
+            } as Track,
+            {
+                type: "TRANSLATION",
+                language: { id: "es-ES" },
+                default: false,
+                currentVersion: { cues: [
+                        new VTTCue(0, 1, "Translation Line 1"),
+                        new VTTCue(1, 2, "Translation Line 2"),
+                    ]} as TrackVersion
+            } as Track
+        ];
         return (
             <div style={{ display: "flex", height: "100%" }}>
                 <div style={{ flex: "1 1 0", padding: "10px" }}>
@@ -35,6 +56,7 @@ export default class SubtitleEdit extends React.Component<Props> {
                         mp4={this.props.mp4}
                         poster={this.props.poster}
                         ref={(node: VideoPlayer): VideoPlayer => this.videoPlayer = node}
+                        tracks={tracks}
                     />
                 </div>
                 <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px" }}>
