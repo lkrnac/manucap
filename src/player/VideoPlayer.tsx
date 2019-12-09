@@ -31,7 +31,7 @@ export interface Props {
 }
 
 export default class VideoPlayer extends React.Component<Props> {
-    public readonly player: VideoJsPlayer;
+    public player: VideoJsPlayer;
     private videoNode?: Node;
 
     constructor(props: Props) {
@@ -50,14 +50,17 @@ export default class VideoPlayer extends React.Component<Props> {
             fluid: true,
         } as VideoJsPlayerOptions;
 
-        // @ts-ignore I couldn't come up with import syntax that would be without problems.
-        // I suspect that type definitions for video.js need to be backward compatible, therefore are exporting
-        // "videojs" as namespace as well as function.
-        this.player = videojs(this.videoNode, options) as DotsubPlayer;
-        // this.player.textTracks().addEventListener("addtrack", () => {
-        //     this.player.textTracks()[0].addCue(new VTTCue(0, 1, ""));
-        //     this.player.textTracks()[0].addCue(new VTTCue(1.5, 3, ""));
-        // });
+        this.player = videojs(this.videoNode, options) as VideoJsPlayer;
+        this.player.textTracks().addEventListener("addtrack", (event: Event) => {
+            // TODO: Figure out how to test this code
+            // @ts-ignore Typescript doesn't know about track field on event
+            const videoJsTrack = event.track as TextTrack;
+            const vtmsTrack =
+                this.props.tracks.filter(track => track.language.id === videoJsTrack.language)[0] as Track;
+            if (vtmsTrack.currentVersion) {
+                vtmsTrack.currentVersion.cues.forEach(((cue: VTTCue) => videoJsTrack.addCue(cue)));
+            }
+        });
 
         registerPlayerShortcuts(this);
     }
