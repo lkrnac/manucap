@@ -4,8 +4,8 @@ import * as enzyme from "enzyme";
 import * as React from "react";
 import { removeVideoPlayerDynamicValue } from "../testUtils";
 import VideoPlayer from "./VideoPlayer";
-import {Track} from "./model";
 import videojs from "video.js";
+import {Track} from "./model";
 
 describe("VideoPlayer", () => {
     it("renders", () => {
@@ -32,7 +32,7 @@ describe("VideoPlayer", () => {
     });
 
     it("initializes videoJs with correct options", () => {
-        // WHEN
+        // GIVEN
         const tracks = [
             { type: "CAPTION", language: { id: "en-US" }, default: true} as Track,
             { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
@@ -41,6 +41,8 @@ describe("VideoPlayer", () => {
             {kind: "captions", mode: "showing", srclang: "en-US", default: true} as videojs.TextTrackOptions,
             {kind: "subtitles", mode: "showing", srclang: "es-ES", default: false} as videojs.TextTrackOptions
         ];
+
+        // WHEN
         const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks}/>);
 
         // THEN
