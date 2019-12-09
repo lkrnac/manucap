@@ -3,6 +3,8 @@ import * as React from "react";
 import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
 import {ReactElement} from "react";
 import "../../node_modules/video.js/dist/video-js.css";
+import {Track} from "./model";
+import {convertToTextTrackOptions} from "./textTrackOptionsConversion";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -25,6 +27,7 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
 export interface Props {
     mp4: string;
     poster: string;
+    tracks: Track[];
 }
 
 export default class VideoPlayer extends React.Component<Props> {
@@ -38,16 +41,12 @@ export default class VideoPlayer extends React.Component<Props> {
     }
 
     public componentDidMount(): void {
+        const textTrackOptions = this.props.tracks.map(convertToTextTrackOptions);
         const options = {
             playbackRates: PLAYBACK_RATES,
             sources: [{ src: this.props.mp4, type: "video/mp4" }],
             poster: this.props.poster,
-            // tracks: [{
-            //     kind: "captions",
-            //     srclang: "en",
-            //     mode: "showing",
-            //     default: true,
-            // }],
+            tracks: textTrackOptions,
             fluid: true,
         } as VideoJsPlayerOptions;
 
@@ -55,7 +54,6 @@ export default class VideoPlayer extends React.Component<Props> {
         // I suspect that type definitions for video.js need to be backward compatible, therefore are exporting
         // "videojs" as namespace as well as function.
         this.player = videojs(this.videoNode, options) as DotsubPlayer;
-
         // this.player.textTracks().addEventListener("addtrack", () => {
         //     this.player.textTracks()[0].addCue(new VTTCue(0, 1, ""));
         //     this.player.textTracks()[0].addCue(new VTTCue(1.5, 3, ""));

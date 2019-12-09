@@ -4,6 +4,8 @@ import * as enzyme from "enzyme";
 import * as React from "react";
 import { removeVideoPlayerDynamicValue } from "../testUtils";
 import VideoPlayer from "./VideoPlayer";
+import {Track} from "./model";
+import videojs from "video.js";
 
 describe("VideoPlayer", () => {
     it("renders", () => {
@@ -22,7 +24,7 @@ describe("VideoPlayer", () => {
         );
 
         // WHEN
-        const actualVideoView = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        const actualVideoView = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
@@ -31,17 +33,26 @@ describe("VideoPlayer", () => {
 
     it("initializes videoJs with correct options", () => {
         // WHEN
-        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        const tracks = [
+            { type: "CAPTION", language: { id: "en-US" }, default: true} as Track,
+            { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
+        ];
+        const expectedTextTrackOptions = [
+            {kind: "captions", mode: "showing", srclang: "en-US", default: true} as videojs.TextTrackOptions,
+            {kind: "subtitles", mode: "showing", srclang: "es-ES", default: false} as videojs.TextTrackOptions
+        ];
+        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks}/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([ 0.5, 0.75, 1, 1.25 ]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
+        expect(actualComponent.player.options_.tracks).toEqual(expectedTextTrackOptions);
     });
 
     it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
-        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
