@@ -11,12 +11,12 @@ describe("VideoPlayer", () => {
         // noinspection HtmlUnknownTarget Dummy URL is OK for testing
         const expectedVideoView = enzyme.mount(
             <video
+                id="video-player_html5_api"
                 style={{ margin: "auto" }}
                 className="vjs-tech"
                 poster="dummyPosterUrl"
                 preload="none"
                 data-setup="{}"
-                id="vjs_video_3_html5_api"
                 tabIndex={-1}
             />
         );
