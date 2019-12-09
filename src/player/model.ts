@@ -8,9 +8,9 @@ export interface TrackVersion {
 }
 
 export interface Track {
-    readonly currentVersion: TrackVersion;
-    readonly sourceTrack: Track;
-    readonly type: "captions" | "subtitles";
+    readonly currentVersion?: TrackVersion;
+    readonly sourceTrack?: Track;
+    readonly type: "CAPTION" | "TRANSLATION";
     readonly language: Language;
     readonly default: boolean;
 }
