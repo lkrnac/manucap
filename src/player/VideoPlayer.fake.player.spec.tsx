@@ -17,7 +17,6 @@ describe("VideoPlayer", () => {
         // GIVEN
         const play = jest.fn();
         const playerMock = {
-            el: (): object => ({ parentElement: undefined }),
             paused: (): boolean => true,
             play,
         };
@@ -55,12 +54,8 @@ describe("VideoPlayer", () => {
         // GIVEN
         const currentTime = jest.fn();
         currentTime.mockReturnValueOnce(5);
-        const playerMock = {
-            currentTime,
-            el: (): object => ({ parentElement: undefined }),
-        };
         // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => playerMock);
+        videojs.mockImplementationOnce(() => ({ currentTime }));
         enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // WHEN
@@ -74,12 +69,8 @@ describe("VideoPlayer", () => {
         // GIVEN
         const currentTime = jest.fn();
         currentTime.mockReturnValueOnce(5);
-        const playerMock = {
-            currentTime,
-            el: (): object => ({ parentElement: undefined }),
-        };
         // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => playerMock);
+        videojs.mockImplementationOnce(() => ({ currentTime }));
         enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // WHEN
@@ -91,10 +82,7 @@ describe("VideoPlayer", () => {
 
     it("returns currentTime", () => {
         // GIVEN
-        const playerMock = {
-            currentTime: (): number => 5,
-            el: (): object => ({ parentElement: undefined }),
-        };
+        const playerMock = {currentTime: (): number => 5};
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
@@ -111,12 +99,8 @@ describe("VideoPlayer", () => {
         // GIVEN
         const currentTime = jest.fn();
         currentTime.mockReturnValueOnce(5);
-        const playerMock = {
-            currentTime,
-            el: (): object => ({ parentElement: undefined }),
-        };
         // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => playerMock);
+        videojs.mockImplementationOnce(() => ({ currentTime }));
         const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
         const component = actualNode.instance() as VideoPlayer;
 
