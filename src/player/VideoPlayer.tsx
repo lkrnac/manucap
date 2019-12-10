@@ -51,12 +51,10 @@ export default class VideoPlayer extends React.Component<Props> {
         } as VideoJsPlayerOptions;
 
         this.player = videojs(this.videoNode, options) as VideoJsPlayer;
-        this.player.textTracks().addEventListener("addtrack", (event: Event) => {
-            // TODO: Figure out how to test this code
-            // @ts-ignore Typescript doesn't know about track field on event
+        this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
-            const vtmsTrack =
-                this.props.tracks.filter(track => track.language.id === videoJsTrack.language)[0] as Track;
+            const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
+            const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
             if (vtmsTrack.currentVersion) {
                 vtmsTrack.currentVersion.cues.forEach(((cue: VTTCue) => videoJsTrack.addCue(cue)));
             }
