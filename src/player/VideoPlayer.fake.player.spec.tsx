@@ -4,13 +4,17 @@ import * as enzyme from "enzyme";
 import * as React from "react";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
-import * as videojs from "video.js";
+import videojs from "video.js";
 import VideoPlayer from "./VideoPlayer";
 
 jest.mock("video.js");
 const O_CHAR = 79;
 const LEFT = 37;
 const RIGHT = 39;
+
+interface FakeTextTrack {
+    addEventListener(type: string, listener: (this: TextTrackList, event: TrackEvent) => void): void;
+}
 
 describe("VideoPlayer", () => {
     it("executes play via keyboard shortcut", () => {
@@ -19,6 +23,7 @@ describe("VideoPlayer", () => {
         const playerMock = {
             paused: (): boolean => true,
             play,
+            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -35,9 +40,9 @@ describe("VideoPlayer", () => {
         // GIVEN
         const pause = jest.fn();
         const playerMock = {
-            el: (): object => ({ parentElement: undefined }),
             pause,
             paused: (): boolean => false,
+            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -54,8 +59,13 @@ describe("VideoPlayer", () => {
         // GIVEN
         const currentTime = jest.fn();
         currentTime.mockReturnValueOnce(5);
+        const playerMock = {
+            currentTime,
+            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+        };
+
         // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => ({ currentTime }));
+        videojs.mockImplementationOnce(() => playerMock);
         enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // WHEN
@@ -69,8 +79,13 @@ describe("VideoPlayer", () => {
         // GIVEN
         const currentTime = jest.fn();
         currentTime.mockReturnValueOnce(5);
+        const playerMock = {
+            currentTime,
+            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+        };
+
         // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => ({ currentTime }));
+        videojs.mockImplementationOnce(() => playerMock);
         enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // WHEN
@@ -82,7 +97,11 @@ describe("VideoPlayer", () => {
 
     it("returns currentTime", () => {
         // GIVEN
-        const playerMock = {currentTime: (): number => 5};
+        const playerMock = {
+            currentTime: (): number => 5,
+            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+        };
+
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
@@ -99,8 +118,13 @@ describe("VideoPlayer", () => {
         // GIVEN
         const currentTime = jest.fn();
         currentTime.mockReturnValueOnce(5);
+        const playerMock = {
+            currentTime,
+            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+        };
+
         // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => ({ currentTime }));
+        videojs.mockImplementationOnce(() => playerMock);
         const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
         const component = actualNode.instance() as VideoPlayer;
 
