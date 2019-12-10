@@ -15,6 +15,7 @@ describe("SubtitleEdit", () => {
                     <VideoPlayer
                         mp4="dummyMp4"
                         poster="dummyPoster"
+                        tracks={[]}
                     />
                 </div>
                 <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px" }}>
