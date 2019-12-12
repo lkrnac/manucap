@@ -63,6 +63,20 @@ export default class VideoPlayer extends React.Component<Props> {
         registerPlayerShortcuts(this);
     }
 
+    componentDidUpdate(): void {
+        for (let trackIdx = 0; trackIdx < this.player.textTracks().length; trackIdx++) {
+            const videoJsTrack = this.player.textTracks()[trackIdx];
+            for (let cueIdx = 0; cueIdx < this.player.textTracks().length; cueIdx++) {
+                videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
+            }
+            const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
+            const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
+            if (vtmsTrack.currentVersion) {
+                vtmsTrack.currentVersion.cues.forEach(((cue: VTTCue) => videoJsTrack.addCue(cue)));
+            }
+        }
+    }
+
     public getTime(): number {
         return this.player.currentTime() * SECOND;
     }

@@ -4,13 +4,15 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 // import styles from "./styles.css";
 import { ReactElement } from "react";
-import { createStore } from "redux";
-import { connect } from "react-redux";
+import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import {connect, Provider} from "react-redux";
 import subtitleEditReducers from "./reducers/subtitleEditReducer";
 import { TestAction } from "./reducers/testReducer";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
+import thunk from "redux-thunk";
 
-const store = createStore(subtitleEditReducers);
+const middleware = [...getDefaultMiddleware(), thunk];
+const store = configureStore({ reducer: subtitleEditReducers, middleware });
 store.subscribe(() => console.log(store.getState()));
 
 const TestApp = (): ReactElement => (
@@ -22,6 +24,11 @@ const TestApp = (): ReactElement => (
 
 const mapStateToProps = (state: TestAction): object => ({ testValue: state.testValue });
 
-ReactDOM.render(<TestApp />, document.getElementById("root"));
+ReactDOM.render(
+    <Provider store={store}>
+        <TestApp />
+    </Provider>,
+    document.getElementById("root")
+);
 
 export default connect(mapStateToProps, null)(TestApp);
