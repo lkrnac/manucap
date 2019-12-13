@@ -5,9 +5,8 @@ import * as ReactDOM from "react-dom";
 // import styles from "./styles.css";
 import { ReactElement } from "react";
 import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
-import {connect, Provider} from "react-redux";
+import {Provider} from "react-redux";
 import subtitleEditReducers from "./reducers/subtitleEditReducer";
-import { TestAction } from "./reducers/testReducer";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import thunk from "redux-thunk";
 
@@ -21,8 +20,6 @@ const TestApp = (): ReactElement => (
     />
 );
 
-const mapStateToProps = (state: TestAction): object => ({ testValue: state.testValue });
-
 ReactDOM.render(
     <Provider store={store}>
         <TestApp />
@@ -30,4 +27,3 @@ ReactDOM.render(
     document.getElementById("root")
 );
 
-export default connect(mapStateToProps, null)(TestApp);

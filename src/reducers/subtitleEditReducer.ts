@@ -1,11 +1,9 @@
 import { combineReducers, Action } from "@reduxjs/toolkit";
-import testReducer from "./testReducer";
 import {editingTrackSlice, cuesSlice} from "../player/trackSlices";
 import {ThunkAction} from "redux-thunk";
 
 
 const subtitleEditReducers = combineReducers({
-    testReducer,
     cues: cuesSlice.reducer,
     editingTrack: editingTrackSlice.reducer
 });
