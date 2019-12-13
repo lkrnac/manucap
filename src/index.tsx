@@ -13,7 +13,6 @@ import thunk from "redux-thunk";
 
 const middleware = [...getDefaultMiddleware(), thunk];
 const store = configureStore({ reducer: subtitleEditReducers, middleware });
-store.subscribe(() => console.log(store.getState()));
 
 const TestApp = (): ReactElement => (
     <SubtitleEdit
