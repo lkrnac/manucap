@@ -17,10 +17,3 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
 };
 
 export default EditingVideoPlayer;
-
-// const mapStateToProps = (state) => {
-//     const tracks = state.tracks
-//     tracks: state.tracks
-// }
-//
-// export default connect(mapStateToProps, null)(EditingTrackContainer);

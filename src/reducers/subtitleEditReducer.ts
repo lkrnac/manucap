@@ -1,7 +1,6 @@
 import { combineReducers, Action } from "@reduxjs/toolkit";
 import testReducer from "./testReducer";
-import {editingTrackSlice} from "../player/trackSlices";
-import {cuesSlice} from "../player/cueSlices";
+import {editingTrackSlice, cuesSlice} from "../player/trackSlices";
 import {ThunkAction} from "redux-thunk";
 
 
