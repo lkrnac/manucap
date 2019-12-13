@@ -22,7 +22,7 @@ interface FakeTextTrackList {
     addEventListener(type: string, listener: (this: TextTrackList, event: TrackEvent) => void): void;
 }
 
-export const initialTestingTracks = [
+const initialTestingTracks = [
     {
         type: "CAPTION",
         language: { id: "en-US" },
@@ -43,7 +43,7 @@ export const initialTestingTracks = [
     } as Track
 ];
 
-describe("VideoPlayer", () => {
+describe("VideoPlayer tested with fake player", () => {
     it("executes play via keyboard shortcut", () => {
         // GIVEN
         const play = jest.fn();

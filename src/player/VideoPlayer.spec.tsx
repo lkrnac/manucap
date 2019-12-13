@@ -5,8 +5,7 @@ import * as React from "react";
 import { removeVideoPlayerDynamicValue } from "../testUtils";
 import VideoPlayer from "./VideoPlayer";
 import videojs, {VideoJsPlayer} from "video.js";
-import {Track} from "./model";
-import {initialTestingTracks} from "./VideoPlayer.fake.player.spec";
+import {Track, TrackVersion} from "./model";
 
 interface FakeTrack {
     language: string;
@@ -77,8 +76,28 @@ describe("VideoPlayer", () => {
 
     it("initializes tracks content", () => {
         // GIVEN
+        const initialTestingTracks = [
+            {
+                type: "CAPTION",
+                language: { id: "en-CA" },
+                default: true,
+                currentVersion: { cues: [
+                        new VTTCue(0, 1, "Caption Line 1"),
+                        new VTTCue(1, 2, "Caption Line 2"),
+                    ]} as TrackVersion
+            } as Track,
+            {
+                type: "TRANSLATION",
+                language: { id: "es-ES" },
+                default: false,
+                currentVersion: { cues: [
+                        new VTTCue(0, 1, "Translation Line 1"),
+                        new VTTCue(1, 2, "Translation Line 2"),
+                    ]} as TrackVersion
+            } as Track
+        ];
         const textTracks = [
-            { language: "en-US", addCue: jest.fn() },
+            { language: "en-CA", addCue: jest.fn() },
             { language: "es-ES", addCue: jest.fn() }
         ];
         const actualNode = enzyme.mount(
