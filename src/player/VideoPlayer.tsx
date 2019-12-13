@@ -66,7 +66,7 @@ export default class VideoPlayer extends React.Component<Props> {
     componentDidUpdate(): void {
         for (let trackIdx = 0; trackIdx < this.player.textTracks().length; trackIdx++) {
             const videoJsTrack = this.player.textTracks()[trackIdx];
-            for (let cueIdx = 0; cueIdx <= this.player.textTracks().length; cueIdx++) {
+            for (let cueIdx = this.player.textTracks().length; cueIdx >= 0; cueIdx--) {
                 videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
             }
             const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
