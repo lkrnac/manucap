@@ -14,20 +14,17 @@ const SubtitleEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setInterval(
-            dispatch(updateEditingTrack({
-                type: "CAPTION",
-                language: {id: "en-US"} as Language,
-                default: true,
-                currentVersion: {
-                    cues: [
-                        new VTTCue(0, 1, "Caption Line 1"),
-                        new VTTCue(1, 2, "Caption Line 2"),
-                    ]
-                } as TrackVersion
-            })),
-            1000
-        );
+        dispatch(updateEditingTrack({
+            type: "CAPTION",
+            language: {id: "en-US"} as Language,
+            default: true,
+            currentVersion: {
+                cues: [
+                    new VTTCue(0, 1, "Caption Line 1"),
+                    new VTTCue(1, 2, "Caption Line 2"),
+                ]
+            } as TrackVersion
+        }));
     });
     return (
         <div style={{display: "flex", height: "100%"}}>
