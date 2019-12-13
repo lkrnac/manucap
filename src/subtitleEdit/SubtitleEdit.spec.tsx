@@ -5,28 +5,48 @@ import * as React from "react";
 import VideoPlayer from "../player/VideoPlayer";
 import SubtitleEdit from "./SubtitleEdit";
 import {removeVideoPlayerDynamicValue} from "../testUtils";
+import {Provider} from "react-redux";
+import testingStore from "../player/testingStore";
+import {Language, Track, TrackVersion} from "../player/model";
+import {updateEditingTrack} from "../player/trackSlices";
 
 describe("SubtitleEdit", () => {
     it("renders", () => {
         // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: {id: "en-US"} as Language,
+            default: true,
+            currentVersion: {
+                cues: [
+                    new VTTCue(0, 1, "Caption Line 1"),
+                    new VTTCue(1, 2, "Caption Line 2"),
+                ]
+            } as TrackVersion
+        } as Track;
         const expectedNode = enzyme.mount(
             <div style={{ display: "flex", height: "100%" }}>
                 <div style={{ flex: "1 1 0", padding: "10px" }}>
                     <VideoPlayer
                         mp4="dummyMp4"
                         poster="dummyPoster"
-                        tracks={[]}
+                        tracks={[testingTrack]}
                     />
                 </div>
                 <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px" }}>
-                    <input inputMode="text"/>
-                    <input inputMode="text"/>
+                    <input/>
+                    <input/>
                 </div>
             </div>
         );
 
         // WHEN
-        const actualNode = enzyme.mount(<SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />);
+        const actualNode = enzyme.mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack));
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))

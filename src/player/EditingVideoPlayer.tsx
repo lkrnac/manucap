@@ -13,7 +13,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
     const tracks = editingTrack ? [editingTrack] : [];
     return editingTrack
         ? <VideoPlayer mp4={props.mp4} poster={props.poster} tracks={tracks} />
-        : <label>No Data</label>;
+        : <p>Editing track not available!</p>;
 };
 
 export default EditingVideoPlayer;
