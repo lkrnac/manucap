@@ -12,13 +12,5 @@ export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
 
 export default subtitleEditReducers;
 
-export type RootState = ReturnType<typeof subtitleEditReducers>;
+type RootState = ReturnType<typeof subtitleEditReducers>;
 export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;
-
-
-/**
- * This is marker interface for all the actions that can be dispatched
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SubtitleEditAction {
-}

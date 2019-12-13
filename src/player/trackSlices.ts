@@ -1,7 +1,14 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Track} from "./model";
 import {Dispatch} from "react";
-import {AppThunk, SubtitleEditAction} from "../reducers/subtitleEditReducer";
+import {AppThunk} from "../reducers/subtitleEditReducer";
+
+/**
+ * This is marker interface for all the actions that can be dispatched
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface SubtitleEditAction {
+}
 
 interface EditingTrackAction extends SubtitleEditAction {
     editingTrack: Track;
