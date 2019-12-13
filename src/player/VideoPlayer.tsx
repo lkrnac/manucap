@@ -65,8 +65,8 @@ export default class VideoPlayer extends React.Component<Props> {
 
     componentDidUpdate(): void {
         for (let trackIdx = 0; trackIdx < this.player.textTracks().length; trackIdx++) {
-            const videoJsTrack = this.player.textTracks()[trackIdx];
-            for (let cueIdx = this.player.textTracks().length; cueIdx >= 0; cueIdx--) {
+            const videoJsTrack = (this.player.textTracks())[trackIdx];
+            for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
                 videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
             }
             const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
@@ -74,7 +74,7 @@ export default class VideoPlayer extends React.Component<Props> {
             if (vtmsTrack.currentVersion) {
                 vtmsTrack.currentVersion.cues.forEach(((cue: VTTCue) => videoJsTrack.addCue(cue)));
             }
-            this.player.textTracks()[0].dispatchEvent(new Event("cuechange"));
+            videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
     }
 

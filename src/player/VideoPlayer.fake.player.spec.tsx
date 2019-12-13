@@ -6,6 +6,8 @@ import * as React from "react";
 import * as simulant from "simulant";
 import videojs from "video.js";
 import VideoPlayer from "./VideoPlayer";
+import {Track, TrackVersion} from "./model";
+import {simulateComponentDidUpdate} from "../testUtils";
 
 jest.mock("video.js");
 const O_CHAR = 79;
@@ -13,8 +15,33 @@ const LEFT = 37;
 const RIGHT = 39;
 
 interface FakeTextTrack {
+    cues: VTTCue[];
+}
+
+interface FakeTextTrackList {
     addEventListener(type: string, listener: (this: TextTrackList, event: TrackEvent) => void): void;
 }
+
+export const initialTestingTracks = [
+    {
+        type: "CAPTION",
+        language: { id: "en-US" },
+        default: true,
+        currentVersion: { cues: [
+                new VTTCue(0, 1, "Caption Line 1"),
+                new VTTCue(1, 2, "Caption Line 2"),
+            ]} as TrackVersion
+    } as Track,
+    {
+        type: "TRANSLATION",
+        language: { id: "es-ES" },
+        default: false,
+        currentVersion: { cues: [
+                new VTTCue(0, 1, "Translation Line 1"),
+                new VTTCue(1, 2, "Translation Line 2"),
+            ]} as TrackVersion
+    } as Track
+];
 
 describe("VideoPlayer", () => {
     it("executes play via keyboard shortcut", () => {
@@ -23,7 +50,7 @@ describe("VideoPlayer", () => {
         const playerMock = {
             paused: (): boolean => true,
             play,
-            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -42,7 +69,7 @@ describe("VideoPlayer", () => {
         const playerMock = {
             pause,
             paused: (): boolean => false,
-            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
@@ -61,7 +88,7 @@ describe("VideoPlayer", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
         };
 
         // @ts-ignore - we are mocking the module
@@ -81,7 +108,7 @@ describe("VideoPlayer", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
         };
 
         // @ts-ignore - we are mocking the module
@@ -99,7 +126,7 @@ describe("VideoPlayer", () => {
         // GIVEN
         const playerMock = {
             currentTime: (): number => 5,
-            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
         };
 
         // @ts-ignore - we are mocking the module
@@ -120,7 +147,7 @@ describe("VideoPlayer", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            textTracks: (): FakeTextTrack => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
         };
 
         // @ts-ignore - we are mocking the module
@@ -133,5 +160,69 @@ describe("VideoPlayer", () => {
 
         // THEN
         expect(currentTime).toBeCalledWith(5.6);
+    });
+
+    it("update tracks content", () => {
+        // GIVEN
+        const captionCues = initialTestingTracks[0].currentVersion ? initialTestingTracks[0].currentVersion.cues : [];
+        const translationCues = initialTestingTracks[1].currentVersion
+            ? initialTestingTracks[1].currentVersion.cues
+            : [];
+        const textTracks = [
+            {
+                language: "en-US",
+                addCue: jest.fn(),
+                removeCue: jest.fn(),
+                length: 2,
+                cues: captionCues,
+                dispatchEvent: jest.fn()
+            },
+            {
+                language: "es-ES",
+                addCue: jest.fn(),
+                removeCue: jest.fn(),
+                length: 2,
+                cues: translationCues,
+                dispatchEvent: jest.fn()
+            }
+        ];
+        textTracks["addEventListener"] = jest.fn();
+        const tracks =  [
+            {
+                type: "CAPTION",
+                language: { id: "en-US" },
+                default: true,
+                currentVersion: { cues: [new VTTCue(0, 1, "Updated Caption")]}
+            },
+            {
+                type: "TRANSLATION",
+                language: { id: "es-ES" },
+                default: false,
+                currentVersion: { cues: [new VTTCue(0, 1, "Updated Translation")]}
+            }
+        ];
+
+        const playerMock = {
+            textTracks: (): FakeTextTrack[] => textTracks
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = enzyme.mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks}/>
+        );
+
+        // WHEN
+        simulateComponentDidUpdate(actualNode, { tracks });
+
+        // THEN
+        expect(textTracks[0].removeCue).nthCalledWith(1, new VTTCue(1, 2, "Caption Line 2"));
+        expect(textTracks[0].removeCue).nthCalledWith(2, new VTTCue(0, 1, "Caption Line 1"));
+        expect(textTracks[0].addCue).toBeCalledWith(new VTTCue(0, 1, "Updated Caption"));
+        expect(textTracks[0].dispatchEvent).toBeCalledWith(new Event("cuechange"));
+        expect(textTracks[1].removeCue).nthCalledWith(1, new VTTCue(1, 2, "Translation Line 2"));
+        expect(textTracks[1].removeCue).nthCalledWith(2, new VTTCue(0, 1, "Translation Line 1"));
+        expect(textTracks[1].addCue).toBeCalledWith(new VTTCue(0, 1, "Updated Translation"));
+        expect(textTracks[1].dispatchEvent).toBeCalledWith(new Event("cuechange"));
     });
 });
