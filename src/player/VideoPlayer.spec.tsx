@@ -1,8 +1,8 @@
-import "../initBrowserEnvironment";
+import "../testUtils/initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
 import * as React from "react";
-import { removeVideoPlayerDynamicValue } from "../testUtils";
+import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import VideoPlayer from "./VideoPlayer";
 import videojs, {VideoJsPlayer} from "video.js";
 import {Track} from "./model";

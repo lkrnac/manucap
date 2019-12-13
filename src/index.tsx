@@ -1,4 +1,4 @@
-import "./initBrowserEnvironment";
+import "./testUtils/initBrowserEnvironment";
 
 // import styles from "./styles.css";
 import * as React from "react";
@@ -8,7 +8,7 @@ import {Provider, useDispatch} from "react-redux";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import {updateEditingTrack} from "./player/trackSlices";
 import {Language, TrackVersion} from "./player/model";
-import testingStore from "./player/testingStore";
+import testingStore from "./testUtils/testingStore";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();

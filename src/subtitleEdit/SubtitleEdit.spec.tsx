@@ -1,12 +1,12 @@
-import "../initBrowserEnvironment";
+import "../testUtils/initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
 import * as React from "react";
 import VideoPlayer from "../player/VideoPlayer";
 import SubtitleEdit from "./SubtitleEdit";
-import {removeVideoPlayerDynamicValue} from "../testUtils";
+import {removeVideoPlayerDynamicValue} from "../testUtils/testUtils";
 import {Provider} from "react-redux";
-import testingStore from "../player/testingStore";
+import testingStore from "../testUtils/testingStore";
 import {Language, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack} from "../player/trackSlices";
 

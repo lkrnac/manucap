@@ -1,4 +1,4 @@
-import "../initBrowserEnvironment";
+import "../testUtils/initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
 import * as React from "react";
@@ -7,7 +7,7 @@ import * as simulant from "simulant";
 import videojs from "video.js";
 import VideoPlayer from "./VideoPlayer";
 import {Track, TrackVersion} from "./model";
-import {simulateComponentDidUpdate} from "../testUtils";
+import {simulateComponentDidUpdate} from "../testUtils/testUtils";
 
 jest.mock("video.js");
 const O_CHAR = 79;

@@ -1,9 +1,9 @@
-import "../initBrowserEnvironment";
+import "../testUtils/initBrowserEnvironment";
 import {mount} from "enzyme";
 import React from "react";
 import EditingVideoPlayer from "./EditingVideoPlayer";
 import {Provider} from "react-redux";
-import testingStore from "./testingStore";
+import testingStore from "../testUtils/testingStore";
 import {updateEditingTrack} from "./trackSlices";
 import {Track} from "./model";
 import VideoPlayer from "./VideoPlayer";
