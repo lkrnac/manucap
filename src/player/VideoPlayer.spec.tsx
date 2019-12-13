@@ -5,7 +5,7 @@ import * as React from "react";
 import { removeVideoPlayerDynamicValue } from "../testUtils";
 import VideoPlayer from "./VideoPlayer";
 import videojs, {VideoJsPlayer} from "video.js";
-import {Track, TrackVersion} from "./model";
+import {Track} from "./model";
 
 interface FakeTrack {
     language: string;
@@ -84,8 +84,8 @@ describe("VideoPlayer", () => {
                 currentVersion: { cues: [
                         new VTTCue(0, 1, "Caption Line 1"),
                         new VTTCue(1, 2, "Caption Line 2"),
-                    ]} as TrackVersion
-            } as Track,
+                    ]}
+            },
             {
                 type: "TRANSLATION",
                 language: { id: "es-ES" },
@@ -93,9 +93,9 @@ describe("VideoPlayer", () => {
                 currentVersion: { cues: [
                         new VTTCue(0, 1, "Translation Line 1"),
                         new VTTCue(1, 2, "Translation Line 2"),
-                    ]} as TrackVersion
-            } as Track
-        ];
+                    ]}
+            }
+        ] as Track[];
         const textTracks = [
             { language: "en-CA", addCue: jest.fn() },
             { language: "es-ES", addCue: jest.fn() }
