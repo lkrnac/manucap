@@ -37,4 +37,25 @@ describe("trackSlices", () => {
             expect(testingStore.getState().editingTrack.currentVersion.cues[1]).toEqual(new VTTCue(1, 2, "Dummy Cue"));
         });
     });
+
+    describe("updateEditingTrack", () => {
+        it("updates editing track", () => {
+            // WHEN
+            testingStore.dispatch(updateEditingTrack(testingTrack));
+
+            // THEN
+            expect(testingStore.getState().editingTrack).toEqual(testingTrack);
+        });
+
+        it("updates editing cues", () => {
+            // GIVEN
+            const expectedCues = testingTrack.currentVersion ? testingTrack.currentVersion.cues : [];
+
+            // WHEN
+            testingStore.dispatch(updateEditingTrack(testingTrack));
+
+            // THEN
+            expect(testingStore.getState().cues).toEqual(expectedCues);
+        });
+    });
 });
