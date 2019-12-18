@@ -34,8 +34,6 @@ describe("SubtitleEdit", () => {
                     />
                 </div>
                 <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px" }}>
-                    <input/>
-                    <input/>
                 </div>
             </div>
         );
