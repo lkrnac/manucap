@@ -1,15 +1,12 @@
 import Mousetrap from "mousetrap";
 import * as React from "react";
 import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
-// import "videojs-dotsub-captions";
-// import "videojs-dotsub-selector";
-import { getParentOffsetWidth } from "../htmlUtils";
 import {ReactElement} from "react";
+import "../../node_modules/video.js/dist/video-js.css";
+import {Track} from "./model";
+import {convertToTextTrackOptions} from "./textTrackOptionsConversion";
 
 const SECOND = 1000;
-const WIDTH = 16;
-const HEIGHT = 9;
-const VIEWPORT_HEIGHT_PERC = 1;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
@@ -28,95 +25,57 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
 };
 
 export interface Props {
-    id: string;
     mp4: string;
     poster: string;
-    mediaId?: string;
-    captions?: object[];
-    language?: object;
-    viewportHeightPerc?: number;
-}
-
-interface DotsubPlayer extends VideoJsPlayer {
-    dotsubCaptions(options?: VideoJsPlayerOptions): void;
-    dotsubSelector(options?: VideoJsPlayerOptions): void;
+    tracks: Track[];
 }
 
 export default class VideoPlayer extends React.Component<Props> {
-    public readonly player: DotsubPlayer;
-    private readonly viewportHeightPerc: number;
+    public player: VideoJsPlayer;
     private videoNode?: Node;
-    private readonly resizeVideoPlayer: () => void;
 
     constructor(props: Props) {
         super(props);
 
-        this.resizeVideoPlayer = (): void => this._resizeVideoPlayer();
-        this.viewportHeightPerc = props.viewportHeightPerc
-            ? props.viewportHeightPerc
-            : VIEWPORT_HEIGHT_PERC;
-
-        this.player = {} as DotsubPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
+        this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
     }
 
     public componentDidMount(): void {
-        const options = { playbackRates: PLAYBACK_RATES } as VideoJsPlayerOptions;
+        const textTrackOptions = this.props.tracks.map(convertToTextTrackOptions);
+        const options = {
+            playbackRates: PLAYBACK_RATES,
+            sources: [{ src: this.props.mp4, type: "video/mp4" }],
+            poster: this.props.poster,
+            tracks: textTrackOptions,
+            fluid: true,
+        } as VideoJsPlayerOptions;
 
-        // @ts-ignore I couldn't come up with import syntax that would be without problems.
-        // I suspect that type definitions for video.js need to be backward compatible, therefore are exporting
-        // "videojs" as namespace as well as function.
-        this.player = videojs(this.videoNode, options) as DotsubPlayer;
-        // this.player.watermark({
-        //     image: "/images/player-logo.png"
-        // });
+        this.player = videojs(this.videoNode, options) as VideoJsPlayer;
+        this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
+            const videoJsTrack = event.track as TextTrack;
+            const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
+            const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
+            if (vtmsTrack.currentVersion) {
+                vtmsTrack.currentVersion.cues.forEach(((cue: VTTCue) => videoJsTrack.addCue(cue)));
+            }
+        });
 
-        // this.player.dotsubCaptions();
-        //
-        // this.player.on("captionsready", () => {
-        //     this.player.trigger("captions", this.props.captions);
-        //     if (this.props.language) {
-        //         this.player.trigger("language", this.props.language);
-        //     }
-        // });
-
-        // if (this.props.mediaId) {
-        //     // only load selector if a media id is sent.
-        //     this.player.dotsubSelector();
-        //     this.player.on("selectorready", () => {
-        //         this.player.trigger("loadtracks", this.props.mediaId);
-        //     });
-        // }
-
-        // this line is causing issues in FF (not dev edition)
-        this._resizeVideoPlayer();
-
-        window.addEventListener("resize", this.resizeVideoPlayer);
         registerPlayerShortcuts(this);
     }
 
-    public UNSAFE_componentWillReceiveProps(nextProps: Readonly<Props>): void {
-        const newMp4Src = nextProps.mp4;
-        // set the new source if none is set or it's a different value.
-        // allowing this to set the same value multiple times causes playback issues in Firefox
-        if (!this.player.currentSrc() || (newMp4Src !== undefined && newMp4Src !== this.props.mp4)) {
-            this.player.src([
-                { src: newMp4Src, type: "video/mp4" }
-            ]);
-            this.player.poster(nextProps.poster);
+    componentDidUpdate(): void {
+        for (let trackIdx = 0; trackIdx < this.player.textTracks().length; trackIdx++) {
+            const videoJsTrack = (this.player.textTracks())[trackIdx];
+            for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
+                videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
+            }
+            const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
+            const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
+            if (vtmsTrack.currentVersion) {
+                vtmsTrack.currentVersion.cues.forEach(((cue: VTTCue) => videoJsTrack.addCue(cue)));
+            }
+            videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
-
-        // if (!this.props.mediaId) {
-        //     this.player.trigger("captions", nextProps.captions);
-        // }
-    }
-
-    public shouldComponentUpdate(): boolean {
-        return false;
-    }
-
-    public componentWillUnmount(): void {
-        window.removeEventListener("resize", this.resizeVideoPlayer);
-        this.player.dispose();
     }
 
     public getTime(): number {
@@ -143,29 +102,15 @@ export default class VideoPlayer extends React.Component<Props> {
     public render(): ReactElement {
         return (
             <video
+                id="video-player"
                 ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
                 style={{margin: "auto"}}
                 className="video-js vjs-default-skin vjs-big-play-centered"
-                id={this.props.id}
                 poster={this.props.poster}
                 controls={true}
                 preload="none"
                 data-setup="{}"
             />
         );
-    }
-
-    private _resizeVideoPlayer(): void {
-        const aspectRatio = WIDTH / HEIGHT;
-        const width = getParentOffsetWidth(this.player.el());
-        const height = width / aspectRatio;
-        const vpHeight = (window.innerHeight || 0) * this.viewportHeightPerc;
-        if (height < vpHeight) {
-            this.player.width(width);
-            this.player.height(height);
-        } else if (vpHeight !== 0) {
-            this.player.width((vpHeight * aspectRatio));
-            this.player.height(vpHeight);
-        }
     }
 }

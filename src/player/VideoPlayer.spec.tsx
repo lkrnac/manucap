@@ -1,13 +1,23 @@
-import "../initBrowserEnvironment";
+import "../testUtils/initBrowserEnvironment";
 
 import * as enzyme from "enzyme";
-import each from "jest-each";
 import * as React from "react";
-import * as htmlUtils from "../htmlUtils";
-import { removeVideoPlayerDynamicValue } from "../testUtils";
+import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import VideoPlayer from "./VideoPlayer";
+import videojs, {VideoJsPlayer} from "video.js";
+import {Track} from "./model";
 
-jest.mock("../htmlUtils");
+interface FakeTrack {
+    language: string;
+    addCue(cue: TextTrackCue): void;
+}
+
+const dispatchEventForTrack = (player: VideoJsPlayer, textTrack: FakeTrack): void => {
+    const trackEventEn = new Event("addtrack") as TrackEvent;
+    // @ts-ignore We need to force this for testing
+    trackEventEn.track = textTrack;
+    player.textTracks().dispatchEvent(trackEventEn);
+};
 
 describe("VideoPlayer", () => {
     it("renders", () => {
@@ -15,9 +25,9 @@ describe("VideoPlayer", () => {
         // noinspection HtmlUnknownTarget Dummy URL is OK for testing
         const expectedVideoView = enzyme.mount(
             <video
+                id="video-player_html5_api"
                 style={{ margin: "auto" }}
                 className="vjs-tech"
-                id="testvpid_html5_api"
                 poster="dummyPosterUrl"
                 preload="none"
                 data-setup="{}"
@@ -26,60 +36,83 @@ describe("VideoPlayer", () => {
         );
 
         // WHEN
-        const actualVideoView = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        const actualVideoView = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
             .toEqual(removeVideoPlayerDynamicValue(expectedVideoView.html()));
     });
 
-    it("initializes videoJs with correct playback rates", () => {
+    it("initializes videoJs with correct options", () => {
+        // GIVEN
+        const tracks = [
+            { type: "CAPTION", language: { id: "en-US" }, default: true} as Track,
+            { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
+        ];
+        const expectedTextTrackOptions = [
+            {kind: "captions", mode: "showing", srclang: "en-US", default: true} as videojs.TextTrackOptions,
+            {kind: "subtitles", mode: "showing", srclang: "es-ES", default: false} as videojs.TextTrackOptions
+        ];
+
         // WHEN
-        const actualNode = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
+        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks}/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([ 0.5, 0.75, 1, 1.25 ]);
+        expect(actualComponent.player.options_.fluid).toBeTruthy();
+        expect(actualComponent.player.options_.tracks).toEqual(expectedTextTrackOptions);
     });
 
-    it("initializes videoJs with correct playback rates", () => {
-        // GIVEN
-        const actualNode = enzyme.mount(<VideoPlayer id="testvpid" poster="dummyPosterUrl" mp4="dummyMp4Url"/>);
-
+    it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
-        actualNode.setProps({ poster: "newPosterUrl", mp4: "newMp4Url" });
+        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
-        expect(actualComponent.player.src()).toEqual("newMp4Url");
-        expect(actualComponent.player.poster()).toEqual("newPosterUrl");
+        expect(actualComponent.player.src()).toEqual("dummyMp4Url");
+        expect(actualComponent.player.poster()).toEqual("dummyPosterUrl");
     });
 
-    each([
-        [800, 600, 400, 0.5, 400, 225],
-        [800, 600, 700, 0.5, 533.3333333333333, 300],
-    ]).it(
-        "resize work correctly for new window width: %i and height %i and offsetWidth %i",
-        (width, height, offsetWidth, viewPostHeightPerc, expectedWidth, expectedHeight) => {
-            // GIVEN
-            const actualNode = enzyme.mount(
-                <VideoPlayer
-                    id="testvpid"
-                    poster="dummyPosterUrl"
-                    mp4="dummyMp4Url"
-                    viewportHeightPerc={viewPostHeightPerc}
-                />
-            );
+    it("initializes tracks content", () => {
+        // GIVEN
+        const initialTestingTracks = [
+            {
+                type: "CAPTION",
+                language: { id: "en-CA" },
+                default: true,
+                currentVersion: { cues: [
+                        new VTTCue(0, 1, "Caption Line 1"),
+                        new VTTCue(1, 2, "Caption Line 2"),
+                    ]}
+            },
+            {
+                type: "TRANSLATION",
+                language: { id: "es-ES" },
+                default: false,
+                currentVersion: { cues: [
+                        new VTTCue(0, 1, "Translation Line 1"),
+                        new VTTCue(1, 2, "Translation Line 2"),
+                    ]}
+            }
+        ] as Track[];
+        const textTracks = [
+            { language: "en-CA", addCue: jest.fn() },
+            { language: "es-ES", addCue: jest.fn() }
+        ];
+        const actualNode = enzyme.mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks}/>
+        );
+        const component = actualNode.instance() as VideoPlayer;
 
-            // @ts-ignore We mocked the module (notice __mocks__ directory)
-            htmlUtils.getParentOffsetWidth.mockReturnValue(offsetWidth);
+        // WHEN
+        dispatchEventForTrack(component.player, textTracks[0]);
+        dispatchEventForTrack(component.player, textTracks[1]);
 
-            // WHEN
-            window.resizeTo(width, height);
-
-            // THEN
-            const actualComponent = actualNode.instance() as VideoPlayer;
-            expect(actualComponent.player.width()).toEqual(expectedWidth);
-            expect(actualComponent.player.height()).toEqual(expectedHeight);
+        // THEN
+        expect(textTracks[0].addCue).nthCalledWith(1, new VTTCue(0, 1, "Caption Line 1"));
+        expect(textTracks[0].addCue).nthCalledWith(2, new VTTCue(1, 2, "Caption Line 2"));
+        expect(textTracks[1].addCue).nthCalledWith(1, new VTTCue(0, 1, "Translation Line 1"));
+        expect(textTracks[1].addCue).nthCalledWith(2, new VTTCue(1, 2, "Translation Line 2"));
     });
 });

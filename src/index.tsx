@@ -1,28 +1,44 @@
-import "./initBrowserEnvironment";
+import "./testUtils/initBrowserEnvironment";
 
+// import styles from "./styles.css";
 import * as React from "react";
+import {ReactElement, useEffect} from "react";
 import * as ReactDOM from "react-dom";
-import styles from "./styles.css";
-import { ReactElement } from "react";
-import { createStore } from "redux";
-import { connect } from "react-redux";
-import subtitleEditReducers from "./reducers/subtitleEditReducer";
-import { TestAction } from "./reducers/testReducer";
+import {Provider, useDispatch} from "react-redux";
+import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
+import {updateEditingTrack} from "./player/trackSlices";
+import {Language, TrackVersion} from "./player/model";
+import testingStore from "./testUtils/testingStore";
 
-const store = createStore(subtitleEditReducers);
-store.subscribe(() => console.log(store.getState()));
+const TestApp = (): ReactElement => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        setTimeout( // this simulates latency caused by server roundtrip
+            dispatch(updateEditingTrack({
+                type: "CAPTION",
+                language: {id: "en-US"} as Language,
+                default: true,
+                currentVersion: {
+                    cues: [
+                        new VTTCue(0, 1, "Caption Line 1"),
+                        new VTTCue(1, 2, "Caption Line 2"),
+                    ]
+                } as TrackVersion
+            })),
+            500
+        )
+    });
 
-const TestApp = (): ReactElement => (
-    <div className={styles.test}>
-        After clicking on button, Redux event should appear in console.
-        <button onClick={(): void => {store.dispatch({ type: "TEST_ACTION", testValue: "clicked"})}} >
-            Test Redux
-        </button>
-    </div>
+    return <SubtitleEdit
+        poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
+        mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+    />;
+};
+
+ReactDOM.render(
+    <Provider store={testingStore}>
+        <TestApp />
+    </Provider>,
+    document.getElementById("root")
 );
 
-const mapStateToProps = (state: TestAction): object => ({ testValue: state.testValue });
-
-ReactDOM.render(<TestApp />, document.getElementById("root"));
-
-export default connect(mapStateToProps, null)(TestApp);
