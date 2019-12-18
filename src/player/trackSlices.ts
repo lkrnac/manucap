@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Track} from "./model";
+import {Track, TrackProgress} from "./model";
 import {Dispatch} from "react";
 import {AppThunk} from "../reducers/subtitleEditReducers";
 
@@ -12,6 +12,10 @@ interface SubtitleEditAction {
 
 interface EditingTrackAction extends SubtitleEditAction {
     editingTrack: Track;
+}
+
+interface EditingTrackProgressAction extends SubtitleEditAction {
+    progress: TrackProgress;
 }
 
 interface CueAction extends SubtitleEditAction {
@@ -47,6 +51,11 @@ export const editingTrackSlice = createSlice({
                 cues[action.payload.idx] = action.payload.cue;
                 state.currentVersion = { cues };
             }
+        },
+        updateEditingTrackProgress: (state, action: PayloadAction<EditingTrackProgressAction>): void => {
+            if (state) {
+                state.progress = action.payload.progress;
+            }
         }
     }
 });
@@ -63,3 +72,9 @@ export const updateEditingTrack = (track: Track): AppThunk =>
         const cues = track && track.currentVersion ? track.currentVersion.cues : [] as VTTCue[];
         dispatch(cuesSlice.actions.updateCues({ cues }));
     };
+
+export const updateEditingTrackProgress = (progress: TrackProgress): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+        dispatch(editingTrackSlice.actions.updateEditingTrackProgress({ progress }));
+    };
+
