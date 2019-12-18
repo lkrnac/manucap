@@ -2,7 +2,7 @@ import React, {ChangeEvent, ReactElement} from "react";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import {useDispatch} from "react-redux";
 import {updateCue} from "../player/trackSlices";
-import {AppThunk} from "../reducers/subtitleEditReducer";
+import {AppThunk} from "../reducers/subtitleEditReducers";
 
 export interface Props {
     mp4: string;

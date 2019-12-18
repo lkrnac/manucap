@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Track} from "./model";
 import {Dispatch} from "react";
-import {AppThunk} from "../reducers/subtitleEditReducer";
+import {AppThunk} from "../reducers/subtitleEditReducers";
 
 /**
  * This is marker interface for all the actions that can be dispatched
