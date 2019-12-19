@@ -23,8 +23,7 @@ const CueTextEditor = (props: Props): ReactElement => {
                    new VTTCue(props.cue.startTime, props.cue.endTime, editorState.getCurrentContent().getPlainText())
                ));
            }}
-           // spellCheck
-           // placeholder="Caption text..."
+           spellCheck
         />
     )
 };

@@ -9,13 +9,32 @@ import {ContentState, convertFromHTML, Editor, EditorState} from "draft-js";
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
 
 describe("CueTextEditor", () => {
+    it("renders empty", () => {
+        // GIVEN
+        const cue = new VTTCue(0, 1, "");
+        const  editorState = EditorState.createEmpty();
+        const expectedNode = mount(
+            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueTextEditor index={0} cue={cue}/>
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
     it("renders with text", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "someText");
         const contentState = ContentState.createFromText(cue.text);
         const  editorState = EditorState.createWithContent(contentState);
         const expectedNode = mount(
-            <Editor editorState={editorState} onChange={jest.fn}/>
+            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
         );
 
         // WHEN
@@ -36,7 +55,7 @@ describe("CueTextEditor", () => {
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         const  editorState = EditorState.createWithContent(contentState);
         const expectedNode = mount(
-            <Editor editorState={editorState} onChange={jest.fn}/>
+            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
         );
 
         // WHEN
