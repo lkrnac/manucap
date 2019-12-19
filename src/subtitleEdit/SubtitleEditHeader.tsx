@@ -10,30 +10,27 @@ const getTrackType = (track: Track): string => {
 };
 
 const getLanguageDescription = (track: Track): ReactElement => {
-    if (track.type === "CAPTION") {
-        return <b>{track.language.name}</b>;
-    }
     if (track.type === "TRANSLATION") {
-        const sourceLanguage = track.sourceTrack ? track.sourceTrack.language.name : "Unknown";
-        return <span><b>{sourceLanguage}</b> to <b>{track.language.name}</b></span>
+        const sourceLanguage = track.sourceTrack ? <b>{track.sourceTrack.language.name}</b> : null;
+        return <span>{sourceLanguage} to <b>{track.language.name}</b></span>
     }
-    return <b>Unknown</b>
+    return <b>{track.language.name}</b>;
 };
 
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
     if (!task || !task.type || !track) {
         return <div/>;
     }
-    if (task.type === "TASK_CAPTION") {
-        return <div>Caption in: {getLanguageDescription(track)}</div>
-    }
     if (task.type === "TASK_TRANSLATE") {
         return <div>Translation from {getLanguageDescription(track)}</div>
+    }
+    if (task.type === "TASK_DIRECT_TRANSLATE") {
+        return <div>Direct Translation {getLanguageDescription(track)}</div>
     }
     if (task.type === "TASK_REVIEW") {
         return <div>Review of {getLanguageDescription(track)} {getTrackType(track)}</div>
     }
-    return <div/>;
+    return <div>Caption in: {getLanguageDescription(track)}</div>
 };
 
 const getDueDate = (task: Task): ReactElement => {

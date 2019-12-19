@@ -96,6 +96,46 @@ describe("SubtitleEditHeader", () => {
             .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
     });
 
+    it("renders Direct Translation", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "TRANSLATION",
+            language: {id: "it-IT", name: "Italian"} as Language,
+            default: true,
+            videoTitle: "This is the video title"
+        } as Track;
+        const testingTask = {
+            type: "TASK_DIRECT_TRANSLATE",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = enzyme.mount(
+            <header style={{display: "flex"}}>
+                <div style={{display: "flex", flexFlow: "column"}}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Direct Translation <span> to <b>Italian</b></span></div>
+                </div>
+                <div style={{flex: "2"}}/>
+                <div style={{display: "flex", flexFlow: "column"}}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = enzyme.mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateTask(testingTask));
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
     it("renders Caption Review", () => {
         // GIVEN
         const testingTrack = {
