@@ -1,17 +1,13 @@
 import "video.js"; // VTTCue definition
-import {updateCue, updateEditingTrack, updateEditingTrackProgress} from "./trackSlices";
+import {updateCue, updateEditingTrack, updateTask} from "./trackSlices";
 import testingStore from "../testUtils/testingStore";
-import {Track, TrackDescription, TrackProgress} from "./model";
+import {Task, Track} from "./model";
 
 const testingTrack = {
     type: "CAPTION",
     language: {id: "en-US"},
     default: true,
     videoTitle: "This is the video title",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    description: {action: "Caption in", subject: "English (US)"} as TrackDescription,
-    progress: {unit: "0/115 seconds", percentage: "0"} as TrackProgress,
     currentVersion: {
         cues: [
             new VTTCue(0, 1, "Caption Line 1"),
@@ -19,6 +15,12 @@ const testingTrack = {
         ]
     }
 } as Track;
+
+const testingTask = {
+    type: "TASK_CAPTION",
+    projectName: "Project One",
+    dueDate: "2019/12/30 10:00AM"
+} as Task;
 
 describe("trackSlices", () => {
     describe("updateCue", () => {
@@ -62,32 +64,15 @@ describe("trackSlices", () => {
             // THEN
             expect(testingStore.getState().cues).toEqual(expectedCues);
         });
+    });
 
-        it("updates track progress", () => {
-            // GIVEN
-            const updatedProgress = { unit: "20/115 seconds", percentage: "25"} as TrackProgress;
-            const expectedTrack = {
-                type: "CAPTION",
-                language: {id: "en-US"},
-                default: true,
-                videoTitle: "This is the video title",
-                projectName: "Project One",
-                dueDate: "2019/12/30 10:00AM",
-                description: {action: "Caption in", subject: "English (US)"} as TrackDescription,
-                progress: {unit: "20/115 seconds", percentage: "25"} as TrackProgress,
-                currentVersion: {
-                    cues: [
-                        new VTTCue(0, 1, "Caption Line 1"),
-                        new VTTCue(1, 2, "Caption Line 2"),
-                    ]
-                }
-            } as Track;
-
+    describe("updateTask", () => {
+        it("updates task", () => {
             // WHEN
-            testingStore.dispatch(updateEditingTrackProgress(updatedProgress));
+            testingStore.dispatch(updateTask(testingTask));
 
             // THEN
-            expect(testingStore.getState().editingTrack).toEqual(expectedTrack);
+            expect(testingStore.getState().task).toEqual(testingTask);
         });
     });
 });
