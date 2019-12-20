@@ -7,14 +7,14 @@ import {AppThunk} from "../reducers/subtitleEditReducers";
  * This is marker interface for all the actions that can be dispatched
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface SubtitleEditAction {
+export interface SubtitleEditAction {
 }
 
 interface EditingTrackAction extends SubtitleEditAction {
     editingTrack: Track;
 }
 
-interface CueAction extends SubtitleEditAction {
+export interface CueAction extends SubtitleEditAction {
     idx: number;
     cue: VTTCue;
 }

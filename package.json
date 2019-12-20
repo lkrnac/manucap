@@ -36,6 +36,7 @@
     "@types/redux": "^3.6.0",
     "@types/video.js": "7.3.3",
     "draft-js": "^0.11.3",
+    "draft-js-export-html": "^1.4.1",
     "mousetrap": "1.6.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
