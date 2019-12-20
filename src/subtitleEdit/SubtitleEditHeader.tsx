@@ -21,16 +21,13 @@ const getTrackDescription = (task: Task, track: Track): ReactElement => {
     if (!task || !task.type || !track) {
         return <div/>;
     }
-    if (task.type === "TASK_TRANSLATE") {
-        return <div>Translation from {getLanguageDescription(track)}</div>
-    }
-    if (task.type === "TASK_DIRECT_TRANSLATE") {
-        return <div>Direct Translation {getLanguageDescription(track)}</div>
-    }
-    if (task.type === "TASK_REVIEW") {
-        return <div>Review of {getLanguageDescription(track)} {getTrackType(track)}</div>
-    }
-    return <div>Caption in: {getLanguageDescription(track)}</div>
+    const trackDescriptions = {
+        TASK_TRANSLATE: <div>Translation from {getLanguageDescription(track)}</div>,
+        TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)}</div>,
+        TASK_REVIEW: <div>Review of {getLanguageDescription(track)} {getTrackType(track)}</div>,
+        TASK_CAPTION: <div>Caption in: {getLanguageDescription(track)}</div>
+    };
+    return trackDescriptions[task.type] ? trackDescriptions[task.type] : <div/>;
 };
 
 const getDueDate = (task: Task): ReactElement => {
