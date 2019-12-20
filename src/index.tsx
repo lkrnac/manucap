@@ -6,7 +6,7 @@ import {ReactElement, useEffect} from "react";
 import * as ReactDOM from "react-dom";
 import {Provider, useDispatch} from "react-redux";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
-import {updateEditingTrack} from "./player/trackSlices";
+import {updateEditingTrack, updateTask} from "./player/trackSlices";
 import {Language, TrackVersion} from "./player/model";
 import testingStore from "./testUtils/testingStore";
 
@@ -16,14 +16,25 @@ const TestApp = (): ReactElement => {
         setTimeout( // this simulates latency caused by server roundtrip
             dispatch(updateEditingTrack({
                 type: "CAPTION",
-                language: {id: "en-US"} as Language,
+                language: {id: "en-US", name: "English (US)"} as Language,
                 default: true,
+                videoTitle: "This is the video title",
                 currentVersion: {
                     cues: [
                         new VTTCue(0, 1, "Caption Line 1"),
                         new VTTCue(1, 2, "Caption Line 2"),
                     ]
                 } as TrackVersion
+            })),
+            500
+        )
+    });
+    useEffect(() => {
+        setTimeout( // this simulates latency caused by server roundtrip
+            dispatch(updateTask({
+               type: "TASK_CAPTION",
+               projectName: "Project One",
+               dueDate: "2019/12/30 10:00AM"
             })),
             500
         )
