@@ -4,6 +4,7 @@ import React, {
 } from "react";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
+import Toolbox from "./Toolbox";
 // import {useDispatch} from "react-redux";
 // import {updateCue} from "../player/trackSlices";
 // import {AppThunk} from "../reducers/subtitleEditReducers";
@@ -19,8 +20,9 @@ const SubtitleEdit = (props: Props): ReactElement => {
         <div style={{display: "flex", flexFlow: "column"}}>
             <SubtitleEditHeader />
             <div style={{display: "flex", height: "100%"}}>
-                <div style={{flex: "1 1 0", padding: "10px"}}>
+                <div style={{flex: "1 1 0", padding: "10px", display: "flex", flexFlow: "column"}}>
                     <EditingVideoPlayer mp4={props.mp4} poster={props.poster}/>
+                    <Toolbox />
                 </div>
                 <div style={{flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px"}}>
                     {/*    <input*/}
