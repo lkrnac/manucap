@@ -5,6 +5,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import KeyboardShortcuts from "./KeyboardShortcuts";
+import SubtitleSpecifications from "./SubtitleSpecifications";
 
 const Toolbox = (): ReactElement => {
     return (
@@ -17,6 +18,7 @@ const Toolbox = (): ReactElement => {
                     <Card.Body>
                         <ButtonToolbar>
                             <KeyboardShortcuts />
+                            <SubtitleSpecifications />
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>
