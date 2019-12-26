@@ -4,6 +4,7 @@ import React, {
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "../styles.css";
+import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 
 const SubtitleSpecifications = (): ReactElement => {
   const [show, setShow] = useState(false);
@@ -11,7 +12,8 @@ const SubtitleSpecifications = (): ReactElement => {
   const handleShow = () => setShow(true);
   return (
       <div>
-          <Button variant="primary" onClick={handleShow} className="dotsub-subtitle-specifications-button">
+          <Button variant="primary" onClick={handleShow} className="dotsub-subtitle-specifications-button"
+                  style={{ marginLeft: "10px"}}>
             Subtitle Specifications
           </Button>
 
@@ -20,7 +22,7 @@ const SubtitleSpecifications = (): ReactElement => {
                   <Modal.Title>Subtitle Specifications</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                  <p>Specifications</p>
+                  <SubtitleSpecificationsForm />
               </Modal.Body>
               <Modal.Footer>
                   <Button variant="primary" onClick={handleClose}>
