@@ -7,13 +7,31 @@ import testingStore from "../testUtils/testingStore";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SubtitleSpecifications from "./SubtitleSpecifications";
+import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 
 describe("SubtitleSpecifications", () => {
     it("renders", () => {
         // GIVEN
+        const subTitleSpecifications = {
+            "subtitleSpecificationId":"3f458b11-2996-41f5-8f22-0114c7bc84db",
+            "projectId":"68ed2f59-c5c3-4956-823b-d1f9f26585fb",
+            "enabled":true,
+            "audioDescription":false,
+            "onScreenText":true,
+            "spokenAudio":false,
+            "speakerIdentification":"NUMBERED",
+            "dialogueStyle":"DOUBLE_CHEVRON",
+            "maxLinesPerCaption":null,
+            "maxCharactersPerLine":null,
+            "minCaptionDurationInMillis":null,
+            "maxCaptionDurationInMillis":null,
+            "comments":"Note"
+        };
+
         const expectedNode = enzyme.mount(
             <div>
-                <Button variant="primary" className="dotsub-subtitle-specifications-button">
+                <Button variant="primary" className="dotsub-subtitle-specifications-button"
+                        style={{ marginLeft: "10px"}}>
                   Subtitle Specifications
                 </Button>
 
@@ -22,7 +40,7 @@ describe("SubtitleSpecifications", () => {
                         <Modal.Title>Subtitle Specifications</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                      <p>Specifications</p>
+                        <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary">
@@ -57,6 +75,7 @@ describe("SubtitleSpecifications", () => {
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
 
         // THEN
-        expect(actualNode.find(Modal).props().show).toEqual(true);
+        expect(actualNode.find(Modal).props().show)
+            .toEqual(true);
     });
 });

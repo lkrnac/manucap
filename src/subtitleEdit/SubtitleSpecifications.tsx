@@ -6,6 +6,24 @@ import Modal from "react-bootstrap/Modal";
 import "../styles.css";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 
+const readSubtitleSpecification = (): any => {
+    return {
+        "subtitleSpecificationId":"3f458b11-2996-41f5-8f22-0114c7bc84db",
+        "projectId":"68ed2f59-c5c3-4956-823b-d1f9f26585fb",
+        "enabled":true,
+        "audioDescription":false,
+        "onScreenText":true,
+        "spokenAudio":false,
+        "speakerIdentification":"NUMBERED",
+        "dialogueStyle":"DOUBLE_CHEVRON",
+        "maxLinesPerCaption":null,
+        "maxCharactersPerLine":null,
+        "minCaptionDurationInMillis":null,
+        "maxCaptionDurationInMillis":null,
+        "comments":"Note"
+    };
+}
+
 const SubtitleSpecifications = (): ReactElement => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -22,7 +40,7 @@ const SubtitleSpecifications = (): ReactElement => {
                   <Modal.Title>Subtitle Specifications</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                  <SubtitleSpecificationsForm />
+                  <SubtitleSpecificationsForm subTitleSpecifications={readSubtitleSpecification()} />
               </Modal.Body>
               <Modal.Footer>
                   <Button variant="primary" onClick={handleClose}>
