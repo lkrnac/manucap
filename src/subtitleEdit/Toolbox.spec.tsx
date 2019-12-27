@@ -6,6 +6,7 @@ import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import Toolbox from "./Toolbox";
 import KeyboardShortcuts from "./KeyboardShortcuts";
+import SubtitleSpecifications from "./SubtitleSpecifications";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
@@ -23,6 +24,7 @@ describe("Toolbox", () => {
                         <Card.Body>
                             <ButtonToolbar>
                                 <KeyboardShortcuts />
+                                <SubtitleSpecifications />
                             </ButtonToolbar>
                         </Card.Body>
                     </Accordion.Collapse>
