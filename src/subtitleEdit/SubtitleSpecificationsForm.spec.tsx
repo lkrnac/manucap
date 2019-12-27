@@ -5,6 +5,7 @@ import * as React from "react";
 import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
+import {getNumberArrayByRange} from "../utils/selectUtils";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 
@@ -20,10 +21,10 @@ describe("SubtitleSpecificationsForm", () => {
             "spokenAudio":true,
             "speakerIdentification":"NUMBERED",
             "dialogueStyle":"DOUBLE_CHEVRON",
-            "maxLinesPerCaption":null,
-            "maxCharactersPerLine":null,
-            "minCaptionDurationInMillis":null,
-            "maxCaptionDurationInMillis":null,
+            "maxLinesPerCaption":1,
+            "maxCharactersPerLine":40,
+            "minCaptionDurationInMillis":1,
+            "maxCaptionDurationInMillis":3,
             "comments":"This is a sample comment"
         };
 
@@ -45,7 +46,7 @@ describe("SubtitleSpecificationsForm", () => {
                     </Form.Group>
                     <Form.Group controlId="speakerIdentification">
                         <Form.Label>Speaker Identification</Form.Label>
-                        <Form.Control disabled as="select">
+                        <Form.Control disabled as="select" value="NUMBERED">
                             <option value="NONE">None</option>
                             <option value="FIRST_NAME">First Name</option>
                             <option value="FULLNAME">Full Name</option>
@@ -56,7 +57,7 @@ describe("SubtitleSpecificationsForm", () => {
                     </Form.Group>
                     <Form.Group controlId="dialogueStyle">
                         <Form.Label>Dialogue Style</Form.Label>
-                        <Form.Control disabled as="select">
+                        <Form.Control disabled as="select" value="DOUBLE_CHEVRON">
                             <option value="LINE_BREAKS">Line Breaks</option>
                             <option value="DOUBLE_CHEVRON">Double Chevron</option>
                             <option value="NO_DASHES">No Dashes</option>
@@ -66,28 +67,36 @@ describe("SubtitleSpecificationsForm", () => {
                     <Form.Row>
                         <Form.Group as={Col} controlId="maxLinesPerCaption">
                             <Form.Label>Max Lines Per Caption</Form.Label>
-                            <Form.Control disabled as="select">
-                                <option>1</option>
+                            <Form.Control disabled as="select" value="1">
+                                {getNumberArrayByRange(1,4).map(value => (
+                                    <option key={value} value={value}>{value}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group as={Col} controlId="maxCharactersPerLine">
                             <Form.Label>Max Characters Per Caption</Form.Label>
-                            <Form.Control disabled as="select">
-                                <option>1</option>
+                            <Form.Control disabled as="select" value="40">
+                                {getNumberArrayByRange(30,80).map(value => (
+                                    <option key={value} value={value}>{value}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} controlId="minCaptionDurationInMillis">
                             <Form.Label>Min Caption Duration In Seconds</Form.Label>
-                            <Form.Control disabled as="select">
-                                <option>1</option>
+                            <Form.Control disabled as="select" value="1">
+                                {getNumberArrayByRange(1,4).map(value => (
+                                    <option key={value} value={value}>{value}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group as={Col} controlId="maxCaptionDurationInMillis">
                             <Form.Label>Max Caption Duration In Seconds</Form.Label>
-                            <Form.Control disabled as="select">
-                                <option>1</option>
+                            <Form.Control disabled as="select" value="3">
+                                {getNumberArrayByRange(2,10).map(value => (
+                                    <option key={value} value={value}>{value}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
                     </Form.Row>

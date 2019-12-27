@@ -16,10 +16,10 @@ const readSubtitleSpecification = (): any => {
         "spokenAudio":false,
         "speakerIdentification":"NUMBERED",
         "dialogueStyle":"DOUBLE_CHEVRON",
-        "maxLinesPerCaption":null,
-        "maxCharactersPerLine":null,
-        "minCaptionDurationInMillis":null,
-        "maxCaptionDurationInMillis":null,
+        "maxLinesPerCaption":4,
+        "maxCharactersPerLine":30,
+        "minCaptionDurationInMillis":2,
+        "maxCaptionDurationInMillis":6,
         "comments":"Note"
     };
 }

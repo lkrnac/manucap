@@ -12,22 +12,6 @@ import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 describe("SubtitleSpecifications", () => {
     it("renders", () => {
         // GIVEN
-        const subTitleSpecifications = {
-            "subtitleSpecificationId":"3f458b11-2996-41f5-8f22-0114c7bc84db",
-            "projectId":"68ed2f59-c5c3-4956-823b-d1f9f26585fb",
-            "enabled":true,
-            "audioDescription":false,
-            "onScreenText":true,
-            "spokenAudio":false,
-            "speakerIdentification":"NUMBERED",
-            "dialogueStyle":"DOUBLE_CHEVRON",
-            "maxLinesPerCaption":null,
-            "maxCharactersPerLine":null,
-            "minCaptionDurationInMillis":null,
-            "maxCaptionDurationInMillis":null,
-            "comments":"Note"
-        };
-
         const expectedNode = enzyme.mount(
             <div>
                 <Button variant="primary" className="dotsub-subtitle-specifications-button"
@@ -40,7 +24,7 @@ describe("SubtitleSpecifications", () => {
                         <Modal.Title>Subtitle Specifications</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                        <SubtitleSpecificationsForm subTitleSpecifications />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary">
