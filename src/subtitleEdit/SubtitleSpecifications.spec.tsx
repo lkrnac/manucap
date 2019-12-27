@@ -15,8 +15,8 @@ describe("SubtitleSpecifications", () => {
         const expectedNode = enzyme.mount(
             <div>
                 <Button variant="primary" className="dotsub-subtitle-specifications-button"
-                        style={{ marginLeft: "10px"}}>
-                  Subtitle Specifications
+                        style={{marginLeft: "10px"}}>
+                    Subtitle Specifications
                 </Button>
 
                 <Modal centered dialogClassName="keyboard-modal">
@@ -24,7 +24,7 @@ describe("SubtitleSpecifications", () => {
                         <Modal.Title>Subtitle Specifications</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <SubtitleSpecificationsForm subTitleSpecifications />
+                        <SubtitleSpecificationsForm subTitleSpecifications/>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary">
@@ -37,8 +37,8 @@ describe("SubtitleSpecifications", () => {
 
         // WHEN
         const actualNode = enzyme.mount(
-            <Provider store={testingStore} >
-                <SubtitleSpecifications />
+            <Provider store={testingStore}>
+                <SubtitleSpecifications/>
             </Provider>
         );
 
@@ -50,8 +50,8 @@ describe("SubtitleSpecifications", () => {
     it("opens subtitle specifications modal when button is clicked", () => {
         // GIVEN
         const actualNode = enzyme.mount(
-            <Provider store={testingStore} >
-                <SubtitleSpecifications />
+            <Provider store={testingStore}>
+                <SubtitleSpecifications/>
             </Provider>
         );
 

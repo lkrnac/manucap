@@ -13,19 +13,19 @@ describe("SubtitleSpecificationsForm", () => {
     it("renders", () => {
         // GIVEN
         const subTitleSpecifications = {
-            "subtitleSpecificationId":"3f458b11-2996-41f5-8f22-0114c7bc84db",
-            "projectId":"68ed2f59-c5c3-4956-823b-d1f9f26585fb",
-            "enabled":true,
-            "audioDescription":true,
-            "onScreenText":true,
-            "spokenAudio":true,
-            "speakerIdentification":"NUMBERED",
-            "dialogueStyle":"DOUBLE_CHEVRON",
-            "maxLinesPerCaption":1,
-            "maxCharactersPerLine":40,
-            "minCaptionDurationInMillis":1,
-            "maxCaptionDurationInMillis":3,
-            "comments":"This is a sample comment"
+            "subtitleSpecificationId": "3f458b11-2996-41f5-8f22-0114c7bc84db",
+            "projectId": "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
+            "enabled": true,
+            "audioDescription": true,
+            "onScreenText": true,
+            "spokenAudio": true,
+            "speakerIdentification": "NUMBERED",
+            "dialogueStyle": "DOUBLE_CHEVRON",
+            "maxLinesPerCaption": 1,
+            "maxCharactersPerLine": 40,
+            "minCaptionDurationInMillis": 1,
+            "maxCaptionDurationInMillis": 3,
+            "comments": "This is a sample comment"
         };
 
         const expectedNode = enzyme.mount(
@@ -68,7 +68,7 @@ describe("SubtitleSpecificationsForm", () => {
                         <Form.Group as={Col} controlId="maxLinesPerCaption">
                             <Form.Label>Max Lines Per Caption</Form.Label>
                             <Form.Control disabled as="select" value="1">
-                                {getNumberArrayByRange(1,4).map(value => (
+                                {getNumberArrayByRange(1, 4).map(value => (
                                     <option key={value} value={value}>{value}</option>
                                 ))}
                             </Form.Control>
@@ -76,7 +76,7 @@ describe("SubtitleSpecificationsForm", () => {
                         <Form.Group as={Col} controlId="maxCharactersPerLine">
                             <Form.Label>Max Characters Per Caption</Form.Label>
                             <Form.Control disabled as="select" value="40">
-                                {getNumberArrayByRange(30,80).map(value => (
+                                {getNumberArrayByRange(30, 80).map(value => (
                                     <option key={value} value={value}>{value}</option>
                                 ))}
                             </Form.Control>
@@ -86,7 +86,7 @@ describe("SubtitleSpecificationsForm", () => {
                         <Form.Group as={Col} controlId="minCaptionDurationInMillis">
                             <Form.Label>Min Caption Duration In Seconds</Form.Label>
                             <Form.Control disabled as="select" value="1">
-                                {getNumberArrayByRange(1,4).map(value => (
+                                {getNumberArrayByRange(1, 4).map(value => (
                                     <option key={value} value={value}>{value}</option>
                                 ))}
                             </Form.Control>
@@ -94,7 +94,7 @@ describe("SubtitleSpecificationsForm", () => {
                         <Form.Group as={Col} controlId="maxCaptionDurationInMillis">
                             <Form.Label>Max Caption Duration In Seconds</Form.Label>
                             <Form.Control disabled as="select" value="3">
-                                {getNumberArrayByRange(2,10).map(value => (
+                                {getNumberArrayByRange(2, 10).map(value => (
                                     <option key={value} value={value}>{value}</option>
                                 ))}
                             </Form.Control>
@@ -111,7 +111,7 @@ describe("SubtitleSpecificationsForm", () => {
 
         // WHEN
         const actualNode = enzyme.mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications}/>
             </Provider>
         );
