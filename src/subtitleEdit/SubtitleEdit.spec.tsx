@@ -9,6 +9,7 @@ import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
+import Toolbox from "./Toolbox";
 
 describe("SubtitleEdit", () => {
     it("renders", () => {
@@ -43,12 +44,13 @@ describe("SubtitleEdit", () => {
                     </div>
                 </header>
                 <div style={{display: "flex", height: "100%"}}>
-                    <div style={{flex: "1 1 0", padding: "10px"}}>
+                    <div style={{flex: "1 1 0", padding: "10px", display: "flex", flexFlow: "column"}}>
                         <VideoPlayer
                             mp4="dummyMp4"
                             poster="dummyPoster"
                             tracks={[testingTrack]}
                         />
+                        <Toolbox />
                     </div>
                     <div style={{flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px"}}>
                     </div>
