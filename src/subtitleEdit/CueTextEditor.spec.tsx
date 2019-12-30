@@ -5,9 +5,27 @@ import { mount } from "enzyme";
 import CueTextEditor from "./CueTextEditor";
 import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
-import {ContentState, convertFromHTML, Editor, EditorState} from "draft-js";
+import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from "draft-js";
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
 
+const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string): void => {
+    // GIVEN
+    const actualNode = mount(
+        <Provider store={testingStore}>
+            <CueTextEditor index={0} cue={cue}/>
+        </Provider>
+    );
+    const editorState = actualNode.find(Editor).props().editorState;
+    const selectionState = editorState.getSelection();
+    const newSelectionState = selectionState.set("focusOffset", 5) as SelectionState;
+
+    // WHEN
+    actualNode.find(Editor).props().onChange(EditorState.acceptSelection(editorState, newSelectionState));
+    actualNode.find("button").at(buttonIndex).simulate("click");
+
+    // THEN
+    expect(testingStore.getState().cues[0].text).toEqual(expectedText);
+};
 describe("CueTextEditor", () => {
     it("renders empty", () => {
         // GIVEN
@@ -25,6 +43,7 @@ describe("CueTextEditor", () => {
         );
 
         // THEN
+        console.log(actualNode.html());
         expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
@@ -89,5 +108,17 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].text).toEqual("Paste text to start: someText");
+    });
+
+    it("updated cue when bold inline style is used", () => {
+        testInlineStyle(new VTTCue(0, 1, "someText"), 0, "<p><b>someT</b>ext</p>");
+    });
+
+    it("updated cue when italic inline style is used", () => {
+        testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<p><i>someT</i>ext</p>");
+    });
+
+    it("updated cue when underline inline style is used", () => {
+        testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<p><u>someT</u>ext</p>");
     });
 });
