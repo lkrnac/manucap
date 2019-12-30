@@ -10,7 +10,9 @@ interface Props{
 }
 
 
-// @ts-ignore
+// @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
+// defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
+// TODO: is this would be updated in types definition, we can remove this explicit cast + ts-ignore
 const convertToHtmlOptions = {
     inlineStyles: {
         BOLD: {element: "b"},

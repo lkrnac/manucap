@@ -110,18 +110,18 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].text).toEqual("<p>Paste text to start: someText</p>");
+        expect(testingStore.getState().cues[0].text).toEqual("Paste text to start: someText");
     });
 
     it("updated cue when bold inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 0, "<p><b>someT</b>ext</p>");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 0, "<b>someT</b>ext");
     });
 
     it("updated cue when italic inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<p><i>someT</i>ext</p>");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<i>someT</i>ext");
     });
 
     it("updated cue when underline inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<p><u>someT</u>ext</p>");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
     });
 });
