@@ -2,19 +2,22 @@ import React, {ReactElement, useEffect, useState} from "react";
 import {updateCue} from "../player/trackSlices";
 import {useDispatch} from "react-redux";
 import {ContentState, Editor, EditorState, convertFromHTML, RichUtils} from "draft-js";
-import {stateToHTML} from "draft-js-export-html";
+import {Options, stateToHTML} from "draft-js-export-html";
 
 interface Props{
     index: number;
     cue: VTTCue;
 }
 
+
+// @ts-ignore
 const convertToHtmlOptions = {
     inlineStyles: {
         BOLD: {element: "b"},
         ITALIC: {element: "i"},
-    }
-};
+    },
+    defaultBlockTag: null
+} as Options;
 
 const CueTextEditor = (props: Props): ReactElement => {
     const processedHTML = convertFromHTML(props.cue.text);
@@ -26,7 +29,7 @@ const CueTextEditor = (props: Props): ReactElement => {
             const text = stateToHTML(editorState.getCurrentContent(), convertToHtmlOptions);
             dispatch(updateCue(props.index, new VTTCue(props.cue.startTime, props.cue.endTime, text)));
         },
-        [ editorState ]
+        [ editorState, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
     );
     return (
         <div>
