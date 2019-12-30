@@ -26,13 +26,41 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
     // THEN
     expect(testingStore.getState().cues[0].text).toEqual(expectedText);
 };
+
+const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
+    const editorState = EditorState.createWithContent(contentState);
+    const expectedNode = mount(
+        <div>
+            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+            <button><b>B</b></button>
+            <button><i>I</i></button>
+            <button><u>U</u></button>
+        </div>
+    );
+
+    // WHEN
+    const actualNode = mount(
+        <Provider store={testingStore}>
+            <CueTextEditor index={0} cue={cue}/>
+        </Provider>
+    );
+
+    // THEN
+    expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+};
+
 describe("CueTextEditor", () => {
     it("renders empty", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "");
         const  editorState = EditorState.createEmpty();
         const expectedNode = mount(
-            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+            <div>
+                <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+                <button><b>B</b></button>
+                <button><i>I</i></button>
+                <button><u>U</u></button>
+            </div>
         );
 
         // WHEN
@@ -43,7 +71,6 @@ describe("CueTextEditor", () => {
         );
 
         // THEN
-        console.log(actualNode.html());
         expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
@@ -51,20 +78,8 @@ describe("CueTextEditor", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "someText");
         const contentState = ContentState.createFromText(cue.text);
-        const  editorState = EditorState.createWithContent(contentState);
-        const expectedNode = mount(
-            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
-        );
 
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue}/>
-            </Provider>
-        );
-
-        // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        testForContentState(contentState, cue);
     });
 
     it("renders with html", () => {
@@ -72,20 +87,8 @@ describe("CueTextEditor", () => {
         const cue = new VTTCue(0, 1, "<i>some</i> HTML <b>Text</b>");
         const processedHTML = convertFromHTML(cue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
-        const  editorState = EditorState.createWithContent(contentState);
-        const expectedNode = mount(
-            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
-        );
 
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue}/>
-            </Provider>
-        );
-
-        // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        testForContentState(contentState, cue);
     });
 
     it("updates cue in redux store when changed", () => {
@@ -107,7 +110,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].text).toEqual("Paste text to start: someText");
+        expect(testingStore.getState().cues[0].text).toEqual("<p>Paste text to start: someText</p>");
     });
 
     it("updated cue when bold inline style is used", () => {
