@@ -16,3 +16,31 @@
     max-width: 100%;
     width: 650px;
 }
+
+.time-editor {
+    max-width: 200px;
+}
+
+.time-editor .col {
+    padding: 0px;
+}
+
+.time-editor-input {
+    width: 40px;
+    border-width: 1px;
+    border-style: groove;
+    /* Prevent numeric arrows on Firefox */
+    -moz-appearance:textfield;
+}
+
+/* Prevent numeric arrows on Chrome, Safari, Edge, Opera */
+.time-editor-input::-webkit-outer-spin-button,
+.time-editor-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.ms-input {
+    width: 50px;
+}
+
