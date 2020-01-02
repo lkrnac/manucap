@@ -35,11 +35,13 @@ const CueTextEditor = (props: Props): ReactElement => {
     );
     return (
         <div>
-            <Editor
-                editorState={editorState}
-                onChange={(editorState: EditorState): void => setEditorState(editorState)}
-                spellCheck
-            />
+            <div className="form-control sbte-form-control" style={{ height: "4em" }}>
+                <Editor
+                    editorState={editorState}
+                    onChange={(editorState: EditorState): void => setEditorState(editorState)}
+                    spellCheck
+                />
+            </div>
             <button onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"))}>
                 <b>B</b>
             </button>

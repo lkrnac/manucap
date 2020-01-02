@@ -31,7 +31,9 @@ const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
     const editorState = EditorState.createWithContent(contentState);
     const expectedNode = mount(
         <div>
-            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+            <div className="form-control sbte-form-control" style={{ height: "4em" }}>
+                <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+            </div>
             <button><b>B</b></button>
             <button><i>I</i></button>
             <button><u>U</u></button>
@@ -56,7 +58,9 @@ describe("CueTextEditor", () => {
         const  editorState = EditorState.createEmpty();
         const expectedNode = mount(
             <div>
-                <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+                <div className="form-control sbte-form-control" style={{ height: "4em" }}>
+                    <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+                </div>
                 <button><b>B</b></button>
                 <button><i>I</i></button>
                 <button><u>U</u></button>
