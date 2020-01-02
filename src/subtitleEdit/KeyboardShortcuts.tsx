@@ -8,8 +8,8 @@ import "../styles.css";
 
 const KeyboardShortcuts = (): ReactElement => {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = (): void => setShow(false);
+    const handleShow = (): void => setShow(true);
     return (
         <div>
             <Button variant="primary" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
