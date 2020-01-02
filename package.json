@@ -21,7 +21,7 @@
     "prepare": "npm run build",
     "predeploy": "cd example && npm install && npm run build",
     "deploy": "gh-pages -d example/build",
-    "lint": "eslint src/**/*.ts src/**/*.tsx -o build/eslint.xml -f checkstyle || true"
+    "lint": "eslint src/**/*.ts src/**/*.tsx src/*.tsx src/*.ts -o build/eslint.xml -f checkstyle || true"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
