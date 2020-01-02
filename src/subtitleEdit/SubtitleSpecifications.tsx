@@ -6,8 +6,8 @@ import Modal from "react-bootstrap/Modal";
 import "../styles.css";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 
-const readSubtitleSpecification = (): any => {
-    return {
+const readSubtitleSpecification = (): any =>
+    ({
         "subtitleSpecificationId": "3f458b11-2996-41f5-8f22-0114c7bc84db",
         "projectId": "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
         "enabled": true,
@@ -21,13 +21,12 @@ const readSubtitleSpecification = (): any => {
         "minCaptionDurationInMillis": 2,
         "maxCaptionDurationInMillis": 6,
         "comments": "Note"
-    };
-}
+    });
 
 const SubtitleSpecifications = (): ReactElement => {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = (): void => setShow(false);
+    const handleShow = (): void => setShow(true);
     return (
         <div>
             <Button variant="primary" onClick={handleShow} className="dotsub-subtitle-specifications-button"
