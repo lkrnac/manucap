@@ -1,12 +1,13 @@
 import "video.js"; // VTTCue definition
-import {updateCue, updateEditingTrack} from "./trackSlices";
+import {updateCue, updateEditingTrack, updateTask} from "./trackSlices";
 import testingStore from "../testUtils/testingStore";
-import {Track} from "./model";
+import {Task, Track} from "./model";
 
 const testingTrack = {
     type: "CAPTION",
     language: {id: "en-US"},
     default: true,
+    videoTitle: "This is the video title",
     currentVersion: {
         cues: [
             new VTTCue(0, 1, "Caption Line 1"),
@@ -14,6 +15,12 @@ const testingTrack = {
         ]
     }
 } as Track;
+
+const testingTask = {
+    type: "TASK_CAPTION",
+    projectName: "Project One",
+    dueDate: "2019/12/30 10:00AM"
+} as Task;
 
 describe("trackSlices", () => {
     describe("updateCue", () => {
@@ -56,6 +63,16 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues).toEqual(expectedCues);
+        });
+    });
+
+    describe("updateTask", () => {
+        it("updates task", () => {
+            // WHEN
+            testingStore.dispatch(updateTask(testingTask));
+
+            // THEN
+            expect(testingStore.getState().task).toEqual(testingTask);
         });
     });
 });

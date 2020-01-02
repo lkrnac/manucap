@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Track} from "./model";
+import {Task, Track} from "./model";
 import {Dispatch} from "react";
 import {AppThunk} from "../reducers/subtitleEditReducers";
 
@@ -12,6 +12,10 @@ export interface SubtitleEditAction {
 
 interface EditingTrackAction extends SubtitleEditAction {
     editingTrack: Track;
+}
+
+interface TaskAction extends SubtitleEditAction {
+    task: Task;
 }
 
 export interface CueAction extends SubtitleEditAction {
@@ -51,6 +55,14 @@ export const editingTrackSlice = createSlice({
     }
 });
 
+export const taskSlice = createSlice({
+    name: "task",
+    initialState: null as Task | null,
+    reducers: {
+        updateTask: (_state, action: PayloadAction<TaskAction>): Task => action.payload.task,
+    }
+});
+
 export const updateCue = (idx: number, cue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
         dispatch(cuesSlice.actions.updateCue({ idx, cue }));
@@ -63,3 +75,9 @@ export const updateEditingTrack = (track: Track): AppThunk =>
         const cues = track && track.currentVersion ? track.currentVersion.cues : [] as VTTCue[];
         dispatch(cuesSlice.actions.updateCues({ cues }));
     };
+
+export const updateTask = (task: Task): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+        dispatch(taskSlice.actions.updateTask({ task }));
+    };
+
