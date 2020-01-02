@@ -1,10 +1,10 @@
-.subtitle-edit {
+.sbte-subtitle-edit {
     color: rgb(118, 131, 143);
-    font-family: Roboto, sans-serif;
     font-size: 14px;
+    font-family: Roboto, sans-serif;
 }
 
-.keyboard-modal {
+.sbte-keyboard-modal {
     max-width: 100%;
     width: 650px;
 }

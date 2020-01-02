@@ -16,7 +16,7 @@ const KeyboardShortcuts = (): ReactElement => {
                 Keyboard Shortcuts
             </Button>
 
-            <Modal show={show} onHide={handleClose} centered dialogClassName="keyboard-modal">
+            <Modal show={show} onHide={handleClose} centered dialogClassName="sbte-keyboard-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Keyboard Shortcuts</Modal.Title>
                 </Modal.Header>
