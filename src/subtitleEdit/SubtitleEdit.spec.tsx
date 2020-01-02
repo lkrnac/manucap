@@ -33,7 +33,7 @@ describe("SubtitleEdit", () => {
         } as Task;
         const expectedNode = enzyme.mount(
             <Provider store={testingStore} >
-                <div style={{display: "flex", flexFlow: "column"}}>
+                <div className="subtitle-edit" style={{display: "flex", flexFlow: "column"}}>
                     <header style={{display: "flex"}}>
                         <div style={{display: "flex", flexFlow: "column"}}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
