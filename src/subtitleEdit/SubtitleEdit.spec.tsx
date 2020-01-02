@@ -10,7 +10,6 @@ import testingStore from "../testUtils/testingStore";
 import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
 import Toolbox from "./Toolbox";
-import {updateEditingTrack} from "../player/trackSlices";
 import CueTextEditor from "./CueTextEditor";
 
 describe("SubtitleEdit", () => {
