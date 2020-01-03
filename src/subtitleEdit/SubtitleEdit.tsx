@@ -1,7 +1,7 @@
 import React, {ReactElement} from "react";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
-import Toolbox from "./Toolbox";
+import Toolbox from "../toolbox/Toolbox";
 import CueTextEditor from "./CueTextEditor";
 import {useSelector} from "react-redux";
 import {SubtitleEditState} from "../reducers/subtitleEditReducers";

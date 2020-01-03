@@ -9,7 +9,7 @@ import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
-import Toolbox from "./Toolbox";
+import Toolbox from "../toolbox/Toolbox";
 import CueTextEditor from "./CueTextEditor";
 
 describe("SubtitleEdit", () => {
