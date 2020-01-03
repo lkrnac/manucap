@@ -4,7 +4,7 @@ import React, {
 } from "react";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
-import Toolbox from "./Toolbox";
+import Toolbox from "../toolbox/Toolbox";
 // import {useDispatch} from "react-redux";
 // import {updateCue} from "../player/trackSlices";
 // import {AppThunk} from "../reducers/subtitleEditReducers";

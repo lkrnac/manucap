@@ -35,7 +35,7 @@ describe("SubtitleSpecifications", () => {
                     Subtitle Specifications
                 </Button>
 
-                <Modal centered dialogClassName="medium-modal">
+                <Modal centered dialogClassName="sbte-medium-modal">
                     <Modal.Header closeButton>
                         <Modal.Title>Subtitle Specifications</Modal.Title>
                     </Modal.Header>

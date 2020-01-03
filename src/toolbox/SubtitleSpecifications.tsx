@@ -36,7 +36,7 @@ const SubtitleSpecifications = (): ReactElement => {
                 Subtitle Specifications
             </Button>
 
-            <Modal show={show} onHide={handleClose} centered dialogClassName="medium-modal">
+            <Modal show={show} onHide={handleClose} centered dialogClassName="sbte-medium-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Subtitle Specifications</Modal.Title>
                 </Modal.Header>
