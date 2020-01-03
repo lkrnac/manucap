@@ -1,31 +1,18 @@
 import React, {
     ReactElement, useState
 } from "react";
+import {useSelector} from "react-redux";
+import {SubtitleEditState} from "../reducers/subtitleEditReducers";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "../styles.css";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import {SubtitleSpecification} from "./model";
 
-const readSubtitleSpecification = (): SubtitleSpecification => {
-    return {
-        subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
-        projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
-        enabled: true,
-        audioDescription: false,
-        onScreenText: true,
-        spokenAudio: false,
-        speakerIdentification: "NUMBERED",
-        dialogueStyle: "DOUBLE_CHEVRON",
-        maxLinesPerCaption: 4,
-        maxCharactersPerLine: 30,
-        minCaptionDurationInMillis: 2,
-        maxCaptionDurationInMillis: 6,
-        comments: "Note"
-    };
-};
-
 const SubtitleSpecifications = (): ReactElement => {
+    const stateSubtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecficiations);
+    const subtitleSpecifications = stateSubtitleSpecifications ? stateSubtitleSpecifications :
+        {} as SubtitleSpecification;
     const [show, setShow] = useState(false);
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
@@ -41,7 +28,7 @@ const SubtitleSpecifications = (): ReactElement => {
                     <Modal.Title>Subtitle Specifications</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <SubtitleSpecificationsForm subTitleSpecifications={readSubtitleSpecification()}/>
+                    <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>
