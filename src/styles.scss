@@ -17,8 +17,23 @@ $theme-colors: (
   border-color: $input-border-color;
 }
 
-.form-control, .btn-light {
+.form-control {
   color: $sbte-main-text-color;
+  border-radius: 0;
+}
+
+.btn-light {
+  color: $sbte-main-text-color;
+}
+
+.card-header {
+  color: white;
+  background-color: $sbte-main-text-color;
+}
+
+
+.card {
+  border-radius: 0;
 }
 
 // ##############################
@@ -32,6 +47,7 @@ $theme-colors: (
   background-color: white;
   margin-bottom: 10px;
 }
+
 
 .sbte-left-border {
   border-left: 1px solid $input-border-color;
