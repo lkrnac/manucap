@@ -5,9 +5,7 @@ import * as React from "react";
 import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
-import {getNumberArrayByRange} from "../utils/selectUtils";
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
+import Checkbox from "../common/Checkbox";
 
 describe("SubtitleSpecificationsForm", () => {
     it("renders", () => {
@@ -17,8 +15,8 @@ describe("SubtitleSpecificationsForm", () => {
             "projectId": "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             "enabled": true,
             "audioDescription": true,
-            "onScreenText": true,
-            "spokenAudio": true,
+            "onScreenText": false,
+            "spokenAudio": false,
             "speakerIdentification": "NUMBERED",
             "dialogueStyle": "DOUBLE_CHEVRON",
             "maxLinesPerCaption": 1,
@@ -30,82 +28,104 @@ describe("SubtitleSpecificationsForm", () => {
 
         const expectedNode = enzyme.mount(
             <div>
-                <Form>
-                    <Form.Group controlId="enabled">
-                        <Form.Check disabled type="checkbox" label="Enabled" id="enabled" checked/>
-                    </Form.Group>
+                <form>
+                    <div className="form-group">
+                        <Checkbox
+                            id="enabled"
+                            checked={true}
+                            labelMessage="Enabled"
+                            disabled={true}
+                        />
+                    </div>
                     <hr/>
-                    <Form.Group controlId="audioDescription">
-                        <Form.Check disabled type="checkbox" label="Audio Description" id="audioDescription" checked/>
-                    </Form.Group>
-                    <Form.Group controlId="onScreenText">
-                        <Form.Check disabled type="checkbox" label="On-Screen Text" id="onScreenText" checked/>
-                    </Form.Group>
-                    <Form.Group controlId="spokenAudio">
-                        <Form.Check disabled type="checkbox" label="Spoken Audio" id="spokenAudio" checked/>
-                    </Form.Group>
-                    <Form.Group controlId="speakerIdentification">
-                        <Form.Label>Speaker Identification</Form.Label>
-                        <Form.Control disabled as="select" value="NUMBERED">
+                    <div className="form-group">
+                        <Checkbox
+                            id="audioDescription"
+                            checked={true}
+                            labelMessage="Audio Description"
+                            disabled={true}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <Checkbox
+                            id="onScreenText"
+                            checked={false}
+                            labelMessage="On-Screen Text"
+                            disabled={true}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <Checkbox
+                            id="spokenAudio"
+                            checked={false}
+                            labelMessage="Spoken Audio"
+                            disabled={true}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Speaker Identification</label>
+                        <select className="form-control" disabled
+                                value="NUMBERED">
                             <option value="NONE">None</option>
                             <option value="FIRST_NAME">First Name</option>
                             <option value="FULLNAME">Full Name</option>
                             <option value="NUMBERED">Numbered</option>
                             <option value="GENDER">Gender</option>
                             <option value="GENRE">Genre</option>
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group controlId="dialogueStyle">
-                        <Form.Label>Dialogue Style</Form.Label>
-                        <Form.Control disabled as="select" value="DOUBLE_CHEVRON">
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label>Dialogue Style</label>
+                        <select className="form-control" disabled
+                                value="DOUBLE_CHEVRON">
                             <option value="LINE_BREAKS">Line Breaks</option>
                             <option value="DOUBLE_CHEVRON">Double Chevron</option>
                             <option value="NO_DASHES">No Dashes</option>
-                        </Form.Control>
-                    </Form.Group>
+                        </select>
+                    </div>
                     <hr/>
-                    <Form.Row>
-                        <Form.Group as={Col} controlId="maxLinesPerCaption">
-                            <Form.Label>Max Lines Per Caption</Form.Label>
-                            <Form.Control disabled as="select" value="1">
-                                {getNumberArrayByRange(1, 4).map(value => (
-                                    <option key={value} value={value}>{value}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
-                        <Form.Group as={Col} controlId="maxCharactersPerLine">
-                            <Form.Label>Max Characters Per Caption</Form.Label>
-                            <Form.Control disabled as="select" value="40">
-                                {getNumberArrayByRange(30, 80).map(value => (
-                                    <option key={value} value={value}>{value}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
-                    </Form.Row>
-                    <Form.Row>
-                        <Form.Group as={Col} controlId="minCaptionDurationInMillis">
-                            <Form.Label>Min Caption Duration In Seconds</Form.Label>
-                            <Form.Control disabled as="select" value="1">
-                                {getNumberArrayByRange(1, 4).map(value => (
-                                    <option key={value} value={value}>{value}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
-                        <Form.Group as={Col} controlId="maxCaptionDurationInMillis">
-                            <Form.Label>Max Caption Duration In Seconds</Form.Label>
-                            <Form.Control disabled as="select" value="3">
-                                {getNumberArrayByRange(2, 10).map(value => (
-                                    <option key={value} value={value}>{value}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
-                    </Form.Row>
+                    <div className="form-row">
+                        <div className="form-group col">
+                            <label className="form-label">
+                                Max Lines Per Caption
+                            </label>
+                            <select className="form-control" disabled value={1}>
+                                <option key={1} value={1}>{1}</option>
+                            </select>
+                        </div>
+                        <div className="form-group col">
+                            <label className="form-label">
+                                Max Characters Per Caption
+                            </label>
+                            <select className="form-control" disabled value={40}>
+                                <option key={40} value={40}>{40}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group col">
+                            <label className="form-label">
+                                Min Caption Duration In Seconds
+                            </label>
+                            <select className="form-control" disabled value={1}>
+                                <option key={1} value={1}>{1}</option>
+                            </select>
+                        </div>
+                        <div className="form-group col">
+                            <label className="form-label">
+                                Max Caption Duration In Seconds
+                            </label>
+                            <select className="form-control" disabled value={3}>
+                                <option key={3} value={3}>{3}</option>
+                            </select>
+                        </div>
+                    </div>
                     <hr/>
-                    <Form.Group controlId="comments">
-                        <Form.Label>Comments</Form.Label>
-                        <Form.Control disabled as="textarea" rows="2" value="This is a sample comment"/>
-                    </Form.Group>
-                </Form>
+                    <div className="form-group">
+                        <label>Speaker Identification</label>
+                        <textarea className="form-control" disabled rows={2} value="This is a sample comment"/>
+                    </div>
+                </form>
             </div>
         );
 
