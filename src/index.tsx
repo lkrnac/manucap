@@ -8,6 +8,7 @@ import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import {updateEditingTrack, updateTask} from "./player/trackSlices";
 import {Language, TrackVersion} from "./player/model";
 import testingStore from "./testUtils/testingStore";
+import "./localTesting.scss";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
