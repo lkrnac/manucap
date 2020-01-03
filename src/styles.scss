@@ -7,7 +7,8 @@ $font-size-base: 0.875rem; // 14px
 $body-color: $sbte-main-text-color;
 $input-color: $sbte-main-text-color;
 $theme-colors: (
-  "secondary": $sbte-main-text-color
+  "secondary": $sbte-main-text-color,
+  "light": #dee2e6
 );
 
 @import "../node_modules/bootstrap/scss/bootstrap";
@@ -16,7 +17,8 @@ $theme-colors: (
   border-color: $input-border-color;
 }
 
-.form-control {
+.form-control, .btn {
+  color: $sbte-main-text-color;
   border-radius: 0;
 }
 
