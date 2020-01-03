@@ -9,7 +9,7 @@ import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
 
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
-    <div>
+    <div className="sbte-cue-editor">
         <div className="form-control" style={{ height: "4em", borderRight: "none" }}>
             <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
         </div>
