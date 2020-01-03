@@ -24,7 +24,7 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = enzyme.mount(
-            <header style={{display: "flex"}}>
+            <header style={{display: "flex", paddingBottom: "10px"}}>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b></div>
@@ -70,7 +70,7 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = enzyme.mount(
-            <header style={{display: "flex"}}>
+            <header style={{display: "flex", paddingBottom: "10px"}}>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span></div>
@@ -110,7 +110,7 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = enzyme.mount(
-            <header style={{display: "flex"}}>
+            <header style={{display: "flex", paddingBottom: "10px"}}>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Direct Translation <span> to <b>Italian</b></span></div>
@@ -150,7 +150,7 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = enzyme.mount(
-            <header style={{display: "flex"}}>
+            <header style={{display: "flex", paddingBottom: "10px"}}>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Review of <b>English (US)</b> Caption</div>
@@ -196,7 +196,7 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = enzyme.mount(
-            <header style={{display: "flex"}}>
+            <header style={{display: "flex", paddingBottom: "10px"}}>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Review of <span><b>English (US)</b> to <b>Italian</b></span> Translation</div>
@@ -231,7 +231,7 @@ describe("SubtitleEditHeader", () => {
             videoTitle: "This is the video title",
         } as Track;
         const expectedNode = enzyme.mount(
-            <header style={{display: "flex"}}>
+            <header style={{display: "flex", paddingBottom: "10px"}}>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div><b>This is the video title</b> <i/></div>
                     <div/>
