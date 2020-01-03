@@ -4,7 +4,6 @@ import React, {
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
-import "../styles.css";
 
 const KeyboardShortcuts = (): ReactElement => {
     const [show, setShow] = useState(false);

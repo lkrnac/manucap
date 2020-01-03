@@ -5,6 +5,7 @@ import Toolbox from "./Toolbox";
 import CueTextEditor from "./CueTextEditor";
 import {useSelector} from "react-redux";
 import {SubtitleEditState} from "../reducers/subtitleEditReducers";
+import "../styles.scss";
 
 export interface Props {
     mp4: string;

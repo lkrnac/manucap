@@ -1,0 +1,18 @@
+$main-color: rgb(118, 131, 143);
+$main-font-size: 14px;
+
+.sbte-subtitle-edit {
+  color: $main-color;
+  font-size: $main-font-size;
+  font-family: Roboto, sans-serif;
+}
+
+.sbte-form-control {
+  color: $main-color;
+  font-size: $main-font-size;
+}
+
+.sbte-keyboard-modal {
+  max-width: 100%;
+  width: 650px;
+}
