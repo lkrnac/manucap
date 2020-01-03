@@ -1,12 +1,25 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React from "react";
-import { mount } from "enzyme";
+import {mount, ReactWrapper} from "enzyme";
 import CueTextEditor from "./CueTextEditor";
 import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from "draft-js";
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
+
+const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
+    <div>
+        <div className="form-control" style={{ height: "4em", borderRight: "none" }}>
+            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+        </div>
+        <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
+            <button className="btn btn-outline-secondary"><b>B</b></button>
+            <button className="btn btn-outline-secondary"><i>I</i></button>
+            <button className="btn btn-outline-secondary"><u>U</u></button>
+        </div>
+    </div>
+);
 
 const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string): void => {
     // GIVEN
@@ -29,16 +42,7 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
 
 const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
     const editorState = EditorState.createWithContent(contentState);
-    const expectedNode = mount(
-        <div>
-            <div className="form-control sbte-form-control" style={{ height: "4em" }}>
-                <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
-            </div>
-            <button><b>B</b></button>
-            <button><i>I</i></button>
-            <button><u>U</u></button>
-        </div>
-    );
+    const expectedNode = createExpectedNode(editorState);
 
     // WHEN
     const actualNode = mount(
@@ -56,16 +60,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "");
         const  editorState = EditorState.createEmpty();
-        const expectedNode = mount(
-            <div>
-                <div className="form-control sbte-form-control" style={{ height: "4em" }}>
-                    <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
-                </div>
-                <button><b>B</b></button>
-                <button><i>I</i></button>
-                <button><u>U</u></button>
-            </div>
-        );
+        const expectedNode = createExpectedNode(editorState);
 
         // WHEN
         const actualNode = mount(

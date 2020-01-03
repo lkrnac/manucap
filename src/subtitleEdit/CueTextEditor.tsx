@@ -34,22 +34,33 @@ const CueTextEditor = (props: Props): ReactElement => {
     );
     return (
         <div>
-            <div className="form-control" style={{ height: "4em" }}>
+            <div className="form-control" style={{ height: "4em", borderRight: "none" }}>
                 <Editor
                     editorState={editorState}
                     onChange={(editorState: EditorState): void => setEditorState(editorState)}
                     spellCheck
                 />
             </div>
-            <button onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"))}>
-                <b>B</b>
-            </button>
-            <button onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "ITALIC"))}>
-                <i>I</i>
-            </button>
-            <button onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "UNDERLINE"))}>
-                <u>U</u>
-            </button>
+            <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
+                <button
+                    className="btn btn-outline-secondary"
+                    onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"))}
+                >
+                    <b>B</b>
+                </button>
+                <button
+                    className="btn btn-outline-secondary"
+                    onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "ITALIC"))}
+                >
+                    <i>I</i>
+                </button>
+                <button
+                    className="btn btn-outline-secondary"
+                    onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "UNDERLINE"))}
+                >
+                    <u>U</u>
+                </button>
+            </div>
         </div>
     )
 };
