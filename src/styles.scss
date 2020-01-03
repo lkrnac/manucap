@@ -1,15 +1,14 @@
-$main-color: rgb(118, 131, 143);
-$main-font-size: 14px;
+$sbte-main-text-color: rgb(118, 131, 143);
+
+//Override bootstrap defaults
+$font-size-base: 0.875rem; // 14px
+$body-color: $sbte-main-text-color;
+$input-color: $sbte-main-text-color;
+
+@import "../node_modules/bootstrap/scss/bootstrap";
 
 .sbte-subtitle-edit {
-  color: $main-color;
-  font-size: $main-font-size;
   font-family: Roboto, sans-serif;
-}
-
-.sbte-form-control {
-  color: $main-color;
-  font-size: $main-font-size;
 }
 
 .sbte-keyboard-modal {

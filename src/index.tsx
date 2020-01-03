@@ -1,6 +1,5 @@
 import "./testUtils/initBrowserEnvironment";
 
-import "bootstrap/dist/css/bootstrap.min.css";
 import * as React from "react";
 import {ReactElement, useEffect} from "react";
 import * as ReactDOM from "react-dom";

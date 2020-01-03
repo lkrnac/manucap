@@ -9,7 +9,6 @@ interface Props{
     cue: VTTCue;
 }
 
-
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
 // defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
 // TODO: is this would be updated in types definition, we can remove this explicit cast + ts-ignore
@@ -35,7 +34,7 @@ const CueTextEditor = (props: Props): ReactElement => {
     );
     return (
         <div>
-            <div className="form-control sbte-form-control" style={{ height: "4em" }}>
+            <div className="form-control" style={{ height: "4em" }}>
                 <Editor
                     editorState={editorState}
                     onChange={(editorState: EditorState): void => setEditorState(editorState)}
