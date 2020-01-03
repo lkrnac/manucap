@@ -6,24 +6,25 @@ import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import Checkbox from "../common/Checkbox";
+import {SubtitleSpecification} from "./model";
 
 describe("SubtitleSpecificationsForm", () => {
     it("renders", () => {
         // GIVEN
-        const subTitleSpecifications = {
-            "subtitleSpecificationId": "3f458b11-2996-41f5-8f22-0114c7bc84db",
-            "projectId": "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
-            "enabled": true,
-            "audioDescription": true,
-            "onScreenText": false,
-            "spokenAudio": false,
-            "speakerIdentification": "NUMBERED",
-            "dialogueStyle": "DOUBLE_CHEVRON",
-            "maxLinesPerCaption": 1,
-            "maxCharactersPerLine": 40,
-            "minCaptionDurationInMillis": 1,
-            "maxCaptionDurationInMillis": 3,
-            "comments": "This is a sample comment"
+        const subTitleSpecifications: SubtitleSpecification = {
+            subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
+            projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
+            enabled: true,
+            audioDescription: true,
+            onScreenText: false,
+            spokenAudio: false,
+            speakerIdentification: "GENDER",
+            dialogueStyle: "LINE_BREAKS",
+            maxLinesPerCaption: 1,
+            maxCharactersPerLine: 40,
+            minCaptionDurationInMillis: 1,
+            maxCaptionDurationInMillis: 3,
+            comments: "This is a sample comment"
         };
 
         const expectedNode = enzyme.mount(
@@ -65,7 +66,7 @@ describe("SubtitleSpecificationsForm", () => {
                     <div className="form-group">
                         <label>Speaker Identification</label>
                         <select className="form-control" disabled
-                                value="NUMBERED">
+                                value="GENDER">
                             <option value="NONE">None</option>
                             <option value="FIRST_NAME">First Name</option>
                             <option value="FULLNAME">Full Name</option>
@@ -77,7 +78,7 @@ describe("SubtitleSpecificationsForm", () => {
                     <div className="form-group">
                         <label>Dialogue Style</label>
                         <select className="form-control" disabled
-                                value="DOUBLE_CHEVRON">
+                                value="LINE_BREAKS">
                             <option value="LINE_BREAKS">Line Breaks</option>
                             <option value="DOUBLE_CHEVRON">Double Chevron</option>
                             <option value="NO_DASHES">No Dashes</option>
