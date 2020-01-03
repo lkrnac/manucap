@@ -43,12 +43,14 @@ const CueTextEditor = (props: Props): ReactElement => {
             </div>
             <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
                 <button
+                    style={{ marginRight: "5px "}}
                     className="btn btn-outline-secondary"
                     onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"))}
                 >
                     <b>B</b>
                 </button>
                 <button
+                    style={{ marginRight: "5px "}}
                     className="btn btn-outline-secondary"
                     onClick={(): void => setEditorState(RichUtils.toggleInlineStyle(editorState, "ITALIC"))}
                 >
