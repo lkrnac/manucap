@@ -33,7 +33,7 @@ const CueTextEditor = (props: Props): ReactElement => {
         [ editorState, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
     );
     return (
-        <div>
+        <div className="sbte-cue-editor">
             <div className="form-control" style={{ height: "4em", borderRight: "none" }}>
                 <Editor
                     editorState={editorState}
