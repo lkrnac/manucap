@@ -9,6 +9,7 @@ export interface Props {
     readonly: boolean;
 }
 
+// TODO: add onchange when needed
 const Checkbox = (props: Props): ReactElement => {
     return (
         <div className="form-check">

@@ -34,7 +34,7 @@ describe("SubtitleSpecificationsForm", () => {
                             id="enabled"
                             checked={true}
                             labelMessage="Enabled"
-                            disabled={true}
+                            readonly={true}
                         />
                     </div>
                     <hr/>
@@ -43,7 +43,7 @@ describe("SubtitleSpecificationsForm", () => {
                             id="audioDescription"
                             checked={true}
                             labelMessage="Audio Description"
-                            disabled={true}
+                            readonly={true}
                         />
                     </div>
                     <div className="form-group">
@@ -51,7 +51,7 @@ describe("SubtitleSpecificationsForm", () => {
                             id="onScreenText"
                             checked={false}
                             labelMessage="On-Screen Text"
-                            disabled={true}
+                            readonly={true}
                         />
                     </div>
                     <div className="form-group">
@@ -59,7 +59,7 @@ describe("SubtitleSpecificationsForm", () => {
                             id="spokenAudio"
                             checked={false}
                             labelMessage="Spoken Audio"
-                            disabled={true}
+                            readonly={true}
                         />
                     </div>
                     <div className="form-group">
