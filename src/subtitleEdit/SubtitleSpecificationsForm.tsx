@@ -3,9 +3,10 @@ import React, {
 } from "react";
 import "../styles.css";
 import Checkbox from "../common/Checkbox";
+import {SubtitleSpecification} from "./model";
 
 export interface Props {
-    subTitleSpecifications: any;
+    subTitleSpecifications: SubtitleSpecification;
 }
 
 const SubtitleSpecificationsForm = (props: Props): ReactElement => {
