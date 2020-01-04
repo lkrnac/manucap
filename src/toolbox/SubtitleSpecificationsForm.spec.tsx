@@ -28,7 +28,7 @@ describe("SubtitleSpecificationsForm", () => {
 
         const expectedNode = enzyme.mount(
             <div>
-                <div className="form-group">
+                <div>
                     <label><strong>Enabled:&nbsp;</strong></label>
                     <label>No</label>
                 </div>
@@ -67,7 +67,7 @@ describe("SubtitleSpecificationsForm", () => {
 
         const expectedNode = enzyme.mount(
             <div>
-                <div className="form-group">
+                <div>
                     <label><strong>Enabled:&nbsp;</strong></label>
                     <label>Yes</label>
                 </div>
@@ -75,49 +75,49 @@ describe("SubtitleSpecificationsForm", () => {
                     <hr/>
                     <div style={{display: "flex"}}>
                         <div style={{flexFlow: "column"}}>
-                            <div className="form-group">
+                            <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
                                 <label>Yes</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>On-Screen Text:&nbsp;</strong></label>
                                 <label>No</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Spoken Audio:&nbsp;</strong></label>
                                 <label>No</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Speaker Identification:&nbsp;</strong></label>
                                 <label>Gender</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Dialogue Style:&nbsp;</strong></label>
                                 <label>Line Breaks</label>
                             </div>
                         </div>
                         <hr/>
                         <div style={{flexFlow: "column"}}>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                                 <label>1</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Max Characters Per Caption:&nbsp;</strong></label>
                                 <label>40</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
                                 <label>1</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
                                 <label>3</label>
                             </div>
                         </div>
                     </div>
                     <hr/>
-                    <div className="form-group">
+                    <div>
                         <label><strong>Comments:&nbsp;</strong></label>
                         <label>This is a sample comment</label>
                     </div>
