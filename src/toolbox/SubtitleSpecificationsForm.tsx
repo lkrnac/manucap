@@ -8,39 +8,21 @@ export interface Props {
     subTitleSpecifications: SubtitleSpecification;
 }
 
+const speakerIdentificationValues = {
+    NONE: "None",
+    FIRST_NAME: "First Name",
+    FULLNAME: "Full Name",
+    NUMBERED: "Numbered",
+    GENDER: "Gender",
+    GENRE: "Genre"
+};
+const dialogueStyleValues = {
+    LINE_BREAKS: "Line Breaks",
+    DOUBLE_CHEVRON: "Double Chevron",
+    NO_DASHES: "No Dashes"
+};
+
 const SubtitleSpecificationsForm = (props: Props): ReactElement => {
-    const getSpeakerIdentificationValue = (value: string): string => {
-        switch (value) {
-            case "NONE":
-                return "None";
-            case "FIRST_NAME":
-                return "First Name";
-            case "FULLNAME":
-                return "Full Name";
-            case "NUMBERED":
-                return "Numbered";
-            case "GENDER":
-                return "Gender";
-            case "GENRE":
-                return "Genre";
-            default:
-                return "N/A";
-        }
-    };
-
-    const getDialogueStyleValue = (value: string): string => {
-        switch (value) {
-            case "LINE_BREAKS":
-                return "Line Breaks";
-            case "DOUBLE_CHEVRON":
-                return "Double Chevron";
-            case "NO_DASHES":
-                return "No Dashes";
-            default:
-                return "N/A";
-        }
-    };
-
     return (
         <div>
             <div className="form-group">
@@ -66,11 +48,15 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                             </div>
                             <div className="form-group">
                                 <label><strong>Speaker Identification:&nbsp;</strong></label>
-                                <label>{getSpeakerIdentificationValue(props.subTitleSpecifications.speakerIdentification)}</label>
+                                <label>
+                                    {speakerIdentificationValues[props.subTitleSpecifications.speakerIdentification]}
+                                </label>
                             </div>
                             <div className="form-group">
                                 <label><strong>Dialogue Style:&nbsp;</strong></label>
-                                <label>{getDialogueStyleValue(props.subTitleSpecifications.dialogueStyle)}</label>
+                                <label>
+                                    {dialogueStyleValues[props.subTitleSpecifications.dialogueStyle]}
+                                </label>
                             </div>
                         </div>
                         <hr/>
