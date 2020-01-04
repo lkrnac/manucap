@@ -7,7 +7,8 @@ $font-size-base: 0.875rem; // 14px
 $body-color: $sbte-main-text-color;
 $input-color: $sbte-main-text-color;
 $theme-colors: (
-  "secondary": $sbte-main-text-color
+  "secondary": $sbte-main-text-color,
+  "light": #dee2e6
 );
 
 @import "../node_modules/bootstrap/scss/bootstrap";
@@ -17,7 +18,22 @@ $theme-colors: (
 }
 
 .form-control {
+  color: $sbte-main-text-color;
   border-radius: 0;
+}
+
+.btn-light {
+  color: $sbte-main-text-color;
+}
+
+.card-header {
+  color: white;
+  background-color: $sbte-main-text-color;
+}
+
+.card {
+  border-radius: 0;
+  border: 0;
 }
 
 // ##############################
@@ -26,6 +42,12 @@ $theme-colors: (
 .sbte-subtitle-edit {
   font-family: Roboto, sans-serif;
 }
+
+.sbte-cue-editor {
+  background-color: white;
+  margin-bottom: 10px;
+}
+
 
 .sbte-left-border {
   border-left: 1px solid $input-border-color;

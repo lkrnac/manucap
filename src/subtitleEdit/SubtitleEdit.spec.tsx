@@ -9,7 +9,7 @@ import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
-import Toolbox from "./Toolbox";
+import Toolbox from "../toolbox/Toolbox";
 import CueTextEditor from "./CueTextEditor";
 
 describe("SubtitleEdit", () => {
@@ -33,8 +33,8 @@ describe("SubtitleEdit", () => {
         } as Task;
         const expectedNode = enzyme.mount(
             <Provider store={testingStore} >
-                <div className="sbte-subtitle-edit" style={{display: "flex", flexFlow: "column"}}>
-                    <header style={{display: "flex"}}>
+                <div className="sbte-subtitle-edit" style={{display: "flex", flexFlow: "column", padding: "10px"}}>
+                    <header style={{display: "flex", paddingBottom: "10px"}}>
                         <div style={{display: "flex", flexFlow: "column"}}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b></div>
@@ -45,7 +45,7 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{display: "flex", height: "100%"}}>
-                        <div style={{flex: "1 1 0", padding: "10px", display: "flex", flexFlow: "column"}}>
+                        <div style={{flex: "1 1 0", display: "flex", flexFlow: "column", paddingRight: "10px"}}>
                             <VideoPlayer
                                 mp4="dummyMp4"
                                 poster="dummyPoster"
@@ -53,7 +53,7 @@ describe("SubtitleEdit", () => {
                             />
                             <Toolbox />
                         </div>
-                        <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px" }}>
+                        <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
                             <CueTextEditor index={0} cue={cues[0]}/>
                             <CueTextEditor index={1} cue={cues[1]}/>
                         </div>

@@ -9,13 +9,13 @@ import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
 
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
-    <div>
+    <div className="sbte-cue-editor">
         <div className="form-control" style={{ height: "4em", borderRight: "none" }}>
             <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
         </div>
         <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
-            <button className="btn btn-outline-secondary"><b>B</b></button>
-            <button className="btn btn-outline-secondary"><i>I</i></button>
+            <button style={{ marginRight: "5px "}} className="btn btn-outline-secondary"><b>B</b></button>
+            <button style={{ marginRight: "5px "}} className="btn btn-outline-secondary"><i>I</i></button>
             <button className="btn btn-outline-secondary"><u>U</u></button>
         </div>
     </div>
