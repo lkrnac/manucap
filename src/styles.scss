@@ -1,0 +1,37 @@
+$sbte-main-text-color: rgb(118, 131, 143);
+
+// ##############################
+// Override bootstrap defaults
+// ##############################
+$font-size-base: 0.875rem; // 14px
+$body-color: $sbte-main-text-color;
+$input-color: $sbte-main-text-color;
+$theme-colors: (
+  "secondary": $sbte-main-text-color
+);
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.btn-outline-secondary {
+  border-color: $input-border-color;
+}
+
+.form-control {
+  border-radius: 0;
+}
+
+// ##############################
+// Subtitle Edit visuals
+// ##############################
+.sbte-subtitle-edit {
+  font-family: Roboto, sans-serif;
+}
+
+.sbte-left-border {
+  border-left: 1px solid $input-border-color;
+}
+
+.sbte-keyboard-modal {
+  max-width: 100%;
+  width: 650px;
+}
