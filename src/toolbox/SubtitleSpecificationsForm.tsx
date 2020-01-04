@@ -25,7 +25,7 @@ const dialogueStyleValues = {
 const SubtitleSpecificationsForm = (props: Props): ReactElement => {
     return (
         <div>
-            <div className="form-group">
+            <div>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>{props.subTitleSpecifications.enabled ? "Yes" : "No"}</label>
             </div>
@@ -34,25 +34,25 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                     <hr/>
                     <div style={{display: "flex"}}>
                         <div style={{flexFlow: "column"}}>
-                            <div className="form-group">
+                            <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.audioDescription ? "Yes" : "No"}</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>On-Screen Text:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.onScreenText ? "Yes" : "No"}</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Spoken Audio:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.spokenAudio ? "Yes" : "No"}</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Speaker Identification:&nbsp;</strong></label>
                                 <label>
                                     {speakerIdentificationValues[props.subTitleSpecifications.speakerIdentification]}
                                 </label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Dialogue Style:&nbsp;</strong></label>
                                 <label>
                                     {dialogueStyleValues[props.subTitleSpecifications.dialogueStyle]}
@@ -61,26 +61,26 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                         </div>
                         <hr/>
                         <div style={{flexFlow: "column"}}>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.maxLinesPerCaption}</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Max Characters Per Caption:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.maxCharactersPerLine}</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.minCaptionDurationInMillis}</label>
                             </div>
-                            <div className="form-group">
+                            <div>
                                 <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.maxCaptionDurationInMillis}</label>
                             </div>
                         </div>
                     </div>
                     <hr/>
-                    <div className="form-group">
+                    <div>
                         <label><strong>Comments:&nbsp;</strong></label>
                         <label>{props.subTitleSpecifications.comments}</label>
                     </div>
