@@ -30,12 +30,7 @@ describe("SubtitleSpecificationsModal", () => {
         };
         const expectedNode = enzyme.mount(
             <div>
-                <Button variant="primary" className="dotsub-subtitle-specifications-button"
-                        style={{marginLeft: "10px"}}>
-                    Subtitle Specifications
-                </Button>
-
-                <Modal centered dialogClassName="sbte-medium-modal">
+                <Modal show={false} onHide={() => {}} centered dialogClassName="sbte-medium-modal">
                     <Modal.Header closeButton>
                         <Modal.Title>Subtitle Specifications</Modal.Title>
                     </Modal.Header>
@@ -54,28 +49,12 @@ describe("SubtitleSpecificationsModal", () => {
         // WHEN
         const actualNode = enzyme.mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsModal/>
+                <SubtitleSpecificationsModal show={false} onClose={() => {}}/>
             </Provider>
         );
 
         // THEN
         expect(actualNode.html())
             .toEqual(expectedNode.html());
-    });
-
-    it("opens subtitle specifications modal when button is clicked", () => {
-        // GIVEN
-        const actualNode = enzyme.mount(
-            <Provider store={testingStore}>
-                <SubtitleSpecificationsModal/>
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
-
-        // THEN
-        expect(actualNode.find(Modal).props().show)
-            .toEqual(true);
     });
 });
