@@ -32,7 +32,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
             {props.subTitleSpecifications.enabled ? (
                 <div>
                     <hr/>
-                    <div style={{display: "flex"}}>
+                    <div style={{display: "flex", marginRight: "20px"}}>
                         <div style={{flexFlow: "column"}}>
                             <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
