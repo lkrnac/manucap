@@ -14,7 +14,7 @@ describe("KeyboardShortcuts", () => {
         // GIVEN
         const expectedNode = enzyme.mount(
             <div>
-                <Button variant="primary" className="dotsub-keyboard-shortcuts-button">
+                <Button variant="light" className="dotsub-keyboard-shortcuts-button">
                     Keyboard Shortcuts
                 </Button>
 

@@ -1,7 +1,6 @@
 import React, {
     ReactElement
 } from "react";
-import "../styles.css";
 import {SubtitleSpecification} from "./model";
 
 export interface Props {

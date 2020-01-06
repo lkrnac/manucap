@@ -2,7 +2,6 @@ import React, {
     ReactElement, useState
 } from "react";
 import Button from "react-bootstrap/Button";
-import "../styles.css";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 
 const SubtitleSpecificationsButton = (): ReactElement => {

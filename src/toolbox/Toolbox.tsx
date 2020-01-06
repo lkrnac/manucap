@@ -4,7 +4,7 @@ import React, {
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import KeyboardShortcuts from "../subtitleEdit/KeyboardShortcuts";
+import KeyboardShortcuts from "./KeyboardShortcuts";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 
 const Toolbox = (): ReactElement => {

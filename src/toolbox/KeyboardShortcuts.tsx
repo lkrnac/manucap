@@ -4,7 +4,6 @@ import React, {
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
-import "../styles.css";
 
 const KeyboardShortcuts = (): ReactElement => {
     const [show, setShow] = useState(false);
@@ -12,7 +11,7 @@ const KeyboardShortcuts = (): ReactElement => {
     const handleShow = (): void => setShow(true);
     return (
         <div>
-            <Button variant="primary" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
+            <Button variant="light" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
                 Keyboard Shortcuts
             </Button>
 

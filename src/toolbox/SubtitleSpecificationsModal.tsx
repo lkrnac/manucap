@@ -5,7 +5,6 @@ import {useSelector} from "react-redux";
 import {SubtitleEditState} from "../reducers/subtitleEditReducers";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import "../styles.css";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import {SubtitleSpecification} from "./model";
 

@@ -43,7 +43,7 @@ const SubtitleEditHeader = (): ReactElement => {
     const track = editingTrack ? editingTrack : {} as Track;
     const task = stateTask ? stateTask : {} as Task;
     return (
-        <header style={{display: "flex"}}>
+        <header style={{display: "flex", paddingBottom: "10px" }}>
             <div style={{display: "flex", flexFlow: "column"}}>
                 <div><b>{track.videoTitle}</b> <i>{task.projectName}</i></div>
                 {getTrackDescription(task, track)}
