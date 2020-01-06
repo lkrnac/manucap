@@ -9,7 +9,7 @@ import "../styles.css";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import {SubtitleSpecification} from "./model";
 
-const SubtitleSpecifications = (): ReactElement => {
+const SubtitleSpecificationsModal = (): ReactElement => {
     const stateSubtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecficiations);
     const subtitleSpecifications = stateSubtitleSpecifications ? stateSubtitleSpecifications :
         {} as SubtitleSpecification;
@@ -40,4 +40,4 @@ const SubtitleSpecifications = (): ReactElement => {
     );
 };
 
-export default SubtitleSpecifications;
+export default SubtitleSpecificationsModal;

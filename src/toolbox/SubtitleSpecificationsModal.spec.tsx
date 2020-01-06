@@ -6,11 +6,11 @@ import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import SubtitleSpecifications from "./SubtitleSpecifications";
+import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import {SubtitleSpecification} from "./model";
 
-describe("SubtitleSpecifications", () => {
+describe("SubtitleSpecificationsModal", () => {
     it("renders", () => {
         // GIVEN
         const subtitleSpecification: SubtitleSpecification = {
@@ -54,7 +54,7 @@ describe("SubtitleSpecifications", () => {
         // WHEN
         const actualNode = enzyme.mount(
             <Provider store={testingStore}>
-                <SubtitleSpecifications/>
+                <SubtitleSpecificationsModal/>
             </Provider>
         );
 
@@ -67,7 +67,7 @@ describe("SubtitleSpecifications", () => {
         // GIVEN
         const actualNode = enzyme.mount(
             <Provider store={testingStore}>
-                <SubtitleSpecifications/>
+                <SubtitleSpecificationsModal/>
             </Provider>
         );
 
