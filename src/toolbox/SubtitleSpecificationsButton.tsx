@@ -10,7 +10,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const handleShow = (): void => setShow(true);
     return (
         <div>
-            <Button variant="primary" onClick={handleShow} className="dotsub-subtitle-specifications-button"
+            <Button variant="light" onClick={handleShow} className="dotsub-subtitle-specifications-button"
                     style={{marginLeft: "10px"}}>
                 Subtitle Specifications
             </Button>

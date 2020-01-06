@@ -17,7 +17,7 @@ describe("SubtitleSpecificationsButton", () => {
         const expectedNode = enzyme.mount(
             <Provider store={testingStore}>
                 <div>
-                    <Button variant="primary" className="dotsub-subtitle-specifications-button"
+                    <Button variant="light" className="dotsub-subtitle-specifications-button"
                             style={{marginLeft: "10px"}}>
                         Subtitle Specifications
                     </Button>
