@@ -10,6 +10,8 @@ import testingStore from "../testUtils/testingStore";
 import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
 import Toolbox from "../toolbox/Toolbox";
+import {readSubtitleSpecification} from "../toolbox/subtitleSpecificationSlice";
+import {SubtitleSpecification} from "../toolbox/model";
 
 describe("SubtitleEdit", () => {
     it("renders", () => {
@@ -32,40 +34,43 @@ describe("SubtitleEdit", () => {
             dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = enzyme.mount(
-            <div style={{display: "flex", flexFlow: "column"}}>
-                <header style={{display: "flex"}}>
-                    <div style={{display: "flex", flexFlow: "column"}}>
-                        <div><b>This is the video title</b> <i>Project One</i></div>
-                        <div>Caption in: <b>English (US)</b></div>
-                    </div>
-                    <div style={{flex: "2"}}/>
-                    <div style={{display: "flex", flexFlow: "column"}}>
-                        <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    </div>
-                </header>
-                <div style={{display: "flex", height: "100%"}}>
-                    <div style={{flex: "1 1 0", padding: "10px", display: "flex", flexFlow: "column"}}>
-                        <VideoPlayer
-                            mp4="dummyMp4"
-                            poster="dummyPoster"
-                            tracks={[testingTrack]}
-                        />
-                        <Toolbox />
-                    </div>
-                    <div style={{flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px"}}>
+            <Provider store={testingStore}>
+                <div style={{display: "flex", flexFlow: "column"}}>
+                    <header style={{display: "flex"}}>
+                        <div style={{display: "flex", flexFlow: "column"}}>
+                            <div><b>This is the video title</b> <i>Project One</i></div>
+                            <div>Caption in: <b>English (US)</b></div>
+                        </div>
+                        <div style={{flex: "2"}}/>
+                        <div style={{display: "flex", flexFlow: "column"}}>
+                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                        </div>
+                    </header>
+                    <div style={{display: "flex", height: "100%"}}>
+                        <div style={{flex: "1 1 0", padding: "10px", display: "flex", flexFlow: "column"}}>
+                            <VideoPlayer
+                                mp4="dummyMp4"
+                                poster="dummyPoster"
+                                tracks={[testingTrack]}
+                            />
+                            <Toolbox/>
+                        </div>
+                        <div style={{flex: "1 1 0", display: "flex", flexDirection: "column", padding: "10px"}}>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </Provider>
         );
 
         // WHEN
         const actualNode = enzyme.mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            <Provider store={testingStore}>
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster"/>
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(readSubtitleSpecification({enabled: false} as SubtitleSpecification));
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
