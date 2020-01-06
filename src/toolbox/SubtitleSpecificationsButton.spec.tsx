@@ -22,8 +22,7 @@ describe("SubtitleSpecificationsButton", () => {
                         Subtitle Specifications
                     </Button>
 
-                    <SubtitleSpecificationsModal show={true} onClose={() => {
-                    }}/>
+                    <SubtitleSpecificationsModal show={true} onClose={(): void => {}}/>
                 </div>
             </Provider>
         );

@@ -30,7 +30,7 @@ describe("SubtitleSpecificationsModal", () => {
         };
         const expectedNode = enzyme.mount(
             <div>
-                <Modal show={false} onHide={() => {}} centered dialogClassName="sbte-medium-modal">
+                <Modal show={false} onHide={(): void => {}} centered dialogClassName="sbte-medium-modal">
                     <Modal.Header closeButton>
                         <Modal.Title>Subtitle Specifications</Modal.Title>
                     </Modal.Header>
@@ -49,7 +49,7 @@ describe("SubtitleSpecificationsModal", () => {
         // WHEN
         const actualNode = enzyme.mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsModal show={false} onClose={() => {}}/>
+                <SubtitleSpecificationsModal show={false} onClose={(): void => {}}/>
             </Provider>
         );
 
