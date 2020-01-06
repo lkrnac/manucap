@@ -14,11 +14,11 @@ describe("KeyboardShortcuts", () => {
         // GIVEN
         const expectedNode = enzyme.mount(
             <div>
-                <Button variant="primary" className="dotsub-keyboard-shortcuts-button">
+                <Button variant="light" className="dotsub-keyboard-shortcuts-button">
                     Keyboard Shortcuts
                 </Button>
 
-                <Modal centered dialogClassName="keyboard-modal">
+                <Modal centered dialogClassName="sbte-medium-modal">
                     <Modal.Header closeButton>
                         <Modal.Title>Keyboard Shortcuts</Modal.Title>
                     </Modal.Header>

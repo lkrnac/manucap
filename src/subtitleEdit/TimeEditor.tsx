@@ -3,7 +3,6 @@ import React, {
     KeyboardEvent,
     ReactElement
 } from "react";
-import "../styles.css";
 import {Container, Col, Row} from "react-bootstrap";
 
 const BEGIN_NUMERIC = 0;
