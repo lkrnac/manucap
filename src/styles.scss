@@ -57,3 +57,13 @@ $theme-colors: (
   max-width: 100%;
   width: 650px;
 }
+
+.sbte-time-editor {
+    max-width: 160px;
+}
+
+.sbte-time-editor-input {
+    width: 40px;
+    border: 1px solid $input-border-color;
+    padding: 5px;
+}
