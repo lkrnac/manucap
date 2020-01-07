@@ -18,7 +18,7 @@ describe("KeyboardShortcuts", () => {
                     Keyboard Shortcuts
                 </Button>
 
-                <Modal centered dialogClassName="sbte-keyboard-modal">
+                <Modal centered dialogClassName="sbte-medium-modal">
                     <Modal.Header closeButton>
                         <Modal.Title>Keyboard Shortcuts</Modal.Title>
                     </Modal.Header>
