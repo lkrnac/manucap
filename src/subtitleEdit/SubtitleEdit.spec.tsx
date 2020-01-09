@@ -11,6 +11,8 @@ import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
 import Toolbox from "../toolbox/Toolbox";
 import CueTextEditor from "./CueTextEditor";
+import {readSubtitleSpecification} from "../toolbox/subtitleSpecificationSlice";
+import {SubtitleSpecification} from "../toolbox/model";
 
 describe("SubtitleEdit", () => {
     it("renders", () => {
@@ -70,6 +72,7 @@ describe("SubtitleEdit", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(readSubtitleSpecification({enabled: false} as SubtitleSpecification));
 
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
