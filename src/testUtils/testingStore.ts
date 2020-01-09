@@ -6,7 +6,10 @@ import subtitleEditReducers from "../reducers/subtitleEditReducers";
 // import logger from "redux-logger";
 // const middleware = [...getDefaultMiddleware({ serializableCheck: false }), logger];
 
-const middleware = [...getDefaultMiddleware({ serializableCheck: false })];
-const testingStore = configureStore({ reducer: subtitleEditReducers, middleware });
+export const createTestingStore = () => {
+    const middleware = [...getDefaultMiddleware({serializableCheck: false})];
+    return configureStore({reducer: subtitleEditReducers, middleware});
+};
 
-export default testingStore;
+export const testingStore = createTestingStore();
+

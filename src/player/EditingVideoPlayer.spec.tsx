@@ -3,7 +3,7 @@ import {mount} from "enzyme";
 import React from "react";
 import EditingVideoPlayer from "./EditingVideoPlayer";
 import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
+import {testingStore} from "../testUtils/testingStore";
 import {updateEditingTrack} from "./trackSlices";
 import {Track} from "./model";
 import VideoPlayer from "./VideoPlayer";

@@ -4,12 +4,17 @@ import * as enzyme from "enzyme";
 import * as React from "react";
 import {removeVideoPlayerDynamicValue} from "../testUtils/testUtils";
 import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
+import {createTestingStore} from "../testUtils/testingStore";
 import {Language, Task, Track} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 
+let testingStore: any;
+
 describe("SubtitleEditHeader", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+    });
     it("renders Caption", () => {
         // GIVEN
         const testingTrack = {
@@ -250,7 +255,6 @@ describe("SubtitleEditHeader", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask({} as Task));
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))

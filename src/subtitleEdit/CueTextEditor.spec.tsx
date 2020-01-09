@@ -4,7 +4,7 @@ import React from "react";
 import {mount, ReactWrapper} from "enzyme";
 import CueTextEditor from "./CueTextEditor";
 import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
+import {testingStore} from "../testUtils/testingStore";
 import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from "draft-js";
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
 
