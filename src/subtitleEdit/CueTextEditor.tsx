@@ -25,12 +25,13 @@ const CueTextEditor = (props: Props): ReactElement => {
     const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
     const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState));
     const dispatch = useDispatch();
+    const currentContent = editorState.getCurrentContent();
     useEffect(
         () => {
-            const text = stateToHTML(editorState.getCurrentContent(), convertToHtmlOptions);
+            const text = stateToHTML(currentContent, convertToHtmlOptions);
             dispatch(updateCue(props.index, new VTTCue(props.cue.startTime, props.cue.endTime, text)));
         },
-        [ editorState, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
+        [ currentContent, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
     );
     return (
         <div className="sbte-cue-editor">
