@@ -13,16 +13,12 @@ describe("TimeEditor", () => {
                     <input id="test-minutes" type="text" className="sbte-time-editor-input" value="000"
                            onChange={(): void => {}}/>
                 </div>
-                <div style={{flexFlow: "column"}}>
-                    <div style={{verticalAlign: "bottom", padding: "5px"}}><span>:</span></div>
-                </div>
+                <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
                 <div style={{flexFlow: "column"}}>
                     <input id="test-seconds" type="text" className="sbte-time-editor-input" style={{width: "30px"}} value="00"
                            onChange={(): void => {}}/>
                 </div>
-                <div>
-                    <div style={{verticalAlign: "bottom", padding: "5px"}}><span>.</span></div>
-                </div>
+                <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
                 <div style={{flexFlow: "column"}}>
                     <input id="test-milliseconds" type="text" className="sbte-time-editor-input" value="000"
                            onChange={(): void => {}}/>
@@ -47,16 +43,12 @@ describe("TimeEditor", () => {
                     <input id="test-minutes" type="text" className="sbte-time-editor-input" value="999"
                            onChange={(): void => {}}/>
                 </div>
-                <div style={{flexFlow: "column"}}>
-                    <div style={{verticalAlign: "bottom", padding: "5px"}}><span>:</span></div>
-                </div>
+                <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
                 <div style={{flexFlow: "column"}}>
                     <input id="test-seconds" type="text" className="sbte-time-editor-input" style={{width: "30px"}} value="00"
                            onChange={(): void => {}}/>
                 </div>
-                <div>
-                    <div style={{verticalAlign: "bottom", padding: "5px"}}><span>.</span></div>
-                </div>
+                <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
                 <div style={{flexFlow: "column"}}>
                     <input id="test-milliseconds" type="text" className="sbte-time-editor-input" value="999"
                            onChange={(): void => {}}/>
@@ -81,16 +73,12 @@ describe("TimeEditor", () => {
                     <input id="test-minutes" type="text" className="sbte-time-editor-input" value="999"
                            onChange={(): void => {}}/>
                 </div>
-                <div style={{flexFlow: "column"}}>
-                    <div style={{verticalAlign: "bottom", padding: "5px"}}><span>:</span></div>
-                </div>
+                <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
                 <div style={{flexFlow: "column"}}>
                     <input id="test-seconds" type="text" className="sbte-time-editor-input" style={{width: "30px"}} value="59"
                            onChange={(): void => {}}/>
                 </div>
-                <div>
-                    <div style={{verticalAlign: "bottom", padding: "5px"}}><span>.</span></div>
-                </div>
+                <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
                 <div style={{flexFlow: "column"}}>
                     <input id="test-milliseconds" type="text" className="sbte-time-editor-input" value="999"
                            onChange={(): void => {}}/>

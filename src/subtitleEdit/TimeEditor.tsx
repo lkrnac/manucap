@@ -81,9 +81,7 @@ const TimeEditor = (props: Props): ReactElement => {
                        onBlur={(e): void => handleChange(e, MINUTES)}
                 />
             </div>
-            <div style={{flexFlow: "column"}}>
-                <div style={{verticalAlign: "bottom", padding: "5px"}}><span>:</span></div>
-            </div>
+            <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
             <div style={{flexFlow: "column"}}>
                 <input id={`${props.id}-seconds`} type="text" className="sbte-time-editor-input" style={{width: "30px"}}
                        value={seconds}
@@ -92,9 +90,7 @@ const TimeEditor = (props: Props): ReactElement => {
                        onBlur={(e): void => handleChange(e, SECONDS)}
                 />
             </div>
-            <div>
-                <div style={{verticalAlign: "bottom", padding: "5px"}}><span>.</span></div>
-            </div>
+            <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
             <div style={{flexFlow: "column"}}>
                 <input id={`${props.id}-milliseconds`} type="text" className="sbte-time-editor-input"
                        value={milliseconds}
