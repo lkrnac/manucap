@@ -2,7 +2,7 @@ import React, {ReactElement} from "react";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import Toolbox from "../toolbox/Toolbox";
-import CueTextEditor from "./CueTextEditor";
+import CueLine from "./CueLine";
 import {useSelector} from "react-redux";
 import {SubtitleEditState} from "../reducers/subtitleEditReducers";
 import "../styles.scss";
@@ -24,7 +24,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
                 </div>
                 <div style={{flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px"}}>
                     {
-                        cues.map((cue: VTTCue, idx: number): ReactElement => <CueTextEditor key={idx} index={idx} cue={cue}/>)
+                        cues.map((cue: VTTCue, idx: number): ReactElement => <CueLine key={idx} index={idx} cue={cue}/>)
                     }
                 </div>
             </div>

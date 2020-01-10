@@ -10,7 +10,7 @@ import testingStore from "../testUtils/testingStore";
 import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
 import Toolbox from "../toolbox/Toolbox";
-import CueTextEditor from "./CueTextEditor";
+import CueLine from "./CueLine";
 import {readSubtitleSpecification} from "../toolbox/subtitleSpecificationSlice";
 import {SubtitleSpecification} from "../toolbox/model";
 
@@ -56,8 +56,8 @@ describe("SubtitleEdit", () => {
                             <Toolbox />
                         </div>
                         <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
-                            <CueTextEditor index={0} cue={cues[0]}/>
-                            <CueTextEditor index={1} cue={cues[1]}/>
+                            <CueLine index={0} cue={cues[0]}/>
+                            <CueLine index={1} cue={cues[1]}/>
                         </div>
                     </div>
                 </div>
