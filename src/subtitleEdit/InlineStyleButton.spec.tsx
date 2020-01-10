@@ -7,9 +7,10 @@ import { mount } from "enzyme";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { updateEditorState } from "./editorStatesSlice";
 
+/**
+ * On click actions are covered by CueTextEditor tests
+ */
 describe("InlineStyleButton", () => {
-    // On click concerns are covered by CueTextEditor tests
-
     it("renders for empty editor state", () => {
         // GIVEN
         const expectedNode = mount(
