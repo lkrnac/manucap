@@ -101,4 +101,20 @@ describe("InlineStyleButton", () => {
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
+
+    it("it doesn't grab focus from text editor when clicked, so we can change inline style text written next", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>}/>
+            </Provider>
+        );
+        const event = { preventDefault: jest.fn() };
+
+        // WHEN
+        actualNode.find(InlineStyleButton).simulate("mousedown", event);
+
+        // THEN
+        expect(event.preventDefault).toBeCalled();
+    });
 });

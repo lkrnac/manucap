@@ -22,6 +22,9 @@ const InlineStyleButton = (props: Props): ReactElement => {
         <button
             style={{ marginRight: "5px"}}
             className={buttonStyle}
+            // Following prevents taking focus from editor, so that we can toggle inline style for current
+            // cursor position. If editor would loose focus, inline style toggle is lost.
+            onMouseDown={(event: React.MouseEvent<HTMLElement>): void => event.preventDefault()}
             onClick={(): void => {
                 const newState = RichUtils.toggleInlineStyle(editorState, props.inlineStyle);
                 dispatch(updateEditorState(props.editorIndex, newState));
