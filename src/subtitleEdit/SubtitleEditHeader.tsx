@@ -38,18 +38,18 @@ const getDueDate = (task: Task): ReactElement => {
 };
 
 const getProgressPercentage = (track: Track): number => {
-    if (!track.currentVersion || track.currentVersion.cues.length === 0) {
-        return 0;
+    if (track.currentVersion && track.currentVersion.cues.length > 0) {
+        const cues = track.currentVersion.cues;
+        return (cues[cues.length - 1].endTime / track.videoLength) * 100;
     }
-    const cues = track.currentVersion.cues;
-    return (cues[cues.length-1].endTime / track.videoLength) * 100;
+    return 0;
 };
 
 const getProgress = (track: Track): ReactElement => {
-    if (!track || !track.videoLength) {
-        return <div/>;
+    if (track && track.videoLength) {
+        return <div><b>{getProgressPercentage(track)}%</b> of {track.videoLength} seconds</div>;
     }
-    return <div><b>{getProgressPercentage(track)}%</b> of {track.videoLength} seconds</div>
+    return <div/>;
 };
 
 const SubtitleEditHeader = (): ReactElement => {
