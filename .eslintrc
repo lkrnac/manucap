@@ -1,4 +1,4 @@
-module.exports = {
+{
     "env": {
         "browser": true
     },
@@ -10,10 +10,13 @@ module.exports = {
     },
     "plugins": [
         "@typescript-eslint",
-        "@typescript-eslint/tslint"
+        "@typescript-eslint/tslint",
+        "react-hooks"
     ],
     "rules": {
         "@typescript-eslint/ban-ts-ignore": "off",
-        "quotes": ["error", "double"]
+        "quotes": ["error", "double"],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
     }
-};
+}
