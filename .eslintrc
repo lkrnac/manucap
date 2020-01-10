@@ -22,7 +22,8 @@
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "max-len": ["error", { "code": 120 }],
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "jsx-quotes": ["error", "prefer-double"]
     },
     "settings": {
       "react": {
