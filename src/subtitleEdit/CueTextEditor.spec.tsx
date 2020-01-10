@@ -57,7 +57,7 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].text);
 };
 
-const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
+const testForContentState = (contentState: ContentState, cue: VTTCue, expectedStateHtml: string): void => {
     const editorState = EditorState.createWithContent(contentState);
     const expectedNode = createExpectedNode(editorState);
 
@@ -71,7 +71,8 @@ const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-    expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(cue.text);
+    expect(testingStore.getState().cues[0].text).toEqual(cue.text);
+    expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };
 
 describe("CueTextEditor", () => {
@@ -84,7 +85,9 @@ describe("CueTextEditor", () => {
         const cue = new VTTCue(0, 1, "");
         const contentState = ContentState.createFromText("");
 
-        testForContentState(contentState, cue);
+        // NOTE: Following latest expectation is not configurable nature of draft-js-export-html. See following line in their code
+        // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
+        testForContentState(contentState, cue, "<br>");
     });
 
     it("renders with text", () => {
@@ -92,7 +95,7 @@ describe("CueTextEditor", () => {
         const cue = new VTTCue(0, 1, "someText");
         const contentState = ContentState.createFromText(cue.text);
 
-        testForContentState(contentState, cue);
+        testForContentState(contentState, cue, "someText");
     });
 
     it("renders with html", () => {
@@ -101,7 +104,7 @@ describe("CueTextEditor", () => {
         const processedHTML = convertFromHTML(cue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, cue);
+        testForContentState(contentState, cue, "<i>some</i> HTML <b>Text</b>");
     });
 
     it("updates cue in redux store when changed", () => {

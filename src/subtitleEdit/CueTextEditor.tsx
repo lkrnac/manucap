@@ -26,7 +26,6 @@ const CueTextEditor = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(props.cue.text);
     let editorState = useSelector((state: SubtitleEditState) => state.editorStates.get(props.index)) as EditorState;
-
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
@@ -41,7 +40,7 @@ const CueTextEditor = (props: Props): ReactElement => {
     const currentContent = editorState.getCurrentContent();
     useEffect(
         () => {
-            const text = stateToHTML(currentContent, convertToHtmlOptions);
+            const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
             dispatch(updateCue(props.index, new VTTCue(props.cue.startTime, props.cue.endTime, text)));
         },
         [ currentContent, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
