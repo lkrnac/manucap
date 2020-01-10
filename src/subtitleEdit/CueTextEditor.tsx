@@ -1,10 +1,11 @@
 import React, {ReactElement, useEffect} from "react";
 import {updateCue} from "../player/trackSlices";
 import {useDispatch, useSelector} from "react-redux";
-import {ContentState, Editor, EditorState, convertFromHTML, RichUtils} from "draft-js";
+import {ContentState, Editor, EditorState, convertFromHTML} from "draft-js";
 import {Options, stateToHTML} from "draft-js-export-html";
 import {AppThunk, SubtitleEditState} from "../reducers/subtitleEditReducers";
 import {updateEditorState} from "./editorStatesSlice";
+import InlineStyleButton from "./InlineStyleButton";
 
 interface Props{
     index: number;
@@ -57,26 +58,9 @@ const CueTextEditor = (props: Props): ReactElement => {
                 />
             </div>
             <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
-                <button
-                    style={{ marginRight: "5px "}}
-                    className="btn btn-outline-secondary"
-                    onClick={(): AppThunk => dispatch(updateEditorState(props.index, RichUtils.toggleInlineStyle(editorState, "BOLD")))}
-                >
-                    <b>B</b>
-                </button>
-                <button
-                    style={{ marginRight: "5px "}}
-                    className="btn btn-outline-secondary"
-                    onClick={(): AppThunk => dispatch(updateEditorState(props.index, RichUtils.toggleInlineStyle(editorState, "ITALIC")))}
-                >
-                    <i>I</i>
-                </button>
-                <button
-                    className="btn btn-outline-secondary"
-                    onClick={(): AppThunk => dispatch(updateEditorState(props.index, RichUtils.toggleInlineStyle(editorState, "UNDERLINE")))}
-                >
-                    <u>U</u>
-                </button>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>}/>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>}/>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>}/>
             </div>
         </div>
     );
