@@ -8,6 +8,7 @@ import {createTestingStore} from "../testUtils/testingStore";
 import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from "draft-js";
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
 import {reset} from "./editorStatesSlice";
+import {Options, stateToHTML} from "draft-js-export-html";
 
 let testingStore = createTestingStore();
 
@@ -23,6 +24,17 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
         </div>
     </div>
 );
+
+// @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
+// defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
+// TODO: is this would be updated in types definition, we can remove this explicit cast + ts-ignore
+const convertToHtmlOptions = {
+    inlineStyles: {
+        BOLD: {element: "b"},
+        ITALIC: {element: "i"},
+    },
+    defaultBlockTag: null,
+} as Options;
 
 const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string): void => {
     // GIVEN
@@ -41,8 +53,8 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
 
     // THEN
     expect(testingStore.getState().cues[0].text).toEqual(expectedText);
-    // @ts-ignore
-    expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual(cue.text);
+    const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+    expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].text);
 };
 
 const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
@@ -58,8 +70,8 @@ const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
 
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    // @ts-ignore
-    expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual(cue.text);
+    const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+    expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(cue.text);
 };
 
 describe("CueTextEditor", () => {
@@ -70,20 +82,9 @@ describe("CueTextEditor", () => {
     it("renders empty", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "");
-        const  editorState = EditorState.createEmpty();
-        const expectedNode = createExpectedNode(editorState);
+        const contentState = ContentState.createFromText("");
 
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue}/>
-            </Provider>
-        );
-
-        // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-        // @ts-ignore
-        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual(cue.text);
+        testForContentState(contentState, cue);
     });
 
     it("renders with text", () => {
