@@ -63,8 +63,10 @@ const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
 };
 
 describe("CueTextEditor", () => {
-    beforeEach(() => {  testingStore = createTestingStore();});
-    beforeEach(() => {  testingStore.dispatch(reset())});
+    beforeEach(() => {
+        testingStore = createTestingStore();
+        testingStore.dispatch(reset())
+    });
     it("renders empty", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "");
