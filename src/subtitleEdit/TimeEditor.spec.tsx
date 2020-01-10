@@ -212,4 +212,38 @@ describe("TimeEditor", () => {
         expect(actualNode.find("#test-seconds").props().value).toEqual("02");
         expect(actualNode.find("#test-milliseconds").props().value).toEqual("563");
     });
+
+    it("focus doesn't change the value", () => {
+        // GIVEN
+        const actualNode = enzyme.mount(
+            <TimeEditor id="test" />
+        );
+
+        // WHEN
+        actualNode.find("#test-minutes").simulate("focus");
+        actualNode.find("#test-seconds").simulate("focus");
+        actualNode.find("#test-milliseconds").simulate("focus");
+
+        // THEN
+        expect(actualNode.find("#test-minutes").props().value).toEqual("000");
+        expect(actualNode.find("#test-seconds").props().value).toEqual("00");
+        expect(actualNode.find("#test-milliseconds").props().value).toEqual("000");
+    });
+
+    it("change changes the value", () => {
+        // GIVEN
+        const actualNode = enzyme.mount(
+            <TimeEditor id="test" />
+        );
+
+        // WHEN
+        actualNode.find("#test-minutes").simulate("change", { target: { value: "001" } });
+        actualNode.find("#test-seconds").simulate("change", { target: { value: "20" } });
+        actualNode.find("#test-milliseconds").simulate("change", { target: { value: "987" } });
+
+        // THEN
+        expect(actualNode.find("#test-minutes").props().value).toEqual("001");
+        expect(actualNode.find("#test-seconds").props().value).toEqual("20");
+        expect(actualNode.find("#test-milliseconds").props().value).toEqual("987");
+    });
 });
