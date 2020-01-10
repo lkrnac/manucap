@@ -100,11 +100,11 @@ describe("CueTextEditor", () => {
 
     it("renders with html", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "<i>some</i> HTML <b>Text</b>");
+        const cue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b>");
         const processedHTML = convertFromHTML(cue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, cue, "<i>some</i> HTML <b>Text</b>");
+        testForContentState(contentState, cue, "some <i>HTML</i> <b>Text</b>");
     });
 
     it("updates cue in redux store when changed", () => {
