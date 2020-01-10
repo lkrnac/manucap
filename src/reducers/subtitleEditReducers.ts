@@ -3,17 +3,13 @@ import {editingTrackSlice, cuesSlice, taskSlice} from "../player/trackSlices";
 import {ThunkAction} from "redux-thunk";
 import {editorStatesSlice} from "../subtitleEdit/editorStatesSlice";
 
-
 const subtitleEditReducers = combineReducers({
     cues: cuesSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
     task: taskSlice.reducer,
     editorStates: editorStatesSlice.reducer
 });
-
-export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
-
 export default subtitleEditReducers;
 
-type RootState = ReturnType<typeof subtitleEditReducers>;
-export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;
+export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
+export type AppThunk = ThunkAction<void, SubtitleEditState, null, Action<string>>;
