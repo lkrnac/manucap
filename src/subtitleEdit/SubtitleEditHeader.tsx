@@ -37,6 +37,21 @@ const getDueDate = (task: Task): ReactElement => {
     return <div>Due Date: <b>{task.dueDate}</b></div>
 };
 
+const getProgressPercentage = (track: Track): number => {
+    if (!track.currentVersion || track.currentVersion.cues.length === 0) {
+        return 0;
+    }
+    const cues = track.currentVersion.cues;
+    return (cues[cues.length-1].endTime / track.videoLength) * 100;
+};
+
+const getProgress = (track: Track): ReactElement => {
+    if (!track || !track.videoLength) {
+        return <div/>;
+    }
+    return <div><b>{getProgressPercentage(track)}%</b> of {track.videoLength} seconds</div>
+};
+
 const SubtitleEditHeader = (): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const stateTask = useSelector((state: SubtitleEditState) => state.task);
@@ -51,6 +66,7 @@ const SubtitleEditHeader = (): ReactElement => {
             <div style={{flex: "2"}}/>
             <div style={{display: "flex", flexFlow: "column"}}>
                 {getDueDate(task)}
+                {getProgress(track)}
             </div>
         </header>
     );

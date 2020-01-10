@@ -4,8 +4,9 @@ import * as enzyme from "enzyme";
 import * as React from "react";
 import {removeVideoPlayerDynamicValue} from "../testUtils/testUtils";
 import {Provider} from "react-redux";
+import "video.js"; // VTTCue definition
 import {createTestingStore} from "../testUtils/testingStore";
-import {Language, Task, Track} from "../player/model";
+import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 
@@ -22,6 +23,7 @@ describe("SubtitleEditHeader", () => {
             language: {id: "en-US", name: "English (US)"} as Language,
             default: true,
             videoTitle: "This is the video title",
+            videoLength: 120
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -37,6 +39,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{flex: "2"}}/>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div><b>0%</b> of 120 seconds</div>
                 </div>
             </header>
         );
@@ -83,6 +86,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{flex: "2"}}/>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div/>
                 </div>
             </header>
         );
@@ -123,6 +127,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{flex: "2"}}/>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div/>
                 </div>
             </header>
         );
@@ -163,6 +168,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{flex: "2"}}/>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div/>
                 </div>
             </header>
         );
@@ -209,6 +215,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{flex: "2"}}/>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div/>
                 </div>
             </header>
         );
@@ -244,6 +251,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{flex: "2"}}/>
                 <div style={{display: "flex", flexFlow: "column"}}>
                     <div/>
+                    <div/>
                 </div>
             </header>
         );
@@ -255,6 +263,100 @@ describe("SubtitleEditHeader", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack));
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders Progress with cues", () => {
+        // GIVEN
+        const cues = [
+            new VTTCue(0, 20, "Caption Line 1"),
+            new VTTCue(20, 60, "Caption Line 2"),
+        ];
+        const testingTrack = {
+            type: "CAPTION",
+            language: {id: "en-US", name: "English (US)"} as Language,
+            default: true,
+            videoTitle: "This is the video title",
+            videoLength: 120,
+            currentVersion: {cues} as TrackVersion
+        } as Track;
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = enzyme.mount(
+            <header style={{display: "flex", paddingBottom: "10px"}}>
+                <div style={{display: "flex", flexFlow: "column"}}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Caption in: <b>English (US)</b></div>
+                </div>
+                <div style={{flex: "2"}}/>
+                <div style={{display: "flex", flexFlow: "column"}}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div><b>50%</b> of 120 seconds</div>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = enzyme.mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateTask(testingTask));
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders Progress with cues and video length 0", () => {
+        // GIVEN
+        const cues = [
+            new VTTCue(0, 20, "Caption Line 1"),
+            new VTTCue(20, 60, "Caption Line 2"),
+        ];
+        const testingTrack = {
+            type: "CAPTION",
+            language: {id: "en-US", name: "English (US)"} as Language,
+            default: true,
+            videoTitle: "This is the video title",
+            videoLength: 0,
+            currentVersion: {cues} as TrackVersion
+        } as Track;
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = enzyme.mount(
+            <header style={{display: "flex", paddingBottom: "10px"}}>
+                <div style={{display: "flex", flexFlow: "column"}}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Caption in: <b>English (US)</b></div>
+                </div>
+                <div style={{flex: "2"}}/>
+                <div style={{display: "flex", flexFlow: "column"}}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div/>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = enzyme.mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateTask(testingTask));
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))

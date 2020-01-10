@@ -44,6 +44,7 @@ describe("SubtitleEdit", () => {
                         <div style={{flex: "2"}}/>
                         <div style={{display: "flex", flexFlow: "column"}}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div/>
                         </div>
                     </header>
                     <div style={{display: "flex", height: "100%"}}>
