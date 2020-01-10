@@ -34,6 +34,8 @@ const CueTextEditor = (props: Props): ReactElement => {
         () => {
             dispatch(updateEditorState(props.index, editorState));
         },
+        // Following suppressThis is done in purpose, because we want to initialize state only for first render
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [ dispatch, props.index ]
     );
 
