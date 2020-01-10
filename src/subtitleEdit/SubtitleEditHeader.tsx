@@ -12,7 +12,7 @@ const getTrackType = (track: Track): string => {
 const getLanguageDescription = (track: Track): ReactElement => {
     if (track.type === "TRANSLATION") {
         const sourceLanguage = track.sourceTrack ? <b>{track.sourceTrack.language.name}</b> : null;
-        return <span>{sourceLanguage} to <b>{track.language.name}</b></span>
+        return <span>{sourceLanguage} to <b>{track.language.name}</b></span>;
     }
     return <b>{track.language.name}</b>;
 };
@@ -34,7 +34,7 @@ const getDueDate = (task: Task): ReactElement => {
     if (!task || !task.type) {
         return <div/>;
     }
-    return <div>Due Date: <b>{task.dueDate}</b></div>
+    return <div>Due Date: <b>{task.dueDate}</b></div>;
 };
 
 const SubtitleEditHeader = (): ReactElement => {

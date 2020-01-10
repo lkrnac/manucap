@@ -28,7 +28,7 @@ const TestApp = (): ReactElement => {
                 } as TrackVersion
             })),
             500
-        )
+        );
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
@@ -38,7 +38,7 @@ const TestApp = (): ReactElement => {
                dueDate: "2019/12/30 10:00AM"
             })),
             500
-        )
+        );
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
@@ -58,7 +58,7 @@ const TestApp = (): ReactElement => {
                 comments: "Note"
             })),
             500
-        )
+        );
     });
 
     return <SubtitleEdit
