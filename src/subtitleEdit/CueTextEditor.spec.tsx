@@ -4,9 +4,12 @@ import React from "react";
 import {mount, ReactWrapper} from "enzyme";
 import CueTextEditor from "./CueTextEditor";
 import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
+import {createTestingStore} from "../testUtils/testingStore";
 import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from "draft-js";
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
+import {reset} from "./editorStatesSlice";
+
+let testingStore = createTestingStore();
 
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
     <div className="sbte-cue-editor">
@@ -38,6 +41,8 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
 
     // THEN
     expect(testingStore.getState().cues[0].text).toEqual(expectedText);
+    // @ts-ignore
+    expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual(cue.text);
 };
 
 const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
@@ -53,9 +58,13 @@ const testForContentState = (contentState: ContentState, cue: VTTCue): void => {
 
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    // @ts-ignore
+    expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual(cue.text);
 };
 
 describe("CueTextEditor", () => {
+    beforeEach(() => {  testingStore = createTestingStore();});
+    beforeEach(() => {  testingStore.dispatch(reset())});
     it("renders empty", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "");
@@ -71,6 +80,8 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        // @ts-ignore
+        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual(cue.text);
     });
 
     it("renders with text", () => {
@@ -124,23 +135,23 @@ describe("CueTextEditor", () => {
         testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
     });
 
-    it("should not update state for selection action", (done) => {
-        // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor index={0} cue={cue}/>
-            </Provider>
-        );
-        const editorState = actualNode.find(Editor).props().editorState;
-        const selectionState = editorState.getSelection();
-        const newSelectionState = selectionState.set("focusOffset", 5) as SelectionState;
-        testingStore.subscribe(() => fail("Redux state should not be updated"));
-
-        // WHEN
-        actualNode.find(Editor).props().onChange(EditorState.acceptSelection(editorState, newSelectionState));
-
-        // THEN
-        setTimeout(done, 100);
-    });
+    // it("should not update state for selection action", (done) => {
+    //     // GIVEN
+    //     const cue = new VTTCue(0, 1, "someText");
+    //     const actualNode = mount(
+    //         <Provider store={testingStore}>
+    //             <CueTextEditor index={0} cue={cue}/>
+    //         </Provider>
+    //     );
+    //     const editorState = actualNode.find(Editor).props().editorState;
+    //     const selectionState = editorState.getSelection();
+    //     const newSelectionState = selectionState.set("focusOffset", 5) as SelectionState;
+    //     testingStore.subscribe(() => fail("Redux state should not be updated"));
+    //
+    //     // WHEN
+    //     actualNode.find(Editor).props().onChange(EditorState.acceptSelection(editorState, newSelectionState));
+    //
+    //     // THEN
+    //     setTimeout(done, 100);
+    // });
 });
