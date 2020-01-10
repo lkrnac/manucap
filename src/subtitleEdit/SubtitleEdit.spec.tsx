@@ -6,7 +6,7 @@ import VideoPlayer from "../player/VideoPlayer";
 import SubtitleEdit from "./SubtitleEdit";
 import {removeDraftJsDynamicValues, removeVideoPlayerDynamicValue} from "../testUtils/testUtils";
 import {Provider} from "react-redux";
-import {testingStore} from "../testUtils/testingStore";
+import testingStore from "../testUtils/testingStore";
 import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
 import Toolbox from "../toolbox/Toolbox";

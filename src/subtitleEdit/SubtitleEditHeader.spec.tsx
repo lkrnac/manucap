@@ -10,7 +10,7 @@ import {Language, Task, Track, TrackVersion} from "../player/model";
 import {updateEditingTrack, updateTask} from "../player/trackSlices";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 
-let testingStore: any;
+let testingStore = createTestingStore();
 
 describe("SubtitleEditHeader", () => {
     beforeEach(() => {

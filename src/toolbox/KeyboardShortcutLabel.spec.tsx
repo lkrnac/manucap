@@ -4,7 +4,7 @@ import * as enzyme from "enzyme";
 import * as React from "react";
 import {Provider} from "react-redux";
 import { os } from "platform";
-import {testingStore} from "../testUtils/testingStore";
+import testingStore from "../testUtils/testingStore";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 
 

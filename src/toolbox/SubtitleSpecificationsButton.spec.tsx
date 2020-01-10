@@ -3,7 +3,7 @@ import "../testUtils/initBrowserEnvironment";
 import * as enzyme from "enzyme";
 import * as React from "react";
 import {Provider} from "react-redux";
-import {testingStore} from "../testUtils/testingStore";
+import testingStore from "../testUtils/testingStore";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";

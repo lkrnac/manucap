@@ -1,6 +1,6 @@
 import "video.js"; // VTTCue definition
 import {updateCue, updateEditingTrack, updateTask} from "./trackSlices";
-import {testingStore} from "../testUtils/testingStore";
+import testingStore from "../testUtils/testingStore";
 import {Task, Track} from "./model";
 
 const testingTrack = {
