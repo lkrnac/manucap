@@ -1,4 +1,4 @@
-import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import {configureStore, EnhancedStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import subtitleEditReducers from "../reducers/subtitleEditReducers";
 
 // NOTE: You can use logger middleware to log Redux state changes/actions to the browser console.
@@ -7,6 +7,6 @@ import subtitleEditReducers from "../reducers/subtitleEditReducers";
 // const middleware = [...getDefaultMiddleware({ serializableCheck: false }), logger];
 
 const middleware = [...getDefaultMiddleware({ serializableCheck: false })];
-const testingStore = configureStore({ reducer: subtitleEditReducers, middleware });
 
-export default testingStore;
+export const createTestingStore = (): EnhancedStore => configureStore({ reducer: subtitleEditReducers, middleware });
+export default createTestingStore();
