@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {SubtitleSpecification} from "../toolbox/model";
+import {SubtitleSpecification} from "./model";
 import {Dispatch} from "react";
 import {AppThunk} from "../reducers/subtitleEditReducers";
 
@@ -11,8 +11,9 @@ export const subtitleSpecificationSlice = createSlice({
     name: "subtitleSpecification",
     initialState: null as SubtitleSpecification | null,
     reducers: {
-        readSubtitleSpecification: (_state, action: PayloadAction<SubtitleSpecificationAction>): SubtitleSpecification =>
-            action.payload.subtitleSpecification,
+        readSubtitleSpecification:
+            (_state, action: PayloadAction<SubtitleSpecificationAction>): SubtitleSpecification =>
+                action.payload.subtitleSpecification,
     }
 });
 

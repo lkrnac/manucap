@@ -53,7 +53,8 @@ const CueTextEditor = (props: Props): ReactElement => {
             <div className="form-control" style={{ height: "4em", borderRight: "none" }}>
                 <Editor
                     editorState={editorState}
-                    onChange={(editorState: EditorState): AppThunk => dispatch(updateEditorState(props.index, editorState))}
+                    onChange={(editorState: EditorState): AppThunk =>
+                        dispatch(updateEditorState(props.index, editorState))}
                     spellCheck
                 />
             </div>

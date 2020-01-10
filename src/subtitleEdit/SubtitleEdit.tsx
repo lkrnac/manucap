@@ -24,7 +24,8 @@ const SubtitleEdit = (props: Props): ReactElement => {
                 </div>
                 <div style={{flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px"}}>
                     {
-                        cues.map((cue: VTTCue, idx: number): ReactElement => <CueTextEditor key={idx} index={idx} cue={cue}/>)
+                        cues.map((cue: VTTCue, idx: number): ReactElement =>
+                            <CueTextEditor key={idx} index={idx} cue={cue}/>)
                     }
                 </div>
             </div>

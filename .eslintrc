@@ -20,7 +20,8 @@
         "@typescript-eslint/ban-ts-ignore": "off",
         "quotes": ["error", "double"],
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn"
+        "react-hooks/exhaustive-deps": "warn",
+        "max-len": ["error", { "code": 120 }]
     },
     "settings": {
       "react": {

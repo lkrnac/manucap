@@ -85,7 +85,9 @@ describe("CueTextEditor", () => {
         const cue = new VTTCue(0, 1, "");
         const contentState = ContentState.createFromText("");
 
-        // NOTE: Following latest expectation is not configurable nature of draft-js-export-html. See following line in their code
+        // NOTE: Following latest expectation is not configurable nature of draft-js-export-html.
+        // See following line in their code
+        // eslint-disable-next-line max-len
         // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
         testForContentState(contentState, cue, "<br>");
     });
