@@ -34,7 +34,6 @@ const CueTextEditor = (props: Props): ReactElement => {
     useEffect(
         () => {
             dispatch(updateEditorState(props.index, editorState));
-            console.log("State:" + editorState.getCurrentContent().getPlainText());
         },
         [ dispatch, props.index ]
     );
@@ -43,7 +42,6 @@ const CueTextEditor = (props: Props): ReactElement => {
     useEffect(
         () => {
             const text = stateToHTML(currentContent, convertToHtmlOptions);
-            console.log("Cue:" + text);
             dispatch(updateCue(props.index, new VTTCue(props.cue.startTime, props.cue.endTime, text)));
         },
         [ currentContent, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
