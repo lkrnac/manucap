@@ -1,7 +1,17 @@
 import React, {
     ChangeEvent,
-    ReactElement, useState
+    ReactElement, useEffect, useState
 } from "react";
+
+/***
+ A start time
+ The time, in seconds and fractions of a second, that describes the beginning of the range of the media data to which
+ the cue applies.
+
+ An end time
+ The time, in seconds and fractions of a second, that describes the end of the range of the media data to which the
+ cue applies.
+ **/
 
 const MAX_MINUTES = 999;
 const MAX_SECONDS = 59;
@@ -24,15 +34,13 @@ const padWithZeros = (value: number, type: string): string => {
 
 interface Props {
     id: string;
-    minutes?: string;
-    seconds?: string;
-    milliseconds?: string;
+    time?: number;
 }
 
 const TimeEditor = (props: Props): ReactElement => {
-    const [minutes, setMinutes] = useState(props.minutes);
-    const [seconds, setSeconds] = useState(props.seconds);
-    const [milliseconds, setMilliseconds] = useState(props.milliseconds);
+    const [minutes, setMinutes] = useState("000");
+    const [seconds, setSeconds] = useState("00");
+    const [milliseconds, setMilliseconds] = useState("000");
 
     const adjustValue = (stringValue: string, type: string): string => {
         let value = Number(stringValue);
@@ -64,6 +72,19 @@ const TimeEditor = (props: Props): ReactElement => {
         }
         return value.toString();
     };
+
+    useEffect(() => {
+        const newTime = props.time;
+        if (newTime) {
+            const newMinutes = Math.floor(newTime / 60);
+            const newMinutesInSeconds = newMinutes * 60;
+            const newSeconds = Math.floor(newTime - newMinutesInSeconds);
+            const newMilliseconds = Math.round((newTime - newSeconds - newMinutesInSeconds) * 1000);
+            adjustValue(newMinutes.toString(), MINUTES);
+            adjustValue(newSeconds.toString(), SECONDS);
+            adjustValue(newMilliseconds.toString(), MILLISECONDS);
+        }
+    }, [props.time]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>, type: string): void => {
         let value = e.target.value;
@@ -104,9 +125,7 @@ const TimeEditor = (props: Props): ReactElement => {
 };
 
 TimeEditor.defaultProps = {
-    minutes: "000",
-    seconds: "00",
-    milliseconds: "000",
+    time: 0
 } as Partial<Props>;
 
 export default TimeEditor;
