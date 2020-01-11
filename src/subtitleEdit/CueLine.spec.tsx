@@ -10,8 +10,10 @@ import TimeEditor from "./TimeEditor";
 import CueTextEditor from "./CueTextEditor";
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
 
-
-const cue = new VTTCue(0, 1, "Caption Line 1");
+const cues = [
+    new VTTCue(0, 0, "Caption Line 1"),
+    new VTTCue(1, 2, "Caption Line 2"),
+];
 
 describe("CueLine", () => {
     it("renders", () => {
@@ -27,7 +29,7 @@ describe("CueLine", () => {
                         <TimeEditor id="1-time-end"/>
                     </div>
                     <div className="sbte-left-border" style={{flex: "1 1 75%"}}>
-                        <CueTextEditor key={1} index={1} cue={cue}/>
+                        <CueTextEditor key={1} index={1} cue={cues[0]}/>
                     </div>
                 </div>
             </Provider>
@@ -36,7 +38,38 @@ describe("CueLine", () => {
         // WHEN
         const actualNode = enzyme.mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cue}/>
+                <CueLine index={1} cue={cues[0]}/>
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.html()))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
+    it("renders with time values", () => {
+        // GIVEN
+        const expectedNode = enzyme.mount(
+            <Provider store={testingStore}>
+                <div className="sbte-cue-line" style={{display: "flex"}}>
+                    <div style={{
+                        flex: "1 1 25%", display: "flex", flexDirection: "column",
+                        paddingLeft: "20px", paddingTop: "15px"
+                    }}>
+                        <TimeEditor id="1-time-start" time={1}/>
+                        <TimeEditor id="1-time-end" time={2}/>
+                    </div>
+                    <div className="sbte-left-border" style={{flex: "1 1 75%"}}>
+                        <CueTextEditor key={1} index={1} cue={cues[1]}/>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = enzyme.mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]}/>
             </Provider>
         );
 
