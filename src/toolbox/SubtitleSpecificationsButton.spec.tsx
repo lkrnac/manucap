@@ -17,8 +17,9 @@ describe("SubtitleSpecificationsButton", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div>
-                    <Button variant="light" className="dotsub-subtitle-specifications-button"
-                            style={{ marginLeft: "10px" }}
+                    <Button
+                        variant="light" className="dotsub-subtitle-specifications-button"
+                        style={{ marginLeft: "10px" }}
                     >
                         Subtitle Specifications
                     </Button>
