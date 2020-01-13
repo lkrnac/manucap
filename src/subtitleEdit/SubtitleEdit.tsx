@@ -15,7 +15,7 @@ export interface Props {
 const SubtitleEdit = (props: Props): ReactElement => {
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     return (
-        <div className="sbte-subtitle-edit"  style={{ display: "flex", flexFlow: "column", padding: "10px" }}>
+        <div className="sbte-subtitle-edit" style={{ display: "flex", flexFlow: "column", padding: "10px" }}>
             <SubtitleEditHeader />
             <div style={{ display: "flex", height: "100%" }}>
                 <div style={{ flex: "1 1 0", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
