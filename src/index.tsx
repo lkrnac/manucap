@@ -1,15 +1,14 @@
-import "./testUtils/initBrowserEnvironment";
-
-import * as React from "react";
-import { ReactElement, useEffect } from "react";
-import * as ReactDOM from "react-dom";
-import { Provider, useDispatch } from "react-redux";
-import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
-import { updateEditingTrack, updateTask } from "./player/trackSlices";
-import { Language, TrackVersion } from "./player/model";
-import testingStore from "./testUtils/testingStore";
-import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import "./localTesting.scss";
+import "./testUtils/initBrowserEnvironment";
+import { Language, TrackVersion } from "./player/model";
+import { Provider, useDispatch } from "react-redux";
+import { ReactElement, useEffect } from "react";
+import { updateEditingTrack, updateTask } from "./player/trackSlices";
+import React from "react";
+import ReactDOM from "react-dom";
+import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
+import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
+import testingStore from "./testUtils/testingStore";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
