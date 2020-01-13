@@ -29,7 +29,8 @@
         "react/jsx-boolean-value": "error",
         "react/jsx-child-element-spacing": "error",
         "react/jsx-closing-bracket-location": "error",
-        "react/jsx-closing-tag-location": "error"
+        "react/jsx-closing-tag-location": "error",
+        "react/jsx-curly-newline": "error"
     },
     "settings": {
       "react": {
