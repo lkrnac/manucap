@@ -1,39 +1,42 @@
 import "../testUtils/initBrowserEnvironment";
 
-import * as enzyme from "enzyme";
-import * as React from "react";
-import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { Provider } from "react-redux";
+import React from "react";
+import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
-import {readSubtitleSpecification} from "./subtitleSpecificationSlice";
-import {SubtitleSpecification} from "./model";
+import { mount } from "enzyme";
+import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
+import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleSpecificationsButton", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <Provider store={testingStore}>
                 <div>
-                    <Button variant="light" className="dotsub-subtitle-specifications-button"
-                            style={{marginLeft: "10px"}}>
+                    <Button
+                        variant="light"
+                        className="dotsub-subtitle-specifications-button"
+                        style={{ marginLeft: "10px" }}
+                    >
                         Subtitle Specifications
                     </Button>
 
-                    <SubtitleSpecificationsModal show={true} onClose={(): void => {}}/>
+                    <SubtitleSpecificationsModal show onClose={(): void => {}} />
                 </div>
             </Provider>
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton/>
+                <SubtitleSpecificationsButton />
             </Provider>
         );
-        testingStore.dispatch(readSubtitleSpecification({enabled: false} as SubtitleSpecification));
+        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
 
         // THEN
         expect(actualNode.html())
@@ -42,9 +45,9 @@ describe("SubtitleSpecificationsButton", () => {
 
     it("opens subtitle specifications modal when button is clicked", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton/>
+                <SubtitleSpecificationsButton />
             </Provider>
         );
 
@@ -58,9 +61,9 @@ describe("SubtitleSpecificationsButton", () => {
 
     it("closes subtitle specifications modal when close button is clicked", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton/>
+                <SubtitleSpecificationsButton />
             </Provider>
         );
 

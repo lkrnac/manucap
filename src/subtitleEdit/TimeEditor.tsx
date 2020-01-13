@@ -1,7 +1,4 @@
-import React, {
-    ChangeEvent,
-    ReactElement, useState
-} from "react";
+import React, { ChangeEvent, ReactElement, useState } from "react";
 
 const MAX_MINUTES = 999;
 const MAX_SECONDS = 59;
@@ -72,31 +69,41 @@ const TimeEditor = (props: Props): ReactElement => {
     };
 
     return (
-        <div id={props.id} style={{display: "flex"}} className="sbte-time-editor">
-            <div style={{flexFlow: "column"}}>
-                <input id={`${props.id}-minutes`} type="text" className="sbte-time-editor-input"
-                       value={minutes}
-                       onChange={(e): void => setMinutes(e.target.value)}
-                       onFocus={(e): void => e.target.select()}
-                       onBlur={(e): void => handleChange(e, MINUTES)}
+        <div id={props.id} style={{ display: "flex" }} className="sbte-time-editor">
+            <div style={{ flexFlow: "column" }}>
+                <input
+                    id={`${props.id}-minutes`}
+                    type="text"
+                    className="sbte-time-editor-input"
+                    value={minutes}
+                    onChange={(e): void => setMinutes(e.target.value)}
+                    onFocus={(e): void => e.target.select()}
+                    onBlur={(e): void => handleChange(e, MINUTES)}
                 />
             </div>
-            <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
-            <div style={{flexFlow: "column"}}>
-                <input id={`${props.id}-seconds`} type="text" className="sbte-time-editor-input" style={{width: "30px"}}
-                       value={seconds}
-                       onChange={(e): void => setSeconds(e.target.value)}
-                       onFocus={(e): void => e.target.select()}
-                       onBlur={(e): void => handleChange(e, SECONDS)}
+            <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
+            <div style={{ flexFlow: "column" }}>
+                <input
+                    id={`${props.id}-seconds`}
+                    type="text"
+                    className="sbte-time-editor-input"
+                    style={{ width: "30px" }}
+                    value={seconds}
+                    onChange={(e): void => setSeconds(e.target.value)}
+                    onFocus={(e): void => e.target.select()}
+                    onBlur={(e): void => handleChange(e, SECONDS)}
                 />
             </div>
-            <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
-            <div style={{flexFlow: "column"}}>
-                <input id={`${props.id}-milliseconds`} type="text" className="sbte-time-editor-input"
-                       value={milliseconds}
-                       onChange={(e): void => setMilliseconds(e.target.value)}
-                       onFocus={(e): void => e.target.select()}
-                       onBlur={(e): void => handleChange(e, MILLISECONDS)}
+            <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
+            <div style={{ flexFlow: "column" }}>
+                <input
+                    id={`${props.id}-milliseconds`}
+                    type="text"
+                    className="sbte-time-editor-input"
+                    value={milliseconds}
+                    onChange={(e): void => setMilliseconds(e.target.value)}
+                    onFocus={(e): void => e.target.select()}
+                    onBlur={(e): void => handleChange(e, MILLISECONDS)}
                 />
             </div>
         </div>

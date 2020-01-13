@@ -1,6 +1,6 @@
-import {updateEditorState} from "./editorStatesSlice";
+import { ContentState, EditorState } from "draft-js";
 import testingStore from "../testUtils/testingStore";
-import {ContentState, EditorState} from "draft-js";
+import { updateEditorState } from "./editorStatesSlice";
 
 describe("editorStatesSlice", () => {
     it("updates editor state for ID 1", () => {

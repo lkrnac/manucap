@@ -1,14 +1,13 @@
 import "../testUtils/initBrowserEnvironment";
-
-import * as enzyme from "enzyme";
-import * as React from "react";
-import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
+import { Provider } from "react-redux";
+import React from "react";
+import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
-import {SubtitleSpecification} from "./model";
+import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
+import { mount } from "enzyme";
+import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleSpecificationsModal", () => {
     it("renders", () => {
@@ -28,14 +27,14 @@ describe("SubtitleSpecificationsModal", () => {
             maxCaptionDurationInMillis: 6,
             comments: "Note"
         };
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div>
                 <Modal show={false} onHide={(): void => {}} centered dialogClassName="sbte-medium-modal">
                     <Modal.Header closeButton>
                         <Modal.Title>Subtitle Specifications</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecification}/>
+                        <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecification} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary">
@@ -47,9 +46,9 @@ describe("SubtitleSpecificationsModal", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsModal show={false} onClose={(): void => {}}/>
+                <SubtitleSpecificationsModal show={false} onClose={(): void => {}} />
             </Provider>
         );
 

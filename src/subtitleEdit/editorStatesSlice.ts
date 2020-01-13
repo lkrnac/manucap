@@ -1,7 +1,7 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {EditorState} from "draft-js";
-import {AppThunk} from "../reducers/subtitleEditReducers";
-import {Dispatch} from "react";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { AppThunk } from "../reducers/subtitleEditReducers";
+import { Dispatch } from "react";
+import { EditorState } from "draft-js";
 
 interface EditorStateAction {
     editorId: number;
