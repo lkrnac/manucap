@@ -39,7 +39,8 @@
         "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
         "react/jsx-no-duplicate-props": "error",
         "react/jsx-fragments": "error",
-        "react/jsx-props-no-multi-spaces": "error"
+        "react/jsx-props-no-multi-spaces": "error",
+        "react/jsx-wrap-multilines": "error"
     },
     "settings": {
       "react": {
