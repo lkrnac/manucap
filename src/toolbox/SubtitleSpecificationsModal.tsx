@@ -26,7 +26,8 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={props.onClose}
-                            className="dotsub-subtitle-specifications-modal-close-button">
+                            className="dotsub-subtitle-specifications-modal-close-button"
+                    >
                         Close
                     </Button>
                 </Modal.Footer>

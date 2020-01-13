@@ -27,7 +27,8 @@
         "sort-imports": "error",
         "object-curly-spacing": ["error", "always", { "objectsInObjects": false, "arraysInObjects": false }],
         "react/jsx-boolean-value": "error",
-        "react/jsx-child-element-spacing": "error"
+        "react/jsx-child-element-spacing": "error",
+        "react/jsx-closing-bracket-location": "error"
     },
     "settings": {
       "react": {
