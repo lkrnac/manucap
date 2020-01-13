@@ -1,19 +1,18 @@
 import "../testUtils/initBrowserEnvironment";
-
-import * as enzyme from "enzyme";
-import * as React from "react";
-import {Provider} from "react-redux";
+import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
+import { Provider } from "react-redux";
+import React from "react";
+import { mount } from "enzyme";
 import { os } from "platform";
 import testingStore from "../testUtils/testingStore";
-import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 
 
 describe("KeyboardShortcutLabel", () => {
     it("renders", () => {
         // GIVEN
         const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
-        const expectedNode = enzyme.mount(
-            <div style={{display: "flex", alignItems: "center"}}>
+        const expectedNode = mount(
+            <div style={{ display: "flex", alignItems: "center" }}>
                 <h5><span className="badge badge-secondary">{commandKey}</span></h5>
                 <span>&#160;+&#160;</span>
                 <h5><span className="badge badge-secondary">Shift</span></h5>
@@ -31,7 +30,7 @@ describe("KeyboardShortcutLabel", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore} >
                 <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
             </Provider>

@@ -1,7 +1,5 @@
-import React, {
-    ReactElement
-} from "react";
-import {SubtitleSpecification} from "./model";
+import React, { ReactElement } from "react";
+import { SubtitleSpecification } from "./model";
 
 export interface Props {
     subTitleSpecifications: SubtitleSpecification;
@@ -30,9 +28,9 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
             </div>
             {props.subTitleSpecifications.enabled ? (
                 <div>
-                    <hr/>
-                    <div style={{display: "flex", marginRight: "20px"}}>
-                        <div style={{flexFlow: "column"}}>
+                    <hr />
+                    <div style={{ display: "flex", marginRight: "20px" }}>
+                        <div style={{ flexFlow: "column" }}>
                             <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.audioDescription ? "Yes" : "No"}</label>
@@ -58,8 +56,8 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                                 </label>
                             </div>
                         </div>
-                        <hr/>
-                        <div style={{flexFlow: "column"}}>
+                        <hr />
+                        <div style={{ flexFlow: "column" }}>
                             <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.maxLinesPerCaption}</label>
@@ -78,7 +76,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                             </div>
                         </div>
                     </div>
-                    <hr/>
+                    <hr />
                     <div>
                         <label><strong>Comments:&nbsp;</strong></label>
                         <label>{props.subTitleSpecifications.comments}</label>

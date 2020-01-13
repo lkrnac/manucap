@@ -1,9 +1,7 @@
-import React, {
-    ReactElement, useState
-} from "react";
+import React, { ReactElement, useState } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
+import Modal from "react-bootstrap/Modal";
 
 const KeyboardShortcuts = (): ReactElement => {
     const [show, setShow] = useState(false);
