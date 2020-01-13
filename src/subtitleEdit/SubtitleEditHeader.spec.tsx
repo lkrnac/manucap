@@ -5,8 +5,8 @@ import { updateEditingTrack, updateTask } from "../player/trackSlices";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEditHeader from "./SubtitleEditHeader";
-import { mount } from "enzyme";
 import { createTestingStore } from "../testUtils/testingStore";
+import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 
 let testingStore = createTestingStore();
