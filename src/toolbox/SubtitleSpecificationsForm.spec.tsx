@@ -38,7 +38,7 @@ describe("SubtitleSpecificationsForm", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications}/>
+                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
@@ -72,7 +72,7 @@ describe("SubtitleSpecificationsForm", () => {
                     <label>Yes</label>
                 </div>
                 <div>
-                    <hr/>
+                    <hr />
                     <div style={{ display: "flex", marginRight: "20px" }}>
                         <div style={{ flexFlow: "column" }}>
                             <div>
@@ -96,7 +96,7 @@ describe("SubtitleSpecificationsForm", () => {
                                 <label>Line Breaks</label>
                             </div>
                         </div>
-                        <hr/>
+                        <hr />
                         <div style={{ flexFlow: "column" }}>
                             <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
@@ -116,7 +116,7 @@ describe("SubtitleSpecificationsForm", () => {
                             </div>
                         </div>
                     </div>
-                    <hr/>
+                    <hr />
                     <div>
                         <label><strong>Comments:&nbsp;</strong></label>
                         <label>This is a sample comment</label>
@@ -128,7 +128,7 @@ describe("SubtitleSpecificationsForm", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications}/>
+                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 

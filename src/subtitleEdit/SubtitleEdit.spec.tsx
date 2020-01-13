@@ -40,7 +40,7 @@ describe("SubtitleEdit", () => {
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b></div>
                         </div>
-                        <div style={{ flex: "2" }}/>
+                        <div style={{ flex: "2" }} />
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                         </div>
@@ -55,8 +55,8 @@ describe("SubtitleEdit", () => {
                             <Toolbox />
                         </div>
                         <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
-                            <CueTextEditor index={0} cue={cues[0]}/>
-                            <CueTextEditor index={1} cue={cues[1]}/>
+                            <CueTextEditor index={0} cue={cues[0]} />
+                            <CueTextEditor index={1} cue={cues[1]} />
                         </div>
                     </div>
                 </div>

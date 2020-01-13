@@ -22,7 +22,7 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
                     <Modal.Title>Subtitle Specifications</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications}/>
+                    <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button

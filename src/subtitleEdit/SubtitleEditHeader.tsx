@@ -17,7 +17,7 @@ const getLanguageDescription = (track: Track): ReactElement => {
 
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
     if (!task || !task.type || !track) {
-        return <div/>;
+        return <div />;
     }
     const trackDescriptions = {
         TASK_TRANSLATE: <div>Translation from {getLanguageDescription(track)}</div>,
@@ -25,12 +25,12 @@ const getTrackDescription = (task: Task, track: Track): ReactElement => {
         TASK_REVIEW: <div>Review of {getLanguageDescription(track)} {getTrackType(track)}</div>,
         TASK_CAPTION: <div>Caption in: {getLanguageDescription(track)}</div>
     };
-    return trackDescriptions[task.type] ? trackDescriptions[task.type] : <div/>;
+    return trackDescriptions[task.type] ? trackDescriptions[task.type] : <div />;
 };
 
 const getDueDate = (task: Task): ReactElement => {
     if (!task || !task.type) {
-        return <div/>;
+        return <div />;
     }
     return <div>Due Date: <b>{task.dueDate}</b></div>;
 };
@@ -46,7 +46,7 @@ const SubtitleEditHeader = (): ReactElement => {
                 <div><b>{track.videoTitle}</b> <i>{task.projectName}</i></div>
                 {getTrackDescription(task, track)}
             </div>
-            <div style={{ flex: "2" }}/>
+            <div style={{ flex: "2" }} />
             <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
             </div>

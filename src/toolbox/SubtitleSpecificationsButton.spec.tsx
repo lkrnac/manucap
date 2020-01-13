@@ -25,7 +25,7 @@ describe("SubtitleSpecificationsButton", () => {
                         Subtitle Specifications
                     </Button>
 
-                    <SubtitleSpecificationsModal show onClose={(): void => {}}/>
+                    <SubtitleSpecificationsModal show onClose={(): void => {}} />
                 </div>
             </Provider>
         );
@@ -33,7 +33,7 @@ describe("SubtitleSpecificationsButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton/>
+                <SubtitleSpecificationsButton />
             </Provider>
         );
         testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
@@ -47,7 +47,7 @@ describe("SubtitleSpecificationsButton", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton/>
+                <SubtitleSpecificationsButton />
             </Provider>
         );
 
@@ -63,7 +63,7 @@ describe("SubtitleSpecificationsButton", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton/>
+                <SubtitleSpecificationsButton />
             </Provider>
         );
 

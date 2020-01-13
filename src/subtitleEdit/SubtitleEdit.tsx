@@ -19,13 +19,13 @@ const SubtitleEdit = (props: Props): ReactElement => {
             <SubtitleEditHeader />
             <div style={{ display: "flex", height: "100%" }}>
                 <div style={{ flex: "1 1 0", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
-                    <EditingVideoPlayer mp4={props.mp4} poster={props.poster}/>
+                    <EditingVideoPlayer mp4={props.mp4} poster={props.poster} />
                     <Toolbox />
                 </div>
                 <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
                     {
                         cues.map((cue: VTTCue, idx: number): ReactElement =>
-                            <CueTextEditor key={idx} index={idx} cue={cue}/>)
+                            <CueTextEditor key={idx} index={idx} cue={cue} />)
                     }
                 </div>
             </div>

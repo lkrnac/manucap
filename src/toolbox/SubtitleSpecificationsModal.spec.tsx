@@ -34,7 +34,7 @@ describe("SubtitleSpecificationsModal", () => {
                         <Modal.Title>Subtitle Specifications</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecification}/>
+                        <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecification} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary">
@@ -48,7 +48,7 @@ describe("SubtitleSpecificationsModal", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsModal show={false} onClose={(): void => {}}/>
+                <SubtitleSpecificationsModal show={false} onClose={(): void => {}} />
             </Provider>
         );
 

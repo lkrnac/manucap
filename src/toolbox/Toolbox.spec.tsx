@@ -25,8 +25,8 @@ describe("Toolbox", () => {
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>
                                 <ButtonToolbar>
-                                    <KeyboardShortcuts/>
-                                    <SubtitleSpecificationsButton/>
+                                    <KeyboardShortcuts />
+                                    <SubtitleSpecificationsButton />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>
@@ -38,7 +38,7 @@ describe("Toolbox", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <Toolbox/>
+                <Toolbox />
             </Provider>
         );
         testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));

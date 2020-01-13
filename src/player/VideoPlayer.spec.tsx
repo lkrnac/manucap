@@ -36,7 +36,7 @@ describe("VideoPlayer", () => {
         );
 
         // WHEN
-        const actualVideoView = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        const actualVideoView = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
@@ -55,7 +55,7 @@ describe("VideoPlayer", () => {
         ];
 
         // WHEN
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks}/>);
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks} />);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -66,7 +66,7 @@ describe("VideoPlayer", () => {
 
     it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -101,7 +101,7 @@ describe("VideoPlayer", () => {
             { language: "es-ES", addCue: jest.fn() }
         ];
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks}/>
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
         );
         const component = actualNode.instance() as VideoPlayer;
 

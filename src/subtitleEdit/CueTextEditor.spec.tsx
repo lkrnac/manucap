@@ -15,7 +15,7 @@ let testingStore = createTestingStore();
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
     <div className="sbte-cue-editor">
         <div className="form-control" style={{ height: "4em", borderRight: "none" }}>
-            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+            <Editor editorState={editorState} onChange={jest.fn} spellCheck />
         </div>
         <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
             <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
@@ -40,7 +40,7 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
     // GIVEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} cue={cue}/>
+            <CueTextEditor index={0} cue={cue} />
         </Provider>
     );
     const editorState = actualNode.find(Editor).props().editorState;
@@ -64,7 +64,7 @@ const testForContentState = (contentState: ContentState, cue: VTTCue, expectedSt
     // WHEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} cue={cue}/>
+            <CueTextEditor index={0} cue={cue} />
         </Provider>
     );
 
@@ -114,7 +114,7 @@ describe("CueTextEditor", () => {
         const cue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue}/>
+                <CueTextEditor index={0} cue={cue} />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");

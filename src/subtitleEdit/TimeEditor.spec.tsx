@@ -43,7 +43,7 @@ describe("TimeEditor", () => {
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test"/>
+            <TimeEditor id="test" />
         );
 
         // THEN
@@ -218,7 +218,7 @@ describe("TimeEditor", () => {
     it("seconds overflow to minutes", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" minutes="5"/>
+            <TimeEditor id="test" minutes="5" />
         );
 
         // WHEN
@@ -233,7 +233,7 @@ describe("TimeEditor", () => {
     it("milliseconds overflow to seconds", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" seconds="10"/>
+            <TimeEditor id="test" seconds="10" />
         );
 
         // WHEN

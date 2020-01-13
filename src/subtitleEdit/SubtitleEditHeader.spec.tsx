@@ -28,7 +28,7 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b></div>
                 </div>
-                <div style={{ flex: "2" }}/>
+                <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                 </div>
@@ -74,7 +74,7 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span></div>
                 </div>
-                <div style={{ flex: "2" }}/>
+                <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                 </div>
@@ -114,7 +114,7 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Direct Translation <span> to <b>Italian</b></span></div>
                 </div>
-                <div style={{ flex: "2" }}/>
+                <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                 </div>
@@ -154,7 +154,7 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Review of <b>English (US)</b> Caption</div>
                 </div>
-                <div style={{ flex: "2" }}/>
+                <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                 </div>
@@ -200,7 +200,7 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Review of <span><b>English (US)</b> to <b>Italian</b></span> Translation</div>
                 </div>
-                <div style={{ flex: "2" }}/>
+                <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                 </div>
@@ -232,12 +232,12 @@ describe("SubtitleEditHeader", () => {
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column" }}>
-                    <div><b>This is the video title</b> <i/></div>
-                    <div/>
+                    <div><b>This is the video title</b> <i /></div>
+                    <div />
                 </div>
-                <div style={{ flex: "2" }}/>
+                <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
-                    <div/>
+                    <div />
                 </div>
             </header>
         );

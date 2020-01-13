@@ -22,7 +22,7 @@ describe("InlineStyleButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>}/>
+                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
             </Provider>
         );
 
@@ -46,7 +46,7 @@ describe("InlineStyleButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>}/>
+                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
             </Provider>
         );
 
@@ -70,7 +70,7 @@ describe("InlineStyleButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"ITALIC"} label={<i>I</i>}/>
+                <InlineStyleButton editorIndex={0} inlineStyle={"ITALIC"} label={<i>I</i>} />
             </Provider>
         );
 
@@ -94,7 +94,7 @@ describe("InlineStyleButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"UNDERLINE"} label={<u>U</u>}/>
+                <InlineStyleButton editorIndex={0} inlineStyle={"UNDERLINE"} label={<u>U</u>} />
             </Provider>
         );
 
@@ -106,7 +106,7 @@ describe("InlineStyleButton", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>}/>
+                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
             </Provider>
         );
         const event = { preventDefault: jest.fn() };
