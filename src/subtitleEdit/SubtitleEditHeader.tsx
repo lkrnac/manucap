@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react";
 import { Task, Track } from "../player/model";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
-import { useSelector } from "react-redux";
 import { humanizer } from "humanize-duration";
+import { useSelector } from "react-redux";
 
 const getTrackType = (track: Track): string => {
     return track.type === "CAPTION" ? "Caption" : "Translation";
@@ -18,10 +18,10 @@ const getLanguageDescription = (track: Track): ReactElement => {
 
 const getTrackLength = (track: Track): ReactElement => {
     if (!track || !track.videoLength || track.videoLength <= 0) {
-        return <i/>;
+        return <i />;
     }
     return <i>{humanizer({ delimiter: " " })(track.videoLength * 1000)}</i>;
-}
+};
 
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
     if (!task || !task.type || !track) {
