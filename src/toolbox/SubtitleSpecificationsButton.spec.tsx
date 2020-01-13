@@ -18,7 +18,8 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <div>
                     <Button
-                        variant="light" className="dotsub-subtitle-specifications-button"
+                        variant="light"
+                        className="dotsub-subtitle-specifications-button"
                         style={{ marginLeft: "10px" }}
                     >
                         Subtitle Specifications

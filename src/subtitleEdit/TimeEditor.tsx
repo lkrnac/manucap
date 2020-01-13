@@ -86,7 +86,8 @@ const TimeEditor = (props: Props): ReactElement => {
                 <input
                     id={`${props.id}-seconds`}
                     type="text"
-                    className="sbte-time-editor-input" style={{ width: "30px" }}
+                    className="sbte-time-editor-input"
+                    style={{ width: "30px" }}
                     value={seconds}
                     onChange={(e): void => setSeconds(e.target.value)}
                     onFocus={(e): void => e.target.select()}
