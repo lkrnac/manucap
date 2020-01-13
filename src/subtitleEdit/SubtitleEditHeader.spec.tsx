@@ -1,13 +1,13 @@
 import "../testUtils/initBrowserEnvironment";
+import "video.js"; // VTTCue definition
 import { Language, Task, Track, TrackVersion } from "../player/model";
 import { updateEditingTrack, updateTask } from "../player/trackSlices";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { mount } from "enzyme";
-import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { createTestingStore } from "../testUtils/testingStore";
-import "video.js"; // VTTCue definition
+import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -85,7 +85,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div/>
+                    <div />
                 </div>
             </header>
         );
@@ -126,7 +126,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div/>
+                    <div />
                 </div>
             </header>
         );
@@ -167,7 +167,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div/>
+                    <div />
                 </div>
             </header>
         );
@@ -214,7 +214,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div/>
+                    <div />
                 </div>
             </header>
         );
@@ -276,25 +276,25 @@ describe("SubtitleEditHeader", () => {
         ];
         const testingTrack = {
             type: "CAPTION",
-            language: {id: "en-US", name: "English (US)"} as Language,
+            language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
             videoTitle: "This is the video title",
             videoLength: 120,
-            currentVersion: {cues} as TrackVersion
+            currentVersion: { cues } as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM"
         } as Task;
-        const expectedNode = enzyme.mount(
-            <header style={{display: "flex", paddingBottom: "10px"}}>
-                <div style={{display: "flex", flexFlow: "column"}}>
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b></div>
                 </div>
-                <div style={{flex: "2"}}/>
-                <div style={{display: "flex", flexFlow: "column"}}>
+                <div style={{ flex: "2" }} />
+                <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div><b>50%</b> of 120 seconds</div>
                 </div>
@@ -302,7 +302,7 @@ describe("SubtitleEditHeader", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore} >
                 <SubtitleEditHeader />
             </Provider>
@@ -323,33 +323,33 @@ describe("SubtitleEditHeader", () => {
         ];
         const testingTrack = {
             type: "CAPTION",
-            language: {id: "en-US", name: "English (US)"} as Language,
+            language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
             videoTitle: "This is the video title",
             videoLength: 0,
-            currentVersion: {cues} as TrackVersion
+            currentVersion: { cues } as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM"
         } as Task;
-        const expectedNode = enzyme.mount(
-            <header style={{display: "flex", paddingBottom: "10px"}}>
-                <div style={{display: "flex", flexFlow: "column"}}>
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b></div>
                 </div>
-                <div style={{flex: "2"}}/>
-                <div style={{display: "flex", flexFlow: "column"}}>
+                <div style={{ flex: "2" }} />
+                <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div/>
+                    <div />
                 </div>
             </header>
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore} >
                 <SubtitleEditHeader />
             </Provider>
@@ -366,25 +366,25 @@ describe("SubtitleEditHeader", () => {
         // GIVEN
         const testingTrack = {
             type: "CAPTION",
-            language: {id: "en-US", name: "English (US)"} as Language,
+            language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
             videoTitle: "This is the video title",
             videoLength: 120,
-            currentVersion: {cues: []} as TrackVersion
+            currentVersion: { cues: []} as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM"
         } as Task;
-        const expectedNode = enzyme.mount(
-            <header style={{display: "flex", paddingBottom: "10px"}}>
-                <div style={{display: "flex", flexFlow: "column"}}>
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b></div>
                 </div>
-                <div style={{flex: "2"}}/>
-                <div style={{display: "flex", flexFlow: "column"}}>
+                <div style={{ flex: "2" }} />
+                <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div><b>0%</b> of 120 seconds</div>
                 </div>
@@ -392,7 +392,7 @@ describe("SubtitleEditHeader", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore} >
                 <SubtitleEditHeader />
             </Provider>

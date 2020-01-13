@@ -47,7 +47,7 @@ const getProgress = (track: Track): ReactElement => {
     if (track && track.videoLength) {
         return <div><b>{getProgressPercentage(track)}%</b> of {track.videoLength} seconds</div>;
     }
-    return <div/>;
+    return <div />;
 };
 
 const SubtitleEditHeader = (): ReactElement => {
