@@ -37,7 +37,8 @@
         "react/jsx-indent": "error",
         "react/jsx-indent-props": "error",
         "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
-        "react/jsx-no-duplicate-props": "error"
+        "react/jsx-no-duplicate-props": "error",
+        "react/jsx-fragments": "error"
     },
     "settings": {
       "react": {
