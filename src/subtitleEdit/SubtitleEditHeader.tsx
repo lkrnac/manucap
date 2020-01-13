@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import { Task, Track } from "../player/model";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
 import { useSelector } from "react-redux";
+import { humanizer } from "humanize-duration";
 
 const getTrackType = (track: Track): string => {
     return track.type === "CAPTION" ? "Caption" : "Translation";
@@ -15,15 +16,22 @@ const getLanguageDescription = (track: Track): ReactElement => {
     return <b>{track.language.name}</b>;
 };
 
+const getTrackLength = (track: Track): ReactElement => {
+    if (!track || !track.videoLength || track.videoLength <= 0) {
+        return <i/>;
+    }
+    return <i>{humanizer({ delimiter: " " })(track.videoLength * 1000)}</i>;
+}
+
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
     if (!task || !task.type || !track) {
         return <div />;
     }
     const trackDescriptions = {
-        TASK_TRANSLATE: <div>Translation from {getLanguageDescription(track)}</div>,
-        TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)}</div>,
-        TASK_REVIEW: <div>Review of {getLanguageDescription(track)} {getTrackType(track)}</div>,
-        TASK_CAPTION: <div>Caption in: {getLanguageDescription(track)}</div>
+        TASK_TRANSLATE: <div>Translation from {getLanguageDescription(track)} {getTrackLength(track)}</div>,
+        TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}</div>,
+        TASK_REVIEW: <div>Review of {getLanguageDescription(track)} {getTrackType(track)} {getTrackLength(track)}</div>,
+        TASK_CAPTION: <div>Caption in: {getLanguageDescription(track)} {getTrackLength(track)}</div>
     };
     return trackDescriptions[task.type] ? trackDescriptions[task.type] : <div />;
 };
@@ -45,7 +53,7 @@ const getProgressPercentage = (track: Track): number => {
 
 const getProgress = (track: Track): ReactElement => {
     if (track && track.videoLength) {
-        return <div><b>{getProgressPercentage(track)}%</b> of {track.videoLength} seconds</div>;
+        return <div>Completed: <b>{getProgressPercentage(track)}%</b></div>;
     }
     return <div />;
 };
