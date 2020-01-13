@@ -107,7 +107,7 @@ export default class VideoPlayer extends React.Component<Props> {
                 style={{ margin: "auto" }}
                 className="video-js vjs-default-skin vjs-big-play-centered"
                 poster={this.props.poster}
-                controls={true}
+                controls
                 preload="none"
                 data-setup="{}"
             />
