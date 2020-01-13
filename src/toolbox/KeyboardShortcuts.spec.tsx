@@ -1,18 +1,17 @@
 import "../testUtils/initBrowserEnvironment";
-
-import * as enzyme from "enzyme";
-import * as React from "react";
-import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import KeyboardShortcuts from "./KeyboardShortcuts";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
+import KeyboardShortcuts from "./KeyboardShortcuts";
+import Modal from "react-bootstrap/Modal";
+import {Provider} from "react-redux";
+import React from "react";
+import {mount} from "enzyme";
+import testingStore from "../testUtils/testingStore";
 
 describe("KeyboardShortcuts", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div>
                 <Button variant="light" className="dotsub-keyboard-shortcuts-button">
                     Keyboard Shortcuts
@@ -39,7 +38,7 @@ describe("KeyboardShortcuts", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore} >
                 <KeyboardShortcuts />
             </Provider>
@@ -52,7 +51,7 @@ describe("KeyboardShortcuts", () => {
 
     it("opens keyboard shortcuts modal when button is clicked", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore} >
                 <KeyboardShortcuts />
             </Provider>

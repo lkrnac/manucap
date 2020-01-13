@@ -1,11 +1,11 @@
 import "../testUtils/initBrowserEnvironment";
 
-import * as enzyme from "enzyme";
-import * as React from "react";
-import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import VideoPlayer from "./VideoPlayer";
 import videojs, {VideoJsPlayer} from "video.js";
+import React from "react";
 import {Track} from "./model";
+import VideoPlayer from "./VideoPlayer";
+import {mount} from "enzyme";
+import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 
 interface FakeTrack {
     language: string;
@@ -23,7 +23,7 @@ describe("VideoPlayer", () => {
     it("renders", () => {
         // GIVEN
         // noinspection HtmlUnknownTarget Dummy URL is OK for testing
-        const expectedVideoView = enzyme.mount(
+        const expectedVideoView = mount(
             <video
                 id="video-player_html5_api"
                 style={{ margin: "auto" }}
@@ -36,7 +36,7 @@ describe("VideoPlayer", () => {
         );
 
         // WHEN
-        const actualVideoView = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        const actualVideoView = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
@@ -55,7 +55,7 @@ describe("VideoPlayer", () => {
         ];
 
         // WHEN
-        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks}/>);
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks}/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -66,7 +66,7 @@ describe("VideoPlayer", () => {
 
     it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
-        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -100,7 +100,7 @@ describe("VideoPlayer", () => {
             { language: "en-CA", addCue: jest.fn() },
             { language: "es-ES", addCue: jest.fn() }
         ];
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks}/>
         );
         const component = actualNode.instance() as VideoPlayer;

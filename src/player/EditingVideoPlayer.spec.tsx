@@ -1,12 +1,12 @@
 import "../testUtils/initBrowserEnvironment";
-import {mount} from "enzyme";
-import React from "react";
 import EditingVideoPlayer from "./EditingVideoPlayer";
 import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
-import {updateEditingTrack} from "./trackSlices";
+import React from "react";
 import {Track} from "./model";
 import VideoPlayer from "./VideoPlayer";
+import {mount} from "enzyme";
+import testingStore from "../testUtils/testingStore";
+import {updateEditingTrack} from "./trackSlices";
 
 const testingTrack = {
     type: "CAPTION",

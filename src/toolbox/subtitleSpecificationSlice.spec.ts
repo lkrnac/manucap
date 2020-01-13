@@ -1,6 +1,6 @@
+import {SubtitleSpecification} from "./model";
 import {readSubtitleSpecification} from "./subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
-import {SubtitleSpecification} from "./model";
 
 const testingSubtitleSpecification = {
     subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",

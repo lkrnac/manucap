@@ -1,11 +1,11 @@
+import "../styles.scss";
 import React, {ReactElement} from "react";
+import CueTextEditor from "./CueTextEditor";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
-import Toolbox from "../toolbox/Toolbox";
-import CueTextEditor from "./CueTextEditor";
-import {useSelector} from "react-redux";
 import {SubtitleEditState} from "../reducers/subtitleEditReducers";
-import "../styles.scss";
+import Toolbox from "../toolbox/Toolbox";
+import {useSelector} from "react-redux";
 
 export interface Props {
     mp4: string;

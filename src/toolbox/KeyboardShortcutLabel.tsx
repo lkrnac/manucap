@@ -1,7 +1,5 @@
-import React, {
-    ReactElement
-} from "react";
-import { os } from "platform";
+import React, {ReactElement} from "react";
+import {os} from "platform";
 
 export interface Props {
     character: string;

@@ -1,14 +1,14 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import React from "react";
-import {mount, ReactWrapper} from "enzyme";
+import {ContentState, Editor, EditorState, SelectionState, convertFromHTML} from "draft-js";
+import {Options, stateToHTML} from "draft-js-export-html";
+import {ReactWrapper, mount} from "enzyme";
 import CueTextEditor from "./CueTextEditor";
 import {Provider} from "react-redux";
+import React from "react";
 import {createTestingStore} from "../testUtils/testingStore";
-import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from "draft-js";
 import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
 import {reset} from "./editorStatesSlice";
-import {Options, stateToHTML} from "draft-js-export-html";
 
 let testingStore = createTestingStore();
 

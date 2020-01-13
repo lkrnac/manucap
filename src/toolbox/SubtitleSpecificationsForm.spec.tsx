@@ -1,11 +1,11 @@
 import "../testUtils/initBrowserEnvironment";
 
-import * as enzyme from "enzyme";
-import * as React from "react";
 import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
-import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
+import React from "react";
 import {SubtitleSpecification} from "./model";
+import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
+import {mount} from "enzyme";
+import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleSpecificationsForm", () => {
     it("renders disabled", () => {
@@ -26,7 +26,7 @@ describe("SubtitleSpecificationsForm", () => {
             comments: ""
         };
 
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div>
                 <div>
                     <label><strong>Enabled:&nbsp;</strong></label>
@@ -36,7 +36,7 @@ describe("SubtitleSpecificationsForm", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications}/>
             </Provider>
@@ -65,7 +65,7 @@ describe("SubtitleSpecificationsForm", () => {
             comments: "This is a sample comment"
         };
 
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div>
                 <div>
                     <label><strong>Enabled:&nbsp;</strong></label>
@@ -126,7 +126,7 @@ describe("SubtitleSpecificationsForm", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications}/>
             </Provider>

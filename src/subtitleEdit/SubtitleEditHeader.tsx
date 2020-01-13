@@ -1,9 +1,7 @@
-import React, {
-    ReactElement
-} from "react";
-import {useSelector} from "react-redux";
-import {SubtitleEditState} from "../reducers/subtitleEditReducers";
+import React, {ReactElement} from "react";
 import {Task, Track} from "../player/model";
+import {SubtitleEditState} from "../reducers/subtitleEditReducers";
+import {useSelector} from "react-redux";
 
 const getTrackType = (track: Track): string => {
     return track.type === "CAPTION" ? "Caption" : "Translation";

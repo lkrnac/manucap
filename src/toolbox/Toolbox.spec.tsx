@@ -1,22 +1,21 @@
 import "../testUtils/initBrowserEnvironment";
-
-import * as enzyme from "enzyme";
-import * as React from "react";
-import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
-import Toolbox from "./Toolbox";
-import KeyboardShortcuts from "./KeyboardShortcuts";
+import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from "react-bootstrap/Card";
-import Accordion from "react-bootstrap/Accordion";
-import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
-import {readSubtitleSpecification} from "./subtitleSpecificationSlice";
+import KeyboardShortcuts from "./KeyboardShortcuts";
+import {Provider} from "react-redux";
+import React from "react";
 import {SubtitleSpecification} from "./model";
+import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
+import Toolbox from "./Toolbox";
+import {mount} from "enzyme";
+import {readSubtitleSpecification} from "./subtitleSpecificationSlice";
+import testingStore from "../testUtils/testingStore";
 
 describe("Toolbox", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <Provider store={testingStore}>
                 <Accordion defaultActiveKey="0" style={{marginTop: "10px"}}>
                     <Card>
@@ -37,7 +36,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
                 <Toolbox/>
             </Provider>

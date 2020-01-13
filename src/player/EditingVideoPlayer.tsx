@@ -1,7 +1,7 @@
 import React, {ReactElement} from "react";
-import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
 import VideoPlayer from "../player/VideoPlayer";
+import { useSelector } from "react-redux";
 
 interface Props {
     mp4: string;

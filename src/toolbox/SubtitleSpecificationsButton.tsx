@@ -1,6 +1,4 @@
-import React, {
-    ReactElement, useState
-} from "react";
+import React, {ReactElement, useState} from "react";
 import Button from "react-bootstrap/Button";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 

@@ -1,8 +1,8 @@
-import Mousetrap from "mousetrap";
-import * as React from "react";
-import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
-import {ReactElement} from "react";
 import "../../node_modules/video.js/dist/video-js.css";
+import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
+import Mousetrap from "mousetrap";
+import React from "react";
+import {ReactElement} from "react";
 import {Track} from "./model";
 import {convertToTextTrackOptions} from "./textTrackOptionsConversion";
 

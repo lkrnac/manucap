@@ -1,6 +1,4 @@
-import React, {
-    ReactElement
-} from "react";
+import React, {ReactElement} from "react";
 import {SubtitleSpecification} from "./model";
 
 export interface Props {

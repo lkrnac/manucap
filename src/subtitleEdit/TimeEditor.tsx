@@ -1,7 +1,4 @@
-import React, {
-    ChangeEvent,
-    ReactElement, useState
-} from "react";
+import React, {ChangeEvent, ReactElement, useState} from "react";
 
 const MAX_MINUTES = 999;
 const MAX_SECONDS = 59;

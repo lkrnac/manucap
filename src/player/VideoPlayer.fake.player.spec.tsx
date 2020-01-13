@@ -1,13 +1,12 @@
 import "../testUtils/initBrowserEnvironment";
-
-import * as enzyme from "enzyme";
-import * as React from "react";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
-import videojs from "video.js";
-import VideoPlayer from "./VideoPlayer";
 import {Track, TrackVersion} from "./model";
+import React from "react";
+import VideoPlayer from "./VideoPlayer";
+import {mount} from "enzyme";
 import {simulateComponentDidUpdate} from "../testUtils/testUtils";
+import videojs from "video.js";
 
 jest.mock("video.js");
 const O_CHAR = 79;
@@ -54,7 +53,7 @@ describe("VideoPlayer tested with fake player", () => {
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -73,7 +72,7 @@ describe("VideoPlayer tested with fake player", () => {
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -93,7 +92,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: RIGHT, shiftKey: true, altKey: true });
@@ -113,7 +112,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: LEFT, shiftKey: true, altKey: true });
@@ -131,7 +130,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
         const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -152,7 +151,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = enzyme.mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]}/>);
         const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -208,7 +207,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks}/>
         );
 

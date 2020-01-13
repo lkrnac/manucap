@@ -1,7 +1,7 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {SubtitleSpecification} from "./model";
-import {Dispatch} from "react";
+import {PayloadAction, createSlice} from "@reduxjs/toolkit";
 import {AppThunk} from "../reducers/subtitleEditReducers";
+import {Dispatch} from "react";
+import {SubtitleSpecification} from "./model";
 
 interface SubtitleSpecificationAction {
     subtitleSpecification: SubtitleSpecification;

@@ -23,7 +23,8 @@
         "react-hooks/exhaustive-deps": "warn",
         "max-len": ["error", { "code": 120 }],
         "semi": ["error", "always"],
-        "jsx-quotes": ["error", "prefer-double"]
+        "jsx-quotes": ["error", "prefer-double"],
+        "sort-imports": "error"
     },
     "settings": {
       "react": {

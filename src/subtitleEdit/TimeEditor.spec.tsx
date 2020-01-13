@@ -1,13 +1,12 @@
 import "../testUtils/initBrowserEnvironment";
-
-import * as enzyme from "enzyme";
-import * as React from "react";
+import React from "react";
 import TimeEditor from "./TimeEditor";
+import {mount} from "enzyme";
 
 describe("TimeEditor", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div id="test" style={{display: "flex"}} className="sbte-time-editor">
                 <div style={{flexFlow: "column"}}>
                     <input
@@ -43,7 +42,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test"/>
         );
 
@@ -53,7 +52,7 @@ describe("TimeEditor", () => {
 
     it("renders with some values", () => {
         // GIVEN
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div id="test" style={{display: "flex"}} className="sbte-time-editor">
                 <div style={{flexFlow: "column"}}>
                     <input
@@ -89,7 +88,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" minutes="999" milliseconds="999" />
         );
 
@@ -99,7 +98,7 @@ describe("TimeEditor", () => {
 
     it("renders with all values", () => {
         // GIVEN
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div id="test" style={{display: "flex"}} className="sbte-time-editor">
                 <div style={{flexFlow: "column"}}>
                     <input
@@ -135,7 +134,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" minutes="999" seconds="59" milliseconds="999" />
         );
 
@@ -145,7 +144,7 @@ describe("TimeEditor", () => {
 
     it("inputs ignores non numeric characters", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" minutes="999" seconds="59" milliseconds="999" />
         );
 
@@ -162,7 +161,7 @@ describe("TimeEditor", () => {
 
     it("inputs pad with 0s", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" />
         );
 
@@ -179,7 +178,7 @@ describe("TimeEditor", () => {
 
     it("max minutes is 999", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" />
         );
 
@@ -192,7 +191,7 @@ describe("TimeEditor", () => {
 
     it("max seconds is 59", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" />
         );
 
@@ -205,7 +204,7 @@ describe("TimeEditor", () => {
 
     it("max milliseconds is 999", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" />
         );
 
@@ -218,7 +217,7 @@ describe("TimeEditor", () => {
 
     it("seconds overflow to minutes", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" minutes="5"/>
         );
 
@@ -233,7 +232,7 @@ describe("TimeEditor", () => {
 
     it("milliseconds overflow to seconds", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" seconds="10"/>
         );
 
@@ -248,7 +247,7 @@ describe("TimeEditor", () => {
 
     it("cascade overflow from milliseconds to minutes", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" minutes="20" seconds="59" />
         );
 
@@ -263,7 +262,7 @@ describe("TimeEditor", () => {
 
     it("focus doesn't change the value", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" />
         );
 
@@ -280,7 +279,7 @@ describe("TimeEditor", () => {
 
     it("change changes the value", () => {
         // GIVEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <TimeEditor id="test" />
         );
 

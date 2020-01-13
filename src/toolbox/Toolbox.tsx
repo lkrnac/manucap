@@ -1,9 +1,7 @@
-import React, {
-    ReactElement
-} from "react";
+import React, {ReactElement} from "react";
 import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+import Card from "react-bootstrap/Card";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 

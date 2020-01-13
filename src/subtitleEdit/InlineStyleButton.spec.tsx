@@ -1,10 +1,10 @@
 import "../testUtils/initBrowserEnvironment";
-import React from "react";
+import { ContentState, EditorState, convertFromHTML } from "draft-js";
 import InlineStyleButton from "./InlineStyleButton";
-import testingStore from "../testUtils/testingStore";
 import { Provider } from "react-redux";
+import React from "react";
 import { mount } from "enzyme";
-import { ContentState, convertFromHTML, EditorState } from "draft-js";
+import testingStore from "../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
 
 /**
