@@ -10,18 +10,34 @@ describe("TimeEditor", () => {
         const expectedNode = enzyme.mount(
             <div id="test" style={{display: "flex"}} className="sbte-time-editor">
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-minutes" type="text" className="sbte-time-editor-input" value="000"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-minutes"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        value="000"
+                        onChange={(): void => {}}
+                    />
                 </div>
                 <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-seconds" type="text" className="sbte-time-editor-input" style={{width: "30px"}} value="00"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-seconds"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        style={{width: "30px"}}
+                        value="00"
+                        onChange={(): void => {}}
+                    />
                 </div>
                 <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-milliseconds" type="text" className="sbte-time-editor-input" value="000"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-milliseconds"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        value="000"
+                        onChange={(): void => {}}
+                    />
                 </div>
             </div>
         );
@@ -40,18 +56,34 @@ describe("TimeEditor", () => {
         const expectedNode = enzyme.mount(
             <div id="test" style={{display: "flex"}} className="sbte-time-editor">
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-minutes" type="text" className="sbte-time-editor-input" value="999"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-minutes"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        value="999"
+                        onChange={(): void => {}}
+                    />
                 </div>
                 <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-seconds" type="text" className="sbte-time-editor-input" style={{width: "30px"}} value="00"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-seconds"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        style={{width: "30px"}}
+                        value="00"
+                        onChange={(): void => {}}
+                    />
                 </div>
                 <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-milliseconds" type="text" className="sbte-time-editor-input" value="999"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-milliseconds"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        value="999"
+                        onChange={(): void => {}}
+                    />
                 </div>
             </div>
         );
@@ -70,18 +102,34 @@ describe("TimeEditor", () => {
         const expectedNode = enzyme.mount(
             <div id="test" style={{display: "flex"}} className="sbte-time-editor">
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-minutes" type="text" className="sbte-time-editor-input" value="999"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-minutes"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        value="999"
+                        onChange={(): void => {}}
+                    />
                 </div>
                 <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-seconds" type="text" className="sbte-time-editor-input" style={{width: "30px"}} value="59"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-seconds"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        style={{width: "30px"}}
+                        value="59"
+                        onChange={(): void => {}}
+                    />
                 </div>
                 <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
                 <div style={{flexFlow: "column"}}>
-                    <input id="test-milliseconds" type="text" className="sbte-time-editor-input" value="999"
-                           onChange={(): void => {}}/>
+                    <input
+                        id="test-milliseconds"
+                        type="text"
+                        className="sbte-time-editor-input"
+                        value="999"
+                        onChange={(): void => {}}
+                    />
                 </div>
             </div>
         );
