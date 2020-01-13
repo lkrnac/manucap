@@ -1,11 +1,11 @@
-import {AppThunk, SubtitleEditState} from "../reducers/subtitleEditReducers";
-import {ContentState, Editor, EditorState, convertFromHTML} from "draft-js";
-import {Options, stateToHTML} from "draft-js-export-html";
-import React, {ReactElement, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import { AppThunk, SubtitleEditState } from "../reducers/subtitleEditReducers";
+import { ContentState, Editor, EditorState, convertFromHTML } from "draft-js";
+import { Options, stateToHTML } from "draft-js-export-html";
+import React, { ReactElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import InlineStyleButton from "./InlineStyleButton";
-import {updateCue} from "../player/trackSlices";
-import {updateEditorState} from "./editorStatesSlice";
+import { updateCue } from "../player/trackSlices";
+import { updateEditorState } from "./editorStatesSlice";
 
 interface Props{
     index: number;
@@ -17,8 +17,8 @@ interface Props{
 // TODO: is this would be updated in types definition, we can remove this explicit cast + ts-ignore
 const convertToHtmlOptions = {
     inlineStyles: {
-        BOLD: {element: "b"},
-        ITALIC: {element: "i"},
+        BOLD: { element: "b" },
+        ITALIC: { element: "i" },
     },
     defaultBlockTag: null
 } as Options;

@@ -2,13 +2,13 @@ import "../testUtils/initBrowserEnvironment";
 
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import React from "react";
-import {SubtitleSpecification} from "./model";
+import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
-import {mount} from "enzyme";
-import {readSubtitleSpecification} from "./subtitleSpecificationSlice";
+import { mount } from "enzyme";
+import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleSpecificationsButton", () => {
@@ -18,7 +18,7 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <div>
                     <Button variant="light" className="dotsub-subtitle-specifications-button"
-                            style={{marginLeft: "10px"}}>
+                            style={{ marginLeft: "10px" }}>
                         Subtitle Specifications
                     </Button>
 
@@ -33,7 +33,7 @@ describe("SubtitleSpecificationsButton", () => {
                 <SubtitleSpecificationsButton/>
             </Provider>
         );
-        testingStore.dispatch(readSubtitleSpecification({enabled: false} as SubtitleSpecification));
+        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
 
         // THEN
         expect(actualNode.html())

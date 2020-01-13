@@ -1,10 +1,10 @@
 import "../testUtils/initBrowserEnvironment";
 
-import videojs, {VideoJsPlayer} from "video.js";
+import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
-import {Track} from "./model";
+import { Track } from "./model";
 import VideoPlayer from "./VideoPlayer";
-import {mount} from "enzyme";
+import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 
 interface FakeTrack {
@@ -46,12 +46,12 @@ describe("VideoPlayer", () => {
     it("initializes videoJs with correct options", () => {
         // GIVEN
         const tracks = [
-            { type: "CAPTION", language: { id: "en-US" }, default: true} as Track,
+            { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
             { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
         ];
         const expectedTextTrackOptions = [
-            {kind: "captions", mode: "showing", srclang: "en-US", default: true} as videojs.TextTrackOptions,
-            {kind: "subtitles", mode: "showing", srclang: "es-ES", default: false} as videojs.TextTrackOptions
+            { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
+            { kind: "subtitles", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
         ];
 
         // WHEN

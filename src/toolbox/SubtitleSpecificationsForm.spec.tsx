@@ -1,10 +1,10 @@
 import "../testUtils/initBrowserEnvironment";
 
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import React from "react";
-import {SubtitleSpecification} from "./model";
+import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
-import {mount} from "enzyme";
+import { mount } from "enzyme";
 import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleSpecificationsForm", () => {
@@ -73,8 +73,8 @@ describe("SubtitleSpecificationsForm", () => {
                 </div>
                 <div>
                     <hr/>
-                    <div style={{display: "flex", marginRight: "20px"}}>
-                        <div style={{flexFlow: "column"}}>
+                    <div style={{ display: "flex", marginRight: "20px" }}>
+                        <div style={{ flexFlow: "column" }}>
                             <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
                                 <label>Yes</label>
@@ -97,7 +97,7 @@ describe("SubtitleSpecificationsForm", () => {
                             </div>
                         </div>
                         <hr/>
-                        <div style={{flexFlow: "column"}}>
+                        <div style={{ flexFlow: "column" }}>
                             <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                                 <label>1</label>

@@ -1,11 +1,11 @@
 import "../testUtils/initBrowserEnvironment";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
-import {Track, TrackVersion} from "./model";
+import { Track, TrackVersion } from "./model";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import {mount} from "enzyme";
-import {simulateComponentDidUpdate} from "../testUtils/testUtils";
+import { mount } from "enzyme";
+import { simulateComponentDidUpdate } from "../testUtils/testUtils";
 import videojs from "video.js";
 
 jest.mock("video.js");

@@ -1,16 +1,16 @@
 import "../testUtils/initBrowserEnvironment";
 import EditingVideoPlayer from "./EditingVideoPlayer";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import React from "react";
-import {Track} from "./model";
+import { Track } from "./model";
 import VideoPlayer from "./VideoPlayer";
-import {mount} from "enzyme";
+import { mount } from "enzyme";
 import testingStore from "../testUtils/testingStore";
-import {updateEditingTrack} from "./trackSlices";
+import { updateEditingTrack } from "./trackSlices";
 
 const testingTrack = {
     type: "CAPTION",
-    language: {id: "en-US"},
+    language: { id: "en-US" },
     default: true,
     currentVersion: {
         cues: [

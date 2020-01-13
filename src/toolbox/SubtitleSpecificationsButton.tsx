@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from "react";
+import React, { ReactElement, useState } from "react";
 import Button from "react-bootstrap/Button";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 
@@ -9,7 +9,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     return (
         <div>
             <Button variant="light" onClick={handleShow} className="dotsub-subtitle-specifications-button"
-                    style={{marginLeft: "10px"}}>
+                    style={{ marginLeft: "10px" }}>
                 Subtitle Specifications
             </Button>
 

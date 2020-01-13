@@ -1,14 +1,14 @@
 import "../testUtils/initBrowserEnvironment";
 import React from "react";
 import TimeEditor from "./TimeEditor";
-import {mount} from "enzyme";
+import { mount } from "enzyme";
 
 describe("TimeEditor", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{display: "flex"}} className="sbte-time-editor">
-                <div style={{flexFlow: "column"}}>
+            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-minutes"
                         type="text"
@@ -17,19 +17,19 @@ describe("TimeEditor", () => {
                         onChange={(): void => {}}
                     />
                 </div>
-                <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
-                <div style={{flexFlow: "column"}}>
+                <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-seconds"
                         type="text"
                         className="sbte-time-editor-input"
-                        style={{width: "30px"}}
+                        style={{ width: "30px" }}
                         value="00"
                         onChange={(): void => {}}
                     />
                 </div>
-                <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
-                <div style={{flexFlow: "column"}}>
+                <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-milliseconds"
                         type="text"
@@ -53,8 +53,8 @@ describe("TimeEditor", () => {
     it("renders with some values", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{display: "flex"}} className="sbte-time-editor">
-                <div style={{flexFlow: "column"}}>
+            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-minutes"
                         type="text"
@@ -63,19 +63,19 @@ describe("TimeEditor", () => {
                         onChange={(): void => {}}
                     />
                 </div>
-                <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
-                <div style={{flexFlow: "column"}}>
+                <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-seconds"
                         type="text"
                         className="sbte-time-editor-input"
-                        style={{width: "30px"}}
+                        style={{ width: "30px" }}
                         value="00"
                         onChange={(): void => {}}
                     />
                 </div>
-                <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
-                <div style={{flexFlow: "column"}}>
+                <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-milliseconds"
                         type="text"
@@ -99,8 +99,8 @@ describe("TimeEditor", () => {
     it("renders with all values", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{display: "flex"}} className="sbte-time-editor">
-                <div style={{flexFlow: "column"}}>
+            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-minutes"
                         type="text"
@@ -109,19 +109,19 @@ describe("TimeEditor", () => {
                         onChange={(): void => {}}
                     />
                 </div>
-                <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
-                <div style={{flexFlow: "column"}}>
+                <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-seconds"
                         type="text"
                         className="sbte-time-editor-input"
-                        style={{width: "30px"}}
+                        style={{ width: "30px" }}
                         value="59"
                         onChange={(): void => {}}
                     />
                 </div>
-                <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
-                <div style={{flexFlow: "column"}}>
+                <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
+                <div style={{ flexFlow: "column" }}>
                     <input
                         id="test-milliseconds"
                         type="text"
@@ -149,9 +149,9 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-minutes").simulate("blur", { target: { value: "abc!e@#.$%^" } });
-        actualNode.find("#test-seconds").simulate("blur", { target: { value: "abc!e@#.$%^" } });
-        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "abc!e@#.$%^" } });
+        actualNode.find("#test-minutes").simulate("blur", { target: { value: "abc!e@#.$%^" }});
+        actualNode.find("#test-seconds").simulate("blur", { target: { value: "abc!e@#.$%^" }});
+        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "abc!e@#.$%^" }});
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("000");
@@ -166,9 +166,9 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-minutes").simulate("blur", { target: { value: "1" } });
-        actualNode.find("#test-seconds").simulate("blur", { target: { value: "2" } });
-        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "33" } });
+        actualNode.find("#test-minutes").simulate("blur", { target: { value: "1" }});
+        actualNode.find("#test-seconds").simulate("blur", { target: { value: "2" }});
+        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "33" }});
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("001");
@@ -183,7 +183,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-minutes").simulate("blur", { target: { value: "999999" } });
+        actualNode.find("#test-minutes").simulate("blur", { target: { value: "999999" }});
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("999");
@@ -196,7 +196,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-seconds").simulate("blur", { target: { value: "65" } });
+        actualNode.find("#test-seconds").simulate("blur", { target: { value: "65" }});
 
         // THEN
         expect(actualNode.find("#test-seconds").props().value).toEqual("05");
@@ -209,7 +209,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "1150" } });
+        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "1150" }});
 
         // THEN
         expect(actualNode.find("#test-milliseconds").props().value).toEqual("150");
@@ -222,7 +222,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-seconds").simulate("blur", { target: { value: "80" } });
+        actualNode.find("#test-seconds").simulate("blur", { target: { value: "80" }});
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("006");
@@ -237,7 +237,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "1001" } });
+        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "1001" }});
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("000");
@@ -252,7 +252,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "3563" } });
+        actualNode.find("#test-milliseconds").simulate("blur", { target: { value: "3563" }});
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("021");
@@ -284,9 +284,9 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-minutes").simulate("change", { target: { value: "001" } });
-        actualNode.find("#test-seconds").simulate("change", { target: { value: "20" } });
-        actualNode.find("#test-milliseconds").simulate("change", { target: { value: "987" } });
+        actualNode.find("#test-minutes").simulate("change", { target: { value: "001" }});
+        actualNode.find("#test-seconds").simulate("change", { target: { value: "20" }});
+        actualNode.find("#test-milliseconds").simulate("change", { target: { value: "987" }});
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("001");

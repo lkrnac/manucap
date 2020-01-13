@@ -1,16 +1,16 @@
 import "../testUtils/initBrowserEnvironment";
-import {Language, Task, Track, TrackVersion} from "../player/model";
-import {removeDraftJsDynamicValues, removeVideoPlayerDynamicValue} from "../testUtils/testUtils";
-import {updateEditingTrack, updateTask} from "../player/trackSlices";
+import { Language, Task, Track, TrackVersion } from "../player/model";
+import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+import { updateEditingTrack, updateTask } from "../player/trackSlices";
 import CueTextEditor from "./CueTextEditor";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEdit from "./SubtitleEdit";
-import {SubtitleSpecification} from "../toolbox/model";
+import { SubtitleSpecification } from "../toolbox/model";
 import Toolbox from "../toolbox/Toolbox";
 import VideoPlayer from "../player/VideoPlayer";
-import {mount} from "enzyme";
-import {readSubtitleSpecification} from "../toolbox/subtitleSpecificationSlice";
+import { mount } from "enzyme";
+import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleEdit", () => {
@@ -22,10 +22,10 @@ describe("SubtitleEdit", () => {
         ];
         const testingTrack = {
             type: "CAPTION",
-            language: {id: "en-US", name: "English (US)"} as Language,
+            language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
             videoTitle: "This is the video title",
-            currentVersion: {cues} as TrackVersion
+            currentVersion: { cues } as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -34,19 +34,19 @@ describe("SubtitleEdit", () => {
         } as Task;
         const expectedNode = mount(
             <Provider store={testingStore} >
-                <div className="sbte-subtitle-edit" style={{display: "flex", flexFlow: "column", padding: "10px"}}>
-                    <header style={{display: "flex", paddingBottom: "10px"}}>
-                        <div style={{display: "flex", flexFlow: "column"}}>
+                <div className="sbte-subtitle-edit" style={{ display: "flex", flexFlow: "column", padding: "10px" }}>
+                    <header style={{ display: "flex", paddingBottom: "10px" }}>
+                        <div style={{ display: "flex", flexFlow: "column" }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b></div>
                         </div>
-                        <div style={{flex: "2"}}/>
-                        <div style={{display: "flex", flexFlow: "column"}}>
+                        <div style={{ flex: "2" }}/>
+                        <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                         </div>
                     </header>
-                    <div style={{display: "flex", height: "100%"}}>
-                        <div style={{flex: "1 1 0", display: "flex", flexFlow: "column", paddingRight: "10px"}}>
+                    <div style={{ display: "flex", height: "100%" }}>
+                        <div style={{ flex: "1 1 0", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <VideoPlayer
                                 mp4="dummyMp4"
                                 poster="dummyPoster"
@@ -71,7 +71,7 @@ describe("SubtitleEdit", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
-        testingStore.dispatch(readSubtitleSpecification({enabled: false} as SubtitleSpecification));
+        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
 
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))

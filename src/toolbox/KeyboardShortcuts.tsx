@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from "react";
+import React, { ReactElement, useState } from "react";
 import Button from "react-bootstrap/Button";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import Modal from "react-bootstrap/Modal";

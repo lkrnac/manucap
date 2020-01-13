@@ -1,11 +1,11 @@
 import "video.js"; // VTTCue definition
-import {Task, Track} from "./model";
-import {updateCue, updateEditingTrack, updateTask} from "./trackSlices";
+import { Task, Track } from "./model";
+import { updateCue, updateEditingTrack, updateTask } from "./trackSlices";
 import testingStore from "../testUtils/testingStore";
 
 const testingTrack = {
     type: "CAPTION",
-    language: {id: "en-US"},
+    language: { id: "en-US" },
     default: true,
     videoTitle: "This is the video title",
     currentVersion: {

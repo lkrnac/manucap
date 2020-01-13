@@ -1,5 +1,5 @@
-import {SubtitleSpecification} from "./model";
-import {readSubtitleSpecification} from "./subtitleSpecificationSlice";
+import { SubtitleSpecification } from "./model";
+import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
 
 const testingSubtitleSpecification = {

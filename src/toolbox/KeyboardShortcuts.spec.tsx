@@ -3,9 +3,9 @@ import Button from "react-bootstrap/Button";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import Modal from "react-bootstrap/Modal";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import React from "react";
-import {mount} from "enzyme";
+import { mount } from "enzyme";
 import testingStore from "../testUtils/testingStore";
 
 describe("KeyboardShortcuts", () => {

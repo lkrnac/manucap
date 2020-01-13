@@ -1,12 +1,12 @@
 import "../testUtils/initBrowserEnvironment";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import React from "react";
-import {SubtitleSpecification} from "./model";
+import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
-import {mount} from "enzyme";
+import { mount } from "enzyme";
 import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleSpecificationsModal", () => {

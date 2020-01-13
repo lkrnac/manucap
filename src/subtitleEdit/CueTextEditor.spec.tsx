@@ -1,14 +1,14 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import {ContentState, Editor, EditorState, SelectionState, convertFromHTML} from "draft-js";
-import {Options, stateToHTML} from "draft-js-export-html";
-import {ReactWrapper, mount} from "enzyme";
+import { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
+import { Options, stateToHTML } from "draft-js-export-html";
+import { ReactWrapper, mount } from "enzyme";
 import CueTextEditor from "./CueTextEditor";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import React from "react";
-import {createTestingStore} from "../testUtils/testingStore";
-import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
-import {reset} from "./editorStatesSlice";
+import { createTestingStore } from "../testUtils/testingStore";
+import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
+import { reset } from "./editorStatesSlice";
 
 let testingStore = createTestingStore();
 
@@ -18,9 +18,9 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
             <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
         </div>
         <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
-            <button style={{ marginRight: "5px "}} className="btn btn-outline-secondary"><b>B</b></button>
-            <button style={{ marginRight: "5px "}} className="btn btn-outline-secondary"><i>I</i></button>
-            <button style={{ marginRight: "5px "}} className="btn btn-outline-secondary"><u>U</u></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
         </div>
     </div>
 );
@@ -30,8 +30,8 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
 // TODO: is this would be updated in types definition, we can remove this explicit cast + ts-ignore
 const convertToHtmlOptions = {
     inlineStyles: {
-        BOLD: {element: "b"},
-        ITALIC: {element: "i"},
+        BOLD: { element: "b" },
+        ITALIC: { element: "i" },
     },
     defaultBlockTag: null,
 } as Options;

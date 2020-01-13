@@ -1,8 +1,8 @@
-import {EditorState, RichUtils} from "draft-js";
-import React, {ReactElement} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {SubtitleEditState} from "../reducers/subtitleEditReducers";
-import {updateEditorState} from "./editorStatesSlice";
+import { EditorState, RichUtils } from "draft-js";
+import React, { ReactElement } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SubtitleEditState } from "../reducers/subtitleEditReducers";
+import { updateEditorState } from "./editorStatesSlice";
 
 interface Props{
     editorIndex: number;
@@ -20,7 +20,7 @@ const InlineStyleButton = (props: Props): ReactElement => {
 
     return (
         <button
-            style={{ marginRight: "5px"}}
+            style={{ marginRight: "5px" }}
             className={buttonStyle}
             // Following prevents taking focus from editor, so that we can toggle inline style for current
             // cursor position. If editor would loose focus, inline style toggle is lost.

@@ -1,7 +1,7 @@
-import React, {ReactElement} from "react";
-import {Task, Track} from "../player/model";
-import {SubtitleEditState} from "../reducers/subtitleEditReducers";
-import {useSelector} from "react-redux";
+import React, { ReactElement } from "react";
+import { Task, Track } from "../player/model";
+import { SubtitleEditState } from "../reducers/subtitleEditReducers";
+import { useSelector } from "react-redux";
 
 const getTrackType = (track: Track): string => {
     return track.type === "CAPTION" ? "Caption" : "Translation";
@@ -41,13 +41,13 @@ const SubtitleEditHeader = (): ReactElement => {
     const track = editingTrack ? editingTrack : {} as Track;
     const task = stateTask ? stateTask : {} as Task;
     return (
-        <header style={{display: "flex", paddingBottom: "10px" }}>
-            <div style={{display: "flex", flexFlow: "column"}}>
+        <header style={{ display: "flex", paddingBottom: "10px" }}>
+            <div style={{ display: "flex", flexFlow: "column" }}>
                 <div><b>{track.videoTitle}</b> <i>{task.projectName}</i></div>
                 {getTrackDescription(task, track)}
             </div>
-            <div style={{flex: "2"}}/>
-            <div style={{display: "flex", flexFlow: "column"}}>
+            <div style={{ flex: "2" }}/>
+            <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
             </div>
         </header>
