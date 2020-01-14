@@ -298,7 +298,7 @@ describe("TimeEditor", () => {
         expect(actualNode.find("#test-milliseconds").props().value).toEqual("000");
     });
 
-    it("max minutes value", () => {
+    it("maxes out minutes value", () => {
         // GIVEN
         const onChange = sinon.spy();
         const actualNode = mount(
@@ -313,7 +313,7 @@ describe("TimeEditor", () => {
         sinon.assert.calledOnce(onChange);
     });
 
-    it("seconds overflow to minutes", () => {
+    it("overflows seconds to minutes", () => {
         // GIVEN
         const onChange = sinon.spy();
         const actualNode = mount(
@@ -328,7 +328,7 @@ describe("TimeEditor", () => {
         sinon.assert.calledOnce(onChange);
     });
 
-    it("max seconds overflow", () => {
+    it("overflows max seconds value", () => {
         // GIVEN
         const onChange = sinon.spy();
         const actualNode = mount(
@@ -343,7 +343,7 @@ describe("TimeEditor", () => {
         sinon.assert.calledOnce(onChange);
     });
 
-    it("milliseconds overflow to seconds", () => {
+    it("overflows milliseconds to seconds", () => {
         // GIVEN
         const onChange = sinon.spy();
         const actualNode = mount(
@@ -358,7 +358,7 @@ describe("TimeEditor", () => {
         sinon.assert.calledOnce(onChange);
     });
 
-    it("max milliseconds overflow", () => {
+    it("overflows max milliseconds value", () => {
         // GIVEN
         const onChange = sinon.spy();
         const actualNode = mount(
@@ -373,7 +373,7 @@ describe("TimeEditor", () => {
         sinon.assert.calledOnce(onChange);
     });
 
-    it("focus doesn't change the value", () => {
+    it("doesn't change input value on focus", () => {
         // GIVEN
         const actualNode = mount(
             <TimeEditor id="test" onChange={jest.fn()} />
