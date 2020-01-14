@@ -27,12 +27,10 @@ describe("SubtitleSpecificationsForm", () => {
         };
 
         const expectedNode = mount(
-            <div>
-                <div>
-                    <label><strong>Enabled:&nbsp;</strong></label>
-                    <label>No</label>
-                </div>
-            </div>
+            <>
+                <label><strong>Enabled:&nbsp;</strong></label>
+                <label>No</label>
+            </>
         );
 
         // WHEN
@@ -66,12 +64,10 @@ describe("SubtitleSpecificationsForm", () => {
         };
 
         const expectedNode = mount(
-            <div>
-                <div>
-                    <label><strong>Enabled:&nbsp;</strong></label>
-                    <label>Yes</label>
-                </div>
-                <div>
+            <>
+                <label><strong>Enabled:&nbsp;</strong></label>
+                <label>Yes</label>
+                <>
                     <hr />
                     <div style={{ display: "flex", marginRight: "20px" }}>
                         <div style={{ flexFlow: "column" }}>
@@ -121,8 +117,8 @@ describe("SubtitleSpecificationsForm", () => {
                         <label><strong>Comments:&nbsp;</strong></label>
                         <label>This is a sample comment</label>
                     </div>
-                </div>
-            </div>
+                </>
+            </>
         );
 
         // WHEN
