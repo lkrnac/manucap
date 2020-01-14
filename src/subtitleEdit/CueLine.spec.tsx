@@ -1,14 +1,14 @@
 import "../testUtils/initBrowserEnvironment";
 
-import * as enzyme from "enzyme";
-import * as React from "react";
 import "video.js"; // VTTCue definition
-import { Provider } from "react-redux";
-import testingStore from "../testUtils/testingStore";
 import CueLine from "./CueLine";
-import TimeEditor from "./TimeEditor";
 import CueTextEditor from "./CueTextEditor";
+import { Provider } from "react-redux";
+import React from "react";
+import TimeEditor from "./TimeEditor";
+import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
+import testingStore from "../testUtils/testingStore";
 
 const cues = [
     new VTTCue(0, 0, "Caption Line 1"),
@@ -18,7 +18,7 @@ const cues = [
 describe("CueLine", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <Provider store={testingStore}>
                 <div className="sbte-cue-line" style={{ display: "flex" }}>
                     <div style={{
@@ -26,8 +26,8 @@ describe("CueLine", () => {
                         paddingLeft: "20px", paddingTop: "15px"
                     }}
                     >
-                        <TimeEditor id="1-time-start" />
-                        <TimeEditor id="1-time-end" />
+                        <TimeEditor id="time-start-1" onChange={jest.fn()} />
+                        <TimeEditor id="time-end-1" onChange={jest.fn()} />
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
                         <CueTextEditor key={1} index={1} cue={cues[0]} />
@@ -37,7 +37,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={1} cue={cues[0]} />
             </Provider>
@@ -50,7 +50,7 @@ describe("CueLine", () => {
 
     it("renders with time values", () => {
         // GIVEN
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <Provider store={testingStore}>
                 <div className="sbte-cue-line" style={{ display: "flex" }}>
                     <div style={{
@@ -58,8 +58,8 @@ describe("CueLine", () => {
                         paddingLeft: "20px", paddingTop: "15px"
                     }}
                     >
-                        <TimeEditor id="1-time-start" time={1} />
-                        <TimeEditor id="1-time-end" time={2} />
+                        <TimeEditor id="time-start-1" time={1} onChange={jest.fn()} />
+                        <TimeEditor id="time-end-1" time={2} onChange={jest.fn()} />
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
                         <CueTextEditor key={1} index={1} cue={cues[1]} />
@@ -69,7 +69,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={1} cue={cues[1]} />
             </Provider>
@@ -78,5 +78,35 @@ describe("CueLine", () => {
         // THEN
         expect(removeDraftJsDynamicValues(actualNode.html()))
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
+    it("updates cue in redux store when start time changed", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cues[0]} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("#time-start-0-seconds").simulate("blur", { target: { value: "10" }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].startTime).toEqual(10);
+    });
+
+    it("updates cue in redux store when end time changed", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cues[0]} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("#time-end-0-milliseconds").simulate("blur", { target: { value: "2220" }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].endTime).toEqual(2.22);
     });
 });

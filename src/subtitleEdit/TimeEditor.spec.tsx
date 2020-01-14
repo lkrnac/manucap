@@ -43,7 +43,7 @@ describe("TimeEditor", () => {
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" />
+            <TimeEditor id="test" onChange={jest.fn()} />
         );
 
         // THEN
@@ -89,7 +89,7 @@ describe("TimeEditor", () => {
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" time={1} />
+            <TimeEditor id="test" time={1} onChange={jest.fn()} />
         );
 
         // THEN
@@ -135,7 +135,7 @@ describe("TimeEditor", () => {
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" time={300} />
+            <TimeEditor id="test" time={300} onChange={jest.fn()} />
         );
 
         // THEN
@@ -181,7 +181,7 @@ describe("TimeEditor", () => {
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" time={7235.976} />
+            <TimeEditor id="test" time={7235.976} onChange={jest.fn()} />
         );
 
         // THEN
@@ -199,7 +199,8 @@ describe("TimeEditor", () => {
     //             </div>
     //             <label style={{verticalAlign: "bottom", padding: "5px"}}>:</label>
     //             <div style={{flexFlow: "column"}}>
-    //                 <input id="test-seconds" type="text" className="sbte-time-editor-input" style={{width: "30px"}} value="99"
+    //                 <input id="test-seconds" type="text"
+    //                 className="sbte-time-editor-input" style={{width: "30px"}} value="99"
     //                        onChange={(): void => {}}/>
     //             </div>
     //             <label style={{verticalAlign: "bottom", padding: "5px"}}>.</label>
@@ -212,7 +213,7 @@ describe("TimeEditor", () => {
     //
     //     // WHEN
     //     const actualNode = enzyme.mount(
-    //         <TimeEditor id="test" time={9999999} />
+    //         <TimeEditor id="test" time={9999999} onChange={jest.fn()} />
     //     );
     //
     //     // THEN
@@ -222,7 +223,7 @@ describe("TimeEditor", () => {
     it("inputs ignores non numeric characters", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" />
+            <TimeEditor id="test" onChange={jest.fn()} />
         );
 
         // WHEN
@@ -239,7 +240,7 @@ describe("TimeEditor", () => {
     it("inputs pad with 0s", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" />
+            <TimeEditor id="test" onChange={jest.fn()} />
         );
 
         // WHEN
@@ -256,7 +257,7 @@ describe("TimeEditor", () => {
     it("max minutes is 999", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" />
+            <TimeEditor id="test" onChange={jest.fn()} />
         );
 
         // WHEN
@@ -269,7 +270,7 @@ describe("TimeEditor", () => {
     it("max seconds is 59", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" />
+            <TimeEditor id="test" onChange={jest.fn()} />
         );
 
         // WHEN
@@ -282,7 +283,7 @@ describe("TimeEditor", () => {
     it("max milliseconds is 999", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" />
+            <TimeEditor id="test" onChange={jest.fn()} />
         );
 
         // WHEN
@@ -295,7 +296,7 @@ describe("TimeEditor", () => {
     it("seconds overflow to minutes", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" time={300} />
+            <TimeEditor id="test" time={300} onChange={jest.fn()} />
         );
 
         // WHEN
@@ -310,7 +311,7 @@ describe("TimeEditor", () => {
     it("milliseconds overflow to seconds", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" time={10} />
+            <TimeEditor id="test" time={10} onChange={jest.fn()} />
         );
 
         // WHEN
@@ -325,7 +326,7 @@ describe("TimeEditor", () => {
     it("cascade overflow from milliseconds to minutes", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" time={1259} />
+            <TimeEditor id="test" time={1259} onChange={jest.fn()} />
         );
 
         // WHEN
@@ -340,7 +341,7 @@ describe("TimeEditor", () => {
     it("focus doesn't change the value", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" />
+            <TimeEditor id="test" onChange={jest.fn()} />
         );
 
         // WHEN
@@ -357,7 +358,7 @@ describe("TimeEditor", () => {
     it("change changes the value", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" />
+            <TimeEditor id="test" onChange={jest.fn()} />
         );
 
         // WHEN

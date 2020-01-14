@@ -35,6 +35,7 @@ const padWithZeros = (value: number, type: string): string => {
 interface Props {
     id: string;
     time?: number;
+    onChange: (time: number) => {};
 }
 
 const TimeEditor = (props: Props): ReactElement => {
@@ -85,6 +86,13 @@ const TimeEditor = (props: Props): ReactElement => {
             adjustValue(newMilliseconds.toString(), MILLISECONDS);
         }
     }, [props.time]);
+
+    useEffect(() => {
+        const minutesInSeconds = Number(minutes) * 60;
+        const millisecondsInSeconds = Number(milliseconds) / 1000;
+        const newTime = minutesInSeconds + Number(seconds) + millisecondsInSeconds;
+        props.onChange(newTime);
+    }, [minutes, seconds, milliseconds, props]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>, type: string): void => {
         let value = e.target.value;
