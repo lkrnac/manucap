@@ -151,7 +151,7 @@ describe("TimeEditor", () => {
                         id="test-minutes"
                         type="text"
                         className="sbte-time-editor-input"
-                        value="999"
+                        value="120"
                         onChange={(): void => {}}
                     />
                 </div>
@@ -162,7 +162,7 @@ describe("TimeEditor", () => {
                         type="text"
                         className="sbte-time-editor-input"
                         style={{ width: "30px" }}
-                        value="59"
+                        value="35"
                         onChange={(): void => {}}
                     />
                 </div>
@@ -172,7 +172,7 @@ describe("TimeEditor", () => {
                         id="test-milliseconds"
                         type="text"
                         className="sbte-time-editor-input"
-                        value="999"
+                        value="976"
                         onChange={(): void => {}}
                     />
                 </div>
