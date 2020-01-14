@@ -74,34 +74,4 @@ describe("CueLine", () => {
         expect(removeDraftJsDynamicValues(actualNode.html()))
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
-
-    it("updates cue in redux store when start time changed", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find("#time-start-0-seconds").simulate("blur", { target: { value: "10" }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].startTime).toEqual(10);
-    });
-
-    it("updates cue in redux store when end time changed", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find("#time-end-0-milliseconds").simulate("blur", { target: { value: "2220" }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].endTime).toEqual(2.22);
-    });
 });
