@@ -69,8 +69,8 @@ const TimeEditor = (props: Props): ReactElement => {
     const calculateTime = (stringValue: string, type: string): number => {
         let value = Number(stringValue);
         let time = props.time || 0;
-        let currentMinutesInSeconds = Math.floor(time / 60) * 60;
-        let currentSeconds = Math.floor(time - currentMinutesInSeconds);
+        const currentMinutesInSeconds = Math.floor(time / 60) * 60;
+        const currentSeconds = Math.floor(time - currentMinutesInSeconds);
         const currentMilliseconds = Math.round((time - currentSeconds - currentMinutesInSeconds) * 1000);
         switch (type) {
             case MINUTES:
@@ -84,8 +84,8 @@ const TimeEditor = (props: Props): ReactElement => {
                 if (value > MAX_SECONDS) {
                     plusMinutesInSeconds = Math.floor(value / 60);
                     value = value - plusMinutesInSeconds;
-                    if (currentMinutesInSeconds + plusMinutesInSeconds > MAX_MINUTES) {
-                        currentMinutesInSeconds = MAX_MINUTES;
+                    if (Math.floor(currentMinutesInSeconds / 60) + plusMinutesInSeconds > MAX_MINUTES) {
+                        value = MAX_SECONDS;
                         plusMinutesInSeconds = 0;
                     }
                 }
@@ -97,7 +97,7 @@ const TimeEditor = (props: Props): ReactElement => {
                     plusSeconds = Math.floor(value / 1000);
                     value = value - (plusSeconds * 1000);
                     if (currentSeconds + plusSeconds > MAX_SECONDS) {
-                        currentSeconds = MAX_SECONDS;
+                        value = MAX_MILLISECONDS;
                         plusSeconds = 0;
                     }
                 }

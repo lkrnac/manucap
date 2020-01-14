@@ -298,6 +298,21 @@ describe("TimeEditor", () => {
         expect(actualNode.find("#test-milliseconds").props().value).toEqual("000");
     });
 
+    it("max minutes value", () => {
+        // GIVEN
+        const onChange = sinon.spy();
+        const actualNode = mount(
+            <TimeEditor id="test" onChange={onChange} />
+        );
+
+        // WHEN
+        actualNode.find("#test-minutes").simulate("change", { target: { value: "60000" }});
+
+        // THEN
+        sinon.assert.calledWith(onChange, 59940);
+        sinon.assert.calledOnce(onChange);
+    });
+
     it("seconds overflow to minutes", () => {
         // GIVEN
         const onChange = sinon.spy();
@@ -313,6 +328,21 @@ describe("TimeEditor", () => {
         sinon.assert.calledOnce(onChange);
     });
 
+    it("max seconds overflow", () => {
+        // GIVEN
+        const onChange = sinon.spy();
+        const actualNode = mount(
+            <TimeEditor id="test" time={59940} onChange={onChange} />
+        );
+
+        // WHEN
+        actualNode.find("#test-seconds").simulate("change", { target: { value: "60" }});
+
+        // THEN
+        sinon.assert.calledWith(onChange, 59999);
+        sinon.assert.calledOnce(onChange);
+    });
+
     it("milliseconds overflow to seconds", () => {
         // GIVEN
         const onChange = sinon.spy();
@@ -325,6 +355,21 @@ describe("TimeEditor", () => {
 
         // THEN
         sinon.assert.calledWith(onChange, 11.001);
+        sinon.assert.calledOnce(onChange);
+    });
+
+    it("max milliseconds overflow", () => {
+        // GIVEN
+        const onChange = sinon.spy();
+        const actualNode = mount(
+            <TimeEditor id="test" time={59} onChange={onChange} />
+        );
+
+        // WHEN
+        actualNode.find("#test-milliseconds").simulate("change", { target: { value: "2000" }});
+
+        // THEN
+        sinon.assert.calledWith(onChange, 59.999);
         sinon.assert.calledOnce(onChange);
     });
 
