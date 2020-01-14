@@ -13,6 +13,7 @@ import testingStore from "../testUtils/testingStore";
 const cues = [
     new VTTCue(0, 0, "Caption Line 1"),
     new VTTCue(1, 2, "Caption Line 2"),
+    new VTTCue(62000, 67.045, "Caption Line 2"),
 ];
 
 describe("CueLine", () => {
@@ -89,7 +90,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0-seconds").simulate("blur", { target: { value: "10" }});
+        actualNode.find("#time-start-0-seconds").simulate("change", { target: { value: "10" }});
 
         // THEN
         expect(testingStore.getState().cues[0].startTime).toEqual(10);
@@ -104,9 +105,41 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-end-0-milliseconds").simulate("blur", { target: { value: "2220" }});
+        actualNode.find("#time-end-0-milliseconds").simulate("change", { target: { value: "2220" }});
 
         // THEN
         expect(testingStore.getState().cues[0].endTime).toEqual(2.22);
     });
+
+    it("time editor inputs pad with 0s", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cues[2]} />
+            </Provider>
+        );
+
+        // WHEN
+        // THEN
+        expect(testingStore.getState().cues[0].endTime).toEqual(67.045);
+        expect(actualNode.find("#time-end-0-minutes").props().value).toEqual("001");
+        expect(actualNode.find("#time-end-0-seconds").props().value).toEqual("07");
+        expect(actualNode.find("#time-end-0-milliseconds").props().value).toEqual("045");
+    });
+
+    it("time editor max values", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cues[2]} />
+            </Provider>
+        );
+
+        // WHEN
+        // THEN
+        expect(actualNode.find("#time-start-0-minutes").props().value).toEqual("999");
+        expect(actualNode.find("#time-start-0-seconds").props().value).toEqual("59");
+        expect(actualNode.find("#time-start-0-milliseconds").props().value).toEqual("999");
+    });
+
 });

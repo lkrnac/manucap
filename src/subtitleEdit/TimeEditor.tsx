@@ -1,6 +1,5 @@
 import React, {
-    ChangeEvent,
-    ReactElement, useEffect, useState
+    ReactElement
 } from "react";
 
 /***
@@ -32,6 +31,33 @@ const padWithZeros = (value: number, type: string): string => {
     return value.toString().padStart(maxLength, "0");
 };
 
+const getMinutes = (time: number): string => {
+    const minutes = Math.floor(time / 60);
+    if (minutes > MAX_MINUTES) {
+        return MAX_MINUTES.toString();
+    }
+    return padWithZeros(minutes, MINUTES);
+};
+
+const getSeconds = (time: number): string => {
+    const minutesInSeconds = Math.floor(time / 60) * 60;
+    const seconds = Math.floor(time - minutesInSeconds);
+    if (seconds > MAX_SECONDS || time > ((MAX_MINUTES * 60) + MAX_SECONDS)) {
+        return MAX_SECONDS.toString();
+    }
+    return padWithZeros(seconds, SECONDS);
+};
+
+const getMilliseconds = (time: number): string => {
+    const minutesInSeconds = Math.floor(time / 60) * 60;
+    const seconds = Math.floor(time - minutesInSeconds);
+    const milliseconds = Math.round((time - seconds - minutesInSeconds) * 1000);
+    if (milliseconds > MAX_MILLISECONDS || time > ((MAX_MINUTES * 60) + MAX_SECONDS + MAX_MILLISECONDS)) {
+        return MAX_MILLISECONDS.toString();
+    }
+    return padWithZeros(milliseconds, MILLISECONDS);
+};
+
 interface Props {
     id: string;
     time?: number;
@@ -39,65 +65,50 @@ interface Props {
 }
 
 const TimeEditor = (props: Props): ReactElement => {
-    const [minutes, setMinutes] = useState("000");
-    const [seconds, setSeconds] = useState("00");
-    const [milliseconds, setMilliseconds] = useState("000");
 
-    const adjustValue = (stringValue: string, type: string): string => {
+    const calculateTime = (stringValue: string, type: string): number => {
         let value = Number(stringValue);
+        let time = props.time || 0;
+        let currentMinutesInSeconds = Math.floor(time / 60) * 60;
+        let currentSeconds = Math.floor(time - currentMinutesInSeconds);
+        const currentMilliseconds = Math.round((time - currentSeconds - currentMinutesInSeconds) * 1000);
         switch (type) {
             case MINUTES:
                 if (value > MAX_MINUTES) {
                     value = MAX_MINUTES;
                 }
-                setMinutes(padWithZeros(value, MINUTES));
+                time = (Number(value) * 60) + currentSeconds + currentMilliseconds;
                 break;
             case SECONDS:
+                let plusMinutesInSeconds = 0;
                 if (value > MAX_SECONDS) {
-                    const plusMinutes = Math.floor(value / 60);
-                    value = value - plusMinutes * 60;
-                    const currentMinutes = Number(minutes) + plusMinutes;
-                    adjustValue(currentMinutes.toString(), MINUTES);
+                    plusMinutesInSeconds = Math.floor(value / 60);
+                    value = value - plusMinutesInSeconds;
+                    if (currentMinutesInSeconds + plusMinutesInSeconds > MAX_MINUTES) {
+                        currentMinutesInSeconds = MAX_MINUTES;
+                        plusMinutesInSeconds = 0;
+                    }
                 }
-                setSeconds(padWithZeros(value, SECONDS));
+                time = currentMinutesInSeconds + plusMinutesInSeconds + value + currentMilliseconds;
                 break;
             case MILLISECONDS:
+                let plusSeconds = 0;
                 if (value > MAX_MILLISECONDS) {
-                    const plusSeconds = Math.floor(value / 1000);
-                    value = value - plusSeconds * 1000;
-                    const currentSeconds = Number(seconds) + plusSeconds;
-                    adjustValue(currentSeconds.toString(), SECONDS);
+                    plusSeconds = Math.floor(value / 1000);
+                    value = value - (plusSeconds * 1000);
+                    if (currentSeconds + plusSeconds > MAX_SECONDS) {
+                        currentSeconds = MAX_SECONDS;
+                        plusSeconds = 0;
+                    }
                 }
-                setMilliseconds(padWithZeros(value, MILLISECONDS));
+                time = currentMinutesInSeconds + currentSeconds + plusSeconds + (value / 1000);
                 break;
         }
-        return value.toString();
+        return time;
     };
 
-    useEffect(() => {
-        const newTime = props.time;
-        if (newTime) {
-            const newMinutes = Math.floor(newTime / 60);
-            const newMinutesInSeconds = newMinutes * 60;
-            const newSeconds = Math.floor(newTime - newMinutesInSeconds);
-            const newMilliseconds = Math.round((newTime - newSeconds - newMinutesInSeconds) * 1000);
-            adjustValue(newMinutes.toString(), MINUTES);
-            adjustValue(newSeconds.toString(), SECONDS);
-            adjustValue(newMilliseconds.toString(), MILLISECONDS);
-        }
-    }, [props.time]);
-
-    useEffect(() => {
-        const minutesInSeconds = Number(minutes) * 60;
-        const millisecondsInSeconds = Number(milliseconds) / 1000;
-        const newTime = minutesInSeconds + Number(seconds) + millisecondsInSeconds;
-        props.onChange(newTime);
-    }, [minutes, seconds, milliseconds, props]);
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>, type: string): void => {
-        let value = e.target.value;
-        value = removeNonNumeric(value);
-        adjustValue(value, type);
+    const handleChange = (value: string, type: string): void => {
+        props.onChange(calculateTime(removeNonNumeric(value), type));
     };
 
     return (
@@ -107,10 +118,9 @@ const TimeEditor = (props: Props): ReactElement => {
                     id={`${props.id}-minutes`}
                     type="text"
                     className="sbte-time-editor-input"
-                    value={minutes}
-                    onChange={(e): void => setMinutes(e.target.value)}
+                    value={getMinutes(props.time || 0)}
                     onFocus={(e): void => e.target.select()}
-                    onBlur={(e): void => handleChange(e, MINUTES)}
+                    onChange={(e): void => handleChange(e.target.value, MINUTES)}
                 />
             </div>
             <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
@@ -120,10 +130,9 @@ const TimeEditor = (props: Props): ReactElement => {
                     type="text"
                     className="sbte-time-editor-input"
                     style={{ width: "30px" }}
-                    value={seconds}
-                    onChange={(e): void => setSeconds(e.target.value)}
+                    value={getSeconds(props.time || 0)}
                     onFocus={(e): void => e.target.select()}
-                    onBlur={(e): void => handleChange(e, SECONDS)}
+                    onChange={(e): void => handleChange(e.target.value, SECONDS)}
                 />
             </div>
             <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
@@ -132,10 +141,9 @@ const TimeEditor = (props: Props): ReactElement => {
                     id={`${props.id}-milliseconds`}
                     type="text"
                     className="sbte-time-editor-input"
-                    value={milliseconds}
-                    onChange={(e): void => setMilliseconds(e.target.value)}
+                    value={getMilliseconds(props.time || 0)}
                     onFocus={(e): void => e.target.select()}
-                    onBlur={(e): void => handleChange(e, MILLISECONDS)}
+                    onChange={(e): void => handleChange(e.target.value, MILLISECONDS)}
                 />
             </div>
         </div>
