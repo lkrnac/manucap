@@ -1,4 +1,4 @@
-import React, {ReactElement} from "react";
+import React, { ReactElement } from "react";
 import TimeEditor from "./TimeEditor";
 import CueTextEditor from "./CueTextEditor";
 
@@ -9,19 +9,20 @@ interface Props {
 
 const CueLine = (props: Props): ReactElement => {
     return (
-        <div className="sbte-cue-line" style={{display: "flex"}}>
+        <div className="sbte-cue-line" style={{ display: "flex" }}>
             <div style={{
                 flex: "1 1 25%", display: "flex", flexDirection: "column",
                 paddingLeft: "20px", paddingTop: "15px"
-            }}>
-                <TimeEditor id={`${props.index}-time-start`} time={props.cue.startTime}/>
-                <TimeEditor id={`${props.index}-time-end`} time={props.cue.endTime}/>
+            }}
+            >
+                <TimeEditor id={`${props.index}-time-start`} time={props.cue.startTime} />
+                <TimeEditor id={`${props.index}-time-end`} time={props.cue.endTime} />
             </div>
-            <div className="sbte-left-border" style={{flex: "1 1 75%"}}>
-                <CueTextEditor key={props.index} index={props.index} cue={props.cue}/>
+            <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
+                <CueTextEditor key={props.index} index={props.index} cue={props.cue} />
             </div>
         </div>
-    )
+    );
 };
 
 export default CueLine;
