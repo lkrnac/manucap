@@ -315,6 +315,53 @@ describe("SubtitleEditHeader", () => {
             .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
     });
 
+    it("renders Progress rounded", () => {
+        // GIVEN
+        const cues = [
+            new VTTCue(0, 20, "Caption Line 1"),
+            new VTTCue(20, 60, "Caption Line 2"),
+        ];
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            videoTitle: "This is the video title",
+            videoLength: 130,
+            currentVersion: { cues } as TrackVersion
+        } as Track;
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 10 seconds</i></div>
+                </div>
+                <div style={{ flex: "2" }} />
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Completed: <b>47%</b></div>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateTask(testingTask));
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
     it("renders Progress with cues and video length 0", () => {
         // GIVEN
         const cues = [
