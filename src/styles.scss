@@ -1,5 +1,5 @@
 $sbte-main-text-color: rgb(118, 131, 143);
-$background-color: rgb(241,244,245);
+$border-color: rgb(241,244,245);
 
 // ##############################
 // Override bootstrap defaults
@@ -50,11 +50,11 @@ $theme-colors: (
 }
 
 .sbte-left-border {
-  border-left: 2px solid $background-color;
+  border-left: 2px solid $border-color;
 }
 
 .sbte-bottom-border {
-    border-bottom: 2px solid $background-color;
+    border-bottom: 2px solid $border-color;
 }
 
 .sbte-medium-modal {
@@ -73,7 +73,7 @@ $theme-colors: (
 }
 
 .sbte-cue-line {
-    border: 2px solid $background-color;
+    border: 2px solid $border-color;
     background-color: white;
     border-radius: 5px;
     margin: 5px;
