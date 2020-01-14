@@ -5,7 +5,6 @@ import CueLine from "./CueLine";
 import CueTextEditor from "./CueTextEditor";
 import { Provider } from "react-redux";
 import React from "react";
-import TimeEditor from "./TimeEditor";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
 import testingStore from "../testUtils/testingStore";
@@ -26,8 +25,6 @@ describe("CueLine", () => {
                         paddingLeft: "20px", paddingTop: "15px"
                     }}
                     >
-                        <TimeEditor id="time-start-1" onChange={jest.fn()} />
-                        <TimeEditor id="time-end-1" onChange={jest.fn()} />
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
                         <CueTextEditor key={1} index={1} cue={cues[0]} />
@@ -58,8 +55,6 @@ describe("CueLine", () => {
                         paddingLeft: "20px", paddingTop: "15px"
                     }}
                     >
-                        <TimeEditor id="time-start-1" time={1} onChange={jest.fn()} />
-                        <TimeEditor id="time-end-1" time={2} onChange={jest.fn()} />
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
                         <CueTextEditor key={1} index={1} cue={cues[1]} />
