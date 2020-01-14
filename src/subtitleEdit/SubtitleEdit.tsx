@@ -1,6 +1,6 @@
 import "../styles.scss";
 import React, { ReactElement } from "react";
-import CueTextEditor from "./CueTextEditor";
+import CueLine from "./CueLine";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
@@ -25,7 +25,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
                 <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
                     {
                         cues.map((cue: VTTCue, idx: number): ReactElement =>
-                            <CueTextEditor key={idx} index={idx} cue={cue} />)
+                            <CueLine key={idx} index={idx} cue={cue} />)
                     }
                 </div>
             </div>

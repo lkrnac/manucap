@@ -2,7 +2,7 @@ import "../testUtils/initBrowserEnvironment";
 import { Language, Task, Track, TrackVersion } from "../player/model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateEditingTrack, updateTask } from "../player/trackSlices";
-import CueTextEditor from "./CueTextEditor";
+import CueLine from "./CueLine";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEdit from "./SubtitleEdit";
@@ -55,8 +55,8 @@ describe("SubtitleEdit", () => {
                             <Toolbox />
                         </div>
                         <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
-                            <CueTextEditor index={0} cue={cues[0]} />
-                            <CueTextEditor index={1} cue={cues[1]} />
+                            <CueLine index={0} cue={cues[0]} />
+                            <CueLine index={1} cue={cues[1]} />
                         </div>
                     </div>
                 </div>
