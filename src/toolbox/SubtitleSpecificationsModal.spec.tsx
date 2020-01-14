@@ -33,9 +33,7 @@ describe("SubtitleSpecificationsModal", () => {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <div>
-                                    <div><label><strong>Enabled:&nbsp;</strong></label><label>No</label></div>
-                                </div>
+                                <label><strong>Enabled:&nbsp;</strong></label><label>No</label>
                             </div>
                             <div className="modal-footer">
                                 <button
