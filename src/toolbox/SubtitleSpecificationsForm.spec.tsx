@@ -27,10 +27,10 @@ describe("SubtitleSpecificationsForm", () => {
         };
 
         const expectedNode = mount(
-            <>
+            <Provider store={testingStore}>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>No</label>
-            </>
+            </Provider>
         );
 
         // WHEN
@@ -64,61 +64,57 @@ describe("SubtitleSpecificationsForm", () => {
         };
 
         const expectedNode = mount(
-            <>
+            <Provider store={testingStore}>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
-                <>
-                    <hr />
-                    <div style={{ display: "flex", marginRight: "20px" }}>
-                        <div style={{ flexFlow: "column" }}>
-                            <div>
-                                <label><strong> Audio Description:&nbsp;</strong></label>
-                                <label>Yes</label>
-                            </div>
-                            <div>
-                                <label><strong>On-Screen Text:&nbsp;</strong></label>
-                                <label>No</label>
-                            </div>
-                            <div>
-                                <label><strong>Spoken Audio:&nbsp;</strong></label>
-                                <label>No</label>
-                            </div>
-                            <div>
-                                <label><strong>Speaker Identification:&nbsp;</strong></label>
-                                <label>Gender</label>
-                            </div>
-                            <div>
-                                <label><strong>Dialogue Style:&nbsp;</strong></label>
-                                <label>Line Breaks</label>
-                            </div>
+                <hr />
+                <div style={{ display: "flex", marginRight: "20px" }}>
+                    <div style={{ flexFlow: "column" }}>
+                        <div>
+                            <label><strong> Audio Description:&nbsp;</strong></label>
+                            <label>Yes</label>
                         </div>
-                        <hr />
-                        <div style={{ flexFlow: "column" }}>
-                            <div>
-                                <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
-                                <label>1</label>
-                            </div>
-                            <div>
-                                <label><strong>Max Characters Per Caption:&nbsp;</strong></label>
-                                <label>40</label>
-                            </div>
-                            <div>
-                                <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
-                                <label>1</label>
-                            </div>
-                            <div>
-                                <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
-                                <label>3</label>
-                            </div>
+                        <div>
+                            <label><strong>On-Screen Text:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div>
+                            <label><strong>Spoken Audio:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div>
+                            <label><strong>Speaker Identification:&nbsp;</strong></label>
+                            <label>Gender</label>
+                        </div>
+                        <div>
+                            <label><strong>Dialogue Style:&nbsp;</strong></label>
+                            <label>Line Breaks</label>
                         </div>
                     </div>
                     <hr />
-                    <div>
-                        <label><strong>Comments:&nbsp;</strong></label>
-                        <label>This is a sample comment</label>
+                    <div style={{ flexFlow: "column" }}>
+                        <div>
+                            <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
+                            <label>1</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Characters Per Caption:&nbsp;</strong></label>
+                            <label>40</label>
+                        </div>
+                        <div>
+                            <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
+                            <label>1</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
+                            <label>3</label>
+                        </div>
                     </div>
-                </>
-            </>
+                </div>
+                <hr />
+                <label><strong>Comments:&nbsp;</strong></label>
+                <label>This is a sample comment</label>
+            </Provider>
         );
 
         // WHEN
