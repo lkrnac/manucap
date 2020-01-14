@@ -1,11 +1,11 @@
 import "../testUtils/initBrowserEnvironment";
 
-import * as enzyme from "enzyme";
-import * as React from "react";
-import {Provider} from "react-redux";
-import testingStore from "../testUtils/testingStore";
+import { Provider } from "react-redux";
+import React from "react";
+import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
-import {SubtitleSpecification} from "./model";
+import { mount } from "enzyme";
+import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleSpecificationsForm", () => {
     it("renders disabled", () => {
@@ -26,7 +26,7 @@ describe("SubtitleSpecificationsForm", () => {
             comments: ""
         };
 
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div>
                 <div>
                     <label><strong>Enabled:&nbsp;</strong></label>
@@ -36,9 +36,9 @@ describe("SubtitleSpecificationsForm", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications}/>
+                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
@@ -65,16 +65,16 @@ describe("SubtitleSpecificationsForm", () => {
             comments: "This is a sample comment"
         };
 
-        const expectedNode = enzyme.mount(
+        const expectedNode = mount(
             <div>
                 <div>
                     <label><strong>Enabled:&nbsp;</strong></label>
                     <label>Yes</label>
                 </div>
                 <div>
-                    <hr/>
-                    <div style={{display: "flex", marginRight: "20px"}}>
-                        <div style={{flexFlow: "column"}}>
+                    <hr />
+                    <div style={{ display: "flex", marginRight: "20px" }}>
+                        <div style={{ flexFlow: "column" }}>
                             <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
                                 <label>Yes</label>
@@ -96,8 +96,8 @@ describe("SubtitleSpecificationsForm", () => {
                                 <label>Line Breaks</label>
                             </div>
                         </div>
-                        <hr/>
-                        <div style={{flexFlow: "column"}}>
+                        <hr />
+                        <div style={{ flexFlow: "column" }}>
                             <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                                 <label>1</label>
@@ -116,7 +116,7 @@ describe("SubtitleSpecificationsForm", () => {
                             </div>
                         </div>
                     </div>
-                    <hr/>
+                    <hr />
                     <div>
                         <label><strong>Comments:&nbsp;</strong></label>
                         <label>This is a sample comment</label>
@@ -126,9 +126,9 @@ describe("SubtitleSpecificationsForm", () => {
         );
 
         // WHEN
-        const actualNode = enzyme.mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications}/>
+                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 

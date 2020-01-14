@@ -1,27 +1,29 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import React from "react";
-import {mount, ReactWrapper} from "enzyme";
+import { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
+import { Options, stateToHTML } from "draft-js-export-html";
+import { ReactWrapper, mount } from "enzyme";
 import CueTextEditor from "./CueTextEditor";
-import {Provider} from "react-redux";
-import {createTestingStore} from "../testUtils/testingStore";
-import {ContentState, convertFromHTML, Editor, EditorState, SelectionState} from "draft-js";
-import {removeDraftJsDynamicValues} from "../testUtils/testUtils";
-import {reset} from "./editorStatesSlice";
-import {Options, stateToHTML} from "draft-js-export-html";
+import { Provider } from "react-redux";
+import React from "react";
+import { createTestingStore } from "../testUtils/testingStore";
+import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
+import { reset } from "./editorStatesSlice";
 
 let testingStore = createTestingStore();
 
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
     <div className="sbte-cue-editor">
-        <div className="sbte-bottom-border"
-             style={{ height: "4em", paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
-            <Editor editorState={editorState} onChange={jest.fn} spellCheck/>
+        <div
+            className="sbte-bottom-border"
+            style={{ height: "4em", paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}
+        >
+            <Editor editorState={editorState} onChange={jest.fn} spellCheck />
         </div>
         <div style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
-            <button style={{ marginRight: "5px "}} className="btn btn-outline-secondary"><b>B</b></button>
-            <button style={{ marginRight: "5px "}} className="btn btn-outline-secondary"><i>I</i></button>
-            <button style={{ marginRight: "5px "}} className="btn btn-outline-secondary"><u>U</u></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
         </div>
     </div>
 );
@@ -31,8 +33,8 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
 // TODO: is this would be updated in types definition, we can remove this explicit cast + ts-ignore
 const convertToHtmlOptions = {
     inlineStyles: {
-        BOLD: {element: "b"},
-        ITALIC: {element: "i"},
+        BOLD: { element: "b" },
+        ITALIC: { element: "i" },
     },
     defaultBlockTag: null,
 } as Options;
@@ -41,7 +43,7 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
     // GIVEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} cue={cue}/>
+            <CueTextEditor index={0} cue={cue} />
         </Provider>
     );
     const editorState = actualNode.find(Editor).props().editorState;
@@ -65,7 +67,7 @@ const testForContentState = (contentState: ContentState, cue: VTTCue, expectedSt
     // WHEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} cue={cue}/>
+            <CueTextEditor index={0} cue={cue} />
         </Provider>
     );
 
@@ -79,14 +81,16 @@ const testForContentState = (contentState: ContentState, cue: VTTCue, expectedSt
 describe("CueTextEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset())
+        testingStore.dispatch(reset());
     });
     it("renders empty", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "");
         const contentState = ContentState.createFromText("");
 
-        // NOTE: Following latest expectation is not configurable nature of draft-js-export-html. See following line in their code
+        // NOTE: Following latest expectation is not configurable nature of draft-js-export-html.
+        // See following line in their code
+        // eslint-disable-next-line max-len
         // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
         testForContentState(contentState, cue, "<br>");
     });
@@ -113,7 +117,7 @@ describe("CueTextEditor", () => {
         const cue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue}/>
+                <CueTextEditor index={0} cue={cue} />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");

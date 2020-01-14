@@ -1,10 +1,10 @@
-import Mousetrap from "mousetrap";
-import * as React from "react";
-import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from "video.js";
-import {ReactElement} from "react";
 import "../../node_modules/video.js/dist/video-js.css";
-import {Track} from "./model";
-import {convertToTextTrackOptions} from "./textTrackOptionsConversion";
+import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
+import Mousetrap from "mousetrap";
+import React from "react";
+import { ReactElement } from "react";
+import { Track } from "./model";
+import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -104,10 +104,10 @@ export default class VideoPlayer extends React.Component<Props> {
             <video
                 id="video-player"
                 ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
-                style={{margin: "auto"}}
+                style={{ margin: "auto" }}
                 className="video-js vjs-default-skin vjs-big-play-centered"
                 poster={this.props.poster}
-                controls={true}
+                controls
                 preload="none"
                 data-setup="{}"
             />

@@ -1,15 +1,14 @@
-import "./testUtils/initBrowserEnvironment";
-
-import * as React from "react";
-import {ReactElement, useEffect} from "react";
-import * as ReactDOM from "react-dom";
-import {Provider, useDispatch} from "react-redux";
-import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
-import {updateEditingTrack, updateTask} from "./player/trackSlices";
-import {Language, TrackVersion} from "./player/model";
-import testingStore from "./testUtils/testingStore";
-import {readSubtitleSpecification} from "./toolbox/subtitleSpecificationSlice";
 import "./localTesting.scss";
+import "./testUtils/initBrowserEnvironment";
+import { Language, TrackVersion } from "./player/model";
+import { Provider, useDispatch } from "react-redux";
+import { ReactElement, useEffect } from "react";
+import { updateEditingTrack, updateTask } from "./player/trackSlices";
+import React from "react";
+import ReactDOM from "react-dom";
+import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
+import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
+import testingStore from "./testUtils/testingStore";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
@@ -17,7 +16,7 @@ const TestApp = (): ReactElement => {
         setTimeout( // this simulates latency caused by server roundtrip
             dispatch(updateEditingTrack({
                 type: "CAPTION",
-                language: {id: "en-US", name: "English (US)"} as Language,
+                language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 videoTitle: "This is the video title",
                 currentVersion: {
@@ -28,7 +27,7 @@ const TestApp = (): ReactElement => {
                 } as TrackVersion
             })),
             500
-        )
+        );
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
@@ -38,7 +37,7 @@ const TestApp = (): ReactElement => {
                dueDate: "2019/12/30 10:00AM"
             })),
             500
-        )
+        );
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
@@ -58,13 +57,13 @@ const TestApp = (): ReactElement => {
                 comments: "Note"
             })),
             500
-        )
+        );
     });
 
-    return <SubtitleEdit
+    return (<SubtitleEdit
         poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
         mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
-    />;
+            />);
 };
 
 ReactDOM.render(

@@ -1,12 +1,10 @@
-import React, {
-    ReactElement
-} from "react";
-import {useSelector} from "react-redux";
-import {SubtitleEditState} from "../reducers/subtitleEditReducers";
+import React, { ReactElement } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { SubtitleEditState } from "../reducers/subtitleEditReducers";
+import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
-import {SubtitleSpecification} from "./model";
+import { useSelector } from "react-redux";
 
 export interface Props {
     show: boolean;
@@ -24,11 +22,14 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
                     <Modal.Title>Subtitle Specifications</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications}/>
+                    <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={props.onClose}
-                            className="dotsub-subtitle-specifications-modal-close-button">
+                    <Button
+                        variant="primary"
+                        onClick={props.onClose}
+                        className="dotsub-subtitle-specifications-modal-close-button"
+                    >
                         Close
                     </Button>
                 </Modal.Footer>
