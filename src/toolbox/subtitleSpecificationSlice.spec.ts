@@ -25,7 +25,7 @@ describe("subtitleSpecificationSlices", () => {
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification));
 
             // THEN
-            expect(testingStore.getState().subtitleSpecficiations).toEqual(testingSubtitleSpecification);
+            expect(testingStore.getState().subtitleSpecifications).toEqual(testingSubtitleSpecification);
         });
     });
 });
