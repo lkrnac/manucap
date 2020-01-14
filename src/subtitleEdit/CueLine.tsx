@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
-import TimeEditor from "./TimeEditor";
 import CueTextEditor from "./CueTextEditor";
+import TimeEditor from "./TimeEditor";
 
 interface Props {
     index: number;
