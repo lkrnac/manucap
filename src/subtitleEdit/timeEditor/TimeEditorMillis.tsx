@@ -2,6 +2,7 @@ import React, {
     ReactElement
 } from "react";
 import {
+    getTimeInUnits,
     padWithZeros,
     removeNonNumeric
 } from "../../utils/timeUtils";
@@ -11,29 +12,26 @@ const MAX_SECONDS = 59;
 const MAX_MILLIS = 999;
 
 const getMillis = (time: number): string => {
-    const minutesInSeconds = Math.floor(time / 60) * 60;
-    const seconds = Math.floor(time - minutesInSeconds);
-    const millis = Math.round((time - seconds - minutesInSeconds) * 1000);
-    if (millis > MAX_MILLIS || time > ((MAX_MINUTES * 60) + MAX_SECONDS + MAX_MILLIS)) {
+    const timeInUnits = getTimeInUnits(time);
+    if (timeInUnits.millis > MAX_MILLIS || time > ((MAX_MINUTES * 60) + MAX_SECONDS + MAX_MILLIS)) {
         return MAX_MILLIS.toString();
     }
-    return padWithZeros(millis, 3);
+    return padWithZeros(timeInUnits.millis, 3);
 };
 
 const calculateTime = (time: number, newMillisValue: string): number => {
     let millis = Number(newMillisValue);
-    const currentMinutesInSeconds = Math.floor(time / 60) * 60;
-    const currentSeconds = Math.floor(time - currentMinutesInSeconds);
+    const timeInUnits = getTimeInUnits(time);
     let plusSeconds = 0;
     if (millis > MAX_MILLIS) {
         plusSeconds = Math.floor(millis / 1000);
         millis = millis - (plusSeconds * 1000);
-        if (currentSeconds + plusSeconds > MAX_SECONDS) {
+        if (timeInUnits.seconds + plusSeconds > MAX_SECONDS) {
             millis = MAX_MILLIS;
             plusSeconds = 0;
         }
     }
-    return currentMinutesInSeconds + currentSeconds + plusSeconds + (millis / 1000);
+    return timeInUnits.minutesInSeconds + timeInUnits.seconds + plusSeconds + (millis / 1000);
 };
 
 interface Props {

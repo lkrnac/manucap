@@ -2,6 +2,7 @@ import React, {
     ReactElement
 } from "react";
 import {
+    getTimeInUnits,
     padWithZeros,
     removeNonNumeric
 } from "../../utils/timeUtils";
@@ -9,22 +10,20 @@ import {
 const MAX_MINUTES = 999;
 
 const getMinutes = (time: number): string => {
-    const minutes = Math.floor(time / 60);
-    if (minutes > MAX_MINUTES) {
+    const timeInUnits = getTimeInUnits(time);
+    if (timeInUnits.minutes > MAX_MINUTES) {
         return MAX_MINUTES.toString();
     }
-    return padWithZeros(minutes, 3);
+    return padWithZeros(timeInUnits.minutes, 3);
 };
 
 const calculateTime = (time: number, newMinutesValue: string): number => {
     let minutes = Number(newMinutesValue);
-    const currentMinutesInSeconds = Math.floor(time / 60) * 60;
-    const currentSeconds = Math.floor(time - currentMinutesInSeconds);
-    const currentMillis = Math.round((time - currentSeconds - currentMinutesInSeconds) * 1000);
+    const timeInUnits = getTimeInUnits(time);
     if (minutes > MAX_MINUTES) {
         minutes = MAX_MINUTES;
     }
-    return (Number(minutes) * 60) + currentSeconds + currentMillis;
+    return (Number(minutes) * 60) + timeInUnits.seconds + timeInUnits.millis;
 };
 
 interface Props {
