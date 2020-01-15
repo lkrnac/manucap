@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
-import {useDispatch} from "react-redux";
 import { addCue } from "../player/trackSlices";
+import { useDispatch } from "react-redux";
 
 const ADD_END_TIME_INTERVAL_SECS = 3;
 

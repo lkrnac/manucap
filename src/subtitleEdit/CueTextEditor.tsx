@@ -3,10 +3,10 @@ import { ContentState, Editor, EditorState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import AddCueLineButton from "./AddCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateCue } from "../player/trackSlices";
 import { updateEditorState } from "./editorStatesSlice";
-import AddCueLineButton from "./AddCueLineButton";
 
 interface Props{
     index: number;

@@ -1,8 +1,8 @@
 import "../testUtils/initBrowserEnvironment";
 import AddCueLineButton from "./AddCueLineButton";
+import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
-import {Provider} from "react-redux";
 import testingStore from "../testUtils/testingStore";
 
 /**
