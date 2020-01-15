@@ -22,6 +22,7 @@ const TestApp = (): ReactElement => {
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 videoTitle: "This is the video title",
+                videoLength: 4,
                 currentVersion: {
                     cues: [
                         new VTTCue(0, 1, "Caption Line 1"),
