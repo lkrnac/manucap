@@ -1,4 +1,4 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../testUtils/initBrowserEnvironment";
 import React from "react";
 import TimeEditor from "./TimeEditor";
 import { mount } from "enzyme";
@@ -32,7 +32,7 @@ describe("TimeEditor", () => {
                 <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                 <div style={{ flexFlow: "column" }}>
                     <input
-                        id="test-milliseconds"
+                        id="test-millis"
                         type="text"
                         className="sbte-time-editor-input"
                         value="000"
@@ -78,7 +78,7 @@ describe("TimeEditor", () => {
                 <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                 <div style={{ flexFlow: "column" }}>
                     <input
-                        id="test-milliseconds"
+                        id="test-millis"
                         type="text"
                         className="sbte-time-editor-input"
                         value="000"
@@ -124,7 +124,7 @@ describe("TimeEditor", () => {
                 <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                 <div style={{ flexFlow: "column" }}>
                     <input
-                        id="test-milliseconds"
+                        id="test-millis"
                         type="text"
                         className="sbte-time-editor-input"
                         value="000"
@@ -143,7 +143,7 @@ describe("TimeEditor", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("renders 120 minutes 35 seconds and 976 milliseconds", () => {
+    it("renders 120 minutes 35 seconds and 976 millis", () => {
         // GIVEN
         const expectedNode = mount(
             <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
@@ -170,7 +170,7 @@ describe("TimeEditor", () => {
                 <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                 <div style={{ flexFlow: "column" }}>
                     <input
-                        id="test-milliseconds"
+                        id="test-millis"
                         type="text"
                         className="sbte-time-editor-input"
                         value="976"
@@ -216,7 +216,7 @@ describe("TimeEditor", () => {
                 <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                 <div style={{ flexFlow: "column" }}>
                     <input
-                        id="test-milliseconds"
+                        id="test-millis"
                         type="text"
                         className="sbte-time-editor-input"
                         value="999"
@@ -235,7 +235,7 @@ describe("TimeEditor", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("renders max values for minutes and seconds but not milliseconds", () => {
+    it("renders max values for minutes and seconds but not millis", () => {
         // GIVEN
         const expectedNode = mount(
             <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
@@ -262,7 +262,7 @@ describe("TimeEditor", () => {
                 <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                 <div style={{ flexFlow: "column" }}>
                     <input
-                        id="test-milliseconds"
+                        id="test-millis"
                         type="text"
                         className="sbte-time-editor-input"
                         value="025"
@@ -290,12 +290,12 @@ describe("TimeEditor", () => {
         // WHEN
         actualNode.find("#test-minutes").simulate("change", { target: { value: "abc!e@#.$%^" }});
         actualNode.find("#test-seconds").simulate("change", { target: { value: "abc!e@#.$%^" }});
-        actualNode.find("#test-milliseconds").simulate("change", { target: { value: "abc!e@#.$%^" }});
+        actualNode.find("#test-millis").simulate("change", { target: { value: "abc!e@#.$%^" }});
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("000");
         expect(actualNode.find("#test-seconds").props().value).toEqual("00");
-        expect(actualNode.find("#test-milliseconds").props().value).toEqual("000");
+        expect(actualNode.find("#test-millis").props().value).toEqual("000");
     });
 
     it("maxes out minutes value", () => {
@@ -343,7 +343,7 @@ describe("TimeEditor", () => {
         sinon.assert.calledOnce(onChange);
     });
 
-    it("overflows milliseconds to seconds", () => {
+    it("overflows millis to seconds", () => {
         // GIVEN
         const onChange = sinon.spy();
         const actualNode = mount(
@@ -351,14 +351,14 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-milliseconds").simulate("change", { target: { value: "1001" }});
+        actualNode.find("#test-millis").simulate("change", { target: { value: "1001" }});
 
         // THEN
         sinon.assert.calledWith(onChange, 11.001);
         sinon.assert.calledOnce(onChange);
     });
 
-    it("overflows max milliseconds value", () => {
+    it("overflows max millis value", () => {
         // GIVEN
         const onChange = sinon.spy();
         const actualNode = mount(
@@ -366,7 +366,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test-milliseconds").simulate("change", { target: { value: "2000" }});
+        actualNode.find("#test-millis").simulate("change", { target: { value: "2000" }});
 
         // THEN
         sinon.assert.calledWith(onChange, 59.999);
@@ -382,12 +382,12 @@ describe("TimeEditor", () => {
         // WHEN
         actualNode.find("#test-minutes").simulate("focus");
         actualNode.find("#test-seconds").simulate("focus");
-        actualNode.find("#test-milliseconds").simulate("focus");
+        actualNode.find("#test-millis").simulate("focus");
 
         // THEN
         expect(actualNode.find("#test-minutes").props().value).toEqual("000");
         expect(actualNode.find("#test-seconds").props().value).toEqual("00");
-        expect(actualNode.find("#test-milliseconds").props().value).toEqual("000");
+        expect(actualNode.find("#test-millis").props().value).toEqual("000");
     });
 
 });

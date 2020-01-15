@@ -50,7 +50,7 @@ describe("CueLine", () => {
                             <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                             <div style={{ flexFlow: "column" }}>
                                 <input
-                                    id="time-start-1-milliseconds"
+                                    id="time-start-1-millis"
                                     type="text"
                                     className="sbte-time-editor-input"
                                     value="000"
@@ -82,7 +82,7 @@ describe("CueLine", () => {
                             <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                             <div style={{ flexFlow: "column" }}>
                                 <input
-                                    id="time-end-1-milliseconds"
+                                    id="time-end-1-millis"
                                     type="text"
                                     className="sbte-time-editor-input"
                                     value="000"
@@ -144,7 +144,7 @@ describe("CueLine", () => {
                             <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                             <div style={{ flexFlow: "column" }}>
                                 <input
-                                    id="time-start-1-milliseconds"
+                                    id="time-start-1-millis"
                                     type="text"
                                     className="sbte-time-editor-input"
                                     value="000"
@@ -176,7 +176,7 @@ describe("CueLine", () => {
                             <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
                             <div style={{ flexFlow: "column" }}>
                                 <input
-                                    id="time-end-1-milliseconds"
+                                    id="time-end-1-millis"
                                     type="text"
                                     className="sbte-time-editor-input"
                                     value="000"
@@ -234,7 +234,7 @@ describe("CueLine", () => {
         expect(testingStore.getState().cues[0].startTime).toEqual(10);
     });
 
-    it("updates cue in redux store when start time milliseconds changed", () => {
+    it("updates cue in redux store when start time millis changed", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -243,7 +243,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0-milliseconds").simulate("change", { target: { value: "865" }});
+        actualNode.find("#time-start-0-millis").simulate("change", { target: { value: "865" }});
 
         // THEN
         expect(testingStore.getState().cues[0].startTime).toEqual(.865);
@@ -258,7 +258,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-end-0-milliseconds").simulate("change", { target: { value: "2220" }});
+        actualNode.find("#time-end-0-millis").simulate("change", { target: { value: "2220" }});
 
         // THEN
         expect(testingStore.getState().cues[0].endTime).toEqual(2.22);
@@ -277,7 +277,7 @@ describe("CueLine", () => {
         expect(testingStore.getState().cues[0].endTime).toEqual(67.045);
         expect(actualNode.find("#time-end-0-minutes").props().value).toEqual("001");
         expect(actualNode.find("#time-end-0-seconds").props().value).toEqual("07");
-        expect(actualNode.find("#time-end-0-milliseconds").props().value).toEqual("045");
+        expect(actualNode.find("#time-end-0-millis").props().value).toEqual("045");
     });
 
     it("maxes out to max values in time editor", () => {
@@ -292,7 +292,7 @@ describe("CueLine", () => {
         // THEN
         expect(actualNode.find("#time-start-0-minutes").props().value).toEqual("999");
         expect(actualNode.find("#time-start-0-seconds").props().value).toEqual("59");
-        expect(actualNode.find("#time-start-0-milliseconds").props().value).toEqual("999");
+        expect(actualNode.find("#time-start-0-millis").props().value).toEqual("999");
     });
 
 });
