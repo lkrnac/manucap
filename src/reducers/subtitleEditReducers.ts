@@ -8,7 +8,7 @@ const subtitleEditReducers = combineReducers({
     cues: cuesSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
     task: taskSlice.reducer,
-    subtitleSpecficiations: subtitleSpecificationSlice.reducer,
+    subtitleSpecifications: subtitleSpecificationSlice.reducer,
     editorStates: editorStatesSlice.reducer
 });
 export default subtitleEditReducers;
