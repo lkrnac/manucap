@@ -1,54 +1,59 @@
 import "../testUtils/initBrowserEnvironment";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import { Provider } from "react-redux";
 import React from "react";
 import { SubtitleSpecification } from "./model";
-import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount } from "enzyme";
+import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleSpecificationsModal", () => {
-    it("renders", () => {
+    it("renders shown", () => {
         // GIVEN
-        const subtitleSpecification: SubtitleSpecification = {
-            subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
-            projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
-            enabled: true,
-            audioDescription: false,
-            onScreenText: true,
-            spokenAudio: false,
-            speakerIdentification: "NUMBERED",
-            dialogueStyle: "DOUBLE_CHEVRON",
-            maxLinesPerCaption: 4,
-            maxCharactersPerLine: 30,
-            minCaptionDurationInMillis: 2,
-            maxCaptionDurationInMillis: 6,
-            comments: "Note"
-        };
         const expectedNode = mount(
-            <div>
-                <Modal show={false} onHide={(): void => {}} centered dialogClassName="sbte-medium-modal">
-                    <Modal.Header closeButton>
-                        <Modal.Title>Subtitle Specifications</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecification} />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary">
-                            Close
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </div>
+            <Provider store={testingStore}>
+                <div className="fade modal-backdrop show" />
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    className="fade modal show"
+                    tabIndex={-1}
+                    style={{ display: "block" }}
+                >
+                    <div
+                        role="document"
+                        className="modal-dialog sbte-medium-modal modal-dialog-centered"
+                    >
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <div className="modal-title h4">Subtitle Specifications</div>
+                                <button type="button" className="close">
+                                    <span aria-hidden="true">×</span>
+                                    <span className="sr-only">Close</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <label><strong>Enabled:&nbsp;</strong></label><label>No</label>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="dotsub-subtitle-specifications-modal-close-button btn btn-primary"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Provider>
         );
 
         // WHEN
+        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsModal show={false} onClose={(): void => {}} />
+                <SubtitleSpecificationsModal show onClose={(): void => {}} />
             </Provider>
         );
 

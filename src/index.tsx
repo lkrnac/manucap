@@ -1,4 +1,3 @@
-import "./localTesting.scss";
 import "./testUtils/initBrowserEnvironment";
 import { Language, TrackVersion } from "./player/model";
 import { Provider, useDispatch } from "react-redux";
@@ -10,6 +9,10 @@ import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 
+// Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
+// eslint-disable-next-line sort-imports
+import "./localTesting.scss";
+
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -19,6 +22,7 @@ const TestApp = (): ReactElement => {
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 videoTitle: "This is the video title",
+                videoLength: 4,
                 currentVersion: {
                     cues: [
                         new VTTCue(0, 1, "Caption Line 1"),
