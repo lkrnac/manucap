@@ -7,6 +7,7 @@ import AddCueLineButton from "./AddCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateCue } from "../player/trackSlices";
 import { updateEditorState } from "./editorStatesSlice";
+import DeleteCueLineButton from "./DeleteCueLineButton";
 
 interface Props{
     index: number;
@@ -51,6 +52,12 @@ const CueTextEditor = (props: Props): ReactElement => {
     );
     return (
         <div className="sbte-cue-editor">
+            <div
+                className="sbte-left-border"
+                style={{ display: "flex", justifyContent: "flex-end", padding: "5px 10px 5px 10px" }}
+            >
+                <DeleteCueLineButton cueIndex={props.index} />
+            </div>
             <div className="form-control sbte-form-control" style={{ height: "4em", borderRight: "none" }}>
                 <Editor
                     editorState={editorState}
