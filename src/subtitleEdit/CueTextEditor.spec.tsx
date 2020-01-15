@@ -17,10 +17,16 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
         <div className="form-control sbte-form-control" style={{ height: "4em", borderRight: "none" }}>
             <Editor editorState={editorState} onChange={jest.fn} spellCheck />
         </div>
-        <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
+        <div
+            className="sbte-left-border"
+            style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}
+        >
+            <div>
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
+            </div>
+            <button className="btn btn-outline-secondary sbte-add-cue-button"><b>+</b></button>
         </div>
     </div>
 );
