@@ -16,7 +16,7 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
                     dispatch(deleteCue(props.cueIndex));
                 }}
             >
-                <b>Delete</b>
+                <i className="fas fa-trash-alt" />
             </button>
         </>
     );
