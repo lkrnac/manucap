@@ -7,7 +7,7 @@ import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 
 const Toolbox = (): ReactElement => {
     return (
-        <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }}>
+        <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
             <Card>
                 <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
                     Toolbox

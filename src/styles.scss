@@ -17,23 +17,8 @@ $theme-colors: (
   border-color: $input-border-color;
 }
 
-.form-control {
-  color: $sbte-main-text-color;
-  border-radius: 0;
-}
-
 .btn-light {
   color: $sbte-main-text-color;
-}
-
-.card-header {
-  color: white;
-  background-color: $sbte-main-text-color;
-}
-
-.card {
-  border-radius: 0;
-  border: 0;
 }
 
 // ##############################
@@ -67,3 +52,20 @@ $theme-colors: (
     border: 1px solid $input-border-color;
     padding: 5px;
 }
+
+// Toolbox
+.sbte-form-control {
+  color: $sbte-main-text-color;
+  border-radius: 0;
+}
+
+.sbte-toolbox .card-header {
+  color: white;
+  background-color: $sbte-main-text-color;
+}
+
+.sbte-toolbox .card {
+  border-radius: 0;
+  border: 0;
+}
+
