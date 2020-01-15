@@ -71,6 +71,7 @@ describe("TimeEditorMillis", () => {
         actualNode.find("#test-millis").simulate("change", { target: { value: "3999" }});
 
         // THEN
+        expect(actualNode.find("#test-millis").props().value).toEqual("000");
         sinon.assert.calledWith(onChange, 3.999);
         sinon.assert.calledOnce(onChange);
     });

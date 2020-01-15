@@ -27,7 +27,7 @@ describe("TimeEditorSeconds", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("renders overflow value", () => {
+    it("renders max value", () => {
         // GIVEN
         const expectedNode = mount(
             <input
@@ -35,14 +35,14 @@ describe("TimeEditorSeconds", () => {
                 type="text"
                 className="sbte-time-editor-input"
                 style={{ width: "30px" }}
-                value="00"
+                value="59"
                 onChange={(): void => {}}
             />
         );
 
         // WHEN
         const actualNode = mount(
-            <TimeEditorSeconds id="test" time={60} onChange={jest.fn()} />
+            <TimeEditorSeconds id="test" time={999999} onChange={jest.fn()} />
         );
 
         // THEN
@@ -73,7 +73,23 @@ describe("TimeEditorSeconds", () => {
         actualNode.find("#test-seconds").simulate("change", { target: { value: "60" }});
 
         // THEN
+        expect(actualNode.find("#test-seconds").props().value).toEqual("00");
         sinon.assert.calledWith(onChange, 60);
+        sinon.assert.calledOnce(onChange);
+    });
+
+    it("overflows value to maxed out minutes", () => {
+        // GIVEN
+        const onChange = sinon.spy();
+        const actualNode = mount(
+            <TimeEditorSeconds id="test" time={59940} onChange={onChange} />
+        );
+
+        // WHEN
+        actualNode.find("#test-seconds").simulate("change", { target: { value: "60" }});
+
+        // THEN
+        sinon.assert.calledWith(onChange, 59999);
         sinon.assert.calledOnce(onChange);
     });
 
