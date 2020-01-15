@@ -1,6 +1,4 @@
 import "../testUtils/initBrowserEnvironment";
-import Button from "react-bootstrap/Button";
-import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import Modal from "react-bootstrap/Modal";
 import { Provider } from "react-redux";
@@ -12,37 +10,124 @@ describe("KeyboardShortcuts", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <div>
-                <Button variant="light" className="dotsub-keyboard-shortcuts-button">
+            <Provider store={testingStore}>
+                <button
+                    type="button"
+                    className="dotsub-keyboard-shortcuts-button btn btn-light"
+                >
                     Keyboard Shortcuts
-                </Button>
-
-                <Modal centered dialogClassName="sbte-medium-modal">
-                    <Modal.Header closeButton>
-                        <Modal.Title>Keyboard Shortcuts</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
-                        <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
-                        <KeyboardShortcutLabel character="→" name="Seek Ahead 1 Second" />
-                        <KeyboardShortcutLabel character="↑" name="Set Caption Start Time" />
-                        <KeyboardShortcutLabel character="↓" name="Set Caption End Time" />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary">
-                            Close
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </div>
-        );
+                </button>
+                <div className="fade modal-backdrop show" />
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    className="fade modal show"
+                    tabIndex={-1}
+                    style={{ display: "block" }}
+                >
+                    <div role="document" className="modal-dialog sbte-medium-modal modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <div className="modal-title h4">Keyboard Shortcuts</div>
+                                <button type="button" className="close">
+                                    <span aria-hidden="true">×</span>
+                                    <span className="sr-only">Close</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">o</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">o</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+                                    <span>Toggle Play / Pause</span>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center" }}><h5>
+                                    <span className="badge badge-secondary">Ctrl</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">←</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">←</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+                                    <span>Seek Back 1 Second</span>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">→</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">→</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+                                    <span>Seek Ahead 1 Second</span>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">↑</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">↑</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+                                    <span>Set Caption Start Time</span>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">↓</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">↓</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+                                    <span>Set Caption End Time</span>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-primary">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+            )
+        ;
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <KeyboardShortcuts />
             </Provider>
         );
+        actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
 
         // THEN
         expect(actualNode.html())
@@ -52,7 +137,7 @@ describe("KeyboardShortcuts", () => {
     it("opens keyboard shortcuts modal when button is clicked", () => {
         // GIVEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <KeyboardShortcuts />
             </Provider>
         );
@@ -62,5 +147,39 @@ describe("KeyboardShortcuts", () => {
 
         // THEN
         expect(actualNode.find(Modal).props().show).toEqual(true);
+    });
+
+    it("closes keyboard shortcuts modal when X button is clicked", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <KeyboardShortcuts />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
+        actualNode.find("button.close").simulate("click");
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(Modal).props().show).toEqual(false);
+    });
+
+    it("closes keyboard shortcuts modal when close button is clicked", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <KeyboardShortcuts />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
+        actualNode.find(".modal-footer .btn-primary").simulate("click");
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(Modal).props().show).toEqual(false);
     });
 });

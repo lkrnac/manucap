@@ -21,13 +21,11 @@ const dialogueStyleValues = {
 
 const SubtitleSpecificationsForm = (props: Props): ReactElement => {
     return (
-        <div>
-            <div>
-                <label><strong>Enabled:&nbsp;</strong></label>
-                <label>{props.subTitleSpecifications.enabled ? "Yes" : "No"}</label>
-            </div>
+        <>
+            <label><strong>Enabled:&nbsp;</strong></label>
+            <label>{props.subTitleSpecifications.enabled ? "Yes" : "No"}</label>
             {props.subTitleSpecifications.enabled ? (
-                <div>
+                <>
                     <hr />
                     <div style={{ display: "flex", marginRight: "20px" }}>
                         <div style={{ flexFlow: "column" }}>
@@ -77,13 +75,11 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                         </div>
                     </div>
                     <hr />
-                    <div>
-                        <label><strong>Comments:&nbsp;</strong></label>
-                        <label>{props.subTitleSpecifications.comments}</label>
-                    </div>
-                </div>
+                    <label><strong>Comments:&nbsp;</strong></label>
+                    <label>{props.subTitleSpecifications.comments}</label>
+                </>
             ) : null}
-        </div>
+        </>
     );
 };
 

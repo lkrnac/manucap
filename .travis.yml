@@ -16,5 +16,5 @@ script:
 
 after_success:
   - npm run lint
-  - if [[ ("$TRAVIS_BRANCH" != "master" && "$TRAVIS_BRANCH" != "release") || ("$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_BRANCH" = "master") ]] ; then bash <(curl -s https://codecov.io/bash) ; fi
+  - if [[ ("$TRAVIS_BRANCH" != "release") || ("$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_BRANCH" = "master") ]] ; then bash <(curl -s https://codecov.io/bash) ; fi
   - ./scripts/post-build.sh

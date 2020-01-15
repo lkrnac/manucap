@@ -8,7 +8,7 @@ const KeyboardShortcuts = (): ReactElement => {
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
     return (
-        <div>
+        <>
             <Button variant="light" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
                 Keyboard Shortcuts
             </Button>
@@ -30,7 +30,7 @@ const KeyboardShortcuts = (): ReactElement => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </div>
+        </>
     );
 };
 
