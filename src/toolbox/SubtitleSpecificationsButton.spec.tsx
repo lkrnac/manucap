@@ -1,9 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import React, { ReactElement } from "react";
 import { Provider } from "react-redux";
-import React from "react";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
@@ -11,22 +9,58 @@ import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
 
+jest.mock("./SubtitleSpecificationsModal");
+
+// @ts-ignore We are mocking module
+SubtitleSpecificationsModal.mockImplementation(({ show }): ReactElement => show ? <div>shown</div> : <div />);
+
 describe("SubtitleSpecificationsButton", () => {
-    it("renders", () => {
+    it("renders with shown modal", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div>
-                    <Button
-                        variant="light"
-                        className="dotsub-subtitle-specifications-button"
+                <>
+                    <button
                         style={{ marginLeft: "10px" }}
+                        type="button"
+                        className="dotsub-subtitle-specifications-button btn btn-light"
                     >
                         Subtitle Specifications
-                    </Button>
+                    </button>
 
-                    <SubtitleSpecificationsModal show onClose={(): void => {}} />
-                </div>
+                    <div>shown</div>
+                </>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    it("renders with hidden modal", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <>
+                    <button
+                        style={{ marginLeft: "10px" }}
+                        type="button"
+                        className="dotsub-subtitle-specifications-button btn btn-light"
+                    >
+                        Subtitle Specifications
+                    </button>
+
+                    <div />
+                </>
             </Provider>
         );
 
@@ -39,8 +73,7 @@ describe("SubtitleSpecificationsButton", () => {
         testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
 
         // THEN
-        expect(actualNode.html())
-            .toEqual(expectedNode.html());
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("opens subtitle specifications modal when button is clicked", () => {
@@ -55,8 +88,7 @@ describe("SubtitleSpecificationsButton", () => {
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
 
         // THEN
-        expect(actualNode.find(Modal).props().show)
-            .toEqual(true);
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
     });
 
     it("closes subtitle specifications modal when close button is clicked", () => {
@@ -69,10 +101,10 @@ describe("SubtitleSpecificationsButton", () => {
 
         // WHEN
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
-        actualNode.find("button.dotsub-subtitle-specifications-modal-close-button").simulate("click");
+        actualNode.find(SubtitleSpecificationsModal).props().onClose();
+        actualNode.update();
 
         // THEN
-        expect(actualNode.find(Modal).props().show)
-            .toEqual(false);
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
     });
 });
