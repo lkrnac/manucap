@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateCue } from "../player/trackSlices";
 import { updateEditorState } from "./editorStatesSlice";
+import AddCueLineButton from "./AddCueLineButton";
 
 interface Props{
     index: number;
@@ -50,7 +51,10 @@ const CueTextEditor = (props: Props): ReactElement => {
     );
     return (
         <div className="sbte-cue-editor">
-            <div className="form-control sbte-form-control" style={{ height: "4em", borderRight: "none" }}>
+            <div
+                className="form-control sbte-form-control sbte-bottom-border"
+                style={{ height: "4em", paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}
+            >
                 <Editor
                     editorState={editorState}
                     onChange={(editorState: EditorState): AppThunk =>
@@ -58,10 +62,14 @@ const CueTextEditor = (props: Props): ReactElement => {
                     spellCheck
                 />
             </div>
-            <div className="sbte-left-border" style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
-                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
-                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
+            <div className="sbte-left-border" style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}
+            >
+                <div>
+                    <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
+                    <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
+                    <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
+                </div>
+                <AddCueLineButton cueIndex={props.index} cueEndTime={props.cue.endTime} />
             </div>
         </div>
     );

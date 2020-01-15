@@ -142,4 +142,22 @@ describe("CueTextEditor", () => {
     it("updated cue when underline inline style is used", () => {
         testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
     });
+
+    it("added cue when add cue button is clicked", () => {
+        // GIVEN
+        const cue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} cue={cue} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues[1].text).toEqual("");
+        expect(testingStore.getState().cues[1].startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].endTime).toEqual(4);
+    });
 });
