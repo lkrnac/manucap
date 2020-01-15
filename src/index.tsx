@@ -1,4 +1,3 @@
-import "./localTesting.scss";
 import "./testUtils/initBrowserEnvironment";
 import { Language, TrackVersion } from "./player/model";
 import { Provider, useDispatch } from "react-redux";
@@ -9,6 +8,10 @@ import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
+
+// Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
+// eslint-disable-next-line sort-imports
+import "./localTesting.scss";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
