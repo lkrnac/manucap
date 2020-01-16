@@ -14,7 +14,10 @@ let testingStore = createTestingStore();
 
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
     <div className="sbte-cue-editor">
-        <div className="form-control sbte-form-control" style={{ height: "4em", borderRight: "none" }}>
+        <div
+            className="sbte-form-control sbte-bottom-border"
+            style={{ height: "4em", paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}
+        >
             <Editor editorState={editorState} onChange={jest.fn} spellCheck />
         </div>
         <div

@@ -1,4 +1,5 @@
 $sbte-main-text-color: rgb(118, 131, 143);
+$border-color: rgb(241,244,245);
 
 // ##############################
 // Override bootstrap defaults
@@ -33,9 +34,12 @@ $theme-colors: (
   margin-bottom: 10px;
 }
 
-
 .sbte-left-border {
-  border-left: 1px solid $input-border-color;
+  border-left: 2px solid $border-color;
+}
+
+.sbte-bottom-border {
+    border-bottom: 2px solid $border-color;
 }
 
 .sbte-medium-modal {
@@ -51,6 +55,13 @@ $theme-colors: (
     width: 40px;
     border: 1px solid $input-border-color;
     padding: 5px;
+}
+
+.sbte-cue-line {
+    border: 2px solid $border-color;
+    background-color: white;
+    border-radius: 5px;
+    margin: 5px;
 }
 
 // Toolbox
