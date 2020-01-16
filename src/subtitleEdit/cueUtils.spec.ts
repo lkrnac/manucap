@@ -10,15 +10,18 @@ describe("cueUtils", () => {
             const region = new VTTRegion();
             region.lines = 10;
             oldCue.position = 10;
-            oldCue.align = "start";
+            oldCue.align = "center";
             oldCue.region = region;
             oldCue.snapToLines = true;
             oldCue.size = 100;
-            oldCue.lineAlign = "start";
             oldCue.line = 5;
             oldCue.vertical = "lr";
             oldCue.id = "someId";
             oldCue.pauseOnExit = true;
+
+            // properties not copied - see TODO comment in cueUtil.ts
+            oldCue.lineAlign = "end";
+            oldCue.positionAlign = "end" as PositionAlignSetting;
 
             // WHEN
             copyNonConstructorProperties(newCue, oldCue);
@@ -29,17 +32,19 @@ describe("cueUtils", () => {
             expect(newCue.endTime).toEqual(1);
 
             expect(newCue.position).toEqual(10);
-            expect(newCue.align).toEqual("start");
-            expect(newCue.positionAlign).toEqual("middle");
+            expect(newCue.align).toEqual("center");
             // @ts-ignore If it would be null -> test fails
             expect(newCue.region.lines).toEqual(10);
             expect(newCue.snapToLines).toEqual(true);
             expect(newCue.size).toEqual(100);
-            expect(newCue.lineAlign).toEqual("start");
             expect(newCue.line).toEqual(5);
             expect(newCue.vertical).toEqual("lr");
             expect(newCue.id).toEqual("someId");
             expect(newCue.pauseOnExit).toEqual(true);
+
+            // properties not copied - see TODO comment in cueUtil.ts
+            expect(newCue.positionAlign).toEqual("auto");
+            expect(newCue.lineAlign).toEqual("start");
         });
     });
 });
