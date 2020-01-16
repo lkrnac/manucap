@@ -13,6 +13,7 @@ export interface Track {
     readonly language: Language;
     readonly default: boolean;
     readonly videoTitle: string;
+    readonly videoLength: number;
     readonly sourceTrack?: Track;
 }
 

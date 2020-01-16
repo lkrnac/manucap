@@ -23,7 +23,7 @@ describe("KeyboardShortcutLabel", () => {
                 <span>&#160;+&#160;</span>
                 <h5><span className="badge badge-secondary">Shift</span></h5>
                 <span>&#160;+&#160;</span>
-                <h5> <span className="badge badge-secondary">o</span></h5>
+                <h5><span className="badge badge-secondary">o</span></h5>
                 <span>&#160;&#160;&#160;:&#160;&#160;&#160;</span>
                 <span>Toggle Play / Pause</span>
             </div>

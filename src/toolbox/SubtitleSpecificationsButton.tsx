@@ -7,7 +7,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
     return (
-        <div>
+        <>
             <Button
                 variant="light"
                 onClick={handleShow}
@@ -18,7 +18,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
             </Button>
 
             <SubtitleSpecificationsModal show={show} onClose={handleClose} />
-        </div>
+        </>
     );
 };
 
