@@ -15,6 +15,14 @@ let testingStore = createTestingStore();
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
     <div className="sbte-cue-editor">
         <div
+            className="sbte-left-border"
+            style={{ display: "flex", justifyContent: "flex-end", padding: "5px 10px 5px 10px" }}
+        >
+            <button className="btn btn-outline-secondary sbte-delete-cue-button">
+                <i className="fas fa-trash-alt" />
+            </button>
+        </div>
+        <div
             className="sbte-form-control sbte-bottom-border"
             style={{ height: "4em", paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}
         >
@@ -141,15 +149,15 @@ describe("CueTextEditor", () => {
     });
 
     it("updated cue when bold inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 0, "<b>someT</b>ext");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<b>someT</b>ext");
     });
 
     it("updated cue when italic inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<i>someT</i>ext");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<i>someT</i>ext");
     });
 
     it("updated cue when underline inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 3, "<u>someT</u>ext");
     });
 
     it("added cue when add cue button is clicked", () => {
@@ -168,5 +176,21 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[1].text).toEqual("");
         expect(testingStore.getState().cues[1].startTime).toEqual(1);
         expect(testingStore.getState().cues[1].endTime).toEqual(4);
+    });
+
+    it("deletes cue when delete cue button is clicked", () => {
+        // GIVEN
+        const cue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} cue={cue} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-delete-cue-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(0);
     });
 });

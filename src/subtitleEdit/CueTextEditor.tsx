@@ -4,6 +4,7 @@ import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
+import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateCue } from "../player/trackSlices";
 import { updateEditorState } from "./editorStatesSlice";
@@ -51,6 +52,12 @@ const CueTextEditor = (props: Props): ReactElement => {
     );
     return (
         <div className="sbte-cue-editor">
+            <div
+                className="sbte-left-border"
+                style={{ display: "flex", justifyContent: "flex-end", padding: "5px 10px 5px 10px" }}
+            >
+                <DeleteCueLineButton cueIndex={props.index} />
+            </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
                 style={{ height: "4em", paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}
