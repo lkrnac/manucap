@@ -2,6 +2,7 @@ import "video.js"; // VTTCue definition
 import { Task, Track } from "./model";
 import { addCue, deleteCue, updateCue, updateEditingTrack, updateTask } from "./trackSlices";
 import testingStore from "../testUtils/testingStore";
+import deepFreeze from "deep-freeze";
 
 const testingTrack = {
     type: "CAPTION",
@@ -21,6 +22,8 @@ const testingTask = {
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM"
 } as Task;
+
+deepFreeze(testingStore.getState());
 
 describe("trackSlices", () => {
     describe("updateCue", () => {
