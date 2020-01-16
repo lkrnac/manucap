@@ -1,8 +1,8 @@
 import "video.js"; // VTTCue definition
 import { Task, Track } from "./model";
 import { addCue, deleteCue, updateCue, updateEditingTrack, updateTask } from "./trackSlices";
-import testingStore from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
+import testingStore from "../testUtils/testingStore";
 
 const testingTrack = {
     type: "CAPTION",
