@@ -20,10 +20,16 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
         >
             <Editor editorState={editorState} onChange={jest.fn} spellCheck />
         </div>
-        <div style={{ paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
+        <div
+            className="sbte-left-border"
+            style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}
+        >
+            <div>
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
+            </div>
+            <button className="btn btn-outline-secondary sbte-add-cue-button"><b>+</b></button>
         </div>
     </div>
 );
@@ -144,5 +150,23 @@ describe("CueTextEditor", () => {
 
     it("updated cue when underline inline style is used", () => {
         testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
+    });
+
+    it("added cue when add cue button is clicked", () => {
+        // GIVEN
+        const cue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} cue={cue} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues[1].text).toEqual("");
+        expect(testingStore.getState().cues[1].startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].endTime).toEqual(4);
     });
 });
