@@ -11,7 +11,6 @@ describe("cueUtils", () => {
             region.lines = 10;
             oldCue.position = 10;
             oldCue.align = "start";
-            oldCue.positionAlign = "left" as PositionAlignSetting;
             oldCue.region = region;
             oldCue.snapToLines = true;
             oldCue.size = 100;
@@ -31,7 +30,7 @@ describe("cueUtils", () => {
 
             expect(newCue.position).toEqual(10);
             expect(newCue.align).toEqual("start");
-            expect(newCue.positionAlign).toEqual("left");
+            expect(newCue.positionAlign).toEqual("middle");
             // @ts-ignore If it would be null -> test fails
             expect(newCue.region.lines).toEqual(10);
             expect(newCue.snapToLines).toEqual(true);
