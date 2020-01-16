@@ -12,7 +12,7 @@ import testingStore from "../testUtils/testingStore";
 const cues = [
     new VTTCue(0, 0, "Caption Line 1"),
     new VTTCue(1, 2, "Caption Line 2"),
-    new VTTCue(62000, 67.045, "Caption Line 2"),
+    new VTTCue(67.045, 359999.999, "Caption Line 3"),
 ];
 
 describe("CueLine", () => {
@@ -27,68 +27,20 @@ describe("CueLine", () => {
                     }}
                     >
                         <div id="time-start-1" style={{ display: "flex" }} className="sbte-time-editor">
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-start-1-minutes"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    value="000"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
-                            <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-start-1-seconds"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    style={{ width: "30px" }}
-                                    value="00"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
-                            <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-start-1-millis"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    value="000"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
+                            <input
+                                type="text"
+                                value="00:00:00.000"
+                                className="sbte-time-input"
+                                onChange={(): void => {}}
+                            />
                         </div>
                         <div id="time-end-1" style={{ display: "flex" }} className="sbte-time-editor">
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-end-1-minutes"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    value="000"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
-                            <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-end-1-seconds"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    style={{ width: "30px" }}
-                                    value="00"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
-                            <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-end-1-millis"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    value="000"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
+                            <input
+                                type="text"
+                                value="00:00:00.000"
+                                className="sbte-time-input"
+                                onChange={(): void => {}}
+                            />
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
@@ -121,68 +73,20 @@ describe("CueLine", () => {
                     }}
                     >
                         <div id="time-start-1" style={{ display: "flex" }} className="sbte-time-editor">
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-start-1-minutes"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    value="000"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
-                            <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-start-1-seconds"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    style={{ width: "30px" }}
-                                    value="01"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
-                            <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-start-1-millis"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    value="000"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
+                            <input
+                                type="text"
+                                value="00:00:01.000"
+                                className="sbte-time-input"
+                                onChange={(): void => {}}
+                            />
                         </div>
                         <div id="time-end-1" style={{ display: "flex" }} className="sbte-time-editor">
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-end-1-minutes"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    value="000"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
-                            <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-end-1-seconds"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    style={{ width: "30px" }}
-                                    value="02"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
-                            <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
-                            <div style={{ flexFlow: "column" }}>
-                                <input
-                                    id="time-end-1-millis"
-                                    type="text"
-                                    className="sbte-time-editor-input"
-                                    value="000"
-                                    onChange={(): void => {}}
-                                />
-                            </div>
+                            <input
+                                type="text"
+                                value="00:00:02.000"
+                                className="sbte-time-input"
+                                onChange={(): void => {}}
+                            />
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
@@ -213,7 +117,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0-minutes").simulate("change", { target: { value: "15" }});
+        actualNode.find("#time-start-0 input").simulate("change", { target: { value: "00:15:00.000" }});
 
         // THEN
         expect(testingStore.getState().cues[0].startTime).toEqual(900);
@@ -228,7 +132,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0-seconds").simulate("change", { target: { value: "10" }});
+        actualNode.find("#time-start-0 input").simulate("change", { target: { value: "00:00:10.000" }});
 
         // THEN
         expect(testingStore.getState().cues[0].startTime).toEqual(10);
@@ -243,7 +147,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0-millis").simulate("change", { target: { value: "865" }});
+        actualNode.find("#time-start-0 input").simulate("change", { target: { value: "00:00:00.865" }});
 
         // THEN
         expect(testingStore.getState().cues[0].startTime).toEqual(.865);
@@ -258,41 +162,10 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-end-0-millis").simulate("change", { target: { value: "2220" }});
+        actualNode.find("#time-end-0 input").simulate("change", { target: { value: "00:00:02.220" }});
 
         // THEN
         expect(testingStore.getState().cues[0].endTime).toEqual(2.22);
-    });
-
-    it("pads with 0s in time editor inputs", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[2]} />
-            </Provider>
-        );
-
-        // WHEN
-        // THEN
-        expect(testingStore.getState().cues[0].endTime).toEqual(67.045);
-        expect(actualNode.find("#time-end-0-minutes").props().value).toEqual("001");
-        expect(actualNode.find("#time-end-0-seconds").props().value).toEqual("07");
-        expect(actualNode.find("#time-end-0-millis").props().value).toEqual("045");
-    });
-
-    it("maxes out to max values in time editor", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[2]} />
-            </Provider>
-        );
-
-        // WHEN
-        // THEN
-        expect(actualNode.find("#time-start-0-minutes").props().value).toEqual("999");
-        expect(actualNode.find("#time-start-0-seconds").props().value).toEqual("59");
-        expect(actualNode.find("#time-start-0-millis").props().value).toEqual("999");
     });
 
 });

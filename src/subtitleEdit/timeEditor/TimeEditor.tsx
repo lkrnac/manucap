@@ -1,9 +1,8 @@
 import React, {
     ReactElement
 } from "react";
-import TimeEditorMillis from "./TimeEditorMillis";
-import TimeEditorMinutes from "./TimeEditorMinutes";
-import TimeEditorSeconds from "./TimeEditorSeconds";
+import { getTimeFromString, getTimeString } from "../../utils/timeUtils";
+import TimeField from "./TimeInput";
 
 interface Props {
     id: string;
@@ -12,31 +11,19 @@ interface Props {
 }
 
 const TimeEditor = (props: Props): ReactElement => {
+    const handleChange = (timeString: string): void => {
+      const time = getTimeFromString(timeString);
+      props.onChange(time);
+    };
     return (
         <div id={props.id} style={{ display: "flex" }} className="sbte-time-editor">
-            <div style={{ flexFlow: "column" }}>
-                <TimeEditorMinutes
-                    id={props.id}
-                    time={props.time || 0}
-                    onChange={props.onChange}
-                />
-            </div>
-            <label style={{ verticalAlign: "bottom", padding: "5px" }}>:</label>
-            <div style={{ flexFlow: "column" }}>
-                <TimeEditorSeconds
-                    id={props.id}
-                    time={props.time || 0}
-                    onChange={props.onChange}
-                />
-            </div>
-            <label style={{ verticalAlign: "bottom", padding: "5px" }}>.</label>
-            <div style={{ flexFlow: "column" }}>
-                <TimeEditorMillis
-                    id={props.id}
-                    time={props.time || 0}
-                    onChange={props.onChange}
-                />
-            </div>
+            <TimeField
+                className="sbte-time-input"
+                showSeconds
+                showMillis
+                value={getTimeString(props.time || 0)}
+                onChange={handleChange}
+            />
         </div>
     );
 };
