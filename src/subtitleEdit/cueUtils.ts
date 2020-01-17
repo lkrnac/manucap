@@ -1,3 +1,5 @@
+import Immutable from "immutable";
+
 export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): void => {
     newCue.position = oldCue.position;
     // TODO: Change following try-catch to simple assignment when browsers fix align "center" value
@@ -28,3 +30,34 @@ export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): vo
     newCue.id = oldCue.id;
     newCue.pauseOnExit = oldCue.pauseOnExit;
 };
+
+export interface PositionStyle {
+    line: number;
+    align: string;
+}
+
+export enum Position {
+    TopLeft,
+    TopCenter,
+    TopRight,
+    CenterLeft,
+    Center,
+    CenterRight,
+    BottomLeft,
+    BottomCenter,
+    BottomRight
+}
+
+const positionStylesArray = [
+    [Position.TopLeft,        { line: 0, align: "start" }],
+    [Position.TopCenter,      { line: 0, align: "center" }],
+    [Position.TopRight,       { line: 0, align: "end" }],
+    [Position.CenterLeft,     { line: 7, align: "start" }],
+    [Position.Center,         { line: 7, align: "center" }],
+    [Position.CenterRight,    { line: 7, align: "end" }],
+    [Position.BottomLeft,     { line: 16, align: "start" }],
+    [Position.BottomCenter,   { line: 16, align: "center" }],
+    [Position.BottomRight,    { line: 16, align: "end" }],
+];
+export const positionStyles = Immutable.Map<Position, PositionStyle>(positionStylesArray);
+
