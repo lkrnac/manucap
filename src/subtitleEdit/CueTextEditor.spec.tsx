@@ -193,4 +193,29 @@ describe("CueTextEditor", () => {
         // THEN
         expect(testingStore.getState().cues.length).toEqual(0);
     });
+
+    it("maintain cue styles when cue text is changes", () => {
+        // GIVEN
+        const cue = new VTTCue(0, 1, "someText");
+        cue.position = 60;
+        cue.align = "end";
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueTextEditor index={0} cue={cue} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+
+        // WHEN
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => "Paste text to start: ",
+            }
+        });
+
+        // THEN
+        expect(testingStore.getState().cues[0].position).toEqual(60);
+        expect(testingStore.getState().cues[0].align).toEqual("end");
+    });
 });
