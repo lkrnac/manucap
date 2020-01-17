@@ -59,7 +59,7 @@ const CueTextEditor = (props: Props): ReactElement => {
     return (
         <div className="sbte-cue-editor">
             <div
-                className="sbte-left-border"
+                className="sbte-bottom-border"
                 style={{ display: "flex", justifyContent: "flex-end", padding: "5px 10px 5px 10px" }}
             >
                 <DeleteCueLineButton cueIndex={props.index} />
@@ -75,10 +75,7 @@ const CueTextEditor = (props: Props): ReactElement => {
                     spellCheck
                 />
             </div>
-            <div
-                className="sbte-left-border"
-                style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}>
                 <div>
                     <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
                     <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
