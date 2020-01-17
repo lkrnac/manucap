@@ -1,6 +1,9 @@
 import { SubtitleSpecification } from "./model";
+import deepFreeze from "deep-freeze";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
+
+deepFreeze(testingStore.getState());
 
 const testingSubtitleSpecification = {
     subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
