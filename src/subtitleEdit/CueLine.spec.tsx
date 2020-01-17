@@ -295,4 +295,41 @@ describe("CueLine", () => {
         expect(actualNode.find("#time-start-0-millis").props().value).toEqual("999");
     });
 
+    it("maintains cue styling when start time changes", () => {
+        // GIVEN
+        const cue = new VTTCue(0, 1, "someText");
+        cue.position = 60;
+        cue.align = "end";
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cue} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("#time-start-0-minutes").simulate("change", { target: { value: "15" }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].position).toEqual(60);
+        expect(testingStore.getState().cues[0].align).toEqual("end");
+    });
+
+    it("maintains cue styling when start time changes", () => {
+        // GIVEN
+        const cue = new VTTCue(0, 1, "someText");
+        cue.position = 60;
+        cue.align = "end";
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cue} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("#time-end-0-millis").simulate("change", { target: { value: "2220" }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].position).toEqual(60);
+        expect(testingStore.getState().cues[0].align).toEqual("end");
+    });
 });

@@ -36,7 +36,7 @@ const calculateTime = (time: number, newSecondsValue: string): number => {
 interface Props {
     id: string;
     time: number;
-    onChange: (time: number) => {};
+    onChange: (time: number) => void;
 }
 
 const TimeEditorSeconds = (props: Props): ReactElement => {
