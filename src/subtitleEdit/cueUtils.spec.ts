@@ -1,5 +1,5 @@
 import "video.js"; // import VTTCue type
-import { Position, PositionStyle, copyNonConstructorProperties, positionStyles } from "./cueUtils";
+import { Position, PositionStyle, copyNonConstructorProperties, positionIcons, positionStyles } from "./cueUtils";
 import each from "jest-each";
 
 describe("cueUtils", () => {
@@ -76,6 +76,36 @@ describe("cueUtils", () => {
 
             // THEN
             expect(actualPositionStyle).toEqual(expectedPositionStyle);
+        });
+    });
+
+    describe("positionIcons", () => {
+        it("are immutable", () => {
+            // WHEN
+            positionIcons.set(Position.TopLeft, "something");
+
+            // THEN
+            expect(positionIcons.get(Position.TopLeft)).toEqual("↖");
+        });
+
+        // noinspection DuplicatedCode
+        each([
+            [Position.TopLeft,        "↖"],
+            [Position.TopCenter,      "↑"],
+            [Position.TopRight,       "↗"],
+            [Position.CenterLeft,     "←"],
+            [Position.Center,         "•"],
+            [Position.CenterRight,    "→"],
+            [Position.BottomLeft,     "↙"],
+            [Position.BottomCenter,   "↓"],
+            [Position.BottomRight,    "↘"],
+        ])
+        .it("are correctly initialized", (testingPosition: Position, expectedPositionIcon: PositionStyle) => {
+            // WHEN
+            const actualPositionIcon = positionIcons.get(testingPosition);
+
+            // THEN
+            expect(actualPositionIcon).toEqual(expectedPositionIcon);
         });
     });
 });

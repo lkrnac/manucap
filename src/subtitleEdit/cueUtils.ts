@@ -48,6 +48,7 @@ export enum Position {
     BottomRight
 }
 
+// noinspection DuplicatedCode code is in test as well
 const positionStylesArray = [
     [Position.TopLeft,        { line: 0, align: "start" }],
     [Position.TopCenter,      { line: 0, align: "center" }],
@@ -61,3 +62,16 @@ const positionStylesArray = [
 ];
 export const positionStyles = Immutable.Map<Position, PositionStyle>(positionStylesArray);
 
+// noinspection DuplicatedCode code is in test as well
+const positionIconsArray = [
+    [Position.TopLeft,        "↖"],
+    [Position.TopCenter,      "↑"],
+    [Position.TopRight,       "↗"],
+    [Position.CenterLeft,     "←"],
+    [Position.Center,         "•"],
+    [Position.CenterRight,    "→"],
+    [Position.BottomLeft,     "↙"],
+    [Position.BottomCenter,   "↓"],
+    [Position.BottomRight,    "↘"],
+];
+export const positionIcons = Immutable.Map<Position, string>(positionIconsArray);
