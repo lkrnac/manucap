@@ -1,4 +1,4 @@
-import "../../testUtils/initBrowserEnvironment";
+import "../testUtils/initBrowserEnvironment";
 import React from "react";
 import TimeEditor from "./TimeEditor";
 import { mount } from "enzyme";
