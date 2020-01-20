@@ -117,7 +117,8 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0 input").simulate("change", { target: { value: "00:15:00.000" }});
+        actualNode.find("#time-start-0 TimeField")
+            .simulate("change", { target: { value: "00:15:00.000", selectionEnd: 12 }});
 
         // THEN
         expect(testingStore.getState().cues[0].startTime).toEqual(900);
@@ -132,7 +133,8 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0 input").simulate("change", { target: { value: "00:00:10.000" }});
+        actualNode.find("#time-start-0 TimeField")
+            .simulate("change", { target: { value: "00:00:10.000", selectionEnd: 12 }});
 
         // THEN
         expect(testingStore.getState().cues[0].startTime).toEqual(10);
@@ -147,7 +149,8 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0 input").simulate("change", { target: { value: "00:00:00.865" }});
+        actualNode.find("#time-start-0 TimeField")
+            .simulate("change", { target: { value: "00:00:00.865", selectionEnd: 12 }});
 
         // THEN
         expect(testingStore.getState().cues[0].startTime).toEqual(.865);
@@ -162,7 +165,8 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-end-0 input").simulate("change", { target: { value: "00:00:02.220" }});
+        actualNode.find("#time-end-0 TimeField")
+            .simulate("change", { target: { value: "00:00:02.220", selectionEnd: 12 }});
 
         // THEN
         expect(testingStore.getState().cues[0].endTime).toEqual(2.22);

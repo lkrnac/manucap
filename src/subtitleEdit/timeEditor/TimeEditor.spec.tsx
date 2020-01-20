@@ -158,7 +158,7 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        actualNode.find("#test input").simulate("change", { target: { value: "60" }});
+        actualNode.find("TimeField").simulate("change", { target: { value: "60:00:00.000", selectionEnd: 12 }});
 
         // THEN
         sinon.assert.calledWith(onChange, 216000);

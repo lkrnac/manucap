@@ -1,8 +1,9 @@
 import React, {
+    ChangeEvent,
     ReactElement
 } from "react";
 import { getTimeFromString, getTimeString } from "../../utils/timeUtils";
-import TimeField from "./TimeInput";
+import TimeField from "react-advanced-timefield";
 
 interface Props {
     id: string;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const TimeEditor = (props: Props): ReactElement => {
-    const handleChange = (timeString: string): void => {
+    const handleChange = (_e: ChangeEvent<HTMLInputElement>, timeString: string): void => {
       const time = getTimeFromString(timeString);
       props.onChange(time);
     };
@@ -19,10 +20,10 @@ const TimeEditor = (props: Props): ReactElement => {
         <div id={props.id} style={{ display: "flex" }} className="sbte-time-editor">
             <TimeField
                 className="sbte-time-input"
-                showSeconds
-                showMillis
                 value={getTimeString(props.time || 0)}
                 onChange={handleChange}
+                showSeconds
+                showMillis
             />
         </div>
     );
