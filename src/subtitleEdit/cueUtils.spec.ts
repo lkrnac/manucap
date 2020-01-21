@@ -48,23 +48,43 @@ describe("cueUtils", () => {
     describe("positionStyles", () => {
         it("are immutable", () => {
             // WHEN
-            positionStyles.set(Position.TopLeft, { align: "center", line: 16 });
+            positionStyles.set(
+                Position.Row1Column1,
+                { line: 16, align: "center", positionAlign: "auto", position: 51 }
+            );
 
             // THEN
-            expect(positionStyles.get(Position.TopLeft)).toEqual({ align: "start", line: 0 });
+            expect(positionStyles.get(Position.Row1Column1))
+                .toEqual({ line: 0, align: "start", positionAlign: "center", position: 51 });
         });
 
         // noinspection DuplicatedCode
         each([
-            [Position.TopLeft,        { line: 0, align: "start" }],
-            [Position.TopCenter,      { line: 0, align: "center" }],
-            [Position.TopRight,       { line: 0, align: "end" }],
-            [Position.CenterLeft,     { line: 7, align: "start" }],
-            [Position.Center,         { line: 7, align: "center" }],
-            [Position.CenterRight,    { line: 7, align: "end" }],
-            [Position.BottomLeft,     { line: 16, align: "start" }],
-            [Position.BottomCenter,   { line: 16, align: "center" }],
-            [Position.BottomRight,    { line: 16, align: "end" }],
+            [Position.Row1Column1, { line: 0, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row1Column2, { line: 0, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row1Column3, { line: 0, align: "center", positionAlign: "auto", position: "auto"  }],
+            [Position.Row1Column4, { line: 0, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row1Column5, { line: 0, align: "end", positionAlign: "center", position: 49 }],
+            [Position.Row2Column1, { line: 4, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row2Column2, { line: 4, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row2Column3, { line: 4, align: "center", positionAlign: "auto", position: "auto" }],
+            [Position.Row2Column4, { line: 4, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row2Column5, { line: 4, align: "end", positionAlign: "center", position: 49 }],
+            [Position.Row3Column1, { line: 8, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row3Column2, { line: 8, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row3Column3, { line: 8, align: "center", positionAlign: "auto", position: "auto" }],
+            [Position.Row3Column4, { line: 8, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row3Column5, { line: 8, align: "end", positionAlign: "center", position: 49 }],
+            [Position.Row4Column1, { line: 12, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row4Column2, { line: 12, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row4Column3, { line: 12, align: "center", positionAlign: "auto", position: "auto" }],
+            [Position.Row4Column4, { line: 12, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row4Column5, { line: 12, align: "end", positionAlign: "center", position: 49 }],
+            [Position.Row5Column1, { line: 15, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row5Column2, { line: 15, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row5Column3, { line: "auto", align: "center", positionAlign: "auto", position: "auto" }],
+            [Position.Row5Column4, { line: 15, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row5Column5, { line: 15, align: "end", positionAlign: "center", position: 49 }],
         ])
         .it("are correctly initialized", (testingPosition: Position, expectedPositionStyle: PositionStyle) => {
             // WHEN
@@ -76,32 +96,47 @@ describe("cueUtils", () => {
     });
 
     describe("positionIcons", () => {
-        it("are immutable", () => {
-            // WHEN
-            positionIcons.set(Position.TopLeft, "something");
-
-            // THEN
-            expect(positionIcons.get(Position.TopLeft)).toEqual("↖");
-        });
-
         // noinspection DuplicatedCode
         each([
-            [Position.TopLeft,        "↖"],
-            [Position.TopCenter,      "↑"],
-            [Position.TopRight,       "↗"],
-            [Position.CenterLeft,     "←"],
-            [Position.Center,         "•"],
-            [Position.CenterRight,    "→"],
-            [Position.BottomLeft,     "↙"],
-            [Position.BottomCenter,   "↓"],
-            [Position.BottomRight,    "↘"],
+            [0, Position.Row1Column1, "↖↖", "6px" ],
+            [1, Position.Row1Column2, "↖↑", "9px" ],
+            [2, Position.Row1Column3, "↑↑", "13px" ],
+            [3, Position.Row1Column4, "↑↗", "11px" ],
+            [4, Position.Row1Column5, "↗↗", "6px" ],
+            [5, Position.Row2Column1, "↖←", "6px" ],
+            [6, Position.Row2Column2, "↖", "13px" ],
+            [7, Position.Row2Column3, "↑", "16px" ],
+            [8, Position.Row2Column4, "↗", "13px" ],
+            [9, Position.Row2Column5, "→↗", "6px" ],
+            [10, Position.Row3Column1, "←←", "5px" ],
+            [11, Position.Row3Column2, "←", "12px" ],
+            [12, Position.Row3Column3, "•", "16px" ],
+            [13, Position.Row3Column4, "→", "12px" ],
+            [14, Position.Row3Column5, "→→", "5px" ],
+            [15, Position.Row4Column1, "↙←", "6px" ],
+            [16, Position.Row4Column2, "↙", "13px" ],
+            [17, Position.Row4Column3, "↓", "16px" ],
+            [18, Position.Row4Column4, "↘", "13px" ],
+            [19, Position.Row4Column5, "→↘", "6px" ],
+            [20, Position.Row5Column1, "↙↙", "6px" ],
+            [21, Position.Row5Column2, "↙↓", "9px" ],
+            [22, Position.Row5Column3, "↓↓", "13px" ],
+            [23, Position.Row5Column4, "↓↘", "11px" ],
+            [24, Position.Row5Column5, "↘↘", "6px" ],
         ])
-        .it("are correctly initialized", (testingPosition: Position, expectedPositionIcon: PositionStyle) => {
+        .it("are correctly initialized", (
+            index: number,
+            expectedPosition: Position,
+            expectedIconText: string,
+            expectedLeftPadding: string
+        ) => {
             // WHEN
-            const actualPositionIcon = positionIcons.get(testingPosition);
+            const actualPositionIcon = positionIcons[index];
 
             // THEN
-            expect(actualPositionIcon).toEqual(expectedPositionIcon);
+            expect(actualPositionIcon.position).toEqual(expectedPosition);
+            expect(actualPositionIcon.iconText).toEqual(expectedIconText);
+            expect(actualPositionIcon.leftPadding).toEqual(expectedLeftPadding);
         });
     });
 });

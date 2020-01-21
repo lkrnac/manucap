@@ -24,46 +24,101 @@ export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): vo
 };
 
 export interface PositionStyle {
-    line: number;
-    align: string;
+    line: LineAndPositionSetting;
+    align: AlignSetting;
+    positionAlign: PositionAlignSetting;
+    position: LineAndPositionSetting;
 }
 
 export enum Position {
-    TopLeft,
-    TopCenter,
-    TopRight,
-    CenterLeft,
-    Center,
-    CenterRight,
-    BottomLeft,
-    BottomCenter,
-    BottomRight
+    Row1Column1,
+    Row1Column2,
+    Row1Column3,
+    Row1Column4,
+    Row1Column5,
+    Row2Column1,
+    Row2Column2,
+    Row2Column3,
+    Row2Column4,
+    Row2Column5,
+    Row3Column1,
+    Row3Column2,
+    Row3Column3,
+    Row3Column4,
+    Row3Column5,
+    Row4Column1,
+    Row4Column2,
+    Row4Column3,
+    Row4Column4,
+    Row4Column5,
+    Row5Column1,
+    Row5Column2,
+    Row5Column3,
+    Row5Column4,
+    Row5Column5,
+}
+
+export interface PositionIcon {
+    position: Position;
+    iconText: string;
+    leftPadding: string;
 }
 
 // noinspection DuplicatedCode code is in test as well
 const positionStylesArray = [
-    [Position.TopLeft,        { line: 0, align: "start" }],
-    [Position.TopCenter,      { line: 0, align: "center" }],
-    [Position.TopRight,       { line: 0, align: "end" }],
-    [Position.CenterLeft,     { line: 7, align: "start" }],
-    [Position.Center,         { line: 7, align: "center" }],
-    [Position.CenterRight,    { line: 7, align: "end" }],
-    [Position.BottomLeft,     { line: 16, align: "start" }],
-    [Position.BottomCenter,   { line: 16, align: "center" }],
-    [Position.BottomRight,    { line: 16, align: "end" }],
+    [Position.Row1Column1, { line: 0, align: "start", positionAlign: "center", position: 51 }],
+    [Position.Row1Column2, { line: 0, align: "start", positionAlign: "center", position: 65 }],
+    [Position.Row1Column3, { line: 0, align: "center", positionAlign: "auto", position: "auto"  }],
+    [Position.Row1Column4, { line: 0, align: "end", positionAlign: "center", position: 35 }],
+    [Position.Row1Column5, { line: 0, align: "end", positionAlign: "center", position: 49 }],
+    [Position.Row2Column1, { line: 4, align: "start", positionAlign: "center", position: 51 }],
+    [Position.Row2Column2, { line: 4, align: "start", positionAlign: "center", position: 65 }],
+    [Position.Row2Column3, { line: 4, align: "center", positionAlign: "auto", position: "auto" }],
+    [Position.Row2Column4, { line: 4, align: "end", positionAlign: "center", position: 35 }],
+    [Position.Row2Column5, { line: 4, align: "end", positionAlign: "center", position: 49 }],
+    [Position.Row3Column1, { line: 8, align: "start", positionAlign: "center", position: 51 }],
+    [Position.Row3Column2, { line: 8, align: "start", positionAlign: "center", position: 65 }],
+    [Position.Row3Column3, { line: 8, align: "center", positionAlign: "auto", position: "auto" }],
+    [Position.Row3Column4, { line: 8, align: "end", positionAlign: "center", position: 35 }],
+    [Position.Row3Column5, { line: 8, align: "end", positionAlign: "center", position: 49 }],
+    [Position.Row4Column1, { line: 12, align: "start", positionAlign: "center", position: 51 }],
+    [Position.Row4Column2, { line: 12, align: "start", positionAlign: "center", position: 65 }],
+    [Position.Row4Column3, { line: 12, align: "center", positionAlign: "auto", position: "auto" }],
+    [Position.Row4Column4, { line: 12, align: "end", positionAlign: "center", position: 35 }],
+    [Position.Row4Column5, { line: 12, align: "end", positionAlign: "center", position: 49 }],
+    [Position.Row5Column1, { line: 15, align: "start", positionAlign: "center", position: 51 }],
+    [Position.Row5Column2, { line: 15, align: "start", positionAlign: "center", position: 65 }],
+    [Position.Row5Column3, { line: "auto", align: "center", positionAlign: "auto", position: "auto" }],
+    [Position.Row5Column4, { line: 15, align: "end", positionAlign: "center", position: 35 }],
+    [Position.Row5Column5, { line: 15, align: "end", positionAlign: "center", position: 49 }],
 ];
 export const positionStyles = Immutable.Map<Position, PositionStyle>(positionStylesArray);
 
 // noinspection DuplicatedCode code is in test as well
-const positionIconsArray = [
-    [Position.TopLeft,        "↖"],
-    [Position.TopCenter,      "↑"],
-    [Position.TopRight,       "↗"],
-    [Position.CenterLeft,     "←"],
-    [Position.Center,         "•"],
-    [Position.CenterRight,    "→"],
-    [Position.BottomLeft,     "↙"],
-    [Position.BottomCenter,   "↓"],
-    [Position.BottomRight,    "↘"],
+export const positionIcons = [
+    { position: Position.Row1Column1, iconText: "↖↖", leftPadding: "6px" },
+    { position: Position.Row1Column2, iconText: "↖↑", leftPadding: "9px" },
+    { position: Position.Row1Column3, iconText: "↑↑", leftPadding: "13px" },
+    { position: Position.Row1Column4, iconText: "↑↗", leftPadding: "11px" },
+    { position: Position.Row1Column5, iconText: "↗↗", leftPadding: "6px" },
+    { position: Position.Row2Column1, iconText: "↖←", leftPadding: "6px" },
+    { position: Position.Row2Column2, iconText: "↖", leftPadding: "13px" },
+    { position: Position.Row2Column3, iconText: "↑", leftPadding: "16px" },
+    { position: Position.Row2Column4, iconText: "↗", leftPadding: "13px" },
+    { position: Position.Row2Column5, iconText: "→↗", leftPadding: "6px" },
+    { position: Position.Row3Column1, iconText: "←←", leftPadding: "5px" },
+    { position: Position.Row3Column2, iconText: "←", leftPadding: "12px" },
+    { position: Position.Row3Column3, iconText: "•", leftPadding: "16px" },
+    { position: Position.Row3Column4, iconText: "→", leftPadding: "12px" },
+    { position: Position.Row3Column5, iconText: "→→", leftPadding: "5px" },
+    { position: Position.Row4Column1, iconText: "↙←", leftPadding: "6px" },
+    { position: Position.Row4Column2, iconText: "↙", leftPadding: "13px" },
+    { position: Position.Row4Column3, iconText: "↓", leftPadding: "16px" },
+    { position: Position.Row4Column4, iconText: "↘", leftPadding: "13px" },
+    { position: Position.Row4Column5, iconText: "→↘", leftPadding: "6px" },
+    { position: Position.Row5Column1, iconText: "↙↙", leftPadding: "6px" },
+    { position: Position.Row5Column2, iconText: "↙↓", leftPadding: "9px" },
+    { position: Position.Row5Column3, iconText: "↓↓", leftPadding: "13px" },
+    { position: Position.Row5Column4, iconText: "↓↘", leftPadding: "11px" },
+    { position: Position.Row5Column5, iconText: "↘↘", leftPadding: "6px" },
 ];
-export const positionIcons = Immutable.Map<Position, string>(positionIconsArray);
