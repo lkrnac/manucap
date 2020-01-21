@@ -19,10 +19,8 @@ describe("cueUtils", () => {
             oldCue.vertical = "lr";
             oldCue.id = "someId";
             oldCue.pauseOnExit = true;
-
-            // properties not copied - see TODO comment in cueUtil.ts
+            oldCue.positionAlign = "line-left";
             oldCue.lineAlign = "end";
-            oldCue.positionAlign = "end" as PositionAlignSetting;
 
             // WHEN
             copyNonConstructorProperties(newCue, oldCue);
@@ -42,10 +40,8 @@ describe("cueUtils", () => {
             expect(newCue.vertical).toEqual("lr");
             expect(newCue.id).toEqual("someId");
             expect(newCue.pauseOnExit).toEqual(true);
-
-            // properties not copied - see TODO comment in cueUtil.ts
-            expect(newCue.positionAlign).toEqual("auto");
-            expect(newCue.lineAlign).toEqual("start");
+            expect(newCue.positionAlign).toEqual("line-left");
+            expect(newCue.lineAlign).toEqual("end");
         });
     });
 
