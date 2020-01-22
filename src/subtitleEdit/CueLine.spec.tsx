@@ -26,22 +26,30 @@ describe("CueLine", () => {
                         paddingLeft: "20px", paddingTop: "15px"
                     }}
                     >
-                        <div id="time-start-1" style={{ display: "flex" }} className="sbte-time-editor">
-                            <input
-                                type="text"
-                                value="00:00:00.000"
-                                className="sbte-time-input"
-                                onChange={(): void => {}}
-                            />
-                        </div>
-                        <div id="time-end-1" style={{ display: "flex" }} className="sbte-time-editor">
-                            <input
-                                type="text"
-                                value="00:00:00.000"
-                                className="sbte-time-input"
-                                onChange={(): void => {}}
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            className="sbte-time-input"
+                            style={{
+                                margin: "5px",
+                                width: "110px",
+                                maxWidth: "160px",
+                                padding: "5px"
+                            }}
+                            value="00:00:00.000"
+                            onChange={(): void => {}}
+                        />
+                        <input
+                            type="text"
+                            className="sbte-time-input"
+                            style={{
+                                margin: "5px",
+                                width: "110px",
+                                maxWidth: "160px",
+                                padding: "5px"
+                            }}
+                            value="00:00:00.000"
+                            onChange={(): void => {}}
+                        />
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
                         <CueTextEditor key={1} index={1} cue={cues[0]} />
@@ -72,22 +80,30 @@ describe("CueLine", () => {
                         paddingLeft: "20px", paddingTop: "15px"
                     }}
                     >
-                        <div id="time-start-1" style={{ display: "flex" }} className="sbte-time-editor">
-                            <input
-                                type="text"
-                                value="00:00:01.000"
-                                className="sbte-time-input"
-                                onChange={(): void => {}}
-                            />
-                        </div>
-                        <div id="time-end-1" style={{ display: "flex" }} className="sbte-time-editor">
-                            <input
-                                type="text"
-                                value="00:00:02.000"
-                                className="sbte-time-input"
-                                onChange={(): void => {}}
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            className="sbte-time-input"
+                            style={{
+                                margin: "5px",
+                                width: "110px",
+                                maxWidth: "160px",
+                                padding: "5px"
+                            }}
+                            value="00:00:01.000"
+                            onChange={(): void => {}}
+                        />
+                        <input
+                            type="text"
+                            className="sbte-time-input"
+                            style={{
+                                margin: "5px",
+                                width: "110px",
+                                maxWidth: "160px",
+                                padding: "5px"
+                            }}
+                            value="00:00:02.000"
+                            onChange={(): void => {}}
+                        />
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
                         <CueTextEditor key={1} index={1} cue={cues[1]} />
@@ -117,7 +133,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0 TimeField")
+        actualNode.find("TimeField").at(0)
             .simulate("change", { target: { value: "00:15:00.000", selectionEnd: 12 }});
 
         // THEN
@@ -133,7 +149,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0 TimeField")
+        actualNode.find("TimeField").at(0)
             .simulate("change", { target: { value: "00:00:10.000", selectionEnd: 12 }});
 
         // THEN
@@ -149,7 +165,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-start-0 TimeField")
+        actualNode.find("TimeField").at(0)
             .simulate("change", { target: { value: "00:00:00.865", selectionEnd: 12 }});
 
         // THEN
@@ -165,7 +181,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        actualNode.find("#time-end-0 TimeField")
+        actualNode.find("TimeField").at(1)
             .simulate("change", { target: { value: "00:00:02.220", selectionEnd: 12 }});
 
         // THEN

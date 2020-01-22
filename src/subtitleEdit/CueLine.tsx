@@ -20,14 +20,12 @@ const CueLine = (props: Props): ReactElement => {
             }}
             >
                 <TimeEditor
-                    id={`time-start-${props.index}`}
                     time={props.cue.startTime}
                     onChange={(starTime: number): AppThunk =>
                         dispatch(updateCue(props.index,
                             new VTTCue(starTime, props.cue.endTime, props.cue.text)))}
                 />
                 <TimeEditor
-                    id={`time-end-${props.index}`}
                     time={props.cue.endTime}
                     onChange={(endTime: number): AppThunk =>
                         dispatch(updateCue(props.index,
