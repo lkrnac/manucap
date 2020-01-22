@@ -10,7 +10,7 @@ describe("PositionButton", () => {
         // GIVEN
         const cue = new VTTCue(0, 1, "some text");
         const expectedNode = mount(
-            <div className="dropdown">
+            <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
                 <button
                     aria-haspopup="true"
                     aria-expanded="false"
@@ -35,7 +35,7 @@ describe("PositionButton", () => {
         const cue = new VTTCue(0, 1, "some text");
         // noinspection HtmlUnknownAttribute
         const expectedNode = mount(
-            <div className="show dropdown">
+            <div style={{ marginBottom: "5px", marginRight: "10px" }} className="show dropdown">
                 <button
                     aria-haspopup="true"
                     aria-expanded="true"

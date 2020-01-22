@@ -8,7 +8,7 @@ interface Props {
 }
 
 const PositionButton = (props: Props): ReactElement => (
-    <Dropdown>
+    <Dropdown style={{ marginBottom: "5px", marginRight: "10px" }}>
         <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
             ↓↓ <span className="caret" />
         </Dropdown.Toggle>
