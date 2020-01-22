@@ -64,6 +64,8 @@ export interface PositionIcon {
     leftPadding: string;
 }
 
+const POSITION_STYLES_COUNT = 4;
+
 // noinspection DuplicatedCode code is in test as well
 const positionStylesArray = [
     [Position.Row1Column1, { line: 0, align: "start", positionAlign: "center", position: 51 }],
@@ -122,3 +124,26 @@ export const positionIcons = [
     { position: Position.Row5Column4, iconText: "↓↘", leftPadding: "11px" },
     { position: Position.Row5Column5, iconText: "↘↘", leftPadding: "6px" },
 ];
+
+
+const detectPosition = (cue: VTTCue): Position => {
+    let detectedPosition = Position.Row5Column3;
+    positionStyles.forEach((positionStyle?: PositionStyle, position?: Position): void => {
+        let propertyHits = 0;
+        for (const property in positionStyle) {
+            // noinspection JSUnfilteredForInLoop
+            if (cue[property] === positionStyle[property]){
+                propertyHits++;
+            }
+        }
+        if (propertyHits === POSITION_STYLES_COUNT && position) {
+            detectedPosition = position;
+        }
+    });
+    return detectedPosition;
+};
+
+export const findPositionIcon = ((cue: VTTCue): PositionIcon => {
+    const position = detectPosition(cue);
+    return positionIcons.filter((positionIcon: PositionIcon) => positionIcon.position === position)[0];
+});

@@ -1,5 +1,6 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue type
+import { Dropdown } from "react-bootstrap";
 import { Position } from "./cueUtils";
 import PositionButton from "./PositionButton";
 import React from "react";
@@ -286,4 +287,21 @@ describe("PositionButton", () => {
         // THEN
         expect(changePosition).toBeCalledWith(Position.Row1Column4);
     });
+
+    it("initializes icon on button according to cue styles", () => {
+        // GIVEN
+        const cue = new VTTCue(0, 1, "some text");
+        cue.line = 4;
+        cue.align = "start";
+        cue.positionAlign = "center";
+        cue.position = 65;
+
+        // WHEN
+        const actualNode = mount(<PositionButton cue={cue} changePosition={(): void => {}} />);
+
+
+        // THEN
+        expect(actualNode.find(Dropdown.Toggle).text()).toEqual("↖ ");
+    });
+
 });

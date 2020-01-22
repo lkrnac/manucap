@@ -1,5 +1,12 @@
 import "video.js"; // import VTTCue type
-import { Position, PositionStyle, copyNonConstructorProperties, positionIcons, positionStyles } from "./cueUtils";
+import {
+    Position,
+    PositionStyle,
+    copyNonConstructorProperties,
+    findPositionIcon,
+    positionIcons,
+    positionStyles,
+} from "./cueUtils";
 import each from "jest-each";
 
 describe("cueUtils", () => {
@@ -137,6 +144,113 @@ describe("cueUtils", () => {
             expect(actualPositionIcon.position).toEqual(expectedPosition);
             expect(actualPositionIcon.iconText).toEqual(expectedIconText);
             expect(actualPositionIcon.leftPadding).toEqual(expectedLeftPadding);
+        });
+    });
+
+    describe("findPositionIcon", () => {
+        it("finds icon for Row2Column2 position", () => {
+            // GIVEN
+            const cue = new VTTCue(0, 1, "some text");
+            cue.line = 4;
+            cue.align = "start";
+            cue.positionAlign = "center";
+            cue.position = 65;
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(cue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↖");
+        });
+
+        it("finds icon for Row4Column3 position", () => {
+            // GIVEN
+            const cue = new VTTCue(0, 1, "some text");
+            cue.line = 12;
+            cue.align = "center";
+            cue.positionAlign = "auto";
+            cue.position = "auto";
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(cue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↓");
+        });
+
+        it("finds icon for default position", () => {
+            // GIVEN
+            const cue = new VTTCue(0, 1, "some text");
+            cue.line = "auto";
+            cue.align = "center";
+            cue.positionAlign = "auto";
+            cue.position = "auto";
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(cue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↓↓");
+        });
+
+        it("treats position as default if line parameter is not from positionStyles list", () => {
+            // GIVEN
+            const cue = new VTTCue(0, 1, "some text");
+            cue.line = 16;
+            cue.align = "start";
+            cue.positionAlign = "center";
+            cue.position = 65;
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(cue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↓↓");
+        });
+
+        it("treats position as default if align parameter is not from positionStyles list", () => {
+            // GIVEN
+            const cue = new VTTCue(0, 1, "some text");
+            cue.line = 4;
+            cue.align = "left";
+            cue.positionAlign = "center";
+            cue.position = 65;
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(cue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↓↓");
+        });
+
+        it("treats position as default if positionAlign parameter is not from positionStyles list", () => {
+            // GIVEN
+            const cue = new VTTCue(0, 1, "some text");
+            cue.line = 4;
+            cue.align = "start";
+            cue.positionAlign = "line-left";
+            cue.position = 65;
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(cue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↓↓");
+        });
+
+        it("treats position as default if position parameter is not from positionStyles list", () => {
+            // GIVEN
+            const cue = new VTTCue(0, 1, "some text");
+            cue.line = 4;
+            cue.align = "start";
+            cue.positionAlign = "center";
+            cue.position = 22;
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(cue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↓↓");
         });
     });
 });

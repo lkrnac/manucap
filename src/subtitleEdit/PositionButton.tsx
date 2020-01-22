@@ -1,4 +1,4 @@
-import { Position, PositionIcon, positionIcons } from "./cueUtils";
+import { Position, PositionIcon, findPositionIcon, positionIcons } from "./cueUtils";
 import React, { ReactElement } from "react";
 import { Dropdown } from "react-bootstrap";
 
@@ -10,7 +10,7 @@ interface Props {
 const PositionButton = (props: Props): ReactElement => (
     <Dropdown style={{ marginBottom: "5px", marginRight: "10px" }}>
         <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-            ↓↓ <span className="caret" />
+            {findPositionIcon(props.cue).iconText} <span className="caret" />
         </Dropdown.Toggle>
         <Dropdown.Menu style={{ minWidth: "210px", width: "210px" }}>
             <div style={{ display: "flex", flexFlow: "row wrap" }}>
