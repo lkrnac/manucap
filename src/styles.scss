@@ -50,17 +50,11 @@ $fa-font-path: "../webfonts";
   width: 650px;
 }
 
-.sbte-time-editor {
-    padding: 5px;
-}
-
 .sbte-time-input {
     color: $sbte-main-text-color;
-    width: 110px;
-    max-width: 160px;
     border: 1px solid $input-border-color;
     border-radius: 3px;
-    padding: 5px;
+    font-size: 1rem;
 }
 
 .sbte-time-editor-input {

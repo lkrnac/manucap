@@ -8,19 +8,23 @@ describe("TimeEditor", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
-                <input
-                    type="text"
-                    value="00:00:00.000"
-                    className="sbte-time-input"
-                    onChange={(): void => {}}
-                />
-            </div>
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    margin: "5px",
+                    width: "110px",
+                    maxWidth: "160px",
+                    padding: "5px"
+                }}
+                value="00:00:00.000"
+                onChange={(): void => {}}
+            />
         );
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" onChange={jest.fn()} />
+            <TimeEditor onChange={jest.fn()} />
         );
 
         // THEN
@@ -30,19 +34,23 @@ describe("TimeEditor", () => {
     it("renders 1 second", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
-                <input
-                    type="text"
-                    value="00:00:01.000"
-                    className="sbte-time-input"
-                    onChange={(): void => {}}
-                />
-            </div>
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    margin: "5px",
+                    width: "110px",
+                    maxWidth: "160px",
+                    padding: "5px"
+                }}
+                value="00:00:01.000"
+                onChange={(): void => {}}
+            />
         );
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" time={1} onChange={jest.fn()} />
+            <TimeEditor time={1} onChange={jest.fn()} />
         );
 
         // THEN
@@ -52,19 +60,23 @@ describe("TimeEditor", () => {
     it("renders 5 minutes", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
-                <input
-                    type="text"
-                    value="00:05:00.000"
-                    className="sbte-time-input"
-                    onChange={(): void => {}}
-                />
-            </div>
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    margin: "5px",
+                    width: "110px",
+                    maxWidth: "160px",
+                    padding: "5px"
+                }}
+                value="00:05:00.000"
+                onChange={(): void => {}}
+            />
         );
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" time={300} onChange={jest.fn()} />
+            <TimeEditor time={300} onChange={jest.fn()} />
         );
 
         // THEN
@@ -74,19 +86,23 @@ describe("TimeEditor", () => {
     it("renders 120 minutes 35 seconds and 976 millis", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
-                <input
-                    type="text"
-                    value="02:00:35.976"
-                    className="sbte-time-input"
-                    onChange={(): void => {}}
-                />
-            </div>
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    margin: "5px",
+                    width: "110px",
+                    maxWidth: "160px",
+                    padding: "5px"
+                }}
+                value="02:00:35.976"
+                onChange={(): void => {}}
+            />
         );
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" time={7235.976} onChange={jest.fn()} />
+            <TimeEditor time={7235.976} onChange={jest.fn()} />
         );
 
         // THEN
@@ -96,19 +112,23 @@ describe("TimeEditor", () => {
     it("renders max values", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
-                <input
-                    type="text"
-                    value="99:59:59.999"
-                    className="sbte-time-input"
-                    onChange={(): void => {}}
-                />
-            </div>
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    margin: "5px",
+                    width: "110px",
+                    maxWidth: "160px",
+                    padding: "5px"
+                }}
+                value="99:59:59.999"
+                onChange={(): void => {}}
+            />
         );
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" time={359999.999} onChange={jest.fn()} />
+            <TimeEditor time={359999.999} onChange={jest.fn()} />
         );
 
         // THEN
@@ -118,19 +138,23 @@ describe("TimeEditor", () => {
     it("renders max values for minutes and seconds but not hours and millis", () => {
         // GIVEN
         const expectedNode = mount(
-            <div id="test" style={{ display: "flex" }} className="sbte-time-editor">
-                <input
-                    type="text"
-                    value="01:59:59.025"
-                    className="sbte-time-input"
-                    onChange={(): void => {}}
-                />
-            </div>
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    margin: "5px",
+                    width: "110px",
+                    maxWidth: "160px",
+                    padding: "5px"
+                }}
+                value="01:59:59.025"
+                onChange={(): void => {}}
+            />
         );
 
         // WHEN
         const actualNode = mount(
-            <TimeEditor id="test" time={7199.025} onChange={jest.fn()} />
+            <TimeEditor time={7199.025} onChange={jest.fn()} />
         );
 
         // THEN
@@ -140,21 +164,21 @@ describe("TimeEditor", () => {
     it("inputs ignores non numeric characters", () => {
         // GIVEN
         const actualNode = mount(
-            <TimeEditor id="test" onChange={jest.fn()} />
+            <TimeEditor onChange={jest.fn()} />
         );
 
         // WHEN
-        actualNode.find("#test input").simulate("change", { target: { value: "abc!e@#.$%^" }});
+        actualNode.find("TimeField").simulate("change", { target: { value: "abc!e@#.$%^" }});
 
         // THEN
-        expect(actualNode.find("#test input").props().value).toEqual("00:00:00.000");
+        expect(actualNode.find("TimeField").props().value).toEqual("00:00:00.000");
     });
 
     it("call onChange with correct value", () => {
         // GIVEN
         const onChange = sinon.spy();
         const actualNode = mount(
-            <TimeEditor id="test" onChange={onChange} />
+            <TimeEditor onChange={onChange} />
         );
 
         // WHEN

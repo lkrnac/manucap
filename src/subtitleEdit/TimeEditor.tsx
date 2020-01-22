@@ -6,9 +6,8 @@ import { getTimeFromString, getTimeString } from "../utils/timeUtils";
 import TimeField from "react-advanced-timefield";
 
 interface Props {
-    id: string;
     time?: number;
-    onChange: (time: number) => {};
+    onChange: (time: number) => void;
 }
 
 const TimeEditor = (props: Props): ReactElement => {
@@ -17,15 +16,19 @@ const TimeEditor = (props: Props): ReactElement => {
       props.onChange(time);
     };
     return (
-        <div id={props.id} style={{ display: "flex" }} className="sbte-time-editor">
-            <TimeField
-                className="sbte-time-input"
-                value={getTimeString(props.time || 0)}
-                onChange={handleChange}
-                showSeconds
-                showMillis
-            />
-        </div>
+        <TimeField
+            className="sbte-time-input"
+            style={{
+                margin: "5px",
+                width: "110px",
+                maxWidth: "160px",
+                padding: "5px"
+            }}
+            value={getTimeString(props.time || 0)}
+            onChange={handleChange}
+            showSeconds
+            showMillis
+        />
     );
 };
 
