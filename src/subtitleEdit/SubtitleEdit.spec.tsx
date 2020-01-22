@@ -47,7 +47,7 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", height: "100%" }}>
-                        <div style={{ flex: "1 1 0", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <VideoPlayer
                                 mp4="dummyMp4"
                                 poster="dummyPoster"
@@ -55,7 +55,7 @@ describe("SubtitleEdit", () => {
                             />
                             <Toolbox />
                         </div>
-                        <div style={{ flex: "1 1 0", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
+                        <div style={{ flex: "1 1 60%", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
                             <CueLine index={0} cue={cues[0]} />
                             <CueLine index={1} cue={cues[1]} />
                         </div>

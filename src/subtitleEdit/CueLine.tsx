@@ -24,7 +24,7 @@ const CueLine = (props: Props): ReactElement => {
     return (
         <div className="sbte-cue-line" style={{ display: "flex" }}>
             <div style={{
-                flex: "1 1 25%",
+                flex: "1 1 300px",
                 display: "flex",
                 flexDirection: "column",
                 paddingLeft: "20px",
@@ -48,10 +48,10 @@ const CueLine = (props: Props): ReactElement => {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <button
-                        className="btn btn-outline-secondary"
+                        className="dropdown-toggle btn btn-outline-secondary"
                         style={{ marginBottom: "5px" }}
                     >
-                        Dialogue
+                        Audio Descriptions <span className="caret" />
                     </button>
                     <PositionButton
                         cue={props.cue}

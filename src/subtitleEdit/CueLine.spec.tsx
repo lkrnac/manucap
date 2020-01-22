@@ -24,7 +24,7 @@ describe("CueLine", () => {
             <Provider store={testingStore}>
                 <div className="sbte-cue-line" style={{ display: "flex" }}>
                     <div style={{
-                        flex: "1 1 25%",
+                        flex: "1 1 300px",
                         display: "flex",
                         flexDirection: "column",
                         paddingLeft: "20px",
@@ -100,10 +100,10 @@ describe("CueLine", () => {
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
                             <button
-                                className="btn btn-outline-secondary"
+                                className="dropdown-toggle btn btn-outline-secondary"
                                 style={{ marginBottom: "5px" }}
                             >
-                                Dialogue
+                                Audio Descriptions <span className="caret" />
                             </button>
                             <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
                                 <button
@@ -143,7 +143,7 @@ describe("CueLine", () => {
             <Provider store={testingStore}>
                 <div className="sbte-cue-line" style={{ display: "flex" }}>
                     <div style={{
-                        flex: "1 1 25%",
+                        flex: "1 1 300px",
                         display: "flex",
                         flexDirection: "column",
                         paddingLeft: "20px",
@@ -219,10 +219,10 @@ describe("CueLine", () => {
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
                             <button
-                                className="btn btn-outline-secondary"
+                                className="dropdown-toggle btn btn-outline-secondary"
                                 style={{ marginBottom: "5px" }}
                             >
-                                Dialogue
+                                Audio Descriptions <span className="caret" />
                             </button>
                             <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
                                 <button
