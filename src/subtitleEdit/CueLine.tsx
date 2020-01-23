@@ -2,11 +2,11 @@ import { Position, copyNonConstructorProperties, positionStyles } from "./cueUti
 import React, { Dispatch, ReactElement } from "react";
 import { AppThunk } from "../reducers/subtitleEditReducers";
 import CueTextEditor from "./CueTextEditor";
+import LineCategoryButton from "./LineCategoryButton";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { updateCue } from "../player/trackSlices";
 import { useDispatch } from "react-redux";
-import LineCategoryButton from "./LineCategoryButton";
 
 interface Props {
     index: number;
