@@ -96,4 +96,29 @@ describe("LineCategoryButton", () => {
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
+
+    it("calls onChange function", () => {
+        // GIVEN
+        const onChange = jest.fn();
+
+        // WHEN
+        const actualNode = mount(
+            <LineCategoryButton onChange={onChange} />
+        );
+        actualNode.find("button").simulate("click");
+        actualNode.find("a").at(0).simulate("click");
+        actualNode.find("button").simulate("click");
+        actualNode.find("a").at(1).simulate("click");
+        actualNode.find("button").simulate("click");
+        actualNode.find("a").at(2).simulate("click");
+        actualNode.find("button").simulate("click");
+        actualNode.find("a").at(3).simulate("click");
+
+        // THEN
+        expect(onChange).toBeCalledTimes(4);
+        expect(onChange).toHaveBeenNthCalledWith(1, "DIALOGUE");
+        expect(onChange).toHaveBeenNthCalledWith(2, "ONSCREEN_TEXT");
+        expect(onChange).toHaveBeenNthCalledWith(3, "AUDIO_DESCRIPTION");
+        expect(onChange).toHaveBeenLastCalledWith("LYRICS");
+    });
 });
