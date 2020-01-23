@@ -5,6 +5,7 @@ import React from "react";
 import { ReactElement } from "react";
 import { Track } from "./model";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
+import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -29,6 +30,12 @@ export interface Props {
     poster: string;
     tracks: Track[];
 }
+
+const updateCue = (videoJsTrack: TextTrack) => (cue: VTTCue, index: number): void => {
+    videoJsTrack.addCue(cue);
+    const addedCue = videoJsTrack.cues[index] as VTTCue;
+    copyNonConstructorProperties(addedCue, cue);
+};
 
 export default class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
@@ -56,7 +63,7 @@ export default class VideoPlayer extends React.Component<Props> {
             const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
             const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
             if (vtmsTrack.currentVersion) {
-                vtmsTrack.currentVersion.cues.forEach(((cue: VTTCue) => videoJsTrack.addCue(cue)));
+                vtmsTrack.currentVersion.cues.forEach(updateCue(videoJsTrack));
             }
         });
 
@@ -72,7 +79,7 @@ export default class VideoPlayer extends React.Component<Props> {
             const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
             const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
             if (vtmsTrack.currentVersion) {
-                vtmsTrack.currentVersion.cues.forEach(((cue: VTTCue) => videoJsTrack.addCue(cue)));
+                vtmsTrack.currentVersion.cues.forEach(updateCue(videoJsTrack));
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }

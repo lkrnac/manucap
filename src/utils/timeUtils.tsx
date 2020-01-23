@@ -1,27 +1,36 @@
-export const padWithZeros = (value: number, length: number): string => {
-    return value.toString().padStart(length, "0");
-};
-
-export const removeNonNumeric = (value: string): string => {
-    return value.replace(/\D/g, "");
-};
-
 export interface TimeInUnits {
+    hours: number;
     minutes: number;
-    minutesInSeconds: number;
     seconds: number;
     millis: number;
 }
 
 export const getTimeInUnits = (timeInSeconds: number): TimeInUnits => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const minutesInSeconds = minutes * 60;
-    const seconds = Math.floor(timeInSeconds - minutesInSeconds);
-    const millis = Math.round((timeInSeconds - seconds - minutesInSeconds) * 1000);
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor(timeInSeconds % 3600 / 60);
+    const seconds = Math.floor(timeInSeconds % 3600 % 60);
+    const time = timeInSeconds.toFixed(3);
+    const millis = time.slice(-3);
     return {
+        hours: hours,
         minutes: minutes,
-        minutesInSeconds: minutesInSeconds,
         seconds: seconds,
-        millis: millis
+        millis: Number(millis)
     } as TimeInUnits;
+};
+
+const pad = (value: number, size: number): string => {
+    return ("000" + value).slice(size * -1);
+};
+
+export const getTimeString = (timeInSeconds: number): string => {
+    const timeInUnits = getTimeInUnits(timeInSeconds);
+    return pad(timeInUnits.hours, 2) + ":" + pad(timeInUnits.minutes, 2) + ":"
+        + pad(timeInUnits.seconds, 2) + "." + pad(timeInUnits.millis, 3);
+};
+
+export const getTimeFromString = (timeString: string): number => {
+    const [firstPart, millis] = String(timeString).split(".");
+    const [hours, minutes, seconds] = firstPart.split(":");
+    return (Number(hours) * 3600) + (Number(minutes) * 60) + Number(seconds) + (Number(millis) / 1000);
 };

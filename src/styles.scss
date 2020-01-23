@@ -28,13 +28,11 @@ $fa-font-path: "../webfonts";
 // ##############################
 // Subtitle Edit visuals
 // ##############################
+
+// ------ Generic -------
+
 .sbte-subtitle-edit {
   font-family: Roboto, sans-serif;
-}
-
-.sbte-cue-editor {
-  background-color: white;
-  margin-bottom: 10px;
 }
 
 .sbte-left-border {
@@ -45,13 +43,17 @@ $fa-font-path: "../webfonts";
     border-bottom: 2px solid $border-color;
 }
 
+// ----- Modal ------
+
 .sbte-medium-modal {
   max-width: 100%;
   width: 650px;
 }
 
-.sbte-time-editor {
-    max-width: 160px;
+// ------ Cue -------
+
+.sbte-cue-editor {
+  background-color: white;
 }
 
 .sbte-time-editor-input {
@@ -60,14 +62,24 @@ $fa-font-path: "../webfonts";
     padding: 5px;
 }
 
-.sbte-cue-line {
-    border: 2px solid $border-color;
-    background-color: white;
-    border-radius: 5px;
-    margin: 5px;
+.sbte-time-input {
+    color: $sbte-main-text-color;
+    border: 1px solid $input-border-color;
+    font-size: 1rem;
 }
 
-// Toolbox
+.sbte-cue-line {
+    border: 0 solid $border-color;
+    background-color: white;
+    margin-bottom: 5px;
+}
+
+.sbte-position-button {
+  color: $sbte-main-text-color;
+}
+
+// ------ Toolbox --------
+
 .sbte-form-control {
   color: $sbte-main-text-color;
   border-radius: 0;

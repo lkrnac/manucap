@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
+import { copyNonConstructorProperties } from "./cueUtils";
 import { updateCue } from "../player/trackSlices";
 import { updateEditorState } from "./editorStatesSlice";
 
@@ -37,7 +38,7 @@ const CueTextEditor = (props: Props): ReactElement => {
         () => {
             dispatch(updateEditorState(props.index, editorState));
         },
-        // Following suppressThis is done in purpose, because we want to initialize state only for first render
+        // ESLint suppress: because we want to initialize state only for first render
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [ dispatch, props.index ]
     );
@@ -46,14 +47,19 @@ const CueTextEditor = (props: Props): ReactElement => {
     useEffect(
         () => {
             const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
-            dispatch(updateCue(props.index, new VTTCue(props.cue.startTime, props.cue.endTime, text)));
+            const vttCue = new VTTCue(props.cue.startTime, props.cue.endTime, text);
+            copyNonConstructorProperties(vttCue, props.cue);
+            dispatch(updateCue(props.index, vttCue));
         },
+        // ESLint suppress: copyNonConstructorProperties doesn't create side effect, just copies props from old cue.
+        // If props.cue would be included, it creates endless FLUX loop
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [ currentContent, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
     );
     return (
         <div className="sbte-cue-editor">
             <div
-                className="sbte-left-border"
+                className="sbte-bottom-border"
                 style={{ display: "flex", justifyContent: "flex-end", padding: "5px 10px 5px 10px" }}
             >
                 <DeleteCueLineButton cueIndex={props.index} />
@@ -69,10 +75,7 @@ const CueTextEditor = (props: Props): ReactElement => {
                     spellCheck
                 />
             </div>
-            <div
-                className="sbte-left-border"
-                style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}>
                 <div>
                     <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
                     <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
