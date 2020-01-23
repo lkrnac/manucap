@@ -81,8 +81,10 @@ describe("trackSlices", () => {
             testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert")));
 
             // THEN
-            expect(testingStore.getState().editingTrack.currentVersion.cues[1]).toEqual(new VTTCue(0.5, 1, "Dummy Cue Insert"));
-            expect(testingStore.getState().editingTrack.currentVersion.cues[2]).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().editingTrack.currentVersion.cues[1])
+                .toEqual(new VTTCue(0.5, 1, "Dummy Cue Insert"));
+            expect(testingStore.getState().editingTrack.currentVersion.cues[2])
+                .toEqual(new VTTCue(1, 2, "Caption Line 2"));
         });
     });
 
@@ -122,8 +124,10 @@ describe("trackSlices", () => {
             testingStore.dispatch(deleteCue(   1));
 
             // THEN
-            expect(testingStore.getState().editingTrack.currentVersion.cues[0]).toEqual(new VTTCue(0, 1, "Caption Line 1"));
-            expect(testingStore.getState().editingTrack.currentVersion.cues[1]).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().editingTrack.currentVersion.cues[0])
+                .toEqual(new VTTCue(0, 1, "Caption Line 1"));
+            expect(testingStore.getState().editingTrack.currentVersion.cues[1])
+                .toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().editingTrack.currentVersion.cues.length).toEqual(2);
         });
 
