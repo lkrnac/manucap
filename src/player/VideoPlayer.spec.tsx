@@ -4,8 +4,11 @@ import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
 import { Track } from "./model";
 import VideoPlayer from "./VideoPlayer";
+import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+
+jest.mock("../subtitleEdit/cueUtils");
 
 interface FakeTrack {
     language: string;
@@ -76,29 +79,31 @@ describe("VideoPlayer", () => {
 
     it("initializes tracks content", () => {
         // GIVEN
+        const captionCues = [
+            new VTTCue(0, 1, "Caption Line 1"),
+            new VTTCue(1, 2, "Caption Line 2"),
+        ];
+        const translationCues = [
+            new VTTCue(0, 1, "Translation Line 1"),
+            new VTTCue(1, 2, "Translation Line 2"),
+        ];
         const initialTestingTracks = [
             {
                 type: "CAPTION",
                 language: { id: "en-CA" },
                 default: true,
-                currentVersion: { cues: [
-                        new VTTCue(0, 1, "Caption Line 1"),
-                        new VTTCue(1, 2, "Caption Line 2"),
-                    ]}
+                currentVersion: { cues: captionCues }
             },
             {
                 type: "TRANSLATION",
                 language: { id: "es-ES" },
                 default: false,
-                currentVersion: { cues: [
-                        new VTTCue(0, 1, "Translation Line 1"),
-                        new VTTCue(1, 2, "Translation Line 2"),
-                    ]}
+                currentVersion: { cues: translationCues }
             }
         ] as Track[];
         const textTracks = [
-            { language: "en-CA", addCue: jest.fn() },
-            { language: "es-ES", addCue: jest.fn() }
+            { language: "en-CA", addCue: jest.fn(), cues: captionCues },
+            { language: "es-ES", addCue: jest.fn(), cues: translationCues }
         ];
         const actualNode = mount(
             <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
@@ -114,5 +119,35 @@ describe("VideoPlayer", () => {
         expect(textTracks[0].addCue).nthCalledWith(2, new VTTCue(1, 2, "Caption Line 2"));
         expect(textTracks[1].addCue).nthCalledWith(1, new VTTCue(0, 1, "Translation Line 1"));
         expect(textTracks[1].addCue).nthCalledWith(2, new VTTCue(1, 2, "Translation Line 2"));
+    });
+
+    it("maintains cue styles when tracks are initialized", () => {
+        // GIVEN
+        // @ts-ignore
+        copyNonConstructorProperties.mockImplementationOnce(() => jest.fn());
+        const vttCue = new VTTCue(0, 1, "Caption Line 1");
+        vttCue.align = "start";
+        vttCue.position = 60;
+        const initialTestingTracks = [
+            {
+                type: "CAPTION",
+                language: { id: "en-CA" },
+                default: true,
+                currentVersion: { cues: [vttCue]}
+            }
+        ] as Track[];
+        const textTracks = [
+            { language: "en-CA", addCue: jest.fn(), cues: [ new VTTCue(0, 1, "Caption Line 1") ]},
+        ];
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
+        );
+        const component = actualNode.instance() as VideoPlayer;
+
+        // WHEN
+        dispatchEventForTrack(component.player, textTracks[0]);
+
+        // THEN
+        expect(copyNonConstructorProperties).toBeCalledWith(new VTTCue(0, 1, "Caption Line 1"), vttCue);
     });
 });

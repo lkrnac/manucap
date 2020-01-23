@@ -1,6 +1,9 @@
 import { ContentState, EditorState } from "draft-js";
+import deepFreeze from "deep-freeze";
 import testingStore from "../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
+
+deepFreeze(testingStore.getState());
 
 describe("editorStatesSlice", () => {
     it("updates editor state for ID 1", () => {
