@@ -13,7 +13,7 @@ describe("LineCategoryButton", () => {
                     aria-expanded="false"
                     id="cue-line-category"
                     type="button"
-                    className="sbte-cue-line-category dropdown-toggle btn btn-outline-secondary"
+                    className="dropdown-toggle btn btn-outline-secondary"
                 >
                     Dialogue
                 </button>
@@ -38,7 +38,7 @@ describe("LineCategoryButton", () => {
                     aria-expanded="true"
                     id="cue-line-category"
                     type="button"
-                    className="sbte-cue-line-category dropdown-toggle btn btn-outline-secondary"
+                    className="dropdown-toggle btn btn-outline-secondary"
                 >
                     Dialogue
                 </button>

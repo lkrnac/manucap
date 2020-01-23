@@ -18,7 +18,7 @@ interface Props {
 const LineCategoryButton = (props: Props): ReactElement => {
     return (
         <Dropdown>
-            <Dropdown.Toggle id="cue-line-category" variant="outline-secondary" className="sbte-cue-line-category">
+            <Dropdown.Toggle id="cue-line-category" variant="outline-secondary">
                 {dialogueTypeToPrettyName[props.category || "DIALOGUE"]}
             </Dropdown.Toggle>
 
