@@ -37,7 +37,7 @@ const calculateTime = (time: number, newMillisValue: string): number => {
 interface Props {
     id: string;
     time: number;
-    onChange: (time: number) => {};
+    onChange: (time: number) => void;
 }
 
 const TimeEditorMillis = (props: Props): ReactElement => {

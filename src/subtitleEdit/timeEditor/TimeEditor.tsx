@@ -8,7 +8,7 @@ import TimeEditorSeconds from "./TimeEditorSeconds";
 interface Props {
     id: string;
     time?: number;
-    onChange: (time: number) => {};
+    onChange: (time: number) => void;
 }
 
 const TimeEditor = (props: Props): ReactElement => {
