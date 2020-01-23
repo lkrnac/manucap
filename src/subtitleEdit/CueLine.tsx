@@ -3,7 +3,7 @@ import React, { Dispatch, ReactElement } from "react";
 import { AppThunk } from "../reducers/subtitleEditReducers";
 import CueTextEditor from "./CueTextEditor";
 import PositionButton from "./PositionButton";
-import TimeEditor from "./timeEditor/TimeEditor";
+import TimeEditor from "./TimeEditor";
 import { updateCue } from "../player/trackSlices";
 import { useDispatch } from "react-redux";
 
@@ -32,20 +32,16 @@ const CueLine = (props: Props): ReactElement => {
                 justifyContent: "space-between"
             }}
             >
-                <div>
-                    <TimeEditor
-                        id={`time-start-${props.index}`}
-                        time={props.cue.startTime}
-                        onChange={(starTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, starTime, props.cue.endTime)}
-                    />
-                    <TimeEditor
-                        id={`time-end-${props.index}`}
-                        time={props.cue.endTime}
-                        onChange={(endTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, props.cue.startTime, endTime)}
-                    />
-                </div>
+                <TimeEditor
+                    time={props.cue.startTime}
+                    onChange={(starTime: number): void =>
+                        updateCueAndCopyProperties(dispatch, props, starTime, props.cue.endTime)}
+                />
+                <TimeEditor
+                    time={props.cue.endTime}
+                    onChange={(endTime: number): void =>
+                        updateCueAndCopyProperties(dispatch, props, props.cue.startTime, endTime)}
+                />
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <button
                         className="dropdown-toggle btn btn-outline-secondary"
