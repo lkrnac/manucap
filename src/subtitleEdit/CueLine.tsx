@@ -6,6 +6,7 @@ import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { updateCue } from "../player/trackSlices";
 import { useDispatch } from "react-redux";
+import LineCategoryButton from "./LineCategoryButton";
 
 interface Props {
     index: number;
@@ -43,12 +44,8 @@ const CueLine = (props: Props): ReactElement => {
                         updateCueAndCopyProperties(dispatch, props, props.cue.startTime, endTime)}
                 />
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <button
-                        className="dropdown-toggle btn btn-outline-secondary"
-                        style={{ marginBottom: "5px" }}
-                    >
-                        Audio Descriptions <span className="caret" />
-                    </button>
+                    {/* TODO: pass category value and implement onchange */}
+                    <LineCategoryButton onChange={(): void => {}} />
                     <PositionButton
                         cue={props.cue}
                         changePosition={(position: Position): void => {

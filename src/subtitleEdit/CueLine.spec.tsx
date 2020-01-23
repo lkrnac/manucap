@@ -57,12 +57,17 @@ describe("CueLine", () => {
                             onChange={(): void => {}}
                         />
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
-                            <button
-                                className="dropdown-toggle btn btn-outline-secondary"
-                                style={{ marginBottom: "5px" }}
-                            >
-                                Audio Descriptions <span className="caret" />
-                            </button>
+                            <div className="dropdown">
+                                <button
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    id="cue-line-category"
+                                    type="button"
+                                    className="dropdown-toggle btn btn-outline-secondary"
+                                >
+                                    Dialogue
+                                </button>
+                            </div>
                             <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
                                 <button
                                     aria-haspopup="true"
@@ -134,12 +139,17 @@ describe("CueLine", () => {
                             onChange={(): void => {}}
                         />
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
-                            <button
-                                className="dropdown-toggle btn btn-outline-secondary"
-                                style={{ marginBottom: "5px" }}
-                            >
-                                Audio Descriptions <span className="caret" />
-                            </button>
+                            <div className="dropdown">
+                                <button
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    id="cue-line-category"
+                                    type="button"
+                                    className="dropdown-toggle btn btn-outline-secondary"
+                                >
+                                    Dialogue
+                                </button>
+                            </div>
                             <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
                                 <button
                                     aria-haspopup="true"
