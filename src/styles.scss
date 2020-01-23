@@ -74,6 +74,11 @@ $fa-font-path: "../webfonts";
     margin-bottom: 5px;
 }
 
+.sbte-cue-line-category {
+    color: $sbte-main-text-color;
+    padding: .5rem 1.5rem;
+}
+
 .sbte-position-button {
   color: $sbte-main-text-color;
 }
@@ -94,9 +99,3 @@ $fa-font-path: "../webfonts";
   border-radius: 0;
   border: 0;
 }
-
-.sbte-cue-line-category {
-    color: $sbte-main-text-color;
-    padding: .5rem 1.5rem;
-}
-
