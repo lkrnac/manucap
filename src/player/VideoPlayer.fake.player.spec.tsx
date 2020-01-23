@@ -4,11 +4,14 @@ import * as simulant from "simulant";
 import { Track, TrackVersion } from "./model";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
+import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
 import { mount } from "enzyme";
 import { simulateComponentDidUpdate } from "../testUtils/testUtils";
 import videojs from "video.js";
 
 jest.mock("video.js");
+jest.mock("../subtitleEdit/cueUtils");
+
 const O_CHAR = 79;
 const LEFT = 37;
 const RIGHT = 39;
@@ -163,10 +166,8 @@ describe("VideoPlayer tested with fake player", () => {
 
     it("update tracks content", () => {
         // GIVEN
-        const captionCues = initialTestingTracks[0].currentVersion ? initialTestingTracks[0].currentVersion.cues : [];
-        const translationCues = initialTestingTracks[1].currentVersion
-            ? initialTestingTracks[1].currentVersion.cues
-            : [];
+        const captionCues = [new VTTCue(0, 1, "Caption Line 1"), new VTTCue(1, 2, "Caption Line 2")];
+        const translationCues = [new VTTCue(0, 1, "Translation Line 1"), new VTTCue(1, 2, "Translation Line 2")];
         const textTracks = [
             {
                 language: "en-US",
@@ -223,5 +224,49 @@ describe("VideoPlayer tested with fake player", () => {
         expect(textTracks[1].removeCue).nthCalledWith(2, new VTTCue(0, 1, "Translation Line 1"));
         expect(textTracks[1].addCue).toBeCalledWith(new VTTCue(0, 1, "Updated Translation"));
         expect(textTracks[1].dispatchEvent).toBeCalledWith(new Event("cuechange"));
+    });
+
+    it("maintains cue styles when cue is updated", () => {
+        // GIVEN
+        // @ts-ignore We are mocking function with jest
+        copyNonConstructorProperties.mockImplementationOnce(() => jest.fn());
+        const textTracks = [
+            {
+                language: "en-US",
+                addCue: jest.fn(),
+                removeCue: jest.fn(),
+                length: 1,
+                cues: [new VTTCue(0, 1, "Caption Line 1")],
+                dispatchEvent: jest.fn()
+            }
+        ];
+        textTracks["addEventListener"] = jest.fn();
+        const updatedCue = new VTTCue(0, 1, "Updated Caption");
+        updatedCue.position = 60;
+        updatedCue.align = "start";
+        const tracks =  [
+            {
+                type: "CAPTION",
+                language: { id: "en-US" },
+                default: true,
+                currentVersion: { cues: [updatedCue]}
+            }
+        ];
+
+        const playerMock = {
+            textTracks: (): FakeTextTrack[] => textTracks
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
+        );
+
+        // WHEN
+        simulateComponentDidUpdate(actualNode, { tracks });
+
+        // THEN
+        expect(copyNonConstructorProperties).toBeCalledWith(new VTTCue(0, 1, "Caption Line 1"), updatedCue);
     });
 });
