@@ -18,12 +18,6 @@ const TimeEditor = (props: Props): ReactElement => {
     return (
         <TimeField
             className="sbte-time-input"
-            style={{
-                margin: "5px",
-                width: "130px",
-                maxWidth: "200px",
-                padding: "5px"
-            }}
             value={getTimeString(props.time || 0)}
             onChange={handleChange}
             showSeconds

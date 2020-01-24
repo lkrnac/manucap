@@ -73,9 +73,12 @@ describe("SubtitleEdit", () => {
                                 <CueLine index={1} cue={cues[1]} />
                             </div>
                             <div style={{ marginTop: "10px" }}>
-                                <button className="btn btn-primary" style={{ marginTop: "10px", marginBottom: "10px" }}>
+                                <button className="footer-btn">
                                     View All Tracks
                                 </button>
+                                <buttons className="footer-btn float-right mr-3">
+                                    Complete
+                                </buttons>
                             </div>
                         </div>
                     </div>

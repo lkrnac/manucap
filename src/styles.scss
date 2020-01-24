@@ -60,6 +60,14 @@ $fa-font-path: "../webfonts";
     color: $sbte-main-text-color;
     border: 1px solid $input-border-color;
     font-size: 1.2rem;
+    width: 150px;
+    padding: 5px;
+    text-align: center;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 .sbte-cue-line {
@@ -92,4 +100,12 @@ $fa-font-path: "../webfonts";
 .sbte-toolbox .card {
   border-radius: 0;
   border: 0;
+}
+
+// -----------Buttons--------
+.footer-btn {
+    @extend .btn;
+    @extend .btn-primary;
+    marginTop: "10px";
+    marginBottom: "10px"
 }
