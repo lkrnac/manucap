@@ -1,6 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import LineCategoryButton from "./LineCategoryButton";
 import React from "react";
+import each from "jest-each";
 import { mount } from "enzyme";
 
 describe("LineCategoryButton", () => {
@@ -97,28 +98,29 @@ describe("LineCategoryButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("calls onChange function", () => {
+    describe("LineCategory options", () => {
         // GIVEN
         const onChange = jest.fn();
 
-        // WHEN
-        const actualNode = mount(
-            <LineCategoryButton onChange={onChange} />
-        );
-        actualNode.find("button").simulate("click");
-        actualNode.find("a").at(0).simulate("click");
-        actualNode.find("button").simulate("click");
-        actualNode.find("a").at(1).simulate("click");
-        actualNode.find("button").simulate("click");
-        actualNode.find("a").at(2).simulate("click");
-        actualNode.find("button").simulate("click");
-        actualNode.find("a").at(3).simulate("click");
+        each([
+            [0, "DIALOGUE"],
+            [1, "ONSCREEN_TEXT"],
+            [2, "AUDIO_DESCRIPTION"],
+            [3, "LYRICS"],
+        ])
+            .it("call onChange with correct value", (
+                index: number,
+                expectedValue: string
+            ) => {
+                // WHEN
+                const actualNode = mount(
+                    <LineCategoryButton onChange={onChange} />
+                );
+                actualNode.find("button").simulate("click");
+                actualNode.find("a").at(index).simulate("click");
 
-        // THEN
-        expect(onChange).toBeCalledTimes(4);
-        expect(onChange).toHaveBeenNthCalledWith(1, "DIALOGUE");
-        expect(onChange).toHaveBeenNthCalledWith(2, "ONSCREEN_TEXT");
-        expect(onChange).toHaveBeenNthCalledWith(3, "AUDIO_DESCRIPTION");
-        expect(onChange).toHaveBeenLastCalledWith("LYRICS");
+                // THEN
+                expect(onChange).toHaveBeenCalledWith(expectedValue);
+            });
     });
 });
