@@ -13,10 +13,15 @@ import { reset } from "./editorStatesSlice";
 let testingStore = createTestingStore();
 
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
-    <div className="sbte-cue-editor">
+    <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div
             className="sbte-bottom-border"
-            style={{ display: "flex", justifyContent: "flex-end", padding: "5px 10px 5px 10px" }}
+            style={{
+                flexBasis: "25%",
+                display: "flex",
+                justifyContent: "flex-end",
+                padding: "5px 10px 5px 10px"
+            }}
         >
             <button className="btn btn-outline-secondary sbte-delete-cue-button">
                 <i className="fas fa-trash-alt" />
@@ -24,11 +29,23 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
         </div>
         <div
             className="sbte-form-control sbte-bottom-border"
-            style={{ height: "4em", paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}
+            style={{
+                flexBasis: "50%",
+                paddingLeft: "10px",
+                paddingTop: "5px",
+                paddingBottom: "5px"
+            }}
         >
             <Editor editorState={editorState} onChange={jest.fn} spellCheck />
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}>
+        <div
+            style={{
+                flexBasis: "25%",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "5px 10px 5px 10px"
+            }}
+        >
             <div>
                 <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
                 <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>

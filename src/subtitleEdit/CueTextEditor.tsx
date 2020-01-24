@@ -57,16 +57,26 @@ const CueTextEditor = (props: Props): ReactElement => {
         [ currentContent, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
     );
     return (
-        <div className="sbte-cue-editor">
+        <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div
                 className="sbte-bottom-border"
-                style={{ display: "flex", justifyContent: "flex-end", padding: "5px 10px 5px 10px" }}
+                style={{
+                    flexBasis: "25%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    padding: "5px 10px 5px 10px"
+                }}
             >
                 <DeleteCueLineButton cueIndex={props.index} />
             </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
-                style={{ height: "4em", paddingLeft: "10px", paddingTop: "5px", paddingBottom: "5px" }}
+                style={{
+                    flexBasis: "50%",
+                    paddingLeft: "10px",
+                    paddingTop: "5px",
+                    paddingBottom: "5px"
+                }}
             >
                 <Editor
                     editorState={editorState}
@@ -75,7 +85,14 @@ const CueTextEditor = (props: Props): ReactElement => {
                     spellCheck
                 />
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 10px 5px 10px" }}>
+            <div
+                style={{
+                    flexBasis: "25%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "5px 10px 5px 10px"
+                }}
+            >
                 <div>
                     <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
                     <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />

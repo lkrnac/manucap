@@ -32,30 +32,37 @@ describe("CueLine", () => {
                         justifyContent: "space-between"
                     }}
                     >
-                        <input
-                            type="text"
-                            className="sbte-time-input"
-                            style={{
-                                margin: "5px",
-                                width: "110px",
-                                maxWidth: "160px",
-                                padding: "5px"
-                            }}
-                            value="00:00:00.000"
-                            onChange={(): void => {}}
-                        />
-                        <input
-                            type="text"
-                            className="sbte-time-input"
-                            style={{
-                                margin: "5px",
-                                width: "110px",
-                                maxWidth: "160px",
-                                padding: "5px"
-                            }}
-                            value="00:00:00.000"
-                            onChange={(): void => {}}
-                        />
+                        <div style={{
+                            display: "flex",
+                            flexDirection:"column",
+                            paddingBottom: "15px"
+                        }}
+                        >
+                            <input
+                                type="text"
+                                className="sbte-time-input"
+                                style={{
+                                    margin: "5px",
+                                    width: "110px",
+                                    maxWidth: "160px",
+                                    padding: "5px"
+                                }}
+                                value="00:00:00.000"
+                                onChange={(): void => {}}
+                            />
+                            <input
+                                type="text"
+                                className="sbte-time-input"
+                                style={{
+                                    margin: "5px",
+                                    width: "110px",
+                                    maxWidth: "160px",
+                                    padding: "5px"
+                                }}
+                                value="00:00:00.000"
+                                onChange={(): void => {}}
+                            />
+                        </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
                             <div className="dropdown">
                                 <button
@@ -114,30 +121,37 @@ describe("CueLine", () => {
                         justifyContent: "space-between"
                     }}
                     >
-                        <input
-                            type="text"
-                            className="sbte-time-input"
-                            style={{
-                                margin: "5px",
-                                width: "110px",
-                                maxWidth: "160px",
-                                padding: "5px"
-                            }}
-                            value="00:00:01.000"
-                            onChange={(): void => {}}
-                        />
-                        <input
-                            type="text"
-                            className="sbte-time-input"
-                            style={{
-                                margin: "5px",
-                                width: "110px",
-                                maxWidth: "160px",
-                                padding: "5px"
-                            }}
-                            value="00:00:02.000"
-                            onChange={(): void => {}}
-                        />
+                        <div style={{
+                            display: "flex",
+                            flexDirection:"column",
+                            paddingBottom: "15px"
+                        }}
+                        >
+                            <input
+                                type="text"
+                                className="sbte-time-input"
+                                style={{
+                                    margin: "5px",
+                                    width: "130px",
+                                    maxWidth: "200px",
+                                    padding: "5px"
+                                }}
+                                value="00:00:01.000"
+                                onChange={(): void => {}}
+                            />
+                            <input
+                                type="text"
+                                className="sbte-time-input"
+                                style={{
+                                    margin: "5px",
+                                    width: "130px",
+                                    maxWidth: "200px",
+                                    padding: "5px"
+                                }}
+                                value="00:00:02.000"
+                                onChange={(): void => {}}
+                            />
+                        </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
                             <div className="dropdown">
                                 <button
