@@ -2,6 +2,7 @@ import { Position, copyNonConstructorProperties, positionStyles } from "./cueUti
 import React, { Dispatch, ReactElement } from "react";
 import { AppThunk } from "../reducers/subtitleEditReducers";
 import CueTextEditor from "./CueTextEditor";
+import LineCategoryButton from "./LineCategoryButton";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { updateCue } from "../player/trackSlices";
@@ -32,23 +33,26 @@ const CueLine = (props: Props): ReactElement => {
                 justifyContent: "space-between"
             }}
             >
-                <TimeEditor
-                    time={props.cue.startTime}
-                    onChange={(starTime: number): void =>
-                        updateCueAndCopyProperties(dispatch, props, starTime, props.cue.endTime)}
-                />
-                <TimeEditor
-                    time={props.cue.endTime}
-                    onChange={(endTime: number): void =>
-                        updateCueAndCopyProperties(dispatch, props, props.cue.startTime, endTime)}
-                />
+                <div style={{
+                    display: "flex",
+                    flexDirection:"column",
+                    paddingBottom: "15px"
+                }}
+                >
+                    <TimeEditor
+                        time={props.cue.startTime}
+                        onChange={(starTime: number): void =>
+                            updateCueAndCopyProperties(dispatch, props, starTime, props.cue.endTime)}
+                    />
+                    <TimeEditor
+                        time={props.cue.endTime}
+                        onChange={(endTime: number): void =>
+                            updateCueAndCopyProperties(dispatch, props, props.cue.startTime, endTime)}
+                    />
+                </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <button
-                        className="dropdown-toggle btn btn-outline-secondary"
-                        style={{ marginBottom: "5px" }}
-                    >
-                        Audio Descriptions <span className="caret" />
-                    </button>
+                    {/* TODO: pass category value and implement onchange */}
+                    <LineCategoryButton onChange={(): void => {}} />
                     <PositionButton
                         cue={props.cue}
                         changePosition={(position: Position): void => {

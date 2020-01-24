@@ -20,8 +20,8 @@ const TimeEditor = (props: Props): ReactElement => {
             className="sbte-time-input"
             style={{
                 margin: "5px",
-                width: "110px",
-                maxWidth: "160px",
+                width: "130px",
+                maxWidth: "200px",
                 padding: "5px"
             }}
             value={getTimeString(props.time || 0)}

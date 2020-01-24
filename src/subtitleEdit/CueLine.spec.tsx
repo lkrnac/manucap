@@ -32,37 +32,49 @@ describe("CueLine", () => {
                         justifyContent: "space-between"
                     }}
                     >
-                        <input
-                            type="text"
-                            className="sbte-time-input"
-                            style={{
-                                margin: "5px",
-                                width: "110px",
-                                maxWidth: "160px",
-                                padding: "5px"
-                            }}
-                            value="00:00:00.000"
-                            onChange={(): void => {}}
-                        />
-                        <input
-                            type="text"
-                            className="sbte-time-input"
-                            style={{
-                                margin: "5px",
-                                width: "110px",
-                                maxWidth: "160px",
-                                padding: "5px"
-                            }}
-                            value="00:00:00.000"
-                            onChange={(): void => {}}
-                        />
+                        <div style={{
+                            display: "flex",
+                            flexDirection:"column",
+                            paddingBottom: "15px"
+                        }}
+                        >
+                            <input
+                                type="text"
+                                className="sbte-time-input"
+                                style={{
+                                    margin: "5px",
+                                    width: "130px",
+                                    maxWidth: "200px",
+                                    padding: "5px"
+                                }}
+                                value="00:00:00.000"
+                                onChange={(): void => {}}
+                            />
+                            <input
+                                type="text"
+                                className="sbte-time-input"
+                                style={{
+                                    margin: "5px",
+                                    width: "130px",
+                                    maxWidth: "200px",
+                                    padding: "5px"
+                                }}
+                                value="00:00:00.000"
+                                onChange={(): void => {}}
+                            />
+                        </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
-                            <button
-                                className="dropdown-toggle btn btn-outline-secondary"
-                                style={{ marginBottom: "5px" }}
-                            >
-                                Audio Descriptions <span className="caret" />
-                            </button>
+                            <div className="dropdown">
+                                <button
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    id="cue-line-category"
+                                    type="button"
+                                    className="dropdown-toggle btn btn-outline-secondary"
+                                >
+                                    Dialogue
+                                </button>
+                            </div>
                             <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
                                 <button
                                     aria-haspopup="true"
@@ -109,37 +121,49 @@ describe("CueLine", () => {
                         justifyContent: "space-between"
                     }}
                     >
-                        <input
-                            type="text"
-                            className="sbte-time-input"
-                            style={{
-                                margin: "5px",
-                                width: "110px",
-                                maxWidth: "160px",
-                                padding: "5px"
-                            }}
-                            value="00:00:01.000"
-                            onChange={(): void => {}}
-                        />
-                        <input
-                            type="text"
-                            className="sbte-time-input"
-                            style={{
-                                margin: "5px",
-                                width: "110px",
-                                maxWidth: "160px",
-                                padding: "5px"
-                            }}
-                            value="00:00:02.000"
-                            onChange={(): void => {}}
-                        />
+                        <div style={{
+                            display: "flex",
+                            flexDirection:"column",
+                            paddingBottom: "15px"
+                        }}
+                        >
+                            <input
+                                type="text"
+                                className="sbte-time-input"
+                                style={{
+                                    margin: "5px",
+                                    width: "130px",
+                                    maxWidth: "200px",
+                                    padding: "5px"
+                                }}
+                                value="00:00:01.000"
+                                onChange={(): void => {}}
+                            />
+                            <input
+                                type="text"
+                                className="sbte-time-input"
+                                style={{
+                                    margin: "5px",
+                                    width: "130px",
+                                    maxWidth: "200px",
+                                    padding: "5px"
+                                }}
+                                value="00:00:02.000"
+                                onChange={(): void => {}}
+                            />
+                        </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }} >
-                            <button
-                                className="dropdown-toggle btn btn-outline-secondary"
-                                style={{ marginBottom: "5px" }}
-                            >
-                                Audio Descriptions <span className="caret" />
-                            </button>
+                            <div className="dropdown">
+                                <button
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    id="cue-line-category"
+                                    type="button"
+                                    className="dropdown-toggle btn btn-outline-secondary"
+                                >
+                                    Dialogue
+                                </button>
+                            </div>
                             <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
                                 <button
                                     aria-haspopup="true"

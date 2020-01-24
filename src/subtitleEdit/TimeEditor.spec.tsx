@@ -13,8 +13,8 @@ describe("TimeEditor", () => {
                 className="sbte-time-input"
                 style={{
                     margin: "5px",
-                    width: "110px",
-                    maxWidth: "160px",
+                    width: "130px",
+                    maxWidth: "200px",
                     padding: "5px"
                 }}
                 value="00:00:00.000"
@@ -39,8 +39,8 @@ describe("TimeEditor", () => {
                 className="sbte-time-input"
                 style={{
                     margin: "5px",
-                    width: "110px",
-                    maxWidth: "160px",
+                    width: "130px",
+                    maxWidth: "200px",
                     padding: "5px"
                 }}
                 value="00:00:01.000"
@@ -65,8 +65,8 @@ describe("TimeEditor", () => {
                 className="sbte-time-input"
                 style={{
                     margin: "5px",
-                    width: "110px",
-                    maxWidth: "160px",
+                    width: "130px",
+                    maxWidth: "200px",
                     padding: "5px"
                 }}
                 value="00:05:00.000"
@@ -91,8 +91,8 @@ describe("TimeEditor", () => {
                 className="sbte-time-input"
                 style={{
                     margin: "5px",
-                    width: "110px",
-                    maxWidth: "160px",
+                    width: "130px",
+                    maxWidth: "200px",
                     padding: "5px"
                 }}
                 value="02:00:35.976"
@@ -117,8 +117,8 @@ describe("TimeEditor", () => {
                 className="sbte-time-input"
                 style={{
                     margin: "5px",
-                    width: "110px",
-                    maxWidth: "160px",
+                    width: "130px",
+                    maxWidth: "200px",
                     padding: "5px"
                 }}
                 value="99:59:59.999"
@@ -143,8 +143,8 @@ describe("TimeEditor", () => {
                 className="sbte-time-input"
                 style={{
                     margin: "5px",
-                    width: "110px",
-                    maxWidth: "160px",
+                    width: "130px",
+                    maxWidth: "200px",
                     padding: "5px"
                 }}
                 value="01:59:59.025"
