@@ -34,7 +34,10 @@ describe("SubtitleEdit", () => {
         } as Task;
         const expectedNode = mount(
             <Provider store={testingStore} >
-                <div className="sbte-subtitle-edit" style={{ display: "flex", flexFlow: "column", padding: "10px" }}>
+                <div
+                    className="sbte-subtitle-edit"
+                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -46,7 +49,7 @@ describe("SubtitleEdit", () => {
                             <div />
                         </div>
                     </header>
-                    <div style={{ display: "flex", height: "100%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "90%" }}>
                         <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <VideoPlayer
                                 mp4="dummyMp4"
@@ -55,9 +58,25 @@ describe("SubtitleEdit", () => {
                             />
                             <Toolbox />
                         </div>
-                        <div style={{ flex: "1 1 60%", display: "flex", flexDirection: "column", paddingLeft: "10px" }}>
-                            <CueLine index={0} cue={cues[0]} />
-                            <CueLine index={1} cue={cues[1]} />
+                        <div
+                            style={{
+                                flex: "1 1 60%",
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <div style={{ overflowY: "scroll", height: "100%" }}>
+                                <CueLine index={0} cue={cues[0]} />
+                                <CueLine index={1} cue={cues[1]} />
+                            </div>
+                            <div style={{ marginTop: "10px" }}>
+                                <button className="btn btn-primary" style={{ marginTop: "10px", marginBottom: "10px" }}>
+                                    View All Tracks
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
