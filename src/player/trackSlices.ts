@@ -76,7 +76,7 @@ export const editingTrackSlice = createSlice({
             }
         },
         [cuesSlice.actions.updateCueCategory.type]: (state, action: PayloadAction<CueCategoryAction>): void => {
-            if (state && state.currentVersion) {
+            if (state && state.currentVersion && state.currentVersion.cues[action.payload.idx]) {
                 state.currentVersion.cues[action.payload.idx].cueCategory = action.payload.cueCategory;
             }
         },
