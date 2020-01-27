@@ -29,19 +29,23 @@ const initialTestingTracks = [
         type: "CAPTION",
         language: { id: "en-US" },
         default: true,
-        currentVersion: { cues: [
-                new VTTCue(0, 1, "Caption Line 1"),
-                new VTTCue(1, 2, "Caption Line 2"),
-            ]} as TrackVersion
+        currentVersion: {
+            cues: [
+                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            ]
+        } as TrackVersion
     } as Track,
     {
         type: "TRANSLATION",
         language: { id: "es-ES" },
         default: false,
-        currentVersion: { cues: [
-                new VTTCue(0, 1, "Translation Line 1"),
-                new VTTCue(1, 2, "Translation Line 2"),
-            ]} as TrackVersion
+        currentVersion: {
+            cues: [
+                { vttCue: new VTTCue(0, 1, "Translation Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Translation Line 2"), cueCategory: "DIALOGUE" },
+            ]
+        } as TrackVersion
     } as Track
 ];
 

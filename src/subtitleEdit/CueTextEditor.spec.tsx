@@ -67,11 +67,11 @@ const convertToHtmlOptions = {
     defaultBlockTag: null,
 } as Options;
 
-const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string): void => {
+const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: string): void => {
     // GIVEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} cue={cue} />
+            <CueTextEditor index={0} vttCue={vttCue} />
         </Provider>
     );
     const editorState = actualNode.find(Editor).props().editorState;
@@ -88,21 +88,21 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].text);
 };
 
-const testForContentState = (contentState: ContentState, cue: VTTCue, expectedStateHtml: string): void => {
+const testForContentState = (contentState: ContentState, vttCue: VTTCue, expectedStateHtml: string): void => {
     const editorState = EditorState.createWithContent(contentState);
     const expectedNode = createExpectedNode(editorState);
 
     // WHEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} cue={cue} />
+            <CueTextEditor index={0} vttCue={vttCue} />
         </Provider>
     );
 
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-    expect(testingStore.getState().cues[0].text).toEqual(cue.text);
+    expect(testingStore.getState().cues[0].text).toEqual(vttCue.text);
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };
 
@@ -142,10 +142,10 @@ describe("CueTextEditor", () => {
 
     it("updates cue in redux store when changed", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
+        const vttCue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue} />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -176,10 +176,10 @@ describe("CueTextEditor", () => {
 
     it("added cue when add cue button is clicked", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
+        const vttCue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} cue={cue} />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
 
@@ -194,10 +194,10 @@ describe("CueTextEditor", () => {
 
     it("deletes cue when delete cue button is clicked", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
+        const vttCue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} cue={cue} />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
 
@@ -210,12 +210,12 @@ describe("CueTextEditor", () => {
 
     it("maintain cue styles when cue text is changes", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
-        cue.position = 60;
-        cue.align = "end";
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.position = 60;
+        vttCue.align = "end";
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue} />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");

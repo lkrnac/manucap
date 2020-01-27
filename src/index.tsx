@@ -25,8 +25,8 @@ const TestApp = (): ReactElement => {
                 videoLength: 4,
                 currentVersion: {
                     cues: [
-                        new VTTCue(0, 1, "Caption Line 1"),
-                        new VTTCue(1, 2, "Caption Line 2"),
+                        { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                        { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
                     ]
                 } as TrackVersion
             })),

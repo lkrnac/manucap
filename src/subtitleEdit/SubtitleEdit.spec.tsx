@@ -1,5 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
-import { Language, Task, Track, TrackVersion } from "../player/model";
+import { CueDto, Language, Task, Track, TrackVersion } from "../player/model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateEditingTrack, updateTask } from "../player/trackSlices";
 import CueLine from "./CueLine";
@@ -17,9 +17,9 @@ describe("SubtitleEdit", () => {
     it("renders", () => {
         // GIVEN
         const cues = [
-            new VTTCue(0, 1, "Caption Line 1"),
-            new VTTCue(1, 2, "Caption Line 2"),
-        ];
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
         const testingTrack = {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,

@@ -1,6 +1,7 @@
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
 import React, { Dispatch, ReactElement } from "react";
 import { AppThunk } from "../reducers/subtitleEditReducers";
+import { CueDto } from "../player/model";
 import CueTextEditor from "./CueTextEditor";
 import LineCategoryButton from "./LineCategoryButton";
 import PositionButton from "./PositionButton";
@@ -10,13 +11,13 @@ import { useDispatch } from "react-redux";
 
 interface Props {
     index: number;
-    cue: VTTCue;
+    cue: CueDto;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
                                     startTime: number, endTime: number): void => {
-    const newCue = new VTTCue(startTime, endTime, props.cue.text);
-    copyNonConstructorProperties(newCue, props.cue);
+    const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
+    copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateCue(props.index, newCue));
 };
 
@@ -40,24 +41,25 @@ const CueLine = (props: Props): ReactElement => {
                 }}
                 >
                     <TimeEditor
-                        time={props.cue.startTime}
+                        time={props.cue.vttCue.startTime}
                         onChange={(starTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, starTime, props.cue.endTime)}
+                            updateCueAndCopyProperties(dispatch, props, starTime, props.cue.vttCue.endTime)}
                     />
                     <TimeEditor
-                        time={props.cue.endTime}
+                        time={props.cue.vttCue.endTime}
                         onChange={(endTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, props.cue.startTime, endTime)}
+                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime)}
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     {/* TODO: pass category value and implement onchange */}
                     <LineCategoryButton onChange={(): void => {}} />
                     <PositionButton
-                        cue={props.cue}
+                        vttCue={props.cue.vttCue}
                         changePosition={(position: Position): void => {
-                            const newCue = new VTTCue(props.cue.startTime, props.cue.endTime, props.cue.text);
-                            copyNonConstructorProperties(newCue, props.cue);
+                            const newCue =
+                                new VTTCue(props.cue.vttCue.startTime, props.cue.vttCue.endTime, props.cue.vttCue.text);
+                            copyNonConstructorProperties(newCue, props.cue.vttCue);
                             const newPositionProperties = positionStyles.get(position);
                             for (const property in newPositionProperties) {
                                 // noinspection JSUnfilteredForInLoop
@@ -69,7 +71,7 @@ const CueLine = (props: Props): ReactElement => {
                 </div>
             </div>
             <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
-                <CueTextEditor key={props.index} index={props.index} cue={props.cue} />
+                <CueTextEditor key={props.index} index={props.index} vttCue={props.cue.vttCue} />
             </div>
         </div>
     );

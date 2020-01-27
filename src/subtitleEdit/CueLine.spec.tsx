@@ -1,6 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 
 import "video.js"; // VTTCue definition
+import { CueDto } from "../player/model";
 import CueLine from "./CueLine";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "./cueUtils";
@@ -12,9 +13,9 @@ import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
 import testingStore from "../testUtils/testingStore";
 
 const cues = [
-    new VTTCue(0, 0, "Caption Line 1"),
-    new VTTCue(1, 2, "Caption Line 2"),
-    new VTTCue(67.045, 359999.999, "Caption Line 3"),
+    { vttCue: new VTTCue(0, 0, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(67.045, 359999.999, "Caption Line 3"), cueCategory: "DIALOGUE" } as CueDto,
 ];
 
 describe("CueLine", () => {
@@ -89,7 +90,7 @@ describe("CueLine", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
-                        <CueTextEditor key={1} index={1} cue={cues[0]} />
+                        <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
                     </div>
                 </div>
             </Provider>
@@ -178,7 +179,7 @@ describe("CueLine", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
-                        <CueTextEditor key={1} index={1} cue={cues[1]} />
+                        <CueTextEditor key={1} index={1} vttCue={cues[1].vttCue} />
                     </div>
                 </div>
             </Provider>
@@ -262,9 +263,10 @@ describe("CueLine", () => {
 
     it("maintains cue styling when start time changes", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
-        cue.position = 60;
-        cue.align = "end";
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.position = 60;
+        vttCue.align = "end";
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={0} cue={cue} />
@@ -282,9 +284,10 @@ describe("CueLine", () => {
 
     it("maintains cue styling when end time changes", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
-        cue.position = 60;
-        cue.align = "end";
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.position = 60;
+        vttCue.align = "end";
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={0} cue={cue} />
@@ -302,7 +305,8 @@ describe("CueLine", () => {
 
     it("updates cue position", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={0} cue={cue} />
