@@ -22,8 +22,12 @@ interface CueIndexAction extends SubtitleEditAction {
     idx: number;
 }
 
-export interface CueAction extends CueIndexAction {
+export interface VttCueAction extends CueIndexAction {
     vttCue: VTTCue;
+}
+
+export interface CueCategoryAction extends CueIndexAction {
+    cueCategory: CueCategory;
 }
 
 interface CuesAction extends SubtitleEditAction {
@@ -34,13 +38,21 @@ export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
     reducers: {
-        updateVttCue: (state, action: PayloadAction<CueAction>): void => {
+        updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
                 : "DIALOGUE";
             state[action.payload.idx] = { vttCue: action.payload.vttCue, cueCategory };
         },
-        addCue: (state, action: PayloadAction<CueAction>): void => {
+        updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
+            if (state[action.payload.idx]) {
+                state[action.payload.idx] = {
+                    vttCue: state[action.payload.idx].vttCue,
+                    cueCategory: action.payload.cueCategory
+                };
+            }
+        },
+        addCue: (state, action: PayloadAction<VttCueAction>): void => {
             const newCueDto = { vttCue: action.payload.vttCue, cueCategory: "DIALOGUE" as CueCategory };
             state.splice(action.payload.idx, 0, newCueDto);
         },
@@ -58,12 +70,17 @@ export const editingTrackSlice = createSlice({
         updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack
     },
     extraReducers: {
-        [cuesSlice.actions.updateVttCue.type]: (state, action: PayloadAction<CueAction>): void => {
+        [cuesSlice.actions.updateVttCue.type]: (state, action: PayloadAction<VttCueAction>): void => {
             if (state && state.currentVersion) {
                 state.currentVersion.cues[action.payload.idx].vttCue = action.payload.vttCue;
             }
         },
-        [cuesSlice.actions.addCue.type]: (state, action: PayloadAction<CueAction>): void => {
+        [cuesSlice.actions.updateCueCategory.type]: (state, action: PayloadAction<CueCategoryAction>): void => {
+            if (state && state.currentVersion) {
+                state.currentVersion.cues[action.payload.idx].cueCategory = action.payload.cueCategory;
+            }
+        },
+        [cuesSlice.actions.addCue.type]: (state, action: PayloadAction<VttCueAction>): void => {
             if (state && state.currentVersion) {
                 const newCueDto = { vttCue: action.payload.vttCue, cueCategory: "DIALOGUE" as CueCategory };
                 state.currentVersion.cues.splice(action.payload.idx, 0, newCueDto);
@@ -86,12 +103,17 @@ export const taskSlice = createSlice({
 });
 
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<VttCueAction>>): void => {
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue }));
     };
 
+export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CueCategoryAction>>): void => {
+        dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
+    };
+
 export const addCue = (idx: number, vttCue: VTTCue): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<VttCueAction>>): void => {
         dispatch(cuesSlice.actions.addCue({ idx, vttCue }));
     };
 

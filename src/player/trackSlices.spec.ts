@@ -1,6 +1,6 @@
 import "video.js"; // VTTCue definition
 import { Task, Track } from "./model";
-import { addCue, deleteCue, updateEditingTrack, updateTask, updateVttCue } from "./trackSlices";
+import { addCue, deleteCue, updateCueCategory, updateEditingTrack, updateTask, updateVttCue } from "./trackSlices";
 import deepFreeze from "deep-freeze";
 import testingStore from "../testUtils/testingStore";
 
@@ -46,6 +46,39 @@ describe("trackSlices", () => {
             // @ts-ignore - Test will fail if version is null
             expect(testingStore.getState().editingTrack.currentVersion.cues[1].vttCue)
                 .toEqual(new VTTCue(1, 2, "Dummy Cue"));
+        });
+    });
+
+    describe("updateCueCategory", () => {
+        it("ignores category update if cue doesn't exist in top level cues", () => {
+            // WHEN
+            testingStore.dispatch(updateCueCategory(3, "ONSCREEN_TEXT"));
+
+            // THEN
+            expect(testingStore.getState().cues[3]).toBeUndefined();
+        });
+
+        it("updates top level cues", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack));
+
+            // WHEN
+            testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT"));
+
+            // THEN
+            expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
+        });
+
+        it("updates cues in editing track", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack));
+
+            // WHEN
+            testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT"));
+
+            // THEN
+            // @ts-ignore - Test will fail if version is null
+            expect(testingStore.getState().editingTrack.currentVersion.cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
         });
     });
 
