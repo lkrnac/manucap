@@ -1,6 +1,5 @@
-import React, {
-    ReactElement
-} from "react";
+import React, { ReactElement } from "react";
+import { CueCategory } from "../player/model";
 import { Dropdown } from "react-bootstrap";
 
 export const dialogueTypeToPrettyName = {
@@ -11,7 +10,7 @@ export const dialogueTypeToPrettyName = {
 };
 
 interface Props {
-    category?: string;
+    category?: CueCategory;
     onChange: (value: string) => void;
 }
 
