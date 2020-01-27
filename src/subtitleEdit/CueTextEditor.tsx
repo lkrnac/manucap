@@ -1,11 +1,12 @@
 import { AppThunk, SubtitleEditState } from "../reducers/subtitleEditReducers";
-import { ContentState, Editor, EditorState, convertFromHTML } from "draft-js";
+import Draft, { ContentState, DraftHandleValue, Editor, EditorState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
+import Mousetrap from "mousetrap";
 import { copyNonConstructorProperties } from "./cueUtils";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../player/trackSlices";
@@ -56,6 +57,46 @@ const CueTextEditor = (props: Props): ReactElement => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [ currentContent, dispatch, props.vttCue.startTime, props.vttCue.endTime, props.index ]
     );
+
+    const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
+        if (e.shiftKey && (e.metaKey || e.altKey)) {
+            switch (e.key) {
+                case "o":
+                    return "togglePlayPause";
+                case "ArrowLeft":
+                    return "seekBack";
+                case "ArrowRight":
+                    return "seekAhead";
+                case "ArrowUp":
+                    return "setStartTime";
+                case "ArrowDown":
+                    return "setEndTime";
+            }
+        }
+        return Draft.getDefaultKeyBinding(e);
+    };
+    const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
+        switch (shortcut) {
+            case "togglePlayPause":
+                Mousetrap.trigger("mod+shift+o");
+                return "handled";
+            case "seekBack":
+                Mousetrap.trigger("mod+shift+left");
+                return "handled";
+            case "seekAhead":
+                Mousetrap.trigger("mod+shift+right");
+                return "handled";
+            case "setStartTime":
+                Mousetrap.trigger("mod+shift+up");
+                return "handled";
+            case "setEndTime":
+                Mousetrap.trigger("mod+shift+down");
+                return "handled";
+            default:
+                return "not-handled";
+        }
+    };
+
     return (
         <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div
@@ -83,6 +124,8 @@ const CueTextEditor = (props: Props): ReactElement => {
                     onChange={(editorState: EditorState): AppThunk =>
                         dispatch(updateEditorState(props.index, editorState))}
                     spellCheck
+                    keyBindingFn={keyShortcutBindings}
+                    handleKeyCommand={handleKeyShortcut}
                 />
             </div>
             <div

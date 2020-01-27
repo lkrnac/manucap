@@ -232,4 +232,124 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
         expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
     });
+
+    it("should handle playPauseToggle key shortcut", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const vttCue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueTextEditor index={0} vttCue={vttCue} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+
+        // WHEN
+        editor.simulate("keyDown", {
+            key: "o",
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+o");
+    });
+
+    it("should handle seekBack key shortcut", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const vttCue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueTextEditor index={0} vttCue={vttCue} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+
+        // WHEN
+        editor.simulate("keyDown", {
+            key: "ArrowLeft",
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+left");
+    });
+
+    it("should handle seekAhead key shortcut", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const vttCue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueTextEditor index={0} vttCue={vttCue} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+
+        // WHEN
+        editor.simulate("keyDown", {
+            key: "ArrowRight",
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+right");
+    });
+
+    it("should handle setStartTime key shortcut", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const vttCue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueTextEditor index={0} vttCue={vttCue} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+
+        // WHEN
+        editor.simulate("keyDown", {
+            key: "ArrowUp",
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+up");
+    });
+
+    it("should handle setEndTime key shortcut", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const vttCue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueTextEditor index={0} vttCue={vttCue} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+
+        // WHEN
+        editor.simulate("keyDown", {
+            key: "ArrowDown",
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+down");
+    });
 });
