@@ -52,11 +52,12 @@ describe("VideoPlayer tested with fake player", () => {
         const playerMock = {
             paused: (): boolean => true,
             play,
-            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -71,11 +72,12 @@ describe("VideoPlayer tested with fake player", () => {
         const playerMock = {
             pause,
             paused: (): boolean => false,
-            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -90,12 +92,13 @@ describe("VideoPlayer tested with fake player", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
         };
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: RIGHT, shiftKey: true, altKey: true });
@@ -110,12 +113,13 @@ describe("VideoPlayer tested with fake player", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
         };
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: LEFT, shiftKey: true, altKey: true });
@@ -128,12 +132,14 @@ describe("VideoPlayer tested with fake player", () => {
         // GIVEN
         const playerMock = {
             currentTime: (): number => 5,
-            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
         };
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode =
+            mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
         const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -149,12 +155,14 @@ describe("VideoPlayer tested with fake player", () => {
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
             currentTime,
-            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() })
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
         };
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode =
+            mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
         const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -203,13 +211,19 @@ describe("VideoPlayer tested with fake player", () => {
         ];
 
         const playerMock = {
-            textTracks: (): FakeTextTrack[] => textTracks
+            textTracks: (): FakeTextTrack[] => textTracks,
+            on: jest.fn()
         };
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={initialTestingTracks}
+                onTimeChange={jest.fn()}
+            />
         );
 
         // WHEN
@@ -254,13 +268,19 @@ describe("VideoPlayer tested with fake player", () => {
         ];
 
         const playerMock = {
-            textTracks: (): FakeTextTrack[] => textTracks
+            textTracks: (): FakeTextTrack[] => textTracks,
+            on: jest.fn()
         };
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={initialTestingTracks}
+                onTimeChange={jest.fn()}
+            />
         );
 
         // WHEN

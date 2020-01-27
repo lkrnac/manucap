@@ -1,5 +1,5 @@
 import "../styles.scss";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import CueLine from "./CueLine";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
@@ -14,6 +14,10 @@ export interface Props {
 
 const SubtitleEdit = (props: Props): ReactElement => {
     const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const [, setCurrentPlayerTime] = useState(0);
+
+    const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
+
     return (
         <div
             className="sbte-subtitle-edit"
@@ -22,7 +26,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
             <SubtitleEditHeader />
             <div style={{ display: "flex", alignItems: "flex-start", height: "90%" }}>
                 <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
-                    <EditingVideoPlayer mp4={props.mp4} poster={props.poster} />
+                    <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
                     <Toolbox />
                 </div>
                 <div
