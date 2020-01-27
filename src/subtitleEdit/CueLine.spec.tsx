@@ -340,4 +340,20 @@ describe("CueLine", () => {
         // THEN
         expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
     });
+
+    it("passes down current line category", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cue} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find("button#cue-line-category").text()).toEqual("On Screen Text");
+    });
 });

@@ -55,6 +55,7 @@ const CueLine = (props: Props): ReactElement => {
                     <LineCategoryButton
                         onChange={(cueCategory: CueCategory): AppThunk =>
                             dispatch(updateCueCategory(props.index, cueCategory))}
+                        category={props.cue.cueCategory}
                     />
                     <PositionButton
                         vttCue={props.cue.vttCue}
