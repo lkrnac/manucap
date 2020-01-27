@@ -1,6 +1,8 @@
 import "../testUtils/initBrowserEnvironment";
 
 import "video.js"; // VTTCue definition
+// @ts-ignore - Doesn't have types definitions file
+import * as simulant from "simulant";
 import { CueDto } from "../player/model";
 import CueLine from "./CueLine";
 import CueTextEditor from "./CueTextEditor";
@@ -99,7 +101,7 @@ describe("CueLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[0]} />
+                <CueLine index={1} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -188,7 +190,7 @@ describe("CueLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -201,7 +203,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} />
+                <CueLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -217,7 +219,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} />
+                <CueLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -233,7 +235,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} />
+                <CueLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -249,7 +251,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} />
+                <CueLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -269,7 +271,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} />
+                <CueLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -290,7 +292,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} />
+                <CueLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -309,7 +311,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} />
+                <CueLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -329,7 +331,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} />
+                <CueLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -349,11 +351,47 @@ describe("CueLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} />
+                <CueLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
         // THEN
         expect(actualNode.find("button#cue-line-category").text()).toEqual("On Screen Text");
+    });
+
+    it("should set player time to video start time on mod+shift+up shortcut", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 2, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+        mount(
+            <Provider store={testingStore} >
+                <CueLine index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(document.documentElement, "keydown", { keyCode: 38, shiftKey: true, altKey: true });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+    });
+
+    it("should set player time to video end time on mod+shift+down shortcut", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 2, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+        mount(
+            <Provider store={testingStore} >
+                <CueLine index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(document.documentElement, "keydown", { keyCode: 40, shiftKey: true, altKey: true });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
     });
 });

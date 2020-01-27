@@ -1,10 +1,11 @@
 import { CueCategory, CueDto } from "../player/model";
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
-import React, { Dispatch, ReactElement } from "react";
+import React, { Dispatch, ReactElement, useEffect } from "react";
 import { updateCueCategory, updateVttCue } from "../player/trackSlices";
 import { AppThunk } from "../reducers/subtitleEditReducers";
 import CueTextEditor from "./CueTextEditor";
 import LineCategoryButton from "./LineCategoryButton";
+import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch } from "react-redux";
@@ -12,6 +13,7 @@ import { useDispatch } from "react-redux";
 interface Props {
     index: number;
     cue: CueDto;
+    playerTime: number;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
@@ -23,6 +25,20 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
 
 const CueLine = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+
+    const registerCaptionTimingShortcuts = (): void => {
+        Mousetrap.bind(["mod+shift+up", "alt+shift+up"], () => {
+            updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
+        });
+        Mousetrap.bind(["mod+shift+down", "alt+shift+down"], () => {
+            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
+        });
+    };
+
+    useEffect(() => {
+        registerCaptionTimingShortcuts();
+    });
+
     return (
         <div className="sbte-cue-line" style={{ display: "flex" }}>
             <div style={{
