@@ -1,7 +1,8 @@
 import "../styles.scss";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import CueLine from "./CueLine";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
+import Mousetrap from "mousetrap";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
 import Toolbox from "../toolbox/Toolbox";
@@ -14,9 +15,20 @@ export interface Props {
 
 const SubtitleEdit = (props: Props): ReactElement => {
     const cues = useSelector((state: SubtitleEditState) => state.cues);
-    const [, setCurrentPlayerTime] = useState(0);
+    const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
 
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
+
+    const registerCaptionTimingShortcuts = (): void => {
+        Mousetrap.bind(["mod+shift+up", "alt+shift+up"], () =>
+            console.log("mod+shift+up: " + currentPlayerTime));
+        Mousetrap.bind(["mod+shift+down", "alt+shift+down"], () =>
+            console.log("mod+shift+down: " + currentPlayerTime));
+    };
+
+    useEffect(() => {
+        registerCaptionTimingShortcuts();
+    });
 
     return (
         <div
