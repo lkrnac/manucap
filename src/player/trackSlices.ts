@@ -34,7 +34,7 @@ export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
     reducers: {
-        updateCue: (state, action: PayloadAction<CueAction>): void => {
+        updateVttCue: (state, action: PayloadAction<CueAction>): void => {
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
                 : "DIALOGUE";
@@ -58,7 +58,7 @@ export const editingTrackSlice = createSlice({
         updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack
     },
     extraReducers: {
-        [cuesSlice.actions.updateCue.type]: (state, action: PayloadAction<CueAction>): void => {
+        [cuesSlice.actions.updateVttCue.type]: (state, action: PayloadAction<CueAction>): void => {
             if (state && state.currentVersion) {
                 state.currentVersion.cues[action.payload.idx].vttCue = action.payload.vttCue;
             }
@@ -87,7 +87,7 @@ export const taskSlice = createSlice({
 
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
-        dispatch(cuesSlice.actions.updateCue({ idx, vttCue }));
+        dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue }));
     };
 
 export const addCue = (idx: number, vttCue: VTTCue): AppThunk =>
