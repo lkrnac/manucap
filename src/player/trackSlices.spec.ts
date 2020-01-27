@@ -32,7 +32,7 @@ describe("trackSlices", () => {
             testingStore.dispatch(updateCue(3, new VTTCue(1, 2, "Dummy Cue")));
 
             // THEN
-            expect(testingStore.getState().cues[3].cue).toEqual(new VTTCue(1, 2, "Dummy Cue"));
+            expect(testingStore.getState().cues[3].vttCue).toEqual(new VTTCue(1, 2, "Dummy Cue"));
         });
 
         it("updates cues in editing track", () => {

@@ -210,7 +210,7 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:15:00.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].startTime).toEqual(900);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(900);
     });
 
     it("updates cue in redux store when start time seconds changed", () => {
@@ -226,7 +226,7 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:00:10.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].startTime).toEqual(10);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(10);
     });
 
     it("updates cue in redux store when start time millis changed", () => {
@@ -242,7 +242,7 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:00:00.865", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].startTime).toEqual(.865);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
     });
 
     it("updates cue in redux store when end time changed", () => {
@@ -258,7 +258,7 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:00:02.220", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].endTime).toEqual(2.22);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
     });
 
     it("maintains cue styling when start time changes", () => {
@@ -278,8 +278,8 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:15:00.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].position).toEqual(60);
-        expect(testingStore.getState().cues[0].align).toEqual("end");
+        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
+        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
     });
 
     it("maintains cue styling when end time changes", () => {
@@ -299,8 +299,8 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:00:00.222", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].position).toEqual(60);
-        expect(testingStore.getState().cues[0].align).toEqual("end");
+        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
+        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
     });
 
     it("updates cue position", () => {
@@ -317,9 +317,9 @@ describe("CueLine", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column2);
 
         // THEN
-        expect(testingStore.getState().cues[0].line).toEqual(4);
-        expect(testingStore.getState().cues[0].align).toEqual("start");
-        expect(testingStore.getState().cues[0].positionAlign).toEqual("center");
-        expect(testingStore.getState().cues[0].position).toEqual(65);
+        expect(testingStore.getState().cues[0].vttCue.line).toEqual(4);
+        expect(testingStore.getState().cues[0].vttCue.align).toEqual("start");
+        expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("center");
+        expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
     });
 });
