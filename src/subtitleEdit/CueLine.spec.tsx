@@ -322,4 +322,22 @@ describe("CueLine", () => {
         expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("center");
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
     });
+
+    it("updates line category", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cue} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("button#cue-line-category").simulate("click");
+        actualNode.find("a.sbte-cue-line-category").at(1).simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
+    });
 });

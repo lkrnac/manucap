@@ -1,12 +1,12 @@
+import { CueCategory, CueDto } from "../player/model";
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
 import React, { Dispatch, ReactElement } from "react";
+import { updateCueCategory, updateVttCue } from "../player/trackSlices";
 import { AppThunk } from "../reducers/subtitleEditReducers";
-import { CueDto } from "../player/model";
 import CueTextEditor from "./CueTextEditor";
 import LineCategoryButton from "./LineCategoryButton";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
-import { updateVttCue } from "../player/trackSlices";
 import { useDispatch } from "react-redux";
 
 interface Props {
@@ -52,8 +52,10 @@ const CueLine = (props: Props): ReactElement => {
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    {/* TODO: pass category value and implement onchange */}
-                    <LineCategoryButton onChange={(): void => {}} />
+                    <LineCategoryButton
+                        onChange={(cueCategory: CueCategory): AppThunk =>
+                            dispatch(updateCueCategory(props.index, cueCategory))}
+                    />
                     <PositionButton
                         vttCue={props.cue.vttCue}
                         changePosition={(position: Position): void => {
