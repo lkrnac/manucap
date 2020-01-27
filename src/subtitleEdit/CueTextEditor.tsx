@@ -7,12 +7,12 @@ import AddCueLineButton from "./AddCueLineButton";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import { copyNonConstructorProperties } from "./cueUtils";
-import { updateCue } from "../player/trackSlices";
 import { updateEditorState } from "./editorStatesSlice";
+import { updateVttCue } from "../player/trackSlices";
 
 interface Props{
     index: number;
-    cue: VTTCue;
+    vttCue: VTTCue;
 }
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
@@ -28,7 +28,7 @@ const convertToHtmlOptions = {
 
 const CueTextEditor = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const processedHTML = convertFromHTML(props.cue.text);
+    const processedHTML = convertFromHTML(props.vttCue.text);
     let editorState = useSelector((state: SubtitleEditState) => state.editorStates.get(props.index)) as EditorState;
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -47,14 +47,14 @@ const CueTextEditor = (props: Props): ReactElement => {
     useEffect(
         () => {
             const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
-            const vttCue = new VTTCue(props.cue.startTime, props.cue.endTime, text);
-            copyNonConstructorProperties(vttCue, props.cue);
-            dispatch(updateCue(props.index, vttCue));
+            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, text);
+            copyNonConstructorProperties(vttCue, props.vttCue);
+            dispatch(updateVttCue(props.index, vttCue));
         },
-        // ESLint suppress: copyNonConstructorProperties doesn't create side effect, just copies props from old cue.
-        // If props.cue would be included, it creates endless FLUX loop
+        // ESLint suppress: copyNonConstructorProperties doesn't create side effect, just copies props from old vttCue.
+        // If props.vttCue would be included, it creates endless FLUX loop
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [ currentContent, dispatch, props.cue.startTime, props.cue.endTime, props.index ]
+        [ currentContent, dispatch, props.vttCue.startTime, props.vttCue.endTime, props.index ]
     );
     return (
         <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -98,7 +98,7 @@ const CueTextEditor = (props: Props): ReactElement => {
                     <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
                     <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
                 </div>
-                <AddCueLineButton cueIndex={props.index} cueEndTime={props.cue.endTime} />
+                <AddCueLineButton cueIndex={props.index} cueEndTime={props.vttCue.endTime} />
             </div>
         </div>
     );

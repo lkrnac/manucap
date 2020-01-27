@@ -12,7 +12,7 @@ jest.mock("../subtitleEdit/cueUtils");
 
 interface FakeTrack {
     language: string;
-    addCue(cue: TextTrackCue): void;
+    addCue(vttCue: TextTrackCue): void;
 }
 
 const dispatchEventForTrack = (player: VideoJsPlayer, textTrack: FakeTrack): void => {
@@ -80,12 +80,12 @@ describe("VideoPlayer", () => {
     it("initializes tracks content", () => {
         // GIVEN
         const captionCues = [
-            new VTTCue(0, 1, "Caption Line 1"),
-            new VTTCue(1, 2, "Caption Line 2"),
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
         ];
         const translationCues = [
-            new VTTCue(0, 1, "Translation Line 1"),
-            new VTTCue(1, 2, "Translation Line 2"),
+            { vttCue: new VTTCue(0, 1, "Translation Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Translation Line 2"), cueCategory: "DIALOGUE" },
         ];
         const initialTestingTracks = [
             {
@@ -128,12 +128,13 @@ describe("VideoPlayer", () => {
         const vttCue = new VTTCue(0, 1, "Caption Line 1");
         vttCue.align = "start";
         vttCue.position = 60;
+        const cue = { vttCue: vttCue, cueCategory: "DIALOGUE" };
         const initialTestingTracks = [
             {
                 type: "CAPTION",
                 language: { id: "en-CA" },
                 default: true,
-                currentVersion: { cues: [vttCue]}
+                currentVersion: { cues: [cue]}
             }
         ] as Track[];
         const textTracks = [

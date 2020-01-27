@@ -1,5 +1,6 @@
 import "../styles.scss";
 import React, { ReactElement, useEffect, useState } from "react";
+import { CueDto } from "../player/model";
 import CueLine from "./CueLine";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import Mousetrap from "mousetrap";
@@ -53,7 +54,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
                 >
                     <div style={{ overflowY: "scroll", height: "100%" }}>
                         {
-                            cues.map((cue: VTTCue, idx: number): ReactElement =>
+                            cues.map((cue: CueDto, idx: number): ReactElement =>
                                 <CueLine key={idx} index={idx} cue={cue} />)
                         }
                     </div>

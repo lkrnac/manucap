@@ -1,5 +1,5 @@
+import { CueCategory, CueDto, Task, Track } from "./model";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Task, Track } from "./model";
 import { AppThunk } from "../reducers/subtitleEditReducers";
 import { Dispatch } from "react";
 
@@ -22,28 +22,44 @@ interface CueIndexAction extends SubtitleEditAction {
     idx: number;
 }
 
-export interface CueAction extends CueIndexAction {
-    cue: VTTCue;
+export interface VttCueAction extends CueIndexAction {
+    vttCue: VTTCue;
+}
+
+export interface CueCategoryAction extends CueIndexAction {
+    cueCategory: CueCategory;
 }
 
 interface CuesAction extends SubtitleEditAction {
-    cues: VTTCue[];
+    cues: CueDto[];
 }
 
 export const cuesSlice = createSlice({
     name: "cues",
-    initialState: [] as VTTCue[],
+    initialState: [] as CueDto[],
     reducers: {
-        updateCue: (state, action: PayloadAction<CueAction>): void => {
-            state[action.payload.idx] = action.payload.cue;
+        updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
+            const cueCategory = state[action.payload.idx]
+                ? state[action.payload.idx].cueCategory
+                : "DIALOGUE";
+            state[action.payload.idx] = { vttCue: action.payload.vttCue, cueCategory };
         },
-        addCue: (state, action: PayloadAction<CueAction>): void => {
-            state.splice(action.payload.idx, 0, action.payload.cue);
+        updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
+            if (state[action.payload.idx]) {
+                state[action.payload.idx] = {
+                    vttCue: state[action.payload.idx].vttCue,
+                    cueCategory: action.payload.cueCategory
+                };
+            }
+        },
+        addCue: (state, action: PayloadAction<VttCueAction>): void => {
+            const newCueDto = { vttCue: action.payload.vttCue, cueCategory: "DIALOGUE" as CueCategory };
+            state.splice(action.payload.idx, 0, newCueDto);
         },
         deleteCue: (state, action: PayloadAction<CueIndexAction>): void => {
             state.splice(action.payload.idx, 1);
         },
-        updateCues: (_state, action: PayloadAction<CuesAction>): VTTCue[] => action.payload.cues
+        updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
     }
 });
 
@@ -54,14 +70,20 @@ export const editingTrackSlice = createSlice({
         updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack
     },
     extraReducers: {
-        [cuesSlice.actions.updateCue.type]: (state, action: PayloadAction<CueAction>): void => {
+        [cuesSlice.actions.updateVttCue.type]: (state, action: PayloadAction<VttCueAction>): void => {
             if (state && state.currentVersion) {
-                state.currentVersion.cues[action.payload.idx] = action.payload.cue;
+                state.currentVersion.cues[action.payload.idx].vttCue = action.payload.vttCue;
             }
         },
-        [cuesSlice.actions.addCue.type]: (state, action: PayloadAction<CueAction>): void => {
+        [cuesSlice.actions.updateCueCategory.type]: (state, action: PayloadAction<CueCategoryAction>): void => {
+            if (state && state.currentVersion && state.currentVersion.cues[action.payload.idx]) {
+                state.currentVersion.cues[action.payload.idx].cueCategory = action.payload.cueCategory;
+            }
+        },
+        [cuesSlice.actions.addCue.type]: (state, action: PayloadAction<VttCueAction>): void => {
             if (state && state.currentVersion) {
-                state.currentVersion.cues.splice(action.payload.idx, 0, action.payload.cue);
+                const newCueDto = { vttCue: action.payload.vttCue, cueCategory: "DIALOGUE" as CueCategory };
+                state.currentVersion.cues.splice(action.payload.idx, 0, newCueDto);
             }
         },
         [cuesSlice.actions.deleteCue.type]: (state, action: PayloadAction<CueIndexAction>): void => {
@@ -80,14 +102,19 @@ export const taskSlice = createSlice({
     }
 });
 
-export const updateCue = (idx: number, cue: VTTCue): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
-        dispatch(cuesSlice.actions.updateCue({ idx, cue }));
+export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<VttCueAction>>): void => {
+        dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue }));
     };
 
-export const addCue = (idx: number, cue: VTTCue): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
-        dispatch(cuesSlice.actions.addCue({ idx, cue }));
+export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CueCategoryAction>>): void => {
+        dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
+    };
+
+export const addCue = (idx: number, vttCue: VTTCue): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<VttCueAction>>): void => {
+        dispatch(cuesSlice.actions.addCue({ idx, vttCue }));
     };
 
 export const deleteCue = (idx: number): AppThunk =>
@@ -98,7 +125,7 @@ export const deleteCue = (idx: number): AppThunk =>
 export const updateEditingTrack = (track: Track): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(editingTrackSlice.actions.updateEditingTrack({ editingTrack: track }));
-        const cues = track && track.currentVersion ? track.currentVersion.cues : [] as VTTCue[];
+        const cues = track && track.currentVersion ? track.currentVersion.cues : [] as CueDto[];
         dispatch(cuesSlice.actions.updateCues({ cues }));
     };
 

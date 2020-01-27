@@ -126,13 +126,13 @@ export const positionIcons = [
 ];
 
 
-const detectPosition = (cue: VTTCue): Position => {
+const detectPosition = (vttCue: VTTCue): Position => {
     let detectedPosition = Position.Row5Column3;
     positionStyles.forEach((positionStyle?: PositionStyle, position?: Position): void => {
         let propertyHits = 0;
         for (const property in positionStyle) {
             // noinspection JSUnfilteredForInLoop
-            if (cue[property] === positionStyle[property]){
+            if (vttCue[property] === positionStyle[property]){
                 propertyHits++;
             }
         }
@@ -143,7 +143,7 @@ const detectPosition = (cue: VTTCue): Position => {
     return detectedPosition;
 };
 
-export const findPositionIcon = ((cue: VTTCue): PositionIcon => {
-    const position = detectPosition(cue);
+export const findPositionIcon = ((vttCue: VTTCue): PositionIcon => {
+    const position = detectPosition(vttCue);
     return positionIcons.filter((positionIcon: PositionIcon) => positionIcon.position === position)[0];
 });

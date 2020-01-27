@@ -9,7 +9,7 @@ import { mount } from "enzyme";
 describe("PositionButton", () => {
     it("renders button", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "some text");
+        const vttCue = new VTTCue(0, 1, "some text");
         const expectedNode = mount(
             <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
                 <button
@@ -25,7 +25,7 @@ describe("PositionButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(<PositionButton cue={cue} changePosition={(): void => {}} />);
+        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => {}} />);
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
@@ -33,7 +33,7 @@ describe("PositionButton", () => {
 
     it("renders with dropdown", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "some text");
+        const vttCue = new VTTCue(0, 1, "some text");
         // noinspection HtmlUnknownAttribute
         const expectedNode = mount(
             <div style={{ marginBottom: "5px", marginRight: "10px" }} className="show dropdown">
@@ -267,7 +267,7 @@ describe("PositionButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(<PositionButton cue={cue} changePosition={(): void => {}} />);
+        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => {}} />);
         actualNode.find("button").simulate("click");
 
         // THEN
@@ -276,11 +276,11 @@ describe("PositionButton", () => {
 
     it("changes position", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "some text");
+        const vttCue = new VTTCue(0, 1, "some text");
         const changePosition = jest.fn();
 
         // WHEN
-        const actualNode = mount(<PositionButton cue={cue} changePosition={changePosition} />);
+        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={changePosition} />);
         actualNode.find("button").simulate("click");
         actualNode.find("a").at(3).simulate("click");
 
@@ -288,16 +288,16 @@ describe("PositionButton", () => {
         expect(changePosition).toBeCalledWith(Position.Row1Column4);
     });
 
-    it("initializes icon on button according to cue styles", () => {
+    it("initializes icon on button according to vttCue styles", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "some text");
-        cue.line = 4;
-        cue.align = "start";
-        cue.positionAlign = "center";
-        cue.position = 65;
+        const vttCue = new VTTCue(0, 1, "some text");
+        vttCue.line = 4;
+        vttCue.align = "start";
+        vttCue.positionAlign = "center";
+        vttCue.position = 65;
 
         // WHEN
-        const actualNode = mount(<PositionButton cue={cue} changePosition={(): void => {}} />);
+        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => {}} />);
 
 
         // THEN

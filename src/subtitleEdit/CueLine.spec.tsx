@@ -1,6 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 
 import "video.js"; // VTTCue definition
+import { CueDto } from "../player/model";
 import CueLine from "./CueLine";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "./cueUtils";
@@ -12,9 +13,9 @@ import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
 import testingStore from "../testUtils/testingStore";
 
 const cues = [
-    new VTTCue(0, 0, "Caption Line 1"),
-    new VTTCue(1, 2, "Caption Line 2"),
-    new VTTCue(67.045, 359999.999, "Caption Line 3"),
+    { vttCue: new VTTCue(0, 0, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(67.045, 359999.999, "Caption Line 3"), cueCategory: "DIALOGUE" } as CueDto,
 ];
 
 describe("CueLine", () => {
@@ -89,7 +90,7 @@ describe("CueLine", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
-                        <CueTextEditor key={1} index={1} cue={cues[0]} />
+                        <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
                     </div>
                 </div>
             </Provider>
@@ -178,7 +179,7 @@ describe("CueLine", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
-                        <CueTextEditor key={1} index={1} cue={cues[1]} />
+                        <CueTextEditor key={1} index={1} vttCue={cues[1].vttCue} />
                     </div>
                 </div>
             </Provider>
@@ -209,7 +210,7 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:15:00.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].startTime).toEqual(900);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(900);
     });
 
     it("updates cue in redux store when start time seconds changed", () => {
@@ -225,7 +226,7 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:00:10.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].startTime).toEqual(10);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(10);
     });
 
     it("updates cue in redux store when start time millis changed", () => {
@@ -241,7 +242,7 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:00:00.865", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].startTime).toEqual(.865);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
     });
 
     it("updates cue in redux store when end time changed", () => {
@@ -257,14 +258,15 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:00:02.220", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].endTime).toEqual(2.22);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
     });
 
     it("maintains cue styling when start time changes", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
-        cue.position = 60;
-        cue.align = "end";
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.position = 60;
+        vttCue.align = "end";
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={0} cue={cue} />
@@ -276,15 +278,16 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:15:00.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].position).toEqual(60);
-        expect(testingStore.getState().cues[0].align).toEqual("end");
+        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
+        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
     });
 
     it("maintains cue styling when end time changes", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
-        cue.position = 60;
-        cue.align = "end";
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.position = 60;
+        vttCue.align = "end";
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={0} cue={cue} />
@@ -296,13 +299,14 @@ describe("CueLine", () => {
             .simulate("change", { target: { value: "00:00:00.222", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].position).toEqual(60);
-        expect(testingStore.getState().cues[0].align).toEqual("end");
+        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
+        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
     });
 
     it("updates cue position", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={0} cue={cue} />
@@ -313,9 +317,43 @@ describe("CueLine", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column2);
 
         // THEN
-        expect(testingStore.getState().cues[0].line).toEqual(4);
-        expect(testingStore.getState().cues[0].align).toEqual("start");
-        expect(testingStore.getState().cues[0].positionAlign).toEqual("center");
-        expect(testingStore.getState().cues[0].position).toEqual(65);
+        expect(testingStore.getState().cues[0].vttCue.line).toEqual(4);
+        expect(testingStore.getState().cues[0].vttCue.align).toEqual("start");
+        expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("center");
+        expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
+    });
+
+    it("updates line category", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cue} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("button#cue-line-category").simulate("click");
+        actualNode.find("a.sbte-cue-line-category").at(1).simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
+    });
+
+    it("passes down current line category", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={0} cue={cue} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find("button#cue-line-category").text()).toEqual("On Screen Text");
     });
 });
