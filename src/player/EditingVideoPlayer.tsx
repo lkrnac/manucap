@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 interface Props {
     mp4: string;
     poster: string;
-    onTimeChange: (time: number) => void;
+    onTimeChange?: (time: number) => void;
 }
 
 const EditingVideoPlayer = (props: Props): ReactElement => {

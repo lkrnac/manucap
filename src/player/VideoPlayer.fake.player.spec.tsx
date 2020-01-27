@@ -61,7 +61,7 @@ describe("VideoPlayer tested with fake player", () => {
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -81,7 +81,7 @@ describe("VideoPlayer tested with fake player", () => {
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -102,7 +102,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: RIGHT, shiftKey: true, altKey: true });
@@ -123,7 +123,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: LEFT, shiftKey: true, altKey: true });
@@ -143,7 +143,7 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode =
-            mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
+            mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
         const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -166,7 +166,7 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode =
-            mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={jest.fn()} />);
+            mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
         const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -230,7 +230,6 @@ describe("VideoPlayer tested with fake player", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={initialTestingTracks}
-                onTimeChange={jest.fn()}
             />
         );
 
@@ -288,7 +287,6 @@ describe("VideoPlayer tested with fake player", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={initialTestingTracks}
-                onTimeChange={jest.fn()}
             />
         );
 

@@ -29,7 +29,7 @@ export interface Props {
     mp4: string;
     poster: string;
     tracks: Track[];
-    onTimeChange: (time: number) => void;
+    onTimeChange?: (time: number) => void;
 }
 
 const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
@@ -67,8 +67,10 @@ export default class VideoPlayer extends React.Component<Props> {
                 vtmsTrack.currentVersion.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
             }
         });
-        this.player.on("timeupdate", () => {
-            this.props.onTimeChange(this.player.currentTime());
+        this.player.on("timeupdate", (): void => {
+            if (this.props.onTimeChange) {
+                this.props.onTimeChange(this.player.currentTime());
+            }
         });
 
         registerPlayerShortcuts(this);
