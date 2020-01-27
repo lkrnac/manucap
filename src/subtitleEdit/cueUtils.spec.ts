@@ -13,42 +13,42 @@ describe("cueUtils", () => {
     describe("copyNonConstructorProperties", () => {
         it("copies non-constructor properties from old cue to new one", () => {
             // GIVEN
-            const newCue = new VTTCue(0, 1, "new text");
-            const oldCue = new VTTCue(1, 2, "old text");
+            const newVttCue = new VTTCue(0, 1, "new text");
+            const oldVttCue = new VTTCue(1, 2, "old text");
             const region = new VTTRegion();
             region.lines = 10;
-            oldCue.position = 10;
-            oldCue.align = "center";
-            oldCue.region = region;
-            oldCue.snapToLines = true;
-            oldCue.size = 100;
-            oldCue.line = 5;
-            oldCue.vertical = "lr";
-            oldCue.id = "someId";
-            oldCue.pauseOnExit = true;
-            oldCue.positionAlign = "line-left";
-            oldCue.lineAlign = "end";
+            oldVttCue.position = 10;
+            oldVttCue.align = "center";
+            oldVttCue.region = region;
+            oldVttCue.snapToLines = true;
+            oldVttCue.size = 100;
+            oldVttCue.line = 5;
+            oldVttCue.vertical = "lr";
+            oldVttCue.id = "someId";
+            oldVttCue.pauseOnExit = true;
+            oldVttCue.positionAlign = "line-left";
+            oldVttCue.lineAlign = "end";
 
             // WHEN
-            copyNonConstructorProperties(newCue, oldCue);
+            copyNonConstructorProperties(newVttCue, oldVttCue);
 
             // THEN
-            expect(newCue.text).toEqual("new text");
-            expect(newCue.startTime).toEqual(0);
-            expect(newCue.endTime).toEqual(1);
+            expect(newVttCue.text).toEqual("new text");
+            expect(newVttCue.startTime).toEqual(0);
+            expect(newVttCue.endTime).toEqual(1);
 
-            expect(newCue.position).toEqual(10);
-            expect(newCue.align).toEqual("center");
+            expect(newVttCue.position).toEqual(10);
+            expect(newVttCue.align).toEqual("center");
             // @ts-ignore If it would be null -> test fails
-            expect(newCue.region.lines).toEqual(10);
-            expect(newCue.snapToLines).toEqual(true);
-            expect(newCue.size).toEqual(100);
-            expect(newCue.line).toEqual(5);
-            expect(newCue.vertical).toEqual("lr");
-            expect(newCue.id).toEqual("someId");
-            expect(newCue.pauseOnExit).toEqual(true);
-            expect(newCue.positionAlign).toEqual("line-left");
-            expect(newCue.lineAlign).toEqual("end");
+            expect(newVttCue.region.lines).toEqual(10);
+            expect(newVttCue.snapToLines).toEqual(true);
+            expect(newVttCue.size).toEqual(100);
+            expect(newVttCue.line).toEqual(5);
+            expect(newVttCue.vertical).toEqual("lr");
+            expect(newVttCue.id).toEqual("someId");
+            expect(newVttCue.pauseOnExit).toEqual(true);
+            expect(newVttCue.positionAlign).toEqual("line-left");
+            expect(newVttCue.lineAlign).toEqual("end");
         });
     });
 
@@ -150,14 +150,14 @@ describe("cueUtils", () => {
     describe("findPositionIcon", () => {
         it("finds icon for Row2Column2 position", () => {
             // GIVEN
-            const cue = new VTTCue(0, 1, "some text");
-            cue.line = 4;
-            cue.align = "start";
-            cue.positionAlign = "center";
-            cue.position = 65;
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = 4;
+            vttCue.align = "start";
+            vttCue.positionAlign = "center";
+            vttCue.position = 65;
 
             // WHEN
-            const actualPositionIcon = findPositionIcon(cue);
+            const actualPositionIcon = findPositionIcon(vttCue);
 
             // THEN
             expect(actualPositionIcon.iconText).toEqual("↖");
@@ -165,14 +165,14 @@ describe("cueUtils", () => {
 
         it("finds icon for Row4Column3 position", () => {
             // GIVEN
-            const cue = new VTTCue(0, 1, "some text");
-            cue.line = 12;
-            cue.align = "center";
-            cue.positionAlign = "auto";
-            cue.position = "auto";
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = 12;
+            vttCue.align = "center";
+            vttCue.positionAlign = "auto";
+            vttCue.position = "auto";
 
             // WHEN
-            const actualPositionIcon = findPositionIcon(cue);
+            const actualPositionIcon = findPositionIcon(vttCue);
 
             // THEN
             expect(actualPositionIcon.iconText).toEqual("↓");
@@ -180,14 +180,14 @@ describe("cueUtils", () => {
 
         it("finds icon for default position", () => {
             // GIVEN
-            const cue = new VTTCue(0, 1, "some text");
-            cue.line = "auto";
-            cue.align = "center";
-            cue.positionAlign = "auto";
-            cue.position = "auto";
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = "auto";
+            vttCue.align = "center";
+            vttCue.positionAlign = "auto";
+            vttCue.position = "auto";
 
             // WHEN
-            const actualPositionIcon = findPositionIcon(cue);
+            const actualPositionIcon = findPositionIcon(vttCue);
 
             // THEN
             expect(actualPositionIcon.iconText).toEqual("↓↓");
@@ -195,14 +195,14 @@ describe("cueUtils", () => {
 
         it("treats position as default if line parameter is not from positionStyles list", () => {
             // GIVEN
-            const cue = new VTTCue(0, 1, "some text");
-            cue.line = 16;
-            cue.align = "start";
-            cue.positionAlign = "center";
-            cue.position = 65;
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = 16;
+            vttCue.align = "start";
+            vttCue.positionAlign = "center";
+            vttCue.position = 65;
 
             // WHEN
-            const actualPositionIcon = findPositionIcon(cue);
+            const actualPositionIcon = findPositionIcon(vttCue);
 
             // THEN
             expect(actualPositionIcon.iconText).toEqual("↓↓");
@@ -210,14 +210,14 @@ describe("cueUtils", () => {
 
         it("treats position as default if align parameter is not from positionStyles list", () => {
             // GIVEN
-            const cue = new VTTCue(0, 1, "some text");
-            cue.line = 4;
-            cue.align = "left";
-            cue.positionAlign = "center";
-            cue.position = 65;
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = 4;
+            vttCue.align = "left";
+            vttCue.positionAlign = "center";
+            vttCue.position = 65;
 
             // WHEN
-            const actualPositionIcon = findPositionIcon(cue);
+            const actualPositionIcon = findPositionIcon(vttCue);
 
             // THEN
             expect(actualPositionIcon.iconText).toEqual("↓↓");
@@ -225,14 +225,14 @@ describe("cueUtils", () => {
 
         it("treats position as default if positionAlign parameter is not from positionStyles list", () => {
             // GIVEN
-            const cue = new VTTCue(0, 1, "some text");
-            cue.line = 4;
-            cue.align = "start";
-            cue.positionAlign = "line-left";
-            cue.position = 65;
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = 4;
+            vttCue.align = "start";
+            vttCue.positionAlign = "line-left";
+            vttCue.position = 65;
 
             // WHEN
-            const actualPositionIcon = findPositionIcon(cue);
+            const actualPositionIcon = findPositionIcon(vttCue);
 
             // THEN
             expect(actualPositionIcon.iconText).toEqual("↓↓");
@@ -240,14 +240,14 @@ describe("cueUtils", () => {
 
         it("treats position as default if position parameter is not from positionStyles list", () => {
             // GIVEN
-            const cue = new VTTCue(0, 1, "some text");
-            cue.line = 4;
-            cue.align = "start";
-            cue.positionAlign = "center";
-            cue.position = 22;
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = 4;
+            vttCue.align = "start";
+            vttCue.positionAlign = "center";
+            vttCue.position = 22;
 
             // WHEN
-            const actualPositionIcon = findPositionIcon(cue);
+            const actualPositionIcon = findPositionIcon(vttCue);
 
             // THEN
             expect(actualPositionIcon.iconText).toEqual("↓↓");

@@ -29,19 +29,23 @@ const initialTestingTracks = [
         type: "CAPTION",
         language: { id: "en-US" },
         default: true,
-        currentVersion: { cues: [
-                new VTTCue(0, 1, "Caption Line 1"),
-                new VTTCue(1, 2, "Caption Line 2"),
-            ]} as TrackVersion
+        currentVersion: {
+            cues: [
+                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            ]
+        } as TrackVersion
     } as Track,
     {
         type: "TRANSLATION",
         language: { id: "es-ES" },
         default: false,
-        currentVersion: { cues: [
-                new VTTCue(0, 1, "Translation Line 1"),
-                new VTTCue(1, 2, "Translation Line 2"),
-            ]} as TrackVersion
+        currentVersion: {
+            cues: [
+                { vttCue: new VTTCue(0, 1, "Translation Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Translation Line 2"), cueCategory: "DIALOGUE" },
+            ]
+        } as TrackVersion
     } as Track
 ];
 
@@ -192,13 +196,17 @@ describe("VideoPlayer tested with fake player", () => {
                 type: "CAPTION",
                 language: { id: "en-US" },
                 default: true,
-                currentVersion: { cues: [new VTTCue(0, 1, "Updated Caption")]}
+                currentVersion: {
+                    cues: [{ vttCue: new VTTCue(0, 1, "Updated Caption"), cueCategory: "DIALOGUE" }]
+                }
             },
             {
                 type: "TRANSLATION",
                 language: { id: "es-ES" },
                 default: false,
-                currentVersion: { cues: [new VTTCue(0, 1, "Updated Translation")]}
+                currentVersion: {
+                    cues: [{ vttCue: new VTTCue(0, 1, "Updated Translation"), cueCategory: "DIALOGUE" }]
+                }
             }
         ];
 
@@ -241,9 +249,10 @@ describe("VideoPlayer tested with fake player", () => {
             }
         ];
         textTracks["addEventListener"] = jest.fn();
-        const updatedCue = new VTTCue(0, 1, "Updated Caption");
-        updatedCue.position = 60;
-        updatedCue.align = "start";
+        const updatedVttCue = new VTTCue(0, 1, "Updated Caption");
+        updatedVttCue.position = 60;
+        updatedVttCue.align = "start";
+        const updatedCue = { vttCue: updatedVttCue, cueCategory: "DIALOGUE" };
         const tracks =  [
             {
                 type: "CAPTION",
@@ -267,6 +276,6 @@ describe("VideoPlayer tested with fake player", () => {
         simulateComponentDidUpdate(actualNode, { tracks });
 
         // THEN
-        expect(copyNonConstructorProperties).toBeCalledWith(new VTTCue(0, 1, "Caption Line 1"), updatedCue);
+        expect(copyNonConstructorProperties).toBeCalledWith(new VTTCue(0, 1, "Caption Line 1"), updatedVttCue);
     });
 });

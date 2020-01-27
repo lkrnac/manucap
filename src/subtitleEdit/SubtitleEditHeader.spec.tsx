@@ -1,6 +1,6 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { Language, Task, Track, TrackVersion } from "../player/model";
+import { CueDto, Language, Task, Track, TrackVersion } from "../player/model";
 import { updateEditingTrack, updateTask } from "../player/trackSlices";
 import { Provider } from "react-redux";
 import React from "react";
@@ -271,9 +271,9 @@ describe("SubtitleEditHeader", () => {
     it("renders Progress with cues", () => {
         // GIVEN
         const cues = [
-            new VTTCue(0, 20, "Caption Line 1"),
-            new VTTCue(20, 60, "Caption Line 2"),
-        ];
+            { vttCue: new VTTCue(0, 20, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(20, 60, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
         const testingTrack = {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
@@ -318,8 +318,8 @@ describe("SubtitleEditHeader", () => {
     it("renders Progress rounded", () => {
         // GIVEN
         const cues = [
-            new VTTCue(0, 20, "Caption Line 1"),
-            new VTTCue(20, 60, "Caption Line 2"),
+            { vttCue: new VTTCue(0, 20, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(20, 60, "Caption Line 2"), cueCategory: "DIALOGUE" },
         ];
         const testingTrack = {
             type: "CAPTION",
@@ -365,8 +365,8 @@ describe("SubtitleEditHeader", () => {
     it("renders Progress with cues and video length 0", () => {
         // GIVEN
         const cues = [
-            new VTTCue(0, 20, "Caption Line 1"),
-            new VTTCue(20, 60, "Caption Line 2"),
+            { vttCue: new VTTCue(0, 20, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(20, 60, "Caption Line 2"), cueCategory: "DIALOGUE" },
         ];
         const testingTrack = {
             type: "CAPTION",

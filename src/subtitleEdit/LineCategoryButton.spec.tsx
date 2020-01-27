@@ -5,7 +5,7 @@ import each from "jest-each";
 import { mount } from "enzyme";
 
 describe("LineCategoryButton", () => {
-    it("renders button", () => {
+    it("renders button for undefined category", () => {
         // GIVEN
         const expectedNode = mount(
             <div className="dropdown">
@@ -29,6 +29,32 @@ describe("LineCategoryButton", () => {
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
+
+    it("renders button for already defined category", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <div className="dropdown">
+                <button
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    id="cue-line-category"
+                    type="button"
+                    className="dropdown-toggle btn btn-outline-secondary"
+                >
+                    Audio Descriptions
+                </button>
+            </div>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <LineCategoryButton onChange={jest.fn()} category={"AUDIO_DESCRIPTION"} />
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
 
     it("renders with dropdown", () => {
         // GIVEN

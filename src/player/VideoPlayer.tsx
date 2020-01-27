@@ -1,9 +1,9 @@
 import "../../node_modules/video.js/dist/video-js.css";
+import { CueDto, Track } from "./model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import React from "react";
 import { ReactElement } from "react";
-import { Track } from "./model";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
 
@@ -31,10 +31,10 @@ export interface Props {
     tracks: Track[];
 }
 
-const updateCue = (videoJsTrack: TextTrack) => (cue: VTTCue, index: number): void => {
-    videoJsTrack.addCue(cue);
+const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
+    videoJsTrack.addCue(vttCue);
     const addedCue = videoJsTrack.cues[index] as VTTCue;
-    copyNonConstructorProperties(addedCue, cue);
+    copyNonConstructorProperties(addedCue, vttCue);
 };
 
 export default class VideoPlayer extends React.Component<Props> {
@@ -63,7 +63,7 @@ export default class VideoPlayer extends React.Component<Props> {
             const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
             const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
             if (vtmsTrack.currentVersion) {
-                vtmsTrack.currentVersion.cues.forEach(updateCue(videoJsTrack));
+                vtmsTrack.currentVersion.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
             }
         });
 
@@ -79,7 +79,7 @@ export default class VideoPlayer extends React.Component<Props> {
             const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
             const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
             if (vtmsTrack.currentVersion) {
-                vtmsTrack.currentVersion.cues.forEach(updateCue(videoJsTrack));
+                vtmsTrack.currentVersion.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }

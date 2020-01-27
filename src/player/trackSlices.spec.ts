@@ -1,6 +1,6 @@
 import "video.js"; // VTTCue definition
 import { Task, Track } from "./model";
-import { addCue, deleteCue, updateCue, updateEditingTrack, updateTask } from "./trackSlices";
+import { addCue, deleteCue, updateCueCategory, updateEditingTrack, updateTask, updateVttCue } from "./trackSlices";
 import deepFreeze from "deep-freeze";
 import testingStore from "../testUtils/testingStore";
 
@@ -11,8 +11,8 @@ const testingTrack = {
     videoTitle: "This is the video title",
     currentVersion: {
         cues: [
-            new VTTCue(0, 1, "Caption Line 1"),
-            new VTTCue(1, 2, "Caption Line 2"),
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
         ]
     }
 } as Track;
@@ -26,13 +26,13 @@ const testingTask = {
 deepFreeze(testingStore.getState());
 
 describe("trackSlices", () => {
-    describe("updateCue", () => {
+    describe("updateVttCue", () => {
         it("updates top level cues", () => {
             // WHEN
-            testingStore.dispatch(updateCue(3, new VTTCue(1, 2, "Dummy Cue")));
+            testingStore.dispatch(updateVttCue(3, new VTTCue(1, 2, "Dummy Cue")));
 
             // THEN
-            expect(testingStore.getState().cues[3]).toEqual(new VTTCue(1, 2, "Dummy Cue"));
+            expect(testingStore.getState().cues[3].vttCue).toEqual(new VTTCue(1, 2, "Dummy Cue"));
         });
 
         it("updates cues in editing track", () => {
@@ -40,11 +40,45 @@ describe("trackSlices", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack));
 
             // WHEN
-            testingStore.dispatch(updateCue(1, new VTTCue(1, 2, "Dummy Cue")));
+            testingStore.dispatch(updateVttCue(1, new VTTCue(1, 2, "Dummy Cue")));
 
             // THEN
             // @ts-ignore - Test will fail if version is null
-            expect(testingStore.getState().editingTrack.currentVersion.cues[1]).toEqual(new VTTCue(1, 2, "Dummy Cue"));
+            expect(testingStore.getState().editingTrack.currentVersion.cues[1].vttCue)
+                .toEqual(new VTTCue(1, 2, "Dummy Cue"));
+        });
+    });
+
+    describe("updateCueCategory", () => {
+        it("ignores category update if cue doesn't exist in top level cues", () => {
+            // WHEN
+            testingStore.dispatch(updateCueCategory(3, "ONSCREEN_TEXT"));
+
+            // THEN
+            expect(testingStore.getState().cues[3]).toBeUndefined();
+        });
+
+        it("updates top level cues", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack));
+
+            // WHEN
+            testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT"));
+
+            // THEN
+            expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
+        });
+
+        it("updates cues in editing track", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack));
+
+            // WHEN
+            testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT"));
+
+            // THEN
+            // @ts-ignore - Test will fail if version is null
+            expect(testingStore.getState().editingTrack.currentVersion.cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
         });
     });
 
@@ -57,8 +91,8 @@ describe("trackSlices", () => {
             testingStore.dispatch(addCue(2, new VTTCue(2, 3, "Dummy Cue End")));
 
             // THEN
-            expect(testingStore.getState().cues[1]).toEqual(new VTTCue(1, 2, "Caption Line 2"));
-            expect(testingStore.getState().cues[2]).toEqual(new VTTCue(2, 3, "Dummy Cue End"));
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(2, 3, "Dummy Cue End"));
         });
 
         it("add cue in middle of cue array cues", () => {
@@ -69,8 +103,8 @@ describe("trackSlices", () => {
             testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert")));
 
             // THEN
-            expect(testingStore.getState().cues[1]).toEqual(new VTTCue(0.5, 1, "Dummy Cue Insert"));
-            expect(testingStore.getState().cues[2]).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(0.5, 1, "Dummy Cue Insert"));
+            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
         });
 
         it("add cue in middle of cue array cues in editing track", () => {
@@ -81,9 +115,9 @@ describe("trackSlices", () => {
             testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert")));
 
             // THEN
-            expect(testingStore.getState().editingTrack.currentVersion.cues[1])
+            expect(testingStore.getState().editingTrack.currentVersion.cues[1].vttCue)
                 .toEqual(new VTTCue(0.5, 1, "Dummy Cue Insert"));
-            expect(testingStore.getState().editingTrack.currentVersion.cues[2])
+            expect(testingStore.getState().editingTrack.currentVersion.cues[2].vttCue)
                 .toEqual(new VTTCue(1, 2, "Caption Line 2"));
         });
     });
@@ -97,7 +131,7 @@ describe("trackSlices", () => {
             testingStore.dispatch(deleteCue(   0));
 
             // THEN
-            expect(testingStore.getState().cues[0]).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(1);
         });
 
@@ -107,11 +141,11 @@ describe("trackSlices", () => {
             testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert")));
 
             // WHEN
-            testingStore.dispatch(deleteCue(   1));
+            testingStore.dispatch(deleteCue(1));
 
             // THEN
-            expect(testingStore.getState().cues[0]).toEqual(new VTTCue(0, 1, "Caption Line 1"));
-            expect(testingStore.getState().cues[1]).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(2);
         });
 
@@ -121,12 +155,12 @@ describe("trackSlices", () => {
             testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert")));
 
             // WHEN
-            testingStore.dispatch(deleteCue(   1));
+            testingStore.dispatch(deleteCue(1));
 
             // THEN
-            expect(testingStore.getState().editingTrack.currentVersion.cues[0])
+            expect(testingStore.getState().editingTrack.currentVersion.cues[0].vttCue)
                 .toEqual(new VTTCue(0, 1, "Caption Line 1"));
-            expect(testingStore.getState().editingTrack.currentVersion.cues[1])
+            expect(testingStore.getState().editingTrack.currentVersion.cues[1].vttCue)
                 .toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().editingTrack.currentVersion.cues.length).toEqual(2);
         });
@@ -136,10 +170,10 @@ describe("trackSlices", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack));
 
             // WHEN
-            testingStore.dispatch(deleteCue(   1));
+            testingStore.dispatch(deleteCue(1));
 
             // THEN
-            expect(testingStore.getState().cues[0]).toEqual(new VTTCue(0, 1, "Caption Line 1"));
+            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
             expect(testingStore.getState().cues.length).toEqual(1);
         });
     });

@@ -3,8 +3,15 @@ export interface Language {
     readonly name: string;
 }
 
+export type CueCategory = "DIALOGUE" | "ONSCREEN_TEXT" | "AUDIO_DESCRIPTION" | "LYRICS";
+
+export interface CueDto {
+    readonly vttCue: VTTCue;
+    readonly cueCategory: CueCategory;
+}
+
 export interface TrackVersion {
-    readonly cues: VTTCue[];
+    readonly cues: CueDto[];
 }
 
 export interface Track {

@@ -67,11 +67,11 @@ const convertToHtmlOptions = {
     defaultBlockTag: null,
 } as Options;
 
-const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string): void => {
+const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: string): void => {
     // GIVEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} cue={cue} />
+            <CueTextEditor index={0} vttCue={vttCue} />
         </Provider>
     );
     const editorState = actualNode.find(Editor).props().editorState;
@@ -83,26 +83,26 @@ const testInlineStyle = (cue: VTTCue, buttonIndex: number, expectedText: string)
     actualNode.find("button").at(buttonIndex).simulate("click");
 
     // THEN
-    expect(testingStore.getState().cues[0].text).toEqual(expectedText);
+    expect(testingStore.getState().cues[0].vttCue.text).toEqual(expectedText);
     const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-    expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].text);
+    expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].vttCue.text);
 };
 
-const testForContentState = (contentState: ContentState, cue: VTTCue, expectedStateHtml: string): void => {
+const testForContentState = (contentState: ContentState, vttCue: VTTCue, expectedStateHtml: string): void => {
     const editorState = EditorState.createWithContent(contentState);
     const expectedNode = createExpectedNode(editorState);
 
     // WHEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} cue={cue} />
+            <CueTextEditor index={0} vttCue={vttCue} />
         </Provider>
     );
 
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-    expect(testingStore.getState().cues[0].text).toEqual(cue.text);
+    expect(testingStore.getState().cues[0].vttCue.text).toEqual(vttCue.text);
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };
 
@@ -113,39 +113,39 @@ describe("CueTextEditor", () => {
     });
     it("renders empty", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "");
+        const vttCue = new VTTCue(0, 1, "");
         const contentState = ContentState.createFromText("");
 
         // NOTE: Following latest expectation is not configurable nature of draft-js-export-html.
         // See following line in their code
         // eslint-disable-next-line max-len
         // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
-        testForContentState(contentState, cue, "<br>");
+        testForContentState(contentState, vttCue, "<br>");
     });
 
     it("renders with text", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
-        const contentState = ContentState.createFromText(cue.text);
+        const vttCue = new VTTCue(0, 1, "someText");
+        const contentState = ContentState.createFromText(vttCue.text);
 
-        testForContentState(contentState, cue, "someText");
+        testForContentState(contentState, vttCue, "someText");
     });
 
     it("renders with html", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b>");
-        const processedHTML = convertFromHTML(cue.text);
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b>");
+        const processedHTML = convertFromHTML(vttCue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, cue, "some <i>HTML</i> <b>Text</b>");
+        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b>");
     });
 
     it("updates cue in redux store when changed", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
+        const vttCue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue} />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -159,7 +159,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].text).toEqual("Paste text to start: someText");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Paste text to start: someText");
     });
 
     it("updated cue when bold inline style is used", () => {
@@ -176,10 +176,10 @@ describe("CueTextEditor", () => {
 
     it("added cue when add cue button is clicked", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
+        const vttCue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} cue={cue} />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
 
@@ -187,17 +187,17 @@ describe("CueTextEditor", () => {
         actualNode.find(".sbte-add-cue-button").simulate("click");
 
         // THEN
-        expect(testingStore.getState().cues[1].text).toEqual("");
-        expect(testingStore.getState().cues[1].startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].endTime).toEqual(4);
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
     });
 
     it("deletes cue when delete cue button is clicked", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
+        const vttCue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} cue={cue} />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
 
@@ -210,12 +210,12 @@ describe("CueTextEditor", () => {
 
     it("maintain cue styles when cue text is changes", () => {
         // GIVEN
-        const cue = new VTTCue(0, 1, "someText");
-        cue.position = 60;
-        cue.align = "end";
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.position = 60;
+        vttCue.align = "end";
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} cue={cue} />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -229,7 +229,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].position).toEqual(60);
-        expect(testingStore.getState().cues[0].align).toEqual("end");
+        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
+        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
     });
 });
