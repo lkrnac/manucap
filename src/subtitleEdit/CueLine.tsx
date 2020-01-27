@@ -6,7 +6,7 @@ import CueTextEditor from "./CueTextEditor";
 import LineCategoryButton from "./LineCategoryButton";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
-import { updateCue } from "../player/trackSlices";
+import { updateVttCue } from "../player/trackSlices";
 import { useDispatch } from "react-redux";
 
 interface Props {
@@ -18,7 +18,7 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
                                     startTime: number, endTime: number): void => {
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
-    dispatch(updateCue(props.index, newCue));
+    dispatch(updateVttCue(props.index, newCue));
 };
 
 const CueLine = (props: Props): ReactElement => {
@@ -65,7 +65,7 @@ const CueLine = (props: Props): ReactElement => {
                                 // noinspection JSUnfilteredForInLoop
                                 newCue[property] = newPositionProperties[property];
                             }
-                            dispatch(updateCue(props.index, newCue));
+                            dispatch(updateVttCue(props.index, newCue));
                         }}
                     />
                 </div>

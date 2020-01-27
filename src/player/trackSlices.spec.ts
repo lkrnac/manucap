@@ -1,6 +1,6 @@
 import "video.js"; // VTTCue definition
 import { Task, Track } from "./model";
-import { addCue, deleteCue, updateCue, updateEditingTrack, updateTask } from "./trackSlices";
+import { addCue, deleteCue, updateEditingTrack, updateTask, updateVttCue } from "./trackSlices";
 import deepFreeze from "deep-freeze";
 import testingStore from "../testUtils/testingStore";
 
@@ -26,10 +26,10 @@ const testingTask = {
 deepFreeze(testingStore.getState());
 
 describe("trackSlices", () => {
-    describe("updateCue", () => {
+    describe("updateVttCue", () => {
         it("updates top level cues", () => {
             // WHEN
-            testingStore.dispatch(updateCue(3, new VTTCue(1, 2, "Dummy Cue")));
+            testingStore.dispatch(updateVttCue(3, new VTTCue(1, 2, "Dummy Cue")));
 
             // THEN
             expect(testingStore.getState().cues[3].vttCue).toEqual(new VTTCue(1, 2, "Dummy Cue"));
@@ -40,7 +40,7 @@ describe("trackSlices", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack));
 
             // WHEN
-            testingStore.dispatch(updateCue(1, new VTTCue(1, 2, "Dummy Cue")));
+            testingStore.dispatch(updateVttCue(1, new VTTCue(1, 2, "Dummy Cue")));
 
             // THEN
             // @ts-ignore - Test will fail if version is null

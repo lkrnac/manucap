@@ -85,7 +85,7 @@ export const taskSlice = createSlice({
     }
 });
 
-export const updateCue = (idx: number, vttCue: VTTCue): AppThunk =>
+export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
         dispatch(cuesSlice.actions.updateCue({ idx, vttCue }));
     };

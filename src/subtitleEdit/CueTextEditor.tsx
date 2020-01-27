@@ -7,8 +7,8 @@ import AddCueLineButton from "./AddCueLineButton";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import { copyNonConstructorProperties } from "./cueUtils";
-import { updateCue } from "../player/trackSlices";
 import { updateEditorState } from "./editorStatesSlice";
+import { updateVttCue } from "../player/trackSlices";
 
 interface Props{
     index: number;
@@ -49,7 +49,7 @@ const CueTextEditor = (props: Props): ReactElement => {
             const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
             const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, text);
             copyNonConstructorProperties(vttCue, props.vttCue);
-            dispatch(updateCue(props.index, vttCue));
+            dispatch(updateVttCue(props.index, vttCue));
         },
         // ESLint suppress: copyNonConstructorProperties doesn't create side effect, just copies props from old vttCue.
         // If props.vttCue would be included, it creates endless FLUX loop
