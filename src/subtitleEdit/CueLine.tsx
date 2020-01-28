@@ -33,6 +33,9 @@ const CueLine = (props: Props): ReactElement => {
         Mousetrap.bind(["mod+shift+down", "alt+shift+down"], () => {
             updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
         });
+        Mousetrap.bind(["escape", "enter"], () => {
+            // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
+        });
     };
 
     useEffect(() => {
