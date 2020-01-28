@@ -66,9 +66,10 @@ describe("EditingVideoPlayer", () => {
 
     it("passes down correct properties", () => {
         // GIVEN
+        const handleTimeChange = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore} >
-                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" />
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
             </Provider>
         );
 
@@ -81,5 +82,6 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().poster).toEqual("dummyPoster");
         expect(actualNode.find(VideoPlayer).props().tracks[0]).toEqual(testingTrack);
         expect(actualNode.find(VideoPlayer).props().tracks.length).toEqual(1);
+        expect(actualNode.find(VideoPlayer).props().onTimeChange).toEqual(handleTimeChange);
     });
 });
