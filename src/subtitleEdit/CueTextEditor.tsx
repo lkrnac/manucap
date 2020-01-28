@@ -71,6 +71,8 @@ const CueTextEditor = (props: Props): ReactElement => {
                     return "setStartTime";
                 case "ArrowDown":
                     return "setEndTime";
+                case "/":
+                    return "toggleShortcutPopup";
             }
         }
         return Draft.getDefaultKeyBinding(e);
@@ -91,6 +93,9 @@ const CueTextEditor = (props: Props): ReactElement => {
                 return "handled";
             case "setEndTime":
                 Mousetrap.trigger("mod+shift+down");
+                return "handled";
+            case "toggleShortcutPopup":
+                Mousetrap.trigger("mod+shift+/");
                 return "handled";
             default:
                 return "not-handled";

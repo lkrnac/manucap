@@ -352,4 +352,28 @@ describe("CueTextEditor", () => {
         expect(mousetrapSpy).toBeCalled();
         expect(mousetrapSpy).toBeCalledWith("mod+shift+down");
     });
+
+    it("should handle toggleShortcutPopup key shortcut", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const vttCue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueTextEditor index={0} vttCue={vttCue} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+
+        // WHEN
+        editor.simulate("keyDown", {
+            key: "/",
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+/");
+    });
 });

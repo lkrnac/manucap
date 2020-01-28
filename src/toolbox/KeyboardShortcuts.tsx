@@ -1,12 +1,24 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import Modal from "react-bootstrap/Modal";
+import Mousetrap from "mousetrap";
 
 const KeyboardShortcuts = (): ReactElement => {
     const [show, setShow] = useState(false);
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
+
+    const registerShortcut = (): void => {
+        Mousetrap.bind(["mod+shift+/", "alt+shift+/"], () => {
+            setShow(!show);
+        });
+    };
+
+    useEffect(() => {
+        registerShortcut();
+    });
+
     return (
         <>
             <Button variant="light" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
