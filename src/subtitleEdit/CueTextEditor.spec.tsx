@@ -1,6 +1,6 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
+import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import { ReactWrapper, mount } from "enzyme";
 import CueTextEditor from "./CueTextEditor";
@@ -455,7 +455,7 @@ describe("CueTextEditor", () => {
 
     it("should handle unbound key shortcuts", () => {
         // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const defaultKeyBinding = jest.spyOn(Draft, "getDefaultKeyBinding");
         const editor = createEditorNode();
 
         // WHEN
@@ -467,6 +467,6 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(mousetrapSpy).not.toBeCalled();
+        expect(defaultKeyBinding).toBeCalled();
     });
 });
