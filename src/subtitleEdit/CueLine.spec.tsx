@@ -41,24 +41,12 @@ describe("CueLine", () => {
                             <input
                                 type="text"
                                 className="sbte-time-input"
-                                style={{
-                                    margin: "5px",
-                                    width: "130px",
-                                    maxWidth: "200px",
-                                    padding: "5px"
-                                }}
                                 value="00:00:00.000"
                                 onChange={(): void => {}}
                             />
                             <input
                                 type="text"
                                 className="sbte-time-input"
-                                style={{
-                                    margin: "5px",
-                                    width: "130px",
-                                    maxWidth: "200px",
-                                    padding: "5px"
-                                }}
                                 value="00:00:00.000"
                                 onChange={(): void => {}}
                             />
@@ -130,24 +118,12 @@ describe("CueLine", () => {
                             <input
                                 type="text"
                                 className="sbte-time-input"
-                                style={{
-                                    margin: "5px",
-                                    width: "130px",
-                                    maxWidth: "200px",
-                                    padding: "5px"
-                                }}
                                 value="00:00:01.000"
                                 onChange={(): void => {}}
                             />
                             <input
                                 type="text"
                                 className="sbte-time-input"
-                                style={{
-                                    margin: "5px",
-                                    width: "130px",
-                                    maxWidth: "200px",
-                                    padding: "5px"
-                                }}
                                 value="00:00:02.000"
                                 onChange={(): void => {}}
                             />

@@ -76,9 +76,9 @@ describe("SubtitleEdit", () => {
                                 <button className="footer-btn">
                                     View All Tracks
                                 </button>
-                                <buttons className="footer-btn float-right mr-3">
+                                <button className="footer-btn float-right">
                                     Complete
-                                </buttons>
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -45,7 +45,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
                         <button className="footer-btn">
                             View All Tracks
                         </button>
-                        <button className="footer-btn float-right mr-3">
+                        <button className="footer-btn float-right">
                             Complete
                         </button>
                     </div>
