@@ -452,4 +452,21 @@ describe("CueTextEditor", () => {
         expect(mousetrapSpy).toBeCalled();
         expect(mousetrapSpy).toBeCalledWith("mod+shift+/");
     });
+
+    it("should handle unbound key shortcuts", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: 83,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).not.toBeCalled();
+    });
 });

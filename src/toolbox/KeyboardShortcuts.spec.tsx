@@ -1,8 +1,11 @@
 import "../testUtils/initBrowserEnvironment";
+// @ts-ignore - Doesn't have types definitions file
+import * as simulant from "simulant";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import Modal from "react-bootstrap/Modal";
 import { Provider } from "react-redux";
 import React from "react";
+import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
 import testingStore from "../testUtils/testingStore";
 
@@ -177,6 +180,43 @@ describe("KeyboardShortcuts", () => {
         // WHEN
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
         actualNode.find(".modal-footer .btn-primary").simulate("click");
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(Modal).props().show).toEqual(false);
+    });
+
+    it("opens keyboard shortcuts modal on keyboard shortcut", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <KeyboardShortcuts />
+            </Provider>
+        );
+
+        // WHEN
+        act(() => {
+            simulant.fire(document.documentElement, "keydown", { keyCode: 191, shiftKey: true, altKey: true });
+        });
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(Modal).props().show).toEqual(true);
+    });
+
+    it("closes keyboard shortcuts modal on keyboard shortcut", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <KeyboardShortcuts />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
+        act(() => {
+            simulant.fire(document.documentElement, "keydown", { keyCode: 191, shiftKey: true, altKey: true });
+        });
         actualNode.update();
 
         // THEN
