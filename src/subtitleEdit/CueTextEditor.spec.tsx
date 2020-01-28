@@ -460,7 +460,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 83,
+            keyCode: 8, // backspace
             metaKey: false,
             shiftKey: true,
             altKey: true,
