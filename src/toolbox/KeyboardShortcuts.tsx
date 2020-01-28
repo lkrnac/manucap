@@ -9,15 +9,14 @@ const KeyboardShortcuts = (): ReactElement => {
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
 
-    const registerShortcut = (): void => {
-        Mousetrap.bind(["mod+shift+/", "alt+shift+/"], () => {
-            setShow(!show);
-        });
-    };
-
     useEffect(() => {
-        registerShortcut();
-    });
+        const registerShortcuts = (): void => {
+            Mousetrap.bind(["mod+shift+/", "alt+shift+/"], () => {
+                setShow(!show);
+            });
+        };
+        registerShortcuts();
+    }, [show]);
 
     return (
         <>

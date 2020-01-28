@@ -26,21 +26,20 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
 const CueLine = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
-    const registerCaptionTimingShortcuts = (): void => {
-        Mousetrap.bind(["mod+shift+up", "alt+shift+up"], () => {
-            updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
-        });
-        Mousetrap.bind(["mod+shift+down", "alt+shift+down"], () => {
-            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
-        });
-        Mousetrap.bind(["escape", "enter"], () => {
-            // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
-        });
-    };
-
     useEffect(() => {
-        registerCaptionTimingShortcuts();
-    });
+        const registerShortcuts = (): void => {
+            Mousetrap.bind(["mod+shift+up", "alt+shift+up"], () => {
+                updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
+            });
+            Mousetrap.bind(["mod+shift+down", "alt+shift+down"], () => {
+                updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
+            });
+            Mousetrap.bind(["escape", "enter"], () => {
+                // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
+            });
+        };
+        registerShortcuts();
+    }, [dispatch, props]);
 
     return (
         <div className="sbte-cue-line" style={{ display: "flex" }}>
