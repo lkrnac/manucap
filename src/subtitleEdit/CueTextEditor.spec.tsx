@@ -56,6 +56,16 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
     </div>
 );
 
+const createEditorNode = (): ReactWrapper => {
+    const vttCue = new VTTCue(0, 1, "someText");
+    const actualNode = mount(
+        <Provider store={testingStore}>
+            <CueTextEditor index={0} vttCue={vttCue} />
+        </Provider>
+    );
+    return actualNode.find(".public-DraftEditor-content");
+};
+
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
 // defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
 // TODO: is this would be updated in types definition, we can remove this explicit cast + ts-ignore
@@ -142,13 +152,7 @@ describe("CueTextEditor", () => {
 
     it("updates cue in redux store when changed", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
 
         // WHEN
         editor.simulate("paste", {
@@ -233,20 +237,14 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
     });
 
-    it("should handle playPauseToggle key shortcut", () => {
+    it("should handle playPauseToggle key shortcut with meta key", () => {
         // GIVEN
         const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
 
         // WHEN
         editor.simulate("keyDown", {
-            key: "o",
+            keyCode: 79,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -257,20 +255,32 @@ describe("CueTextEditor", () => {
         expect(mousetrapSpy).toBeCalledWith("mod+shift+o");
     });
 
-    it("should handle seekBack key shortcut", () => {
+    it("should handle playPauseToggle key shortcut with alt key", () => {
         // GIVEN
         const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
 
         // WHEN
         editor.simulate("keyDown", {
-            key: "ArrowLeft",
+            keyCode: 79,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+o");
+    });
+
+    it("should handle seekBack key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: 37,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -281,20 +291,32 @@ describe("CueTextEditor", () => {
         expect(mousetrapSpy).toBeCalledWith("mod+shift+left");
     });
 
-    it("should handle seekAhead key shortcut", () => {
+    it("should handle seekBack key shortcut with alt key", () => {
         // GIVEN
         const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
 
         // WHEN
         editor.simulate("keyDown", {
-            key: "ArrowRight",
+            keyCode: 37,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+left");
+    });
+
+    it("should handle seekAhead key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: 39,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -305,20 +327,32 @@ describe("CueTextEditor", () => {
         expect(mousetrapSpy).toBeCalledWith("mod+shift+right");
     });
 
-    it("should handle setStartTime key shortcut", () => {
+    it("should handle seekAhead key shortcut with alt key", () => {
         // GIVEN
         const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
 
         // WHEN
         editor.simulate("keyDown", {
-            key: "ArrowUp",
+            keyCode: 39,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+right");
+    });
+
+    it("should handle setStartTime key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: 38,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -329,20 +363,32 @@ describe("CueTextEditor", () => {
         expect(mousetrapSpy).toBeCalledWith("mod+shift+up");
     });
 
-    it("should handle setEndTime key shortcut", () => {
+    it("should handle setStartTime key shortcut with alt key", () => {
         // GIVEN
         const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
 
         // WHEN
         editor.simulate("keyDown", {
-            key: "ArrowDown",
+            keyCode: 38,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+up");
+    });
+
+    it("should handle setEndTime key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: 40,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -353,23 +399,53 @@ describe("CueTextEditor", () => {
         expect(mousetrapSpy).toBeCalledWith("mod+shift+down");
     });
 
-    it("should handle toggleShortcutPopup key shortcut", () => {
+    it("should handle setEndTime key shortcut with alt key", () => {
         // GIVEN
         const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
 
         // WHEN
         editor.simulate("keyDown", {
-            key: "/",
+            keyCode: 40,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+down");
+    });
+
+    it("should handle toggleShortcutPopup key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: 191,
             metaKey: true,
             shiftKey: true,
             altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith("mod+shift+/");
+    });
+
+    it("should handle toggleShortcutPopup key shortcut with alt key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: 191,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
         });
 
         // THEN

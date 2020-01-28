@@ -1,5 +1,12 @@
 import { AppThunk, SubtitleEditState } from "../reducers/subtitleEditReducers";
-import Draft, { ContentState, DraftHandleValue, Editor, EditorState, convertFromHTML } from "draft-js";
+import {
+    ContentState,
+    DraftHandleValue,
+    Editor,
+    EditorState,
+    convertFromHTML,
+    getDefaultKeyBinding
+} from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,22 +67,22 @@ const CueTextEditor = (props: Props): ReactElement => {
 
     const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
         if (e.shiftKey && (e.metaKey || e.altKey)) {
-            switch (e.key) {
-                case "o":
+            switch (e.keyCode) {
+                case 79: // "o"
                     return "togglePlayPause";
-                case "ArrowLeft":
+                case 37: // ArrowLeft
                     return "seekBack";
-                case "ArrowRight":
+                case 39: // ArrowRight
                     return "seekAhead";
-                case "ArrowUp":
+                case 38: // ArrowUp
                     return "setStartTime";
-                case "ArrowDown":
+                case 40: // ArrowDown
                     return "setEndTime";
-                case "/":
+                case 191: // "/"
                     return "toggleShortcutPopup";
             }
         }
-        return Draft.getDefaultKeyBinding(e);
+        return getDefaultKeyBinding(e);
     };
     const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
         switch (shortcut) {
