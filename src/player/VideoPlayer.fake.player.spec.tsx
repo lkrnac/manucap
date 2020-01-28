@@ -226,11 +226,7 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-            />
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
         );
 
         // WHEN
@@ -283,11 +279,7 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-            />
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
         );
 
         // WHEN
