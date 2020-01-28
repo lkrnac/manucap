@@ -4,23 +4,24 @@ import { Dispatch } from "react";
 import { EditorState } from "draft-js";
 
 interface EditorStateAction {
-    editorId: number;
+    index: number;
     editorState: EditorState;
 }
 
 export const editorStatesSlice = createSlice({
     name: "editorStates",
-    initialState: new Map<number, EditorState>(),
+    initialState: [] as EditorState[],
     reducers: {
-        updateEditorState: (state, action: PayloadAction<EditorStateAction>): Map<number, EditorState> =>
-            state.set(action.payload.editorId, action.payload.editorState),
-        reset: (): Map<number, EditorState> => new Map<number, EditorState>()
+        updateEditorState: (state: EditorState[], action: PayloadAction<EditorStateAction>): void => {
+            state[action.payload.index] = action.payload.editorState;
+        },
+        reset: (): EditorState[] => []
     }
 });
 
-export const updateEditorState = (editorId: number, editorState: EditorState): AppThunk =>
+export const updateEditorState = (index: number, editorState: EditorState): AppThunk =>
     (dispatch: Dispatch<PayloadAction<EditorStateAction>>): void => {
-        dispatch(editorStatesSlice.actions.updateEditorState({ editorId, editorState }));
+        dispatch(editorStatesSlice.actions.updateEditorState({ index, editorState }));
     };
 
 export const reset = (): AppThunk => (dispatch: Dispatch<PayloadAction<undefined>>): void =>

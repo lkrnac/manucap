@@ -16,7 +16,7 @@ describe("editorStatesSlice", () => {
 
         // THEN
         // @ts-ignore Test would fail if it returns null
-        expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText()).toEqual("editor1 text");
+        expect(testingStore.getState().editorStates[1].getCurrentContent().getPlainText()).toEqual("editor1 text");
     });
 
     it("updates editor state for editor ID 2", () => {
@@ -29,6 +29,6 @@ describe("editorStatesSlice", () => {
 
         // THEN
         // @ts-ignore Test would fail if it returns null
-        expect(testingStore.getState().editorStates.get(2).getCurrentContent().getPlainText()).toEqual("editor2 text");
+        expect(testingStore.getState().editorStates[2].getCurrentContent().getPlainText()).toEqual("editor2 text");
     });
 });
