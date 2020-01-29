@@ -68,29 +68,6 @@ export const editingTrackSlice = createSlice({
     initialState: null as Track | null,
     reducers: {
         updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack
-    },
-    extraReducers: {
-        [cuesSlice.actions.updateVttCue.type]: (state, action: PayloadAction<VttCueAction>): void => {
-            if (state && state.currentVersion) {
-                state.currentVersion.cues[action.payload.idx].vttCue = action.payload.vttCue;
-            }
-        },
-        [cuesSlice.actions.updateCueCategory.type]: (state, action: PayloadAction<CueCategoryAction>): void => {
-            if (state && state.currentVersion && state.currentVersion.cues[action.payload.idx]) {
-                state.currentVersion.cues[action.payload.idx].cueCategory = action.payload.cueCategory;
-            }
-        },
-        [cuesSlice.actions.addCue.type]: (state, action: PayloadAction<VttCueAction>): void => {
-            if (state && state.currentVersion) {
-                const newCueDto = { vttCue: action.payload.vttCue, cueCategory: "DIALOGUE" as CueCategory };
-                state.currentVersion.cues.splice(action.payload.idx, 0, newCueDto);
-            }
-        },
-        [cuesSlice.actions.deleteCue.type]: (state, action: PayloadAction<CueIndexAction>): void => {
-            if (state && state.currentVersion) {
-                state.currentVersion.cues.splice(action.payload.idx, 1);
-            }
-        }
     }
 });
 
@@ -125,8 +102,6 @@ export const deleteCue = (idx: number): AppThunk =>
 export const updateEditingTrack = (track: Track): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(editingTrackSlice.actions.updateEditingTrack({ editingTrack: track }));
-        const cues = track && track.currentVersion ? track.currentVersion.cues : [] as CueDto[];
-        dispatch(cuesSlice.actions.updateCues({ cues }));
     };
 
 export const updateTask = (task: Task): AppThunk =>
@@ -134,3 +109,7 @@ export const updateTask = (task: Task): AppThunk =>
         dispatch(taskSlice.actions.updateTask({ task }));
     };
 
+export const updateCues = (cues: CueDto[]): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
+        dispatch(cuesSlice.actions.updateCues({ cues }));
+    };
