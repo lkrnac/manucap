@@ -102,7 +102,7 @@ const CueTextEditor = (props: Props): ReactElement => {
                 </div>
                 <AddCueLineButton
                     cueIndex={props.index}
-                    cueEndTime={props.vttCue.endTime}
+                    vttCue={props.vttCue}
                     cueCategory={props.cueCategory}
                 />
             </div>
