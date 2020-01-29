@@ -11,8 +11,8 @@ export interface CueDto {
 }
 
 export interface LanguageCues {
-    readonly language: string;
-    cues: CueDto[];
+    readonly languageId: string;
+    readonly cues: CueDto[];
 }
 
 export interface Track {

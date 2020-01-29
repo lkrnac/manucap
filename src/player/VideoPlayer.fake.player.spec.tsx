@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
-import { Track, TrackVersion } from "./model";
+import { LanguageCues, Track } from "./model";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
 import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
@@ -25,29 +25,26 @@ interface FakeTextTrackList {
 }
 
 const initialTestingTracks = [
+    { type: "CAPTION", language: { id: "en-US" }, default: true },
+    { type: "TRANSLATION", language: { id: "es-ES" }, default: false }
+] as Track[];
+
+const initialTestingLanguageCuesArray = [
     {
-        type: "CAPTION",
-        language: { id: "en-US" },
-        default: true,
-        currentVersion: {
-            cues: [
-                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            ]
-        } as TrackVersion
-    } as Track,
+        languageId: "en-US",
+        cues: [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ]
+    },
     {
-        type: "TRANSLATION",
-        language: { id: "es-ES" },
-        default: false,
-        currentVersion: {
-            cues: [
-                { vttCue: new VTTCue(0, 1, "Translation Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(1, 2, "Translation Line 2"), cueCategory: "DIALOGUE" },
-            ]
-        } as TrackVersion
-    } as Track
-];
+        languageId: "es-ES",
+        cues: [
+            { vttCue: new VTTCue(0, 1, "Translation Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Translation Line 2"), cueCategory: "DIALOGUE" },
+        ]
+    },
+] as LanguageCues[];
 
 describe("VideoPlayer tested with fake player", () => {
     it("executes play via keyboard shortcut", () => {
@@ -60,7 +57,7 @@ describe("VideoPlayer tested with fake player", () => {
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -79,7 +76,7 @@ describe("VideoPlayer tested with fake player", () => {
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -99,7 +96,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: RIGHT, shiftKey: true, altKey: true });
@@ -119,7 +116,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />);
 
         // WHEN
         simulant.fire(document.documentElement, "keydown", { keyCode: LEFT, shiftKey: true, altKey: true });
@@ -137,7 +134,9 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
         const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -158,7 +157,9 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
         const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -191,23 +192,14 @@ describe("VideoPlayer tested with fake player", () => {
             }
         ];
         textTracks["addEventListener"] = jest.fn();
-        const tracks =  [
+        const languageCuesArray = [
             {
-                type: "CAPTION",
-                language: { id: "en-US" },
-                default: true,
-                currentVersion: {
-                    cues: [{ vttCue: new VTTCue(0, 1, "Updated Caption"), cueCategory: "DIALOGUE" }]
-                }
+                languageId: "en-US",
+                cues: [{ vttCue: new VTTCue(0, 1, "Updated Caption"), cueCategory: "DIALOGUE" }]},
+            {
+                languageId: "es-ES",
+                cues: [{ vttCue: new VTTCue(0, 1, "Updated Translation"), cueCategory: "DIALOGUE" }]
             },
-            {
-                type: "TRANSLATION",
-                language: { id: "es-ES" },
-                default: false,
-                currentVersion: {
-                    cues: [{ vttCue: new VTTCue(0, 1, "Updated Translation"), cueCategory: "DIALOGUE" }]
-                }
-            }
         ];
 
         const playerMock = {
@@ -217,11 +209,16 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={initialTestingTracks}
+                languageCuesArray={initialTestingLanguageCuesArray}
+            />
         );
 
         // WHEN
-        simulateComponentDidUpdate(actualNode, { tracks });
+        simulateComponentDidUpdate(actualNode, { languageCuesArray });
 
         // THEN
         expect(textTracks[0].removeCue).nthCalledWith(1, new VTTCue(1, 2, "Caption Line 2"));
@@ -253,14 +250,7 @@ describe("VideoPlayer tested with fake player", () => {
         updatedVttCue.position = 60;
         updatedVttCue.align = "start";
         const updatedCue = { vttCue: updatedVttCue, cueCategory: "DIALOGUE" };
-        const tracks =  [
-            {
-                type: "CAPTION",
-                language: { id: "en-US" },
-                default: true,
-                currentVersion: { cues: [updatedCue]}
-            }
-        ];
+        const languageCuesArray = [{ languageId: "en-US", cues: [updatedCue]}];
 
         const playerMock = {
             textTracks: (): FakeTextTrack[] => textTracks
@@ -269,11 +259,16 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={initialTestingTracks}
+                languageCuesArray={initialTestingLanguageCuesArray}
+            />
         );
 
         // WHEN
-        simulateComponentDidUpdate(actualNode, { tracks });
+        simulateComponentDidUpdate(actualNode, { languageCuesArray });
 
         // THEN
         expect(copyNonConstructorProperties).toBeCalledWith(new VTTCue(0, 1, "Caption Line 1"), updatedVttCue);

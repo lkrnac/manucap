@@ -1,5 +1,5 @@
 import "../../node_modules/video.js/dist/video-js.css";
-import { CueDto, Track } from "./model";
+import { CueDto, LanguageCues, Track } from "./model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import React from "react";
@@ -29,6 +29,7 @@ export interface Props {
     mp4: string;
     poster: string;
     tracks: Track[];
+    languageCuesArray: LanguageCues[];
 }
 
 const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
@@ -62,9 +63,11 @@ export default class VideoPlayer extends React.Component<Props> {
             const videoJsTrack = event.track as TextTrack;
             const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
             const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
-            if (vtmsTrack.currentVersion) {
-                vtmsTrack.currentVersion.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
-            }
+            this.props.languageCuesArray
+                .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
+                .forEach((languageCues: LanguageCues) => {
+                    languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
+                });
         });
 
         registerPlayerShortcuts(this);
@@ -78,9 +81,11 @@ export default class VideoPlayer extends React.Component<Props> {
             }
             const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
             const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
-            if (vtmsTrack.currentVersion) {
-                vtmsTrack.currentVersion.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
-            }
+            this.props.languageCuesArray
+                .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
+                .forEach((languageCues: LanguageCues) => {
+                    languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
+                });
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
     }
