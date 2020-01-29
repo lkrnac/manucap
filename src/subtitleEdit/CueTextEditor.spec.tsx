@@ -190,6 +190,26 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
         expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+        expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
+    });
+
+    it("added cue with category when add cue button is clicked", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} vttCue={vttCue} cueCategory="AUDIO_DESCRIPTION" />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+        expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
     });
 
     it("deletes cue when delete cue button is clicked", () => {

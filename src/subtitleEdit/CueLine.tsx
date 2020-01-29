@@ -74,7 +74,12 @@ const CueLine = (props: Props): ReactElement => {
                 </div>
             </div>
             <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
-                <CueTextEditor key={props.index} index={props.index} vttCue={props.cue.vttCue} />
+                <CueTextEditor
+                    key={props.index}
+                    index={props.index}
+                    vttCue={props.cue.vttCue}
+                    cueCategory={props.cue.cueCategory}
+                />
             </div>
         </div>
     );
