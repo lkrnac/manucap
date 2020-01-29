@@ -10,12 +10,12 @@ export interface CueDto {
     readonly cueCategory: CueCategory;
 }
 
-export interface TrackVersion {
-    readonly cues: CueDto[];
+export interface LanguageCues {
+    readonly language: string;
+    cues: CueDto[];
 }
 
 export interface Track {
-    readonly currentVersion?: TrackVersion;
     readonly type: "CAPTION" | "TRANSLATION";
     readonly language: Language;
     readonly default: boolean;
