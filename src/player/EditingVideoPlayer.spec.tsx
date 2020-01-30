@@ -1,24 +1,23 @@
 import "../testUtils/initBrowserEnvironment";
+import { CueDto, Track } from "./model";
+import { updateCues, updateEditingTrack } from "./trackSlices";
 import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Provider } from "react-redux";
 import React from "react";
-import { Track } from "./model";
 import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
 import testingStore from "../testUtils/testingStore";
-import { updateEditingTrack } from "./trackSlices";
 
 const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US" },
     default: true,
-    currentVersion: {
-        cues: [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ]
-    }
 } as Track;
+
+const testingCues = [
+    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+] as CueDto[];
 
 describe("EditingVideoPlayer", () => {
     it("renders without player if track is not defined", () => {
@@ -71,9 +70,19 @@ describe("EditingVideoPlayer", () => {
                 <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" />
             </Provider>
         );
+        const expectedLanguageCuesArray = [
+            {
+                languageId: "en-US",
+                cues: [
+                    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                ]
+            }
+        ];
 
         // WHEN
         testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateCues(testingCues));
         actualNode.update();
 
         // THEN
@@ -81,5 +90,6 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().poster).toEqual("dummyPoster");
         expect(actualNode.find(VideoPlayer).props().tracks[0]).toEqual(testingTrack);
         expect(actualNode.find(VideoPlayer).props().tracks.length).toEqual(1);
+        expect(actualNode.find(VideoPlayer).props().languageCuesArray).toEqual(expectedLanguageCuesArray);
     });
 });
