@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { CueDto, Language, Task, Track, TrackVersion } from "../player/model";
-import { updateEditingTrack, updateTask } from "../player/trackSlices";
+import { CueDto, Language, Task, Track } from "../player/model";
+import { updateCues, updateEditingTrack, updateTask } from "../player/trackSlices";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEditHeader from "./SubtitleEditHeader";
@@ -280,7 +280,6 @@ describe("SubtitleEditHeader", () => {
             default: true,
             videoTitle: "This is the video title",
             videoLength: 120,
-            currentVersion: { cues } as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -307,6 +306,7 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
+        testingStore.dispatch(updateCues(cues));
         testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
 
@@ -320,14 +320,13 @@ describe("SubtitleEditHeader", () => {
         const cues = [
             { vttCue: new VTTCue(0, 20, "Caption Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(20, 60, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ];
+        ] as CueDto[];
         const testingTrack = {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
             videoTitle: "This is the video title",
             videoLength: 130,
-            currentVersion: { cues } as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -354,6 +353,7 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
+        testingStore.dispatch(updateCues(cues));
         testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
 
@@ -367,14 +367,13 @@ describe("SubtitleEditHeader", () => {
         const cues = [
             { vttCue: new VTTCue(0, 20, "Caption Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(20, 60, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ];
+        ] as CueDto[];
         const testingTrack = {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
             videoTitle: "This is the video title",
             videoLength: 0,
-            currentVersion: { cues } as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -403,6 +402,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateCues(cues));
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -417,7 +417,6 @@ describe("SubtitleEditHeader", () => {
             default: true,
             videoTitle: "This is the video title",
             videoLength: 120,
-            currentVersion: { cues: []} as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -460,7 +459,6 @@ describe("SubtitleEditHeader", () => {
             default: true,
             videoTitle: "This is the video title",
             videoLength: 3730,
-            currentVersion: { cues: []} as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
