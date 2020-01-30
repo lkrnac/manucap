@@ -9,11 +9,12 @@ const getTrackType = (track: Track): string => {
 };
 
 const getLanguageDescription = (track: Track): ReactElement => {
+    const languageNameNullSafe = track.language ? track.language.name : "";
     if (track.type === "TRANSLATION") {
         const sourceLanguage = track.sourceTrack ? <b>{track.sourceTrack.language.name}</b> : null;
-        return <span>{sourceLanguage} to <b>{track.language.name}</b></span>;
+        return <span>{sourceLanguage} to <b>{languageNameNullSafe}</b></span>;
     }
-    return <b>{track.language.name}</b>;
+    return <b>{languageNameNullSafe}</b>;
 };
 
 const getTrackLength = (track: Track): ReactElement => {
