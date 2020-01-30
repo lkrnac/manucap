@@ -307,8 +307,8 @@ describe("SubtitleEditHeader", () => {
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
-        testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateEditingTrack(testingTrack));
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
