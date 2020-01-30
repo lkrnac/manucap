@@ -40,8 +40,8 @@ describe("CueLine", () => {
                             flex: "1 1 300px",
                             display: "flex",
                             flexDirection: "column",
-                            paddingLeft: "20px",
-                            paddingTop: "15px",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
                             justifyContent: "space-between"
                         }}
                     >
@@ -55,10 +55,11 @@ describe("CueLine", () => {
                                 type="text"
                                 className="sbte-time-input"
                                 style={{
-                                    margin: "5px",
-                                    width: "130px",
+                                    marginBottom: "5px",
+                                    width: "100px",
                                     maxWidth: "200px",
-                                    padding: "5px"
+                                    padding: "5px",
+                                    textAlign: "center"
                                 }}
                                 value="00:00:00.000"
                                 onChange={(): void => {}}
@@ -67,10 +68,11 @@ describe("CueLine", () => {
                                 type="text"
                                 className="sbte-time-input"
                                 style={{
-                                    margin: "5px",
-                                    width: "130px",
+                                    marginBottom: "5px",
+                                    width: "100px",
                                     maxWidth: "200px",
-                                    padding: "5px"
+                                    padding: "5px",
+                                    textAlign: "center"
                                 }}
                                 value="00:00:00.000"
                                 onChange={(): void => {}}
@@ -141,8 +143,8 @@ describe("CueLine", () => {
                             flex: "1 1 300px",
                             display: "flex",
                             flexDirection: "column",
-                            paddingLeft: "20px",
-                            paddingTop: "15px",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
                             justifyContent: "space-between"
                         }}
                     >
@@ -156,10 +158,11 @@ describe("CueLine", () => {
                                 type="text"
                                 className="sbte-time-input"
                                 style={{
-                                    margin: "5px",
-                                    width: "130px",
+                                    marginBottom: "5px",
+                                    width: "100px",
                                     maxWidth: "200px",
-                                    padding: "5px"
+                                    padding: "5px",
+                                    textAlign: "center"
                                 }}
                                 value="00:00:01.000"
                                 onChange={(): void => {}}
@@ -168,10 +171,11 @@ describe("CueLine", () => {
                                 type="text"
                                 className="sbte-time-input"
                                 style={{
-                                    margin: "5px",
-                                    width: "130px",
+                                    marginBottom: "5px",
+                                    width: "100px",
                                     maxWidth: "200px",
-                                    padding: "5px"
+                                    padding: "5px",
+                                    textAlign: "center"
                                 }}
                                 value="00:00:02.000"
                                 onChange={(): void => {}}
