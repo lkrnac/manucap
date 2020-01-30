@@ -41,8 +41,8 @@ const CueLine = (props: Props): ReactElement => {
                     flex: "1 1 300px",
                     display: "flex",
                     flexDirection: "column",
-                    paddingLeft: "20px",
-                    paddingTop: "15px",
+                    paddingLeft: "10px",
+                    paddingTop: "5px",
                     justifyContent: "space-between"
                 }}
             >
