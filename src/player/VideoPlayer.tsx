@@ -38,6 +38,16 @@ const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): 
     copyNonConstructorProperties(addedCue, vttCue);
 };
 
+const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void => {
+    const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
+    const vtmsTrack = props.tracks.filter(matchTracks)[0] as Track;
+    props.languageCuesArray
+        .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
+        .forEach((languageCues: LanguageCues) => {
+            languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
+        });
+};
+
 export default class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
     private videoNode?: Node;
@@ -61,13 +71,7 @@ export default class VideoPlayer extends React.Component<Props> {
         this.player = videojs(this.videoNode, options) as VideoJsPlayer;
         this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
-            const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
-            const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
-            this.props.languageCuesArray
-                .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
-                .forEach((languageCues: LanguageCues) => {
-                    languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
-                });
+            updateCuesForVideoJsTrack(this.props, videoJsTrack);
         });
 
         registerPlayerShortcuts(this);
@@ -79,13 +83,7 @@ export default class VideoPlayer extends React.Component<Props> {
             for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
                 videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
             }
-            const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
-            const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
-            this.props.languageCuesArray
-                .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
-                .forEach((languageCues: LanguageCues) => {
-                    languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
-                });
+            updateCuesForVideoJsTrack(this.props, videoJsTrack);
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
     }
