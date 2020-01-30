@@ -106,7 +106,7 @@ describe("trackSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(0.5, 1, "Dummy Cue Insert"));
             expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
-            expect(testingStore.getState().cues[2].cueCategory).toEqual(new VTTCue(1, 2, "DIALOGUE"));
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
         });
 
         it("add cue in middle of cue array cues in editing track", () => {
