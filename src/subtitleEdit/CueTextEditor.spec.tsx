@@ -76,7 +76,8 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     );
     const editorState = actualNode.find(Editor).props().editorState;
     const selectionState = editorState.getSelection();
-    const newSelectionState = selectionState.set("focusOffset", 5) as SelectionState;
+    // select first 5 characters
+    const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
 
     // WHEN
     actualNode.find(Editor).props().onChange(EditorState.acceptSelection(editorState, newSelectionState));
@@ -89,7 +90,8 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
 };
 
 const testForContentState = (contentState: ContentState, vttCue: VTTCue, expectedStateHtml: string): void => {
-    const editorState = EditorState.createWithContent(contentState);
+    let editorState = EditorState.createWithContent(contentState);
+    editorState = EditorState.moveFocusToEnd(editorState);
     const expectedNode = createExpectedNode(editorState);
 
     // WHEN
@@ -133,11 +135,11 @@ describe("CueTextEditor", () => {
 
     it("renders with html", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b>");
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
         const processedHTML = convertFromHTML(vttCue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b>");
+        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample");
     });
 
     it("updates cue in redux store when changed", () => {
@@ -154,12 +156,12 @@ describe("CueTextEditor", () => {
         editor.simulate("paste", {
             clipboardData: {
                 types: ["text/plain"],
-                getData: (): string => "Paste text to start: ",
+                getData: (): string => " Paste text to end",
             }
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Paste text to start: someText");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
     it("updated cue when bold inline style is used", () => {

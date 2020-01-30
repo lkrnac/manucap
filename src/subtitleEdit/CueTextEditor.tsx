@@ -35,6 +35,7 @@ const CueTextEditor = (props: Props): ReactElement => {
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
+        editorState = EditorState.moveFocusToEnd(editorState);
     }
     useEffect(
         () => {
