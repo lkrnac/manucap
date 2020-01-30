@@ -84,7 +84,7 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
 
     // THEN
     expect(testingStore.getState().cues[0].vttCue.text).toEqual(expectedText);
-    const currentContent = testingStore.getState().editorStates[0].getCurrentContent();
+    const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].vttCue.text);
 };
 
@@ -101,7 +101,7 @@ const testForContentState = (contentState: ContentState, vttCue: VTTCue, expecte
 
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    const currentContent = testingStore.getState().editorStates[0].getCurrentContent();
+    const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
     expect(testingStore.getState().cues[0].vttCue.text).toEqual(vttCue.text);
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };

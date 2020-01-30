@@ -1,6 +1,6 @@
+import { EditorState, RichUtils } from "draft-js";
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RichUtils } from "draft-js";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
 import { updateEditorState } from "./editorStatesSlice";
 
@@ -12,7 +12,8 @@ interface Props{
 
 const InlineStyleButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const editorState = useSelector((state: SubtitleEditState) => state.editorStates[props.editorIndex]);
+    const editorState = useSelector((state: SubtitleEditState) =>
+        state.editorStates.get(props.editorIndex)) as EditorState;
     const buttonStyle = editorState && editorState.getCurrentInlineStyle().has(props.inlineStyle)
         ? "btn btn-secondary"
         : "btn btn-outline-secondary";

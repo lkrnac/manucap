@@ -29,7 +29,7 @@ const convertToHtmlOptions = {
 const CueTextEditor = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(props.vttCue.text);
-    let editorState = useSelector((state: SubtitleEditState) => state.editorStates[props.index]);
+    let editorState = useSelector((state: SubtitleEditState) => state.editorStates.get(props.index)) as EditorState;
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
