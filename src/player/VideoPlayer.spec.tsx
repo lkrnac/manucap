@@ -1,5 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
-
+import * as shortcuts from "../utils/shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import videojs, { VideoJsPlayer } from "video.js";
@@ -163,8 +163,8 @@ describe("VideoPlayer", () => {
         actualComponent.playPause = playPauseSpy;
 
         // WHEN
-        simulant.fire(document.documentElement, "keydown", { keyCode: 79, shiftKey: true, altKey: true });
-        simulant.fire(document.documentElement, "keydown", { keyCode: 79, shiftKey: true, altKey: true });
+        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
+        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
 
         // THEN
         sinon.assert.calledTwice(playPauseSpy);
@@ -178,7 +178,8 @@ describe("VideoPlayer", () => {
         actualComponent.shiftTime = shiftTimeSpy;
 
         // WHEN
-        simulant.fire(document.documentElement, "keydown", { keyCode: 37, shiftKey: true, altKey: true });
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_LEFT, shiftKey: true, altKey: true });
 
         // THEN
         sinon.assert.calledWith(shiftTimeSpy, -1000);
@@ -192,7 +193,8 @@ describe("VideoPlayer", () => {
         actualComponent.shiftTime = shiftTimeSpy;
 
         // WHEN
-        simulant.fire(document.documentElement, "keydown", { keyCode: 39, shiftKey: true, altKey: true });
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_RIGHT, shiftKey: true, altKey: true });
 
         // THEN
         sinon.assert.calledWith(shiftTimeSpy, 1000);

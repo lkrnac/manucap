@@ -13,6 +13,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
 import testingStore from "../testUtils/testingStore";
+import * as shortcuts from "../utils/shortcutConstants";
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -398,7 +399,8 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        simulant.fire(document.documentElement, "keydown", { keyCode: 38, shiftKey: true, altKey: true });
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_UP, shiftKey: true, altKey: true });
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
@@ -416,7 +418,8 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        simulant.fire(document.documentElement, "keydown", { keyCode: 40, shiftKey: true, altKey: true });
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_DOWN, shiftKey: true, altKey: true });
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);

@@ -1,4 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
+import * as shortcuts from "../utils/shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import KeyboardShortcuts from "./KeyboardShortcuts";
@@ -196,7 +197,8 @@ describe("KeyboardShortcuts", () => {
 
         // WHEN
         act(() => {
-            simulant.fire(document.documentElement, "keydown", { keyCode: 191, shiftKey: true, altKey: true });
+            simulant.fire(
+                document.documentElement, "keydown", { keyCode: shortcuts.SLASH_CHAR, shiftKey: true, altKey: true });
         });
         actualNode.update();
 
@@ -215,7 +217,8 @@ describe("KeyboardShortcuts", () => {
         // WHEN
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
         act(() => {
-            simulant.fire(document.documentElement, "keydown", { keyCode: 191, shiftKey: true, altKey: true });
+            simulant.fire(
+                document.documentElement, "keydown", { keyCode: shortcuts.SLASH_CHAR, shiftKey: true, altKey: true });
         });
         actualNode.update();
 

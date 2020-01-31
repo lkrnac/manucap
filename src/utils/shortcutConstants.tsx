@@ -1,0 +1,21 @@
+export const O_CHAR = 79;
+export const ARROW_LEFT = 37;
+export const ARROW_UP = 38;
+export const ARROW_RIGHT = 39;
+export const ARROW_DOWN = 40;
+export const SLASH_CHAR = 191;
+
+export const MOD_SHIFT_O = "mod+shift+o";
+export const ALT_SHIFT_O = "alt+shift+o";
+export const MOD_SHIFT_LEFT = "mod+shift+left";
+export const ALT_SHIFT_LEFT = "alt+shift+left";
+export const MOD_SHIFT_UP = "mod+shift+up";
+export const ALT_SHIFT_UP = "alt+shift+up";
+export const MOD_SHIFT_RIGHT = "mod+shift+right";
+export const ALT_SHIFT_RIGHT = "alt+shift+right";
+export const MOD_SHIFT_DOWN = "mod+shift+down";
+export const ALT_SHIFT_DOWN = "alt+shift+down";
+export const MOD_SHIFT_SLASH = "mod+shift+/";
+export const ALT_SHIFT_SLASH = "alt+shift+/";
+export const ESCAPE = "escape";
+export const ENTER = "enter";

@@ -1,3 +1,4 @@
+import * as shortcuts from "../utils/shortcutConstants";
 import { AppThunk, SubtitleEditState } from "../reducers/subtitleEditReducers";
 import {
     ContentState,
@@ -71,17 +72,17 @@ const CueTextEditor = (props: Props): ReactElement => {
     const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
         if (e.shiftKey && (e.metaKey || e.altKey)) {
             switch (e.keyCode) {
-                case 79: // "o"
+                case shortcuts.O_CHAR:
                     return "togglePlayPause";
-                case 37: // ArrowLeft
+                case shortcuts.ARROW_LEFT:
                     return "seekBack";
-                case 39: // ArrowRight
+                case shortcuts.ARROW_RIGHT:
                     return "seekAhead";
-                case 38: // ArrowUp
+                case shortcuts.ARROW_UP:
                     return "setStartTime";
-                case 40: // ArrowDown
+                case shortcuts.ARROW_DOWN:
                     return "setEndTime";
-                case 191: // "/"
+                case shortcuts.SLASH_CHAR:
                     return "toggleShortcutPopup";
             }
         }
@@ -90,22 +91,22 @@ const CueTextEditor = (props: Props): ReactElement => {
     const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
         switch (shortcut) {
             case "togglePlayPause":
-                Mousetrap.trigger("mod+shift+o");
+                Mousetrap.trigger(shortcuts.MOD_SHIFT_O);
                 return "handled";
             case "seekBack":
-                Mousetrap.trigger("mod+shift+left");
+                Mousetrap.trigger(shortcuts.MOD_SHIFT_LEFT);
                 return "handled";
             case "seekAhead":
-                Mousetrap.trigger("mod+shift+right");
+                Mousetrap.trigger(shortcuts.MOD_SHIFT_RIGHT);
                 return "handled";
             case "setStartTime":
-                Mousetrap.trigger("mod+shift+up");
+                Mousetrap.trigger(shortcuts.MOD_SHIFT_UP);
                 return "handled";
             case "setEndTime":
-                Mousetrap.trigger("mod+shift+down");
+                Mousetrap.trigger(shortcuts.MOD_SHIFT_DOWN);
                 return "handled";
             case "toggleShortcutPopup":
-                Mousetrap.trigger("mod+shift+/");
+                Mousetrap.trigger(shortcuts.MOD_SHIFT_SLASH);
                 return "handled";
             default:
                 return "not-handled";

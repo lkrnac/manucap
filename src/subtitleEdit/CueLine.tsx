@@ -1,3 +1,4 @@
+import * as shortcuts from "../utils/shortcutConstants";
 import { CueCategory, CueDto } from "../player/model";
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
@@ -28,13 +29,13 @@ const CueLine = (props: Props): ReactElement => {
 
     useEffect(() => {
         const registerShortcuts = (): void => {
-            Mousetrap.bind(["mod+shift+up", "alt+shift+up"], () => {
+            Mousetrap.bind([shortcuts.MOD_SHIFT_UP, shortcuts.ALT_SHIFT_UP], () => {
                 updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
             });
-            Mousetrap.bind(["mod+shift+down", "alt+shift+down"], () => {
+            Mousetrap.bind([shortcuts.MOD_SHIFT_DOWN, shortcuts.ALT_SHIFT_DOWN], () => {
                 updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
             });
-            Mousetrap.bind(["escape", "enter"], () => {
+            Mousetrap.bind([shortcuts.ESCAPE, shortcuts.ENTER], () => {
                 // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
             });
         };

@@ -1,5 +1,6 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
+import * as shortcuts from "../utils/shortcutConstants";
 import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import { ReactWrapper, mount } from "enzyme";
@@ -296,7 +297,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 79,
+            keyCode: shortcuts.O_CHAR,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -304,7 +305,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+o");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_O);
     });
 
     it("should handle playPauseToggle key shortcut with alt key", () => {
@@ -314,7 +315,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 79,
+            keyCode: shortcuts.O_CHAR,
             metaKey: false,
             shiftKey: true,
             altKey: true,
@@ -322,7 +323,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+o");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_O);
     });
 
     it("should handle seekBack key shortcut with meta key", () => {
@@ -332,7 +333,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 37,
+            keyCode: shortcuts.ARROW_LEFT,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -340,7 +341,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+left");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_LEFT);
     });
 
     it("should handle seekBack key shortcut with alt key", () => {
@@ -350,7 +351,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 37,
+            keyCode: shortcuts.ARROW_LEFT,
             metaKey: false,
             shiftKey: true,
             altKey: true,
@@ -358,7 +359,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+left");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_LEFT);
     });
 
     it("should handle seekAhead key shortcut with meta key", () => {
@@ -368,7 +369,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 39,
+            keyCode: shortcuts.ARROW_RIGHT,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -376,7 +377,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+right");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_RIGHT);
     });
 
     it("should handle seekAhead key shortcut with alt key", () => {
@@ -386,7 +387,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 39,
+            keyCode: shortcuts.ARROW_RIGHT,
             metaKey: false,
             shiftKey: true,
             altKey: true,
@@ -394,7 +395,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+right");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_RIGHT);
     });
 
     it("should handle setStartTime key shortcut with meta key", () => {
@@ -404,7 +405,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 38,
+            keyCode: shortcuts.ARROW_UP,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -412,7 +413,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+up");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_UP);
     });
 
     it("should handle setStartTime key shortcut with alt key", () => {
@@ -422,7 +423,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 38,
+            keyCode: shortcuts.ARROW_UP,
             metaKey: false,
             shiftKey: true,
             altKey: true,
@@ -430,7 +431,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+up");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_UP);
     });
 
     it("should handle setEndTime key shortcut with meta key", () => {
@@ -440,7 +441,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 40,
+            keyCode: shortcuts.ARROW_DOWN,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -448,7 +449,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+down");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_DOWN);
     });
 
     it("should handle setEndTime key shortcut with alt key", () => {
@@ -458,7 +459,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 40,
+            keyCode: shortcuts.ARROW_DOWN,
             metaKey: false,
             shiftKey: true,
             altKey: true,
@@ -466,7 +467,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+down");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_DOWN);
     });
 
     it("should handle toggleShortcutPopup key shortcut with meta key", () => {
@@ -476,7 +477,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 191,
+            keyCode: shortcuts.SLASH_CHAR,
             metaKey: true,
             shiftKey: true,
             altKey: false,
@@ -484,7 +485,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+/");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_SLASH);
     });
 
     it("should handle toggleShortcutPopup key shortcut with alt key", () => {
@@ -494,7 +495,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         editor.simulate("keyDown", {
-            keyCode: 191,
+            keyCode: shortcuts.SLASH_CHAR,
             metaKey: false,
             shiftKey: true,
             altKey: true,
@@ -502,7 +503,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith("mod+shift+/");
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_SLASH);
     });
 
     it("should handle unbound key shortcuts", () => {
