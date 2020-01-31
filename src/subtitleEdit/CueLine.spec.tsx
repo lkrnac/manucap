@@ -1,6 +1,6 @@
 import "../testUtils/initBrowserEnvironment";
-
 import "video.js"; // VTTCue definition
+import * as shortcuts from "../utils/shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import { CueDto } from "../player/model";
@@ -13,7 +13,6 @@ import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
 import testingStore from "../testUtils/testingStore";
-import * as shortcuts from "../utils/shortcutConstants";
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
