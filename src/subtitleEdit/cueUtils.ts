@@ -136,7 +136,7 @@ const detectPosition = (vttCue: VTTCue): Position => {
                 propertyHits++;
             }
         }
-        if (propertyHits === POSITION_STYLES_COUNT && position) {
+        if (propertyHits === POSITION_STYLES_COUNT && position !== undefined) {
             detectedPosition = position;
         }
     });

@@ -72,11 +72,12 @@ describe("trackSlices", () => {
             testingStore.dispatch(updateCues(testingCues));
 
             // WHEN
-            testingStore.dispatch(addCue(2, new VTTCue(2, 3, "Dummy Cue End")));
+            testingStore.dispatch(addCue(2, new VTTCue(2, 3, "Dummy Cue End"), "LYRICS"));
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(2, 3, "Dummy Cue End"));
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("LYRICS");
         });
 
         it("add cue in middle of cue array cues", () => {
@@ -84,11 +85,12 @@ describe("trackSlices", () => {
             testingStore.dispatch(updateCues(testingCues));
 
             // WHEN
-            testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert")));
+            testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert"), "DIALOGUE"));
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(0.5, 1, "Dummy Cue Insert"));
             expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
         });
     });
 
@@ -108,7 +110,7 @@ describe("trackSlices", () => {
         it("deletes cue in the middle of the cue array", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues));
-            testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert")));
+            testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert"), "DIALOGUE"));
 
             // WHEN
             testingStore.dispatch(deleteCue(1));
