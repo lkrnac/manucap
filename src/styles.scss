@@ -59,13 +59,18 @@ $fa-font-path: "../webfonts";
 .sbte-time-input {
     color: $sbte-main-text-color;
     border: 1px solid $input-border-color;
-    font-size: 1.2rem;
+    border-radius: 4px;
 }
 
-.sbte-cue-line {
-    border: 0 solid $border-color;
+.sbte-cue-line-left-section {
     background-color: white;
-    margin-bottom: 5px;
+}
+
+.sbte-cue-line-flap {
+    background-color: rgb(190,200,210);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: white;
 }
 
 .sbte-cue-line-category {

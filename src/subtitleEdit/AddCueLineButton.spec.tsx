@@ -1,4 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
+import "video.js"; // VTTCue definition
 import AddCueLineButton from "./AddCueLineButton";
 import { Provider } from "react-redux";
 import React from "react";
@@ -11,6 +12,7 @@ import testingStore from "../testUtils/testingStore";
 describe("AddCueLineButton", () => {
     it("renders", () => {
         // GIVEN
+        const vttCue = new VTTCue(0, 1, "");
         const expectedNode = mount(
             <button className="btn btn-outline-secondary sbte-add-cue-button">
                 <b>+</b>
@@ -20,7 +22,7 @@ describe("AddCueLineButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cueEndTime={1} />
+                <AddCueLineButton cueIndex={0} vttCue={vttCue} />
             </Provider>
         );
 
