@@ -213,4 +213,19 @@ describe("VideoPlayer", () => {
         // THEN
         sinon.assert.calledOnce(onTimeChange);
     });
+
+    it("should work correctly after player timeupdate event when no onTimeChange prop is provided", () => {
+        // GIVEN
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualComponent = actualNode.instance() as VideoPlayer;
+        const playPauseSpy = sinon.spy();
+        actualComponent.playPause = playPauseSpy;
+
+        // WHEN
+        actualComponent.player.trigger("timeupdate");
+        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
+
+        // THEN
+        sinon.assert.calledOnce(playPauseSpy);
+    });
 });
