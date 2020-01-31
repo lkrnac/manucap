@@ -86,7 +86,8 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     );
     const editorState = actualNode.find(Editor).props().editorState;
     const selectionState = editorState.getSelection();
-    const newSelectionState = selectionState.set("focusOffset", 5) as SelectionState;
+    // select first 5 characters
+    const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
 
     // WHEN
     actualNode.find(Editor).props().onChange(EditorState.acceptSelection(editorState, newSelectionState));
@@ -99,7 +100,8 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
 };
 
 const testForContentState = (contentState: ContentState, vttCue: VTTCue, expectedStateHtml: string): void => {
-    const editorState = EditorState.createWithContent(contentState);
+    let editorState = EditorState.createWithContent(contentState);
+    editorState = EditorState.moveFocusToEnd(editorState);
     const expectedNode = createExpectedNode(editorState);
 
     // WHEN
@@ -143,11 +145,11 @@ describe("CueTextEditor", () => {
 
     it("renders with html", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b>");
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
         const processedHTML = convertFromHTML(vttCue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b>");
+        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample");
     });
 
     it("updates cue in redux store when changed", () => {
@@ -158,12 +160,12 @@ describe("CueTextEditor", () => {
         editor.simulate("paste", {
             clipboardData: {
                 types: ["text/plain"],
-                getData: (): string => "Paste text to start: ",
+                getData: (): string => " Paste text to end",
             }
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Paste text to start: someText");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
     it("updated cue when bold inline style is used", () => {
@@ -194,6 +196,56 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
         expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+        expect(testingStore.getState().cues[1].vttCue.align).toEqual("center");
+        expect(testingStore.getState().cues[1].vttCue.line).toEqual("auto");
+        expect(testingStore.getState().cues[1].vttCue.position).toEqual("auto");
+        expect(testingStore.getState().cues[1].vttCue.positionAlign).toEqual("auto");
+        expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
+    });
+
+    it("added cue with non-default category when add cue button is clicked", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} vttCue={vttCue} cueCategory="AUDIO_DESCRIPTION" />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+        expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
+    });
+
+    it("added cue with non-default position when add cue button is clicked", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.align = "left";
+        vttCue.line = 8;
+        vttCue.position = 35;
+        vttCue.positionAlign = "center";
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} vttCue={vttCue} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+        expect(testingStore.getState().cues[1].vttCue.align).toEqual("left");
+        expect(testingStore.getState().cues[1].vttCue.line).toEqual(8);
+        expect(testingStore.getState().cues[1].vttCue.position).toEqual(35);
+        expect(testingStore.getState().cues[1].vttCue.positionAlign).toEqual("center");
     });
 
     it("deletes cue when delete cue button is clicked", () => {

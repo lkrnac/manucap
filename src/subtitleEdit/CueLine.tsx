@@ -42,15 +42,27 @@ const CueLine = (props: Props): ReactElement => {
     }, [dispatch, props]);
 
     return (
-        <div className="sbte-cue-line" style={{ display: "flex" }}>
-            <div style={{
-                flex: "1 1 300px",
-                display: "flex",
-                flexDirection: "column",
-                paddingLeft: "20px",
-                paddingTop: "15px",
-                justifyContent: "space-between"
-            }}
+        <div style={{ display: "flex", paddingBottom: "5px" }}>
+            <div
+                className="sbte-cue-line-flap"
+                style={{
+                    flex: "1 1 20px",
+                    paddingLeft: "8px",
+                    paddingTop: "10px",
+                }}
+            >
+                {props.index + 1}
+            </div>
+            <div
+                className="sbte-cue-line-left-section"
+                style={{
+                    flex: "1 1 300px",
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingLeft: "10px",
+                    paddingTop: "5px",
+                    justifyContent: "space-between"
+                }}
             >
                 <div style={{
                     display: "flex",
@@ -91,8 +103,13 @@ const CueLine = (props: Props): ReactElement => {
                     />
                 </div>
             </div>
-            <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
-                <CueTextEditor key={props.index} index={props.index} vttCue={props.cue.vttCue} />
+            <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                <CueTextEditor
+                    key={props.index}
+                    index={props.index}
+                    vttCue={props.cue.vttCue}
+                    cueCategory={props.cue.cueCategory}
+                />
             </div>
         </div>
     );

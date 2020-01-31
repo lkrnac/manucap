@@ -11,6 +11,7 @@ import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
+import { CueCategory } from "../player/model";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
@@ -21,6 +22,7 @@ import { updateVttCue } from "../player/trackSlices";
 interface Props{
     index: number;
     vttCue: VTTCue;
+    cueCategory?: CueCategory;
 }
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
@@ -41,6 +43,7 @@ const CueTextEditor = (props: Props): ReactElement => {
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
+        editorState = EditorState.moveFocusToEnd(editorState);
     }
     useEffect(
         () => {
@@ -153,7 +156,11 @@ const CueTextEditor = (props: Props): ReactElement => {
                     <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
                     <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
                 </div>
-                <AddCueLineButton cueIndex={props.index} cueEndTime={props.vttCue.endTime} />
+                <AddCueLineButton
+                    cueIndex={props.index}
+                    vttCue={props.vttCue}
+                    cueCategory={props.cueCategory}
+                />
             </div>
         </div>
     );

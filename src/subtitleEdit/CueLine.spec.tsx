@@ -25,15 +25,27 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div className="sbte-cue-line" style={{ display: "flex" }}>
-                    <div style={{
-                        flex: "1 1 300px",
-                        display: "flex",
-                        flexDirection: "column",
-                        paddingLeft: "20px",
-                        paddingTop: "15px",
-                        justifyContent: "space-between"
-                    }}
+                <div style={{ display: "flex", paddingBottom: "5px" }}>
+                    <div
+                        className="sbte-cue-line-flap"
+                        style={{
+                            flex: "1 1 20px",
+                            paddingLeft: "8px",
+                            paddingTop: "10px",
+                        }}
+                    >
+                        1
+                    </div>
+                    <div
+                        className="sbte-cue-line-left-section"
+                        style={{
+                            flex: "1 1 300px",
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
+                            justifyContent: "space-between"
+                        }}
                     >
                         <div style={{
                             display: "flex",
@@ -45,10 +57,11 @@ describe("CueLine", () => {
                                 type="text"
                                 className="sbte-time-input"
                                 style={{
-                                    margin: "5px",
-                                    width: "130px",
+                                    marginBottom: "5px",
+                                    width: "100px",
                                     maxWidth: "200px",
-                                    padding: "5px"
+                                    padding: "5px",
+                                    textAlign: "center"
                                 }}
                                 value="00:00:00.000"
                                 onChange={(): void => {}}
@@ -57,10 +70,11 @@ describe("CueLine", () => {
                                 type="text"
                                 className="sbte-time-input"
                                 style={{
-                                    margin: "5px",
-                                    width: "130px",
+                                    marginBottom: "5px",
+                                    width: "100px",
                                     maxWidth: "200px",
-                                    padding: "5px"
+                                    padding: "5px",
+                                    textAlign: "center"
                                 }}
                                 value="00:00:00.000"
                                 onChange={(): void => {}}
@@ -91,7 +105,7 @@ describe("CueLine", () => {
                             </div>
                         </div>
                     </div>
-                    <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
+                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
                         <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
                     </div>
                 </div>
@@ -101,7 +115,7 @@ describe("CueLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[0]} playerTime={0} />
+                <CueLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -114,15 +128,27 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div className="sbte-cue-line" style={{ display: "flex" }}>
-                    <div style={{
-                        flex: "1 1 300px",
-                        display: "flex",
-                        flexDirection: "column",
-                        paddingLeft: "20px",
-                        paddingTop: "15px",
-                        justifyContent: "space-between"
-                    }}
+                <div style={{ display: "flex", paddingBottom: "5px" }}>
+                    <div
+                        className="sbte-cue-line-flap"
+                        style={{
+                            flex: "1 1 20px",
+                            paddingLeft: "8px",
+                            paddingTop: "10px",
+                        }}
+                    >
+                        2
+                    </div>
+                    <div
+                        className="sbte-cue-line-left-section"
+                        style={{
+                            flex: "1 1 300px",
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
+                            justifyContent: "space-between"
+                        }}
                     >
                         <div style={{
                             display: "flex",
@@ -134,10 +160,11 @@ describe("CueLine", () => {
                                 type="text"
                                 className="sbte-time-input"
                                 style={{
-                                    margin: "5px",
-                                    width: "130px",
+                                    marginBottom: "5px",
+                                    width: "100px",
                                     maxWidth: "200px",
-                                    padding: "5px"
+                                    padding: "5px",
+                                    textAlign: "center"
                                 }}
                                 value="00:00:01.000"
                                 onChange={(): void => {}}
@@ -146,10 +173,11 @@ describe("CueLine", () => {
                                 type="text"
                                 className="sbte-time-input"
                                 style={{
-                                    margin: "5px",
-                                    width: "130px",
+                                    marginBottom: "5px",
+                                    width: "100px",
                                     maxWidth: "200px",
-                                    padding: "5px"
+                                    padding: "5px",
+                                    textAlign: "center"
                                 }}
                                 value="00:00:02.000"
                                 onChange={(): void => {}}
@@ -180,7 +208,7 @@ describe("CueLine", () => {
                             </div>
                         </div>
                     </div>
-                    <div className="sbte-left-border" style={{ flex: "1 1 75%" }}>
+                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
                         <CueTextEditor key={1} index={1} vttCue={cues[1].vttCue} />
                     </div>
                 </div>
