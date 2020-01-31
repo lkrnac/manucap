@@ -323,7 +323,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_O);
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_O);
     });
 
     it("should handle seekBack key shortcut with meta key", () => {
@@ -359,7 +359,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_LEFT);
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_LEFT);
     });
 
     it("should handle seekAhead key shortcut with meta key", () => {
@@ -395,7 +395,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_RIGHT);
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_RIGHT);
     });
 
     it("should handle setStartTime key shortcut with meta key", () => {
@@ -431,7 +431,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_UP);
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_UP);
     });
 
     it("should handle setEndTime key shortcut with meta key", () => {
@@ -467,7 +467,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_DOWN);
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_DOWN);
     });
 
     it("should handle toggleShortcutPopup key shortcut with meta key", () => {
@@ -503,7 +503,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.ALT_SHIFT_SLASH);
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_SLASH);
     });
 
     it("should handle unbound key shortcuts", () => {
