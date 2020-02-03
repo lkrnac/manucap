@@ -1,6 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
+import * as shortcuts from "../utils/shortcutConstants";
+import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import { ReactWrapper, mount } from "enzyme";
 import CueTextEditor from "./CueTextEditor";
@@ -55,6 +56,16 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
         </div>
     </div>
 );
+
+const createEditorNode = (): ReactWrapper => {
+    const vttCue = new VTTCue(0, 1, "someText");
+    const actualNode = mount(
+        <Provider store={testingStore}>
+            <CueTextEditor index={0} vttCue={vttCue} />
+        </Provider>
+    );
+    return actualNode.find(".public-DraftEditor-content");
+};
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
 // defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
@@ -144,13 +155,7 @@ describe("CueTextEditor", () => {
 
     it("updates cue in redux store when changed", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
 
         // WHEN
         editor.simulate("paste", {
@@ -283,5 +288,238 @@ describe("CueTextEditor", () => {
         // THEN
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
         expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
+    });
+
+    it("should handle playPauseToggle key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.O_CHAR,
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_O);
+    });
+
+    it("should handle playPauseToggle key shortcut with alt key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.O_CHAR,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_O);
+    });
+
+    it("should handle seekBack key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.ARROW_LEFT,
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_LEFT);
+    });
+
+    it("should handle seekBack key shortcut with alt key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.ARROW_LEFT,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_LEFT);
+    });
+
+    it("should handle seekAhead key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.ARROW_RIGHT,
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_RIGHT);
+    });
+
+    it("should handle seekAhead key shortcut with alt key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.ARROW_RIGHT,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_RIGHT);
+    });
+
+    it("should handle setStartTime key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.ARROW_UP,
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_UP);
+    });
+
+    it("should handle setStartTime key shortcut with alt key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.ARROW_UP,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_UP);
+    });
+
+    it("should handle setEndTime key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.ARROW_DOWN,
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_DOWN);
+    });
+
+    it("should handle setEndTime key shortcut with alt key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.ARROW_DOWN,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_DOWN);
+    });
+
+    it("should handle toggleShortcutPopup key shortcut with meta key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.SLASH_CHAR,
+            metaKey: true,
+            shiftKey: true,
+            altKey: false,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_SLASH);
+    });
+
+    it("should handle toggleShortcutPopup key shortcut with alt key", () => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: shortcuts.SLASH_CHAR,
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalled();
+        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_SLASH);
+    });
+
+    it("should handle unbound key shortcuts", () => {
+        // GIVEN
+        const defaultKeyBinding = jest.spyOn(Draft, "getDefaultKeyBinding");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", {
+            keyCode: 8, // backspace
+            metaKey: false,
+            shiftKey: true,
+            altKey: true,
+        });
+
+        // THEN
+        expect(defaultKeyBinding).toBeCalled();
     });
 });

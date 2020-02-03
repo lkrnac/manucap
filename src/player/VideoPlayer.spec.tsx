@@ -1,5 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
-
+import * as shortcuts from "../utils/shortcutConstants";
+// @ts-ignore - Doesn't have types definitions file
+import * as simulant from "simulant";
 import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
 import { Track } from "./model";
@@ -7,6 +9,7 @@ import VideoPlayer from "./VideoPlayer";
 import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+import sinon from "sinon";
 
 jest.mock("../subtitleEdit/cueUtils");
 
@@ -150,5 +153,79 @@ describe("VideoPlayer", () => {
 
         // THEN
         expect(copyNonConstructorProperties).toBeCalledWith(new VTTCue(0, 1, "Caption Line 1"), vttCue);
+    });
+
+    it("should toggle play/pause with key shortcut", () => {
+        // GIVEN
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualComponent = actualNode.instance() as VideoPlayer;
+        const playPauseSpy = sinon.spy();
+        actualComponent.playPause = playPauseSpy;
+
+        // WHEN
+        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
+        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
+
+        // THEN
+        sinon.assert.calledTwice(playPauseSpy);
+    });
+
+    it("should shiftTime -1 second with key shortcut", () => {
+        // GIVEN
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualComponent = actualNode.instance() as VideoPlayer;
+        const shiftTimeSpy = sinon.spy();
+        actualComponent.shiftTime = shiftTimeSpy;
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_LEFT, shiftKey: true, altKey: true });
+
+        // THEN
+        sinon.assert.calledWith(shiftTimeSpy, -1000);
+    });
+
+    it("should call shiftTime 1 second with key shortcut", () => {
+        // GIVEN
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualComponent = actualNode.instance() as VideoPlayer;
+        const shiftTimeSpy = sinon.spy();
+        actualComponent.shiftTime = shiftTimeSpy;
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_RIGHT, shiftKey: true, altKey: true });
+
+        // THEN
+        sinon.assert.calledWith(shiftTimeSpy, 1000);
+    });
+
+    it("should call onTimeChange on player timeupdate event", () => {
+        // GIVEN
+        const onTimeChange = sinon.spy();
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={onTimeChange} />);
+        const actualComponent = actualNode.instance() as VideoPlayer;
+
+        // WHEN
+        actualComponent.player.trigger("timeupdate");
+
+        // THEN
+        sinon.assert.calledOnce(onTimeChange);
+    });
+
+    it("should work correctly after player timeupdate event when no onTimeChange prop is provided", () => {
+        // GIVEN
+        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualComponent = actualNode.instance() as VideoPlayer;
+        const playPauseSpy = sinon.spy();
+        actualComponent.playPause = playPauseSpy;
+
+        // WHEN
+        actualComponent.player.trigger("timeupdate");
+        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
+
+        // THEN
+        sinon.assert.calledOnce(playPauseSpy);
     });
 });
