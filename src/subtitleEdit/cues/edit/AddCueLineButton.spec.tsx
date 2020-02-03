@@ -1,10 +1,10 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import AddCueLineButton from "./AddCueLineButton";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
-import testingStore from "../testUtils/testingStore";
+import testingStore from "../../../testUtils/testingStore";
 
 /**
  * On click actions are covered by CueTextEditor tests

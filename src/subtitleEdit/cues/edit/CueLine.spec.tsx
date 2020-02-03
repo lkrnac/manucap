@@ -1,7 +1,7 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../../testUtils/initBrowserEnvironment";
 
 import "video.js"; // VTTCue definition
-import { CueDto } from "../player/model";
+import { CueDto } from "../../../player/model";
 import CueLine from "./CueLine";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "./cueUtils";
@@ -9,8 +9,8 @@ import PositionButton from "./PositionButton";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
-import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
-import testingStore from "../testUtils/testingStore";
+import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
+import testingStore from "../../../testUtils/testingStore";
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,

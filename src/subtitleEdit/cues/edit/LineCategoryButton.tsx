@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
-import { AppThunk } from "../reducers/subtitleEditReducers";
-import { CueCategory } from "../player/model";
+import { AppThunk } from "../../../reducers/subtitleEditReducers";
+import { CueCategory } from "../../../player/model";
 import { Dropdown } from "react-bootstrap";
 
 export const dialogueTypeToPrettyName = {

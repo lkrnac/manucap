@@ -1,4 +1,4 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
@@ -7,8 +7,8 @@ import React, { ReactElement } from "react";
 import { ReactWrapper, mount } from "enzyme";
 import { Provider } from "react-redux";
 import { Store } from "@reduxjs/toolkit";
-import { createTestingStore } from "../testUtils/testingStore";
-import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
+import { createTestingStore } from "../../../testUtils/testingStore";
+import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 
 let testingStore = createTestingStore();

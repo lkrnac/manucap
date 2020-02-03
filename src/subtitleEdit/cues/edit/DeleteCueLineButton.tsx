@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { deleteCue } from "../player/trackSlices";
+import { deleteCue } from "../../../player/trackSlices";
 import { useDispatch } from "react-redux";
 
 interface Props {

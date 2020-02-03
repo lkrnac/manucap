@@ -1,4 +1,4 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue type
 import { Dropdown } from "react-bootstrap";
 import { Position } from "./cueUtils";
