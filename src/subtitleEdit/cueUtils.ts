@@ -23,6 +23,30 @@ export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): vo
     newCue.pauseOnExit = oldCue.pauseOnExit;
 };
 
+/**
+ * Constructs array of cue values used for stopping FLUX loops
+ *
+ * NOTE: This function is tested as part of CueTextEditor tests
+ * @param cue Cue object to construct values from
+ */
+// eslint-disable-next-line
+export const constructCueValuesArray = (cue: VTTCue): any[] => [
+    cue.startTime,
+    cue.endTime,
+    cue.text,
+    cue.position,
+    cue.align,
+    cue.lineAlign,
+    cue.positionAlign,
+    cue.snapToLines,
+    cue.size,
+    cue.line,
+    cue.vertical,
+    cue.id,
+    cue.pauseOnExit,
+    // TODO add cue.region.... properties if used in future
+];
+
 export interface PositionStyle {
     line: LineAndPositionSetting;
     align: AlignSetting;
