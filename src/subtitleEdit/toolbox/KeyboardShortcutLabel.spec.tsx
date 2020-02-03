@@ -1,10 +1,10 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../testUtils/initBrowserEnvironment";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import { os } from "platform";
-import testingStore from "../testUtils/testingStore";
+import testingStore from "../../testUtils/testingStore";
 
 
 describe("KeyboardShortcutLabel", () => {

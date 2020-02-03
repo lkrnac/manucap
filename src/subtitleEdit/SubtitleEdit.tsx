@@ -5,7 +5,7 @@ import CueLine from "./cues/edit/CueLine";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
-import Toolbox from "../toolbox/Toolbox";
+import Toolbox from "./toolbox/Toolbox";
 import { useSelector } from "react-redux";
 
 export interface Props {

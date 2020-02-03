@@ -1,10 +1,10 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../testUtils/initBrowserEnvironment";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import Modal from "react-bootstrap/Modal";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
-import testingStore from "../testUtils/testingStore";
+import testingStore from "../../testUtils/testingStore";
 
 describe("KeyboardShortcuts", () => {
     it("renders", () => {

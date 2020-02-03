@@ -6,7 +6,7 @@ import { Language } from "./player/model";
 import React from "react";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
-import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
+import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults

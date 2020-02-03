@@ -1,11 +1,11 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../testUtils/initBrowserEnvironment";
 import { Provider } from "react-redux";
 import React from "react";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
-import testingStore from "../testUtils/testingStore";
+import testingStore from "../../testUtils/testingStore";
 
 describe("SubtitleSpecificationsModal", () => {
     it("renders shown", () => {

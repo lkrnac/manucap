@@ -1,4 +1,4 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../testUtils/initBrowserEnvironment";
 import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from "react-bootstrap/Card";
@@ -10,7 +10,7 @@ import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import Toolbox from "./Toolbox";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
-import testingStore from "../testUtils/testingStore";
+import testingStore from "../../testUtils/testingStore";
 
 describe("Toolbox", () => {
     it("renders", () => {

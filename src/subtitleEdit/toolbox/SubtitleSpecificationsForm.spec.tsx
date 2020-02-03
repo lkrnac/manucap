@@ -1,11 +1,11 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../testUtils/initBrowserEnvironment";
 
 import { Provider } from "react-redux";
 import React from "react";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import { mount } from "enzyme";
-import testingStore from "../testUtils/testingStore";
+import testingStore from "../../testUtils/testingStore";
 
 describe("SubtitleSpecificationsForm", () => {
     it("renders disabled", () => {
