@@ -1,12 +1,12 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../testUtils/initBrowserEnvironment";
 
-import { LanguageCues, Track } from "../subtitleEdit/model";
+import { LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import { copyNonConstructorProperties } from "../subtitleEdit/cues/edit/cueUtils";
+import { copyNonConstructorProperties } from "../cues/edit/cueUtils";
 import { mount } from "enzyme";
-import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 
 jest.mock("../subtitleEdit/cueUtils");
 
