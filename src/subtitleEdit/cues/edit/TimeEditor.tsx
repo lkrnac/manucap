@@ -2,7 +2,7 @@ import React, {
     ChangeEvent,
     ReactElement
 } from "react";
-import { getTimeFromString, getTimeString } from "../../../utils/timeUtils";
+import { getTimeFromString, getTimeString } from "./timeUtils";
 import TimeField from "react-advanced-timefield";
 
 interface Props {
