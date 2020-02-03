@@ -9,8 +9,10 @@ import {
     updateTask,
     updateVttCue
 } from "./trackSlices";
+import { EditorState } from "draft-js";
 import { createTestingStore } from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
+import { updateEditorState } from "../subtitleEdit/editorStatesSlice";
 
 const testingTrack = {
     type: "CAPTION",
@@ -92,6 +94,19 @@ describe("trackSlices", () => {
             expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
         });
+
+        it("resets editor states map in Redux", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()));
+            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()));
+
+            // WHEN
+            testingStore.dispatch(addCue(2, new VTTCue(2, 3, "Dummy Cue End"), "LYRICS"));
+
+            // THEN
+            expect(testingStore.getState().editorStates.size).toEqual(0);
+        });
     });
 
     describe("deleteCue", () => {
@@ -132,6 +147,21 @@ describe("trackSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
             expect(testingStore.getState().cues.length).toEqual(1);
         });
+
+        it("removes editor states for certain index from Redux", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()));
+            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()));
+
+            // WHEN
+            testingStore.dispatch(deleteCue(1));
+
+            // THEN
+            expect(testingStore.getState().editorStates.size).toEqual(1);
+            expect(testingStore.getState().editorStates.get(1)).toBeUndefined();
+        });
+
     });
 
     describe("updateEditingTrack", () => {

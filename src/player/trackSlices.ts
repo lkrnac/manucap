@@ -18,7 +18,7 @@ interface TaskAction extends SubtitleEditAction {
     task: Task;
 }
 
-interface CueIndexAction extends SubtitleEditAction {
+export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
 }
 
