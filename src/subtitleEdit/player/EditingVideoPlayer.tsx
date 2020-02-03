@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { SubtitleEditState } from "../../reducers/subtitleEditReducers";
+import { SubtitleEditState } from "../subtitleEditReducers";
 import VideoPlayer from "./VideoPlayer";
 import { useSelector } from "react-redux";
 

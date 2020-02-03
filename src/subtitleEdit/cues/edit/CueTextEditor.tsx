@@ -1,4 +1,4 @@
-import { AppThunk, SubtitleEditState } from "../../../reducers/subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { ContentState, Editor, EditorState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";

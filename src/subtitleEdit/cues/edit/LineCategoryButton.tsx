@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { AppThunk } from "../../../reducers/subtitleEditReducers";
+import { AppThunk } from "../../subtitleEditReducers";
 import { CueCategory } from "../../model";
 import { Dropdown } from "react-bootstrap";
 
