@@ -1,4 +1,4 @@
-import { CueDto, Task, Track } from "../player/model";
+import { CueDto, Task, Track } from "./model";
 import React, { ReactElement } from "react";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
 import { humanizer } from "humanize-duration";

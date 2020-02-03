@@ -1,6 +1,6 @@
 import "../testUtils/initBrowserEnvironment";
 
-import { LanguageCues, Track } from "./model";
+import { LanguageCues, Track } from "../subtitleEdit/model";
 import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";

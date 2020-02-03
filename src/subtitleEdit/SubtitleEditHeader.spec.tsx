@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { CueDto, Language, Task, Track } from "../player/model";
-import { updateCues, updateEditingTrack, updateTask } from "../player/trackSlices";
+import { CueDto, Language, Task, Track } from "./model";
+import { updateCues, updateEditingTrack, updateTask } from "./trackSlices";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEditHeader from "./SubtitleEditHeader";

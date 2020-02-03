@@ -1,7 +1,7 @@
 import "../../../testUtils/initBrowserEnvironment";
 
 import "video.js"; // VTTCue definition
-import { CueDto } from "../../../player/model";
+import { CueDto } from "../../model";
 import CueLine from "./CueLine";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "./cueUtils";

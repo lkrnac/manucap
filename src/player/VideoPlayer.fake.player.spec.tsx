@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
-import { LanguageCues, Track } from "./model";
+import { LanguageCues, Track } from "../subtitleEdit/model";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
 import { copyNonConstructorProperties } from "../subtitleEdit/cues/edit/cueUtils";
