@@ -171,7 +171,9 @@ describe("VideoPlayer", () => {
 
     it("should toggle play/pause with key shortcut", () => {
         // GIVEN
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
         const actualComponent = actualNode.instance() as VideoPlayer;
         const playPauseSpy = sinon.spy();
         actualComponent.playPause = playPauseSpy;
@@ -186,7 +188,9 @@ describe("VideoPlayer", () => {
 
     it("should shiftTime -1 second with key shortcut", () => {
         // GIVEN
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
         const actualComponent = actualNode.instance() as VideoPlayer;
         const shiftTimeSpy = sinon.spy();
         actualComponent.shiftTime = shiftTimeSpy;
@@ -201,7 +205,9 @@ describe("VideoPlayer", () => {
 
     it("should call shiftTime 1 second with key shortcut", () => {
         // GIVEN
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
         const actualComponent = actualNode.instance() as VideoPlayer;
         const shiftTimeSpy = sinon.spy();
         actualComponent.shiftTime = shiftTimeSpy;
@@ -218,7 +224,14 @@ describe("VideoPlayer", () => {
         // GIVEN
         const onTimeChange = sinon.spy();
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} onTimeChange={onTimeChange} />);
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                onTimeChange={onTimeChange}
+                languageCuesArray={[]}
+            />
+        );
         const actualComponent = actualNode.instance() as VideoPlayer;
 
         // WHEN
@@ -230,7 +243,9 @@ describe("VideoPlayer", () => {
 
     it("should work correctly after player timeupdate event when no onTimeChange prop is provided", () => {
         // GIVEN
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
         const actualComponent = actualNode.instance() as VideoPlayer;
         const playPauseSpy = sinon.spy();
         actualComponent.playPause = playPauseSpy;
