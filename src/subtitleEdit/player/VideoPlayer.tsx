@@ -1,12 +1,12 @@
 import "video.js/dist/video-js.css";
-import * as shortcuts from "../utils/shortcutConstants";
-import { CueDto, LanguageCues, Track } from "../subtitleEdit/model";
+import * as shortcuts from "../shortcutConstants";
+import { CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import React from "react";
 import { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
-import { copyNonConstructorProperties } from "../subtitleEdit/cues/edit/cueUtils";
+import { copyNonConstructorProperties } from "../cues/edit/cueUtils";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
