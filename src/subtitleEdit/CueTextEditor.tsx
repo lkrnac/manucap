@@ -10,17 +10,17 @@ import {
 } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
+import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
 import { CueCategory } from "../player/model";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
-import { copyNonConstructorProperties } from "./cueUtils";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../player/trackSlices";
 
-interface Props{
+export interface CueTextEditorProps{
     index: number;
     vttCue: VTTCue;
     cueCategory?: CueCategory;
@@ -37,25 +37,32 @@ const convertToHtmlOptions = {
     defaultBlockTag: null
 } as Options;
 
-const CueTextEditor = (props: Props): ReactElement => {
+const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(props.vttCue.text);
-    let editorState = useSelector((state: SubtitleEditState) => state.editorStates.get(props.index)) as EditorState;
+    let editorState = useSelector(
+        (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
+        ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
+    );
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
         editorState = EditorState.moveFocusToEnd(editorState);
     }
+    const currentContent = editorState.getCurrentContent();
+    const currentInlineStyle = editorState.getCurrentInlineStyle();
     useEffect(
         () => {
             dispatch(updateEditorState(props.index, editorState));
         },
-        // ESLint suppress: because we want to initialize state only for first render
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [ dispatch, props.index ]
+        // It is enough to detect changes on pieces of editor state that indicate content change.
+        // E.g. editorState.getSelection() is not changing content, thus we don't need to store editor state
+        // into redux when changed.
+        // (Also some tests would fail if you include editorState object itself, but behavior is still OK)
+        // eslint-disable-next-line
+        [ currentContent, currentInlineStyle, dispatch, props.index ]
     );
 
-    const currentContent = editorState.getCurrentContent();
     useEffect(
         () => {
             const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
@@ -63,10 +70,11 @@ const CueTextEditor = (props: Props): ReactElement => {
             copyNonConstructorProperties(vttCue, props.vttCue);
             dispatch(updateVttCue(props.index, vttCue));
         },
-        // ESLint suppress: copyNonConstructorProperties doesn't create side effect, just copies props from old vttCue.
-        // If props.vttCue would be included, it creates endless FLUX loop
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [ currentContent, dispatch, props.vttCue.startTime, props.vttCue.endTime, props.index ]
+        // Two bullet points in this suppression:
+        //  - props.vttCue is not included, because it causes endless FLUX loop.
+        //  - spread operator for cue values is used so that all the VTTCue properties code can be in single file.
+        // eslint-disable-next-line
+        [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
     );
 
     const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {

@@ -1,6 +1,6 @@
 import "../../node_modules/video.js/dist/video-js.css";
 import * as shortcuts from "../utils/shortcutConstants";
-import { CueDto, Track } from "./model";
+import { CueDto, LanguageCues, Track } from "./model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import React from "react";
@@ -31,12 +31,23 @@ export interface Props {
     poster: string;
     tracks: Track[];
     onTimeChange?: (time: number) => void;
+    languageCuesArray: LanguageCues[];
 }
 
 const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
     videoJsTrack.addCue(vttCue);
     const addedCue = videoJsTrack.cues[index] as VTTCue;
     copyNonConstructorProperties(addedCue, vttCue);
+};
+
+const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void => {
+    const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
+    const vtmsTrack = props.tracks.filter(matchTracks)[0] as Track;
+    props.languageCuesArray
+        .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
+        .forEach((languageCues: LanguageCues) => {
+            languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
+        });
 };
 
 export default class VideoPlayer extends React.Component<Props> {
@@ -62,11 +73,7 @@ export default class VideoPlayer extends React.Component<Props> {
         this.player = videojs(this.videoNode, options) as VideoJsPlayer;
         this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
-            const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
-            const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
-            if (vtmsTrack.currentVersion) {
-                vtmsTrack.currentVersion.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
-            }
+            updateCuesForVideoJsTrack(this.props, videoJsTrack);
         });
         this.player.on("timeupdate", (): void => {
             if (this.props.onTimeChange) {
@@ -83,11 +90,7 @@ export default class VideoPlayer extends React.Component<Props> {
             for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
                 videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
             }
-            const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
-            const vtmsTrack = this.props.tracks.filter(matchTracks)[0] as Track;
-            if (vtmsTrack.currentVersion) {
-                vtmsTrack.currentVersion.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
-            }
+            updateCuesForVideoJsTrack(this.props, videoJsTrack);
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
     }

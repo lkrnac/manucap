@@ -1,5 +1,5 @@
+import { CueDto, Task, Track } from "../player/model";
 import React, { ReactElement } from "react";
-import { Task, Track } from "../player/model";
 import { SubtitleEditState } from "../reducers/subtitleEditReducers";
 import { humanizer } from "humanize-duration";
 import { useSelector } from "react-redux";
@@ -9,11 +9,12 @@ const getTrackType = (track: Track): string => {
 };
 
 const getLanguageDescription = (track: Track): ReactElement => {
+    const languageNameNullSafe = track.language ? track.language.name : "";
     if (track.type === "TRANSLATION") {
         const sourceLanguage = track.sourceTrack ? <b>{track.sourceTrack.language.name}</b> : null;
-        return <span>{sourceLanguage} to <b>{track.language.name}</b></span>;
+        return <span>{sourceLanguage} to <b>{languageNameNullSafe}</b></span>;
     }
-    return <b>{track.language.name}</b>;
+    return <b>{languageNameNullSafe}</b>;
 };
 
 const getTrackLength = (track: Track): ReactElement => {
@@ -43,17 +44,16 @@ const getDueDate = (task: Task): ReactElement => {
     return <div>Due Date: <b>{task.dueDate}</b></div>;
 };
 
-const getProgressPercentage = (track: Track): number => {
-    if (track.currentVersion && track.currentVersion.cues.length > 0) {
-        const cues = track.currentVersion.cues;
-        return Math.ceil((cues[cues.length - 1].vttCue.endTime / track.videoLength) * 100);
+const getProgressPercentage = (track: Track, editingCues: CueDto[]): number => {
+    if (editingCues.length > 0) {
+        return Math.ceil((editingCues[editingCues.length - 1].vttCue.endTime / track.videoLength) * 100);
     }
     return 0;
 };
 
-const getProgress = (track: Track): ReactElement => {
+const getProgress = (track: Track, editingCues: CueDto[]): ReactElement => {
     if (track && track.videoLength) {
-        return <div>Completed: <b>{getProgressPercentage(track)}%</b></div>;
+        return <div>Completed: <b>{getProgressPercentage(track, editingCues)}%</b></div>;
     }
     return <div />;
 };
@@ -61,6 +61,7 @@ const getProgress = (track: Track): ReactElement => {
 const SubtitleEditHeader = (): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const stateTask = useSelector((state: SubtitleEditState) => state.task);
+    const editingCues = useSelector((state: SubtitleEditState) => state.cues);
     const track = editingTrack ? editingTrack : {} as Track;
     const task = stateTask ? stateTask : {} as Task;
     return (
@@ -72,7 +73,7 @@ const SubtitleEditHeader = (): ReactElement => {
             <div style={{ flex: "2" }} />
             <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
-                {getProgress(track)}
+                {getProgress(track, editingCues)}
             </div>
         </header>
     );

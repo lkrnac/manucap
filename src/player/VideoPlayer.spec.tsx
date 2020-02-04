@@ -2,9 +2,10 @@ import "../testUtils/initBrowserEnvironment";
 import * as shortcuts from "../utils/shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
+
+import { LanguageCues, Track } from "./model";
 import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
-import { Track } from "./model";
 import VideoPlayer from "./VideoPlayer";
 import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
 import { mount } from "enzyme";
@@ -42,7 +43,9 @@ describe("VideoPlayer", () => {
         );
 
         // WHEN
-        const actualVideoView = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualVideoView = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
@@ -61,7 +64,9 @@ describe("VideoPlayer", () => {
         ];
 
         // WHEN
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks} />);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks} languageCuesArray={[]} />
+        );
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -72,7 +77,9 @@ describe("VideoPlayer", () => {
 
     it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
-        const actualNode = mount(<VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -90,26 +97,25 @@ describe("VideoPlayer", () => {
             { vttCue: new VTTCue(0, 1, "Translation Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Translation Line 2"), cueCategory: "DIALOGUE" },
         ];
+        const languageCuesArray = [
+            { languageId: "en-CA", cues: captionCues },
+            { languageId: "es-ES", cues: translationCues },
+        ] as LanguageCues[];
         const initialTestingTracks = [
-            {
-                type: "CAPTION",
-                language: { id: "en-CA" },
-                default: true,
-                currentVersion: { cues: captionCues }
-            },
-            {
-                type: "TRANSLATION",
-                language: { id: "es-ES" },
-                default: false,
-                currentVersion: { cues: translationCues }
-            }
+            { type: "CAPTION", language: { id: "en-CA" }, default: true },
+            { type: "TRANSLATION", language: { id: "es-ES" }, default: false }
         ] as Track[];
         const textTracks = [
             { language: "en-CA", addCue: jest.fn(), cues: captionCues },
             { language: "es-ES", addCue: jest.fn(), cues: translationCues }
         ];
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={initialTestingTracks}
+                languageCuesArray={languageCuesArray}
+            />
         );
         const component = actualNode.instance() as VideoPlayer;
 
@@ -132,19 +138,27 @@ describe("VideoPlayer", () => {
         vttCue.align = "start";
         vttCue.position = 60;
         const cue = { vttCue: vttCue, cueCategory: "DIALOGUE" };
+        const languageCuesArray = [
+            { languageId: "en-CA", cues: [cue]},
+        ] as LanguageCues[];
+
         const initialTestingTracks = [
             {
                 type: "CAPTION",
                 language: { id: "en-CA" },
                 default: true,
-                currentVersion: { cues: [cue]}
             }
         ] as Track[];
         const textTracks = [
             { language: "en-CA", addCue: jest.fn(), cues: [ new VTTCue(0, 1, "Caption Line 1") ]},
         ];
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={initialTestingTracks} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={initialTestingTracks}
+                languageCuesArray={languageCuesArray}
+            />
         );
         const component = actualNode.instance() as VideoPlayer;
 

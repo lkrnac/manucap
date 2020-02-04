@@ -1,3 +1,4 @@
+import { CueIndexAction, cuesSlice } from "../player/trackSlices";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../reducers/subtitleEditReducers";
 import { Dispatch } from "react";
@@ -15,6 +16,13 @@ export const editorStatesSlice = createSlice({
         updateEditorState: (state, action: PayloadAction<EditorStateAction>): Map<number, EditorState> =>
             state.set(action.payload.editorId, action.payload.editorState),
         reset: (): Map<number, EditorState> => new Map<number, EditorState>()
+    },
+    extraReducers: {
+        [cuesSlice.actions.addCue.type]: (): Map<number, EditorState> => new Map<number, EditorState>(),
+        [cuesSlice.actions.deleteCue.type]:
+            (state, action: PayloadAction<CueIndexAction>): void => {
+                state.delete(action.payload.idx);
+            }
     }
 });
 

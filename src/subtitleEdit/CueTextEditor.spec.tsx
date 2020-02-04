@@ -1,17 +1,29 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import * as shortcuts from "../utils/shortcutConstants";
+import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
+import React, { ReactElement } from "react";
 import { ReactWrapper, mount } from "enzyme";
-import CueTextEditor from "./CueTextEditor";
 import { Provider } from "react-redux";
-import React from "react";
+import { Store } from "@reduxjs/toolkit";
 import { createTestingStore } from "../testUtils/testingStore";
 import { removeDraftJsDynamicValues } from "../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 
 let testingStore = createTestingStore();
+
+interface ReduxTestWrapperProps {
+    store: Store;
+    props: CueTextEditorProps;
+}
+
+const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
+    <Provider store={props.store}>
+        <CueTextEditor index={props.props.index} vttCue={props.props.vttCue} />
+    </Provider>
+);
 
 const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
     <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -263,6 +275,7 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(0);
+        expect(testingStore.getState().editorStates.size).toEqual(0);
     });
 
     it("maintain cue styles when cue text is changes", () => {
@@ -521,5 +534,155 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(defaultKeyBinding).toBeCalled();
+    });
+
+    it("updates cue in Redux if position property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.position = 3;
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.position = 6;
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.position).toEqual(6);
+    });
+
+    it("updates cue in Redux if align property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.align = "left";
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.align = "right";
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.align).toEqual("right");
+    });
+
+    it("updates cue in Redux if lineAlign property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.lineAlign = "start";
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.lineAlign = "end";
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.lineAlign).toEqual("end");
+    });
+
+    it("updates cue in Redux if positionAlign property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.positionAlign = "line-left";
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.positionAlign = "line-right";
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("line-right");
+    });
+
+    it("updates cue in Redux if snapToLines property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.snapToLines = false;
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.snapToLines = true;
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.snapToLines).toEqual(true);
+    });
+
+    it("updates cue in Redux if size property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.size = 80;
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.size = 30;
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.size).toEqual(30);
+    });
+
+    it("updates cue in Redux if line property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.line = 3;
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.line = 6;
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.line).toEqual(6);
+    });
+
+    it("updates cue in Redux if vertical property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.vertical = "rl";
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.vertical = "lr";
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.vertical).toEqual("lr");
+    });
+
+    it("updates cue in Redux if ID property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.id = "id";
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.id = "differentId";
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.id).toEqual("differentId");
+    });
+
+    it("updates cue in Redux if pauseOnExit property is changed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        vttCue.pauseOnExit = false;
+
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+
+        // WHEN
+        vttCue.pauseOnExit = true;
+        actualNode.setProps({ props: { index: 0, vttCue }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.pauseOnExit).toEqual(true);
     });
 });

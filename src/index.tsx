@@ -1,8 +1,8 @@
 import "./testUtils/initBrowserEnvironment";
-import { Language, TrackVersion } from "./player/model";
 import { Provider, useDispatch } from "react-redux";
 import { ReactElement, useEffect } from "react";
-import { updateEditingTrack, updateTask } from "./player/trackSlices";
+import { updateCues, updateEditingTrack, updateTask } from "./player/trackSlices";
+import { Language } from "./player/model";
 import React from "react";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
@@ -22,16 +22,19 @@ const TestApp = (): ReactElement => {
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 videoTitle: "This is the video title",
-                videoLength: 4,
-                currentVersion: {
-                    cues: [
-                        { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                        { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
-                    ]
-                } as TrackVersion
+                videoLength: 4
             })),
             500
         );
+    });
+    useEffect(() => {
+       setTimeout( // this simulates latency caused by server roundtrip
+           dispatch(updateCues([
+               { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+               { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+           ])),
+           500
+       );
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip

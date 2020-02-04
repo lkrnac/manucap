@@ -1,5 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
-import { CueDto, Language, Task, Track, TrackVersion } from "../player/model";
+import { CueDto, Language, Task, Track } from "../player/model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateEditingTrack, updateTask } from "../player/trackSlices";
 import CueLine from "./CueLine";
@@ -25,7 +25,6 @@ describe("SubtitleEdit", () => {
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
             videoTitle: "This is the video title",
-            currentVersion: { cues } as TrackVersion
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -55,6 +54,7 @@ describe("SubtitleEdit", () => {
                                 mp4="dummyMp4"
                                 poster="dummyPoster"
                                 tracks={[testingTrack]}
+                                languageCuesArray={[]}
                             />
                             <Toolbox />
                         </div>
