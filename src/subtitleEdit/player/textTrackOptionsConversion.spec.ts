@@ -1,4 +1,4 @@
-import { Language, Track } from "../subtitleEdit/model";
+import { Language, Track } from "../model";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import videojs from "video.js";
 

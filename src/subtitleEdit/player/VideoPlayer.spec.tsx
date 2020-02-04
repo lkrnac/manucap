@@ -1,15 +1,15 @@
-import "../testUtils/initBrowserEnvironment";
-import * as shortcuts from "../utils/shortcutConstants";
+import "../../testUtils/initBrowserEnvironment";
+import * as shortcuts from "../../utils/shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 
-import { LanguageCues, Track } from "../subtitleEdit/model";
+import { LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import { copyNonConstructorProperties } from "../subtitleEdit/cues/edit/cueUtils";
+import { copyNonConstructorProperties } from "../cues/edit/cueUtils";
 import { mount } from "enzyme";
-import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import sinon from "sinon";
 
 jest.mock("../subtitleEdit/cueUtils");

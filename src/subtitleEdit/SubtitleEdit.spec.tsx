@@ -8,7 +8,7 @@ import React from "react";
 import SubtitleEdit from "./SubtitleEdit";
 import { SubtitleSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
-import VideoPlayer from "../player/VideoPlayer";
+import VideoPlayer from "./player/VideoPlayer";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";

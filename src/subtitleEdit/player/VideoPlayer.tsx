@@ -1,4 +1,4 @@
-import "../../node_modules/video.js/dist/video-js.css";
+import "video.js/dist/video-js.css";
 import * as shortcuts from "../utils/shortcutConstants";
 import { CueDto, LanguageCues, Track } from "../subtitleEdit/model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";

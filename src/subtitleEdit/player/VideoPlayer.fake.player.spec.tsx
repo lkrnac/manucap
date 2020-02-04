@@ -1,12 +1,12 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../testUtils/initBrowserEnvironment";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
-import { LanguageCues, Track } from "../subtitleEdit/model";
+import { LanguageCues, Track } from "../model";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import { copyNonConstructorProperties } from "../subtitleEdit/cues/edit/cueUtils";
+import { copyNonConstructorProperties } from "../cues/edit/cueUtils";
 import { mount } from "enzyme";
-import { simulateComponentDidUpdate } from "../testUtils/testUtils";
+import { simulateComponentDidUpdate } from "../../testUtils/testUtils";
 import videojs from "video.js";
 
 jest.mock("video.js");

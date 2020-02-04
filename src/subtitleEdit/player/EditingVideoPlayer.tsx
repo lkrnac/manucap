@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
-import { SubtitleEditState } from "../subtitleEdit/subtitleEditReducers";
-import VideoPlayer from "../player/VideoPlayer";
+import { SubtitleEditState } from "../subtitleEditReducers";
+import VideoPlayer from "./VideoPlayer";
 import { useSelector } from "react-redux";
 
 interface Props {
