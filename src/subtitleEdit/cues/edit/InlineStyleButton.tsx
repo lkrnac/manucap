@@ -1,7 +1,7 @@
 import { EditorState, RichUtils } from "draft-js";
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../reducers/subtitleEditReducers";
+import { SubtitleEditState } from "../../../reducers/subtitleEditReducers";
 import { updateEditorState } from "./editorStatesSlice";
 
 interface Props{

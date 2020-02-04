@@ -2,7 +2,7 @@ import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "../player/model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateEditingTrack, updateTask } from "../player/trackSlices";
-import CueLine from "./CueLine";
+import CueLine from "./cues/edit/CueLine";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEdit from "./SubtitleEdit";

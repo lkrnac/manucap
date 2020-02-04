@@ -7,7 +7,7 @@ import { LanguageCues, Track } from "./model";
 import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
+import { copyNonConstructorProperties } from "../subtitleEdit/cues/edit/cueUtils";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import sinon from "sinon";

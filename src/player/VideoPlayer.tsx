@@ -6,7 +6,7 @@ import Mousetrap from "mousetrap";
 import React from "react";
 import { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
-import { copyNonConstructorProperties } from "../subtitleEdit/cueUtils";
+import { copyNonConstructorProperties } from "../subtitleEdit/cues/edit/cueUtils";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];

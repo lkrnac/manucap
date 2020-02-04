@@ -1,4 +1,4 @@
-import "../testUtils/initBrowserEnvironment";
+import "../../../testUtils/initBrowserEnvironment";
 import LineCategoryButton from "./LineCategoryButton";
 import React from "react";
 import each from "jest-each";
