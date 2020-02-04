@@ -13,12 +13,12 @@ import React, { ReactElement, useEffect } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
-import { CueCategory } from "../../../player/model";
+import { CueCategory } from "../../model";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../../../player/trackSlices";
+import { updateVttCue } from "../../trackSlices";
 
 export interface CueTextEditorProps{
     index: number;

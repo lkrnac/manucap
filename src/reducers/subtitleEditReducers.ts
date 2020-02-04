@@ -1,5 +1,5 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
-import { cuesSlice, editingTrackSlice, taskSlice } from "../player/trackSlices";
+import { cuesSlice, editingTrackSlice, taskSlice } from "../subtitleEdit/trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { editorStatesSlice } from "../subtitleEdit/cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "../subtitleEdit/toolbox/subtitleSpecificationSlice";

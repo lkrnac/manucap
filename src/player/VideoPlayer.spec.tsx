@@ -3,7 +3,7 @@ import * as shortcuts from "../utils/shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 
-import { LanguageCues, Track } from "./model";
+import { LanguageCues, Track } from "../subtitleEdit/model";
 import videojs, { VideoJsPlayer } from "video.js";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";

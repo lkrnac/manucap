@@ -1,6 +1,6 @@
 import "../testUtils/initBrowserEnvironment";
-import { CueDto, Track } from "./model";
-import { updateCues, updateEditingTrack } from "./trackSlices";
+import { CueDto, Track } from "../subtitleEdit/model";
+import { updateCues, updateEditingTrack } from "../subtitleEdit/trackSlices";
 import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Provider } from "react-redux";
 import React from "react";

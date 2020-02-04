@@ -1,8 +1,8 @@
 import * as shortcuts from "../../../utils/shortcutConstants";
-import { CueCategory, CueDto } from "../../../player/model";
+import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { updateCueCategory, updateVttCue } from "../../../player/trackSlices";
+import { updateCueCategory, updateVttCue } from "../../trackSlices";
 import { AppThunk } from "../../../reducers/subtitleEditReducers";
 import CueTextEditor from "./CueTextEditor";
 import LineCategoryButton from "./LineCategoryButton";

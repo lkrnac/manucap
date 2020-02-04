@@ -12,7 +12,7 @@ import {
 import { EditorState } from "draft-js";
 import { createTestingStore } from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
-import { updateEditorState } from "../subtitleEdit/cues/edit/editorStatesSlice";
+import { updateEditorState } from "./cues/edit/editorStatesSlice";
 
 const testingTrack = {
     type: "CAPTION",

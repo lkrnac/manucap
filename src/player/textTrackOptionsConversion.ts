@@ -1,4 +1,4 @@
-import { Track } from "./model";
+import { Track } from "../subtitleEdit/model";
 import videojs from "video.js";
 
 export const convertToTextTrackOptions = (track: Track): videojs.TextTrackOptions => (

@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
-import { CueCategory } from "../../../player/model";
-import { addCue } from "../../../player/trackSlices";
+import { CueCategory } from "../../model";
+import { addCue } from "../../trackSlices";
 import { copyNonConstructorProperties } from "./cueUtils";
 import { useDispatch } from "react-redux";
 
