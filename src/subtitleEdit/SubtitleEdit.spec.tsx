@@ -69,8 +69,8 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <div style={{ overflowY: "scroll", height: "100%" }}>
-                                <CueLine index={0} cue={cues[0]} />
-                                <CueLine index={1} cue={cues[1]} />
+                                <CueLine index={0} cue={cues[0]} playerTime={0} />
+                                <CueLine index={1} cue={cues[1]} playerTime={0} />
                             </div>
                             <div style={{ marginTop: "10px" }}>
                                 <button className="btn btn-primary" style={{ marginTop: "10px", marginBottom: "10px" }}>

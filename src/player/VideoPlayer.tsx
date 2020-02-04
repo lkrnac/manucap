@@ -1,4 +1,5 @@
 import "../../node_modules/video.js/dist/video-js.css";
+import * as shortcuts from "../utils/shortcutConstants";
 import { CueDto, LanguageCues, Track } from "./model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
@@ -11,15 +12,15 @@ const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
-    Mousetrap.bind(["mod+shift+o", "alt+shift+o"], () => {
+    Mousetrap.bind([shortcuts.MOD_SHIFT_O, shortcuts.ALT_SHIFT_O], () => {
         videoPlayer.playPause();
         return false;
     });
-    Mousetrap.bind(["mod+shift+left", "alt+shift+left"], () => {
+    Mousetrap.bind([shortcuts.MOD_SHIFT_LEFT, shortcuts.ALT_SHIFT_LEFT], () => {
         videoPlayer.shiftTime(-SECOND);
         return false;
     });
-    Mousetrap.bind(["mod+shift+right", "alt+shift+right"], () => {
+    Mousetrap.bind([shortcuts.MOD_SHIFT_RIGHT, shortcuts.ALT_SHIFT_RIGHT], () => {
         videoPlayer.shiftTime(SECOND);
         return false;
     });
@@ -29,6 +30,7 @@ export interface Props {
     mp4: string;
     poster: string;
     tracks: Track[];
+    onTimeChange?: (time: number) => void;
     languageCuesArray: LanguageCues[];
 }
 
@@ -73,6 +75,11 @@ export default class VideoPlayer extends React.Component<Props> {
             const videoJsTrack = event.track as TextTrack;
             updateCuesForVideoJsTrack(this.props, videoJsTrack);
         });
+        this.player.on("timeupdate", (): void => {
+            if (this.props.onTimeChange) {
+                this.props.onTimeChange(this.player.currentTime());
+            }
+        });
 
         registerPlayerShortcuts(this);
     }
@@ -105,7 +112,10 @@ export default class VideoPlayer extends React.Component<Props> {
         if (this.player.paused()) {
             this.player.play();
         } else {
-            this.player.pause();
+            this.player.pause();        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />
+        );
+
         }
     }
 

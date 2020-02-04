@@ -1,10 +1,12 @@
+import * as shortcuts from "../utils/shortcutConstants";
 import { CueCategory, CueDto } from "../player/model";
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
-import React, { Dispatch, ReactElement } from "react";
+import React, { Dispatch, ReactElement, useEffect } from "react";
 import { updateCueCategory, updateVttCue } from "../player/trackSlices";
 import { AppThunk } from "../reducers/subtitleEditReducers";
 import CueTextEditor from "./CueTextEditor";
 import LineCategoryButton from "./LineCategoryButton";
+import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch } from "react-redux";
@@ -12,6 +14,7 @@ import { useDispatch } from "react-redux";
 interface Props {
     index: number;
     cue: CueDto;
+    playerTime: number;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
@@ -23,6 +26,22 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
 
 const CueLine = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const registerShortcuts = (): void => {
+            Mousetrap.bind([shortcuts.MOD_SHIFT_UP, shortcuts.ALT_SHIFT_UP], () => {
+                updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
+            });
+            Mousetrap.bind([shortcuts.MOD_SHIFT_DOWN, shortcuts.ALT_SHIFT_DOWN], () => {
+                updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
+            });
+            Mousetrap.bind([shortcuts.ESCAPE, shortcuts.ENTER], () => {
+                // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
+            });
+        };
+        registerShortcuts();
+    }, [dispatch, props]);
+
     return (
         <div style={{ display: "flex", paddingBottom: "5px" }}>
             <div

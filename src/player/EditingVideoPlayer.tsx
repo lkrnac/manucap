@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 interface Props {
     mp4: string;
     poster: string;
+    onTimeChange?: (time: number) => void;
 }
 
 const EditingVideoPlayer = (props: Props): ReactElement => {
@@ -14,7 +15,15 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];
     const tracks = editingTrack ? [editingTrack] : [];
     return editingTrack
-        ? <VideoPlayer mp4={props.mp4} poster={props.poster} tracks={tracks} languageCuesArray={languageCuesArray} />
+        ? (
+            <VideoPlayer
+                mp4={props.mp4}
+                poster={props.poster}
+                tracks={tracks}
+                onTimeChange={props.onTimeChange}
+                languageCuesArray={languageCuesArray}
+            />
+        )
         : <p>Editing track not available!</p>;
 };
 
