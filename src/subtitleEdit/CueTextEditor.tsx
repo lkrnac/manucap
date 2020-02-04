@@ -17,7 +17,6 @@ import { CueCategory } from "../player/model";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
-import { copyNonConstructorProperties } from "./cueUtils";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../player/trackSlices";
 
