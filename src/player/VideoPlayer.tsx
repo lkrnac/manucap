@@ -112,10 +112,7 @@ export default class VideoPlayer extends React.Component<Props> {
         if (this.player.paused()) {
             this.player.play();
         } else {
-            this.player.pause();        const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} />
-        );
-
+            this.player.pause();
         }
     }
 
