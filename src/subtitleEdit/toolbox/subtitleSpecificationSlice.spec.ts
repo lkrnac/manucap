@@ -1,7 +1,7 @@
 import { SubtitleSpecification } from "./model";
 import deepFreeze from "deep-freeze";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
-import testingStore from "../testUtils/testingStore";
+import testingStore from "../../testUtils/testingStore";
 
 deepFreeze(testingStore.getState());
 

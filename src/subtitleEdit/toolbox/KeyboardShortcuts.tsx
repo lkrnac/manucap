@@ -1,4 +1,4 @@
-import * as shortcuts from "../utils/shortcutConstants";
+import * as shortcuts from "../../utils/shortcutConstants";
 import React, { ReactElement, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";

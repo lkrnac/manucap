@@ -1,5 +1,5 @@
-import "../testUtils/initBrowserEnvironment";
-import * as shortcuts from "../utils/shortcutConstants";
+import "../../testUtils/initBrowserEnvironment";
+import * as shortcuts from "../../utils/shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import KeyboardShortcuts from "./KeyboardShortcuts";
@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
-import testingStore from "../testUtils/testingStore";
+import testingStore from "../../testUtils/testingStore";
 
 describe("KeyboardShortcuts", () => {
     it("renders", () => {

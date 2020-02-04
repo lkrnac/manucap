@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { SubtitleEditState } from "../reducers/subtitleEditReducers";
+import { SubtitleEditState } from "../../reducers/subtitleEditReducers";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import { useSelector } from "react-redux";
