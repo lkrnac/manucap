@@ -1,5 +1,5 @@
 import "../../testUtils/initBrowserEnvironment";
-import * as shortcuts from "../../utils/shortcutConstants";
+import * as shortcuts from "../shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import KeyboardShortcuts from "./KeyboardShortcuts";

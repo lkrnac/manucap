@@ -1,4 +1,4 @@
-import * as shortcuts from "../../../utils/shortcutConstants";
+import * as shortcuts from "../../shortcutConstants";
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";

@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import * as shortcuts from "../../../utils/shortcutConstants";
+import * as shortcuts from "../../shortcutConstants";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";

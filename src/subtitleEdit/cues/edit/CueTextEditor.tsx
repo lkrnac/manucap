@@ -1,4 +1,4 @@
-import * as shortcuts from "../../../utils/shortcutConstants";
+import * as shortcuts from "../../shortcutConstants";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import {
     ContentState,
