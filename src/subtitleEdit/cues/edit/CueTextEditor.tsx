@@ -1,5 +1,5 @@
 import * as shortcuts from "../../../utils/shortcutConstants";
-import { AppThunk, SubtitleEditState } from "../../../reducers/subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import {
     ContentState,
     DraftHandleValue,

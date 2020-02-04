@@ -4,7 +4,7 @@ import { CueDto } from "./model";
 import CueLine from "./cues/edit/CueLine";
 import EditingVideoPlayer from "../player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
-import { SubtitleEditState } from "../reducers/subtitleEditReducers";
+import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { useSelector } from "react-redux";
 

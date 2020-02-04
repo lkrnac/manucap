@@ -3,7 +3,7 @@ import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import { updateCueCategory, updateVttCue } from "../../trackSlices";
-import { AppThunk } from "../../../reducers/subtitleEditReducers";
+import { AppThunk } from "../../subtitleEditReducers";
 import CueTextEditor from "./CueTextEditor";
 import LineCategoryButton from "./LineCategoryButton";
 import Mousetrap from "mousetrap";
