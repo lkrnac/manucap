@@ -1,16 +1,16 @@
 import "../testUtils/initBrowserEnvironment";
-import { CueDto, Language, Task, Track } from "../player/model";
+import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateEditingTrack, updateTask } from "../player/trackSlices";
-import CueLine from "./CueLine";
+import { updateEditingTrack, updateTask } from "./trackSlices";
+import CueLine from "./cues/edit/CueLine";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEdit from "./SubtitleEdit";
-import { SubtitleSpecification } from "../toolbox/model";
-import Toolbox from "../toolbox/Toolbox";
-import VideoPlayer from "../player/VideoPlayer";
+import { SubtitleSpecification } from "./toolbox/model";
+import Toolbox from "./toolbox/Toolbox";
+import VideoPlayer from "./player/VideoPlayer";
 import { mount } from "enzyme";
-import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
+import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
 
 describe("SubtitleEdit", () => {

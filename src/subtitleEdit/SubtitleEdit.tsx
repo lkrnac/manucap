@@ -1,11 +1,11 @@
 import "../styles.scss";
 import React, { ReactElement, useState } from "react";
-import { CueDto } from "../player/model";
-import CueLine from "./CueLine";
-import EditingVideoPlayer from "../player/EditingVideoPlayer";
+import { CueDto } from "./model";
+import CueLine from "./cues/edit/CueLine";
+import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
-import { SubtitleEditState } from "../reducers/subtitleEditReducers";
-import Toolbox from "../toolbox/Toolbox";
+import { SubtitleEditState } from "./subtitleEditReducers";
+import Toolbox from "./toolbox/Toolbox";
 import { useSelector } from "react-redux";
 
 export interface Props {
