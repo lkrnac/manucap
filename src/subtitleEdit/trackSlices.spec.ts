@@ -162,6 +162,21 @@ describe("trackSlices", () => {
             expect(testingStore.getState().editorStates.get(1)).toBeUndefined();
         });
 
+        it("delete all cues in the array leaves one default empty cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues));
+
+            // WHEN
+            testingStore.dispatch(deleteCue(1));
+            testingStore.dispatch(deleteCue(0));
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 3, ""));
+            expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+            expect(testingStore.getState().cues.length).toEqual(1);
+        });
+
+
     });
 
     describe("updateEditingTrack", () => {
