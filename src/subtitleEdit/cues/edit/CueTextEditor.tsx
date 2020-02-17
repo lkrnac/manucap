@@ -20,7 +20,38 @@ import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../../trackSlices";
 
-// const Map<String, >
+const characterBindings = new Map<Character, string>();
+characterBindings.set(Character.O_CHAR, "togglePlayPause");
+characterBindings.set(Character.ARROW_LEFT, "seekBack");
+characterBindings.set(Character.ARROW_RIGHT, "seekAhead");
+characterBindings.set(Character.ARROW_UP, "setStartTime");
+characterBindings.set(Character.ARROW_DOWN, "setEndTime");
+characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
+
+const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
+    const action = characterBindings.get(e.keyCode);
+    if (e.shiftKey && (e.metaKey || e.altKey) && action) {
+        return action;
+    }
+    return getDefaultKeyBinding(e);
+};
+
+const mousetrapBindings = new Map<string, KeyCombination>();
+mousetrapBindings.set("togglePlayPause", KeyCombination.MOD_SHIFT_O);
+mousetrapBindings.set("seekBack", KeyCombination.MOD_SHIFT_LEFT);
+mousetrapBindings.set("seekAhead", KeyCombination.MOD_SHIFT_RIGHT);
+mousetrapBindings.set("setStartTime", KeyCombination.MOD_SHIFT_UP);
+mousetrapBindings.set("setEndTime", KeyCombination.MOD_SHIFT_DOWN);
+mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
+
+const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
+    const keyCombination = mousetrapBindings.get(shortcut);
+    if (keyCombination) {
+        Mousetrap.trigger(keyCombination);
+        return "handled";
+    }
+    return "not-handled";
+};
 
 export interface CueTextEditorProps{
     index: number;
@@ -78,50 +109,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         // eslint-disable-next-line
         [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
     );
-
-    const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
-        if (e.shiftKey && (e.metaKey || e.altKey)) {
-            switch (e.keyCode) {
-                case Character.O_CHAR:
-                    return "togglePlayPause";
-                case Character.ARROW_LEFT:
-                    return "seekBack";
-                case Character.ARROW_RIGHT:
-                    return "seekAhead";
-                case Character.ARROW_UP:
-                    return "setStartTime";
-                case Character.ARROW_DOWN:
-                    return "setEndTime";
-                case Character.SLASH_CHAR:
-                    return "toggleShortcutPopup";
-            }
-        }
-        return getDefaultKeyBinding(e);
-    };
-    const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
-        switch (shortcut) {
-            case "togglePlayPause":
-                Mousetrap.trigger(KeyCombination.MOD_SHIFT_O);
-                return "handled";
-            case "seekBack":
-                Mousetrap.trigger(KeyCombination.MOD_SHIFT_LEFT);
-                return "handled";
-            case "seekAhead":
-                Mousetrap.trigger(KeyCombination.MOD_SHIFT_RIGHT);
-                return "handled";
-            case "setStartTime":
-                Mousetrap.trigger(KeyCombination.MOD_SHIFT_UP);
-                return "handled";
-            case "setEndTime":
-                Mousetrap.trigger(KeyCombination.MOD_SHIFT_DOWN);
-                return "handled";
-            case "toggleShortcutPopup":
-                Mousetrap.trigger(KeyCombination.MOD_SHIFT_SLASH);
-                return "handled";
-            default:
-                return "not-handled";
-        }
-    };
 
     return (
         <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
