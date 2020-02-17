@@ -1,7 +1,7 @@
 import "../../testUtils/initBrowserEnvironment";
-import * as shortcuts from "../shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
+import { Character } from "../shortcutConstants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import Modal from "react-bootstrap/Modal";
 import { Provider } from "react-redux";
@@ -198,7 +198,7 @@ describe("KeyboardShortcuts", () => {
         // WHEN
         act(() => {
             simulant.fire(
-                document.documentElement, "keydown", { keyCode: shortcuts.SLASH_CHAR, shiftKey: true, altKey: true });
+                document.documentElement, "keydown", { keyCode: Character.SLASH_CHAR, shiftKey: true, altKey: true });
         });
         actualNode.update();
 
@@ -218,7 +218,7 @@ describe("KeyboardShortcuts", () => {
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
         act(() => {
             simulant.fire(
-                document.documentElement, "keydown", { keyCode: shortcuts.SLASH_CHAR, shiftKey: true, altKey: true });
+                document.documentElement, "keydown", { keyCode: Character.SLASH_CHAR, shiftKey: true, altKey: true });
         });
         actualNode.update();
 

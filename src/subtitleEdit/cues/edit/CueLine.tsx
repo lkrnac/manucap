@@ -1,10 +1,10 @@
-import * as shortcuts from "../../shortcutConstants";
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import { updateCueCategory, updateVttCue } from "../../trackSlices";
 import { AppThunk } from "../../subtitleEditReducers";
 import CueTextEditor from "./CueTextEditor";
+import { KeyCombination } from "../../shortcutConstants";
 import LineCategoryButton from "./LineCategoryButton";
 import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
@@ -29,13 +29,13 @@ const CueLine = (props: Props): ReactElement => {
 
     useEffect(() => {
         const registerShortcuts = (): void => {
-            Mousetrap.bind([shortcuts.MOD_SHIFT_UP, shortcuts.ALT_SHIFT_UP], () => {
+            Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
                 updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
             });
-            Mousetrap.bind([shortcuts.MOD_SHIFT_DOWN, shortcuts.ALT_SHIFT_DOWN], () => {
+            Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
                 updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
             });
-            Mousetrap.bind([shortcuts.ESCAPE, shortcuts.ENTER], () => {
+            Mousetrap.bind([KeyCombination.ESCAPE, KeyCombination.ENTER], () => {
                 // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
             });
         };

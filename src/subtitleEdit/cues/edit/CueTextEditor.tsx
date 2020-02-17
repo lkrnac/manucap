@@ -1,5 +1,5 @@
-import * as shortcuts from "../../shortcutConstants";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { Character, KeyCombination } from "../../shortcutConstants";
 import {
     ContentState,
     DraftHandleValue,
@@ -19,6 +19,8 @@ import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../../trackSlices";
+
+// const Map<String, >
 
 export interface CueTextEditorProps{
     index: number;
@@ -80,17 +82,17 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
         if (e.shiftKey && (e.metaKey || e.altKey)) {
             switch (e.keyCode) {
-                case shortcuts.O_CHAR:
+                case Character.O_CHAR:
                     return "togglePlayPause";
-                case shortcuts.ARROW_LEFT:
+                case Character.ARROW_LEFT:
                     return "seekBack";
-                case shortcuts.ARROW_RIGHT:
+                case Character.ARROW_RIGHT:
                     return "seekAhead";
-                case shortcuts.ARROW_UP:
+                case Character.ARROW_UP:
                     return "setStartTime";
-                case shortcuts.ARROW_DOWN:
+                case Character.ARROW_DOWN:
                     return "setEndTime";
-                case shortcuts.SLASH_CHAR:
+                case Character.SLASH_CHAR:
                     return "toggleShortcutPopup";
             }
         }
@@ -99,22 +101,22 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
         switch (shortcut) {
             case "togglePlayPause":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_O);
+                Mousetrap.trigger(KeyCombination.MOD_SHIFT_O);
                 return "handled";
             case "seekBack":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_LEFT);
+                Mousetrap.trigger(KeyCombination.MOD_SHIFT_LEFT);
                 return "handled";
             case "seekAhead":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_RIGHT);
+                Mousetrap.trigger(KeyCombination.MOD_SHIFT_RIGHT);
                 return "handled";
             case "setStartTime":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_UP);
+                Mousetrap.trigger(KeyCombination.MOD_SHIFT_UP);
                 return "handled";
             case "setEndTime":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_DOWN);
+                Mousetrap.trigger(KeyCombination.MOD_SHIFT_DOWN);
                 return "handled";
             case "toggleShortcutPopup":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_SLASH);
+                Mousetrap.trigger(KeyCombination.MOD_SHIFT_SLASH);
                 return "handled";
             default:
                 return "not-handled";

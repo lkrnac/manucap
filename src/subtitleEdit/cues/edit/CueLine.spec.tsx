@@ -1,8 +1,8 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import * as shortcuts from "../../shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
+import { Character } from "../../shortcutConstants";
 import { CueDto } from "../../model";
 import CueLine from "./CueLine";
 import CueTextEditor from "./CueTextEditor";
@@ -399,7 +399,7 @@ describe("CueLine", () => {
 
         // WHEN
         simulant.fire(
-            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_UP, shiftKey: true, altKey: true });
+            document.documentElement, "keydown", { keyCode: Character.ARROW_UP, shiftKey: true, altKey: true });
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
@@ -418,7 +418,7 @@ describe("CueLine", () => {
 
         // WHEN
         simulant.fire(
-            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_DOWN, shiftKey: true, altKey: true });
+            document.documentElement, "keydown", { keyCode: Character.ARROW_DOWN, shiftKey: true, altKey: true });
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
