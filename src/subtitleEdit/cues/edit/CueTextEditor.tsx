@@ -140,7 +140,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     flexBasis: "50%",
                     paddingLeft: "10px",
                     paddingTop: "5px",
-                    paddingBottom: "5px"
+                    paddingBottom: "5px",
+                    minHeight: "54px"
                 }}
             >
                 <Editor
