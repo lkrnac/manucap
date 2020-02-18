@@ -14,6 +14,7 @@ import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtil
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
 import { CueCategory } from "../../model";
+import CueLineCounts from "../CueLineCounts";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
@@ -128,10 +129,11 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 style={{
                     flexBasis: "25%",
                     display: "flex",
-                    justifyContent: "flex-end",
+                    justifyContent: "space-between",
                     padding: "5px 10px 5px 10px"
                 }}
             >
+                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
                 <DeleteCueLineButton cueIndex={props.index} />
             </div>
             <div
