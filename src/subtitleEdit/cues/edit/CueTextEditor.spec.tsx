@@ -275,8 +275,11 @@ describe("CueTextEditor", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(0);
-        expect(testingStore.getState().editorStates.size).toEqual(0);
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
     });
 
     it("maintain cue styles when cue text is changes", () => {
