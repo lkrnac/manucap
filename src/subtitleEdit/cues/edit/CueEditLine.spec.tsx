@@ -4,7 +4,7 @@ import "video.js"; // VTTCue definition
 import * as simulant from "simulant";
 import { Character } from "../../shortcutConstants";
 import { CueDto } from "../../model";
-import CueLine from "./CueLine";
+import CueEditLine from "./CueEditLine";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "./cueUtils";
 import PositionButton from "./PositionButton";
@@ -115,7 +115,7 @@ describe("CueLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} playerTime={0} />
+                <CueEditLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -218,7 +218,7 @@ describe("CueLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                <CueEditLine index={1} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -231,7 +231,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} playerTime={0} />
+                <CueEditLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -247,7 +247,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} playerTime={0} />
+                <CueEditLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -263,7 +263,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} playerTime={0} />
+                <CueEditLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -279,7 +279,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} playerTime={0} />
+                <CueEditLine index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -299,7 +299,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} playerTime={0} />
+                <CueEditLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -320,7 +320,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} playerTime={0} />
+                <CueEditLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -339,7 +339,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} playerTime={0} />
+                <CueEditLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -359,7 +359,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} playerTime={0} />
+                <CueEditLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -379,7 +379,7 @@ describe("CueLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={0} cue={cue} playerTime={0} />
+                <CueEditLine index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -393,7 +393,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
         mount(
             <Provider store={testingStore} >
-                <CueLine index={0} cue={cue} playerTime={1} />
+                <CueEditLine index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -412,7 +412,7 @@ describe("CueLine", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
         mount(
             <Provider store={testingStore} >
-                <CueLine index={0} cue={cue} playerTime={1} />
+                <CueEditLine index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 

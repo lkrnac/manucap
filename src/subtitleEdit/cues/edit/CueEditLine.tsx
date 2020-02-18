@@ -24,7 +24,7 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     dispatch(updateVttCue(props.index, newCue));
 };
 
-const CueLine = (props: Props): ReactElement => {
+const CueEditLine = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -116,4 +116,4 @@ const CueLine = (props: Props): ReactElement => {
     );
 };
 
-export default CueLine;
+export default CueEditLine;

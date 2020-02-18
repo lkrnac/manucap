@@ -2,7 +2,7 @@ import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateEditingTrack, updateTask } from "./trackSlices";
-import CueLine from "./cues/edit/CueLine";
+import CueEditLine from "./cues/edit/CueEditLine";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEdit from "./SubtitleEdit";
@@ -69,8 +69,8 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <div style={{ overflowY: "scroll", height: "100%" }}>
-                                <CueLine index={0} cue={cues[0]} playerTime={0} />
-                                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                                <CueEditLine index={0} cue={cues[0]} playerTime={0} />
+                                <CueEditLine index={1} cue={cues[1]} playerTime={0} />
                             </div>
                             <div style={{ marginTop: "10px" }}>
                                 <button className="btn btn-primary" style={{ marginTop: "10px", marginBottom: "10px" }}>

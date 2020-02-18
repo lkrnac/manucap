@@ -1,7 +1,7 @@
 import "../styles.scss";
 import React, { ReactElement, useState } from "react";
 import { CueDto } from "./model";
-import CueLine from "./cues/edit/CueLine";
+import CueEditLine from "./cues/edit/CueEditLine";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
@@ -43,7 +43,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
                     <div style={{ overflowY: "scroll", height: "100%" }}>
                         {
                             cues.map((cue: CueDto, idx: number): ReactElement =>
-                                <CueLine key={idx} index={idx} cue={cue} playerTime={currentPlayerTime} />)
+                                <CueEditLine key={idx} index={idx} cue={cue} playerTime={currentPlayerTime} />)
                         }
                     </div>
                     <div style={{ marginTop: "10px" }}>
