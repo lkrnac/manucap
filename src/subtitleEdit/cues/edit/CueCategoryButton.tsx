@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { AppThunk } from "../../subtitleEditReducers";
 import { CueCategory } from "../../model";
 import { Dropdown } from "react-bootstrap";
-import { dialogueTypeToPrettyName } from "./cueUtils";
+import { dialogueTypeToPrettyName } from "../cueUtils";
 
 interface Props {
     category?: CueCategory;

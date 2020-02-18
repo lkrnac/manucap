@@ -7,7 +7,7 @@ import videojs, { VideoJsPlayer } from "video.js";
 import { Character } from "../shortcutConstants";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import { copyNonConstructorProperties } from "../cues/edit/cueUtils";
+import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import sinon from "sinon";

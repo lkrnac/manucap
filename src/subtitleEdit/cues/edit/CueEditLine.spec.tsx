@@ -6,7 +6,7 @@ import { Character } from "../../shortcutConstants";
 import { CueDto } from "../../model";
 import CueEditLine from "./CueEditLine";
 import CueTextEditor from "./CueTextEditor";
-import { Position } from "./cueUtils";
+import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { Provider } from "react-redux";
 import React from "react";

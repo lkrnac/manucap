@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { CueCategory } from "../../model";
 import { addCue } from "../../trackSlices";
-import { copyNonConstructorProperties } from "./cueUtils";
+import { copyNonConstructorProperties } from "../cueUtils";
 import { useDispatch } from "react-redux";
 
 const ADD_END_TIME_INTERVAL_SECS = 3;

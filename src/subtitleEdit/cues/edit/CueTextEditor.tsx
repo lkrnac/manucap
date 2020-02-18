@@ -10,7 +10,7 @@ import {
 } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
-import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
+import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
 import { CueCategory } from "../../model";

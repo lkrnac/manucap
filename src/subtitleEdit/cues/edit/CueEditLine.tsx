@@ -1,5 +1,5 @@
 import { CueCategory, CueDto } from "../../model";
-import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
+import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import { updateCueCategory, updateVttCue } from "../../trackSlices";
 import { AppThunk } from "../../subtitleEditReducers";

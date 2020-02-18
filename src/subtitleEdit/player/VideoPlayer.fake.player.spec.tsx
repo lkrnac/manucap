@@ -4,7 +4,7 @@ import * as simulant from "simulant";
 import { LanguageCues, Track } from "../model";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import { copyNonConstructorProperties } from "../cues/edit/cueUtils";
+import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { mount } from "enzyme";
 import { simulateComponentDidUpdate } from "../../testUtils/testUtils";
 import videojs from "video.js";
