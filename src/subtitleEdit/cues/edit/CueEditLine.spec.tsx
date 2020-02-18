@@ -25,17 +25,7 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            flex: "1 1 20px",
-                            paddingLeft: "8px",
-                            paddingTop: "10px",
-                        }}
-                    >
-                        1
-                    </div>
+                <>
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -108,7 +98,7 @@ describe("CueLine", () => {
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
                         <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
                     </div>
-                </div>
+                </>
             </Provider>
         );
 
@@ -128,17 +118,7 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            flex: "1 1 20px",
-                            paddingLeft: "8px",
-                            paddingTop: "10px",
-                        }}
-                    >
-                        2
-                    </div>
+                <>
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -211,7 +191,7 @@ describe("CueLine", () => {
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
                         <CueTextEditor key={1} index={1} vttCue={cues[1].vttCue} />
                     </div>
-                </div>
+                </>
             </Provider>
         );
 

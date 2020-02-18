@@ -43,17 +43,7 @@ const CueEditLine = (props: Props): ReactElement => {
     }, [dispatch, props]);
 
     return (
-        <div style={{ display: "flex", paddingBottom: "5px" }}>
-            <div
-                className="sbte-cue-line-flap"
-                style={{
-                    flex: "1 1 20px",
-                    paddingLeft: "8px",
-                    paddingTop: "10px",
-                }}
-            >
-                {props.index + 1}
-            </div>
+        <>
             <div
                 className="sbte-cue-line-left-section"
                 style={{
@@ -112,7 +102,7 @@ const CueEditLine = (props: Props): ReactElement => {
                     cueCategory={props.cue.cueCategory}
                 />
             </div>
-        </div>
+        </>
     );
 };
 
