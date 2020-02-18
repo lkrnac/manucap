@@ -3,9 +3,9 @@ import { Position, copyNonConstructorProperties, positionStyles } from "./cueUti
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import { updateCueCategory, updateVttCue } from "../../trackSlices";
 import { AppThunk } from "../../subtitleEditReducers";
+import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
 import { KeyCombination } from "../../shortcutConstants";
-import LineCategoryButton from "./LineCategoryButton";
 import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
@@ -73,7 +73,7 @@ const CueEditLine = (props: Props): ReactElement => {
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <LineCategoryButton
+                    <CueCategoryButton
                         onChange={(cueCategory: CueCategory): AppThunk =>
                             dispatch(updateCueCategory(props.index, cueCategory))}
                         category={props.cue.cueCategory}

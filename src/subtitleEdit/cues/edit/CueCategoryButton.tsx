@@ -9,7 +9,7 @@ interface Props {
     onChange: (value: CueCategory) => AppThunk;
 }
 
-const LineCategoryButton = (props: Props): ReactElement => (
+const CueCategoryButton = (props: Props): ReactElement => (
     <Dropdown>
         <Dropdown.Toggle id="cue-line-category" variant="outline-secondary">
             {dialogueTypeToPrettyName[props.category || "DIALOGUE"]}
@@ -45,4 +45,4 @@ const LineCategoryButton = (props: Props): ReactElement => (
     </Dropdown>
 );
 
-export default LineCategoryButton;
+export default CueCategoryButton;
