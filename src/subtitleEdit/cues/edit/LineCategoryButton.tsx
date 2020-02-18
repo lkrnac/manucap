@@ -2,13 +2,7 @@ import React, { ReactElement } from "react";
 import { AppThunk } from "../../subtitleEditReducers";
 import { CueCategory } from "../../model";
 import { Dropdown } from "react-bootstrap";
-
-export const dialogueTypeToPrettyName = {
-    DIALOGUE: "Dialogue",
-    ONSCREEN_TEXT: "On Screen Text",
-    AUDIO_DESCRIPTION: "Audio Descriptions",
-    LYRICS: "Lyrics"
-};
+import { dialogueTypeToPrettyName } from "./cueUtils";
 
 interface Props {
     category?: CueCategory;
