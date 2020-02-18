@@ -172,7 +172,7 @@ export const findPositionIcon = ((vttCue: VTTCue): PositionIcon => {
     return positionIcons.filter((positionIcon: PositionIcon) => positionIcon.position === position)[0];
 });
 
-export const dialogueTypeToPrettyName = {
+export const cueCategoryToPrettyName = {
     DIALOGUE: "Dialogue",
     ONSCREEN_TEXT: "On Screen Text",
     AUDIO_DESCRIPTION: "Audio Descriptions",
