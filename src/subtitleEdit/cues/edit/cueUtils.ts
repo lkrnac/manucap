@@ -178,3 +178,10 @@ export const getWordCount = (text: string): number => {
     const matches = text ? text.match(/\S+/g) : [];
     return matches ? matches.length : 0;
 };
+
+const NUM_DECIMAL = 3;
+
+export const getDuration = (vttCue: VTTCue): number => {
+    const duration = (vttCue.endTime - vttCue.startTime);
+    return +duration.toFixed(NUM_DECIMAL);
+};

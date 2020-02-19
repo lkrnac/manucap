@@ -6,7 +6,7 @@ import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHT
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement } from "react";
 import { ReactWrapper, mount } from "enzyme";
-import { getCharacterCount, getWordCount } from "./cueUtils";
+import { getCharacterCount, getDuration, getWordCount } from "./cueUtils";
 import { Provider } from "react-redux";
 import { Store } from "@reduxjs/toolkit";
 import { createTestingStore } from "../../../testUtils/testingStore";
@@ -26,7 +26,7 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     </Provider>
 );
 
-const createExpectedNode = (editorState: EditorState, text: string): ReactWrapper => mount(
+const createExpectedNode = (editorState: EditorState, vttCue: VTTCue, text: string): ReactWrapper => mount(
     <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div
             className="sbte-bottom-border"
@@ -37,14 +37,10 @@ const createExpectedNode = (editorState: EditorState, text: string): ReactWrappe
                 padding: "5px 10px 5px 10px"
             }}
         >
-            <div style={{
-                paddingLeft: "5px",
-                paddingTop: "5px",
-            }}
-            >
-                <span>Duration: 1s, </span>
-                <span>Characters: {getCharacterCount(text)}, </span>
-                <span>Words: {getWordCount(text)}</span>
+            <div className="sbte-cue-line-counts" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
+                <span>DURATION: <span className="sbte-green-text">{getDuration(vttCue)}s</span>, </span>
+                <span>CHARACTERS: <span className="sbte-green-text">{getCharacterCount(text)}</span>, </span>
+                <span>WORDS: <span className="sbte-green-text">{getWordCount(text)}</span></span>
             </div>
             <button className="btn btn-outline-secondary sbte-delete-cue-button">
                 <i className="fas fa-trash-alt" />
@@ -125,7 +121,7 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
 const testForContentState = (contentState: ContentState, vttCue: VTTCue, expectedStateHtml: string): void => {
     let editorState = EditorState.createWithContent(contentState);
     editorState = EditorState.moveFocusToEnd(editorState);
-    const expectedNode = createExpectedNode(editorState, contentState.getPlainText());
+    const expectedNode = createExpectedNode(editorState, vttCue, contentState.getPlainText());
 
     // WHEN
     const actualNode = mount(

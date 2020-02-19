@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { getCharacterCount, getWordCount } from "./edit/cueUtils";
+import { getCharacterCount, getDuration, getWordCount } from "./edit/cueUtils";
 import { EditorState } from "draft-js";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
@@ -9,13 +9,6 @@ interface Props {
     vttCue: VTTCue;
 }
 
-const NUM_DECIMAL = 3;
-
-const getDuration = (vttCue: VTTCue): number => {
-    const duration = (vttCue.endTime - vttCue.startTime);
-    return +duration.toFixed(NUM_DECIMAL);
-};
-
 const CueLineCounts = (props: Props): ReactElement => {
     const editorState = useSelector((state: SubtitleEditState) =>
         state.editorStates.get(props.cueIndex)) as EditorState;
@@ -23,14 +16,10 @@ const CueLineCounts = (props: Props): ReactElement => {
     const text = !currentContent || !currentContent.hasText() ? "" : currentContent.getPlainText();
 
     return (
-        <div style={{
-            paddingLeft: "5px",
-            paddingTop: "5px",
-        }}
-        >
-            <span>Duration: {getDuration(props.vttCue)}s, </span>
-            <span>Characters: {getCharacterCount(text)}, </span>
-            <span>Words: {getWordCount(text)}</span>
+        <div className="sbte-cue-line-counts" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
+            <span>DURATION: <span className="sbte-green-text">{getDuration(props.vttCue)}s</span>, </span>
+            <span>CHARACTERS: <span className="sbte-green-text">{getCharacterCount(text)}</span>, </span>
+            <span>WORDS: <span className="sbte-green-text">{getWordCount(text)}</span></span>
         </div>
     );
 };
