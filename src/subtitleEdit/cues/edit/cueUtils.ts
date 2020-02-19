@@ -171,17 +171,3 @@ export const findPositionIcon = ((vttCue: VTTCue): PositionIcon => {
     const position = detectPosition(vttCue);
     return positionIcons.filter((positionIcon: PositionIcon) => positionIcon.position === position)[0];
 });
-
-export const getCharacterCount = (text: string): number => text ? text.length : 0;
-
-export const getWordCount = (text: string): number => {
-    const matches = text ? text.match(/\S+/g) : [];
-    return matches ? matches.length : 0;
-};
-
-const NUM_DECIMAL = 3;
-
-export const getDuration = (vttCue: VTTCue): number => {
-    const duration = (vttCue.endTime - vttCue.startTime);
-    return +duration.toFixed(NUM_DECIMAL);
-};

@@ -51,6 +51,11 @@ describe("CueLineCounts", () => {
         testContentRendered("i am a subtitle line", 0, 1, 1, 20, 5);
     });
 
+    it("renders with text and line breaks, spaces and tabs ", () => {
+        testContentRendered("    this is      sample " +
+            "     text with      multiple        blanks", 0, 1, 1, 62, 7);
+    });
+
     it("renders with html", () => {
         testContentRendered("i <i>am</i> <b>a subtitle</b> line", 0, 1, 1, 20, 5);
     });

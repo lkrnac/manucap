@@ -1,5 +1,4 @@
 import React, { ReactElement } from "react";
-import { getCharacterCount, getDuration, getWordCount } from "./edit/cueUtils";
 import { EditorState } from "draft-js";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
@@ -8,6 +7,20 @@ interface Props {
     cueIndex: number;
     vttCue: VTTCue;
 }
+
+const getCharacterCount = (text: string): number => text ? text.length : 0;
+
+const getWordCount = (text: string): number => {
+    const matches = text ? text.match(/\S+/g) : [];
+    return matches ? matches.length : 0;
+};
+
+const NUM_DECIMAL = 3;
+
+const getDuration = (vttCue: VTTCue): number => {
+    const duration = (vttCue.endTime - vttCue.startTime);
+    return +duration.toFixed(NUM_DECIMAL);
+};
 
 const CueLineCounts = (props: Props): ReactElement => {
     const editorState = useSelector((state: SubtitleEditState) =>
