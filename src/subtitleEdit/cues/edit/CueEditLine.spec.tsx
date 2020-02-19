@@ -20,7 +20,7 @@ const cues = [
     { vttCue: new VTTCue(67.045, 359999.999, "Caption Line 3"), cueCategory: "DIALOGUE" } as CueDto,
 ];
 
-describe("CueLine", () => {
+describe("CueEditLine", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
