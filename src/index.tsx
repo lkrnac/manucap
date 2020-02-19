@@ -1,12 +1,13 @@
 import "./testUtils/initBrowserEnvironment";
 import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
-import { updateCues, updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
+import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
+import { updateCues } from "./subtitleEdit/cues/cueSlices";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
