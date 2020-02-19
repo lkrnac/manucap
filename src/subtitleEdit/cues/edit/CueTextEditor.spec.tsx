@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import * as shortcuts from "../../shortcutConstants";
+import { Character, KeyCombination } from "../../shortcutConstants";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
@@ -10,6 +10,7 @@ import { getCharacterCount, getDuration, getWordCount } from "./cueUtils";
 import { Provider } from "react-redux";
 import { Store } from "@reduxjs/toolkit";
 import { createTestingStore } from "../../../testUtils/testingStore";
+import each from "jest-each";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 
@@ -52,7 +53,8 @@ const createExpectedNode = (editorState: EditorState, vttCue: VTTCue, text: stri
                 flexBasis: "50%",
                 paddingLeft: "10px",
                 paddingTop: "5px",
-                paddingBottom: "5px"
+                paddingBottom: "5px",
+                minHeight: "54px"
             }}
         >
             <Editor editorState={editorState} onChange={jest.fn} spellCheck />
@@ -312,220 +314,33 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
     });
 
-    it("should handle playPauseToggle key shortcut with meta key", () => {
+    each([
+        [KeyCombination.MOD_SHIFT_O, Character.O_CHAR, true, true, false],
+        [KeyCombination.MOD_SHIFT_O, Character.O_CHAR, false, true, true],
+        [KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, true, true, false],
+        [KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, false, true, true],
+        [KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, true, true, false],
+        [KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, false, true, true],
+        [KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, true, true, false],
+        [KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, false, true, true],
+        [KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, true, true, false],
+        [KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, false, true, true],
+        [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, true, true, false],
+        [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, false, true, true],
+    ])
+    .it("should handle '%s' keyboard shortcut", (
+        expectedKeyCombination: KeyCombination,
+        character: Character, metaKey: boolean, shiftKey: boolean, altKey: boolean
+    ) => {
         // GIVEN
         const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
         const editor = createEditorNode();
 
         // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.O_CHAR,
-            metaKey: true,
-            shiftKey: true,
-            altKey: false,
-        });
+        editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, });
 
         // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_O);
-    });
-
-    it("should handle playPauseToggle key shortcut with alt key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.O_CHAR,
-            metaKey: false,
-            shiftKey: true,
-            altKey: true,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_O);
-    });
-
-    it("should handle seekBack key shortcut with meta key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.ARROW_LEFT,
-            metaKey: true,
-            shiftKey: true,
-            altKey: false,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_LEFT);
-    });
-
-    it("should handle seekBack key shortcut with alt key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.ARROW_LEFT,
-            metaKey: false,
-            shiftKey: true,
-            altKey: true,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_LEFT);
-    });
-
-    it("should handle seekAhead key shortcut with meta key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.ARROW_RIGHT,
-            metaKey: true,
-            shiftKey: true,
-            altKey: false,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_RIGHT);
-    });
-
-    it("should handle seekAhead key shortcut with alt key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.ARROW_RIGHT,
-            metaKey: false,
-            shiftKey: true,
-            altKey: true,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_RIGHT);
-    });
-
-    it("should handle setStartTime key shortcut with meta key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.ARROW_UP,
-            metaKey: true,
-            shiftKey: true,
-            altKey: false,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_UP);
-    });
-
-    it("should handle setStartTime key shortcut with alt key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.ARROW_UP,
-            metaKey: false,
-            shiftKey: true,
-            altKey: true,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_UP);
-    });
-
-    it("should handle setEndTime key shortcut with meta key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.ARROW_DOWN,
-            metaKey: true,
-            shiftKey: true,
-            altKey: false,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_DOWN);
-    });
-
-    it("should handle setEndTime key shortcut with alt key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.ARROW_DOWN,
-            metaKey: false,
-            shiftKey: true,
-            altKey: true,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_DOWN);
-    });
-
-    it("should handle toggleShortcutPopup key shortcut with meta key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.SLASH_CHAR,
-            metaKey: true,
-            shiftKey: true,
-            altKey: false,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_SLASH);
-    });
-
-    it("should handle toggleShortcutPopup key shortcut with alt key", () => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: shortcuts.SLASH_CHAR,
-            metaKey: false,
-            shiftKey: true,
-            altKey: true,
-        });
-
-        // THEN
-        expect(mousetrapSpy).toBeCalled();
-        expect(mousetrapSpy).toBeCalledWith(shortcuts.MOD_SHIFT_SLASH);
+        expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
     });
 
     it("should handle unbound key shortcuts", () => {
