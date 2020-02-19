@@ -1,7 +1,7 @@
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { updateCueCategory, updateVttCue } from "../../trackSlices";
+import { updateCueCategory, updateVttCue } from "../cueSlices";
 import { AppThunk } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";

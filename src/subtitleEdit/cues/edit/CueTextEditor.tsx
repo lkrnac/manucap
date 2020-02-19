@@ -19,7 +19,7 @@ import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../../trackSlices";
+import { updateVttCue } from "../cueSlices";
 
 const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");
