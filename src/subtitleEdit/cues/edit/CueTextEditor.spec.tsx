@@ -71,8 +71,8 @@ const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
     </div>
 );
 
-const createEditorNode = (): ReactWrapper => {
-    const vttCue = new VTTCue(0, 1, "someText");
+const createEditorNode = (text = "someText"): ReactWrapper => {
+    const vttCue = new VTTCue(0, 1, text);
     const actualNode = mount(
         <Provider store={testingStore}>
             <CueTextEditor index={0} vttCue={vttCue} />
@@ -181,6 +181,26 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
+    });
+
+    /**
+     * This is needed because of VTT vs HTML differences (HTML is native format of draft-js).
+     * Currently this includes only line wrappings ('\n' vs '<br>').
+     */
+    it("does the VTT <-> HTML conversion", () => {
+        // GIVEN
+        const editor = createEditorNode("some\nwrapped\ntext");
+
+        // WHEN
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => "",
+            }
+        });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some\nwrapped\ntext");
     });
 
     it("updated cue when bold inline style is used", () => {

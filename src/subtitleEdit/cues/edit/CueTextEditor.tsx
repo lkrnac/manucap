@@ -11,6 +11,7 @@ import {
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
+import { convertHtmlToVtt, convertVttToHtml } from "../cueTextConverter";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
 import { CueCategory } from "../../model";
@@ -72,7 +73,7 @@ const convertToHtmlOptions = {
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
-    const processedHTML = convertFromHTML(props.vttCue.text);
+    const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
@@ -99,7 +100,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => {
             const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
-            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, text);
+            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, convertHtmlToVtt(text));
             copyNonConstructorProperties(vttCue, props.vttCue);
             dispatch(updateVttCue(props.index, vttCue));
         },
