@@ -10,7 +10,7 @@ import { simulateComponentDidUpdate } from "../../testUtils/testUtils";
 import videojs from "video.js";
 
 jest.mock("video.js");
-jest.mock("../cues/edit/cueUtils");
+jest.mock("../cues/cueUtils");
 
 const O_CHAR = 79;
 const LEFT = 37;

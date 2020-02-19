@@ -12,7 +12,7 @@ import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import sinon from "sinon";
 
-jest.mock("../cues/edit/cueUtils");
+jest.mock("../cues/cueUtils");
 
 interface FakeTrack {
     language: string;
