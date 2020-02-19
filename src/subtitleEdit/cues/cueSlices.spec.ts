@@ -3,7 +3,7 @@ import {
     addCue,
     deleteCue,
     updateCueCategory,
-    updateCues,
+    updateCues, updateEditingCueIndex,
     updateVttCue
 } from "./cueSlices";
 import { CueDto } from "../model";
@@ -160,7 +160,15 @@ describe("trackSlices", () => {
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues.length).toEqual(1);
         });
+    });
 
+    describe("updateEditingCueIndex", () => {
+        it("updates editing cue index", () => {
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(5));
 
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(5);
+        });
     });
 });
