@@ -5,7 +5,7 @@ import {
     copyNonConstructorProperties,
     findPositionIcon,
     positionIcons,
-    positionStyles,
+    positionStyles, getCharacterCount, getWordCount, getDuration,
 } from "./cueUtils";
 import each from "jest-each";
 
@@ -252,5 +252,59 @@ describe("cueUtils", () => {
             // THEN
             expect(actualPositionIcon.iconText).toEqual("↓↓");
         });
+    });
+
+    describe("getCharacterCount", () => {
+        it("works with empty text", () => {
+            // WHEN
+            // THEN
+            expect(getCharacterCount("")).toEqual(0);
+        });
+
+        it("works with text", () => {
+            // WHEN
+            // THEN
+            expect(getCharacterCount("this is sample text")).toEqual(19);
+        });
+    });
+
+    describe("getWordCount", () => {
+        it("works with empty text", () => {
+            // WHEN
+            // THEN
+            expect(getWordCount("")).toEqual(0);
+        });
+
+        it("works with text", () => {
+            // WHEN
+            // THEN
+            expect(getWordCount("this is sample text")).toEqual(4);
+        });
+
+        it("works with text with line breaks, spaces and tabs", () => {
+            // WHEN
+            // THEN
+            expect(getWordCount("    this is      sample " +
+                "     text with      multiple           blanks")).toEqual(7);
+        });
+    });
+
+    describe("getDuration", () => {
+        it("works for 1 second", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "");
+            // WHEN
+            // THEN
+            expect(getDuration(vttCue)).toEqual(1);
+        });
+
+        it("works with milliseconds", () => {
+            // GIVEN
+            const vttCue = new VTTCue(21, 42621.850, "");
+            // WHEN
+            // THEN
+            expect(getDuration(vttCue)).toEqual(42600.85);
+        });
+
     });
 });
