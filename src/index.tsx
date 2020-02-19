@@ -1,14 +1,12 @@
 import "./testUtils/initBrowserEnvironment";
 import { Provider, useDispatch } from "react-redux";
-import { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { updateCues, updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { Language } from "./subtitleEdit/model";
-import React from "react";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
-
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
@@ -30,9 +28,9 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
        setTimeout( // this simulates latency caused by server roundtrip
            dispatch(updateCues([
-               { vttCue: new VTTCue(0, 1, "<i>Caption <b>Line</b></i> 1<br/>Wrapped text"), cueCategory: "DIALOGUE" },
+               { vttCue: new VTTCue(0, 1, "<i>Caption <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
                {
-                   vttCue: new VTTCue(1, 2, "<i>Caption <b>Line</b></i> 2<br/>Wrapped text"),
+                   vttCue: new VTTCue(1, 2, "<i><lang en>Caption</lang> <b>Line</b></i> 2\nWrapped text"),
                    cueCategory: "ONSCREEN_TEXT"
                },
            ])),
