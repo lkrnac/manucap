@@ -30,8 +30,11 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
        setTimeout( // this simulates latency caused by server roundtrip
            dispatch(updateCues([
-               { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-               { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+               { vttCue: new VTTCue(0, 1, "<i>Caption <b>Line</b></i> 1<br/>Wrapped text"), cueCategory: "DIALOGUE" },
+               {
+                   vttCue: new VTTCue(1, 2, "<i>Caption <b>Line</b></i> 2<br/>Wrapped text"),
+                   cueCategory: "ONSCREEN_TEXT"
+               },
            ])),
            500
        );
