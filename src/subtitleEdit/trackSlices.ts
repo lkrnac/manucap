@@ -61,7 +61,15 @@ export const cuesSlice = createSlice({
             state.splice(action.payload.idx, 0, newCueDto);
         },
         deleteCue: (state, action: PayloadAction<CueIndexAction>): void => {
-            state.splice(action.payload.idx, 1);
+            if (state.length > 1) {
+                state.splice(action.payload.idx, 1);
+            } else {
+                // default empty cue
+                state[0] = {
+                    vttCue: new VTTCue(0, 3, ""),
+                    cueCategory: "DIALOGUE"
+                };
+            }
         },
         updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
     }
