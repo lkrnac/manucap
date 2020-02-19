@@ -309,21 +309,23 @@ describe("CueTextEditor", () => {
     });
 
     each([
-        [Character.O_CHAR, true, true, false, KeyCombination.MOD_SHIFT_O],
-        [Character.O_CHAR, false, true, true, KeyCombination.MOD_SHIFT_O],
-        [Character.ARROW_LEFT, true, true, false, KeyCombination.MOD_SHIFT_LEFT],
-        [Character.ARROW_LEFT, false, true, true, KeyCombination.MOD_SHIFT_LEFT],
-        [Character.ARROW_RIGHT, true, true, false, KeyCombination.MOD_SHIFT_RIGHT],
-        [Character.ARROW_RIGHT, false, true, true, KeyCombination.MOD_SHIFT_RIGHT],
-        [Character.ARROW_UP, true, true, false, KeyCombination.MOD_SHIFT_UP],
-        [Character.ARROW_UP, false, true, true, KeyCombination.MOD_SHIFT_UP],
-        [Character.ARROW_DOWN, true, true, false, KeyCombination.MOD_SHIFT_DOWN],
-        [Character.ARROW_DOWN, false, true, true, KeyCombination.MOD_SHIFT_DOWN],
-        [Character.SLASH_CHAR, true, true, false, KeyCombination.MOD_SHIFT_SLASH],
-        [Character.SLASH_CHAR, false, true, true, KeyCombination.MOD_SHIFT_SLASH],
+        [KeyCombination.MOD_SHIFT_O, Character.O_CHAR, true, true, false],
+        [KeyCombination.MOD_SHIFT_O, Character.O_CHAR, false, true, true],
+        [KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, true, true, false],
+        [KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, false, true, true],
+        [KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, true, true, false],
+        [KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, false, true, true],
+        [KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, true, true, false],
+        [KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, false, true, true],
+        [KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, true, true, false],
+        [KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, false, true, true],
+        [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, true, true, false],
+        [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, false, true, true],
     ])
-    .it("should handle keyboard shortcut", (character: Character, metaKey: boolean, shiftKey: boolean,
-                                            altKey: boolean, expectedKeyCombination: KeyCombination) => {
+    .it("should handle '%s' keyboard shortcut", (
+        expectedKeyCombination: KeyCombination,
+        character: Character, metaKey: boolean, shiftKey: boolean, altKey: boolean
+    ) => {
         // GIVEN
         const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
         const editor = createEditorNode();
