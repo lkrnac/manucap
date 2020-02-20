@@ -71,7 +71,15 @@ export const cuesSlice = createSlice({
                 };
             }
         },
-        updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
+        updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
+        applyShiftTime: (_state, action: PayloadAction<number>): void => {
+            const shift = action.payload;
+            console.log(JSON.stringify(_state));
+            _state.forEach((item: CueDto):void => {
+                item.vttCue.startTime += shift
+            });
+
+        }
     }
 });
 
@@ -124,4 +132,8 @@ export const updateTask = (task: Task): AppThunk =>
 export const updateCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
         dispatch(cuesSlice.actions.updateCues({ cues }));
+    };
+export const applyShiftTime = (shiftTime: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<number>>): void => {
+        dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
     };
