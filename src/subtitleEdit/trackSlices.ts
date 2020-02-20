@@ -11,10 +11,6 @@ interface TaskAction extends SubtitleEditAction {
     task: Task;
 }
 
-export interface CueIndexAction extends SubtitleEditAction {
-    idx: number;
-}
-
 export const editingTrackSlice = createSlice({
     name: "editingTrack",
     initialState: null as Track | null,
