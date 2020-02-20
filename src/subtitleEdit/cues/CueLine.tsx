@@ -1,9 +1,10 @@
+import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import React, { ReactElement } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "../model";
 import CueEditLine from "./edit/CueEditLine";
 import CueViewLine from "./view/CueViewLine";
-import { SubtitleEditState } from "../subtitleEditReducers";
-import { useSelector } from "react-redux";
+import { updateEditingCueIndex } from "./cueSlices";
 
 interface Props {
     index: number;
@@ -12,9 +13,13 @@ interface Props {
 }
 
 const CueLine = (props: Props): ReactElement => {
+    const dispatch = useDispatch();
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     return (
-        <div style={{ display: "flex", paddingBottom: "5px" }}>
+        <div
+            style={{ display: "flex", paddingBottom: "5px" }}
+            onClick={(): AppThunk => dispatch(updateEditingCueIndex(props.index))}
+        >
             <div
                 className="sbte-cue-line-flap"
                 style={{

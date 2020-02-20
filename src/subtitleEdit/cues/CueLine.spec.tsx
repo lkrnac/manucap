@@ -96,4 +96,19 @@ describe("CueLine", () => {
         expect(actualProps.cue).toEqual(cues[1]);
         expect(actualProps.playerTime).toEqual(1);
     });
+
+    it("opens cue line for editing when clicked", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.simulate("click");
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
 });
