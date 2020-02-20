@@ -215,74 +215,6 @@ describe("CueTextEditor", () => {
         testInlineStyle(new VTTCue(0, 1, "someText"), 3, "<u>someT</u>ext");
     });
 
-    it("added cue when add cue button is clicked", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
-
-        // THEN
-        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-        expect(testingStore.getState().cues[1].vttCue.align).toEqual("center");
-        expect(testingStore.getState().cues[1].vttCue.line).toEqual("auto");
-        expect(testingStore.getState().cues[1].vttCue.position).toEqual("auto");
-        expect(testingStore.getState().cues[1].vttCue.positionAlign).toEqual("auto");
-        expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
-    });
-
-    it("added cue with non-default category when add cue button is clicked", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} cueCategory="AUDIO_DESCRIPTION" />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
-
-        // THEN
-        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-        expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
-    });
-
-    it("added cue with non-default position when add cue button is clicked", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.align = "left";
-        vttCue.line = 8;
-        vttCue.position = 35;
-        vttCue.positionAlign = "center";
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
-
-        // THEN
-        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-        expect(testingStore.getState().cues[1].vttCue.align).toEqual("left");
-        expect(testingStore.getState().cues[1].vttCue.line).toEqual(8);
-        expect(testingStore.getState().cues[1].vttCue.position).toEqual(35);
-        expect(testingStore.getState().cues[1].vttCue.positionAlign).toEqual("center");
-    });
-
     it("deletes cue when delete cue button is clicked", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
@@ -303,7 +235,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
     });
 
-    it("maintain cue styles when cue text is changes", () => {
+    it("maintain cue styles when cue text changes", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.position = 60;
