@@ -12,6 +12,7 @@ import VideoPlayer from "./player/VideoPlayer";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
+import { updateCues } from "./cues/cueSlices";
 
 describe("SubtitleEdit", () => {
     it("renders", () => {
@@ -92,6 +93,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
         testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(updateCues(cues));
 
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
