@@ -289,6 +289,48 @@ describe("CueTextEditor", () => {
         expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
     });
 
+    each([
+        [KeyCombination.ENTER, Character.ENTER],
+        [KeyCombination.ESCAPE, Character.ESCAPE],
+    ])
+    .it("should handle '%s' keyboard shortcut", (expectedKeyCombination: KeyCombination, character: Character) => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", { keyCode: character });
+
+        // THEN
+        expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
+    });
+
+    each([
+        [KeyCombination.ESCAPE, Character.ESCAPE, true, false, false, false],
+        [KeyCombination.ESCAPE, Character.ESCAPE, false, true, false, false],
+        [KeyCombination.ESCAPE, Character.ESCAPE, false, false, true, false],
+        [KeyCombination.ESCAPE, Character.ESCAPE, false, false, false, true],
+        [KeyCombination.ENTER, Character.ENTER, true, false, false, false],
+        [KeyCombination.ENTER, Character.ENTER, false, true, false, false],
+        [KeyCombination.ENTER, Character.ENTER, false, false, true, false],
+        [KeyCombination.ENTER, Character.ENTER, false, false, false, true],
+    ])
+    .it("doesn't handle '%s' keypress if modifier keys are pressed", (
+        _expectedKeyCombination: KeyCombination, character: Character,
+        metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
+    ) => {
+        // GIVEN
+        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+        mousetrapSpy.mockReset();
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+
+        // THEN
+        expect(mousetrapSpy).not.toBeCalled();
+    });
+
     it("should handle unbound key shortcuts", () => {
         // GIVEN
         const defaultKeyBinding = jest.spyOn(Draft, "getDefaultKeyBinding");
