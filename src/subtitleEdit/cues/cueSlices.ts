@@ -65,6 +65,15 @@ export const editingCueIndexSlice = createSlice({
     initialState: 0,
     reducers: {
         updateEditingCueIndex: (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
+    },
+    extraReducers: {
+        [cuesSlice.actions.addCue.type]:
+            (_state, action: PayloadAction<VttCueAction>): number => action.payload.idx,
+        [cuesSlice.actions.deleteCue.type]:
+            (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx - 1,
+        [cuesSlice.actions.updateCues.type]:
+            (_state, action: PayloadAction<CuesAction>): number => action.payload.cues.length - 1,
+
     }
 });
 
@@ -92,7 +101,6 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
         dispatch(cuesSlice.actions.updateCues({ cues }));
     };
-
 
 export const updateEditingCueIndex = (idx: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueIndexAction>>): void => {
