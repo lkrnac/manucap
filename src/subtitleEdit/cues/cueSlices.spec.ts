@@ -107,7 +107,6 @@ describe("trackSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(1);
-            expect(testingStore.getState().editingCueIndex).toEqual(0);
         });
 
         it("deletes cue in the middle of the cue array", () => {
@@ -122,7 +121,6 @@ describe("trackSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(2);
-            expect(testingStore.getState().editingCueIndex).toEqual(0);
         });
 
         it("deletes cue at the end of the cue array", () => {
@@ -135,19 +133,6 @@ describe("trackSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
             expect(testingStore.getState().cues.length).toEqual(1);
-            expect(testingStore.getState().editingCueIndex).toEqual(0);
-        });
-
-        it("decreases editing cue index by one when last cue is deleted", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
-            testingStore.dispatch(addCue(1, new VTTCue(0.5, 1, "Dummy Cue Insert"), "DIALOGUE"));
-
-            // WHEN
-            testingStore.dispatch(deleteCue(2));
-
-            // THEN
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
 
         it("removes editor states for certain index from Redux", () => {
