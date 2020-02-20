@@ -162,6 +162,30 @@ describe("trackSlices", () => {
         });
     });
 
+    describe("updateCues", () => {
+        it("initializes cues", () => {
+            // WHEN
+            testingStore.dispatch(updateCues(testingCues));
+
+            // THEN
+            expect(testingStore.getState().cues).toEqual(testingCues);
+        });
+
+        it("replaces existing cues", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues));
+            const replacementCues = [
+                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            // WHEN
+            testingStore.dispatch(updateCues(replacementCues));
+
+            // THEN
+            expect(testingStore.getState().cues).toEqual(replacementCues);
+        });
+    });
+
     describe("updateEditingCueIndex", () => {
         it("updates editing cue index", () => {
             // WHEN
