@@ -71,6 +71,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
+        testingStore.dispatch(updateEditingCueIndex(-1));
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={1} cue={cues[1]} playerTime={0} />
@@ -84,6 +85,7 @@ describe("CueLine", () => {
 
     it("passes down properties", () => {
         // WHEN
+        testingStore.dispatch(updateEditingCueIndex(-1));
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={1} cue={cues[1]} playerTime={1} />
