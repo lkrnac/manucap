@@ -26,7 +26,8 @@ const AddCueLineButton = (props: Props): ReactElement => {
                     const newCue =
                         new VTTCue(props.vttCue.endTime, props.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS, "");
                     copyNonConstructorProperties(newCue, props.vttCue);
-                    dispatch(addCue(props.cueIndex + 1, newCue, props.cueCategory || "DIALOGUE"));
+                    const cue = { vttCue: newCue, cueCategory: props.cueCategory || "DIALOGUE" };
+                    dispatch(addCue(props.cueIndex + 1, cue));
                 }}
             >
                 <b>+</b>

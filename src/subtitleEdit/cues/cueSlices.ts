@@ -15,8 +15,8 @@ export interface CueCategoryAction extends CueIndexAction {
     cueCategory: CueCategory;
 }
 
-export interface AddVttCueAction extends VttCueAction {
-    cueCategory: CueCategory;
+export interface CueAction extends CueIndexAction {
+    cue: CueDto;
 }
 
 interface CuesAction extends SubtitleEditAction {
@@ -41,9 +41,8 @@ export const cuesSlice = createSlice({
                 };
             }
         },
-        addCue: (state, action: PayloadAction<AddVttCueAction>): void => {
-            const newCueDto = { vttCue: action.payload.vttCue, cueCategory: action.payload.cueCategory };
-            state.splice(action.payload.idx, 0, newCueDto);
+        addCue: (state, action: PayloadAction<CueAction>): void => {
+            state.splice(action.payload.idx, 0, action.payload.cue);
         },
         deleteCue: (state, action: PayloadAction<CueIndexAction>): void => {
             if (state.length > 1) {
@@ -68,7 +67,7 @@ export const editingCueIndexSlice = createSlice({
     },
     extraReducers: {
         [cuesSlice.actions.addCue.type]:
-            (_state, action: PayloadAction<VttCueAction>): number => action.payload.idx,
+            (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
         [cuesSlice.actions.deleteCue.type]: (): number => -1,
         [cuesSlice.actions.updateCues.type]:
             (_state, action: PayloadAction<CuesAction>): number => action.payload.cues.length - 1,
@@ -86,9 +85,9 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
     };
 
-export const addCue = (idx: number, vttCue: VTTCue, cueCategory: CueCategory): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<AddVttCueAction>>): void => {
-        dispatch(cuesSlice.actions.addCue({ idx, vttCue, cueCategory }));
+export const addCue = (idx: number, cue: CueDto): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
+        dispatch(cuesSlice.actions.addCue({ idx, cue }));
     };
 
 export const deleteCue = (idx: number): AppThunk =>
