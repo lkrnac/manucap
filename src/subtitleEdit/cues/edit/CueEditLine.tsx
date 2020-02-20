@@ -35,9 +35,6 @@ const CueEditLine = (props: Props): ReactElement => {
             Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
                 updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
             });
-            Mousetrap.bind([KeyCombination.ESCAPE, KeyCombination.ENTER], () => {
-                // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
-            });
         };
         registerShortcuts();
     }, [dispatch, props]);
