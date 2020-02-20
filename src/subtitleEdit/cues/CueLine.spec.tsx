@@ -111,4 +111,20 @@ describe("CueLine", () => {
         // THEN
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
+
+    it("opens next cue line for editing when add button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingCueIndex(1));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(2);
+    });
 });

@@ -18,7 +18,11 @@ const AddCueLineButton = (props: Props): ReactElement => {
         <>
             <button
                 className="btn btn-outline-secondary sbte-add-cue-button"
-                onClick={(): void => {
+                onClick={(event: React.MouseEvent<HTMLElement>): void => {
+                    // TODO: Move this stop propagation to right side action buttons ares,
+                    // so that it applies also for play/delete buttons: https://dotsub.atlassian.net/browse/VTMS-2279
+                    // NOTE: This is tested by test in CueLine."opens next cue line for editing ..."
+                    event.stopPropagation();
                     const newCue =
                         new VTTCue(props.vttCue.endTime, props.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS, "");
                     copyNonConstructorProperties(newCue, props.vttCue);
