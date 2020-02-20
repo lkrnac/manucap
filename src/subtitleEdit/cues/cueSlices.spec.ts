@@ -107,6 +107,7 @@ describe("trackSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(1);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
         it("deletes cue in the middle of the cue array", () => {
@@ -121,6 +122,7 @@ describe("trackSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
         it("deletes cue at the end of the cue array", () => {
@@ -133,6 +135,7 @@ describe("trackSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
             expect(testingStore.getState().cues.length).toEqual(1);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
         it("removes editor states for certain index from Redux", () => {

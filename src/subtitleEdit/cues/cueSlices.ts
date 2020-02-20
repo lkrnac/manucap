@@ -69,8 +69,10 @@ export const editingCueIndexSlice = createSlice({
     extraReducers: {
         [cuesSlice.actions.addCue.type]:
             (_state, action: PayloadAction<VttCueAction>): number => action.payload.idx,
+        [cuesSlice.actions.deleteCue.type]: (): number => -1,
         [cuesSlice.actions.updateCues.type]:
             (_state, action: PayloadAction<CuesAction>): number => action.payload.cues.length - 1,
+
     }
 });
 
