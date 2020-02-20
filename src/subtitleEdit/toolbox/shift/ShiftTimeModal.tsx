@@ -33,7 +33,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
             <Modal.Body>
                 <ShiftTimeForm  onChange={(shiftedTime: number): void =>
                     setTime(shiftedTime)}/>
-                <span className="alert alert-danger" style={{display: isValid? "none" : "block"}}>Shift value is not valid (first track line time + shift) must be greater than 0.</span>
+                <span className="alert alert-danger" style={{display: isValid? "none" : "block"}}>Shift value is not valid (first track line time + shift) must be greater or equals 0.</span>
             </Modal.Body>
             <Modal.Footer>
                 <Button

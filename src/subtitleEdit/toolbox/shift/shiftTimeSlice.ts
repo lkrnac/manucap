@@ -9,7 +9,10 @@ export const shiftTimeSlice = createSlice({
     reducers: {
         applyShitTime:
             (_state, action: PayloadAction<number>): number =>
-                action.payload
+            {
+                console.log(action);
+                return action.payload;
+            }
     }
 });
 
