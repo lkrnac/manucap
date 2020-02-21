@@ -1,7 +1,4 @@
 import React, {ChangeEvent, ReactElement} from "react";
-// import TimeField from "react-advanced-timefield";
-// import { getTimeFromString } from "./../../cues/edit/timeUtils";
-
 
 interface Props {
     time?: number;

@@ -17,7 +17,6 @@ export const simulateComponentDidUpdate = (node: ReactWrapper, propsUpdate: obje
     node.instance().componentDidUpdate(oldProps, undefined, undefined);
 };
 
-export const dispatchFunctionTest = (): Promise<void> =>
-    async (dispatch: Dispatch): Promise<void> => {
+export const dispatchFunctionTest = () => (dispatch: Dispatch)=> {
     dispatch(exports.functionToMock());
 };
