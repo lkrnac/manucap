@@ -6,6 +6,7 @@ import ShiftTimesModal from "./ShiftTimeModal";
 import {mount} from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import * as trackSlices from "../../trackSlices";
+import { dispatchFunctionTest } from "../../../testUtils/testUtils";
 import sinon from "sinon";
 
 describe("ShiftTimesModal", () => {
@@ -116,9 +117,12 @@ describe("ShiftTimesModal", () => {
             .toEqual(expectedNodeWithErrorMsg.html());
     });
 
+
+
     it("Calls trackSlice.applyShiftTime when click apply", () => {
         // GIVEN
-        const applyShiftSpy = jest.spyOn(trackSlices, 'applyShiftTime');
+        const applyShiftSpy = jest.spyOn(trackSlices, 'applyShiftTime')
+            .mockImplementation(() => dispatchFunctionTest);
 
         testingStore.dispatch(updateCues([
             {vttCue: {"endTime": 1, "startTime": 0}},

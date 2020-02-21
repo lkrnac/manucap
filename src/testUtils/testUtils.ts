@@ -1,3 +1,4 @@
+import { Dispatch } from "redux";
 import { ReactWrapper } from "enzyme";
 
 export const removeVideoPlayerDynamicValue =
@@ -14,4 +15,9 @@ export const simulateComponentDidUpdate = (node: ReactWrapper, propsUpdate: obje
     node.setProps({ ...node.props(), ...propsUpdate });
     // @ts-ignore - Test should fail if instance is not defined
     node.instance().componentDidUpdate(oldProps, undefined, undefined);
+};
+
+export const dispatchFunctionTest = (): Promise<void> =>
+    async (dispatch: Dispatch): Promise<void> => {
+    dispatch(exports.functionToMock());
 };
