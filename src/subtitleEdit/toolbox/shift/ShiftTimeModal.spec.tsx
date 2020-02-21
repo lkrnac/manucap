@@ -133,7 +133,7 @@ describe("ShiftTimesModal", () => {
             </Provider>
         );
         actualNode.find("input[type='number']")
-            .simulate('change', { target: { value: -1 } });
+            .simulate('change', { target: { value: 1 } });
         actualNode.find("button.dotsub-shift-modal-apply-button")
             .simulate('click');
 
@@ -141,6 +141,8 @@ describe("ShiftTimesModal", () => {
         // THEN
         expect(applyShiftSpy).toBeCalled
     });
+
+
 
     it("Calls cancel when click apply", () => {
         // GIVEN
