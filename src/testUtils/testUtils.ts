@@ -17,6 +17,8 @@ export const simulateComponentDidUpdate = (node: ReactWrapper, propsUpdate: obje
     node.instance().componentDidUpdate(oldProps, undefined, undefined);
 };
 
+
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const dispatchFunctionTest = () => (dispatch: Dispatch)=> {
     dispatch(exports.functionToMock());
 };
