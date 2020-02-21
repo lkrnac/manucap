@@ -38,7 +38,7 @@ describe("ShiftTimesForm", () => {
             .toEqual(expectedNode.html());
     });
 
-    it("Sets calls on change when input changes", () => {
+    it("Calls on change when input changes", () => {
         // GIVEN
         const onChangeSpy = sinon.spy();
         const actualNode = mount(

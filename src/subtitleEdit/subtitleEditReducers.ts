@@ -9,7 +9,7 @@ const subtitleEditReducers = combineReducers({
     editingTrack: editingTrackSlice.reducer,
     task: taskSlice.reducer,
     subtitleSpecifications: subtitleSpecificationSlice.reducer,
-    editorStates: editorStatesSlice.reducer,
+    editorStates: editorStatesSlice.reducer
 });
 export default subtitleEditReducers;
 
