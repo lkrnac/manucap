@@ -82,7 +82,7 @@ export const cuesSlice = createSlice({
                 const endTime = vttCue.endTime + shift;
                 const newCue = new VTTCue(startTime, endTime, vttCue.text);
                 copyNonConstructorProperties(newCue, vttCue);
-                return ({...cue, vttCue: newCue} as CueDto);
+                return ({ ...cue, vttCue: newCue } as CueDto);
             });
         }
     }

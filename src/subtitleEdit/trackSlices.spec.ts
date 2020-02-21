@@ -208,7 +208,6 @@ describe("trackSlices", () => {
             testingStore.dispatch(applyShiftTime(2.123));
 
             // THEN
-            console.log(testingStore.getState())
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.123);
         });
