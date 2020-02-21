@@ -62,7 +62,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     Apply
                 </Button>
                 <Button
-                    variant="primary"
+                    variant="secondary"
                     onClick={handleCancelShift}
                     className="dotsub-shift-modal-close-button"
                 >

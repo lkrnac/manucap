@@ -6,6 +6,7 @@ import ShiftTimesModal from "./ShiftTimeModal";
 import {mount} from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import * as trackSlices from "../../trackSlices";
+import sinon from "sinon";
 
 describe("ShiftTimesModal", () => {
     it("renders with error message", () => {
@@ -36,7 +37,7 @@ describe("ShiftTimesModal", () => {
                                         className="dotsub-shift-modal-apply-button btn btn-primary">Apply
                                 </button>
                                 <button type="button"
-                                        className="dotsub-shift-modal-close-button btn btn-primary">Close
+                                        className="dotsub-shift-modal-close-button btn btn-secondary">Close
                                 </button>
                             </div>
                         </div>
@@ -84,7 +85,7 @@ describe("ShiftTimesModal", () => {
                                 className="dotsub-shift-modal-apply-button btn btn-primary" disabled>Apply
                         </button>
                         <button type="button"
-                                className="dotsub-shift-modal-close-button btn btn-primary">Close
+                                className="dotsub-shift-modal-close-button btn btn-secondary">Close
                         </button>
                     </div>
                 </div>
@@ -139,5 +140,23 @@ describe("ShiftTimesModal", () => {
 
         // THEN
         expect(applyShiftSpy).toBeCalled
+    });
+
+    it("Calls cancel when click apply", () => {
+        // GIVEN
+        const onClose = sinon.spy();
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <ShiftTimesModal show onClose={onClose} />
+            </Provider>
+        );
+
+        actualNode.find(".btn.btn-secondary")
+            .simulate('click');
+
+
+        // THEN
+        sinon.assert.called(onClose)
     });
 });
