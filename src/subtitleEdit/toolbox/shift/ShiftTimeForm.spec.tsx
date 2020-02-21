@@ -54,7 +54,5 @@ describe("ShiftTimesForm", () => {
         // THEN
         sinon.assert.calledOnce(onChangeSpy);
     });
-
-
 });
 
