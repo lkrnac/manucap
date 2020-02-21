@@ -10,7 +10,7 @@ interface Props {
 
 const ShiftTimesForm = (props: Props): ReactElement => {
     const handleChange = (_e: ChangeEvent<HTMLInputElement>): void => {
-        let time = parseFloat(_e.target.value);
+        const time = parseFloat(_e.target.value);
         _e.target.value=time.toFixed(3);
         props.onChange(time);
     };

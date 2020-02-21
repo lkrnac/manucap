@@ -2,6 +2,8 @@ import { CueCategory, CueDto, Task, Track } from "./model";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "./subtitleEditReducers";
 import { Dispatch } from "react";
+import { copyNonConstructorProperties } from "./cues/edit/cueUtils";
+
 
 /**
  * This is marker interface for all the actions that can be dispatched
@@ -72,13 +74,16 @@ export const cuesSlice = createSlice({
             }
         },
         updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
-        applyShiftTime: (_state, action: PayloadAction<number>): void => {
+        applyShiftTime: (_state, action: PayloadAction<number>): CueDto[] => {
             const shift = action.payload;
-            console.log(JSON.stringify(_state));
-            _state.forEach((item: CueDto):void => {
-                item.vttCue.startTime += shift
+            return _state.map((cue: CueDto) => {
+                const vttCue = cue.vttCue;
+                const startTime = vttCue.startTime + shift;
+                const endTime = vttCue.endTime + shift;
+                const newCue = new VTTCue(startTime, endTime, vttCue.text);
+                copyNonConstructorProperties(newCue, vttCue);
+                return ({...cue, vttCue: newCue} as CueDto);
             });
-
         }
     }
 });

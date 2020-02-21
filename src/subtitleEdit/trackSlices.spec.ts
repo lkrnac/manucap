@@ -1,7 +1,7 @@
 import "video.js"; // VTTCue definition
 import { CueDto, Task, Track } from "./model";
 import {
-    addCue,
+    addCue, applyShiftTime,
     deleteCue,
     updateCueCategory,
     updateCues,
@@ -196,6 +196,21 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().task).toEqual(testingTask);
+        });
+    });
+
+    describe("applyShiftTime", () => {
+        it("apply shift time", () => {
+            //GIVEN
+            testingStore.dispatch(updateCues(testingCues));
+
+            // WHEN
+            testingStore.dispatch(applyShiftTime(2.123));
+
+            // THEN
+            console.log(testingStore.getState())
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.123);
         });
     });
 });

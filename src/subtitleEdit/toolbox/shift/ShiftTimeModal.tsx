@@ -1,7 +1,6 @@
 import React, {ReactElement, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-// import { useSelector } from "react-redux";
 import ShiftTimeForm from "./ShiftTimeForm";
 import {useDispatch, useSelector} from "react-redux";
 import { applyShiftTime } from "../../trackSlices";
@@ -16,19 +15,37 @@ interface Props {
 
 const ShiftTimeModal = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+
+    const clearState = ():void => {
+        setShift(0);
+        isValid = true;
+    }
+
+    const handleApplyShift = (): void => {
+        dispatch(applyShiftTime(shift));
+        clearState();
+        props.onClose()
+    };
+
+    const handleCancelShift = (): void => {
+        clearState();
+        props.onClose()
+    };
+
+
     const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
     const [shift, setShift] = useState(0);
 
-
     let isValid: boolean = true;
+
     if ((shift + firstTrackTime) < 0) {
         isValid = false;
     }
 
     return (
-        <Modal show={props.show} onHide={props.onClose} centered dialogClassName="sbte-medium-modal">
+        <Modal show={props.show} onHide={handleCancelShift} centered dialogClassName="sbte-medium-modal">
             <Modal.Header closeButton>
-                <Modal.Title>Subtitle Specifications</Modal.Title>
+                <Modal.Title>Shift All Track Lines Time</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <ShiftTimeForm  onChange={(shiftedTime: number): void =>
@@ -38,17 +55,15 @@ const ShiftTimeModal = (props: Props): ReactElement => {
             <Modal.Footer>
                 <Button
                     variant="primary"
-                    onClick={(): void => {
-                          dispatch(applyShiftTime(shift));
-                          props.onClose()
-                    }}
+                    disabled={!isValid}
+                    onClick={handleApplyShift}
                     className="dotsub-shift-modal-apply-button"
                 >
                     Apply
                 </Button>
                 <Button
                     variant="primary"
-                    onClick={props.onClose}
+                    onClick={handleCancelShift}
                     className="dotsub-shift-modal-close-button"
                 >
                     Close
