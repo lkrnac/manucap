@@ -1,10 +1,10 @@
 import "../../testUtils/initBrowserEnvironment";
-import * as shortcuts from "../shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 
 import { LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer } from "video.js";
+import { Character } from "../shortcutConstants";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
 import { copyNonConstructorProperties } from "../cues/edit/cueUtils";
@@ -179,8 +179,8 @@ describe("VideoPlayer", () => {
         actualComponent.playPause = playPauseSpy;
 
         // WHEN
-        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
-        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.O_CHAR, shiftKey: true, altKey: true });
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.O_CHAR, shiftKey: true, altKey: true });
 
         // THEN
         sinon.assert.calledTwice(playPauseSpy);
@@ -197,7 +197,7 @@ describe("VideoPlayer", () => {
 
         // WHEN
         simulant.fire(
-            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_LEFT, shiftKey: true, altKey: true });
+            document.documentElement, "keydown", { keyCode: Character.ARROW_LEFT, shiftKey: true, altKey: true });
 
         // THEN
         sinon.assert.calledWith(shiftTimeSpy, -1000);
@@ -214,7 +214,7 @@ describe("VideoPlayer", () => {
 
         // WHEN
         simulant.fire(
-            document.documentElement, "keydown", { keyCode: shortcuts.ARROW_RIGHT, shiftKey: true, altKey: true });
+            document.documentElement, "keydown", { keyCode: Character.ARROW_RIGHT, shiftKey: true, altKey: true });
 
         // THEN
         sinon.assert.calledWith(shiftTimeSpy, 1000);
@@ -252,7 +252,7 @@ describe("VideoPlayer", () => {
 
         // WHEN
         actualComponent.player.trigger("timeupdate");
-        simulant.fire(document.documentElement, "keydown", { keyCode: shortcuts.O_CHAR, shiftKey: true, altKey: true });
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.O_CHAR, shiftKey: true, altKey: true });
 
         // THEN
         sinon.assert.calledOnce(playPauseSpy);
