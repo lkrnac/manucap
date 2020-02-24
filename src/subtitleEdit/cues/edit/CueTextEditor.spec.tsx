@@ -26,17 +26,27 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     </Provider>
 );
 
-const createExpectedNode = (editorState: EditorState): ReactWrapper => mount(
+const createExpectedNode = (
+    editorState: EditorState,
+    duration: number,
+    characters: number,
+    words: number
+): ReactWrapper => mount(
     <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div
             className="sbte-bottom-border"
             style={{
                 flexBasis: "25%",
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "space-between",
                 padding: "5px 10px 5px 10px"
             }}
         >
+            <div className="sbte-cue-line-counts" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
+                <span>DURATION: <span className="sbte-green-text">{duration}s</span>, </span>
+                <span>CHARACTERS: <span className="sbte-green-text">{characters}</span>, </span>
+                <span>WORDS: <span className="sbte-green-text">{words}</span></span>
+            </div>
             <button className="btn btn-outline-secondary sbte-delete-cue-button">
                 <i className="fas fa-trash-alt" />
             </button>
@@ -114,10 +124,17 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].vttCue.text);
 };
 
-const testForContentState = (contentState: ContentState, vttCue: VTTCue, expectedStateHtml: string): void => {
+const testForContentState = (
+    contentState: ContentState,
+    vttCue: VTTCue,
+    expectedStateHtml: string,
+    duration: number,
+    characters: number,
+    words: number
+): void => {
     let editorState = EditorState.createWithContent(contentState);
     editorState = EditorState.moveFocusToEnd(editorState);
-    const expectedNode = createExpectedNode(editorState);
+    const expectedNode = createExpectedNode(editorState, duration, characters, words);
 
     // WHEN
     const actualNode = mount(
@@ -147,7 +164,7 @@ describe("CueTextEditor", () => {
         // See following line in their code
         // eslint-disable-next-line max-len
         // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
-        testForContentState(contentState, vttCue, "<br>");
+        testForContentState(contentState, vttCue, "<br>", 1, 0, 0);
     });
 
     it("renders with text", () => {
@@ -155,7 +172,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         const contentState = ContentState.createFromText(vttCue.text);
 
-        testForContentState(contentState, vttCue, "someText");
+        testForContentState(contentState, vttCue, "someText", 1, 8, 1);
     });
 
     it("renders with html", () => {
@@ -164,7 +181,7 @@ describe("CueTextEditor", () => {
         const processedHTML = convertFromHTML(vttCue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample");
+        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample", 1, 21, 4);
     });
 
     it("updates cue in redux store when changed", () => {
