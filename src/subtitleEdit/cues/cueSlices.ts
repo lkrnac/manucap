@@ -75,6 +75,14 @@ export const editingCueIndexSlice = createSlice({
     }
 });
 
+export const sourceCuesSlice = createSlice({
+    name: "sourceCues",
+    initialState: [] as CueDto[],
+    reducers: {
+        updateSourceCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
+    }
+});
+
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<VttCueAction>>): void => {
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue }));
@@ -103,4 +111,9 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
 export const updateEditingCueIndex = (idx: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueIndexAction>>): void => {
         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
+    };
+
+export const updateSourceCues = (cues: CueDto[]): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
+        dispatch(sourceCuesSlice.actions.updateSourceCues({ cues }));
     };
