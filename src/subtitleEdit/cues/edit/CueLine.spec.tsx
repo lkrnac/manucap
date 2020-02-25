@@ -37,7 +37,7 @@ describe("CueLine", () => {
                         1
                     </div>
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="sbte-white-background"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",
@@ -140,7 +140,7 @@ describe("CueLine", () => {
                         2
                     </div>
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="sbte-white-background"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",
