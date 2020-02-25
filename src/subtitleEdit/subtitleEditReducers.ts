@@ -7,10 +7,19 @@ import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice
 const subtitleEditReducers = combineReducers({
     cues: cuesSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
-    task: taskSlice.reducer,
+    cuesTask: taskSlice.reducer,
     subtitleSpecifications: subtitleSpecificationSlice.reducer,
     editorStates: editorStatesSlice.reducer
 });
+
+export const Reducers = {
+    cues: cuesSlice.reducer,
+    editingTrack: editingTrackSlice.reducer,
+    cuesTask: taskSlice.reducer,
+    subtitleSpecifications: subtitleSpecificationSlice.reducer,
+    editorStates: editorStatesSlice.reducer
+};
+
 export default subtitleEditReducers;
 
 export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
