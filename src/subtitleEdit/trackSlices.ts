@@ -84,7 +84,7 @@ export const editingTrackSlice = createSlice({
 });
 
 export const taskSlice = createSlice({
-    name: "task",
+    name: "cuesTask",
     initialState: null as Task | null,
     reducers: {
         updateTask: (_state, action: PayloadAction<TaskAction>): Task => action.payload.task,
@@ -125,3 +125,9 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
         dispatch(cuesSlice.actions.updateCues({ cues }));
     };
+
+export const Actions = {
+    updateEditingTrack,
+    updateCues,
+    updateTask
+};
