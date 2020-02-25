@@ -16,10 +16,10 @@ export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): vo
 
     newCue.region = oldCue.region;
     newCue.snapToLines = oldCue.snapToLines;
-    newCue.size = oldCue.size;
+    newCue.size = oldCue.size ? oldCue.size : 100;
     newCue.line = oldCue.line;
-    newCue.vertical = oldCue.vertical;
-    newCue.id = oldCue.id;
+    newCue.vertical = oldCue.vertical ? oldCue.vertical : "";
+    newCue.id = oldCue.id ? oldCue.id : "";
     newCue.pauseOnExit = oldCue.pauseOnExit;
 };
 
