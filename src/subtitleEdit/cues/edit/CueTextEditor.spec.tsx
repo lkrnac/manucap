@@ -42,7 +42,7 @@ const createExpectedNode = (
                 padding: "5px 10px 5px 10px"
             }}
         >
-            <div className="sbte-cue-line-counts" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
+            <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
                 <span>DURATION: <span className="sbte-green-text">{duration}s</span>, </span>
                 <span>CHARACTERS: <span className="sbte-green-text">{characters}</span>, </span>
                 <span>WORDS: <span className="sbte-green-text">{words}</span></span>
