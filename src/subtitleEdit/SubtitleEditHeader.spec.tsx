@@ -21,8 +21,8 @@ describe("SubtitleEditHeader", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
-            videoLength: 125
+            mediaTitle: "This is the video title",
+            mediaLength: 125000
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -63,12 +63,12 @@ describe("SubtitleEditHeader", () => {
             type: "TRANSLATION",
             language: { id: "it-IT", name: "Italian" } as Language,
             default: true,
-            videoTitle: "This is the video title",
+            mediaTitle: "This is the video title",
             sourceTrack: {
                 type: "CAPTION",
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
-                videoTitle: "This is the video title",
+                mediaTitle: "This is the video title",
             } as Track
         } as Track;
         const testingTask = {
@@ -110,7 +110,7 @@ describe("SubtitleEditHeader", () => {
             type: "TRANSLATION",
             language: { id: "it-IT", name: "Italian" } as Language,
             default: true,
-            videoTitle: "This is the video title"
+            mediaTitle: "This is the video title"
         } as Track;
         const testingTask = {
             type: "TASK_DIRECT_TRANSLATE",
@@ -151,7 +151,7 @@ describe("SubtitleEditHeader", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
+            mediaTitle: "This is the video title",
         } as Track;
         const testingTask = {
             type: "TASK_REVIEW",
@@ -192,12 +192,12 @@ describe("SubtitleEditHeader", () => {
             type: "TRANSLATION",
             language: { id: "it-IT", name: "Italian" } as Language,
             default: true,
-            videoTitle: "This is the video title",
+            mediaTitle: "This is the video title",
             sourceTrack: {
                 type: "CAPTION",
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
-                videoTitle: "This is the video title",
+                mediaTitle: "This is the video title",
             } as Track
         } as Track;
         const testingTask = {
@@ -239,7 +239,7 @@ describe("SubtitleEditHeader", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
+            mediaTitle: "This is the video title",
         } as Track;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -278,8 +278,8 @@ describe("SubtitleEditHeader", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
-            videoLength: 120,
+            mediaTitle: "This is the video title",
+            mediaLength: 120000,
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -325,8 +325,8 @@ describe("SubtitleEditHeader", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
-            videoLength: 130,
+            mediaTitle: "This is the video title",
+            mediaLength: 130000,
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -372,8 +372,8 @@ describe("SubtitleEditHeader", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
-            videoLength: 0,
+            mediaTitle: "This is the video title",
+            mediaLength: 0,
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -415,8 +415,8 @@ describe("SubtitleEditHeader", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
-            videoLength: 120,
+            mediaTitle: "This is the video title",
+            mediaLength: 120000,
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
@@ -457,8 +457,8 @@ describe("SubtitleEditHeader", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
-            videoLength: 3730,
+            mediaTitle: "This is the video title",
+            mediaLength: 3730000,
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
