@@ -82,6 +82,7 @@ describe("LineCategoryButton", () => {
                     className="dropdown-menu show"
                 >
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
                         className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
@@ -90,6 +91,7 @@ describe("LineCategoryButton", () => {
                     </a>
                     <div className="dropdown-divider" role="separator" />
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
                         className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
@@ -97,6 +99,7 @@ describe("LineCategoryButton", () => {
                         On Screen Text
                     </a>
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
                         className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
@@ -104,6 +107,7 @@ describe("LineCategoryButton", () => {
                         Audio Descriptions
                     </a>
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
                         className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
