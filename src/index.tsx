@@ -21,8 +21,8 @@ const TestApp = (): ReactElement => {
                 type: "CAPTION",
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
-                videoTitle: "This is the video title",
-                videoLength: 4
+                mediaTitle: "This is the video title",
+                mediaLength: 4
             })),
             500
         );

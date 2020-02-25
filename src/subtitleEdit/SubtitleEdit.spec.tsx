@@ -24,7 +24,7 @@ describe("SubtitleEdit", () => {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
             default: true,
-            videoTitle: "This is the video title",
+            mediaTitle: "This is the video title",
         } as Track;
         const testingTask = {
             type: "TASK_CAPTION",
