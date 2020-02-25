@@ -49,6 +49,14 @@ $fa-font-path: "../webfonts";
     color: $green;
 }
 
+.sbte-main-text-color {
+  color: $sbte-main-text-color;
+}
+
+.sbte-small-font {
+  font-size: $font-size-small;
+}
+
 // ----- Modal ------
 
 .sbte-medium-modal {
@@ -69,7 +77,7 @@ $fa-font-path: "../webfonts";
 }
 
 .sbte-cue-line-left-section {
-    background-color: white;
+  background-color: white;
 }
 
 .sbte-cue-line-flap {
@@ -77,14 +85,6 @@ $fa-font-path: "../webfonts";
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     color: white;
-}
-
-.sbte-main-text-color {
-    color: $sbte-main-text-color;
-}
-
-.sbte-small-font {
-    font-size: $font-size-small;
 }
 
 // ------ Toolbox --------
