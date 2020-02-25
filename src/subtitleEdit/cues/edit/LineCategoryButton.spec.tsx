@@ -83,7 +83,7 @@ describe("LineCategoryButton", () => {
                 >
                     <a
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Dialogue
@@ -91,21 +91,21 @@ describe("LineCategoryButton", () => {
                     <div className="dropdown-divider" role="separator" />
                     <a
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         On Screen Text
                     </a>
                     <a
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Audio Descriptions
                     </a>
                     <a
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Lyrics
