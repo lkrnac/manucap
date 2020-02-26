@@ -10,10 +10,11 @@ interface Props {
     index: number;
     cue: CueDto;
     playerTime: number;
+    className?: string;
 }
 
 const CueViewLine = (props: Props): ReactElement => (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex" }} className={props.className}>
         <div
             className="sbte-cue-line-left-section"
             style={{

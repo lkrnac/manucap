@@ -68,6 +68,65 @@ describe("CueViewLine", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
+    it("renders with class name parameter", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex" }} className="testingClassName">
+                    <div
+                        className="sbte-cue-line-left-section"
+                        style={{
+                            flex: "1 1 300px",
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ display: "flex", flexDirection:"column" }}>
+                            <div>00:00:01.000</div>
+                            <div>00:00:02.000</div>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
+                            <div className="sbte-small-font">Dialogue</div>
+                            <div className="sbte-small-font" style={{ paddingRight: "10px" }}>↓↓</div>
+                        </div>
+                    </div>
+                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                        <div
+                            className="sbte-cue-editor"
+                            style={{
+                                flexBasis: "50%",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                paddingBottom: "5px",
+                                minHeight: "54px",
+                                height: "100%",
+                                width: "100%"
+                            }}
+                        >
+                            Caption Line 1
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueViewLine index={1} cue={cue} playerTime={1} className="testingClassName" />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.html()))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
     it("converts VTT text to HTML", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "text\nwrapped"), cueCategory: "DIALOGUE" } as CueDto;
