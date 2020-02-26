@@ -36,8 +36,3 @@ export const updateTask = (task: Task): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(taskSlice.actions.updateTask({ task }));
     };
-
-export const Actions = {
-    updateEditingTrack,
-    updateTask
-};

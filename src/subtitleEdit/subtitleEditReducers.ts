@@ -5,22 +5,16 @@ import { ThunkAction } from "redux-thunk";
 import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
 
-const subtitleEditReducers = combineReducers({
+export const Reducers = {
     cues: cuesSlice.reducer,
     editingCueIndex: editingCueIndexSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
     cuesTask: taskSlice.reducer,
     subtitleSpecifications: subtitleSpecificationSlice.reducer,
     editorStates: editorStatesSlice.reducer
-});
-
-export const Reducers = {
-    cues: cuesSlice.reducer,
-    editingTrack: editingTrackSlice.reducer,
-    cuesTask: taskSlice.reducer,
-    subtitleSpecifications: subtitleSpecificationSlice.reducer,
-    editorStates: editorStatesSlice.reducer
 };
+
+const subtitleEditReducers = combineReducers(Reducers);
 
 export default subtitleEditReducers;
 
