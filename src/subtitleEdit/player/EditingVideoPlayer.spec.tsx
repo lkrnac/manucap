@@ -1,12 +1,13 @@
 import "../../testUtils/initBrowserEnvironment";
 import { CueDto, Track } from "../model";
-import { updateCues, updateEditingTrack } from "../trackSlices";
 import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Provider } from "react-redux";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
+import { updateCues } from "../cues/cueSlices";
+import { updateEditingTrack } from "../trackSlices";
 
 const testingTrack = {
     type: "CAPTION",

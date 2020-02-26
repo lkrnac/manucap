@@ -5,7 +5,9 @@ export enum Character {
     ARROW_UP = 38,
     ARROW_RIGHT = 39,
     ARROW_DOWN = 40,
-    SLASH_CHAR = 191
+    SLASH_CHAR = 191,
+    ENTER = 13,
+    ESCAPE = 27
 }
 
 export enum KeyCombination {

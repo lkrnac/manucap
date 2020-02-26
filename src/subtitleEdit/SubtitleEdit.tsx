@@ -1,7 +1,7 @@
 import "../styles.scss";
 import React, { ReactElement, useState } from "react";
 import { CueDto } from "./model";
-import CueLine from "./cues/edit/CueLine";
+import CueLine from "./cues/CueLine";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";

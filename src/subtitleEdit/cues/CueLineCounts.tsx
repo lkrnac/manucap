@@ -29,7 +29,7 @@ const CueLineCounts = (props: Props): ReactElement => {
     const text = !currentContent || !currentContent.hasText() ? "" : currentContent.getPlainText();
 
     return (
-        <div className="sbte-cue-line-counts" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
+        <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
             <span>DURATION: <span className="sbte-green-text">{getDuration(props.vttCue)}s</span>, </span>
             <span>CHARACTERS: <span className="sbte-green-text">{getCharacterCount(text)}</span>, </span>
             <span>WORDS: <span className="sbte-green-text">{getWordCount(text)}</span></span>
