@@ -15,10 +15,13 @@ export interface Props {
 
 const SubtitleEdit = (props: Props): ReactElement => {
     const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
 
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
-
+    const drivingCues = sourceCues.length > 0
+        ? sourceCues
+        : cues;
     return (
         <div
             className="sbte-subtitle-edit"
@@ -42,8 +45,19 @@ const SubtitleEdit = (props: Props): ReactElement => {
                 >
                     <div style={{ overflowY: "scroll", height: "100%" }}>
                         {
-                            cues.map((cue: CueDto, idx: number): ReactElement =>
-                                <CueLine key={idx} index={idx} cue={cue} playerTime={currentPlayerTime} />)
+                            drivingCues.map((cue: CueDto, idx: number): ReactElement => {
+                                const sourceCue = sourceCues[idx];
+                                const editingCue = cues[idx] === cue ? cue : cues[idx];
+                                return (
+                                    <CueLine
+                                        key={idx}
+                                        index={idx}
+                                        sourceCue={sourceCue}
+                                        cue={editingCue}
+                                        playerTime={currentPlayerTime}
+                                    />
+                                );
+                            })
                         }
                     </div>
                     <div style={{ marginTop: "10px" }}>
