@@ -1,13 +1,14 @@
 import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { CueDto, Language, Task, Track } from "./model";
-import { updateCues, updateEditingTrack, updateTask } from "./trackSlices";
+import { updateEditingTrack, updateTask } from "./trackSlices";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+import { updateCues } from "./cues/cueSlices";
 
 let testingStore = createTestingStore();
 

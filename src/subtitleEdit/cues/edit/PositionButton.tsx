@@ -1,4 +1,4 @@
-import { Position, PositionIcon, findPositionIcon, positionIcons } from "./cueUtils";
+import { Position, PositionIcon, findPositionIcon, positionIcons } from "../cueUtils";
 import React, { ReactElement } from "react";
 import { Dropdown } from "react-bootstrap";
 
