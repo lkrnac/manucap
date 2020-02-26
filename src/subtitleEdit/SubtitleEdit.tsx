@@ -46,11 +46,6 @@ const SubtitleEdit = (props: Props): ReactElement => {
                                 <CueLine key={idx} index={idx} cue={cue} playerTime={currentPlayerTime} />)
                         }
                     </div>
-                    <div style={{ marginTop: "10px" }}>
-                        <button className="btn btn-primary" style={{ marginTop: "10px", marginBottom: "10px" }}>
-                            View All Tracks
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
