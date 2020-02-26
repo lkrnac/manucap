@@ -15,106 +15,11 @@ import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import testingStore from "../../../testUtils/testingStore";
 
 const cues = [
-    { vttCue: new VTTCue(0, 0, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
-    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto,
-    { vttCue: new VTTCue(67.045, 359999.999, "Caption Line 3"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
 describe("CueEditLine", () => {
     it("renders", () => {
-        // GIVEN
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <div style={{ display: "flex" }}>
-                    <div
-                        className="sbte-cue-line-left-section"
-                        style={{
-                            flex: "1 1 300px",
-                            display: "flex",
-                            flexDirection: "column",
-                            paddingLeft: "10px",
-                            paddingTop: "5px",
-                            justifyContent: "space-between"
-                        }}
-                    >
-                        <div style={{
-                            display: "flex",
-                            flexDirection:"column",
-                            paddingBottom: "15px"
-                        }}
-                        >
-                            <input
-                                type="text"
-                                className="sbte-time-input"
-                                style={{
-                                    marginBottom: "5px",
-                                    width: "100px",
-                                    maxWidth: "200px",
-                                    padding: "5px",
-                                    textAlign: "center"
-                                }}
-                                value="00:00:00.000"
-                                onChange={(): void => {}}
-                            />
-                            <input
-                                type="text"
-                                className="sbte-time-input"
-                                style={{
-                                    marginBottom: "5px",
-                                    width: "100px",
-                                    maxWidth: "200px",
-                                    padding: "5px",
-                                    textAlign: "center"
-                                }}
-                                value="00:00:00.000"
-                                onChange={(): void => {}}
-                            />
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }} >
-                            <div className="dropdown">
-                                <button
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                    id="cue-line-category"
-                                    type="button"
-                                    className="dropdown-toggle btn btn-outline-secondary"
-                                >
-                                    Dialogue
-                                </button>
-                            </div>
-                            <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
-                                <button
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                    id="dropdown-basic"
-                                    type="button"
-                                    className="dropdown-toggle btn btn-outline-secondary"
-                                >
-                                    ↓↓ <span className="caret" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
-                    </div>
-                </div>
-            </Provider>
-        );
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueEditLine index={0} cue={cues[0]} playerTime={0} />
-            </Provider>
-        );
-
-        // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    });
-
-    it("renders with time values", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
@@ -189,7 +94,7 @@ describe("CueEditLine", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <CueTextEditor key={1} index={1} vttCue={cues[1].vttCue} />
+                        <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
                     </div>
                 </div>
             </Provider>
@@ -198,7 +103,7 @@ describe("CueEditLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEditLine index={1} cue={cues[1]} playerTime={0} />
+                <CueEditLine index={1} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
