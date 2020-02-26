@@ -15,7 +15,7 @@ describe("CueViewLine", () => {
 
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
+                <div style={{ display: "flex" }}>
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -52,7 +52,7 @@ describe("CueViewLine", () => {
                             Caption Line 1
                         </div>
                     </div>
-                </>
+                </div>
             </Provider>
         );
 

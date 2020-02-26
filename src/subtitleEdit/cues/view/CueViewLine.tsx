@@ -13,7 +13,7 @@ interface Props {
 }
 
 const CueViewLine = (props: Props): ReactElement => (
-    <>
+    <div style={{ display: "flex" }}>
         <div
             className="sbte-cue-line-left-section"
             style={{
@@ -57,7 +57,7 @@ const CueViewLine = (props: Props): ReactElement => (
                 }}
             />
         </div>
-    </>
+    </div>
 );
 
 export default CueViewLine;

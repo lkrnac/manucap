@@ -40,7 +40,7 @@ const CueEditLine = (props: Props): ReactElement => {
     }, [dispatch, props]);
 
     return (
-        <>
+        <div style={{ display: "flex" }}>
             <div
                 className="sbte-cue-line-left-section"
                 style={{
@@ -52,12 +52,7 @@ const CueEditLine = (props: Props): ReactElement => {
                     justifyContent: "space-between"
                 }}
             >
-                <div style={{
-                    display: "flex",
-                    flexDirection:"column",
-                    paddingBottom: "15px"
-                }}
-                >
+                <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
                         onChange={(starTime: number): void =>
@@ -99,7 +94,7 @@ const CueEditLine = (props: Props): ReactElement => {
                     cueCategory={props.cue.cueCategory}
                 />
             </div>
-        </>
+        </div>
     );
 };
 

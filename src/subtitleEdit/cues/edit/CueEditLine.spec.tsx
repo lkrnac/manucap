@@ -25,7 +25,7 @@ describe("CueEditLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
+                <div style={{ display: "flex" }}>
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -98,7 +98,7 @@ describe("CueEditLine", () => {
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
                         <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
                     </div>
-                </>
+                </div>
             </Provider>
         );
 
@@ -118,7 +118,7 @@ describe("CueEditLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
+                <div style={{ display: "flex" }}>
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -191,7 +191,7 @@ describe("CueEditLine", () => {
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
                         <CueTextEditor key={1} index={1} vttCue={cues[1].vttCue} />
                     </div>
-                </>
+                </div>
             </Provider>
         );
 
