@@ -1,21 +1,28 @@
-export const O_CHAR = 79;
-export const ARROW_LEFT = 37;
-export const ARROW_UP = 38;
-export const ARROW_RIGHT = 39;
-export const ARROW_DOWN = 40;
-export const SLASH_CHAR = 191;
 
-export const MOD_SHIFT_O = "mod+shift+o";
-export const ALT_SHIFT_O = "alt+shift+o";
-export const MOD_SHIFT_LEFT = "mod+shift+left";
-export const ALT_SHIFT_LEFT = "alt+shift+left";
-export const MOD_SHIFT_UP = "mod+shift+up";
-export const ALT_SHIFT_UP = "alt+shift+up";
-export const MOD_SHIFT_RIGHT = "mod+shift+right";
-export const ALT_SHIFT_RIGHT = "alt+shift+right";
-export const MOD_SHIFT_DOWN = "mod+shift+down";
-export const ALT_SHIFT_DOWN = "alt+shift+down";
-export const MOD_SHIFT_SLASH = "mod+shift+/";
-export const ALT_SHIFT_SLASH = "alt+shift+/";
-export const ESCAPE = "escape";
-export const ENTER = "enter";
+export enum Character {
+    O_CHAR = 79,
+    ARROW_LEFT = 37,
+    ARROW_UP = 38,
+    ARROW_RIGHT = 39,
+    ARROW_DOWN = 40,
+    SLASH_CHAR = 191,
+    ENTER = 13,
+    ESCAPE = 27
+}
+
+export enum KeyCombination {
+    MOD_SHIFT_O = "mod+shift+o",
+    ALT_SHIFT_O = "alt+shift+o",
+    MOD_SHIFT_LEFT = "mod+shift+left",
+    ALT_SHIFT_LEFT = "alt+shift+left",
+    MOD_SHIFT_UP = "mod+shift+up",
+    ALT_SHIFT_UP = "alt+shift+up",
+    MOD_SHIFT_RIGHT = "mod+shift+right",
+    ALT_SHIFT_RIGHT = "alt+shift+right",
+    MOD_SHIFT_DOWN = "mod+shift+down",
+    ALT_SHIFT_DOWN = "alt+shift+down",
+    MOD_SHIFT_SLASH = "mod+shift+/",
+    ALT_SHIFT_SLASH = "alt+shift+/",
+    ESCAPE = "escape",
+    ENTER = "enter",
+}

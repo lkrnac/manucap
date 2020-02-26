@@ -1,6 +1,6 @@
-import * as shortcuts from "../shortcutConstants";
 import React, { ReactElement, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
+import { KeyCombination } from "../shortcutConstants";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import Modal from "react-bootstrap/Modal";
 import Mousetrap from "mousetrap";
@@ -12,7 +12,7 @@ const KeyboardShortcuts = (): ReactElement => {
 
     useEffect(() => {
         const registerShortcuts = (): void => {
-            Mousetrap.bind([shortcuts.MOD_SHIFT_SLASH, shortcuts.ALT_SHIFT_SLASH], () => {
+            Mousetrap.bind([KeyCombination.MOD_SHIFT_SLASH, KeyCombination.ALT_SHIFT_SLASH], () => {
                 setShow(!show);
             });
         };

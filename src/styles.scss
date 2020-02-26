@@ -1,10 +1,13 @@
 $sbte-main-text-color: rgb(118, 131, 143);
 $border-color: rgb(241,244,245);
 $input-border-color: #ced4da;
+$green: rgb(0,87,0);
 
 // ##############################
 // Override bootstrap defaults
 // ##############################
+$font-size-base: 0.875rem; // 14px
+$font-size-small: 0.75rem; // 12px
 $body-color: $sbte-main-text-color;
 $input-color: $sbte-main-text-color;
 $theme-colors: (
@@ -36,6 +39,10 @@ $theme-colors: (
 
 .sbte-bottom-border {
     border-bottom: 2px solid $border-color;
+}
+
+.sbte-green-text {
+    color: $green;
 }
 
 // ----- Modal ------
@@ -75,6 +82,10 @@ $theme-colors: (
 
 .sbte-position-button {
   color: $sbte-main-text-color;
+}
+
+.sbte-small-font {
+  font-size: $font-size-small;
 }
 
 // ------ Toolbox --------

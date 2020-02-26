@@ -1,5 +1,5 @@
-import * as shortcuts from "../../shortcutConstants";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { Character, KeyCombination } from "../../shortcutConstants";
 import {
     ContentState,
     DraftHandleValue,
@@ -10,15 +10,59 @@ import {
 } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
-import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
+import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
+import { convertHtmlToVtt, convertVttToHtml } from "../cueTextConverter";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
 import { CueCategory } from "../../model";
+import CueLineCounts from "../CueLineCounts";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../../trackSlices";
+import { updateVttCue } from "../cueSlices";
+
+const characterBindings = new Map<Character, string>();
+characterBindings.set(Character.O_CHAR, "togglePlayPause");
+characterBindings.set(Character.ARROW_LEFT, "seekBack");
+characterBindings.set(Character.ARROW_RIGHT, "seekAhead");
+characterBindings.set(Character.ARROW_UP, "setStartTime");
+characterBindings.set(Character.ARROW_DOWN, "setEndTime");
+characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
+
+const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
+    const action = characterBindings.get(e.keyCode);
+    if (e.shiftKey && (e.metaKey || e.altKey) && action) {
+        return action;
+    }
+    if ((!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)) {
+        if (e.keyCode === Character.ESCAPE) {
+            return "closeEditor";
+        } else if (e.keyCode === Character.ENTER) {
+            return "closeEditorAndCreateIfLast";
+        }
+    }
+    return getDefaultKeyBinding(e);
+};
+
+const mousetrapBindings = new Map<string, KeyCombination>();
+mousetrapBindings.set("togglePlayPause", KeyCombination.MOD_SHIFT_O);
+mousetrapBindings.set("seekBack", KeyCombination.MOD_SHIFT_LEFT);
+mousetrapBindings.set("seekAhead", KeyCombination.MOD_SHIFT_RIGHT);
+mousetrapBindings.set("setStartTime", KeyCombination.MOD_SHIFT_UP);
+mousetrapBindings.set("setEndTime", KeyCombination.MOD_SHIFT_DOWN);
+mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
+mousetrapBindings.set("closeEditor", KeyCombination.ESCAPE);
+mousetrapBindings.set("closeEditorAndCreateIfLast", KeyCombination.ENTER);
+
+const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
+    const keyCombination = mousetrapBindings.get(shortcut);
+    if (keyCombination) {
+        Mousetrap.trigger(keyCombination);
+        return "handled";
+    }
+    return "not-handled";
+};
 
 export interface CueTextEditorProps{
     index: number;
@@ -39,7 +83,7 @@ const convertToHtmlOptions = {
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
-    const processedHTML = convertFromHTML(props.vttCue.text);
+    const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
@@ -66,7 +110,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => {
             const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
-            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, text);
+            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, convertHtmlToVtt(text));
             copyNonConstructorProperties(vttCue, props.vttCue);
             dispatch(updateVttCue(props.index, vttCue));
         },
@@ -77,50 +121,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
     );
 
-    const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
-        if (e.shiftKey && (e.metaKey || e.altKey)) {
-            switch (e.keyCode) {
-                case shortcuts.O_CHAR:
-                    return "togglePlayPause";
-                case shortcuts.ARROW_LEFT:
-                    return "seekBack";
-                case shortcuts.ARROW_RIGHT:
-                    return "seekAhead";
-                case shortcuts.ARROW_UP:
-                    return "setStartTime";
-                case shortcuts.ARROW_DOWN:
-                    return "setEndTime";
-                case shortcuts.SLASH_CHAR:
-                    return "toggleShortcutPopup";
-            }
-        }
-        return getDefaultKeyBinding(e);
-    };
-    const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
-        switch (shortcut) {
-            case "togglePlayPause":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_O);
-                return "handled";
-            case "seekBack":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_LEFT);
-                return "handled";
-            case "seekAhead":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_RIGHT);
-                return "handled";
-            case "setStartTime":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_UP);
-                return "handled";
-            case "setEndTime":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_DOWN);
-                return "handled";
-            case "toggleShortcutPopup":
-                Mousetrap.trigger(shortcuts.MOD_SHIFT_SLASH);
-                return "handled";
-            default:
-                return "not-handled";
-        }
-    };
-
     return (
         <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div
@@ -128,10 +128,11 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 style={{
                     flexBasis: "25%",
                     display: "flex",
-                    justifyContent: "flex-end",
+                    justifyContent: "space-between",
                     padding: "5px 10px 5px 10px"
                 }}
             >
+                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
                 <DeleteCueLineButton cueIndex={props.index} />
             </div>
             <div
@@ -140,7 +141,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     flexBasis: "50%",
                     paddingLeft: "10px",
                     paddingTop: "5px",
-                    paddingBottom: "5px"
+                    paddingBottom: "5px",
+                    minHeight: "54px"
                 }}
             >
                 <Editor

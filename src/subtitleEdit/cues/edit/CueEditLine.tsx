@@ -1,11 +1,11 @@
-import * as shortcuts from "../../shortcutConstants";
 import { CueCategory, CueDto } from "../../model";
-import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
+import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { updateCueCategory, updateVttCue } from "../../trackSlices";
+import { updateCueCategory, updateVttCue } from "../cueSlices";
 import { AppThunk } from "../../subtitleEditReducers";
+import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
-import LineCategoryButton from "./LineCategoryButton";
+import { KeyCombination } from "../../shortcutConstants";
 import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
@@ -24,36 +24,23 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     dispatch(updateVttCue(props.index, newCue));
 };
 
-const CueLine = (props: Props): ReactElement => {
+const CueEditLine = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
     useEffect(() => {
         const registerShortcuts = (): void => {
-            Mousetrap.bind([shortcuts.MOD_SHIFT_UP, shortcuts.ALT_SHIFT_UP], () => {
+            Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
                 updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
             });
-            Mousetrap.bind([shortcuts.MOD_SHIFT_DOWN, shortcuts.ALT_SHIFT_DOWN], () => {
+            Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
                 updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
-            });
-            Mousetrap.bind([shortcuts.ESCAPE, shortcuts.ENTER], () => {
-                // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
             });
         };
         registerShortcuts();
     }, [dispatch, props]);
 
     return (
-        <div style={{ display: "flex", paddingBottom: "5px" }}>
-            <div
-                className="sbte-cue-line-flap"
-                style={{
-                    flex: "1 1 20px",
-                    paddingLeft: "8px",
-                    paddingTop: "10px",
-                }}
-            >
-                {props.index + 1}
-            </div>
+        <>
             <div
                 className="sbte-cue-line-left-section"
                 style={{
@@ -83,7 +70,7 @@ const CueLine = (props: Props): ReactElement => {
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <LineCategoryButton
+                    <CueCategoryButton
                         onChange={(cueCategory: CueCategory): AppThunk =>
                             dispatch(updateCueCategory(props.index, cueCategory))}
                         category={props.cue.cueCategory}
@@ -112,8 +99,8 @@ const CueLine = (props: Props): ReactElement => {
                     cueCategory={props.cue.cueCategory}
                 />
             </div>
-        </div>
+        </>
     );
 };
 
-export default CueLine;
+export default CueEditLine;

@@ -29,3 +29,10 @@ export interface Task {
     readonly projectName: string;
     readonly dueDate: string;
 }
+
+/**
+ * This is marker interface for all the actions that can be dispatched
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface SubtitleEditAction {
+}

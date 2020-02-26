@@ -1,26 +1,26 @@
 import "video.js/dist/video-js.css";
-import * as shortcuts from "../shortcutConstants";
 import { CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
+import { KeyCombination } from "../shortcutConstants";
 import Mousetrap from "mousetrap";
 import React from "react";
 import { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
-import { copyNonConstructorProperties } from "../cues/edit/cueUtils";
+import { copyNonConstructorProperties } from "../cues/cueUtils";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
-    Mousetrap.bind([shortcuts.MOD_SHIFT_O, shortcuts.ALT_SHIFT_O], () => {
+    Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
         videoPlayer.playPause();
         return false;
     });
-    Mousetrap.bind([shortcuts.MOD_SHIFT_LEFT, shortcuts.ALT_SHIFT_LEFT], () => {
+    Mousetrap.bind([KeyCombination.MOD_SHIFT_LEFT, KeyCombination.ALT_SHIFT_LEFT], () => {
         videoPlayer.shiftTime(-SECOND);
         return false;
     });
-    Mousetrap.bind([shortcuts.MOD_SHIFT_RIGHT, shortcuts.ALT_SHIFT_RIGHT], () => {
+    Mousetrap.bind([KeyCombination.MOD_SHIFT_RIGHT, KeyCombination.ALT_SHIFT_RIGHT], () => {
         videoPlayer.shiftTime(SECOND);
         return false;
     });

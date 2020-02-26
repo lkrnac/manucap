@@ -1,4 +1,4 @@
-import { CueIndexAction, cuesSlice } from "../../trackSlices";
+import { CueIndexAction, cuesSlice } from "../cueSlices";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";

@@ -2,7 +2,7 @@ import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateEditingTrack, updateTask } from "./trackSlices";
-import CueLine from "./cues/edit/CueLine";
+import CueLine from "./cues/CueLine";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEdit from "./SubtitleEdit";
@@ -12,6 +12,7 @@ import VideoPlayer from "./player/VideoPlayer";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import testingStore from "../testUtils/testingStore";
+import { updateCues } from "./cues/cueSlices";
 
 describe("SubtitleEdit", () => {
     it("renders", () => {
@@ -92,6 +93,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack));
         testingStore.dispatch(updateTask(testingTask));
         testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(updateCues(cues));
 
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
