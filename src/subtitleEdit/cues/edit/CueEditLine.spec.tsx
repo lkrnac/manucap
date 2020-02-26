@@ -25,7 +25,7 @@ describe("CueEditLine", () => {
             <Provider store={testingStore}>
                 <div style={{ display: "flex" }}>
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="sbte-white-background"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",
@@ -250,7 +250,7 @@ describe("CueEditLine", () => {
 
         // WHEN
         actualNode.find("button#cue-line-category").simulate("click");
-        actualNode.find("a.sbte-cue-line-category").at(1).simulate("click");
+        actualNode.find("a.sbte-main-text-color").at(1).simulate("click");
 
         // THEN
         expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");

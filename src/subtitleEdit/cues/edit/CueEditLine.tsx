@@ -42,7 +42,7 @@ const CueEditLine = (props: Props): ReactElement => {
     return (
         <div style={{ display: "flex" }}>
             <div
-                className="sbte-cue-line-left-section"
+                className="sbte-white-background"
                 style={{
                     flex: "1 1 300px",
                     display: "flex",

@@ -19,7 +19,7 @@ const PositionButton = (props: Props): ReactElement => (
                         (
                             <Dropdown.Item
                                 key={index}
-                                className="sbte-position-button btn btn-outline-secondary"
+                                className="sbte-main-text-color btn btn-outline-secondary"
                                 style={{
                                     lineHeight: "38px",
                                     width: "38px",
