@@ -259,4 +259,36 @@ describe("CueViewLine", () => {
         // THEN
         expect(actualNode.find(".sbte-cue-editor").html()).toEqual(expectedText.html());
     });
+
+    it("hides cue text if required", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const expectedText = mount(
+            <div
+                className="sbte-cue-editor"
+                style={{
+                    flexBasis: "50%",
+                    paddingLeft: "10px",
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    minHeight: "54px",
+                    height: "100%",
+                    width: "100%"
+                }}
+            />
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueViewLine index={1} cue={cue} playerTime={1} hideText />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(".sbte-cue-editor").html()).toEqual(expectedText.html());
+    });
 });
