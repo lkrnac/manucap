@@ -12,27 +12,23 @@ import testingStore from "../../testUtils/testingStore";
 import { updateEditingCueIndex } from "./cueSlices";
 
 const cues = [
-    { vttCue: new VTTCue(0, 0, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
-    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+    { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
+const sourceCue = { vttCue: new VTTCue(0, 0, "Source Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
 describe("CueLine", () => {
-    it("renders edit line", () => {
+    it("renders edit line in captioning mode", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            flex: "1 1 20px",
-                            paddingLeft: "8px",
-                            paddingTop: "10px",
-                        }}
-                    >
-                        2
+                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
+                    <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <div />
+                        <CueEditLine index={1} cue={cues[1]} playerTime={0} />
                     </div>
-                    <CueEditLine index={1} cue={cues[1]} playerTime={0} />
                 </div>
             </Provider>
         );
@@ -50,22 +46,16 @@ describe("CueLine", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
-    it("renders view line", () => {
+    it("renders view line in captioning mode", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            flex: "1 1 20px",
-                            paddingLeft: "8px",
-                            paddingTop: "10px",
-                        }}
-                    >
-                        2
+                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
+                    <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <div />
+                        <CueViewLine index={1} cue={cues[1]} playerTime={0} />
                     </div>
-                    <CueViewLine index={1} cue={cues[1]} playerTime={0} />
                 </div>
             </Provider>
         );
@@ -75,6 +65,87 @@ describe("CueLine", () => {
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine index={1} cue={cues[1]} playerTime={0} />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.html()))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
+    it("renders edit line in translation mode", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
+                    <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <CueViewLine index={1} cue={sourceCue} playerTime={0} className="sbte-bottom-border" />
+                        <CueEditLine index={1} cue={cues[1]} playerTime={0} />
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(1));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.html()))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
+    it("renders view line in translation mode", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
+                    <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <CueViewLine index={1} cue={sourceCue} playerTime={0} className="sbte-bottom-border" />
+                        <CueViewLine index={1} cue={cues[1]} playerTime={0} />
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(-1));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.html()))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
+    it("renders empty line in translation mode", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
+                    <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <CueViewLine index={1} cue={sourceCue} playerTime={0} className="sbte-bottom-border" />
+                        <CueViewLine index={1} cue={sourceCue} playerTime={0} hideText />
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(2));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={undefined} playerTime={0} sourceCue={sourceCue} />
             </Provider>
         );
 
