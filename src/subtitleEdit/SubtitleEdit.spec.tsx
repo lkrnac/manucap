@@ -80,8 +80,8 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <div style={{ overflowY: "scroll", height: "100%" }}>
-                                <CueLine index={0} cue={cues[0]} playerTime={0} />
-                                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                                <CueLine index={0} cue={cues[0]} playerTime={0} editingCuesSize={2} />
+                                <CueLine index={1} cue={cues[1]} playerTime={0} editingCuesSize={2} />
                             </div>
                             <div style={{ marginTop: "10px" }}>
                                 <button className="btn btn-primary" style={{ marginTop: "10px", marginBottom: "10px" }}>
@@ -191,10 +191,10 @@ describe("SubtitleEdit", () => {
         const cueLines = actualNode.find(CueLine);
         expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
         expect((cueLines.at(0).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
-        expect(cueLines.at(0).props().lastCue).toEqual(false);
+        expect(cueLines.at(0).props().editingCuesSize).toEqual(2);
         expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
         expect((cueLines.at(1).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
-        expect(cueLines.at(1).props().lastCue).toEqual(true);
+        expect(cueLines.at(1).props().editingCuesSize).toEqual(2);
         expect(cueLines.at(2).props().cue).toBeUndefined();
         expect((cueLines.at(2).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 3");
     });
