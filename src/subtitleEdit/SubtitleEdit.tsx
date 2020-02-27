@@ -11,6 +11,9 @@ import { useSelector } from "react-redux";
 export interface Props {
     mp4: string;
     poster: string;
+    onViewAllTracks: () => void;
+    onSave: () => void;
+    onComplete: () => void;
 }
 
 const SubtitleEdit = (props: Props): ReactElement => {
@@ -25,7 +28,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
             <SubtitleEditHeader />
-            <div style={{ display: "flex", alignItems: "flex-start", height: "90%" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                 <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                     <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
                     <Toolbox />
@@ -45,6 +48,24 @@ const SubtitleEdit = (props: Props): ReactElement => {
                             cues.map((cue: CueDto, idx: number): ReactElement =>
                                 <CueLine key={idx} index={idx} cue={cue} playerTime={currentPlayerTime} />)
                         }
+                    </div>
+                    <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                        <button className="btn btn-primary sbte-view-all-tracks-btn" type="button"
+                            onClick={() => props.onViewAllTracks()}
+                        >
+                            View All Tracks
+                        </button>
+                        <span style={{flexGrow: 2}} />
+                        <button className="btn btn-primary sbte-save-subtitle-btn" type="button"
+                            onClick={() => props.onSave()} style={{ marginRight: "10px" }}
+                        >
+                            Save
+                        </button>
+                        <button className="btn btn-primary sbte-complete-subtitle-btn" type="button"
+                            onClick={() => props.onComplete()}
+                        >
+                            Complete
+                        </button>
                     </div>
                 </div>
             </div>
