@@ -21,7 +21,7 @@ const TestApp = (): ReactElement => {
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
-                mediaLength: 4
+                mediaLength: 4000
             })),
             500
         );
@@ -72,6 +72,9 @@ const TestApp = (): ReactElement => {
     return (<SubtitleEdit
         poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
         mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+        onViewAllTracks={() => {}}
+        onSave={() => {}}
+        onComplete={() => {}}
             />);
 };
 
