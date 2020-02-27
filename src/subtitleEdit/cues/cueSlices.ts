@@ -61,7 +61,7 @@ export const cuesSlice = createSlice({
 
 export const editingCueIndexSlice = createSlice({
     name: "editingCueIndex",
-    initialState: 0,
+    initialState: -1,
     reducers: {
         updateEditingCueIndex: (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
     },
@@ -69,8 +69,7 @@ export const editingCueIndexSlice = createSlice({
         [cuesSlice.actions.addCue.type]:
             (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
         [cuesSlice.actions.deleteCue.type]: (): number => -1,
-        [cuesSlice.actions.updateCues.type]:
-            (_state, action: PayloadAction<CuesAction>): number => action.payload.cues.length - 1,
+        [cuesSlice.actions.updateCues.type]: (): number => -1,
 
     }
 });

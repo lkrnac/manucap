@@ -20,7 +20,7 @@ const testingCues = [
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
-describe("trackSlices", () => {
+describe("cueSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
     describe("updateVttCue", () => {
         it("updates top level cues", () => {
@@ -178,7 +178,7 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues).toEqual(testingCues);
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
         it("replaces existing cues", () => {
@@ -193,7 +193,7 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues).toEqual(replacementCues);
-            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
     });
 
