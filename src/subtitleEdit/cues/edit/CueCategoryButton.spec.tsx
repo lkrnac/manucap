@@ -82,30 +82,34 @@ describe("CueCategoryButton", () => {
                     className="dropdown-menu show"
                 >
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Dialogue
                     </a>
                     <div className="dropdown-divider" role="separator" />
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         On Screen Text
                     </a>
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Audio Descriptions
                     </a>
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Lyrics
