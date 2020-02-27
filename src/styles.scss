@@ -6,14 +6,7 @@ $green: rgb(0,87,0);
 // ##############################
 // Override bootstrap defaults
 // ##############################
-$font-size-base: 0.875rem; // 14px
 $font-size-small: 0.75rem; // 12px
-$body-color: $sbte-main-text-color;
-$input-color: $sbte-main-text-color;
-$theme-colors: (
-  "secondary": $sbte-main-text-color,
-  "light": #dee2e6
-);
 
 .btn-outline-secondary {
   border-color: $input-border-color;
@@ -31,6 +24,7 @@ $theme-colors: (
 
 .sbte-subtitle-edit {
   font-family: Roboto, sans-serif;
+  color: rgb(33,37,41);
 }
 
 .sbte-left-border {
