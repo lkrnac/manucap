@@ -1,8 +1,8 @@
-import VideoPlayer from "./subtitleEdit/player/VideoPlayer";
-import { Reducers } from "./subtitleEdit/subtitleEditReducers";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
-import { updateCues } from "./subtitleEdit/cues/cueSlices";
+import { Reducers } from "./subtitleEdit/subtitleEditReducers";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
+import VideoPlayer from "./subtitleEdit/player/VideoPlayer";
+import { updateCues } from "./subtitleEdit/cues/cueSlices";
 
 const Actions = ({
     updateEditingTrack,

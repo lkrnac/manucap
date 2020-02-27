@@ -50,19 +50,26 @@ const SubtitleEdit = (props: Props): ReactElement => {
                         }
                     </div>
                     <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
-                        <button className="btn btn-primary sbte-view-all-tracks-btn" type="button"
-                            onClick={() => props.onViewAllTracks()}
+                        <button
+                            className="btn btn-primary sbte-view-all-tracks-btn"
+                            type="button"
+                            onClick={(): void => props.onViewAllTracks()}
                         >
                             View All Tracks
                         </button>
-                        <span style={{flexGrow: 2}} />
-                        <button className="btn btn-primary sbte-save-subtitle-btn" type="button"
-                            onClick={() => props.onSave()} style={{ marginRight: "10px" }}
+                        <span style={{ flexGrow: 2 }} />
+                        <button
+                            className="btn btn-primary sbte-save-subtitle-btn"
+                            type="button"
+                            onClick={(): void => props.onSave()}
+                            style={{ marginRight: "10px" }}
                         >
                             Save
                         </button>
-                        <button className="btn btn-primary sbte-complete-subtitle-btn" type="button"
-                            onClick={() => props.onComplete()}
+                        <button
+                            className="btn btn-primary sbte-complete-subtitle-btn"
+                            type="button"
+                            onClick={(): void => props.onComplete()}
                         >
                             Complete
                         </button>

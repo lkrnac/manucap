@@ -78,8 +78,10 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <span style={{flexGrow: 2}} />
-                                <button className="btn btn-primary sbte-save-subtitle-btn" type="button"
+                                <span style={{ flexGrow: 2 }} />
+                                <button
+                                    className="btn btn-primary sbte-save-subtitle-btn"
+                                    type="button"
                                     style={{ marginRight: "10px" }}
                                 >
                                     Save
@@ -97,8 +99,12 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" onViewAllTracks={() => {}} onSave={() => {}}
-                              onComplete={() => {}}
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
                 />
             </Provider>
         );
@@ -117,9 +123,12 @@ describe("SubtitleEdit", () => {
         const mockOnViewAllTracks = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" onViewAllTracks={mockOnViewAllTracks}
-                              onSave={() => {}}
-                              onComplete={() => {}}
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={mockOnViewAllTracks}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
                 />
             </Provider>
         );
@@ -140,9 +149,12 @@ describe("SubtitleEdit", () => {
         const mockOnSave = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" onViewAllTracks={() => {}}
-                              onSave={mockOnSave}
-                              onComplete={() => {}}
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={mockOnSave}
+                    onComplete={(): void => {/*dummy*/}}
                 />
             </Provider>
         );
@@ -163,9 +175,12 @@ describe("SubtitleEdit", () => {
         const mockOnComplete = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" onViewAllTracks={() => {}}
-                              onSave={() => {}}
-                              onComplete={mockOnComplete}
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={mockOnComplete}
                 />
             </Provider>
         );
