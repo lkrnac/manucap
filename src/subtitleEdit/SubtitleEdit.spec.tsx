@@ -191,8 +191,10 @@ describe("SubtitleEdit", () => {
         const cueLines = actualNode.find(CueLine);
         expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
         expect((cueLines.at(0).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
+        expect(cueLines.at(0).props().lastCue).toEqual(false);
         expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
         expect((cueLines.at(1).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
+        expect(cueLines.at(1).props().lastCue).toEqual(true);
         expect(cueLines.at(2).props().cue).toBeUndefined();
         expect((cueLines.at(2).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 3");
     });
