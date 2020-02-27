@@ -27,7 +27,13 @@ describe("CueLine", () => {
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
-                        <CueEdit index={1} cue={cues[1]} playerTime={0} />
+                        <CueEdit
+                            index={1}
+                            cue={cues[1]}
+                            playerTime={0}
+                            hideAddButton={false}
+                            hideDeleteButton={false}
+                        />
                     </div>
                 </div>
             </Provider>
@@ -86,7 +92,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                         />
-                        <CueEdit index={1} cue={cues[1]} playerTime={0} />
+                        <CueEdit index={1} cue={cues[1]} playerTime={0} hideAddButton hideDeleteButton />
                     </div>
                 </div>
             </Provider>
@@ -214,5 +220,70 @@ describe("CueLine", () => {
 
         // THEN
         expect(testingStore.getState().editingCueIndex).toEqual(2);
+    });
+
+    it("does not hide add button in captioning mode", () => {
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(1));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} lastCue />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueEdit).props().hideAddButton).toBeFalsy();
+    });
+
+    it("hides add button in translation mode when cue is not the last one", () => {
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(1));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueEdit).props().hideAddButton).toBeTruthy();
+    });
+
+    it("does not hide add button in translation mode when cue is last one", () => {
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(1));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} lastCue />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueEdit).props().hideAddButton).toBeFalsy();
+    });
+
+    it("does not hide delete button in captioning mode", () => {
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(1));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueEdit).props().hideDeleteButton).toBeFalsy();
+    });
+
+    it("hides delete button in translation mode", () => {
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(1));
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueEdit).props().hideDeleteButton).toBeTruthy();
     });
 });

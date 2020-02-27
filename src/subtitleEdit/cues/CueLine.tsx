@@ -11,6 +11,7 @@ interface Props {
     cue?: CueDto;
     playerTime: number;
     sourceCue?: CueDto;
+    lastCue?: boolean;
 }
 
 const CueLine = (props: Props): ReactElement => {
@@ -39,7 +40,13 @@ const CueLine = (props: Props): ReactElement => {
                 {
                     props.cue
                         ? editingCueIndex === props.index
-                            ? <CueEdit index={props.index} cue={props.cue} playerTime={props.playerTime} />
+                            ? <CueEdit
+                                index={props.index}
+                                cue={props.cue}
+                                playerTime={props.playerTime}
+                                hideAddButton={props.sourceCue !== undefined && !props.lastCue}
+                                hideDeleteButton={props.sourceCue !== undefined}
+                              />
                             : <CueView
                                 index={props.index}
                                 cue={props.cue}
