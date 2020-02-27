@@ -2,8 +2,8 @@ import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "../model";
-import CueEditLine from "./edit/CueEditLine";
-import CueViewLine from "./view/CueViewLine";
+import CueEdit from "./edit/CueEdit";
+import CueView from "./view/CueView";
 import { updateEditingCueIndex } from "./cueSlices";
 
 interface Props {
@@ -28,7 +28,7 @@ const CueLine = (props: Props): ReactElement => {
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {
                     props.sourceCue
-                        ? <CueViewLine
+                        ? <CueView
                             index={props.index}
                             cue={props.sourceCue}
                             playerTime={props.playerTime}
@@ -39,14 +39,14 @@ const CueLine = (props: Props): ReactElement => {
                 {
                     props.cue
                         ? editingCueIndex === props.index
-                            ? <CueEditLine index={props.index} cue={props.cue} playerTime={props.playerTime} />
-                            : <CueViewLine
+                            ? <CueEdit index={props.index} cue={props.cue} playerTime={props.playerTime} />
+                            : <CueView
                                 index={props.index}
                                 cue={props.cue}
                                 playerTime={props.playerTime}
                                 className="sbte-gray-100-background"
                               />
-                        : <CueViewLine
+                        : <CueView
                             index={props.index}
                             // @ts-ignore If cue is undefined, sourceCue is passed in (ensured by SubtitleEdit tests)
                             cue={props.sourceCue}

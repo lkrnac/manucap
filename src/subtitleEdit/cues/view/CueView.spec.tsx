@@ -1,14 +1,14 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { CueDto } from "../../model";
-import CueViewLine from "./CueViewLine";
+import CueView from "./CueView";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import testingStore from "../../../testUtils/testingStore";
 
-describe("CueViewLine", () => {
+describe("CueView", () => {
     it("renders", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
@@ -59,7 +59,7 @@ describe("CueViewLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueViewLine index={1} cue={cue} playerTime={1} />
+                <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -118,7 +118,7 @@ describe("CueViewLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueViewLine index={1} cue={cue} playerTime={1} className="testingClassName" />
+                <CueView index={1} cue={cue} playerTime={1} className="testingClassName" />
             </Provider>
         );
 
@@ -150,7 +150,7 @@ describe("CueViewLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueViewLine index={1} cue={cue} playerTime={1} />
+                <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -184,7 +184,7 @@ describe("CueViewLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueViewLine index={1} cue={cue} playerTime={1} />
+                <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -218,7 +218,7 @@ describe("CueViewLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueViewLine index={1} cue={cue} playerTime={1} />
+                <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -252,7 +252,7 @@ describe("CueViewLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueViewLine index={1} cue={cue} playerTime={1} />
+                <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -284,7 +284,7 @@ describe("CueViewLine", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueViewLine index={1} cue={cue} playerTime={1} hideText />
+                <CueView index={1} cue={cue} playerTime={1} hideText />
             </Provider>
         );
 

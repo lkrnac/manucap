@@ -1,9 +1,9 @@
 import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { CueDto } from "../model";
-import CueEditLine from "./edit/CueEditLine";
+import CueEdit from "./edit/CueEdit";
 import CueLine from "./CueLine";
-import CueViewLine from "./view/CueViewLine";
+import CueView from "./view/CueView";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
@@ -27,7 +27,7 @@ describe("CueLine", () => {
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
-                        <CueEditLine index={1} cue={cues[1]} playerTime={0} />
+                        <CueEdit index={1} cue={cues[1]} playerTime={0} />
                     </div>
                 </div>
             </Provider>
@@ -54,7 +54,7 @@ describe("CueLine", () => {
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
-                        <CueViewLine index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
+                        <CueView index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
                     </div>
                 </div>
             </Provider>
@@ -80,13 +80,13 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
-                        <CueViewLine
+                        <CueView
                             index={1}
                             cue={sourceCue}
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                         />
-                        <CueEditLine index={1} cue={cues[1]} playerTime={0} />
+                        <CueEdit index={1} cue={cues[1]} playerTime={0} />
                     </div>
                 </div>
             </Provider>
@@ -112,13 +112,13 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
-                        <CueViewLine
+                        <CueView
                             index={1}
                             cue={sourceCue}
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                         />
-                        <CueViewLine index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
+                        <CueView index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
                     </div>
                 </div>
             </Provider>
@@ -144,13 +144,13 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
-                        <CueViewLine
+                        <CueView
                             index={1}
                             cue={sourceCue}
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                         />
-                        <CueViewLine index={1} cue={sourceCue} playerTime={0} hideText className="bg-light" />
+                        <CueView index={1} cue={sourceCue} playerTime={0} hideText className="bg-light" />
                     </div>
                 </div>
             </Provider>
@@ -179,7 +179,7 @@ describe("CueLine", () => {
         );
 
         // THEN
-        const actualProps = actualNode.find(CueViewLine).props();
+        const actualProps = actualNode.find(CueView).props();
         expect(actualProps.index).toEqual(1);
         expect(actualProps.cue).toEqual(cues[1]);
         expect(actualProps.playerTime).toEqual(1);

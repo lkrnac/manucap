@@ -14,7 +14,7 @@ interface Props {
     hideText?: boolean;
 }
 
-const CueViewLine = (props: Props): ReactElement => {
+const CueView = (props: Props): ReactElement => {
     const html = props.hideText
         ? ""
         : convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
@@ -65,4 +65,4 @@ const CueViewLine = (props: Props): ReactElement => {
     );
 };
 
-export default CueViewLine;
+export default CueView;
