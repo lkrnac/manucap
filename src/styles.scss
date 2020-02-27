@@ -57,8 +57,8 @@ $fa-font-path: "../webfonts";
   font-size: $font-size-small;
 }
 
-.sbte-white-background {
-  background-color: white;
+.sbte-gray-100-background {
+  background-color: $gray-100;
 }
 
 // ----- Modal ------
@@ -71,9 +71,9 @@ $fa-font-path: "../webfonts";
 // ------ Cue -------
 
 .sbte-time-input {
-    color: $sbte-main-text-color;
-    border: 1px solid $input-border-color;
-    border-radius: 4px;
+  color: $sbte-main-text-color;
+  border: 1px solid $input-border-color;
+  border-radius: 4px;
 }
 
 .sbte-cue-line-flap {

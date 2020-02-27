@@ -122,7 +122,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     );
 
     return (
-        <div className="sbte-white-background" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div
                 className="sbte-bottom-border"
                 style={{

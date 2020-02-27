@@ -16,6 +16,7 @@ interface Props {
 const CueLine = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const translationCueClassName = props.cue ? "sbte-gray-100-background" : "bg-light";
     return (
         <div
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
@@ -31,7 +32,7 @@ const CueLine = (props: Props): ReactElement => {
                             index={props.index}
                             cue={props.sourceCue}
                             playerTime={props.playerTime}
-                            className="sbte-bottom-border"
+                            className="sbte-bottom-border sbte-gray-100-background"
                           />
                         : <div />
                 }
@@ -39,13 +40,19 @@ const CueLine = (props: Props): ReactElement => {
                     props.cue
                         ? editingCueIndex === props.index
                             ? <CueEditLine index={props.index} cue={props.cue} playerTime={props.playerTime} />
-                            : <CueViewLine index={props.index} cue={props.cue} playerTime={props.playerTime} />
+                            : <CueViewLine
+                                index={props.index}
+                                cue={props.cue}
+                                playerTime={props.playerTime}
+                                className="sbte-gray-100-background"
+                              />
                         : <CueViewLine
                             index={props.index}
                             // @ts-ignore If cue is undefined, sourceCue is passed in (ensured by SubtitleEdit tests)
                             cue={props.sourceCue}
                             playerTime={props.playerTime}
                             hideText
+                            className={translationCueClassName}
                           />
 
                 }
