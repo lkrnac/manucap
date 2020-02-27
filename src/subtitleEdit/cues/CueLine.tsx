@@ -11,14 +11,13 @@ interface Props {
     cue?: CueDto;
     playerTime: number;
     sourceCue?: CueDto;
-    editingCuesSize: number;
+    lastCue?: boolean;
 }
 
 const CueLine = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const translationCueClassName = props.cue ? "sbte-gray-100-background" : "bg-light";
-    const lastCue = props.index === props.editingCuesSize - 1;
     return (
         <div
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
@@ -45,7 +44,7 @@ const CueLine = (props: Props): ReactElement => {
                                 index={props.index}
                                 cue={props.cue}
                                 playerTime={props.playerTime}
-                                hideAddButton={props.sourceCue !== undefined && !lastCue}
+                                hideAddButton={props.sourceCue !== undefined && !props.lastCue}
                                 hideDeleteButton={props.sourceCue !== undefined}
                               />
                             : <CueView

@@ -55,7 +55,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
                                         sourceCue={sourceCue}
                                         cue={editingCue}
                                         playerTime={currentPlayerTime}
-                                        editingCuesSize={cues.length}
+                                        lastCue={idx === cues.length - 1}
                                     />
                                 );
                             })

@@ -43,7 +43,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -70,7 +70,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(-1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -102,7 +102,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
             </Provider>
         );
 
@@ -134,7 +134,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(-1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
             </Provider>
         );
 
@@ -166,7 +166,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(2));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={undefined} playerTime={0} sourceCue={sourceCue} editingCuesSize={3} />
+                <CueLine index={1} cue={undefined} playerTime={0} sourceCue={sourceCue} />
             </Provider>
         );
 
@@ -180,7 +180,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(-1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={1} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={1} />
             </Provider>
         );
 
@@ -195,7 +195,7 @@ describe("CueLine", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -211,7 +211,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -227,7 +227,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} lastCue />
             </Provider>
         );
 
@@ -240,7 +240,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} editingCuesSize={3} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
             </Provider>
         );
 
@@ -253,7 +253,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} editingCuesSize={2}  />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} lastCue />
             </Provider>
         );
 
@@ -266,7 +266,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} editingCuesSize={2} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -279,7 +279,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} editingCuesSize={2} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
             </Provider>
         );
 
