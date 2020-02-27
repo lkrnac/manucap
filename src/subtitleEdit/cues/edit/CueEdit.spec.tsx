@@ -93,7 +93,13 @@ describe("CueEdit", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
+                        <CueTextEditor
+                            key={1}
+                            index={1}
+                            vttCue={cues[0].vttCue}
+                            hideAddButton={false}
+                            hideDeleteButton={false}
+                        />
                     </div>
                 </div>
             </Provider>
@@ -102,7 +108,7 @@ describe("CueEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={1} cue={cues[0]} playerTime={0} />
+                <CueEdit index={1} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -115,7 +121,7 @@ describe("CueEdit", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+                <CueEdit index={0} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -131,7 +137,7 @@ describe("CueEdit", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+                <CueEdit index={0} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -147,7 +153,7 @@ describe("CueEdit", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+                <CueEdit index={0} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -163,7 +169,7 @@ describe("CueEdit", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+                <CueEdit index={0} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -183,7 +189,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} />
+                <CueEdit index={0} cue={cue} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -204,7 +210,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} />
+                <CueEdit index={0} cue={cue} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -223,7 +229,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} />
+                <CueEdit index={0} cue={cue} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -243,7 +249,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} />
+                <CueEdit index={0} cue={cue} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -263,7 +269,7 @@ describe("CueEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} />
+                <CueEdit index={0} cue={cue} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -277,7 +283,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} />
+                <CueEdit index={0} cue={cue} playerTime={1} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -296,7 +302,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} />
+                <CueEdit index={0} cue={cue} playerTime={1} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -307,5 +313,37 @@ describe("CueEdit", () => {
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+    });
+
+    it("passes down hideAddButton flag", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cue} playerTime={0} hideAddButton hideDeleteButton={false} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueTextEditor).props().hideAddButton).toEqual(true);
+    });
+
+    it("passes down hideDeleteButton flag", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cue} playerTime={0} hideAddButton={false} hideDeleteButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueTextEditor).props().hideDeleteButton).toEqual(true);
     });
 });
