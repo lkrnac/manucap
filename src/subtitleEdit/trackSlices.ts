@@ -73,10 +73,10 @@ export const cuesSlice = createSlice({
                 };
             }
         },
-        updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
-        applyShiftTime: (_state, action: PayloadAction<number>): CueDto[] => {
+        updateCues: (state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
+        applyShiftTime: (state, action: PayloadAction<number>): CueDto[] => {
             const shift = action.payload;
-            return _state.map((cue: CueDto) => {
+            return state.map((cue: CueDto) => {
                 const vttCue = cue.vttCue;
                 const startTime = vttCue.startTime + shift;
                 const endTime = vttCue.endTime + shift;
@@ -92,7 +92,7 @@ export const editingTrackSlice = createSlice({
     name: "editingTrack",
     initialState: null as Track | null,
     reducers: {
-        updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack
+        updateEditingTrack: (state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack
     }
 });
 
@@ -100,7 +100,7 @@ export const taskSlice = createSlice({
     name: "task",
     initialState: null as Task | null,
     reducers: {
-        updateTask: (_state, action: PayloadAction<TaskAction>): Task => action.payload.task,
+        updateTask: (state, action: PayloadAction<TaskAction>): Task => action.payload.task,
     }
 });
 
