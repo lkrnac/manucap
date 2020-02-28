@@ -43,7 +43,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -70,7 +70,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(-1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -102,7 +102,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -134,7 +134,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(-1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -166,7 +166,13 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(2));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={undefined} playerTime={0} sourceCue={sourceCue} />
+                <CueLine
+                    index={1}
+                    cue={undefined}
+                    playerTime={0}
+                    sourceCue={sourceCue}
+                    onClickHandler={(): void => {}}
+                />
             </Provider>
         );
 
@@ -180,7 +186,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(-1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={1} />
+                <CueLine index={1} cue={cues[1]} playerTime={1} onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -193,9 +199,10 @@ describe("CueLine", () => {
 
     it("opens cue line for editing when clicked", () => {
         // GIVEN
+        const onClickHandler = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={onClickHandler} />
             </Provider>
         );
 
@@ -203,7 +210,7 @@ describe("CueLine", () => {
         actualNode.simulate("click");
 
         // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(1);
+        expect(onClickHandler).toBeCalled();
     });
 
     it("opens next cue line for editing when add button is clicked", () => {
@@ -211,7 +218,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -227,7 +234,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} lastCue />
+                <CueLine index={1} cue={cues[1]} playerTime={0} lastCue onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -240,7 +247,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -253,7 +260,14 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} lastCue />
+                <CueLine
+                    index={1}
+                    cue={cues[1]}
+                    playerTime={0}
+                    sourceCue={sourceCue}
+                    lastCue
+                    onClickHandler={(): void => {}}
+                />
             </Provider>
         );
 
@@ -266,7 +280,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
             </Provider>
         );
 
@@ -279,7 +293,7 @@ describe("CueLine", () => {
         testingStore.dispatch(updateEditingCueIndex(1));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} onClickHandler={(): void => {}} />
             </Provider>
         );
 

@@ -1,12 +1,14 @@
 import "../styles.scss";
 import React, { ReactElement, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
-import { useSelector } from "react-redux";
+import { createAndAddCue } from "./cues/cueUtils";
+import { updateEditingCueIndex } from "./cues/cueSlices";
 
 export interface Props {
     mp4: string;
@@ -14,6 +16,7 @@ export interface Props {
 }
 
 const SubtitleEdit = (props: Props): ReactElement => {
+    const dispatch = useDispatch();
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
@@ -56,6 +59,11 @@ const SubtitleEdit = (props: Props): ReactElement => {
                                         cue={editingCue}
                                         playerTime={currentPlayerTime}
                                         lastCue={idx === cues.length - 1}
+                                        onClickHandler={(): void => {
+                                            idx >= cues.length
+                                                ? createAndAddCue(dispatch, cues[cues.length - 1], cues.length)
+                                                : dispatch(updateEditingCueIndex(idx));
+                                        }}
                                     />
                                 );
                             })
