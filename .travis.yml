@@ -24,4 +24,4 @@ deploy:
   edge: true
   api_token: $NPM_API_TOKEN
   on:
-    branch: russ-VTMS-2290-npm-private
+    branch: master
