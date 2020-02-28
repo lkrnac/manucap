@@ -49,6 +49,18 @@ $fa-font-path: "../webfonts";
     color: $green;
 }
 
+.sbte-main-text-color {
+  color: $sbte-main-text-color;
+}
+
+.sbte-small-font {
+  font-size: $font-size-small;
+}
+
+.sbte-gray-100-background {
+  background-color: $gray-100;
+}
+
 // ----- Modal ------
 
 .sbte-medium-modal {
@@ -58,18 +70,10 @@ $fa-font-path: "../webfonts";
 
 // ------ Cue -------
 
-.sbte-cue-editor {
-  background-color: white;
-}
-
 .sbte-time-input {
-    color: $sbte-main-text-color;
-    border: 1px solid $input-border-color;
-    border-radius: 4px;
-}
-
-.sbte-cue-line-left-section {
-    background-color: white;
+  color: $sbte-main-text-color;
+  border: 1px solid $input-border-color;
+  border-radius: 4px;
 }
 
 .sbte-cue-line-flap {
@@ -77,19 +81,6 @@ $fa-font-path: "../webfonts";
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     color: white;
-}
-
-.sbte-cue-line-category {
-    color: $sbte-main-text-color;
-    padding: 8px 24px;
-}
-
-.sbte-position-button {
-  color: $sbte-main-text-color;
-}
-
-.sbte-cue-line-counts {
-    font-size: $font-size-small;
 }
 
 // ------ Toolbox --------

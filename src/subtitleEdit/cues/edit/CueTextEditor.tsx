@@ -10,7 +10,8 @@ import {
 } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
-import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
+import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
+import { convertHtmlToVtt, convertVttToHtml } from "../cueTextConverter";
 import { useDispatch, useSelector } from "react-redux";
 import AddCueLineButton from "./AddCueLineButton";
 import { CueCategory } from "../../model";
@@ -19,7 +20,7 @@ import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../../trackSlices";
+import { updateVttCue } from "../cueSlices";
 
 const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");
@@ -34,6 +35,13 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     if (e.shiftKey && (e.metaKey || e.altKey) && action) {
         return action;
     }
+    if ((!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)) {
+        if (e.keyCode === Character.ESCAPE) {
+            return "closeEditor";
+        } else if (e.keyCode === Character.ENTER) {
+            return "closeEditorAndCreateIfLast";
+        }
+    }
     return getDefaultKeyBinding(e);
 };
 
@@ -44,6 +52,8 @@ mousetrapBindings.set("seekAhead", KeyCombination.MOD_SHIFT_RIGHT);
 mousetrapBindings.set("setStartTime", KeyCombination.MOD_SHIFT_UP);
 mousetrapBindings.set("setEndTime", KeyCombination.MOD_SHIFT_DOWN);
 mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
+mousetrapBindings.set("closeEditor", KeyCombination.ESCAPE);
+mousetrapBindings.set("closeEditorAndCreateIfLast", KeyCombination.ENTER);
 
 const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
@@ -57,7 +67,9 @@ const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
 export interface CueTextEditorProps{
     index: number;
     vttCue: VTTCue;
-    cueCategory?: CueCategory;
+    cueCategory: CueCategory;
+    hideAddButton: boolean;
+    hideDeleteButton: boolean;
 }
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
@@ -73,7 +85,7 @@ const convertToHtmlOptions = {
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
-    const processedHTML = convertFromHTML(props.vttCue.text);
+    const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
@@ -100,7 +112,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => {
             const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
-            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, text);
+            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, convertHtmlToVtt(text));
             copyNonConstructorProperties(vttCue, props.vttCue);
             dispatch(updateVttCue(props.index, vttCue));
         },
@@ -112,7 +124,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     );
 
     return (
-        <div className="sbte-cue-editor" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div
                 className="sbte-bottom-border"
                 style={{
@@ -123,7 +135,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 }}
             >
                 <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
-                <DeleteCueLineButton cueIndex={props.index} />
+                {
+                    props.hideDeleteButton
+                        ? <div />
+                        : <DeleteCueLineButton cueIndex={props.index} />
+
+                }
             </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
@@ -157,11 +174,16 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
                     <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
                 </div>
-                <AddCueLineButton
-                    cueIndex={props.index}
-                    vttCue={props.vttCue}
-                    cueCategory={props.cueCategory}
-                />
+                {
+                    props.hideAddButton
+                        ? <div />
+                        : <AddCueLineButton
+                            cueIndex={props.index}
+                            vttCue={props.vttCue}
+                            cueCategory={props.cueCategory}
+                          />
+
+                }
             </div>
         </div>
     );

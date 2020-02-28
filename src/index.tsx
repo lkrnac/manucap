@@ -1,20 +1,38 @@
 import "./testUtils/initBrowserEnvironment";
 import { Provider, useDispatch } from "react-redux";
-import { ReactElement, useEffect } from "react";
-import { updateCues, updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
+import React, { ReactElement, useEffect } from "react";
+import { updateCues, updateSourceCues } from "./subtitleEdit/cues/cueSlices";
+import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { Language } from "./subtitleEdit/model";
-import React from "react";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
-
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
+    // #############################################################################################
+    // #################### Comment this out if you need to test Captioning mode ###################
+    // #############################################################################################
+    useEffect(() => {
+        setTimeout( // this simulates latency caused by server roundtrip
+            dispatch(updateSourceCues([
+                { vttCue: new VTTCue(0, 1, "<i>Source <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
+                {
+                    vttCue: new VTTCue(1, 2, "<i><lang en>Source</lang> <b>Line</b></i> 2\nWrapped text"),
+                    cueCategory: "ONSCREEN_TEXT"
+                },
+                { vttCue: new VTTCue(2, 3, "<i>Source <b>Line</b></i> 3\nWrapped text"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 4, "<i>Source <b>Line</b></i> 4\nWrapped text"), cueCategory: "DIALOGUE" },
+            ])),
+            500
+        );
+    });
+    // #############################################################################################
+
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             dispatch(updateEditingTrack({
@@ -30,8 +48,11 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
        setTimeout( // this simulates latency caused by server roundtrip
            dispatch(updateCues([
-               { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-               { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+               { vttCue: new VTTCue(0, 1, "<i>Editing <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
+               {
+                   vttCue: new VTTCue(1, 2, "<i><lang en>Editing</lang> <b>Line</b></i> 2\nWrapped text"),
+                   cueCategory: "ONSCREEN_TEXT"
+               },
            ])),
            500
        );
@@ -59,8 +80,8 @@ const TestApp = (): ReactElement => {
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 4,
                 maxCharactersPerLine: 30,
-                minCaptionDurationInMillis: 2,
-                maxCaptionDurationInMillis: 6,
+                minCaptionDurationInMillis: 2000,
+                maxCaptionDurationInMillis: 6000,
                 comments: "Note"
             })),
             500

@@ -1,10 +1,10 @@
 import "../../../testUtils/initBrowserEnvironment";
-import LineCategoryButton from "./LineCategoryButton";
+import CueCategoryButton from "./CueCategoryButton";
 import React from "react";
 import each from "jest-each";
 import { mount } from "enzyme";
 
-describe("LineCategoryButton", () => {
+describe("CueCategoryButton", () => {
     it("renders button for undefined category", () => {
         // GIVEN
         const expectedNode = mount(
@@ -23,7 +23,7 @@ describe("LineCategoryButton", () => {
 
         // WHEN
         const actualNode = mount(
-            <LineCategoryButton onChange={jest.fn()} />
+            <CueCategoryButton onChange={jest.fn()} />
         );
 
         // THEN
@@ -48,7 +48,7 @@ describe("LineCategoryButton", () => {
 
         // WHEN
         const actualNode = mount(
-            <LineCategoryButton onChange={jest.fn()} category={"AUDIO_DESCRIPTION"} />
+            <CueCategoryButton onChange={jest.fn()} category={"AUDIO_DESCRIPTION"} />
         );
 
         // THEN
@@ -82,30 +82,34 @@ describe("LineCategoryButton", () => {
                     className="dropdown-menu show"
                 >
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Dialogue
                     </a>
                     <div className="dropdown-divider" role="separator" />
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         On Screen Text
                     </a>
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Audio Descriptions
                     </a>
                     <a
+                        style={{ padding: "8px 24px" }}
                         href="#"
-                        className="sbte-cue-line-category btn btn-outline-secondary dropdown-item"
+                        className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
                         role="button"
                     >
                         Lyrics
@@ -116,7 +120,7 @@ describe("LineCategoryButton", () => {
 
         // WHEN
         const actualNode = mount(
-            <LineCategoryButton onChange={jest.fn()} />
+            <CueCategoryButton onChange={jest.fn()} />
         );
         actualNode.find("button").simulate("click");
 
@@ -124,7 +128,7 @@ describe("LineCategoryButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    describe("LineCategory options", () => {
+    describe("CueCategory options", () => {
         // GIVEN
         const onChange = jest.fn();
 
@@ -140,7 +144,7 @@ describe("LineCategoryButton", () => {
             ) => {
                 // WHEN
                 const actualNode = mount(
-                    <LineCategoryButton onChange={onChange} />
+                    <CueCategoryButton onChange={onChange} />
                 );
                 actualNode.find("button").simulate("click");
                 actualNode.find("a").at(index).simulate("click");

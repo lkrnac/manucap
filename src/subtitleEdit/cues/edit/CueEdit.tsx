@@ -1,11 +1,11 @@
 import { CueCategory, CueDto } from "../../model";
-import { Position, copyNonConstructorProperties, positionStyles } from "./cueUtils";
+import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { updateCueCategory, updateVttCue } from "../../trackSlices";
+import { updateCueCategory, updateVttCue } from "../cueSlices";
 import { AppThunk } from "../../subtitleEditReducers";
+import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
 import { KeyCombination } from "../../shortcutConstants";
-import LineCategoryButton from "./LineCategoryButton";
 import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
@@ -15,6 +15,8 @@ interface Props {
     index: number;
     cue: CueDto;
     playerTime: number;
+    hideAddButton: boolean;
+    hideDeleteButton: boolean;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
@@ -24,7 +26,7 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     dispatch(updateVttCue(props.index, newCue));
 };
 
-const CueLine = (props: Props): ReactElement => {
+const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -35,27 +37,13 @@ const CueLine = (props: Props): ReactElement => {
             Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
                 updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
             });
-            Mousetrap.bind([KeyCombination.ESCAPE, KeyCombination.ENTER], () => {
-                // TODO: close edit mode / go to view mode (blocked by VTMS-2146)
-            });
         };
         registerShortcuts();
     }, [dispatch, props]);
 
     return (
-        <div style={{ display: "flex", paddingBottom: "5px" }}>
+        <div style={{ display: "flex" }} className="bg-white">
             <div
-                className="sbte-cue-line-flap"
-                style={{
-                    flex: "1 1 20px",
-                    paddingLeft: "8px",
-                    paddingTop: "10px",
-                }}
-            >
-                {props.index + 1}
-            </div>
-            <div
-                className="sbte-cue-line-left-section"
                 style={{
                     flex: "1 1 300px",
                     display: "flex",
@@ -65,12 +53,7 @@ const CueLine = (props: Props): ReactElement => {
                     justifyContent: "space-between"
                 }}
             >
-                <div style={{
-                    display: "flex",
-                    flexDirection:"column",
-                    paddingBottom: "15px"
-                }}
-                >
+                <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
                         onChange={(starTime: number): void =>
@@ -83,7 +66,7 @@ const CueLine = (props: Props): ReactElement => {
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <LineCategoryButton
+                    <CueCategoryButton
                         onChange={(cueCategory: CueCategory): AppThunk =>
                             dispatch(updateCueCategory(props.index, cueCategory))}
                         category={props.cue.cueCategory}
@@ -110,10 +93,12 @@ const CueLine = (props: Props): ReactElement => {
                     index={props.index}
                     vttCue={props.cue.vttCue}
                     cueCategory={props.cue.cueCategory}
+                    hideAddButton={props.hideAddButton}
+                    hideDeleteButton={props.hideDeleteButton}
                 />
             </div>
         </div>
     );
 };
 
-export default CueLine;
+export default CueEdit;

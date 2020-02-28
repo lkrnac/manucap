@@ -58,8 +58,8 @@ describe("SubtitleSpecificationsForm", () => {
             dialogueStyle: "LINE_BREAKS",
             maxLinesPerCaption: 1,
             maxCharactersPerLine: 40,
-            minCaptionDurationInMillis: 1,
-            maxCaptionDurationInMillis: 3,
+            minCaptionDurationInMillis: 1000,
+            maxCaptionDurationInMillis: 3000,
             comments: "This is a sample comment"
         };
 

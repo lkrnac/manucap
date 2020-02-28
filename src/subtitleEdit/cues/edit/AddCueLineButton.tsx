@@ -1,28 +1,44 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CueCategory } from "../../model";
-import { addCue } from "../../trackSlices";
-import { copyNonConstructorProperties } from "./cueUtils";
-import { useDispatch } from "react-redux";
+import { KeyCombination } from "../../shortcutConstants";
+import Mousetrap from "mousetrap";
+import { SubtitleEditState } from "../../subtitleEditReducers";
+import { createAndAddCue } from "../cueUtils";
+import { updateEditingCueIndex } from "../cueSlices";
 
-const ADD_END_TIME_INTERVAL_SECS = 3;
 
 interface Props {
     cueIndex: number;
     vttCue: VTTCue;
-    cueCategory?: CueCategory;
+    cueCategory: CueCategory;
 }
 
 const AddCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+    const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
+
+    useEffect(() => {
+        const registerShortcuts = (): void => {
+            const oldCue = { vttCue: props.vttCue, cueCategory: props.cueCategory };
+            Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
+            Mousetrap.bind([KeyCombination.ENTER], () => props.cueIndex === cuesCount - 1
+                ? createAndAddCue(dispatch, oldCue, props.cueIndex + 1)
+                : dispatch(updateEditingCueIndex(-1)));
+        };
+        registerShortcuts();
+    }, [dispatch, props, cuesCount]);
     return (
         <>
             <button
                 className="btn btn-outline-secondary sbte-add-cue-button"
-                onClick={(): void => {
-                    const newCue =
-                        new VTTCue(props.vttCue.endTime, props.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS, "");
-                    copyNonConstructorProperties(newCue, props.vttCue);
-                    dispatch(addCue(props.cueIndex + 1, newCue, props.cueCategory || "DIALOGUE"));
+                onClick={(event: React.MouseEvent<HTMLElement>): void => {
+                    // TODO: Move this stop propagation to right side action buttons ares,
+                    // so that it applies also for play/delete buttons: https://dotsub.atlassian.net/browse/VTMS-2279
+                    // NOTE: This is tested by test in CueLine."opens next cue line for editing ..."
+                    event.stopPropagation();
+                    const oldCue = { vttCue: props.vttCue, cueCategory: props.cueCategory };
+                    createAndAddCue(dispatch, oldCue, props.cueIndex + 1);
                 }}
             >
                 <b>+</b>
