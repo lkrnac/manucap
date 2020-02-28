@@ -27,6 +27,7 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
             vttCue={props.props.vttCue}
             hideAddButton={props.props.hideAddButton}
             hideDeleteButton={props.props.hideDeleteButton}
+            cueCategory="DIALOGUE"
         />
     </Provider>
 );
@@ -90,7 +91,13 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     const vttCue = new VTTCue(0, 1, text);
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} hideAddButton={false} hideDeleteButton={false} />
+            <CueTextEditor
+                cueCategory="DIALOGUE"
+                index={0}
+                vttCue={vttCue}
+                hideAddButton={false}
+                hideDeleteButton={false}
+            />
         </Provider>
     );
     return actualNode.find(".public-DraftEditor-content");
@@ -111,7 +118,13 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     // GIVEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} hideAddButton={false} hideDeleteButton={false} />
+            <CueTextEditor
+                cueCategory="DIALOGUE"
+                index={0}
+                vttCue={vttCue}
+                hideAddButton={false}
+                hideDeleteButton={false}
+            />
         </Provider>
     );
     const editorState = actualNode.find(Editor).props().editorState;
@@ -144,7 +157,13 @@ const testForContentState = (
     // WHEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} hideAddButton={false} hideDeleteButton={false} />
+            <CueTextEditor
+                cueCategory="DIALOGUE"
+                index={0}
+                vttCue={vttCue}
+                hideAddButton={false}
+                hideDeleteButton={false}
+            />
         </Provider>
     );
 
@@ -242,7 +261,13 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} hideAddButton={false} hideDeleteButton={false} />
+                <CueTextEditor
+                    cueCategory="DIALOGUE"
+                    index={0}
+                    vttCue={vttCue}
+                    hideAddButton={false}
+                    hideDeleteButton={false}
+                />
             </Provider>
         );
 
@@ -264,7 +289,13 @@ describe("CueTextEditor", () => {
         vttCue.align = "end";
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} hideAddButton={false} hideDeleteButton={false} />
+                <CueTextEditor
+                    cueCategory="DIALOGUE"
+                    index={0}
+                    vttCue={vttCue}
+                    hideAddButton={false}
+                    hideDeleteButton={false}
+                />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -378,7 +409,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -398,7 +429,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -418,7 +449,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -438,7 +469,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -458,7 +489,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -478,7 +509,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -498,7 +529,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -518,7 +549,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -538,7 +569,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -558,7 +589,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false }}
+                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
             />
         );
 
@@ -577,7 +608,13 @@ describe("CueTextEditor", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} hideAddButton hideDeleteButton={false} />
+                <CueTextEditor
+                    cueCategory="DIALOGUE"
+                    index={0}
+                    vttCue={vttCue}
+                    hideAddButton
+                    hideDeleteButton={false}
+                />
             </Provider>
         );
 
@@ -592,7 +629,13 @@ describe("CueTextEditor", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} hideAddButton={false} hideDeleteButton />
+                <CueTextEditor
+                    cueCategory="DIALOGUE"
+                    index={0}
+                    vttCue={vttCue}
+                    hideAddButton={false}
+                    hideDeleteButton
+                />
             </Provider>
         );
 

@@ -67,7 +67,7 @@ const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
 export interface CueTextEditorProps{
     index: number;
     vttCue: VTTCue;
-    cueCategory?: CueCategory;
+    cueCategory: CueCategory;
     hideAddButton: boolean;
     hideDeleteButton: boolean;
 }
