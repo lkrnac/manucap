@@ -11,7 +11,7 @@ const getTrackType = (track: Track): string => {
 const getLanguageDescription = (track: Track): ReactElement => {
     const languageNameNullSafe = track.language ? track.language.name : "";
     if (track.type === "TRANSLATION") {
-        const sourceLanguage = track.sourceTrack ? <b>{track.sourceTrack.language.name}</b> : null;
+        const sourceLanguage = track.sourceLanguage ? <b>{track.sourceLanguage.name}</b> : null;
         return <span>{sourceLanguage} to <b>{languageNameNullSafe}</b></span>;
     }
     return <b>{languageNameNullSafe}</b>;

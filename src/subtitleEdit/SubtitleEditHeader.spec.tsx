@@ -65,12 +65,7 @@ describe("SubtitleEditHeader", () => {
             language: { id: "it-IT", name: "Italian" } as Language,
             default: true,
             mediaTitle: "This is the video title",
-            sourceTrack: {
-                type: "CAPTION",
-                language: { id: "en-US", name: "English (US)" } as Language,
-                default: true,
-                mediaTitle: "This is the video title",
-            } as Track
+            sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
         } as Track;
         const testingTask = {
             type: "TASK_TRANSLATE",
@@ -194,12 +189,7 @@ describe("SubtitleEditHeader", () => {
             language: { id: "it-IT", name: "Italian" } as Language,
             default: true,
             mediaTitle: "This is the video title",
-            sourceTrack: {
-                type: "CAPTION",
-                language: { id: "en-US", name: "English (US)" } as Language,
-                default: true,
-                mediaTitle: "This is the video title",
-            } as Track
+            sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
         } as Track;
         const testingTask = {
             type: "TASK_REVIEW",

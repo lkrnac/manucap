@@ -21,7 +21,7 @@ export interface Track {
     readonly default: boolean;
     readonly mediaTitle: string;
     readonly mediaLength: number;
-    readonly sourceTrack?: Track;
+    readonly sourceLanguage?: Language;
 }
 
 export interface Task {
