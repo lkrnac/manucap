@@ -1,7 +1,7 @@
 import "../../../testUtils/initBrowserEnvironment";
 import {Provider} from "react-redux";
 import React from "react";
-import {applyShiftTime, updateCues} from "../../trackSlices";
+import {applyShiftTime, updateCues} from "../../cues/cueSlices";
 import ShiftTimesModal from "./ShiftTimeModal";
 import {mount} from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
@@ -121,7 +121,7 @@ describe("ShiftTimesModal", () => {
 
 
 
-    it("Calls trackSlice.applyShiftTime when click apply", () => {
+    it("Calls cuesSlice.applyShiftTime when click apply", () => {
         // // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
