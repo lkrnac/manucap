@@ -1,5 +1,4 @@
 import React, {ReactElement, useState} from "react";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ShiftTimeForm from "./ShiftTimeForm";
 import {useDispatch, useSelector} from "react-redux";
@@ -53,21 +52,21 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                 <span className="alert alert-danger" style={{display: isValid? "none" : "block"}}>Shift value is not valid (first track line time + shift) must be greater or equals 0.</span>
             </Modal.Body>
             <Modal.Footer>
-                <Button
-                    variant="primary"
+                <button
+                    type="button"
                     disabled={!isValid}
                     onClick={handleApplyShift}
-                    className="dotsub-shift-modal-apply-button"
+                    className="dotsub-shift-modal-apply-button btn btn-primary"
                 >
                     Apply
-                </Button>
-                <Button
-                    variant="secondary"
+                </button>
+                <button
+                    type="button"
                     onClick={handleCancelShift}
-                    className="dotsub-shift-modal-close-button"
+                    className="dotsub-shift-modal-close-button btn btn-secondary"
                 >
                     Close
-                </Button>
+                </button>
             </Modal.Footer>
         </Modal>
     );

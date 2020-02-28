@@ -1,5 +1,3 @@
 coverage:
   precision: 1
   round: up
-ignore:
-  - "src/testUtils"
