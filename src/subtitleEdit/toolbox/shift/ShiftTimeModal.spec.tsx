@@ -6,8 +6,6 @@ import ShiftTimesModal from "./ShiftTimeModal";
 import {mount} from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import "video.js"; // VTTCue definition
-import * as trackSlices from "../../trackSlices";
-import { dispatchFunctionTest } from "../../../testUtils/testUtils";
 import { CueDto } from "./model";
 import sinon from "sinon";
 
