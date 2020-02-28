@@ -1,5 +1,6 @@
 import "../styles.scss";
 import React, { ReactElement, useState } from "react";
+import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -7,7 +8,6 @@ import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
-import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 
 export interface Props {
     mp4: string;
