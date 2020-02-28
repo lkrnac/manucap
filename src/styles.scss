@@ -8,6 +8,10 @@ $green: rgb(0,87,0);
 // ##############################
 $font-size-small: 0.75rem; // 12px
 
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
+
 .btn-outline-secondary {
   border-color: $input-border-color;
 }
