@@ -1,12 +1,14 @@
 import "../styles.scss";
 import React, { ReactElement, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
-import { useSelector } from "react-redux";
+import { createAndAddCue } from "./cues/cueUtils";
+import { updateEditingCueIndex } from "./cues/cueSlices";
 
 export interface Props {
     mp4: string;
@@ -17,11 +19,15 @@ export interface Props {
 }
 
 const SubtitleEdit = (props: Props): ReactElement => {
+    const dispatch = useDispatch();
     const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
 
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
-
+    const drivingCues = sourceCues.length > 0
+        ? sourceCues
+        : cues;
     return (
         <div
             className="sbte-subtitle-edit"
@@ -45,8 +51,25 @@ const SubtitleEdit = (props: Props): ReactElement => {
                 >
                     <div style={{ overflowY: "scroll", height: "100%" }}>
                         {
-                            cues.map((cue: CueDto, idx: number): ReactElement =>
-                                <CueLine key={idx} index={idx} cue={cue} playerTime={currentPlayerTime} />)
+                            drivingCues.map((cue: CueDto, idx: number): ReactElement => {
+                                const sourceCue = sourceCues[idx];
+                                const editingCue = cues[idx] === cue ? cue : cues[idx];
+                                return (
+                                    <CueLine
+                                        key={idx}
+                                        index={idx}
+                                        sourceCue={sourceCue}
+                                        cue={editingCue}
+                                        playerTime={currentPlayerTime}
+                                        lastCue={idx === cues.length - 1}
+                                        onClickHandler={(): void => {
+                                            idx >= cues.length
+                                                ? createAndAddCue(dispatch, cues[cues.length - 1], cues.length)
+                                                : dispatch(updateEditingCueIndex(idx));
+                                        }}
+                                    />
+                                );
+                            })
                         }
                     </div>
                     <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>

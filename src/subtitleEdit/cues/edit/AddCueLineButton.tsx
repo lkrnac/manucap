@@ -1,27 +1,18 @@
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import React, { Dispatch, ReactElement, useEffect } from "react";
-import { addCue, updateEditingCueIndex } from "../cueSlices";
+import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CueCategory } from "../../model";
 import { KeyCombination } from "../../shortcutConstants";
 import Mousetrap from "mousetrap";
-import { copyNonConstructorProperties } from "../cueUtils";
+import { SubtitleEditState } from "../../subtitleEditReducers";
+import { createAndAddCue } from "../cueUtils";
+import { updateEditingCueIndex } from "../cueSlices";
 
-const ADD_END_TIME_INTERVAL_SECS = 3;
 
 interface Props {
     cueIndex: number;
     vttCue: VTTCue;
-    cueCategory?: CueCategory;
+    cueCategory: CueCategory;
 }
-
-const createAndAddCue = (dispatch: Dispatch<AppThunk>, props: Props): void => {
-    const newCue =
-        new VTTCue(props.vttCue.endTime, props.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS, "");
-    copyNonConstructorProperties(newCue, props.vttCue);
-    const cue = { vttCue: newCue, cueCategory: props.cueCategory || "DIALOGUE" };
-    dispatch(addCue(props.cueIndex + 1, cue));
-};
 
 const AddCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
@@ -29,9 +20,10 @@ const AddCueLineButton = (props: Props): ReactElement => {
 
     useEffect(() => {
         const registerShortcuts = (): void => {
+            const oldCue = { vttCue: props.vttCue, cueCategory: props.cueCategory };
             Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
             Mousetrap.bind([KeyCombination.ENTER], () => props.cueIndex === cuesCount - 1
-                ? createAndAddCue(dispatch, props)
+                ? createAndAddCue(dispatch, oldCue, props.cueIndex + 1)
                 : dispatch(updateEditingCueIndex(-1)));
         };
         registerShortcuts();
@@ -45,7 +37,8 @@ const AddCueLineButton = (props: Props): ReactElement => {
                     // so that it applies also for play/delete buttons: https://dotsub.atlassian.net/browse/VTMS-2279
                     // NOTE: This is tested by test in CueLine."opens next cue line for editing ..."
                     event.stopPropagation();
-                    createAndAddCue(dispatch, props);
+                    const oldCue = { vttCue: props.vttCue, cueCategory: props.cueCategory };
+                    createAndAddCue(dispatch, oldCue, props.cueIndex + 1);
                 }}
             >
                 <b>+</b>

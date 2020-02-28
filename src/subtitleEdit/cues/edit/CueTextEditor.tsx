@@ -67,7 +67,9 @@ const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
 export interface CueTextEditorProps{
     index: number;
     vttCue: VTTCue;
-    cueCategory?: CueCategory;
+    cueCategory: CueCategory;
+    hideAddButton: boolean;
+    hideDeleteButton: boolean;
 }
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
@@ -122,7 +124,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     );
 
     return (
-        <div className="sbte-white-background" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div
                 className="sbte-bottom-border"
                 style={{
@@ -133,7 +135,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 }}
             >
                 <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
-                <DeleteCueLineButton cueIndex={props.index} />
+                {
+                    props.hideDeleteButton
+                        ? <div />
+                        : <DeleteCueLineButton cueIndex={props.index} />
+
+                }
             </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
@@ -167,11 +174,16 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
                     <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
                 </div>
-                <AddCueLineButton
-                    cueIndex={props.index}
-                    vttCue={props.vttCue}
-                    cueCategory={props.cueCategory}
-                />
+                {
+                    props.hideAddButton
+                        ? <div />
+                        : <AddCueLineButton
+                            cueIndex={props.index}
+                            vttCue={props.vttCue}
+                            cueCategory={props.cueCategory}
+                          />
+
+                }
             </div>
         </div>
     );

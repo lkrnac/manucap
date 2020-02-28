@@ -1,6 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+import { updateCues, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import CueLine from "./cues/CueLine";
 import { Provider } from "react-redux";
@@ -9,10 +10,12 @@ import SubtitleEdit from "./SubtitleEdit";
 import { SubtitleSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
+import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
-import testingStore from "../testUtils/testingStore";
-import { updateCues } from "./cues/cueSlices";
+import { reset } from "./cues/edit/editorStatesSlice";
+
+let testingStore = createTestingStore();
 
 const cues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -22,8 +25,9 @@ const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US", name: "English (US)" } as Language,
     default: true,
-    mediaTitle: "This is the video title",
+    videoTitle: "This is the video title",
 } as Track;
+
 const testingTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
@@ -31,6 +35,10 @@ const testingTask = {
 } as Task;
 
 describe("SubtitleEdit", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+        testingStore.dispatch(reset());
+    });
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
@@ -71,8 +79,8 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <div style={{ overflowY: "scroll", height: "100%" }}>
-                                <CueLine index={0} cue={cues[0]} playerTime={0} />
-                                <CueLine index={1} cue={cues[1]} playerTime={0} />
+                                <CueLine index={0} cue={cues[0]} playerTime={0} onClickHandler={(): void => {}} />
+                                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
@@ -116,6 +124,184 @@ describe("SubtitleEdit", () => {
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
             .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+    });
+
+    it("shows cues when there are same amount of translation and caption cue lines", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateSourceCues(sourceCues));
+        actualNode.update();
+
+        // THEN
+        const cueLines = actualNode.find(CueLine);
+        expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
+        expect((cueLines.at(0).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
+        expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
+        expect((cueLines.at(1).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
+    });
+
+    it("shows cues in captioning mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues));
+        actualNode.update();
+
+        // THEN
+        const cueLines = actualNode.find(CueLine);
+        expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
+        expect(cueLines.at(0).props().sourceCue).toBeUndefined();
+        expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
+        expect(cueLines.at(1).props().sourceCue).toBeUndefined();
+    });
+
+    it("shows cues when there are more translation cues than caption cues", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateSourceCues(sourceCues));
+        actualNode.update();
+
+        // THEN
+        const cueLines = actualNode.find(CueLine);
+        expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
+        expect((cueLines.at(0).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
+        expect(cueLines.at(0).props().lastCue).toEqual(false);
+        expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
+        expect((cueLines.at(1).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
+        expect(cueLines.at(1).props().lastCue).toEqual(true);
+        expect(cueLines.at(2).props().cue).toBeUndefined();
+        expect((cueLines.at(2).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 3");
+    });
+
+    it("shows cues when there are more caption cues than translation cues", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateSourceCues(sourceCues));
+        actualNode.update();
+
+        // THEN
+        const cueLines = actualNode.find(CueLine);
+        expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
+        expect((cueLines.at(0).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
+        expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
+        expect((cueLines.at(1).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
+        expect(cueLines.at(2)).toEqual({});
+    });
+
+    it("opens cue for editing", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateSourceCues(sourceCues));
+        actualNode.update();
+        actualNode.find(CueLine).at(1).simulate("click");
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
+    it("adds new cue if empty cue is clicked in translation mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateSourceCues(sourceCues));
+        actualNode.update();
+        actualNode.find(CueLine).at(2).simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(3);
+        expect(testingStore.getState().cues[2].vttCue.text).toEqual("");
     });
 
     it("calls onViewAllTrack callback when button is clicked", () => {

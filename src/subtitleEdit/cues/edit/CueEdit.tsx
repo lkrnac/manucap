@@ -15,6 +15,8 @@ interface Props {
     index: number;
     cue: CueDto;
     playerTime: number;
+    hideAddButton: boolean;
+    hideDeleteButton: boolean;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
@@ -24,7 +26,7 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     dispatch(updateVttCue(props.index, newCue));
 };
 
-const CueEditLine = (props: Props): ReactElement => {
+const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -40,9 +42,8 @@ const CueEditLine = (props: Props): ReactElement => {
     }, [dispatch, props]);
 
     return (
-        <>
+        <div style={{ display: "flex" }} className="bg-white">
             <div
-                className="sbte-white-background"
                 style={{
                     flex: "1 1 300px",
                     display: "flex",
@@ -52,12 +53,7 @@ const CueEditLine = (props: Props): ReactElement => {
                     justifyContent: "space-between"
                 }}
             >
-                <div style={{
-                    display: "flex",
-                    flexDirection:"column",
-                    paddingBottom: "15px"
-                }}
-                >
+                <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
                         onChange={(starTime: number): void =>
@@ -97,10 +93,12 @@ const CueEditLine = (props: Props): ReactElement => {
                     index={props.index}
                     vttCue={props.cue.vttCue}
                     cueCategory={props.cue.cueCategory}
+                    hideAddButton={props.hideAddButton}
+                    hideDeleteButton={props.hideDeleteButton}
                 />
             </div>
-        </>
+        </div>
     );
 };
 
-export default CueEditLine;
+export default CueEdit;
