@@ -10,12 +10,16 @@ interface Props {
     index: number;
     cue: CueDto;
     playerTime: number;
+    className?: string;
+    hideText?: boolean;
 }
 
-const CueViewLine = (props: Props): ReactElement => {
-
+const CueView = (props: Props): ReactElement => {
+    const html = props.hideText
+        ? ""
+        : convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
     return (
-        <>
+        <div style={{ display: "flex" }} className={props.className}>
             <div
                 className="sbte-cue-line-left-section"
                 style={{
@@ -54,13 +58,11 @@ const CueViewLine = (props: Props): ReactElement => {
                         height: "100%",
                         width: "100%"
                     }}
-                    dangerouslySetInnerHTML={{
-                        __html: convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}))
-                    }}
+                    dangerouslySetInnerHTML={{ __html: html }}
                 />
             </div>
-        </>
+        </div>
     );
 };
 
-export default CueViewLine;
+export default CueView;

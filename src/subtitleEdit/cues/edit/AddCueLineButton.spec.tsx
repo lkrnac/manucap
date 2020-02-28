@@ -24,7 +24,7 @@ describe("AddCueLineButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} />
+                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
             </Provider>
         );
 
@@ -38,7 +38,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} />
+                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
             </Provider>
         );
 
@@ -86,7 +86,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]));
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} />
+                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
             </Provider>
         );
 
@@ -109,7 +109,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]));
         mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} />
+                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
             </Provider>
         );
 
@@ -132,7 +132,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues(cues));
         mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={cues[0].vttCue} />
+                <AddCueLineButton cueIndex={0} vttCue={cues[0].vttCue} cueCategory="DIALOGUE" />
             </Provider>
         );
 
@@ -152,7 +152,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]));
         mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} />
+                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
             </Provider>
         );
 
