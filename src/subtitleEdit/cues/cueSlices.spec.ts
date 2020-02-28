@@ -3,7 +3,7 @@ import {
     addCue,
     deleteCue,
     updateCueCategory,
-    updateCues, updateEditingCueIndex,
+    updateCues, updateEditingCueIndex, updateSourceCues,
     updateVttCue
 } from "./cueSlices";
 import { CueDto } from "../model";
@@ -20,7 +20,7 @@ const testingCues = [
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
-describe("trackSlices", () => {
+describe("cueSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
     describe("updateVttCue", () => {
         it("updates top level cues", () => {
@@ -178,7 +178,7 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues).toEqual(testingCues);
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
         it("replaces existing cues", () => {
@@ -193,7 +193,7 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues).toEqual(replacementCues);
-            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
     });
 
@@ -204,6 +204,30 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(5);
+        });
+    });
+
+    describe("updateSourceCues", () => {
+        it("initializes source cues", () => {
+            // WHEN
+            testingStore.dispatch(updateSourceCues(testingCues));
+
+            // THEN
+            expect(testingStore.getState().sourceCues).toEqual(testingCues);
+        });
+
+        it("replaces existing source cues", () => {
+            // GIVEN
+            testingStore.dispatch(updateSourceCues(testingCues));
+            const replacementCues = [
+                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            // WHEN
+            testingStore.dispatch(updateSourceCues(replacementCues));
+
+            // THEN
+            expect(testingStore.getState().sourceCues).toEqual(replacementCues);
         });
     });
 });
