@@ -81,8 +81,18 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <div style={{ overflowY: "scroll", height: "100%" }}>
-                                <CueLine index={0} cue={cues[0]} playerTime={0} onClickHandler={(): void => {}} />
-                                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
+                                <CueLine
+                                    index={0}
+                                    cue={cues[0]}
+                                    playerTime={0}
+                                    onClickHandler={(): void => {/*dummy*/}}
+                                />
+                                <CueLine
+                                    index={1}
+                                    cue={cues[1]}
+                                    playerTime={0}
+                                    onClickHandler={(): void => {/*dummy*/}}
+                                />
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
