@@ -21,11 +21,13 @@ const cues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
+
 const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US", name: "English (US)" } as Language,
     default: true,
-    videoTitle: "This is the video title",
+    mediaTitle: "This is the video title",
+    mediaLength: 4000,
 } as Track;
 
 const testingTask = {
@@ -50,12 +52,12 @@ describe("SubtitleEdit", () => {
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <i /></div>
+                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
                         <div style={{ flex: "2" }} />
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div />
+                            <div>Completed: <b>50%</b></div>
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
@@ -141,7 +143,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -166,7 +174,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -196,7 +210,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -231,7 +251,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -263,7 +289,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -291,7 +323,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
