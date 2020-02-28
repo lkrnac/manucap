@@ -19,6 +19,8 @@ const dialogueStyleValues = {
     NO_DASHES: "No Dashes"
 };
 
+const millisToSeconds = (millis: number): number => millis / 1000;
+
 const SubtitleSpecificationsForm = (props: Props): ReactElement => {
     return (
         <>
@@ -66,11 +68,15 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                             </div>
                             <div>
                                 <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
-                                <label>{props.subTitleSpecifications.minCaptionDurationInMillis}</label>
+                                <label>
+                                    {millisToSeconds(props.subTitleSpecifications.minCaptionDurationInMillis)}
+                                </label>
                             </div>
                             <div>
                                 <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
-                                <label>{props.subTitleSpecifications.maxCaptionDurationInMillis}</label>
+                                <label>
+                                    {millisToSeconds(props.subTitleSpecifications.maxCaptionDurationInMillis)}
+                                </label>
                             </div>
                         </div>
                     </div>
