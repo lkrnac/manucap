@@ -99,6 +99,7 @@ describe("CueEdit", () => {
                             vttCue={cues[0].vttCue}
                             hideAddButton={false}
                             hideDeleteButton={false}
+                            cueCategory="DIALOGUE"
                         />
                     </div>
                 </div>
