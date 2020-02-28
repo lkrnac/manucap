@@ -18,3 +18,10 @@ after_success:
   - npm run lint
   - if [[ ("$TRAVIS_BRANCH" != "release") || ("$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_BRANCH" = "master") ]] ; then bash <(curl -s https://codecov.io/bash) ; fi
   - ./scripts/post-build.sh
+
+deploy:
+  provider: npm
+  edge: true
+  api_token: $NPM_API_TOKEN
+  on:
+    branch: lubos-VTMS-2290-npm-autodeploy
