@@ -4,7 +4,8 @@ import {
     deleteCue,
     updateCueCategory,
     updateCues, updateEditingCueIndex, updateSourceCues,
-    updateVttCue
+    updateVttCue,
+    applyShiftTime
 } from "./cueSlices";
 import { CueDto } from "../model";
 import { EditorState } from "draft-js";
@@ -230,4 +231,20 @@ describe("cueSlices", () => {
             expect(testingStore.getState().sourceCues).toEqual(replacementCues);
         });
     });
+
+
+    describe("applyShiftTime", () => {
+        it("apply shift time", () => {
+            //GIVEN
+            testingStore.dispatch(updateCues(testingCues));
+
+            // WHEN
+            testingStore.dispatch(applyShiftTime(2.123));
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.123);
+        });
+    });
+
 });
