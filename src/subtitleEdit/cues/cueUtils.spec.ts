@@ -50,6 +50,36 @@ describe("cueUtils", () => {
             expect(newVttCue.positionAlign).toEqual("line-left");
             expect(newVttCue.lineAlign).toEqual("end");
         });
+
+        it("handles missing attributes", () => {
+            // GIVEN
+            const newVttCue = new VTTCue(0, 1, "new text");
+            const oldVttCue = new VTTCue(1, 2, "old text");
+            const region = new VTTRegion();
+            region.lines = 10;
+            oldVttCue.region = region;
+
+            // WHEN
+            copyNonConstructorProperties(newVttCue, oldVttCue);
+
+            // THEN
+            expect(newVttCue.text).toEqual("new text");
+            expect(newVttCue.startTime).toEqual(0);
+            expect(newVttCue.endTime).toEqual(1);
+
+            expect(newVttCue.position).toEqual("auto");
+            expect(newVttCue.align).toEqual("center");
+            // @ts-ignore If it would be null -> test fails
+            expect(newVttCue.region.lines).toEqual(10);
+            expect(newVttCue.snapToLines).toEqual(true);
+            expect(newVttCue.size).toEqual(100);
+            expect(newVttCue.line).toEqual("auto");
+            expect(newVttCue.vertical).toEqual("");
+            expect(newVttCue.id).toEqual("");
+            expect(newVttCue.pauseOnExit).toEqual(false);
+            expect(newVttCue.positionAlign).toEqual("auto");
+            expect(newVttCue.lineAlign).toEqual("start");
+        });
     });
 
     describe("positionStyles", () => {

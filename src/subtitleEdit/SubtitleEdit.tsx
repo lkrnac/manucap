@@ -12,6 +12,9 @@ import Toolbox from "./toolbox/Toolbox";
 export interface Props {
     mp4: string;
     poster: string;
+    onViewAllTracks: () => void;
+    onSave: () => void;
+    onComplete: () => void;
 }
 
 const SubtitleEdit = (props: Props): ReactElement => {
@@ -30,7 +33,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
             <SubtitleEditHeader />
-            <div style={{ display: "flex", alignItems: "flex-start", height: "90%" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                 <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                     <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
                     <Toolbox />
@@ -68,9 +71,29 @@ const SubtitleEdit = (props: Props): ReactElement => {
                             })
                         }
                     </div>
-                    <div style={{ marginTop: "10px" }}>
-                        <button className="btn btn-primary" style={{ marginTop: "10px", marginBottom: "10px" }}>
+                    <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                        <button
+                            className="btn btn-primary sbte-view-all-tracks-btn"
+                            type="button"
+                            onClick={(): void => props.onViewAllTracks()}
+                        >
                             View All Tracks
+                        </button>
+                        <span style={{ flexGrow: 2 }} />
+                        <button
+                            className="btn btn-primary sbte-save-subtitle-btn"
+                            type="button"
+                            onClick={(): void => props.onSave()}
+                            style={{ marginRight: "10px" }}
+                        >
+                            Save
+                        </button>
+                        <button
+                            className="btn btn-primary sbte-complete-subtitle-btn"
+                            type="button"
+                            onClick={(): void => props.onComplete()}
+                        >
+                            Complete
                         </button>
                     </div>
                 </div>
