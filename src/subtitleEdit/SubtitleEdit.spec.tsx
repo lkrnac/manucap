@@ -36,6 +36,7 @@ const testingTask = {
     dueDate: "2019/12/30 10:00AM"
 } as Task;
 
+{/* eslint-disable @typescript-eslint/no-empty-function*/}
 describe("SubtitleEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
