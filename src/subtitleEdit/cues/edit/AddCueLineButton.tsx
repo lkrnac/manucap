@@ -16,7 +16,7 @@ interface Props {
 const AddCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
-
+    const mediaLengthInSeconds = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaLength || 0) / 1000;
     useEffect(() => {
         const registerShortcuts = (): void => {
             const oldCue = { vttCue: props.vttCue, cueCategory: props.cueCategory };
@@ -31,6 +31,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
         <>
             <button
                 className="btn btn-outline-secondary sbte-add-cue-button"
+                disabled={props.vttCue.endTime == mediaLengthInSeconds}
                 onClick={(event: React.MouseEvent<HTMLElement>): void => {
                     // TODO: Move this stop propagation to right side action buttons ares,
                     // so that it applies also for play/delete buttons: https://dotsub.atlassian.net/browse/VTMS-2279

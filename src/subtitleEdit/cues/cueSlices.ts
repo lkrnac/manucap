@@ -105,7 +105,8 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     };
 
 export const addCue = (idx: number, cue: CueDto): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<CueAction>>, state): void => {
+    console.log(state)
         dispatch(cuesSlice.actions.addCue({ idx, cue }));
     };
 
@@ -134,9 +135,17 @@ export const applyShiftTime = (shiftTime: number): AppThunk =>
     };
 
 const ADD_END_TIME_INTERVAL_SECS = 3;
-export const createAndAddCue = (oldCue: CueDto, index: number): AppThunk => {
-    const newCue = new VTTCue(oldCue.vttCue.endTime, oldCue.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS, "");
+export const createAndAddCue = (oldCue: CueDto, idx: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CueAction>>, getState): void => {
+    const mediaLengthInSeconds = (getState().editingTrack?.mediaLength || 0) / 1000;
+    const startTime = oldCue.vttCue.endTime;
+    if (startTime >= mediaLengthInSeconds) {
+        return;
+    }
+    let endTime = oldCue.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS;
+    endTime = endTime > mediaLengthInSeconds ? mediaLengthInSeconds : endTime;
+    const newCue = new VTTCue(oldCue.vttCue.endTime, endTime, "");
     copyNonConstructorProperties(newCue, oldCue.vttCue);
     const cue = { vttCue: newCue, cueCategory: oldCue.cueCategory };
-    return addCue(index, cue);
+    dispatch(cuesSlice.actions.addCue({ idx, cue }));
 };
