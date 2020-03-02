@@ -2,6 +2,7 @@ import { CueCategory, CueDto, SubtitleEditAction } from "../model";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
+import { copyNonConstructorProperties } from "./../cues/cueUtils";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -55,7 +56,18 @@ export const cuesSlice = createSlice({
                 };
             }
         },
-        updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
+        updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
+        applyShiftTime: (state, action: PayloadAction<number>): CueDto[] => {
+            const shift = action.payload;
+            return state.map((cue: CueDto) => {
+                const vttCue = cue.vttCue;
+                const startTime = vttCue.startTime + shift;
+                const endTime = vttCue.endTime + shift;
+                const newCue = new VTTCue(startTime, endTime, vttCue.text);
+                copyNonConstructorProperties(newCue, vttCue);
+                return ({ ...cue, vttCue: newCue } as CueDto);
+            });
+        }
     }
 });
 
@@ -116,3 +128,15 @@ export const updateSourceCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
         dispatch(sourceCuesSlice.actions.updateSourceCues({ cues }));
     };
+export const applyShiftTime = (shiftTime: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<number>>): void => {
+        dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
+    };
+
+const ADD_END_TIME_INTERVAL_SECS = 3;
+export const createAndAddCue = (oldCue: CueDto, index: number): AppThunk => {
+    const newCue = new VTTCue(oldCue.vttCue.endTime, oldCue.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS, "");
+    copyNonConstructorProperties(newCue, oldCue.vttCue);
+    const cue = { vttCue: newCue, cueCategory: oldCue.cueCategory };
+    return addCue(index, cue);
+};

@@ -1,23 +1,16 @@
 $sbte-main-text-color: rgb(118, 131, 143);
 $border-color: rgb(241,244,245);
+$input-border-color: #ced4da;
 $green: rgb(0,87,0);
 
 // ##############################
 // Override bootstrap defaults
 // ##############################
-$font-size-base: 0.875rem; // 14px
 $font-size-small: 0.75rem; // 12px
-$body-color: $sbte-main-text-color;
-$input-color: $sbte-main-text-color;
-$theme-colors: (
-  "secondary": $sbte-main-text-color,
-  "light": #dee2e6
-);
-$fa-font-path: "../webfonts";
 
-@import "../node_modules/bootstrap/scss/bootstrap";
-@import "../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss";
-@import "../node_modules/@fortawesome/fontawesome-free/scss/solid.scss";
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
 
 .btn-outline-secondary {
   border-color: $input-border-color;
@@ -35,6 +28,7 @@ $fa-font-path: "../webfonts";
 
 .sbte-subtitle-edit {
   font-family: Roboto, sans-serif;
+  color: rgb(33,37,41);
 }
 
 .sbte-left-border {
@@ -99,3 +93,5 @@ $fa-font-path: "../webfonts";
   border-radius: 0;
   border: 0;
 }
+
+.sbte-toolbox .btn-toolbar .btn {font-size: 15px;}

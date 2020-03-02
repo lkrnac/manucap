@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import React from "react";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
+import ShiftTimeButton from "./shift/ShiftTimeButton";
 import Toolbox from "./Toolbox";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
@@ -27,6 +28,7 @@ describe("Toolbox", () => {
                                 <ButtonToolbar>
                                     <KeyboardShortcuts />
                                     <SubtitleSpecificationsButton />
+                                    <ShiftTimeButton />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>

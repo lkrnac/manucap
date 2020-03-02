@@ -39,8 +39,8 @@ const TestApp = (): ReactElement => {
                 type: "CAPTION",
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
-                videoTitle: "This is the video title",
-                videoLength: 4
+                mediaTitle: "This is the video title",
+                mediaLength: 4000
             })),
             500
         );
@@ -80,8 +80,8 @@ const TestApp = (): ReactElement => {
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 4,
                 maxCharactersPerLine: 30,
-                minCaptionDurationInMillis: 2,
-                maxCaptionDurationInMillis: 6,
+                minCaptionDurationInMillis: 2000,
+                maxCaptionDurationInMillis: 6000,
                 comments: "Note"
             })),
             500
@@ -91,6 +91,9 @@ const TestApp = (): ReactElement => {
     return (<SubtitleEdit
         poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
         mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+        onViewAllTracks={(): void => {/*dummy*/}}
+        onSave={(): void => {/*dummy*/}}
+        onComplete={(): void => {/*dummy*/}}
             />);
 };
 

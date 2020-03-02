@@ -54,7 +54,7 @@ const createExpectedNode = (
                 <span>WORDS: <span className="sbte-green-text">{words}</span></span>
             </div>
             <button className="btn btn-outline-secondary sbte-delete-cue-button">
-                <i className="fas fa-trash-alt" />
+                <i className="fa fa-trash" />
             </button>
         </div>
         <div
