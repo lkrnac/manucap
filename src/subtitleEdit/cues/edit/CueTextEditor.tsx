@@ -32,7 +32,7 @@ characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = characterBindings.get(e.keyCode);
-    if (e.shiftKey && (e.metaKey || e.altKey) && action) {
+    if (e.shiftKey && (e.metaKey || e.altKey || e.ctrlKey) && action) {
         return action;
     }
     if ((!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)) {
