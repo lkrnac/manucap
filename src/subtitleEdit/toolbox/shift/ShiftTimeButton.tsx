@@ -1,5 +1,4 @@
 import React, { ReactElement, useState } from "react";
-import Button from "react-bootstrap/Button";
 import ShiftTimeModal from "./ShiftTimeModal";
 
 const ShiftTimeButton = (): ReactElement => {
@@ -8,14 +7,15 @@ const ShiftTimeButton = (): ReactElement => {
     const handleShow = (): void => setShow(true);
     return (
         <>
-            <Button
-                variant="light"
-                onClick={handleShow}
-                className="dotsub-shift-time-button"
+            <button
                 style={{ marginLeft: "10px" }}
+                onClick={handleShow}
+                type="button"
+                className="btn btn-light dotsub-shift-time-button"
+
             >
                 Shift All Tracks Time
-            </Button>
+            </button>
 
             <ShiftTimeModal show={show} onClose={handleClose} />
         </>
