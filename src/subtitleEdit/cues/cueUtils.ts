@@ -1,8 +1,4 @@
-import { AppThunk } from "../subtitleEditReducers";
-import { CueDto } from "../model";
-import { Dispatch } from "react";
 import Immutable from "immutable";
-import { addCue } from "./cueSlices";
 
 export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): void => {
     newCue.position = oldCue.position;
@@ -19,11 +15,11 @@ export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): vo
     newCue.positionAlign = oldCue.positionAlign ? oldCue.positionAlign : "auto";
 
     newCue.region = oldCue.region;
-    newCue.snapToLines = oldCue.snapToLines;
-    newCue.size = oldCue.size;
+    newCue.snapToLines = oldCue.snapToLines === undefined ? true : oldCue.snapToLines;
+    newCue.size = oldCue.size ? oldCue.size : 100;
     newCue.line = oldCue.line;
-    newCue.vertical = oldCue.vertical;
-    newCue.id = oldCue.id;
+    newCue.vertical = oldCue.vertical ? oldCue.vertical : "";
+    newCue.id = oldCue.id ? oldCue.id : "";
     newCue.pauseOnExit = oldCue.pauseOnExit;
 };
 
@@ -182,12 +178,3 @@ export const cueCategoryToPrettyName = {
     AUDIO_DESCRIPTION: "Audio Descriptions",
     LYRICS: "Lyrics"
 };
-
-const ADD_END_TIME_INTERVAL_SECS = 3;
-export const createAndAddCue = (dispatch: Dispatch<AppThunk>, oldCue: CueDto, index: number): void => {
-    const newCue = new VTTCue(oldCue.vttCue.endTime, oldCue.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS, "");
-    copyNonConstructorProperties(newCue, oldCue.vttCue);
-    const cue = { vttCue: newCue, cueCategory: oldCue.cueCategory };
-    dispatch(addCue(index, cue));
-};
-

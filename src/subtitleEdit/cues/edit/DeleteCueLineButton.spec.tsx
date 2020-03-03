@@ -13,7 +13,7 @@ describe("DeleteCueLineButton", () => {
         // GIVEN
         const expectedNode = mount(
             <button className="btn btn-outline-secondary sbte-delete-cue-button">
-                <i className="fas fa-trash-alt" />
+                <i className="fa fa-trash" />
             </button>
         );
 

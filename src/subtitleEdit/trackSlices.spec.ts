@@ -7,7 +7,7 @@ const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US" },
     default: true,
-    videoTitle: "This is the video title",
+    mediaTitle: "This is the video title",
 } as Track;
 
 const testingTask = {
@@ -36,7 +36,7 @@ describe("trackSlices", () => {
             testingStore.dispatch(updateTask(testingTask));
 
             // THEN
-            expect(testingStore.getState().task).toEqual(testingTask);
+            expect(testingStore.getState().cuesTask).toEqual(testingTask);
         });
     });
 });

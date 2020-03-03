@@ -1,3 +1,19 @@
+$fa-font-path: "../webfonts";
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "../node_modules/@fortawesome/fontawesome-free/scss/solid.scss";
+
+$font-size-base: 0.875rem; // 14px
+$font-size-small: 0.75rem; // 12px
+$sbte-main-text-color: rgb(118, 131, 143);
+$body-color: $sbte-main-text-color;
+$input-color: $sbte-main-text-color;
+$theme-colors: (
+    "secondary": $sbte-main-text-color,
+    "light": #dee2e6
+);
+
 body {
   background-color: rgb(241, 244, 245);
 }

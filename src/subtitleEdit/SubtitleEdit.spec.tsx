@@ -17,11 +17,17 @@ import { reset } from "./cues/edit/editorStatesSlice";
 
 let testingStore = createTestingStore();
 
+const cues = [
+    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+] as CueDto[];
+
 const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US", name: "English (US)" } as Language,
     default: true,
-    videoTitle: "This is the video title",
+    mediaTitle: "This is the video title",
+    mediaLength: 4000,
 } as Track;
 
 const testingTask = {
@@ -30,6 +36,7 @@ const testingTask = {
     dueDate: "2019/12/30 10:00AM"
 } as Task;
 
+{/* eslint-disable @typescript-eslint/no-empty-function*/}
 describe("SubtitleEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -37,11 +44,6 @@ describe("SubtitleEdit", () => {
     });
     it("renders", () => {
         // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
         const expectedNode = mount(
             <Provider store={testingStore} >
                 <div
@@ -51,15 +53,15 @@ describe("SubtitleEdit", () => {
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <i /></div>
+                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
                         <div style={{ flex: "2" }} />
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div />
+                            <div>Completed: <b>50%</b></div>
                         </div>
                     </header>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "90%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <VideoPlayer
                                 mp4="dummyMp4"
@@ -80,12 +82,33 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <div style={{ overflowY: "scroll", height: "100%" }}>
-                                <CueLine index={0} cue={cues[0]} playerTime={0} onClickHandler={(): void => {}} />
-                                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
+                                <CueLine
+                                    index={0}
+                                    cue={cues[0]}
+                                    playerTime={0}
+                                    onClickHandler={(): void => {/*dummy*/}}
+                                />
+                                <CueLine
+                                    index={1}
+                                    cue={cues[1]}
+                                    playerTime={0}
+                                    onClickHandler={(): void => {/*dummy*/}}
+                                />
                             </div>
-                            <div style={{ marginTop: "10px" }}>
-                                <button className="btn btn-primary" style={{ marginTop: "10px", marginBottom: "10px" }}>
+                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
+                                </button>
+                                <span style={{ flexGrow: 2 }} />
+                                <button
+                                    className="btn btn-primary sbte-save-subtitle-btn"
+                                    type="button"
+                                    style={{ marginRight: "10px" }}
+                                >
+                                    Save
+                                </button>
+                                <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
+                                    Complete
                                 </button>
                             </div>
                         </div>
@@ -97,7 +120,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack));
@@ -125,7 +154,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -150,7 +185,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -180,7 +221,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -215,7 +262,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -247,7 +300,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -275,7 +334,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
             </Provider>
         );
         testingStore.dispatch(updateCues(cues));
@@ -286,6 +351,84 @@ describe("SubtitleEdit", () => {
         // THEN
         expect(testingStore.getState().cues.length).toEqual(3);
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("");
+    });
+
+    it("calls onViewAllTrack callback when button is clicked", () => {
+        // GIVEN
+        const mockOnViewAllTracks = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={mockOnViewAllTracks}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={(): void => {/*dummy*/}}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(updateCues(cues));
+
+        // WHEN
+        actualNode.find("button.sbte-view-all-tracks-btn").simulate("click");
+
+        // THEN
+        expect(mockOnViewAllTracks.mock.calls.length).toBe(1);
+    });
+
+    it("calls onSave callback when button is clicked", () => {
+        // GIVEN
+        const mockOnSave = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={mockOnSave}
+                    onComplete={(): void => {/*dummy*/}}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(updateCues(cues));
+
+        // WHEN
+        actualNode.find("button.sbte-save-subtitle-btn").simulate("click");
+
+        // THEN
+        expect(mockOnSave.mock.calls.length).toBe(1);
+    });
+
+    it("calls onComplete callback when button is clicked", () => {
+        // GIVEN
+        const mockOnComplete = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onSave={(): void => {/*dummy*/}}
+                    onComplete={mockOnComplete}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(updateCues(cues));
+
+        // WHEN
+        actualNode.find("button.sbte-complete-subtitle-btn").simulate("click");
+
+        // THEN
+        expect(mockOnComplete.mock.calls.length).toBe(1);
     });
 
     it("adds initial cue if there isn't one", () => {

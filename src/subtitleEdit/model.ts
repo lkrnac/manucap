@@ -19,9 +19,9 @@ export interface Track {
     readonly type: "CAPTION" | "TRANSLATION";
     readonly language: Language;
     readonly default: boolean;
-    readonly videoTitle: string;
-    readonly videoLength: number;
-    readonly sourceTrack?: Track;
+    readonly mediaTitle: string;
+    readonly mediaLength: number;
+    readonly sourceLanguage?: Language;
 }
 
 export interface Task {

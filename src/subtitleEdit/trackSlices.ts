@@ -20,7 +20,7 @@ export const editingTrackSlice = createSlice({
 });
 
 export const taskSlice = createSlice({
-    name: "task",
+    name: "cuesTask",
     initialState: null as Task | null,
     reducers: {
         updateTask: (_state, action: PayloadAction<TaskAction>): Task => action.payload.task,
