@@ -10,6 +10,7 @@ notifications:
     secure: MvbjeKirTvGI60XpmhAXNkl1QMp9H7GTqWp0WL6FxYsq2ixJPFMDhYsSSOnPQU349PC+yG0hH1ZSI+kAun2ppLRpKKBqowHokmIEs8dZ9IRyQfflsGnCBBYM+cBRrvZ5Lqy2MLbdg3y79k4rxpdAhyRNMDnzJgb/Pl1ghokGS5WLuDmdJCHttH0cnFDU2vwTtRQhlRGNGzJtx3AFYQJlbhLMxN6fEf+Rij/q8Yh3ibNYAOA5riPR/czdl0zCPA/Ae+pSX7PY8HIcQcXPk+KCX7cXUrgBv+phi6QRkOcmSAX+hN41WcbJll+50UlfrFAjX/w8TcM8bELiwsfzgPQV+wDM700bLmvj7438Adj+ZzVTOXN3jH1KmHFbSTrqBJ092r4zbKVF1kT9X1ZTUdXItl0DidUXDAIJBzyNq4NgS2/T7GyBwBgp+MG9HY3NEOMcFBYUMCqNcVFZARvIXHkvQoQYYv9KC5yWN2xRM1Mc+cPXVpKrIwiCXyT75ilgxcXB5rftvKBDlE5iBFXl9OgN/Qqu9lHr6t/MfRu4pVyzyOARlGQV0CqWugUPkeJNbQlmXUBFultBJ23IPbysBRxnBxMu7yxUemQZkTvU52k+ZtzcdAJtFMaD3bONQNWc3obgHkE5xCoKpynFvXtHyEBCf3z6h7k0FKOTUxLRPuaua1k=
 
 script:
+  - npm run compile-with-tests
   - npm run build
   - npm run test
   - npx react-scripts build # tests if local development browser build is working
