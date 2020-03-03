@@ -1,13 +1,13 @@
-import typescript from 'rollup-plugin-typescript2'
-import commonjs from 'rollup-plugin-commonjs'
-import peerDepsExternal from 'rollup-plugin-peer-deps-external'
+import svgr from "@svgr/rollup";
+import commonjs from "rollup-plugin-commonjs";
+import resolve from "rollup-plugin-node-resolve";
+import peerDepsExternal from "rollup-plugin-peer-deps-external";
 //import postcss from 'rollup-plugin-postcss-modules'
-import postcss from 'rollup-plugin-postcss'
-import resolve from 'rollup-plugin-node-resolve'
-import url from 'rollup-plugin-url'
-import svgr from '@svgr/rollup'
+import postcss from "rollup-plugin-postcss";
+import typescript from "rollup-plugin-typescript3";
+import url from "rollup-plugin-url";
 
-import pkg from './package.json'
+import pkg from "./package.json";
 
 export default {
   input: 'src/indexLibrary.ts',
