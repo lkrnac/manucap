@@ -31,7 +31,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
     useEffect(
         () => {
             if (cues.length === 0) {
-                createAndAddCue(dispatch, { vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }, 0);
+                dispatch(createAndAddCue({ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }, 0));
             }
         },
         [ dispatch, cues ]
