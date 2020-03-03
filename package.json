@@ -14,7 +14,7 @@
     "test": "cross-env CI=1 react-scripts test --coverage --collectCoverageFrom=src/**/*.tsx --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/typings.d.ts --collectCoverageFrom=!src/index.tsx",
     "test:watch": "react-scripts test",
     "build": "rollup -c",
-    "compile-with-tests": "typescript",
+    "compile-with-tests": "npx typescript",
     "start": "rollup -c -w",
     "autoreload": "npx react-scripts start",
     "prepare": "npm run build",
