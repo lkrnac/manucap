@@ -1,5 +1,5 @@
 import "../styles.scss";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
@@ -27,6 +27,15 @@ const SubtitleEdit = (props: Props): ReactElement => {
     const drivingCues = sourceCues.length > 0
         ? sourceCues
         : cues;
+
+    useEffect(
+        () => {
+            if (cues.length === 0) {
+                dispatch(createAndAddCue({ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }, 0));
+            }
+        },
+        [ dispatch, cues ]
+    );
     return (
         <div
             className="sbte-subtitle-edit"
