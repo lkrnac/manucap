@@ -10,8 +10,19 @@ import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateCues } from "../cueSlices";
+import { updateEditingTrack } from "../../trackSlices";
+
 
 describe("AddCueLineButton", () => {
+    const testingTrack = {
+        type: "CAPTION",
+        mediaLength: 4000
+    } as Track;
+
+    beforeEach(() => {
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+    });
+
     it("renders", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "");
@@ -165,4 +176,41 @@ describe("AddCueLineButton", () => {
         expect(testingStore.getState().cues.length).toEqual(1);
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
+
+    it("Disables add cue button if time reaches max video length", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 4, "someText");
+        testingStore.dispatch(updateCues([{ vttCue, cueCategory: "AUDIO_DESCRIPTION" }]));
+
+        //WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="AUDIO_DESCRIPTION" />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find("button[disabled=true]").length).toEqual(1);
+    });
+
+    it("Does not add cue when ENTER is pressed and last cue end time equals video length", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 4, "someText");
+        testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]));
+        mount(
+            <Provider store={testingStore}>
+                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+    });
+
 });

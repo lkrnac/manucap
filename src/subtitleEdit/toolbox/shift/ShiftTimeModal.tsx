@@ -31,15 +31,14 @@ const ShiftTimeModal = (props: Props): ReactElement => {
         props.onClose()
     };
 
-
-    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
+    const mediaLengthInSeconds = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaLength || 0) / 1000;
+    const firstTrackLineStartTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
+    const lastTrackLineEndTime = useSelector((state: SubtitleEditState) => state.cues[state.cues.length-1]?.vttCue.endTime);
     const [shift, setShift] = useState(0);
 
     let isValid: boolean = true;
 
-    if ((shift + firstTrackTime) < 0) {
-        isValid = false;
-    }
+    isValid = (shift + firstTrackLineStartTime) >= 0 && (shift + lastTrackLineEndTime) <= mediaLengthInSeconds;
 
     return (
         <Modal show={props.show} onHide={handleCancelShift} centered dialogClassName="sbte-medium-modal">
@@ -49,7 +48,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
             <Modal.Body>
                 <ShiftTimeForm  onChange={(shiftedTime: number): void =>
                     setShift(shiftedTime)}/>
-                <span className="alert alert-danger" style={{display: isValid? "none" : "block"}}>Shift value is not valid (first track line time + shift) must be greater or equals 0.</span>
+                <span className="alert alert-danger" style={{display: isValid? "none" : "block"}}>Shift value is out of bounds [All track lines + shift value must be whitin video bounds].</span>
             </Modal.Body>
             <Modal.Footer>
                 <button

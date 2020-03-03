@@ -2,14 +2,32 @@ import "../../../testUtils/initBrowserEnvironment";
 import {Provider} from "react-redux";
 import React from "react";
 import {applyShiftTime, updateCues} from "../../cues/cueSlices";
+import { updateEditingTrack } from "../../trackSlices";
 import ShiftTimesModal from "./ShiftTimeModal";
 import {mount} from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import "video.js"; // VTTCue definition
-import { CueDto } from "./model";
+import { CueDto, Track } from "./model";
 import sinon from "sinon";
 
 describe("ShiftTimesModal", () => {
+
+    const testingTrack = {
+        type: "CAPTION",
+        mediaLength: 4000
+    } as Track;
+
+    const cues = [
+        { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+        { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    ] as CueDto[];
+
+
+    beforeEach(() => {
+        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateEditingTrack(testingTrack));
+    });
+
     it("renders with error message", () => {
         // GIVEN
         const expectedNode = mount(
@@ -31,7 +49,7 @@ describe("ShiftTimesModal", () => {
                                         style={{width: "120px"}} type="number" placeholder="0.000" step="0.100"/>
                                     </div>
                                 </form>
-                                <span className="alert alert-danger" style={{display: "none"}}>Shift value is not valid (first track line time + shift) must be greater or equals 0.</span>
+                                <span className="alert alert-danger" style={{display: "none"}}>Shift value is out of bounds [All track lines + shift value must be whitin video bounds].</span>
                             </div>
                             <div className="modal-footer">
                                 <button type="button"
@@ -79,7 +97,7 @@ describe("ShiftTimesModal", () => {
                                     style={{width: "120px"}} type="number" placeholder="0.000" step="0.100"/>
                             </div>
                         </form>
-                        <span className="alert alert-danger" style={{display: "block"}}>Shift value is not valid (first track line time + shift) must be greater or equals 0.</span>
+                        <span className="alert alert-danger" style={{display: "block"}}>Shift value is out of bounds [All track lines + shift value must be whitin video bounds].</span>
                     </div>
                     <div className="modal-footer">
                         <button type="button"
@@ -94,19 +112,11 @@ describe("ShiftTimesModal", () => {
         </div>
     </Provider>);
 
-    it("renders error message and disable apply button if shift is not valid", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        testingStore.dispatch(updateCues(cues));
-
-
+    it("renders error message and disable apply button " +
+        "if shift + first item start time is out of bounds", () => {
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore}f>
+            <Provider store={testingStore}>
                 <ShiftTimesModal show onClose={(): void => {}} />
             </Provider>
         );
@@ -119,18 +129,26 @@ describe("ShiftTimesModal", () => {
             .toEqual(expectedNodeWithErrorMsg.html());
     });
 
+    it("renders error message and disable apply button " +
+        "if shift + last item endtime is out of bounds", () => {
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <ShiftTimesModal show onClose={(): void => {}} />
+            </Provider>
+        );
+        actualNode.find("input[type='number']")
+            .simulate('change', { target: { value: 2.1 } });
+
+
+        // THEN
+        expect(actualNode.html())
+            .toEqual(expectedNodeWithErrorMsg.html());
+    });
+
 
 
     it("Calls cuesSlice.applyShiftTime when click apply", () => {
-        // // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        testingStore.dispatch(updateCues(cues));
-
-
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>

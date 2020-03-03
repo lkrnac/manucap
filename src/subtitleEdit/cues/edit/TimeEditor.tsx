@@ -4,6 +4,8 @@ import React, {
 } from "react";
 import { getTimeFromString, getTimeString } from "../timeUtils";
 import TimeField from "react-advanced-timefield";
+import { SubtitleEditState } from "./../../subtitleEditReducers";
+import {useSelector} from "react-redux";
 
 interface Props {
     time?: number;
@@ -11,8 +13,11 @@ interface Props {
 }
 
 const TimeEditor = (props: Props): ReactElement => {
-    const handleChange = (_e: ChangeEvent<HTMLInputElement>, timeString: string): void => {
-      const time = getTimeFromString(timeString);
+    const mediaLengthInSeconds = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaLength || 0) / 1000;
+    const handleChange = (e: ChangeEvent<HTMLInputElement>, timeString: string): void => {
+      let time = getTimeFromString(timeString);
+      time = time >= mediaLengthInSeconds ? mediaLengthInSeconds : time;
+      e.target.value = '' + time;
       props.onChange(time);
     };
     return (
