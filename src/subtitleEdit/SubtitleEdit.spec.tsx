@@ -430,4 +430,20 @@ describe("SubtitleEdit", () => {
         // THEN
         expect(mockOnComplete.mock.calls.length).toBe(1);
     });
+
+    it("adds initial cue if there isn't one", () => {
+        // WHEN
+        mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+    });
+
 });
