@@ -20,4 +20,11 @@ const subtitleEditReducers = combineReducers(Reducers);
 export default subtitleEditReducers;
 
 export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
+
+/**
+ * We are forced to use `as {} as AnyAction` casting then we are executing actions with `testingStore.dispatch`.
+ * This seem to be related problem: https://github.com/reduxjs/redux-toolkit/issues/321.
+ * But no suggestions from that issue work nor mentioned fix didn't work. I couldn't figure out any other fix than
+ * applying ugly cast workaround.
+ */
 export type AppThunk = ThunkAction<void, SubtitleEditState, unknown, Action<string>>;
