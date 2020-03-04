@@ -2,6 +2,7 @@ $sbte-main-text-color: rgb(118, 131, 143);
 $border-color: rgb(241,244,245);
 $input-border-color: #ced4da;
 $green: rgb(0,87,0);
+$red: rgb(87,0,0);
 
 // ##############################
 // Override bootstrap defaults
@@ -68,6 +69,12 @@ $font-size-small: 0.75rem; // 12px
   color: $sbte-main-text-color;
   border: 1px solid $input-border-color;
   border-radius: 4px;
+}
+
+.sbte-time-input-error {
+    color: $red;
+    border: 1px solid $red;
+    border-radius: 4px;
 }
 
 .sbte-cue-line-flap {

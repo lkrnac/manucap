@@ -167,6 +167,60 @@ describe("TimeEditor", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
+    it("renders valid time code", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    marginBottom: "5px",
+                    width: "120px",
+                    maxWidth: "200px",
+                    padding: "5px",
+                    textAlign: "center"
+                }}
+                value="00:00:20.100"
+                onChange={(): void => undefined}
+            />
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <TimeEditor referenceTime={20} time={20.1} onChange={jest.fn()} />
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    it("renders invalid time code", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <input
+                type="text"
+                className="sbte-time-input-error"
+                style={{
+                    marginBottom: "5px",
+                    width: "120px",
+                    maxWidth: "200px",
+                    padding: "5px",
+                    textAlign: "center"
+                }}
+                value="00:00:10.000"
+                onChange={(): void => undefined}
+            />
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <TimeEditor referenceTime={20} time={10} onChange={jest.fn()} />
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
     it("inputs ignores non numeric characters", () => {
         // GIVEN
         const actualNode = mount(
