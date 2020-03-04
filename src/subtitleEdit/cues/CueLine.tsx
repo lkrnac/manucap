@@ -1,7 +1,9 @@
 import React, { ReactElement } from "react";
+import AddCueLineButton from "./edit/AddCueLineButton";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
+import DeleteCueLineButton from "./edit/DeleteCueLineButton";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
 
@@ -40,8 +42,6 @@ const CueLine = (props: Props): ReactElement => {
                                 index={props.index}
                                 cue={props.cue}
                                 playerTime={props.playerTime}
-                                hideAddButton={props.sourceCue !== undefined && !props.lastCue}
-                                hideDeleteButton={props.sourceCue !== undefined}
                               />
                             : <CueView
                                 index={props.index}
@@ -57,6 +57,23 @@ const CueLine = (props: Props): ReactElement => {
                             hideText
                             className={translationCueClassName}
                           />
+
+                }
+            </div>
+            <div
+                style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
+                className="sbte-gray-100-background sbte-left-border"
+            >
+                {
+                    editingCueIndex === props.index && props.sourceCue === undefined
+                        ? <DeleteCueLineButton cueIndex={props.index} />
+                        : <div />
+                }
+                {
+                    editingCueIndex === props.index && (props.sourceCue === undefined || props.lastCue)
+                        // @ts-ignore If cue is undefined, sourceCue is passed in (ensured by SubtitleEdit tests)
+                        ? <AddCueLineButton cueIndex={props.index} cue={props.cue} />
+                        : <div />
 
                 }
             </div>
