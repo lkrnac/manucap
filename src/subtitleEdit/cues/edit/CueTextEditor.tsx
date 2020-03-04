@@ -149,19 +149,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     handleKeyCommand={handleKeyShortcut}
                 />
             </div>
-            <div
-                style={{
-                    flexBasis: "25%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "5px 10px 5px 10px"
-                }}
-            >
-                <div>
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
-                </div>
+            <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
             </div>
         </div>
     );

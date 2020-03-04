@@ -60,19 +60,10 @@ const createExpectedNode = (
         >
             <Editor editorState={editorState} onChange={jest.fn} spellCheck />
         </div>
-        <div
-            style={{
-                flexBasis: "25%",
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "5px 10px 5px 10px"
-            }}
-        >
-            <div>
-                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
-                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
-                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
-            </div>
+        <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
         </div>
     </div>
 );
