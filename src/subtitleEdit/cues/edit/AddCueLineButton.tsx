@@ -4,7 +4,7 @@ import { CueCategory } from "../../model";
 import { KeyCombination } from "../../shortcutConstants";
 import Mousetrap from "mousetrap";
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import { updateEditingCueIndex, createAndAddCue } from "../cueSlices";
+import { createAndAddCue, updateEditingCueIndex } from "../cueSlices";
 
 
 interface Props {

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, ReactElement} from "react";
+import React, { ChangeEvent, ReactElement } from "react";
 
 interface Props {
     time?: number;
@@ -21,7 +21,7 @@ const ShiftTimesForm = (props: Props): ReactElement => {
                     style={{ width: "120px" }}
                     onChange={handleChange}
                     type="number"
-                    placeholder='0.000'
+                    placeholder="0.000"
                     step={"0.100"}
                 />
             </div>
