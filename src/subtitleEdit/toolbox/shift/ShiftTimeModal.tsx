@@ -1,11 +1,9 @@
 import React, { ReactElement, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import ShiftTimeForm from "./ShiftTimeForm";
-import { useDispatch, useSelector } from "react-redux";
-import { applyShiftTime } from "../../cues/cueSlices";
-
 import { SubtitleEditState } from "../../subtitleEditReducers";
-
+import { applyShiftTime } from "../../cues/cueSlices";
 
 interface Props {
     show: boolean;
@@ -14,6 +12,10 @@ interface Props {
 
 const ShiftTimeModal = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+    const [shift, setShift] = useState(0);
+    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
+
+    let isValid = true;
 
     const clearState = (): void => {
         setShift(0);
@@ -31,12 +33,6 @@ const ShiftTimeModal = (props: Props): ReactElement => {
         props.onClose();
     };
 
-
-    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
-    const [shift, setShift] = useState(0);
-
-    let isValid = true;
-
     if ((shift + firstTrackTime) < 0) {
         isValid = false;
     }
@@ -50,7 +46,9 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                 <ShiftTimeForm  onChange={(shiftedTime: number): void =>
                     setShift(shiftedTime)}
                 />
-                <span className="alert alert-danger" style={{ display: isValid? "none" : "block" }}>Shift value is not valid (first track line time + shift) must be greater or equals 0.</span>
+                <span className="alert alert-danger" style={{ display: isValid? "none" : "block" }}>
+                    Shift value is not valid (first track line time + shift) must be greater or equals 0.
+                </span>
             </Modal.Body>
             <Modal.Footer>
                 <button

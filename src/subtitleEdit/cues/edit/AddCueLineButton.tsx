@@ -1,11 +1,10 @@
 import React, { ReactElement, useEffect } from "react";
+import { createAndAddCue, updateEditingCueIndex } from "../cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueCategory } from "../../model";
 import { KeyCombination } from "../../shortcutConstants";
 import Mousetrap from "mousetrap";
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import { createAndAddCue, updateEditingCueIndex } from "../cueSlices";
-
 
 interface Props {
     cueIndex: number;

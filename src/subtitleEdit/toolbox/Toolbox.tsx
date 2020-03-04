@@ -3,8 +3,8 @@ import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from "react-bootstrap/Card";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
+import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 
 const Toolbox = (): ReactElement => {
     return (
