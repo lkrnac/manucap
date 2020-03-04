@@ -1,12 +1,15 @@
 import "video.js"; // VTTCue definition
 import {
     addCue,
+    applyShiftTime,
     deleteCue,
     updateCueCategory,
-    updateCues, updateEditingCueIndex, updateSourceCues,
-    updateVttCue,
-    applyShiftTime
+    updateCues,
+    updateEditingCueIndex,
+    updateSourceCues,
+    updateVttCue
 } from "./cueSlices";
+import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../model";
 import { EditorState } from "draft-js";
 import { createTestingStore } from "../../testUtils/testingStore";
@@ -26,7 +29,7 @@ describe("cueSlices", () => {
     describe("updateVttCue", () => {
         it("updates top level cues", () => {
             // WHEN
-            testingStore.dispatch(updateVttCue(3, new VTTCue(1, 2, "Dummy Cue")));
+            testingStore.dispatch(updateVttCue(3, new VTTCue(1, 2, "Dummy Cue")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[3].vttCue).toEqual(new VTTCue(1, 2, "Dummy Cue"));
@@ -36,7 +39,7 @@ describe("cueSlices", () => {
     describe("updateCueCategory", () => {
         it("ignores category update if cue doesn't exist in top level cues", () => {
             // WHEN
-            testingStore.dispatch(updateCueCategory(3, "ONSCREEN_TEXT"));
+            testingStore.dispatch(updateCueCategory(3, "ONSCREEN_TEXT") as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[3]).toBeUndefined();
@@ -44,10 +47,10 @@ describe("cueSlices", () => {
 
         it("updates top level cues", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT"));
+            testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT") as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
@@ -57,10 +60,12 @@ describe("cueSlices", () => {
     describe("addCue", () => {
         it("adds cue to the end of the cue array", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(addCue(2, { vttCue: new VTTCue(2, 3, "Dummy Cue End"), cueCategory: "LYRICS" }));
+            testingStore.dispatch(
+                addCue(2, { vttCue: new VTTCue(2, 3, "Dummy Cue End"), cueCategory: "LYRICS" }) as {} as AnyAction
+            );
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
@@ -71,15 +76,14 @@ describe("cueSlices", () => {
 
         it("add cue in middle of cue array cues", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const vttCue = new VTTCue(0.5, 1, "Dummy Cue Insert");
 
             // WHEN
-            testingStore.dispatch(
-                addCue(1, { vttCue: new VTTCue(0.5, 1, "Dummy Cue Insert"), cueCategory: "DIALOGUE" })
-            );
+            testingStore.dispatch(addCue(1, { vttCue, cueCategory: "DIALOGUE" }) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(0.5, 1, "Dummy Cue Insert"));
+            expect(testingStore.getState().cues[1].vttCue).toEqual(vttCue);
             expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
             expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
@@ -87,12 +91,14 @@ describe("cueSlices", () => {
 
         it("resets editor states map in Redux", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()));
-            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
+            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(addCue(2, { vttCue: new VTTCue(2, 3, "Dummy Cue End"), cueCategory: "LYRICS" }));
+            testingStore.dispatch(
+                addCue(2, { vttCue: new VTTCue(2, 3, "Dummy Cue End"), cueCategory: "LYRICS" }) as {} as AnyAction
+            );
 
             // THEN
             expect(testingStore.getState().editorStates.size).toEqual(0);
@@ -102,10 +108,10 @@ describe("cueSlices", () => {
     describe("deleteCue", () => {
         it("deletes cue at the beginning of the cue array", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(deleteCue(0));
+            testingStore.dispatch(deleteCue(0) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
@@ -115,13 +121,12 @@ describe("cueSlices", () => {
 
         it("deletes cue in the middle of the cue array", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
-            testingStore.dispatch(
-                addCue(1, { vttCue: new VTTCue(0.5, 1, "Dummy Cue Insert"), cueCategory: "DIALOGUE" })
-            );
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const vttCue = new VTTCue(0.5, 1, "Dummy Cue Insert");
+            testingStore.dispatch(addCue(1, { vttCue, cueCategory: "DIALOGUE" }) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(deleteCue(1));
+            testingStore.dispatch(deleteCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
@@ -132,10 +137,10 @@ describe("cueSlices", () => {
 
         it("deletes cue at the end of the cue array", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(deleteCue(1));
+            testingStore.dispatch(deleteCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
@@ -145,12 +150,12 @@ describe("cueSlices", () => {
 
         it("removes editor states for certain index from Redux", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()));
-            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
+            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(deleteCue(1));
+            testingStore.dispatch(deleteCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().editorStates.size).toEqual(1);
@@ -159,11 +164,11 @@ describe("cueSlices", () => {
 
         it("delete all cues in the array leaves one default empty cue", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(deleteCue(1));
-            testingStore.dispatch(deleteCue(0));
+            testingStore.dispatch(deleteCue(1) as {} as AnyAction);
+            testingStore.dispatch(deleteCue(0) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 3, ""));
@@ -175,7 +180,7 @@ describe("cueSlices", () => {
     describe("updateCues", () => {
         it("initializes cues", () => {
             // WHEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues).toEqual(testingCues);
@@ -184,13 +189,13 @@ describe("cueSlices", () => {
 
         it("replaces existing cues", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const replacementCues = [
                 { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
 
             // WHEN
-            testingStore.dispatch(updateCues(replacementCues));
+            testingStore.dispatch(updateCues(replacementCues) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues).toEqual(replacementCues);
@@ -201,7 +206,7 @@ describe("cueSlices", () => {
     describe("updateEditingCueIndex", () => {
         it("updates editing cue index", () => {
             // WHEN
-            testingStore.dispatch(updateEditingCueIndex(5));
+            testingStore.dispatch(updateEditingCueIndex(5) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(5);
@@ -211,7 +216,7 @@ describe("cueSlices", () => {
     describe("updateSourceCues", () => {
         it("initializes source cues", () => {
             // WHEN
-            testingStore.dispatch(updateSourceCues(testingCues));
+            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().sourceCues).toEqual(testingCues);
@@ -219,13 +224,13 @@ describe("cueSlices", () => {
 
         it("replaces existing source cues", () => {
             // GIVEN
-            testingStore.dispatch(updateSourceCues(testingCues));
+            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
             const replacementCues = [
                 { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
 
             // WHEN
-            testingStore.dispatch(updateSourceCues(replacementCues));
+            testingStore.dispatch(updateSourceCues(replacementCues) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().sourceCues).toEqual(replacementCues);
@@ -236,10 +241,10 @@ describe("cueSlices", () => {
     describe("applyShiftTime", () => {
         it("apply shift time", () => {
             //GIVEN
-            testingStore.dispatch(updateCues(testingCues));
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(applyShiftTime(2.123));
+            testingStore.dispatch(applyShiftTime(2.123) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);

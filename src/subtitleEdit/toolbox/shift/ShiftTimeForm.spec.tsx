@@ -1,10 +1,10 @@
 import "../../../testUtils/initBrowserEnvironment";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import React from "react";
 import ShiftTimesForm from "./ShiftTimeForm";
-import {mount} from "enzyme";
-import testingStore from "../../../testUtils/testingStore";
+import { mount } from "enzyme";
 import sinon from "sinon";
+import testingStore from "../../../testUtils/testingStore";
 
 describe("ShiftTimesForm", () => {
     it("renders", () => {
@@ -14,12 +14,14 @@ describe("ShiftTimesForm", () => {
                 <form>
                     <div className="form-group">
                         <label>Time Shift in Seconds.Milliseconds</label>
-                        <input name="shift"
-                               className="form-control dotsub-track-line-shift margin-right-10"
-                               style={{width: "120px"}}
-                               type="number"
-                               placeholder="0.000"
-                               step="0.100"/>
+                        <input
+                            name="shift"
+                            className="form-control dotsub-track-line-shift margin-right-10"
+                            style={{ width: "120px" }}
+                            type="number"
+                            placeholder="0.000"
+                            step="0.100"
+                        />
                     </div>
                 </form>
             </Provider>
@@ -28,8 +30,7 @@ describe("ShiftTimesForm", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <ShiftTimesForm time={0} onChange={(): void => {
-                }}/>
+                <ShiftTimesForm time={0} onChange={(): void => undefined} />
             </Provider>
         );
 
@@ -43,13 +44,12 @@ describe("ShiftTimesForm", () => {
         const onChangeSpy = sinon.spy();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <ShiftTimesForm time={0} onChange={onChangeSpy}/>
+                <ShiftTimesForm time={0} onChange={onChangeSpy} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find("input[type='number']")
-            .simulate('change', { target: { value: -1 } });
+        actualNode.find("input[type='number']").simulate("change", { target: { value: -1 }});
 
         // THEN
         sinon.assert.calledOnce(onChangeSpy);

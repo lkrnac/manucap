@@ -1,4 +1,5 @@
 import "../../testUtils/initBrowserEnvironment";
+import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import React from "react";
 import { SubtitleSpecification } from "./model";
@@ -50,10 +51,12 @@ describe("SubtitleSpecificationsModal", () => {
         );
 
         // WHEN
-        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsModal show onClose={(): void => {}} />
+                <SubtitleSpecificationsModal show onClose={(): void => undefined} />
             </Provider>
         );
 

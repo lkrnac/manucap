@@ -1,3 +1,4 @@
+import { AnyAction } from "@reduxjs/toolkit";
 import { SubtitleSpecification } from "./model";
 import deepFreeze from "deep-freeze";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
@@ -25,7 +26,7 @@ describe("subtitleSpecificationSlices", () => {
     describe("readSubtitleSpecification", () => {
         it("reads a subtitle specification", () => {
             // WHEN
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification));
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().subtitleSpecifications).toEqual(testingSubtitleSpecification);

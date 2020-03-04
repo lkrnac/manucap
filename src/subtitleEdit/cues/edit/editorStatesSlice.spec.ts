@@ -1,7 +1,9 @@
 import { ContentState, EditorState } from "draft-js";
+import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
+
 
 deepFreeze(testingStore.getState());
 
@@ -12,7 +14,7 @@ describe("editorStatesSlice", () => {
         const editorState = EditorState.createWithContent(contentState);
 
         // WHEN
-        testingStore.dispatch(updateEditorState(1, editorState));
+        testingStore.dispatch(updateEditorState(1, editorState) as {} as AnyAction);
 
         // THEN
         // @ts-ignore Test would fail if it returns null
@@ -25,7 +27,7 @@ describe("editorStatesSlice", () => {
         const editorState = EditorState.createWithContent(contentState);
 
         // WHEN
-        testingStore.dispatch(updateEditorState(2, editorState));
+        testingStore.dispatch(updateEditorState(2, editorState) as {} as AnyAction);
 
         // THEN
         // @ts-ignore Test would fail if it returns null

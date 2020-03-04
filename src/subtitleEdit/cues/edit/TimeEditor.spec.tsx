@@ -19,7 +19,7 @@ describe("TimeEditor", () => {
                     textAlign: "center"
                 }}
                 value="00:00:00.000"
-                onChange={(): void => {}}
+                onChange={(): void => undefined}
             />
         );
 
@@ -46,7 +46,7 @@ describe("TimeEditor", () => {
                     textAlign: "center"
                 }}
                 value="00:00:01.000"
-                onChange={(): void => {}}
+                onChange={(): void => undefined}
             />
         );
 
@@ -73,7 +73,7 @@ describe("TimeEditor", () => {
                     textAlign: "center"
                 }}
                 value="00:05:00.000"
-                onChange={(): void => {}}
+                onChange={(): void => undefined}
             />
         );
 
@@ -100,7 +100,7 @@ describe("TimeEditor", () => {
                     textAlign: "center"
                 }}
                 value="02:00:35.976"
-                onChange={(): void => {}}
+                onChange={(): void => undefined}
             />
         );
 
@@ -127,7 +127,7 @@ describe("TimeEditor", () => {
                     textAlign: "center"
                 }}
                 value="99:59:59.999"
-                onChange={(): void => {}}
+                onChange={(): void => undefined}
             />
         );
 
@@ -154,7 +154,7 @@ describe("TimeEditor", () => {
                     textAlign: "center"
                 }}
                 value="01:59:59.025"
-                onChange={(): void => {}}
+                onChange={(): void => undefined}
             />
         );
 

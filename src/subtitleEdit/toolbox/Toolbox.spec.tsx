@@ -1,13 +1,14 @@
 import "../../testUtils/initBrowserEnvironment";
 import Accordion from "react-bootstrap/Accordion";
+import { AnyAction } from "@reduxjs/toolkit";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from "react-bootstrap/Card";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Provider } from "react-redux";
 import React from "react";
+import ShiftTimeButton from "./shift/ShiftTimeButton";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
-import ShiftTimeButton from "./shift/ShiftTimeButton";
 import Toolbox from "./Toolbox";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
@@ -43,7 +44,9 @@ describe("Toolbox", () => {
                 <Toolbox />
             </Provider>
         );
-        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
 
         // THEN
         expect(actualNode.html())

@@ -1,5 +1,6 @@
 import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
+import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueLine from "./CueLine";
@@ -40,10 +41,10 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1));
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
             </Provider>
         );
 
@@ -67,10 +68,10 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(-1));
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
             </Provider>
         );
 
@@ -99,10 +100,16 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1));
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} onClickHandler={(): void => {}} />
+                <CueLine
+                    index={1}
+                    cue={cues[1]}
+                    playerTime={0}
+                    sourceCue={sourceCue}
+                    onClickHandler={(): void => undefined}
+                />
             </Provider>
         );
 
@@ -131,10 +138,16 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(-1));
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} onClickHandler={(): void => {}} />
+                <CueLine
+                    index={1}
+                    cue={cues[1]}
+                    playerTime={0}
+                    sourceCue={sourceCue}
+                    onClickHandler={(): void => undefined}
+                />
             </Provider>
         );
 
@@ -163,7 +176,7 @@ describe("CueLine", () => {
         );
 
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(2));
+        testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine
@@ -171,7 +184,7 @@ describe("CueLine", () => {
                     cue={undefined}
                     playerTime={0}
                     sourceCue={sourceCue}
-                    onClickHandler={(): void => {}}
+                    onClickHandler={(): void => undefined}
                 />
             </Provider>
         );
@@ -183,10 +196,10 @@ describe("CueLine", () => {
 
     it("passes down properties", () => {
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(-1));
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={1} onClickHandler={(): void => {}} />
+                <CueLine index={1} cue={cues[1]} playerTime={1} onClickHandler={(): void => undefined} />
             </Provider>
         );
 
@@ -215,10 +228,10 @@ describe("CueLine", () => {
 
     it("opens next cue line for editing when add button is clicked", () => {
         // GIVEN
-        testingStore.dispatch(updateEditingCueIndex(1));
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
             </Provider>
         );
 
@@ -231,10 +244,10 @@ describe("CueLine", () => {
 
     it("does not hide add button in captioning mode", () => {
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1));
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} lastCue onClickHandler={(): void => {}} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} lastCue onClickHandler={(): void => undefined} />
             </Provider>
         );
 
@@ -244,10 +257,16 @@ describe("CueLine", () => {
 
     it("hides add button in translation mode when cue is not the last one", () => {
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1));
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} onClickHandler={(): void => {}} />
+                <CueLine
+                    index={1}
+                    cue={cues[1]}
+                    playerTime={0}
+                    sourceCue={sourceCue}
+                    onClickHandler={(): void => undefined}
+                />
             </Provider>
         );
 
@@ -257,7 +276,7 @@ describe("CueLine", () => {
 
     it("does not hide add button in translation mode when cue is last one", () => {
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1));
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine
@@ -266,7 +285,7 @@ describe("CueLine", () => {
                     playerTime={0}
                     sourceCue={sourceCue}
                     lastCue
-                    onClickHandler={(): void => {}}
+                    onClickHandler={(): void => undefined}
                 />
             </Provider>
         );
@@ -277,10 +296,10 @@ describe("CueLine", () => {
 
     it("does not hide delete button in captioning mode", () => {
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1));
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => {}} />
+                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
             </Provider>
         );
 
@@ -290,10 +309,16 @@ describe("CueLine", () => {
 
     it("hides delete button in translation mode", () => {
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1));
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} sourceCue={sourceCue} onClickHandler={(): void => {}} />
+                <CueLine
+                    index={1}
+                    cue={cues[1]}
+                    playerTime={0}
+                    sourceCue={sourceCue}
+                    onClickHandler={(): void => undefined}
+                />
             </Provider>
         );
 

@@ -51,7 +51,7 @@ describe("CueEdit", () => {
                                     textAlign: "center"
                                 }}
                                 value="00:00:01.000"
-                                onChange={(): void => {}}
+                                onChange={(): void => undefined}
                             />
                             <input
                                 type="text"
@@ -64,7 +64,7 @@ describe("CueEdit", () => {
                                     textAlign: "center"
                                 }}
                                 value="00:00:02.000"
-                                onChange={(): void => {}}
+                                onChange={(): void => undefined}
                             />
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }} >

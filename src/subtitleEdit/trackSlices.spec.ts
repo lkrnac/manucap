@@ -1,5 +1,6 @@
 import { Task, Track } from "./model";
 import { updateEditingTrack, updateTask } from "./trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
 
@@ -23,7 +24,7 @@ describe("trackSlices", () => {
     describe("updateEditingTrack", () => {
         it("updates editing track", () => {
             // WHEN
-            testingStore.dispatch(updateEditingTrack(testingTrack));
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().editingTrack).toEqual(testingTrack);
@@ -33,7 +34,7 @@ describe("trackSlices", () => {
     describe("updateTask", () => {
         it("updates task", () => {
             // WHEN
-            testingStore.dispatch(updateTask(testingTask));
+            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cuesTask).toEqual(testingTask);

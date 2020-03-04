@@ -1,41 +1,40 @@
-import React, {ReactElement, useState} from "react";
+import React, { ReactElement, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import ShiftTimeForm from "./ShiftTimeForm";
-import {useDispatch, useSelector} from "react-redux";
-import { applyShiftTime } from "../../cues/cueSlices";
-
 import { SubtitleEditState } from "../../subtitleEditReducers";
-
+import { applyShiftTime } from "../../cues/cueSlices";
 
 interface Props {
     show: boolean;
     onClose: () => void;
 }
 
+// TODO: This component seems to be very overcomplicated. Why not use redux-form to store the state instead of such
+// ugly state handling.
 const ShiftTimeModal = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+    const [shift, setShift] = useState(0);
+    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
 
-    const clearState = ():void => {
+    // TODO: Such local variable is totally not legal in React components.
+    let isValid = true;
+
+    const clearState = (): void => {
         setShift(0);
         isValid = true;
-    }
+    };
 
     const handleApplyShift = (): void => {
         dispatch(applyShiftTime(shift));
         clearState();
-        props.onClose()
+        props.onClose();
     };
 
     const handleCancelShift = (): void => {
         clearState();
-        props.onClose()
+        props.onClose();
     };
-
-
-    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
-    const [shift, setShift] = useState(0);
-
-    let isValid: boolean = true;
 
     if ((shift + firstTrackTime) < 0) {
         isValid = false;
@@ -48,8 +47,11 @@ const ShiftTimeModal = (props: Props): ReactElement => {
             </Modal.Header>
             <Modal.Body>
                 <ShiftTimeForm  onChange={(shiftedTime: number): void =>
-                    setShift(shiftedTime)}/>
-                <span className="alert alert-danger" style={{display: isValid? "none" : "block"}}>Shift value is not valid (first track line time + shift) must be greater or equals 0.</span>
+                    setShift(shiftedTime)}
+                />
+                <span className="alert alert-danger" style={{ display: isValid? "none" : "block" }}>
+                    Shift value is not valid (first track line time + shift) must be greater or equals 0.
+                </span>
             </Modal.Body>
             <Modal.Footer>
                 <button
