@@ -20,4 +20,4 @@ const subtitleEditReducers = combineReducers(Reducers);
 export default subtitleEditReducers;
 
 export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
-export type AppThunk = ThunkAction<void, SubtitleEditState, null, Action<string>>;
+export type AppThunk = ThunkAction<void, SubtitleEditState, unknown, Action<string>>;

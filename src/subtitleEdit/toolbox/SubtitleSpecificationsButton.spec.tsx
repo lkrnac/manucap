@@ -1,6 +1,7 @@
 import "../../testUtils/initBrowserEnvironment";
 
 import React, { ReactElement } from "react";
+import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
@@ -39,7 +40,9 @@ describe("SubtitleSpecificationsButton", () => {
                 <SubtitleSpecificationsButton />
             </Provider>
         );
-        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
 
         // THEN
@@ -70,7 +73,9 @@ describe("SubtitleSpecificationsButton", () => {
                 <SubtitleSpecificationsButton />
             </Provider>
         );
-        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());

@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.12.0",
-    "@reduxjs/toolkit": "^1.1.0",
+    "@reduxjs/toolkit": "^1.2.5",
     "@svgr/rollup": "^2.4.1",
     "@types/deep-freeze": "^0.1.2",
     "@types/draft-js": "^0.10.37",

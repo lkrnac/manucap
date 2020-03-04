@@ -2,6 +2,7 @@ import "../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { CueDto, Language, Task, Track } from "./model";
 import { updateEditingTrack, updateTask } from "./trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import React from "react";
 import SubtitleEditHeader from "./SubtitleEditHeader";
@@ -50,8 +51,8 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -92,8 +93,8 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -133,8 +134,8 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -174,8 +175,8 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -216,8 +217,8 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -252,7 +253,7 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -297,9 +298,9 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateCues(cues));
-        testingStore.dispatch(updateTask(testingTask));
-        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -344,9 +345,9 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateCues(cues));
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -391,9 +392,9 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
-        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -434,8 +435,8 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -476,8 +477,8 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))

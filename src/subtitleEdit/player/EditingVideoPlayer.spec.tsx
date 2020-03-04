@@ -1,5 +1,6 @@
 import "../../testUtils/initBrowserEnvironment";
 import { CueDto, Track } from "../model";
+import { AnyAction } from "@reduxjs/toolkit";
 import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Provider } from "react-redux";
 import React from "react";
@@ -57,7 +58,7 @@ describe("EditingVideoPlayer", () => {
         );
 
         // WHEN
-        testingStore.dispatch(updateEditingTrack(testingTrack));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         actualNode.update();
 
         // THEN
@@ -83,8 +84,8 @@ describe("EditingVideoPlayer", () => {
         ];
 
         // WHEN
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateCues(testingCues));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         actualNode.update();
 
         // THEN

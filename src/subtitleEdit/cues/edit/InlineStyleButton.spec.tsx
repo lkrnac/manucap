@@ -1,5 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import { ContentState, EditorState, convertFromHTML } from "draft-js";
+import { AnyAction } from "@reduxjs/toolkit";
 import InlineStyleButton from "./InlineStyleButton";
 import { Provider } from "react-redux";
 import React from "react";
@@ -41,7 +42,7 @@ describe("InlineStyleButton", () => {
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         const editorState = EditorState.createWithContent(contentState);
 
-        testingStore.dispatch(updateEditorState(0, editorState));
+        testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
         // WHEN
         const actualNode = mount(
@@ -65,7 +66,7 @@ describe("InlineStyleButton", () => {
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         const editorState = EditorState.createWithContent(contentState);
 
-        testingStore.dispatch(updateEditorState(0, editorState));
+        testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
         // WHEN
         const actualNode = mount(
@@ -89,7 +90,7 @@ describe("InlineStyleButton", () => {
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         const editorState = EditorState.createWithContent(contentState);
 
-        testingStore.dispatch(updateEditorState(0, editorState));
+        testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
         // WHEN
         const actualNode = mount(

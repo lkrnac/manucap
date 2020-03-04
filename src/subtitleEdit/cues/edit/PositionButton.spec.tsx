@@ -25,7 +25,7 @@ describe("PositionButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => {}} />);
+        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
@@ -267,7 +267,7 @@ describe("PositionButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => {}} />);
+        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
         actualNode.find("button").simulate("click");
 
         // THEN
@@ -297,7 +297,7 @@ describe("PositionButton", () => {
         vttCue.position = 65;
 
         // WHEN
-        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => {}} />);
+        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
 
 
         // THEN

@@ -1,5 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
+import { AnyAction, Store } from "@reduxjs/toolkit";
 import { Character, KeyCombination } from "../../shortcutConstants";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
@@ -7,7 +8,6 @@ import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement } from "react";
 import { ReactWrapper, mount } from "enzyme";
 import { Provider } from "react-redux";
-import { Store } from "@reduxjs/toolkit";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import each from "jest-each";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
@@ -177,7 +177,7 @@ const testForContentState = (
 describe("CueTextEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset());
+        testingStore.dispatch(reset() as {} as AnyAction);
     });
     it("renders empty", () => {
         // GIVEN

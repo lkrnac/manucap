@@ -3,6 +3,7 @@ import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateCues, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
 import { Provider } from "react-redux";
 import React from "react";
@@ -40,7 +41,7 @@ const testingTask = {
 describe("SubtitleEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset());
+        testingStore.dispatch(reset() as {} as AnyAction);
     });
     it("renders", () => {
         // GIVEN
@@ -86,13 +87,13 @@ describe("SubtitleEdit", () => {
                                     index={0}
                                     cue={cues[0]}
                                     playerTime={0}
-                                    onClickHandler={(): void => {/*dummy*/}}
+                                    onClickHandler={(): void => undefined}
                                 />
                                 <CueLine
                                     index={1}
                                     cue={cues[1]}
                                     playerTime={0}
-                                    onClickHandler={(): void => {/*dummy*/}}
+                                    onClickHandler={(): void => undefined}
                                 />
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
@@ -123,16 +124,18 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
-                    onSave={(): void => {/*dummy*/}}
-                    onComplete={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
-        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
-        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
@@ -157,14 +160,14 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
-                    onSave={(): void => {/*dummy*/}}
-                    onComplete={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateCues(cues));
-        testingStore.dispatch(updateSourceCues(sourceCues));
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
 
         // THEN
@@ -188,13 +191,13 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
-                    onSave={(): void => {/*dummy*/}}
-                    onComplete={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
 
         // THEN
@@ -224,14 +227,14 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
-                    onSave={(): void => {/*dummy*/}}
-                    onComplete={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateCues(cues));
-        testingStore.dispatch(updateSourceCues(sourceCues));
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
 
         // THEN
@@ -265,14 +268,14 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
-                    onSave={(): void => {/*dummy*/}}
-                    onComplete={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateCues(cues));
-        testingStore.dispatch(updateSourceCues(sourceCues));
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
 
         // THEN
@@ -303,14 +306,14 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
-                    onSave={(): void => {/*dummy*/}}
-                    onComplete={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateCues(cues));
-        testingStore.dispatch(updateSourceCues(sourceCues));
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
         actualNode.find(CueLine).at(1).simulate("click");
 
@@ -337,14 +340,14 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
-                    onSave={(): void => {/*dummy*/}}
-                    onComplete={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateCues(cues));
-        testingStore.dispatch(updateSourceCues(sourceCues));
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
         actualNode.find(CueLine).at(2).simulate("click");
 
@@ -362,15 +365,17 @@ describe("SubtitleEdit", () => {
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewAllTracks={mockOnViewAllTracks}
-                    onSave={(): void => {/*dummy*/}}
-                    onComplete={(): void => {/*dummy*/}}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
-        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
-        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // WHEN
         actualNode.find("button.sbte-view-all-tracks-btn").simulate("click");
@@ -387,16 +392,18 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
                     onSave={mockOnSave}
-                    onComplete={(): void => {/*dummy*/}}
+                    onComplete={(): void => undefined}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
-        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
-        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // WHEN
         actualNode.find("button.sbte-save-subtitle-btn").simulate("click");
@@ -413,16 +420,18 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => {/*dummy*/}}
-                    onSave={(): void => {/*dummy*/}}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
                     onComplete={mockOnComplete}
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack));
-        testingStore.dispatch(updateTask(testingTask));
-        testingStore.dispatch(readSubtitleSpecification({ enabled: false } as SubtitleSpecification));
-        testingStore.dispatch(updateCues(cues));
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // WHEN
         actualNode.find("button.sbte-complete-subtitle-btn").simulate("click");
@@ -435,7 +444,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore} >
-                <SubtitleEdit mp4="dummyMp4" poster="dummyPoster" />
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
             </Provider>
         );
 

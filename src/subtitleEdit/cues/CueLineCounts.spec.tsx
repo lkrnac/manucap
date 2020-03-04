@@ -1,6 +1,7 @@
 import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { ContentState, EditorState, convertFromHTML } from "draft-js";
+import { AnyAction } from "@reduxjs/toolkit";
 import CueLineCounts from "./CueLineCounts";
 import { Provider } from "react-redux";
 import React from "react";
@@ -20,7 +21,7 @@ const testContentRendered = (
     const processedHTML = convertFromHTML(text);
     const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
     const editorState = EditorState.createWithContent(contentState);
-    testingStore.dispatch(updateEditorState(0, editorState));
+    testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
     const vttCue = new VTTCue(startTime, endTime, "");
     const expectedNode = mount(
