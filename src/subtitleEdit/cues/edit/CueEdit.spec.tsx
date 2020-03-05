@@ -23,84 +23,93 @@ describe("CueEdit", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="bg-white">
-                    <div
-                        style={{
-                            flex: "1 1 300px",
-                            display: "flex",
-                            flexDirection: "column",
-                            paddingLeft: "10px",
-                            paddingTop: "5px",
-                            justifyContent: "space-between"
-                        }}
-                    >
-                        <div style={{
-                            display: "flex",
-                            flexDirection:"column",
-                            paddingBottom: "15px"
-                        }}
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex" }} className="bg-white">
+                        <div
+                            style={{
+                                flex: "1 1 300px",
+                                display: "flex",
+                                flexDirection: "column",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                justifyContent: "space-between"
+                            }}
                         >
-                            <input
-                                type="text"
-                                className="sbte-time-input"
-                                style={{
-                                    marginBottom: "5px",
-                                    width: "120px",
-                                    maxWidth: "200px",
-                                    padding: "5px",
-                                    textAlign: "center"
-                                }}
-                                value="00:00:01.000"
-                                onChange={(): void => undefined}
-                            />
-                            <input
-                                type="text"
-                                className="sbte-time-input"
-                                style={{
-                                    marginBottom: "5px",
-                                    width: "120px",
-                                    maxWidth: "200px",
-                                    padding: "5px",
-                                    textAlign: "center"
-                                }}
-                                value="00:00:02.000"
-                                onChange={(): void => undefined}
-                            />
+                            <div style={{
+                                display: "flex",
+                                flexDirection:"column",
+                                paddingBottom: "15px"
+                            }}
+                            >
+                                <input
+                                    type="text"
+                                    className="sbte-time-input"
+                                    style={{
+                                        marginBottom: "5px",
+                                        width: "120px",
+                                        maxWidth: "200px",
+                                        padding: "5px",
+                                        textAlign: "center"
+                                    }}
+                                    value="00:00:01.000"
+                                    onChange={(): void => undefined}
+                                />
+                                <input
+                                    type="text"
+                                    className="sbte-time-input"
+                                    style={{
+                                        marginBottom: "5px",
+                                        width: "120px",
+                                        maxWidth: "200px",
+                                        padding: "5px",
+                                        textAlign: "center"
+                                    }}
+                                    value="00:00:02.000"
+                                    onChange={(): void => undefined}
+                                />
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }} >
+                                <div className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="cue-line-category"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        Dialogue
+                                    </button>
+                                </div>
+                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="dropdown-basic"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        ↓↓ <span className="caret" />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }} >
-                            <div className="dropdown">
-                                <button
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                    id="cue-line-category"
-                                    type="button"
-                                    className="dropdown-toggle btn btn-outline-secondary"
-                                >
-                                    Dialogue
-                                </button>
-                            </div>
-                            <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
-                                <button
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                    id="dropdown-basic"
-                                    type="button"
-                                    className="dropdown-toggle btn btn-outline-secondary"
-                                >
-                                    ↓↓ <span className="caret" />
-                                </button>
-                            </div>
+                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                            <CueTextEditor
+                                key={1}
+                                index={1}
+                                vttCue={cues[0].vttCue}
+                                hideAddButton={false}
+                                hideDeleteButton={false}
+                                cueCategory="DIALOGUE"
+                            />
                         </div>
                     </div>
-                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <CueTextEditor
-                            key={1}
-                            index={1}
-                            vttCue={cues[0].vttCue}
-                            hideAddButton={false}
-                            hideDeleteButton={false}
-                            cueCategory="DIALOGUE"
-                        />
+                    <div>
+                        <span
+                            className="alert alert-danger"
+                            style={{ display: "none", marginBottom: 0, padding: ".25rem .5rem" }}
+                        >
+                        </span>
                     </div>
                 </div>
             </Provider>
@@ -112,6 +121,122 @@ describe("CueEdit", () => {
                 <CueEdit index={1} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.html()))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
+    it("renders invalid end time", () => {
+        // GIVEN
+        const vttCue = new VTTCue(2, 1, "someText");
+        vttCue.position = 60;
+        vttCue.align = "end";
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
+
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex" }} className="bg-white">
+                        <div
+                            style={{
+                                flex: "1 1 300px",
+                                display: "flex",
+                                flexDirection: "column",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <div style={{
+                                display: "flex",
+                                flexDirection:"column",
+                                paddingBottom: "15px"
+                            }}
+                            >
+                                <input
+                                    type="text"
+                                    className="sbte-time-input"
+                                    style={{
+                                        marginBottom: "5px",
+                                        width: "120px",
+                                        maxWidth: "200px",
+                                        padding: "5px",
+                                        textAlign: "center"
+                                    }}
+                                    value="00:00:02.000"
+                                    onChange={(): void => undefined}
+                                />
+                                <input
+                                    type="text"
+                                    className="sbte-time-input-error"
+                                    style={{
+                                        marginBottom: "5px",
+                                        width: "120px",
+                                        maxWidth: "200px",
+                                        padding: "5px",
+                                        textAlign: "center"
+                                    }}
+                                    value="00:00:02.000"
+                                    onChange={(): void => undefined}
+                                />
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }} >
+                                <div className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="cue-line-category"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        Dialogue
+                                    </button>
+                                </div>
+                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="dropdown-basic"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        ↓↓ <span className="caret" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                            <CueTextEditor
+                                key={1}
+                                index={1}
+                                vttCue={vttCue}
+                                hideAddButton={false}
+                                hideDeleteButton={false}
+                                cueCategory="DIALOGUE"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <span
+                            className="alert alert-danger"
+                            style={{ display: "block", marginBottom: 0, padding: ".25rem .5rem" }}
+                        >
+                            End time has to be greater than start time
+                        </span>
+                    </div>
+                </div>
+            </Provider>
+        );
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={1} cue={cue} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(1)
+            .simulate("change", { target: { value: "00:00:02.000", selectionEnd: 12 }});
 
         // THEN
         expect(removeDraftJsDynamicValues(actualNode.html()))
