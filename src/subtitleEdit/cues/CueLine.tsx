@@ -1,9 +1,8 @@
 import React, { ReactElement } from "react";
-import AddCueLineButton from "./edit/AddCueLineButton";
+import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
-import DeleteCueLineButton from "./edit/DeleteCueLineButton";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
 
@@ -60,23 +59,13 @@ const CueLine = (props: Props): ReactElement => {
 
                 }
             </div>
-            <div
-                style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                className="sbte-gray-100-background sbte-left-border"
-            >
-                {
-                    editingCueIndex === props.index && props.sourceCue === undefined
-                        ? <DeleteCueLineButton cueIndex={props.index} />
-                        : <div />
-                }
-                {
-                    editingCueIndex === props.index && (props.sourceCue === undefined || props.lastCue)
-                        // @ts-ignore If cue is undefined, sourceCue is passed in (ensured by SubtitleEdit tests)
-                        ? <AddCueLineButton cueIndex={props.index} cue={props.cue} />
-                        : <div />
-
-                }
-            </div>
+            <CueActionsPanel
+                index={props.index}
+                editingCueIndex={editingCueIndex}
+                cue={props.cue}
+                sourceCue={props.sourceCue}
+                lastCue={props.lastCue}
+            />
         </div>
     );
 };

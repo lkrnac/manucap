@@ -1,18 +1,17 @@
 import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { updateCues, updateEditingCueIndex } from "./cueSlices";
-import AddCueLineButton from "./edit/AddCueLineButton";
 import { AnyAction } from "@reduxjs/toolkit";
+import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueLine from "./CueLine";
 import CueView from "./view/CueView";
-import DeleteCueLineButton from "./edit/DeleteCueLineButton";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import testingStore from "../../testUtils/testingStore";
+import { updateEditingCueIndex } from "./cueSlices";
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -32,13 +31,7 @@ describe("CueLine", () => {
                         <div />
                         <CueEdit index={1} cue={cues[1]} playerTime={0} />
                     </div>
-                    <div
-                        style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                        className="sbte-gray-100-background sbte-left-border"
-                    >
-                        <DeleteCueLineButton cueIndex={1} />
-                        <AddCueLineButton cueIndex={1} cue={cues[1]} />
-                    </div>
+                    <CueActionsPanel index={1} editingCueIndex={1} cue={cues[1]} />
                 </div>
             </Provider>
         );
@@ -66,13 +59,7 @@ describe("CueLine", () => {
                         <div />
                         <CueView index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
                     </div>
-                    <div
-                        style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                        className="sbte-gray-100-background sbte-left-border"
-                    >
-                        <div />
-                        <div />
-                    </div>
+                    <CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} />
                 </div>
             </Provider>
         );
@@ -105,13 +92,7 @@ describe("CueLine", () => {
                         />
                         <CueEdit index={1} cue={cues[1]} playerTime={0} />
                     </div>
-                    <div
-                        style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                        className="sbte-gray-100-background sbte-left-border"
-                    >
-                        <div />
-                        <div />
-                    </div>
+                    <CueActionsPanel index={1} editingCueIndex={1} cue={cues[1]} sourceCue={sourceCue} />
                 </div>
             </Provider>
         );
@@ -150,13 +131,7 @@ describe("CueLine", () => {
                         />
                         <CueEdit index={1} cue={cues[1]} playerTime={0} />
                     </div>
-                    <div
-                        style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                        className="sbte-gray-100-background sbte-left-border"
-                    >
-                        <div />
-                        <AddCueLineButton cueIndex={1} cue={cues[1]} />
-                    </div>
+                    <CueActionsPanel index={1} editingCueIndex={1} cue={cues[1]} sourceCue={sourceCue} lastCue />
                 </div>
             </Provider>
         );
@@ -196,13 +171,7 @@ describe("CueLine", () => {
                         />
                         <CueView index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
                     </div>
-                    <div
-                        style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                        className="sbte-gray-100-background sbte-left-border"
-                    >
-                        <div />
-                        <div />
-                    </div>
+                    <CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} sourceCue={sourceCue} />
                 </div>
             </Provider>
         );
@@ -241,13 +210,7 @@ describe("CueLine", () => {
                         />
                         <CueView index={1} cue={sourceCue} playerTime={0} hideText className="bg-light" />
                     </div>
-                    <div
-                        style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                        className="sbte-gray-100-background sbte-left-border"
-                    >
-                        <div />
-                        <div />
-                    </div>
+                    <CueActionsPanel index={1} editingCueIndex={-1} sourceCue={sourceCue} />
                 </div>
             </Provider>
         );
@@ -271,7 +234,7 @@ describe("CueLine", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
-    it("passes down properties", () => {
+    it("passes down properties to cue view component", () => {
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
@@ -303,44 +266,28 @@ describe("CueLine", () => {
         expect(onClickHandler).toBeCalled();
     });
 
-    it("opens next cue line for editing when add button is clicked", () => {
-        // GIVEN
+    it("passes down parameters into actions panel component", () => {
+        // WHEN
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
+                <CueLine
+                    index={1}
+                    cue={cues[1]}
+                    playerTime={0}
+                    sourceCue={sourceCue}
+                    lastCue
+                    onClickHandler={(): void => undefined}
+                />
             </Provider>
         );
 
-        // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
-
         // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(2);
-    });
-
-    it("deletes cue when delete button is clicked", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueLine index={0} cue={cues[0]} playerTime={0} onClickHandler={(): void => undefined} />
-            </Provider>
-        );
-        actualNode.update();
-
-        // WHEN
-        actualNode.find(".sbte-delete-cue-button").simulate("click");
-
-        // THEN
-        expect(testingStore.getState().cues.length).toEqual(1);
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Cue 2");
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        const actualProps = actualNode.find(CueActionsPanel).props();
+        expect(actualProps.index).toEqual(1);
+        expect(actualProps.editingCueIndex).toEqual(1);
+        expect(actualProps.cue).toEqual(cues[1]);
+        expect(actualProps.sourceCue).toEqual(sourceCue);
+        expect(actualProps.lastCue).toEqual(true);
     });
 });
