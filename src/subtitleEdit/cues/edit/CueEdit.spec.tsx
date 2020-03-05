@@ -45,7 +45,7 @@ describe("CueEdit", () => {
                                 className="sbte-time-input"
                                 style={{
                                     marginBottom: "5px",
-                                    width: "100px",
+                                    width: "110px",
                                     maxWidth: "200px",
                                     padding: "5px",
                                     textAlign: "center"
@@ -58,7 +58,7 @@ describe("CueEdit", () => {
                                 className="sbte-time-input"
                                 style={{
                                     marginBottom: "5px",
-                                    width: "100px",
+                                    width: "110px",
                                     maxWidth: "200px",
                                     padding: "5px",
                                     textAlign: "center"
