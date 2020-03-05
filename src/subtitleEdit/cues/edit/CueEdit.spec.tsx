@@ -347,4 +347,38 @@ describe("CueEdit", () => {
         // THEN
         expect(actualNode.find(CueTextEditor).props().hideDeleteButton).toEqual(true);
     });
+
+    it("prevents end time from being before start time when modifying start time", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(0)
+            .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(3);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.5);
+    });
+
+    it("prevents end time from being before start time when modifying end time", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(1)
+            .simulate("change", { target: { value: "00:00:00.500", selectionEnd: 12 }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1.5);
+    });
 });

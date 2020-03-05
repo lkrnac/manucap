@@ -11,6 +11,8 @@ import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch } from "react-redux";
 
+const HALF_SECOND = 0.5;
+
 interface Props {
     index: number;
     cue: CueDto;
@@ -56,13 +58,23 @@ const CueEdit = (props: Props): ReactElement => {
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
-                        onChange={(starTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, starTime, props.cue.vttCue.endTime)}
+                        onChange={(starTime: number): void => {
+                            let endTime = props.cue.vttCue.endTime;
+                            if (starTime >= props.cue.vttCue.endTime) {
+                                endTime = starTime + HALF_SECOND;
+                            }
+                            updateCueAndCopyProperties(dispatch, props, starTime, endTime);
+                        }}
                     />
                     <TimeEditor
                         time={props.cue.vttCue.endTime}
-                        onChange={(endTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime)}
+                        onChange={(endTime: number): void => {
+                            let newEndTime = endTime;
+                            if (props.cue.vttCue.startTime >= endTime) {
+                                newEndTime = props.cue.vttCue.startTime + HALF_SECOND;
+                            }
+                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, newEndTime);
+                        }}
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
