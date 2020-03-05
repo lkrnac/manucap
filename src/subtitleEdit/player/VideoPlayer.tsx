@@ -32,6 +32,8 @@ export interface Props {
     tracks: Track[];
     onTimeChange?: (time: number) => void;
     languageCuesArray: LanguageCues[];
+    changePlayerTime?: number;
+    resetPlayerTimeChange?: () => void;
 }
 
 const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
@@ -84,7 +86,7 @@ export default class VideoPlayer extends React.Component<Props> {
         registerPlayerShortcuts(this);
     }
 
-    componentDidUpdate(): void {
+    componentDidUpdate(prevProps: Props): void {
         for (let trackIdx = 0; trackIdx < this.player.textTracks().length; trackIdx++) {
             const videoJsTrack = (this.player.textTracks())[trackIdx];
             for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
@@ -92,6 +94,15 @@ export default class VideoPlayer extends React.Component<Props> {
             }
             updateCuesForVideoJsTrack(this.props, videoJsTrack);
             videoJsTrack.dispatchEvent(new Event("cuechange"));
+        }
+
+        if (this.props.changePlayerTime !== undefined
+            && this.props.resetPlayerTimeChange
+            && this.props.changePlayerTime >= 0
+            && prevProps.changePlayerTime !== this.props.changePlayerTime) {
+            this.player.currentTime(this.props.changePlayerTime);
+            this.player.play();
+            this.props.resetPlayerTimeChange();
         }
     }
 
@@ -102,10 +113,6 @@ export default class VideoPlayer extends React.Component<Props> {
     public shiftTime(delta: number): void {
         const deltaInSeconds = delta / SECOND;
         this.player.currentTime(this.player.currentTime() + deltaInSeconds);
-    }
-
-    public moveTime(newTime: number): void {
-        this.player.currentTime(newTime / SECOND);
     }
 
     public playPause(): void {
