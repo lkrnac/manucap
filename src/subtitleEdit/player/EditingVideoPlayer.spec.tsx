@@ -5,6 +5,7 @@ import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Provider } from "react-redux";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
+import { changePlayerTime } from "./playbackSlices";
 import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
 import { updateCues } from "../cues/cueSlices";
@@ -95,5 +96,22 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().tracks.length).toEqual(1);
         expect(actualNode.find(VideoPlayer).props().onTimeChange).toEqual(handleTimeChange);
         expect(actualNode.find(VideoPlayer).props().languageCuesArray).toEqual(expectedLanguageCuesArray);
+    });
+
+    it("adjust new player time to negative value so that it can be changed to same value again", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(changePlayerTime(2) as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(VideoPlayer).props().changePlayerTime).toEqual(-1);
     });
 });
