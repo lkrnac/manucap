@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { CueDto } from "../model";
 import DeleteCueLineButton from "./edit/DeleteCueLineButton";
+import PlayCueButton from "./PlayCueButton";
 
 interface Props {
     index: number;
@@ -19,6 +20,11 @@ export const CueActionsPanel = (props: Props): ReactElement => (
         {
             props.editingCueIndex === props.index && props.sourceCue === undefined
                 ? <DeleteCueLineButton cueIndex={props.index} />
+                : <div />
+        }
+        {
+            props.cue
+                ? <PlayCueButton cue={props.cue} />
                 : <div />
         }
         {

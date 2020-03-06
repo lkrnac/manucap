@@ -5,6 +5,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
 import DeleteCueLineButton from "./edit/DeleteCueLineButton";
+import PlayCueButton from "./PlayCueButton";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
@@ -29,6 +30,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-gray-100-background sbte-left-border"
                 >
                     <DeleteCueLineButton cueIndex={1} />
+                    <PlayCueButton cue={cues[1]} />
                     <AddCueLineButton cueIndex={1} cue={cues[1]} />
                 </div>
             </Provider>
@@ -56,6 +58,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-gray-100-background sbte-left-border"
                 >
                     <div />
+                    <PlayCueButton cue={cues[1]} />
                     <div />
                 </div>
             </Provider>
@@ -82,6 +85,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-gray-100-background sbte-left-border"
                 >
                     <div />
+                    <PlayCueButton cue={cues[1]} />
                     <div />
                 </div>
             </Provider>
@@ -108,6 +112,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-gray-100-background sbte-left-border"
                 >
                     <div />
+                    <PlayCueButton cue={cues[1]} />
                     <div />
                 </div>
             </Provider>
@@ -134,6 +139,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-gray-100-background sbte-left-border"
                 >
                     <div />
+                    <PlayCueButton cue={cues[1]} />
                     <AddCueLineButton cueIndex={1} cue={cues[1]} />
                 </div>
             </Provider>
@@ -159,6 +165,7 @@ describe("CueActionsPanel", () => {
                     style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
                     className="sbte-gray-100-background sbte-left-border"
                 >
+                    <div />
                     <div />
                     <div />
                 </div>
