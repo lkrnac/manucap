@@ -1,6 +1,6 @@
 import React, {
-    ChangeEvent,
-    ReactElement
+    ReactElement,
+    SyntheticEvent
 } from "react";
 import { getTimeFromString, getTimeString } from "../timeUtils";
 import TimeField from "react-advanced-timefield";
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const TimeEditor = (props: Props): ReactElement => {
-    const handleChange = (_e: ChangeEvent<HTMLInputElement>, timeString: string): void => {
+    const handleChange = (_e: SyntheticEvent<HTMLInputElement>, timeString: string): void => {
       const time = getTimeFromString(timeString);
       props.onChange(time);
     };
