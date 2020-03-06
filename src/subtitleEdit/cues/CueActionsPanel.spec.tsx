@@ -222,4 +222,20 @@ describe("CueActionsPanel", () => {
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
     });
+
+    it("doesn't propagate click event to parent DOM nodes", () => {
+        // GIVEN
+        const fakeEvent = { stopPropagation: jest.fn() };
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueActionsPanel index={0} cue={cues[0]} editingCueIndex={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.simulate("click", fakeEvent);
+
+        // THEN
+        expect(fakeEvent.stopPropagation).toBeCalled();
+    });
 });

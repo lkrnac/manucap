@@ -16,6 +16,7 @@ export const CueActionsPanel = (props: Props): ReactElement => (
     <div
         style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
         className="sbte-gray-100-background sbte-left-border"
+        onClick={(event: React.MouseEvent<HTMLElement>): void => event.stopPropagation()}
     >
         {
             props.editingCueIndex === props.index && props.sourceCue === undefined
