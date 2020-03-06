@@ -195,4 +195,66 @@ describe("TimeEditor", () => {
         sinon.assert.calledOnce(onChange);
     });
 
+    it("prevents value from changing to a value greater than maxValue", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    marginBottom: "5px",
+                    width: "110px",
+                    maxWidth: "200px",
+                    padding: "5px",
+                    textAlign: "center"
+                }}
+                value="01:59:59.025"
+                onChange={(): void => undefined}
+            />
+        );
+        const onChange = sinon.spy();
+        const actualNode = mount(
+            <TimeEditor time={7199.025} maxTime={7200} onChange={onChange} />
+        );
+
+        // WHEN
+        actualNode.find("TimeField").simulate("change", { target: { value: "03:00:00.000", selectionEnd: 12 }});
+
+        // THEN
+        sinon.assert.calledWith(onChange, 7199.025);
+        sinon.assert.calledOnce(onChange);
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    it("prevents value from changing to a value less than minValue", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <input
+                type="text"
+                className="sbte-time-input"
+                style={{
+                    marginBottom: "5px",
+                    width: "110px",
+                    maxWidth: "200px",
+                    padding: "5px",
+                    textAlign: "center"
+                }}
+                value="00:01:00.200"
+                onChange={(): void => undefined}
+            />
+        );
+        const onChange = sinon.spy();
+        const actualNode = mount(
+            <TimeEditor time={60.200} minTime={50} onChange={onChange} />
+        );
+
+        // WHEN
+        actualNode.find("TimeField").simulate("change", { target: { value: "00:00:05.000", selectionEnd: 12 }});
+
+        // THEN
+        sinon.assert.calledWith(onChange, 60.2);
+        sinon.assert.calledOnce(onChange);
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
 });

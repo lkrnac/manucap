@@ -57,24 +57,16 @@ const CueEdit = (props: Props): ReactElement => {
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     <TimeEditor
+                        maxTime={props.cue.vttCue.endTime - HALF_SECOND}
                         time={props.cue.vttCue.startTime}
-                        onChange={(starTime: number): void => {
-                            let endTime = props.cue.vttCue.endTime;
-                            if (starTime >= props.cue.vttCue.endTime) {
-                                endTime = starTime + HALF_SECOND;
-                            }
-                            updateCueAndCopyProperties(dispatch, props, starTime, endTime);
-                        }}
+                        onChange={(starTime: number): void =>
+                            updateCueAndCopyProperties(dispatch, props, starTime, props.cue.vttCue.endTime)}
                     />
                     <TimeEditor
+                        minTime={props.cue.vttCue.startTime + HALF_SECOND}
                         time={props.cue.vttCue.endTime}
-                        onChange={(endTime: number): void => {
-                            let newEndTime = endTime;
-                            if (props.cue.vttCue.startTime >= endTime) {
-                                newEndTime = props.cue.vttCue.startTime + HALF_SECOND;
-                            }
-                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, newEndTime);
-                        }}
+                        onChange={(endTime: number): void =>
+                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime)}
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
