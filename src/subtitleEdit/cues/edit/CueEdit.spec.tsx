@@ -15,7 +15,8 @@ import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import testingStore from "../../../testUtils/testingStore";
 
 const cues = [
-    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+    { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(1, 7200, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
 describe("CueEdit", () => {
@@ -122,7 +123,7 @@ describe("CueEdit", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
+                <CueEdit index={0} cue={cues[1]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -138,7 +139,7 @@ describe("CueEdit", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
+                <CueEdit index={0} cue={cues[1]} playerTime={0} hideAddButton={false} hideDeleteButton={false} />
             </Provider>
         );
 
@@ -348,7 +349,7 @@ describe("CueEdit", () => {
         expect(actualNode.find(CueTextEditor).props().hideDeleteButton).toEqual(true);
     });
 
-    it("prevents end time from being before start time when modifying start time", () => {
+    it("prevents start time from being greater than end time", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -361,11 +362,11 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(3);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.5);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
     });
 
-    it("prevents end time from being before start time when modifying end time", () => {
+    it("prevents end time from being less than start time", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -379,6 +380,6 @@ describe("CueEdit", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1.5);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
     });
 });
