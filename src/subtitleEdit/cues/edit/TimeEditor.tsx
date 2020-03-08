@@ -29,7 +29,7 @@ const TimeEditor = (props: Props): ReactElement => {
     const maxTime = props.maxTime ? getTimeString(props.maxTime || 0) : "";
     return (
         <TimeField
-            className="sbte-time-input"
+            className="sbte-time-input mousetrap"
             style={styles}
             value={getTimeString(props.time || 0)}
             minValue={minTime}

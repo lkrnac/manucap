@@ -43,7 +43,7 @@ describe("CueEdit", () => {
                         >
                             <input
                                 type="text"
-                                className="sbte-time-input"
+                                className="sbte-time-input mousetrap"
                                 style={{
                                     marginBottom: "5px",
                                     width: "110px",
@@ -56,7 +56,7 @@ describe("CueEdit", () => {
                             />
                             <input
                                 type="text"
-                                className="sbte-time-input"
+                                className="sbte-time-input mousetrap"
                                 style={{
                                     marginBottom: "5px",
                                     width: "110px",
