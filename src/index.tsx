@@ -19,7 +19,7 @@ const TestApp = (): ReactElement => {
     // #############################################################################################
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
-            dispatch(updateSourceCues([
+            () => dispatch(updateSourceCues([
                 { vttCue: new VTTCue(0, 1, "<i>Source <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
                 {
                     vttCue: new VTTCue(1, 2, "<i><lang en>Source</lang> <b>Line</b></i> 2\nWrapped text"),
@@ -35,7 +35,7 @@ const TestApp = (): ReactElement => {
 
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
-            dispatch(updateEditingTrack({
+            () => dispatch(updateEditingTrack({
                 type: "CAPTION",
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
@@ -47,7 +47,7 @@ const TestApp = (): ReactElement => {
     });
     useEffect(() => {
        setTimeout( // this simulates latency caused by server roundtrip
-           dispatch(updateCues([
+           () => dispatch(updateCues([
                { vttCue: new VTTCue(0, 1, "<i>Editing <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
                {
                    vttCue: new VTTCue(1, 2, "<i><lang en>Editing</lang> <b>Line</b></i> 2\nWrapped text"),
@@ -59,7 +59,7 @@ const TestApp = (): ReactElement => {
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
-            dispatch(updateTask({
+            () => dispatch(updateTask({
                type: "TASK_CAPTION",
                projectName: "Project One",
                dueDate: "2019/12/30 10:00AM"
@@ -69,7 +69,7 @@ const TestApp = (): ReactElement => {
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
-            dispatch(readSubtitleSpecification({
+            () => dispatch(readSubtitleSpecification({
                 subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
                 projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
                 enabled: true,
