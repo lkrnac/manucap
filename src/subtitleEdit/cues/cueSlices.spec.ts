@@ -201,6 +201,21 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues).toEqual(replacementCues);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
+
+        it("resets subtitle edits states", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
+            const replacementCues = [
+                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            // WHEN
+            testingStore.dispatch(updateCues(replacementCues) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editorStates.size).toEqual(0);
+        });
     });
 
     describe("updateEditingCueIndex", () => {
