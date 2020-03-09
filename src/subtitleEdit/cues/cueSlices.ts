@@ -2,7 +2,7 @@ import { CueCategory, CueDto, SubtitleEditAction } from "../model";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import { copyNonConstructorProperties } from "./../cues/cueUtils";
+import { copyNonConstructorProperties } from "./cueUtils";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -128,15 +128,22 @@ export const updateSourceCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
         dispatch(sourceCuesSlice.actions.updateSourceCues({ cues }));
     };
+
 export const applyShiftTime = (shiftTime: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<number>>): void => {
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
     };
 
 const ADD_END_TIME_INTERVAL_SECS = 3;
-export const createAndAddCue = (oldCue: CueDto, index: number): AppThunk => {
-    const newCue = new VTTCue(oldCue.vttCue.endTime, oldCue.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS, "");
-    copyNonConstructorProperties(newCue, oldCue.vttCue);
-    const cue = { vttCue: newCue, cueCategory: oldCue.cueCategory };
+export const createAndAddCue = (previousCue: CueDto, index: number, sourceCue?: CueDto): AppThunk => {
+    const startTime = sourceCue
+        ? sourceCue.vttCue.startTime
+        : previousCue.vttCue.endTime;
+    const endTime = sourceCue
+        ? sourceCue.vttCue.endTime
+        : previousCue.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS;
+    const newCue = new VTTCue(startTime, endTime, "");
+    copyNonConstructorProperties(newCue, previousCue.vttCue);
+    const cue = { vttCue: newCue, cueCategory: previousCue.cueCategory };
     return addCue(index, cue);
 };
