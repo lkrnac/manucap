@@ -17,7 +17,7 @@ const TimeEditor = (props: Props): ReactElement => {
     };
     return (
         <TimeField
-            className="sbte-time-input"
+            className="sbte-time-input mousetrap"
             style={{
                 marginBottom: "5px",
                 width: "100px",
