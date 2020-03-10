@@ -22,13 +22,7 @@ interface ReduxTestWrapperProps {
 
 const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     <Provider store={props.store}>
-        <CueTextEditor
-            index={props.props.index}
-            vttCue={props.props.vttCue}
-            hideAddButton={props.props.hideAddButton}
-            hideDeleteButton={props.props.hideDeleteButton}
-            cueCategory="DIALOGUE"
-        />
+        <CueTextEditor index={props.props.index} vttCue={props.props.vttCue} />
     </Provider>
 );
 
@@ -53,9 +47,6 @@ const createExpectedNode = (
                 <span>CHARACTERS: <span className="sbte-green-text">{characters}</span>, </span>
                 <span>WORDS: <span className="sbte-green-text">{words}</span></span>
             </div>
-            <button className="btn btn-outline-secondary sbte-delete-cue-button">
-                <i className="fa fa-trash" />
-            </button>
         </div>
         <div
             className="sbte-form-control sbte-bottom-border"
@@ -69,20 +60,10 @@ const createExpectedNode = (
         >
             <Editor editorState={editorState} onChange={jest.fn} spellCheck />
         </div>
-        <div
-            style={{
-                flexBasis: "25%",
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "5px 10px 5px 10px"
-            }}
-        >
-            <div>
-                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
-                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
-                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
-            </div>
-            <button className="btn btn-outline-secondary sbte-add-cue-button"><b>+</b></button>
+        <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
+            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
         </div>
     </div>
 );
@@ -91,13 +72,7 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     const vttCue = new VTTCue(0, 1, text);
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor
-                cueCategory="DIALOGUE"
-                index={0}
-                vttCue={vttCue}
-                hideAddButton={false}
-                hideDeleteButton={false}
-            />
+            <CueTextEditor index={0} vttCue={vttCue} />
         </Provider>
     );
     return actualNode.find(".public-DraftEditor-content");
@@ -118,13 +93,7 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     // GIVEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor
-                cueCategory="DIALOGUE"
-                index={0}
-                vttCue={vttCue}
-                hideAddButton={false}
-                hideDeleteButton={false}
-            />
+            <CueTextEditor index={0} vttCue={vttCue} />
         </Provider>
     );
     const editorState = actualNode.find(Editor).props().editorState;
@@ -157,13 +126,7 @@ const testForContentState = (
     // WHEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor
-                cueCategory="DIALOGUE"
-                index={0}
-                vttCue={vttCue}
-                hideAddButton={false}
-                hideDeleteButton={false}
-            />
+            <CueTextEditor index={0} vttCue={vttCue} />
         </Provider>
     );
 
@@ -245,41 +208,15 @@ describe("CueTextEditor", () => {
     });
 
     it("updated cue when bold inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<b>someT</b>ext");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 0, "<b>someT</b>ext");
     });
 
     it("updated cue when italic inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<i>someT</i>ext");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<i>someT</i>ext");
     });
 
     it("updated cue when underline inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 3, "<u>someT</u>ext");
-    });
-
-    it("deletes cue when delete cue button is clicked", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    cueCategory="DIALOGUE"
-                    index={0}
-                    vttCue={vttCue}
-                    hideAddButton={false}
-                    hideDeleteButton={false}
-                />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find(".sbte-delete-cue-button").simulate("click");
-
-        // THEN
-        expect(testingStore.getState().cues.length).toEqual(1);
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
-        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+        testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
     });
 
     it("maintain cue styles when cue text changes", () => {
@@ -289,13 +226,7 @@ describe("CueTextEditor", () => {
         vttCue.align = "end";
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor
-                    cueCategory="DIALOGUE"
-                    index={0}
-                    vttCue={vttCue}
-                    hideAddButton={false}
-                    hideDeleteButton={false}
-                />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -413,12 +344,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.position = 3;
 
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.position = 6;
@@ -433,12 +359,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.align = "left";
 
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.align = "right";
@@ -453,12 +374,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.lineAlign = "start";
 
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.lineAlign = "end";
@@ -473,12 +389,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.positionAlign = "line-left";
 
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.positionAlign = "line-right";
@@ -493,12 +404,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.snapToLines = false;
 
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.snapToLines = true;
@@ -513,12 +419,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.size = 80;
 
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.size = 30;
@@ -533,12 +434,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.line = 3;
 
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.line = 6;
@@ -553,12 +449,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.vertical = "rl";
 
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.vertical = "lr";
@@ -572,13 +463,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.id = "id";
-
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.id = "differentId";
@@ -592,13 +477,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.pauseOnExit = false;
-
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, hideAddButton: false, hideDeleteButton: false, cueCategory: "DIALOGUE" }}
-            />
-        );
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
 
         // WHEN
         vttCue.pauseOnExit = true;
@@ -615,13 +494,7 @@ describe("CueTextEditor", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor
-                    cueCategory="DIALOGUE"
-                    index={0}
-                    vttCue={vttCue}
-                    hideAddButton
-                    hideDeleteButton={false}
-                />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
 
@@ -636,13 +509,7 @@ describe("CueTextEditor", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor
-                    cueCategory="DIALOGUE"
-                    index={0}
-                    vttCue={vttCue}
-                    hideAddButton={false}
-                    hideDeleteButton
-                />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
 

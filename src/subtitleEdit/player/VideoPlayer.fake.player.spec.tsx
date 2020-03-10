@@ -153,9 +153,13 @@ describe("VideoPlayer tested with fake player", () => {
 
     it("moves time", () => {
         // GIVEN
+        const play = jest.fn();
         const currentTime = jest.fn();
+        const resetPlayerTimeChange = jest.fn();
         currentTime.mockReturnValueOnce(5);
         const playerMock = {
+            paused: (): boolean => true,
+            play,
             currentTime,
             textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
             on: jest.fn()
@@ -166,13 +170,72 @@ describe("VideoPlayer tested with fake player", () => {
         const actualNode = mount(
             <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
         );
-        const component = actualNode.instance() as VideoPlayer;
 
         // WHEN
-        component.moveTime(5600);
+        actualNode.setProps({ changePlayerTime: 1, resetPlayerTimeChange });
 
         // THEN
-        expect(currentTime).toBeCalledWith(5.6);
+        expect(currentTime).toBeCalledWith(1);
+        expect(play).toBeCalled();
+        expect(resetPlayerTimeChange).toBeCalled();
+    });
+
+    it("moves time if requested time is less than 0", () => {
+        // GIVEN
+        const play = jest.fn();
+        const currentTime = jest.fn();
+        const resetPlayerTimeChange = jest.fn();
+        currentTime.mockReturnValueOnce(5);
+        const playerMock = {
+            paused: (): boolean => true,
+            play,
+            currentTime,
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
+
+        // WHEN
+        actualNode.setProps({ changePlayerTime: -1, resetPlayerTimeChange });
+
+        // THEN
+        expect(currentTime).not.toBeCalled();
+        expect(play).not.toBeCalled();
+        expect(resetPlayerTimeChange).not.toBeCalled();
+    });
+
+    it("doesn't move time when resetPlayerTimeChange callback is not defined", () => {
+        // GIVEN
+        const play = jest.fn();
+        const currentTime = jest.fn();
+        const resetPlayerTimeChange = jest.fn();
+        currentTime.mockReturnValueOnce(5);
+        const playerMock = {
+            paused: (): boolean => true,
+            play,
+            currentTime,
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
+
+        // WHEN
+        actualNode.setProps({ changePlayerTime: 1 });
+
+        // THEN
+        expect(currentTime).not.toBeCalled();
+        expect(play).not.toBeCalled();
+        expect(resetPlayerTimeChange).not.toBeCalled();
     });
 
     it("update tracks content", () => {
