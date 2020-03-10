@@ -27,7 +27,7 @@ deepFreeze(testingStore.getState());
 describe("cueSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
     describe("updateVttCue", () => {
-        it("updates top level cues", () => {
+        it("update top level cue", () => {
             // WHEN
             testingStore.dispatch(updateVttCue(3, new VTTCue(1, 2, "Dummy Cue")) as {} as AnyAction);
 
