@@ -345,7 +345,7 @@ describe("VideoPlayer tested with fake player", () => {
         expect(copyNonConstructorProperties).toBeCalledWith(new VTTCue(0, 1, "Caption Line 1"), updatedVttCue);
     });
 
-    it("Test set format time is called", () => {
+    it("Ensures set format time is called", () => {
         // GIVEN
         // @ts-ignore We are mocking function with jest
         const textTracks = [
