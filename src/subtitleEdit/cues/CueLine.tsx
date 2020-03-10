@@ -17,7 +17,7 @@ interface Props {
 
 const CueLine = (props: Props): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const translationCueClassName = props.cue ? "sbte-gray-100-background" : "bg-light";
+    const translationCueClassName = props.cue ? "sbte-gray-100-background" : "sbte-gray-200-background";
     return (
         <div onClick={props.onClickHandler} style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
             <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }} >
