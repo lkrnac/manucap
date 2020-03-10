@@ -323,8 +323,8 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(3);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.5);
     });
 
     it("prevents end time from being less than start time", () => {
@@ -341,6 +341,6 @@ describe("CueEdit", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1.5);
     });
 });

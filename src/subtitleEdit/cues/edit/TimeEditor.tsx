@@ -7,8 +7,6 @@ import TimeField from "react-advanced-timefield";
 
 interface Props {
     time?: number;
-    minTime?: number;
-    maxTime?: number;
     onChange: (time: number) => void;
 }
 
@@ -25,15 +23,11 @@ const TimeEditor = (props: Props): ReactElement => {
         const time = getTimeFromString(timeString);
         props.onChange(time);
     };
-    const minTime = props.minTime ? getTimeString(props.minTime || 0) : "";
-    const maxTime = props.maxTime ? getTimeString(props.maxTime || 0) : "";
     return (
         <TimeField
             className="sbte-time-input"
             style={styles}
             value={getTimeString(props.time || 0)}
-            minValue={minTime}
-            maxValue={maxTime}
             onChange={handleChange}
             showSeconds
             showMillis
