@@ -83,17 +83,18 @@ export default class VideoPlayer extends React.Component<Props> {
 
         registerPlayerShortcuts(this);
         videojs.setFormatTime((x: number,_y: number): string => {
-
+            console.log(x);
             const hours = Math.floor(x / 60 / 60);
             const minutes = Math.floor(x / 60) - (hours * 60);
             const seconds = Math.floor(x % 60);
             const milliseconds = (x % 1).toFixed(3).substring(2);
-
-            return hours ? (hours.toString().padStart(2, "0") + ":") : ""
+            return (hours ? (hours.toString().padStart(2, "0") + ":") : "")
             + minutes.toString().padStart(2, "0") + ":"
             + seconds.toString().padStart(2, "0")
-            + milliseconds == "000"? "" : "." + milliseconds.toString();
+            + (milliseconds === "000"? "" : "." + milliseconds.toString());
+
         });
+
     }
 
     componentDidUpdate(): void {
