@@ -2,6 +2,7 @@ import { Action, combineReducers } from "@reduxjs/toolkit";
 import { cuesSlice, editingCueIndexSlice, sourceCuesSlice } from "./cues/cueSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
+import { changePlayerTimeSlice } from "./player/playbackSlices";
 import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
 
@@ -12,7 +13,8 @@ export const Reducers = {
     cuesTask: taskSlice.reducer,
     subtitleSpecifications: subtitleSpecificationSlice.reducer,
     editorStates: editorStatesSlice.reducer,
-    sourceCues: sourceCuesSlice.reducer
+    sourceCues: sourceCuesSlice.reducer,
+    changePlayerTime: changePlayerTimeSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

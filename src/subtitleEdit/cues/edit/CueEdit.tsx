@@ -15,8 +15,6 @@ interface Props {
     index: number;
     cue: CueDto;
     playerTime: number;
-    hideAddButton: boolean;
-    hideDeleteButton: boolean;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
@@ -92,9 +90,6 @@ const CueEdit = (props: Props): ReactElement => {
                     key={props.index}
                     index={props.index}
                     vttCue={props.cue.vttCue}
-                    cueCategory={props.cue.cueCategory}
-                    hideAddButton={props.hideAddButton}
-                    hideDeleteButton={props.hideDeleteButton}
                 />
             </div>
         </div>
