@@ -208,7 +208,13 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                         />
-                        <CueView index={1} cue={sourceCue} playerTime={0} hideText className="bg-light" />
+                        <CueView
+                            index={1}
+                            cue={sourceCue}
+                            playerTime={0}
+                            hideText
+                            className="sbte-gray-200-background"
+                        />
                     </div>
                     <CueActionsPanel index={1} editingCueIndex={-1} sourceCue={sourceCue} />
                 </div>
