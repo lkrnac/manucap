@@ -32,7 +32,7 @@ describe("PlayCueButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("deletes cue when delete cue button is clicked", () => {
+    it("plays cue when play cue button is clicked", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
