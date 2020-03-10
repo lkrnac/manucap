@@ -23,10 +23,12 @@ const pad = (value: number, size: number): string => {
     return ("000" + value).slice(size * -1);
 };
 
-export const getTimeString = (timeInSeconds: number): string => {
+export const getTimeString = (timeInSeconds: number, hideHours?: Function, hideMillis?: Function): string => {
     const timeInUnits = getTimeInUnits(timeInSeconds);
-    return pad(timeInUnits.hours, 2) + ":" + pad(timeInUnits.minutes, 2) + ":"
-        + pad(timeInUnits.seconds, 2) + "." + pad(timeInUnits.millis, 3);
+    return((hideHours && hideHours(timeInUnits.hours) ? "": pad(timeInUnits.hours, 2) + ":")
+        + pad(timeInUnits.minutes, 2) + ":"
+        + pad(timeInUnits.seconds, 2)
+        + (hideMillis && hideMillis(timeInUnits.millis) ? "" : "." + pad(timeInUnits.millis, 3)));
 };
 
 export const getTimeFromString = (timeString: string): number => {

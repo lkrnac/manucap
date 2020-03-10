@@ -7,9 +7,11 @@ import React from "react";
 import { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
+import { getTimeString } from "../cues/timeUtils";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
+const hideIfTimeUnitIsZero = (timeUnit: number): boolean => timeUnit == 0;
 
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
@@ -82,18 +84,10 @@ export default class VideoPlayer extends React.Component<Props> {
         });
 
         registerPlayerShortcuts(this);
-        videojs.setFormatTime((x: number,_y: number): string => {
-            console.log(x);
-            const hours = Math.floor(x / 60 / 60);
-            const minutes = Math.floor(x / 60) - (hours * 60);
-            const seconds = Math.floor(x % 60);
-            const milliseconds = (x % 1).toFixed(3).substring(2);
-            return (hours ? (hours.toString().padStart(2, "0") + ":") : "")
-            + minutes.toString().padStart(2, "0") + ":"
-            + seconds.toString().padStart(2, "0")
-            + (milliseconds === "000"? "" : "." + milliseconds.toString());
 
-        });
+        videojs.setFormatTime((x: number): string =>
+            getTimeString(x, hideIfTimeUnitIsZero, hideIfTimeUnitIsZero)
+        );
 
     }
 
