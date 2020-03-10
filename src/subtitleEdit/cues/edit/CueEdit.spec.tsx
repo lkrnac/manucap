@@ -310,7 +310,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
     });
 
-    it("prevents start time from being greater than end time", () => {
+    it("prevents (start time + half a second) from being greater than end time", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -327,7 +327,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.5);
     });
 
-    it("prevents end time from being less than start time", () => {
+    it("prevents end time from being less than (start time + half a second)", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -342,5 +342,24 @@ describe("CueEdit", () => {
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1.5);
+    });
+
+    it("prevents end time from being less than (start time + half a second) testing millis", () => {
+        // GIVEN
+        const vttCue = new VTTCue(10, 10.5, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cue} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(1)
+            .simulate("change", { target: { value: "00:00:10.400", selectionEnd: 12 }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(10);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(10.5);
     });
 });

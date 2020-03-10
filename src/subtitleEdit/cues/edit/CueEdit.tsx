@@ -58,7 +58,7 @@ const CueEdit = (props: Props): ReactElement => {
                         time={props.cue.vttCue.startTime}
                         onChange={(startTime: number): void => {
                             let newEndTime = props.cue.vttCue.endTime;
-                            if (startTime >= newEndTime) {
+                            if (startTime + HALF_SECOND >= newEndTime) {
                                 newEndTime = startTime + HALF_SECOND;
                             }
                             updateCueAndCopyProperties(dispatch, props, startTime, newEndTime);
@@ -69,7 +69,7 @@ const CueEdit = (props: Props): ReactElement => {
                         onChange={(endTime: number): void => {
                             const startTime = props.cue.vttCue.startTime;
                             let newEndTime = endTime;
-                            if (startTime >= endTime) {
+                            if (startTime + HALF_SECOND >= endTime) {
                                 newEndTime = startTime + HALF_SECOND;
                             }
                             updateCueAndCopyProperties(dispatch, props, startTime, newEndTime);
