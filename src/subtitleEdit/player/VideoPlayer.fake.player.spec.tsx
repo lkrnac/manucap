@@ -381,6 +381,6 @@ describe("VideoPlayer tested with fake player", () => {
 
 
         // THEN
-        expect(videojs.setFormatTime).toBeCalledTimes(1);
+        expect(videojs.setFormatTime).toBeCalled();
     });
 });
