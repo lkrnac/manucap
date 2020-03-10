@@ -11,7 +11,6 @@ import { getTimeString } from "../cues/timeUtils";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
-const hideIfTimeUnitIsZero = (timeUnit: number): boolean => timeUnit === 0;
 
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
@@ -88,7 +87,7 @@ export default class VideoPlayer extends React.Component<Props> {
         registerPlayerShortcuts(this);
 
         videojs.setFormatTime((x: number): string =>
-            getTimeString(x, hideIfTimeUnitIsZero, hideIfTimeUnitIsZero)
+            getTimeString(x, (hours: number): boolean => hours === 0)
         );
 
     }
