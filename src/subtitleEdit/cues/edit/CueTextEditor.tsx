@@ -13,10 +13,7 @@ import React, { ReactElement, useEffect } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertHtmlToVtt, convertVttToHtml } from "../cueTextConverter";
 import { useDispatch, useSelector } from "react-redux";
-import AddCueLineButton from "./AddCueLineButton";
-import { CueCategory } from "../../model";
 import CueLineCounts from "../CueLineCounts";
-import DeleteCueLineButton from "./DeleteCueLineButton";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
@@ -67,9 +64,6 @@ const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
 export interface CueTextEditorProps{
     index: number;
     vttCue: VTTCue;
-    cueCategory: CueCategory;
-    hideAddButton: boolean;
-    hideDeleteButton: boolean;
 }
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
@@ -135,12 +129,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 }}
             >
                 <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
-                {
-                    props.hideDeleteButton
-                        ? <div />
-                        : <DeleteCueLineButton cueIndex={props.index} />
-
-                }
             </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
@@ -161,29 +149,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     handleKeyCommand={handleKeyShortcut}
                 />
             </div>
-            <div
-                style={{
-                    flexBasis: "25%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "5px 10px 5px 10px"
-                }}
-            >
-                <div>
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
-                </div>
-                {
-                    props.hideAddButton
-                        ? <div />
-                        : <AddCueLineButton
-                            cueIndex={props.index}
-                            vttCue={props.vttCue}
-                            cueCategory={props.cueCategory}
-                          />
-
-                }
+            <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
             </div>
         </div>
     );

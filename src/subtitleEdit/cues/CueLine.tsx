@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
@@ -16,7 +17,7 @@ interface Props {
 
 const CueLine = (props: Props): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const translationCueClassName = props.cue ? "sbte-gray-100-background" : "bg-light";
+    const translationCueClassName = props.cue ? "sbte-gray-100-background" : "sbte-gray-200-background";
     return (
         <div onClick={props.onClickHandler} style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
             <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }} >
@@ -40,8 +41,6 @@ const CueLine = (props: Props): ReactElement => {
                                 index={props.index}
                                 cue={props.cue}
                                 playerTime={props.playerTime}
-                                hideAddButton={props.sourceCue !== undefined && !props.lastCue}
-                                hideDeleteButton={props.sourceCue !== undefined}
                               />
                             : <CueView
                                 index={props.index}
@@ -60,6 +59,13 @@ const CueLine = (props: Props): ReactElement => {
 
                 }
             </div>
+            <CueActionsPanel
+                index={props.index}
+                editingCueIndex={editingCueIndex}
+                cue={props.cue}
+                sourceCue={props.sourceCue}
+                lastCue={props.lastCue}
+            />
         </div>
     );
 };
