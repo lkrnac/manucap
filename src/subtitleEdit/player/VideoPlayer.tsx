@@ -7,6 +7,7 @@ import React from "react";
 import { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
+import { getTimeString } from "../cues/timeUtils";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -84,6 +85,11 @@ export default class VideoPlayer extends React.Component<Props> {
         });
 
         registerPlayerShortcuts(this);
+
+        videojs.setFormatTime((x: number): string =>
+            getTimeString(x, (hours: number): boolean => hours === 0)
+        );
+
     }
 
     componentDidUpdate(prevProps: Props): void {
