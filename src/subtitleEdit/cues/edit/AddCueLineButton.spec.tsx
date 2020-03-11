@@ -15,9 +15,12 @@ import { updateCues } from "../cueSlices";
 describe("AddCueLineButton", () => {
     it("renders", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "");
+        const cue = { vttCue: new VTTCue(0, 1, ""), cueCategory: "DIALOGUE" } as CueDto;
         const expectedNode = mount(
-            <button className="btn btn-outline-secondary sbte-add-cue-button">
+            <button
+                style={{ maxHeight: "38px", margin: "5px" }}
+                className="btn btn-outline-secondary sbte-add-cue-button"
+            >
                 <b>+</b>
             </button>
         );
@@ -25,7 +28,7 @@ describe("AddCueLineButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
+                <AddCueLineButton cueIndex={0} cue={cue} />
             </Provider>
         );
 
@@ -35,11 +38,11 @@ describe("AddCueLineButton", () => {
 
     it("adds cue when clicked", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]) as {} as AnyAction);
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
+                <AddCueLineButton cueIndex={0} cue={cue} />
             </Provider>
         );
 
@@ -59,11 +62,11 @@ describe("AddCueLineButton", () => {
 
     it("adds cue with non-default category when clicked", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        testingStore.dispatch(updateCues([{ vttCue, cueCategory: "AUDIO_DESCRIPTION" }]) as {} as AnyAction);
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "AUDIO_DESCRIPTION" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="AUDIO_DESCRIPTION" />
+                <AddCueLineButton cueIndex={0} cue={cue} />
             </Provider>
         );
 
@@ -79,15 +82,15 @@ describe("AddCueLineButton", () => {
 
     it("adds cue with non-default position when clicked", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.align = "left";
-        vttCue.line = 8;
-        vttCue.position = 35;
-        vttCue.positionAlign = "center";
-        testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]) as {} as AnyAction);
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        cue.vttCue.align = "left";
+        cue.vttCue.line = 8;
+        cue.vttCue.position = 35;
+        cue.vttCue.positionAlign = "center";
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
+                <AddCueLineButton cueIndex={0} cue={cue} />
             </Provider>
         );
 
@@ -106,11 +109,11 @@ describe("AddCueLineButton", () => {
 
     it("adds cue when ENTER is pressed on last cue", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]) as {} as AnyAction);
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
+                <AddCueLineButton cueIndex={0} cue={cue} />
             </Provider>
         );
 
@@ -133,7 +136,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={cues[0].vttCue} cueCategory="DIALOGUE" />
+                <AddCueLineButton cueIndex={0} cue={cues[0]} />
             </Provider>
         );
 
@@ -149,11 +152,11 @@ describe("AddCueLineButton", () => {
 
     it("closes cue editing mode when ESCAPE is pressed", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        testingStore.dispatch(updateCues([{ vttCue, cueCategory: "DIALOGUE" }]) as {} as AnyAction);
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} vttCue={vttCue} cueCategory="DIALOGUE" />
+                <AddCueLineButton cueIndex={0} cue={cue} />
             </Provider>
         );
 

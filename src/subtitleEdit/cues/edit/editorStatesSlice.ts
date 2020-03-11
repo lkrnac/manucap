@@ -19,6 +19,7 @@ export const editorStatesSlice = createSlice({
     },
     extraReducers: {
         [cuesSlice.actions.addCue.type]: (): Map<number, EditorState> => new Map<number, EditorState>(),
+        [cuesSlice.actions.updateCues.type]: (): Map<number, EditorState> => new Map<number, EditorState>(),
         [cuesSlice.actions.deleteCue.type]:
             (state, action: PayloadAction<CueIndexAction>): void => {
                 state.delete(action.payload.idx);
