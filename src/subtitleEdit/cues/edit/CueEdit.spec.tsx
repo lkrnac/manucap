@@ -10,15 +10,18 @@ import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { Provider } from "react-redux";
 import React from "react";
+import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import testingStore from "../../../testUtils/testingStore";
+
+let testingStore = createTestingStore();
 
 const cues = [
     { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
 describe("CueEdit", () => {
+    beforeEach(() => { testingStore = createTestingStore(); });
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
