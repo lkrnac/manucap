@@ -24,6 +24,16 @@ interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
 }
 
+const HALF_SECOND = 0.5;
+
+const applyInvalidEndTimePrevention = (vttCue: VTTCue): VTTCue => {
+    const maxEndTime = vttCue.startTime + HALF_SECOND;
+    if (maxEndTime >= vttCue.endTime) {
+        vttCue.endTime = maxEndTime;
+    }
+    return vttCue;
+};
+
 export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
@@ -32,7 +42,8 @@ export const cuesSlice = createSlice({
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
                 : "DIALOGUE";
-            state[action.payload.idx] = { vttCue: action.payload.vttCue, cueCategory };
+            const vttCue = applyInvalidEndTimePrevention(action.payload.vttCue);
+            state[action.payload.idx] = { vttCue, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
