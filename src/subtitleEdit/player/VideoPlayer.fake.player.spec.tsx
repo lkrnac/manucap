@@ -347,7 +347,6 @@ describe("VideoPlayer tested with fake player", () => {
 
     it("Ensures set format time is called", () => {
         // GIVEN
-        // @ts-ignore We are mocking function with jest
         const textTracks = [
             {
                 language: "en-US",
