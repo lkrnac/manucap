@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, Ref } from "react";
 import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
@@ -15,11 +15,11 @@ interface Props {
     onClickHandler: () => void;
 }
 
-const CueLine = (props: Props): ReactElement => {
+const CueLineInternal = (props: Props): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const translationCueClassName = props.cue ? "sbte-gray-100-background" : "sbte-gray-200-background";
     return (
-        <div onClick={props.onClickHandler} style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+        <>
             <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }} >
                 {props.index + 1}
             </div>
@@ -66,8 +66,22 @@ const CueLine = (props: Props): ReactElement => {
                 sourceCue={props.sourceCue}
                 lastCue={props.lastCue}
             />
-        </div>
+        </>
     );
 };
+
+
+// eslint-disable-next-line react/display-name
+const CueLine = React.forwardRef((props: Props, ref: Ref<HTMLDivElement>) => {
+    return (
+        <div
+            ref={ref}
+            onClick={props.onClickHandler}
+            style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
+        >
+            <CueLineInternal {...props} />
+        </div>
+    );
+});
 
 export default CueLine;
