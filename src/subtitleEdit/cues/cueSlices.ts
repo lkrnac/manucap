@@ -24,6 +24,16 @@ interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
 }
 
+const HALF_SECOND = 0.5;
+
+const applyInvalidEndTimePrevention = (vttCue: VTTCue): VTTCue => {
+    const maxEndTime = vttCue.startTime + HALF_SECOND;
+    if (maxEndTime >= vttCue.endTime) {
+        vttCue.endTime = maxEndTime;
+    }
+    return vttCue;
+};
+
 const applyOverlapPrevention = (action: PayloadAction<VttCueAction>, state: CueDto[]): VTTCue => {
     const vttCue = action.payload.vttCue;
     const previousCue = state[action.payload.idx - 1];
@@ -45,7 +55,8 @@ export const cuesSlice = createSlice({
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
                 : "DIALOGUE";
-            const vttCue = applyOverlapPrevention(action, state);
+            const vttCueWithoutOverlap = applyOverlapPrevention(action, state);
+            const vttCue = applyInvalidEndTimePrevention(vttCueWithoutOverlap);
             state[action.payload.idx] = { vttCue, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
