@@ -81,7 +81,7 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div style={{ overflowY: "scroll", height: "100%" }}>
+                            <div style={{ overflowY: "scroll", height: "100%" }} className="sbte-cues-array-container">
                                 <CueLine
                                     index={0}
                                     cue={cues[0]}
@@ -501,8 +501,7 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        // @ts-ignore ref should be present on this component
-        expect(cueLines.at(1).getElement().ref.current.parentNode.scrollTop).toEqual(25);
+        expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
     });
 
     it("jump to last in translation mode", () => {
@@ -542,7 +541,6 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        // @ts-ignore ref should be present on this component
-        expect(cueLines.at(1).getElement().ref.current.parentNode.scrollTop).toEqual(25);
+        expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
     });
 });

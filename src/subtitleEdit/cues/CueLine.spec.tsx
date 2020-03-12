@@ -1,6 +1,5 @@
 import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import React, { Ref } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
@@ -8,6 +7,7 @@ import CueEdit from "./edit/CueEdit";
 import CueLine from "./CueLine";
 import CueView from "./view/CueView";
 import { Provider } from "react-redux";
+import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import testingStore from "../../testUtils/testingStore";
@@ -295,31 +295,5 @@ describe("CueLine", () => {
         expect(actualProps.cue).toEqual(cues[1]);
         expect(actualProps.sourceCue).toEqual(sourceCue);
         expect(actualProps.lastCue).toEqual(true);
-    });
-
-    it("passes down React reference to the component", () => {
-        // GIVEN
-        const testingRef = React.createRef() as Ref<HTMLDivElement> | null;
-
-        // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-        mount(
-            <Provider store={testingStore}>
-                <CueLine
-                    index={1}
-                    cue={cues[1]}
-                    playerTime={0}
-                    onClickHandler={(): void => undefined}
-                    ref={testingRef}
-                />
-            </Provider>
-        );
-
-        // THEN - I didn't find better way just to identify HTMLDivElement via style
-        // @ts-ignore Test would fail if ref or current instance would be null
-        const actualStyle = testingRef.current.style;
-        expect(actualStyle.display).toEqual("flex");
-        expect(actualStyle.paddingBottom).toEqual("5px");
-        expect(actualStyle.width).toEqual("100%");
     });
 });

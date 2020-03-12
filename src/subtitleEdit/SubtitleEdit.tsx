@@ -27,7 +27,20 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const drivingCues = sourceCues.length > 0
         ? sourceCues
         : cues;
-    const jumpToLastRef = useRef() as MutableRefObject<HTMLDivElement>;
+    const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
+    // const cueRefs: MutableRefObject<HTMLDivElement>[] = [];
+    // useEffect(
+    //     () => {
+    //         for (let idx = 0; idx < cues.length; idx++) {
+    //             // eslint-disable-next-line react-hooks/rules-of-hooks
+    //             cueRefs[idx] = useRef() as MutableRefObject<HTMLDivElement>;
+    //         }
+    //     },
+    //     [ cues,cueRefs ]
+    // );
+    // cues.map((_cue: CueDto, idx: number) => {
+    //     cueRefs[idx] = useRef() as MutableRefObject<HTMLDivElement>;
+    // });
 
     useEffect(
         () => {
@@ -58,19 +71,19 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         justifyContent: "space-between"
                     }}
                 >
-                    <div style={{ overflowY: "scroll", height: "100%" }}>
+                    <div
+                        ref={cuesRef}
+                        style={{ overflowY: "scroll", height: "100%" }}
+                        className="sbte-cues-array-container"
+                    >
                         {
                             drivingCues.map((cue: CueDto, idx: number): ReactElement => {
                                 const sourceCue = sourceCues[idx];
                                 const editingCue = cues[idx] === cue ? cue : cues[idx];
-                                const jumpToLastEditingCueRef = sourceCues.length > 0 && idx >= cues.length
-                                    ? null
-                                    : jumpToLastRef;
                                 return (
                                     <CueLine
                                         key={idx}
                                         index={idx}
-                                        ref={jumpToLastEditingCueRef}
                                         sourceCue={sourceCue}
                                         cue={editingCue}
                                         playerTime={currentPlayerTime}
@@ -99,7 +112,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             type="button"
                             style={{ marginLeft: "10px" }}
                             onClick={(): void => {
-                                const element = jumpToLastRef.current;
+                                // const element = jumpToLastRef.current;
+                                const element = cuesRef.current.children[cues.length - 1];
                                 if (element && element.parentNode) {
                                     // TODO: enable scrollIntoView after spec finalization + support by all browsers
                                     // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
