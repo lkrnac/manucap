@@ -28,19 +28,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         ? sourceCues
         : cues;
     const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
-    // const cueRefs: MutableRefObject<HTMLDivElement>[] = [];
-    // useEffect(
-    //     () => {
-    //         for (let idx = 0; idx < cues.length; idx++) {
-    //             // eslint-disable-next-line react-hooks/rules-of-hooks
-    //             cueRefs[idx] = useRef() as MutableRefObject<HTMLDivElement>;
-    //         }
-    //     },
-    //     [ cues,cueRefs ]
-    // );
-    // cues.map((_cue: CueDto, idx: number) => {
-    //     cueRefs[idx] = useRef() as MutableRefObject<HTMLDivElement>;
-    // });
 
     useEffect(
         () => {
@@ -112,7 +99,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             type="button"
                             style={{ marginLeft: "10px" }}
                             onClick={(): void => {
-                                // const element = jumpToLastRef.current;
                                 const element = cuesRef.current.children[cues.length - 1];
                                 if (element && element.parentNode) {
                                     // TODO: enable scrollIntoView after spec finalization + support by all browsers
