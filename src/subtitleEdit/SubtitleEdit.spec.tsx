@@ -100,6 +100,14 @@ describe("SubtitleEdit", () => {
                                     View All Tracks
                                 </button>
                                 <button
+                                    className="btn btn-light sbte-jump-to-first-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    Jump to first
+                                </button>
+                                <button
                                     className="btn btn-light sbte-jump-to-last-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
@@ -471,7 +479,7 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
     });
 
-    it("jump to last in captioning mode", () => {
+    it("jump to last cue in captioning mode", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
@@ -504,7 +512,7 @@ describe("SubtitleEdit", () => {
         expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
     });
 
-    it("jump to last in translation mode", () => {
+    it("jump to last cue in translation mode", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
@@ -543,4 +551,38 @@ describe("SubtitleEdit", () => {
         // THEN
         expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
     });
+
+    it("jumps to first cue", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
+        const cueLines = actualNode.find(CueLine);
+        const domNode = cueLines.at(0).getDOMNode();
+        const parentNode = domNode.parentNode;
+
+        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
+        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-first-button").simulate("click");
+
+        // THEN
+        expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
+    });
+
 });

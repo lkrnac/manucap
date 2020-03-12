@@ -96,6 +96,14 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             View All Tracks
                         </button>
                         <button
+                            className="btn btn-light sbte-jump-to-first-button"
+                            type="button"
+                            style={{ marginLeft: "10px" }}
+                            onClick={(): void => scrollToElement(cuesRef.current.children[0])}
+                        >
+                            Jump to first
+                        </button>
+                        <button
                             className="btn btn-light sbte-jump-to-last-button"
                             type="button"
                             style={{ marginLeft: "10px" }}
