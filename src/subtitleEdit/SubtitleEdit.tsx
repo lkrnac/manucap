@@ -8,6 +8,7 @@ import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
+import { scrollToElement } from "./cues/cueUtils";
 
 export interface SubtitleEditProps {
     mp4: string;
@@ -98,19 +99,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             className="btn btn-light sbte-jump-to-last-button"
                             type="button"
                             style={{ marginLeft: "10px" }}
-                            onClick={(): void => {
-                                const element = cuesRef.current.children[cues.length - 1];
-                                if (element && element.parentNode) {
-                                    // TODO: enable scrollIntoView after spec finalization + support by all browsers
-                                    // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-                                    // element.scrollIntoView();
-
-                                    // Workaround until scrollIntoView will be ready:
-                                    // Inspired by https://stackoverflow.com/a/11041376/1919879
-                                    // @ts-ignore Ignore TS compiler false positives
-                                    element.parentNode.scrollTop = element.offsetTop - element.parentNode.offsetTop;
-                                }
-                            }}
+                            onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
                         >
                             Jump to last
                         </button>
