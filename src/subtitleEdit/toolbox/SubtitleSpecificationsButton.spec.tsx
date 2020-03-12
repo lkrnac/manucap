@@ -24,7 +24,7 @@ describe("SubtitleSpecificationsButton", () => {
                     <button
                         style={{ marginLeft: "10px" }}
                         type="button"
-                        className="dotsub-subtitle-specifications-button btn btn-light"
+                        className="dotsub-subtitle-specifications-button btn btn-secondary"
                     >
                         Subtitle Specifications
                     </button>
@@ -57,7 +57,7 @@ describe("SubtitleSpecificationsButton", () => {
                     <button
                         style={{ marginLeft: "10px" }}
                         type="button"
-                        className="dotsub-subtitle-specifications-button btn btn-light"
+                        className="dotsub-subtitle-specifications-button btn btn-secondary"
                     >
                         Subtitle Specifications
                     </button>

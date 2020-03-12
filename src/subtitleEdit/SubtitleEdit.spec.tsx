@@ -100,7 +100,7 @@ describe("SubtitleEdit", () => {
                                     View All Tracks
                                 </button>
                                 <button
-                                    className="btn btn-light sbte-jump-to-first-button"
+                                    className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -108,7 +108,7 @@ describe("SubtitleEdit", () => {
                                     Jump to first
                                 </button>
                                 <button
-                                    className="btn btn-light sbte-jump-to-last-button"
+                                    className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}

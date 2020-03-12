@@ -96,7 +96,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             View All Tracks
                         </button>
                         <button
-                            className="btn btn-light sbte-jump-to-first-button"
+                            className="btn btn-secondary sbte-jump-to-first-button"
                             type="button"
                             style={{ marginLeft: "10px" }}
                             onClick={(): void => scrollToElement(cuesRef.current.children[0])}
@@ -104,7 +104,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             Jump to first
                         </button>
                         <button
-                            className="btn btn-light sbte-jump-to-last-button"
+                            className="btn btn-secondary sbte-jump-to-last-button"
                             type="button"
                             style={{ marginLeft: "10px" }}
                             onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
