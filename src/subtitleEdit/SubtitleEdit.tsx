@@ -1,5 +1,5 @@
 import "../styles.scss";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
 import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
@@ -9,7 +9,7 @@ import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 
-export interface Props {
+export interface SubtitleEditProps {
     mp4: string;
     poster: string;
     onViewAllTracks: () => void;
@@ -17,7 +17,7 @@ export interface Props {
     onComplete: () => void;
 }
 
-const SubtitleEdit = (props: Props): ReactElement => {
+const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
@@ -27,6 +27,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
     const drivingCues = sourceCues.length > 0
         ? sourceCues
         : cues;
+    const jumpToLastRef = useRef() as MutableRefObject<HTMLDivElement>;
 
     useEffect(
         () => {
@@ -62,10 +63,14 @@ const SubtitleEdit = (props: Props): ReactElement => {
                             drivingCues.map((cue: CueDto, idx: number): ReactElement => {
                                 const sourceCue = sourceCues[idx];
                                 const editingCue = cues[idx] === cue ? cue : cues[idx];
+                                const jumpToLastEditingCueRef = sourceCues.length > 0 && idx >= cues.length
+                                    ? null
+                                    : jumpToLastRef;
                                 return (
                                     <CueLine
                                         key={idx}
                                         index={idx}
+                                        ref={jumpToLastEditingCueRef}
                                         sourceCue={sourceCue}
                                         cue={editingCue}
                                         playerTime={currentPlayerTime}
@@ -89,6 +94,27 @@ const SubtitleEdit = (props: Props): ReactElement => {
                         >
                             View All Tracks
                         </button>
+                        <button
+                            className="btn btn-light sbte-jump-to-last-button"
+                            type="button"
+                            style={{ marginLeft: "10px" }}
+                            onClick={(): void => {
+                                const element = jumpToLastRef.current;
+                                if (element && element.parentNode) {
+                                    // TODO: enable scrollIntoView after spec finalization + support by all browsers
+                                    // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+                                    // element.scrollIntoView();
+
+                                    // Workaround until scrollIntoView will be ready:
+                                    // Inspired by https://stackoverflow.com/a/11041376/1919879
+                                    // @ts-ignore Ignore TS compiler false positives
+                                    element.parentNode.scrollTop = element.offsetTop - element.parentNode.offsetTop;
+                                }
+                            }}
+                        >
+                            Jump to last
+                        </button>
+
                         <span style={{ flexGrow: 2 }} />
                         <button
                             className="btn btn-primary sbte-save-subtitle-btn"

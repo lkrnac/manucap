@@ -37,7 +37,6 @@ const testingTask = {
     dueDate: "2019/12/30 10:00AM"
 } as Task;
 
-{/* eslint-disable @typescript-eslint/no-empty-function*/}
 describe("SubtitleEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -99,6 +98,14 @@ describe("SubtitleEdit", () => {
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
+                                </button>
+                                <button
+                                    className="btn btn-light sbte-jump-to-last-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    Jump to last
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <button
@@ -280,6 +287,7 @@ describe("SubtitleEdit", () => {
 
         // THEN
         const cueLines = actualNode.find(CueLine);
+        // console.log(actualNode.)
         expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
         expect((cueLines.at(0).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
         expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
@@ -463,4 +471,78 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
     });
 
+    it("jump to last in captioning mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
+        const cueLines = actualNode.find(CueLine);
+        const domNode = cueLines.at(1).getDOMNode();
+        const parentNode = domNode.parentNode;
+
+        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
+        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+
+        // THEN
+        // @ts-ignore ref should be present on this component
+        expect(cueLines.at(1).getElement().ref.current.parentNode.scrollTop).toEqual(25);
+    });
+
+    it("jump to last in translation mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        actualNode.update();
+        const cueLines = actualNode.find(CueLine);
+        const domNode = cueLines.at(1).getDOMNode();
+        const parentNode = domNode.parentNode;
+
+        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
+        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+
+        // THEN
+        // @ts-ignore ref should be present on this component
+        expect(cueLines.at(1).getElement().ref.current.parentNode.scrollTop).toEqual(25);
+    });
 });
