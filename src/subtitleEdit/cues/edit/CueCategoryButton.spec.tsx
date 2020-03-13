@@ -58,6 +58,7 @@ describe("CueCategoryButton", () => {
 
     it("renders with dropdown", () => {
         // GIVEN
+        // noinspection HtmlUnknownAttribute
         const expectedNode = mount(
             <div className="show dropdown">
                 <button
