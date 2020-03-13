@@ -10,10 +10,10 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-time-input"
+                className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
-                    width: "100px",
+                    width: "110px",
                     maxWidth: "200px",
                     padding: "5px",
                     textAlign: "center"
@@ -37,10 +37,10 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-time-input"
+                className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
-                    width: "100px",
+                    width: "110px",
                     maxWidth: "200px",
                     padding: "5px",
                     textAlign: "center"
@@ -64,10 +64,10 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-time-input"
+                className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
-                    width: "100px",
+                    width: "110px",
                     maxWidth: "200px",
                     padding: "5px",
                     textAlign: "center"
@@ -91,10 +91,10 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-time-input"
+                className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
-                    width: "100px",
+                    width: "110px",
                     maxWidth: "200px",
                     padding: "5px",
                     textAlign: "center"
@@ -118,10 +118,10 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-time-input"
+                className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
-                    width: "100px",
+                    width: "110px",
                     maxWidth: "200px",
                     padding: "5px",
                     textAlign: "center"
@@ -145,10 +145,10 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-time-input"
+                className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
-                    width: "100px",
+                    width: "110px",
                     maxWidth: "200px",
                     padding: "5px",
                     textAlign: "center"

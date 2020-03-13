@@ -54,8 +54,8 @@ const CueEdit = (props: Props): ReactElement => {
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
-                        onChange={(starTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, starTime, props.cue.vttCue.endTime)}
+                        onChange={(startTime: number): void =>
+                            updateCueAndCopyProperties(dispatch, props, startTime, props.cue.vttCue.endTime)}
                     />
                     <TimeEditor
                         time={props.cue.vttCue.endTime}

@@ -17,8 +17,8 @@ import deepFreeze from "deep-freeze";
 import { updateEditorState } from "./edit/editorStatesSlice";
 
 const testingCues = [
-    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
 
 let testingStore = createTestingStore();
@@ -27,12 +27,65 @@ deepFreeze(testingStore.getState());
 describe("cueSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
     describe("updateVttCue", () => {
-        it("updates top level cues", () => {
+        it("update top level cue", () => {
             // WHEN
             testingStore.dispatch(updateVttCue(3, new VTTCue(1, 2, "Dummy Cue")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[3].vttCue).toEqual(new VTTCue(1, 2, "Dummy Cue"));
+        });
+
+        it("apply invalid end time prevention on start time change", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(0, new VTTCue(2, 0, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.5);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+        });
+
+        it("apply invalid end time prevention on end time change", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(1, 0, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1.225);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(1.725);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+        });
+
+
+        it("apply overlap prevention for end time", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1.225);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+        });
+
+        it("apply overlap prevention for start time", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1.225);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
         });
     });
 
@@ -68,7 +121,7 @@ describe("cueSlices", () => {
             );
 
             // THEN
-            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1.225, 2, "Caption Line 2"));
             expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(2, 3, "Dummy Cue End"));
             expect(testingStore.getState().cues[2].cueCategory).toEqual("LYRICS");
             expect(testingStore.getState().editingCueIndex).toEqual(2);
@@ -84,7 +137,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue).toEqual(vttCue);
-            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(1.225, 2, "Caption Line 2"));
             expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
@@ -114,7 +167,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(deleteCue(0) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(1.225, 2, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
@@ -129,8 +182,8 @@ describe("cueSlices", () => {
             testingStore.dispatch(deleteCue(1) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
-            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1.225, "Caption Line 1"));
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1.225, 2, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
@@ -143,7 +196,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(deleteCue(1) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1, "Caption Line 1"));
+            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1.225, "Caption Line 1"));
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
@@ -263,7 +316,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.123);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3.3480000000000003);
         });
     });
 

@@ -95,3 +95,11 @@ $font-size-small: 0.75rem; // 12px
 }
 
 .sbte-toolbox .btn-toolbar .btn {font-size: 15px;}
+
+// ------ Videojs --------
+.video-js .vjs-time-control {
+  display: block !important;
+}
+.video-js .vjs-remaining-time {
+  display: none !important;
+}

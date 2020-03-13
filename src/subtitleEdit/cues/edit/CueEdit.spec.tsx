@@ -10,15 +10,19 @@ import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { Provider } from "react-redux";
 import React from "react";
+import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import testingStore from "../../../testUtils/testingStore";
+
+let testingStore = createTestingStore();
 
 const cues = [
-    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+    { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(1, 7200, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
 describe("CueEdit", () => {
+    beforeEach(() => { testingStore = createTestingStore(); });
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
@@ -42,10 +46,10 @@ describe("CueEdit", () => {
                         >
                             <input
                                 type="text"
-                                className="sbte-time-input"
+                                className="sbte-time-input mousetrap"
                                 style={{
                                     marginBottom: "5px",
-                                    width: "100px",
+                                    width: "110px",
                                     maxWidth: "200px",
                                     padding: "5px",
                                     textAlign: "center"
@@ -55,10 +59,10 @@ describe("CueEdit", () => {
                             />
                             <input
                                 type="text"
-                                className="sbte-time-input"
+                                className="sbte-time-input mousetrap"
                                 style={{
                                     marginBottom: "5px",
-                                    width: "100px",
+                                    width: "110px",
                                     maxWidth: "200px",
                                     padding: "5px",
                                     textAlign: "center"
@@ -115,7 +119,7 @@ describe("CueEdit", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+                <CueEdit index={0} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -131,7 +135,7 @@ describe("CueEdit", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+                <CueEdit index={0} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -308,4 +312,5 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
     });
+
 });
