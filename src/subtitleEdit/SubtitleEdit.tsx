@@ -1,4 +1,5 @@
 import "../styles.scss";
+import "../../node_modules/@fortawesome/fontawesome-pro/js/all.js";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
 import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
