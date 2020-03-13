@@ -10,8 +10,10 @@ import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
-import testingStore from "../../testUtils/testingStore";
+import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditingCueIndex } from "./cueSlices";
+
+let testingStore = createTestingStore();
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -21,6 +23,7 @@ const cues = [
 const sourceCue = { vttCue: new VTTCue(0, 0, "Source Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
 describe("CueLine", () => {
+    beforeEach(() => { testingStore = createTestingStore(); });
     it("renders edit line in captioning mode", () => {
         // GIVEN
         const expectedNode = mount(
