@@ -112,4 +112,28 @@ describe("SubtitleSpecificationsButton", () => {
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
     });
+
+    it("Shows subtitle specification modal if show is passed true", () => {
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton show />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+    });
+
+    it("Does not show subtitle specification modal if show is passed false", () => {
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton show={false} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+    });
 });

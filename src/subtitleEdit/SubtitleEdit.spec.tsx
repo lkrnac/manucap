@@ -463,4 +463,40 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
     });
 
+    it("Pass showSubtitleSpecification as true value to ToolBox", () => {
+        //WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    showSubtitleSpecification
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(Toolbox).props().showSubtitleSpecification).toEqual(true);
+    });
+
+    it("Pass showSubtitleSpecification value as false to Toolbox if not provided", () => {
+        //WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(Toolbox).props().showSubtitleSpecification).toEqual(false);
+    });
 });

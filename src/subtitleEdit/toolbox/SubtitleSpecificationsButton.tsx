@@ -2,8 +2,11 @@ import React, { ReactElement, useState } from "react";
 import Button from "react-bootstrap/Button";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 
-const SubtitleSpecificationsButton = (): ReactElement => {
-    const [show, setShow] = useState(false);
+export interface Props {
+    show?: boolean;
+}
+const SubtitleSpecificationsButton = (props: Props): ReactElement => {
+    const [show, setShow] = useState(props.show);
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
     return (
@@ -21,5 +24,9 @@ const SubtitleSpecificationsButton = (): ReactElement => {
         </>
     );
 };
+
+SubtitleSpecificationsButton.defaultProps = {
+    show: false
+} as Partial<Props>;
 
 export default SubtitleSpecificationsButton;

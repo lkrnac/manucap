@@ -12,6 +12,7 @@ import Toolbox from "./toolbox/Toolbox";
 export interface Props {
     mp4: string;
     poster: string;
+    showSubtitleSpecification?: boolean;
     onViewAllTracks: () => void;
     onSave: () => void;
     onComplete: () => void;
@@ -45,7 +46,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
             <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                 <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                     <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
-                    <Toolbox />
+                    <Toolbox showSubtitleSpecification={props.showSubtitleSpecification} />
                 </div>
                 <div
                     style={{
@@ -111,5 +112,10 @@ const SubtitleEdit = (props: Props): ReactElement => {
         </div>
     );
 };
+
+SubtitleEdit.defaultProps = {
+    showSubtitleSpecification: false
+} as Partial<Props>;
+
 
 export default SubtitleEdit;

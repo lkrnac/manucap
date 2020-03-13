@@ -52,4 +52,28 @@ describe("Toolbox", () => {
         expect(actualNode.html())
             .toEqual(expectedNode.html());
     });
+
+    it("Pass shows as true value to SubtitleSpecificationsButton", () => {
+        //WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <Toolbox showSubtitleSpecification />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsButton).props().show).toEqual(true);
+    });
+
+    it("Pass shows value as false to SubtitleSpecificationsButton if missing", () => {
+        //WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <Toolbox />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsButton).props().show).toEqual(false);
+    });
 });
