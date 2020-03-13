@@ -102,7 +102,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             style={{ marginLeft: "10px" }}
                             onClick={(): void => scrollToElement(cuesRef.current.children[0])}
                         >
-                            Jump to first
+                            <i className="fa fa-chevron-double-up" />
                         </button>
                         <button
                             className="btn btn-secondary sbte-jump-to-last-button"
@@ -110,7 +110,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             style={{ marginLeft: "10px" }}
                             onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
                         >
-                            Jump to last
+                            <i className="fa fa-chevron-double-down" />
                         </button>
 
                         <span style={{ flexGrow: 2 }} />
