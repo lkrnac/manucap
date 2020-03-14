@@ -79,6 +79,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
                                     />
                                 );
                             })
+
                         }
                     </div>
                     <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>

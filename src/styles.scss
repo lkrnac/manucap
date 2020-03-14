@@ -67,6 +67,11 @@ $font-size-small: 0.75rem; // 12px
 }
 
 // ------ Cue -------
+.sbte-cue-line {
+  display: flex;
+  padding-bottom: 5px;
+  width: 100%;
+}
 
 .sbte-time-input {
   color: $sbte-main-text-color;
