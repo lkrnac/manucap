@@ -25,7 +25,7 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                <div className="sbte-cue-line">
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
@@ -53,7 +53,7 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                <div className="sbte-cue-line">
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
@@ -81,7 +81,7 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                <div className="sbte-cue-line">
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
@@ -120,7 +120,7 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                <div className="sbte-cue-line">
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
@@ -160,7 +160,7 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                <div className="sbte-cue-line">
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
@@ -199,7 +199,7 @@ describe("CueLine", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                <div className="sbte-cue-line">
                     <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }}>2</div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
