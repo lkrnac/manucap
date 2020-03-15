@@ -14,7 +14,6 @@ interface Props {
 const AddCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
-    const currentEditingIdx = useSelector((state: SubtitleEditState) => state.editingCueIndex);
 
     useEffect(() => {
         const registerShortcuts = (): void => {
@@ -23,7 +22,6 @@ const AddCueLineButton = (props: Props): ReactElement => {
                 ? dispatch(createAndAddCue(props.cue, props.cueIndex + 1))
                 : dispatch(updateEditingCueIndex(-1)));
         };
-        document.querySelectorAll(`.sbte-cue-line:nth-child(${currentEditingIdx})`)[0]?.scrollIntoView();
         registerShortcuts();
     }, [dispatch, props, cuesCount]);
     return (

@@ -1,5 +1,5 @@
 import "../styles.scss";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, RefObject, useEffect, useState } from "react";
 import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
@@ -21,20 +21,26 @@ const SubtitleEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
-    const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
+    const currentEditingIdx = useSelector((state: SubtitleEditState) => state.editingCueIndex);
 
+    const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
     const drivingCues = sourceCues.length > 0
         ? sourceCues
         : cues;
+    const cuesCollectionRef: RefObject<HTMLDivElement> = React.createRef();
 
     useEffect(
         () => {
             if (cues.length === 0) {
                 dispatch(createAndAddCue({ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }, 0));
             }
+            cuesCollectionRef.current?.children[currentEditingIdx]?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
         },
-        [ dispatch, cues ]
+        [ dispatch, cues, currentEditingIdx, cuesCollectionRef ]
     );
     return (
         <div
@@ -57,7 +63,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
                         justifyContent: "space-between"
                     }}
                 >
-                    <div style={{ overflowY: "scroll", height: "100%" }}>
+                    <div ref={cuesCollectionRef} style={{ overflowY: "scroll", height: "100%" }}>
                         {
                             drivingCues.map((cue: CueDto, idx: number): ReactElement => {
                                 const sourceCue = sourceCues[idx];

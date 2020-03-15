@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateCues, updateSourceCues } from "./cues/cueSlices";
+import { updateCues, updateEditingCueIndex, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -442,6 +442,7 @@ describe("SubtitleEdit", () => {
         expect(mockOnComplete.mock.calls.length).toBe(1);
     });
 
+
     it("adds initial cue if there isn't one", () => {
         // WHEN
         mount(
@@ -461,6 +462,37 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+    });
+
+    it("Calls scrollIntoView when mounted or cue changes", () => {
+        // GIVEN
+        const scrollIntoViewMock = jest.fn();
+
+        Element.prototype.scrollIntoView = scrollIntoViewMock;
+
+        mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        //WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+
+        // THEN
+        expect(scrollIntoViewMock.mock.calls.length).toEqual(2);
+        expect(scrollIntoViewMock.mock.calls[0][0]).toStrictEqual({
+            "behavior": "smooth",
+            "block": "center"
+        });
     });
 
 });
