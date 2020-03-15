@@ -37,11 +37,19 @@ const testingTask = {
     dueDate: "2019/12/30 10:00AM"
 } as Task;
 
+let scrollIntoViewMock: jest.Mock;
+
 {/* eslint-disable @typescript-eslint/no-empty-function*/}
 describe("SubtitleEdit", () => {
+
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
+
+        // Mocking due to this https://github.com/jsdom/jsdom/issues/1695
+        scrollIntoViewMock = jest.fn();
+        Element.prototype.scrollIntoView = scrollIntoViewMock;
+
     });
     it("renders", () => {
         // GIVEN
@@ -466,10 +474,7 @@ describe("SubtitleEdit", () => {
 
     it("Calls scrollIntoView when mounted or cue changes", () => {
         // GIVEN
-        const scrollIntoViewMock = jest.fn();
-
-        Element.prototype.scrollIntoView = scrollIntoViewMock;
-
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         mount(
             <Provider store={testingStore} >
                 <SubtitleEdit
@@ -483,12 +488,10 @@ describe("SubtitleEdit", () => {
         );
 
         //WHEN
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
 
-
         // THEN
-        expect(scrollIntoViewMock.mock.calls.length).toEqual(2);
+        expect(scrollIntoViewMock.mock.calls.length).toEqual(1);
         expect(scrollIntoViewMock.mock.calls[0][0]).toStrictEqual({
             "behavior": "smooth",
             "block": "center"

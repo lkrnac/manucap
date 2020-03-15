@@ -35,13 +35,20 @@ const SubtitleEdit = (props: Props): ReactElement => {
             if (cues.length === 0) {
                 dispatch(createAndAddCue({ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }, 0));
             }
+        },
+        [ dispatch, cues]
+    );
+
+    useEffect(
+        () => {
             cuesCollectionRef.current?.children[currentEditingIdx]?.scrollIntoView({
                 behavior: "smooth",
                 block: "center",
             });
         },
-        [ dispatch, cues, currentEditingIdx, cuesCollectionRef ]
+        [currentEditingIdx, cuesCollectionRef]
     );
+
     return (
         <div
             className="sbte-subtitle-edit"
