@@ -83,6 +83,9 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                     <hr />
                     <label><strong>Comments:&nbsp;</strong></label>
                     <label>{props.subTitleSpecifications.comments}</label>
+                    <br />
+                    <label><strong>Media Notes:&nbsp;</strong></label>
+                    <label>{props.subTitleSpecifications.mediaNotes}</label>
                 </>
             ) : null}
         </>
