@@ -12,5 +12,5 @@ export interface SubtitleSpecification {
     minCaptionDurationInMillis: number;
     maxCaptionDurationInMillis: number;
     comments: string;
-    mediaNotes: string;
+    mediaNotes?: string;
 }
