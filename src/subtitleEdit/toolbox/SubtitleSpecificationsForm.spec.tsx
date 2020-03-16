@@ -62,7 +62,7 @@ describe("SubtitleSpecificationsForm", () => {
             minCaptionDurationInMillis: 1000,
             maxCaptionDurationInMillis: 3000,
             comments: "This is a sample comment",
-            mediaNotes: "media notes"
+            mediaNotes: "media **notes** ~~test~~"
         };
 
         const expectedNode = mount(
@@ -118,7 +118,7 @@ describe("SubtitleSpecificationsForm", () => {
                 <label>This is a sample comment</label>
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
-                <label>media notes</label>
+                <p>media <strong>notes</strong> <del>test</del></p>
             </Provider>
         );
 

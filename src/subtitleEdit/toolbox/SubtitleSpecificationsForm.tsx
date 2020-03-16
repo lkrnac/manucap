@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import ReactMarkdown from "react-markdown";
 import { SubtitleSpecification } from "./model";
 
 export interface Props {
@@ -85,7 +86,10 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                     <label>{props.subTitleSpecifications.comments}</label>
                     <br />
                     <label><strong>Media Notes:&nbsp;</strong></label>
-                    <label>{props.subTitleSpecifications.mediaNotes}</label>
+                    <ReactMarkdown
+                        source={props.subTitleSpecifications.mediaNotes}
+                        disallowedTypes={["html", "virtualHtml"]}
+                    />
                 </>
             ) : null}
         </>
