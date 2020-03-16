@@ -1,24 +1,27 @@
 import React, { ReactElement, useState } from "react";
-import Button from "react-bootstrap/Button";
+import { SubtitleEditState } from "../subtitleEditReducers";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
+import { useSelector } from "react-redux";
 
 export interface Props {
     show?: boolean;
 }
 const SubtitleSpecificationsButton = (props: Props): ReactElement => {
     const [show, setShow] = useState(props.show);
+    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
     return (
         <>
-            <Button
-                variant="light"
+            <button
                 onClick={handleShow}
-                className="dotsub-subtitle-specifications-button"
+                className="dotsub-subtitle-specifications-button btn btn-light"
                 style={{ marginLeft: "10px" }}
+                type="button"
+                hidden={subtitleSpecifications == null}
             >
                 Subtitle Specifications
-            </Button>
+            </button>
 
             <SubtitleSpecificationsModal show={show} onClose={handleClose} />
         </>

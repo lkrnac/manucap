@@ -22,9 +22,9 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <>
                     <button
+                        className="dotsub-subtitle-specifications-button btn btn-light"
                         style={{ marginLeft: "10px" }}
                         type="button"
-                        className="dotsub-subtitle-specifications-button btn btn-light"
                     >
                         Subtitle Specifications
                     </button>
@@ -49,15 +49,45 @@ describe("SubtitleSpecificationsButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
+    it("Hides button if subtitle specifications is null", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <>
+                    <button
+                        className="dotsub-subtitle-specifications-button btn btn-light"
+                        style={{ marginLeft: "10px" }}
+                        type="button"
+                        hidden
+                    >
+                        Subtitle Specifications
+                    </button>
+                    <div />
+                </>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+
     it("renders with hidden modal", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
                     <button
+                        className="dotsub-subtitle-specifications-button btn btn-light"
                         style={{ marginLeft: "10px" }}
                         type="button"
-                        className="dotsub-subtitle-specifications-button btn btn-light"
                     >
                         Subtitle Specifications
                     </button>
