@@ -105,7 +105,7 @@ describe("SubtitleEdit", () => {
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
                                 >
-                                    <i className="fa fa-chevron-double-up" />
+                                    <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
                                     className="btn btn-secondary sbte-jump-to-last-button"
@@ -113,7 +113,7 @@ describe("SubtitleEdit", () => {
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
                                 >
-                                    <i className="fa fa-chevron-double-down" />
+                                    <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <button
