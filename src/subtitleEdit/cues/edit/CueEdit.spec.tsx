@@ -253,7 +253,7 @@ describe("CueEdit", () => {
 
         // WHEN
         actualNode.find("button#cue-line-category").simulate("click");
-        actualNode.find("a.sbte-main-text-color").at(1).simulate("click");
+        actualNode.find("a.dropdown-item").at(1).simulate("click");
 
         // THEN
         expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");

@@ -17,7 +17,7 @@ const CueCategoryButton = (props: Props): ReactElement => (
 
         <Dropdown.Menu>
             <Dropdown.Item
-                className="sbte-main-text-color btn btn-outline-secondary"
+                className="btn btn-outline-secondary"
                 style={{ padding: "8px 24px" }}
                 onClick={(): AppThunk => props.onChange("DIALOGUE")}
             >
@@ -25,21 +25,21 @@ const CueCategoryButton = (props: Props): ReactElement => (
             </Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item
-                className="sbte-main-text-color btn btn-outline-secondary"
+                className="btn btn-outline-secondary"
                 style={{ padding: "8px 24px" }}
                 onClick={(): AppThunk => props.onChange("ONSCREEN_TEXT")}
             >
                 {cueCategoryToPrettyName.ONSCREEN_TEXT}
             </Dropdown.Item>
             <Dropdown.Item
-                className="sbte-main-text-color btn btn-outline-secondary"
+                className="btn btn-outline-secondary"
                 style={{ padding: "8px 24px" }}
                 onClick={(): AppThunk => props.onChange("AUDIO_DESCRIPTION")}
             >
                 {cueCategoryToPrettyName.AUDIO_DESCRIPTION}
             </Dropdown.Item>
             <Dropdown.Item
-                className="sbte-main-text-color btn btn-outline-secondary"
+                className="btn btn-outline-secondary"
                 style={{ padding: "8px 24px" }}
                 onClick={(): AppThunk => props.onChange("LYRICS")}
             >

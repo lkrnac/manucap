@@ -20,7 +20,7 @@ describe("ShiftTimeButton", () => {
                     <button
                         style={{ marginLeft: "10px" }}
                         type="button"
-                        className="btn btn-light dotsub-shift-time-button"
+                        className="btn btn-secondary dotsub-shift-time-button"
                     >
                         Shift All Tracks Time
                     </button>
@@ -50,7 +50,7 @@ describe("ShiftTimeButton", () => {
                     <button
                         style={{ marginLeft: "10px" }}
                         type="button"
-                        className="btn btn-light dotsub-shift-time-button"
+                        className="btn btn-secondary dotsub-shift-time-button"
                     >
                         Shift All Tracks Time
                     </button>
