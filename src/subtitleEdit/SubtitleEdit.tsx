@@ -1,5 +1,5 @@
 import "../styles.scss";
-import "../../node_modules/@fortawesome/fontawesome-pro/js/all.js";
+import "../../node_modules/@fortawesome/fontawesome-free/js/all.js";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
 import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
@@ -102,7 +102,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             style={{ marginLeft: "10px" }}
                             onClick={(): void => scrollToElement(cuesRef.current.children[0])}
                         >
-                            <i className="fa fa-chevron-double-up" />
+                            <i className="fa fa-angle-double-up" />
                         </button>
                         <button
                             className="btn btn-secondary sbte-jump-to-last-button"
@@ -110,7 +110,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             style={{ marginLeft: "10px" }}
                             onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
                         >
-                            <i className="fa fa-chevron-double-down" />
+                            <i className="fa fa-angle-double-down" />
                         </button>
 
                         <span style={{ flexGrow: 2 }} />
