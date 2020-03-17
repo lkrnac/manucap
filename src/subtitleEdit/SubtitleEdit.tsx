@@ -1,5 +1,6 @@
 import "../styles.scss";
-import React, { ReactElement, useEffect, useState } from "react";
+import "../../node_modules/@fortawesome/fontawesome-pro/js/all.js";
+import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
 import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
@@ -8,8 +9,9 @@ import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
+import { scrollToElement } from "./cues/cueUtils";
 
-export interface Props {
+export interface SubtitleEditProps {
     mp4: string;
     poster: string;
     onViewAllTracks: () => void;
@@ -17,7 +19,7 @@ export interface Props {
     onComplete: () => void;
 }
 
-const SubtitleEdit = (props: Props): ReactElement => {
+const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
@@ -27,6 +29,7 @@ const SubtitleEdit = (props: Props): ReactElement => {
     const drivingCues = sourceCues.length > 0
         ? sourceCues
         : cues;
+    const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
 
     useEffect(
         () => {
@@ -57,7 +60,11 @@ const SubtitleEdit = (props: Props): ReactElement => {
                         justifyContent: "space-between"
                     }}
                 >
-                    <div style={{ overflowY: "scroll", height: "100%" }}>
+                    <div
+                        ref={cuesRef}
+                        style={{ overflowY: "scroll", height: "100%" }}
+                        className="sbte-cues-array-container"
+                    >
                         {
                             drivingCues.map((cue: CueDto, idx: number): ReactElement => {
                                 const sourceCue = sourceCues[idx];
@@ -89,6 +96,23 @@ const SubtitleEdit = (props: Props): ReactElement => {
                         >
                             View All Tracks
                         </button>
+                        <button
+                            className="btn btn-secondary sbte-jump-to-first-button"
+                            type="button"
+                            style={{ marginLeft: "10px" }}
+                            onClick={(): void => scrollToElement(cuesRef.current.children[0])}
+                        >
+                            <i className="fa fa-chevron-double-up" />
+                        </button>
+                        <button
+                            className="btn btn-secondary sbte-jump-to-last-button"
+                            type="button"
+                            style={{ marginLeft: "10px" }}
+                            onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
+                        >
+                            <i className="fa fa-chevron-double-down" />
+                        </button>
+
                         <span style={{ flexGrow: 2 }} />
                         <button
                             className="btn btn-primary sbte-save-subtitle-btn"

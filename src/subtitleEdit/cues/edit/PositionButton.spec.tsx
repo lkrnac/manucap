@@ -64,7 +64,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↖↖
@@ -72,7 +72,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 9px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↖↑
@@ -80,7 +80,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↑↑
@@ -88,7 +88,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 11px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↑↗
@@ -96,7 +96,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↗↗
@@ -104,7 +104,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↖←
@@ -112,7 +112,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↖
@@ -120,7 +120,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 16px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↑
@@ -128,7 +128,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↗
@@ -136,7 +136,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             →↗
@@ -144,7 +144,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 5px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ←←
@@ -152,7 +152,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 12px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ←
@@ -160,7 +160,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 16px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             •
@@ -168,7 +168,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 12px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             →
@@ -176,7 +176,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 5px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             →→
@@ -184,7 +184,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↙←
@@ -192,7 +192,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↙
@@ -200,7 +200,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 16px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↓
@@ -208,7 +208,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↘
@@ -216,7 +216,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             →↘
@@ -224,7 +224,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↙↙
@@ -232,7 +232,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 9px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↙↓
@@ -240,7 +240,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↓↓
@@ -248,7 +248,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 11px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↓↘
@@ -256,7 +256,7 @@ describe("PositionButton", () => {
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
-                            className="sbte-main-text-color btn btn-outline-secondary dropdown-item"
+                            className="btn btn-outline-secondary dropdown-item"
                             role="button"
                         >
                             ↘↘

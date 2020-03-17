@@ -1,8 +1,3 @@
-$sbte-main-text-color: rgb(118, 131, 143);
-$border-color: rgb(241,244,245);
-$input-border-color: #ced4da;
-$green: rgb(0,87,0);
-
 // ##############################
 // Override bootstrap defaults
 // ##############################
@@ -12,13 +7,14 @@ $font-size-small: 0.75rem; // 12px
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";
 
-.btn-outline-secondary {
-  border-color: $input-border-color;
-}
+// ##############################
+// Subtitle Edit colors
+// ##############################
 
-.btn-light {
-  color: $sbte-main-text-color;
-}
+$sbte-main-text-color: $secondary;
+$border-color: rgb(241,244,245);
+$input-border-color: rgb(108, 117, 125);
+$green: rgb(0,87,0);
 
 // ##############################
 // Subtitle Edit visuals
@@ -28,7 +24,7 @@ $font-size-small: 0.75rem; // 12px
 
 .sbte-subtitle-edit {
   font-family: Roboto, sans-serif;
-  color: rgb(33,37,41);
+  color: $sbte-main-text-color;
 }
 
 .sbte-left-border {
@@ -41,10 +37,6 @@ $font-size-small: 0.75rem; // 12px
 
 .sbte-green-text {
     color: $green;
-}
-
-.sbte-main-text-color {
-  color: $sbte-main-text-color;
 }
 
 .sbte-small-font {
@@ -94,7 +86,7 @@ $font-size-small: 0.75rem; // 12px
 
 .sbte-toolbox .card-header {
   color: white;
-  background-color: $sbte-main-text-color;
+  background-color: $secondary;
 }
 
 .sbte-toolbox .card {
@@ -102,7 +94,9 @@ $font-size-small: 0.75rem; // 12px
   border: 0;
 }
 
-.sbte-toolbox .btn-toolbar .btn {font-size: 15px;}
+.sbte-toolbox .btn-toolbar .btn {
+  font-size: 15px;
+}
 
 // ------ Videojs --------
 .video-js .vjs-time-control {

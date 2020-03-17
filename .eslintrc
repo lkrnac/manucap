@@ -4,7 +4,7 @@
     },
     "extends": [
       "plugin:@typescript-eslint/recommended",
-      "plugin:react/recommended",
+      "plugin:react/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -24,7 +24,6 @@
         "max-len": ["error", { "code": 120 }],
         "semi": ["error", "always"],
         "jsx-quotes": ["error", "prefer-double"],
-        "sort-imports": "error",
         "object-curly-spacing": ["error", "always", { "objectsInObjects": false, "arraysInObjects": false }],
         "react/jsx-boolean-value": "error",
         "react/jsx-child-element-spacing": "error",
@@ -47,6 +46,6 @@
       "react": {
         "pragma": "React",
         "version": "detect"
-      },
+      }
     }
 }

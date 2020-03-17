@@ -1,9 +1,10 @@
-import React, { ReactElement } from "react";
+import React, { MutableRefObject, ReactElement, useEffect, useRef } from "react";
 import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
 import { SubtitleEditState } from "../subtitleEditReducers";
+import { scrollToElement } from "./cueUtils";
 import { useSelector } from "react-redux";
 
 interface Props {
@@ -18,8 +19,21 @@ interface Props {
 const CueLine = (props: Props): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const translationCueClassName = props.cue ? "sbte-gray-100-background" : "sbte-gray-200-background";
+    const ref = useRef() as MutableRefObject<HTMLDivElement>;
+    useEffect(
+        () => {
+            if (editingCueIndex === props.index) {
+                scrollToElement(ref.current);
+            }
+        },
+        [ editingCueIndex, props.index, ref ]
+    );
     return (
-        <div onClick={props.onClickHandler} style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+        <div
+            ref={ref}
+            onClick={props.onClickHandler}
+            style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
+        >
             <div className="sbte-cue-line-flap" style={{ paddingTop: "10px" }} >
                 {props.index + 1}
             </div>

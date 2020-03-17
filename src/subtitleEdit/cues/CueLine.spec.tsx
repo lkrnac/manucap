@@ -10,8 +10,10 @@ import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
-import testingStore from "../../testUtils/testingStore";
+import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditingCueIndex } from "./cueSlices";
+
+let testingStore = createTestingStore();
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -21,6 +23,7 @@ const cues = [
 const sourceCue = { vttCue: new VTTCue(0, 0, "Source Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
 describe("CueLine", () => {
+    beforeEach(() => { testingStore = createTestingStore(); });
     it("renders edit line in captioning mode", () => {
         // GIVEN
         const expectedNode = mount(
@@ -295,5 +298,28 @@ describe("CueLine", () => {
         expect(actualProps.cue).toEqual(cues[1]);
         expect(actualProps.sourceCue).toEqual(sourceCue);
         expect(actualProps.lastCue).toEqual(true);
+    });
+
+    it("scrolls to current cue if it enters editing mode", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <div className="testing-cues-container">
+                    <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
+                </div>
+            </Provider>
+        );
+        const cueLine = actualNode.find(CueLine);
+        const domNode = cueLine.getDOMNode();
+        const parentNode = domNode.parentNode;
+
+        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
+        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
+
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+        // THEN
+        expect(actualNode.find(".testing-cues-container").getDOMNode().scrollTop).toEqual(25);
     });
 });
