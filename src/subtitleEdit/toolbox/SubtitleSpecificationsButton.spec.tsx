@@ -22,11 +22,10 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <>
                     <button
-                        style={{ marginLeft: "10px" }}
                         type="button"
                         className="dotsub-subtitle-specifications-button btn btn-secondary"
                     >
-                        Subtitle Specifications
+                        <i className="far fa-flag" /> Subtitle Specifications
                     </button>
 
                     <div>shown</div>
@@ -55,11 +54,10 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <>
                     <button
-                        style={{ marginLeft: "10px" }}
                         type="button"
                         className="dotsub-subtitle-specifications-button btn btn-secondary"
                     >
-                        Subtitle Specifications
+                        <i className="far fa-flag" /> Subtitle Specifications
                     </button>
 
                     <div />

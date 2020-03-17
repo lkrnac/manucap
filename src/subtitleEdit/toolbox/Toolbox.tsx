@@ -15,7 +15,7 @@ const Toolbox = (): ReactElement => {
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
-                        <ButtonToolbar>
+                        <ButtonToolbar className="sbte-button-toolbar">
                             <KeyboardShortcuts />
                             <SubtitleSpecificationsButton />
                             <ShiftTimeButton />

@@ -12,9 +12,8 @@ const SubtitleSpecificationsButton = (): ReactElement => {
                 variant="secondary"
                 onClick={handleShow}
                 className="dotsub-subtitle-specifications-button"
-                style={{ marginLeft: "10px" }}
             >
-                Subtitle Specifications
+                <i className="far fa-flag" /> Subtitle Specifications
             </Button>
 
             <SubtitleSpecificationsModal show={show} onClose={handleClose} />
