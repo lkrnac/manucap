@@ -17,7 +17,7 @@ describe("KeyboardShortcuts", () => {
             <Provider store={testingStore}>
                 <button
                     type="button"
-                    className="dotsub-keyboard-shortcuts-button btn btn-light"
+                    className="dotsub-keyboard-shortcuts-button btn btn-secondary"
                 >
                     Keyboard Shortcuts
                 </button>

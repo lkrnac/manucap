@@ -7,7 +7,7 @@ import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import { useSelector } from "react-redux";
 
 interface Props {
-    show?: boolean;
+    show: boolean;
     onClose: () => void;
 }
 
@@ -35,9 +35,5 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
         </Modal>
     );
 };
-
-SubtitleSpecificationsModal.defaultProps = {
-    show: false
-} as Partial<Props>;
 
 export default SubtitleSpecificationsModal;

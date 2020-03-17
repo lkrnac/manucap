@@ -6,10 +6,7 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 
-export interface Props {
-    showSubtitleSpecification?: boolean;
-}
-const Toolbox = (props: Props): ReactElement => {
+const Toolbox = (): ReactElement => {
     return (
         <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
             <Card>
@@ -20,7 +17,7 @@ const Toolbox = (props: Props): ReactElement => {
                     <Card.Body>
                         <ButtonToolbar>
                             <KeyboardShortcuts />
-                            <SubtitleSpecificationsButton show={props.showSubtitleSpecification} />
+                            <SubtitleSpecificationsButton />
                             <ShiftTimeButton />
                         </ButtonToolbar>
                     </Card.Body>
@@ -29,10 +26,5 @@ const Toolbox = (props: Props): ReactElement => {
         </Accordion>
     );
 };
-
-Toolbox.defaultProps = {
-    showSubtitleSpecification: false
-} as Partial<Props>;
-
 
 export default Toolbox;

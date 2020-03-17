@@ -22,9 +22,9 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <>
                     <button
-                        className="dotsub-subtitle-specifications-button btn btn-light"
                         style={{ marginLeft: "10px" }}
                         type="button"
+                        className="dotsub-subtitle-specifications-button btn btn-secondary"
                     >
                         Subtitle Specifications
                     </button>
@@ -49,45 +49,15 @@ describe("SubtitleSpecificationsButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("Hides button if subtitle specifications is null", () => {
-        // GIVEN
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <>
-                    <button
-                        className="dotsub-subtitle-specifications-button btn btn-light"
-                        style={{ marginLeft: "10px" }}
-                        type="button"
-                        hidden
-                    >
-                        Subtitle Specifications
-                    </button>
-                    <div />
-                </>
-            </Provider>
-        );
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
-    });
-
-
     it("renders with hidden modal", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
                     <button
-                        className="dotsub-subtitle-specifications-button btn btn-light"
                         style={{ marginLeft: "10px" }}
                         type="button"
+                        className="dotsub-subtitle-specifications-button btn btn-secondary"
                     >
                         Subtitle Specifications
                     </button>
@@ -138,30 +108,6 @@ describe("SubtitleSpecificationsButton", () => {
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
         actualNode.find(SubtitleSpecificationsModal).props().onClose();
         actualNode.update();
-
-        // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
-    });
-
-    it("Shows subtitle specification modal if show is passed true", () => {
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleSpecificationsButton show />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
-    });
-
-    it("Does not show subtitle specification modal if show is passed false", () => {
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleSpecificationsButton show={false} />
-            </Provider>
-        );
 
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
