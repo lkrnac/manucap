@@ -37,7 +37,6 @@ const testingTask = {
     dueDate: "2019/12/30 10:00AM"
 } as Task;
 
-{/* eslint-disable @typescript-eslint/no-empty-function*/}
 describe("SubtitleEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -82,7 +81,7 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div style={{ overflowY: "scroll", height: "100%" }}>
+                            <div style={{ overflowY: "scroll", height: "100%" }} className="sbte-cues-array-container">
                                 <CueLine
                                     index={0}
                                     cue={cues[0]}
@@ -99,6 +98,22 @@ describe("SubtitleEdit", () => {
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-chevron-double-up" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-chevron-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <button
@@ -280,6 +295,7 @@ describe("SubtitleEdit", () => {
 
         // THEN
         const cueLines = actualNode.find(CueLine);
+        // console.log(actualNode.)
         expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
         expect((cueLines.at(0).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
         expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
@@ -461,6 +477,112 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+    });
+
+    it("jump to last cue in captioning mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
+        const cueLines = actualNode.find(CueLine);
+        const domNode = cueLines.at(1).getDOMNode();
+        const parentNode = domNode.parentNode;
+
+        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
+        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+
+        // THEN
+        expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
+    });
+
+    it("jump to last cue in translation mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        actualNode.update();
+        const cueLines = actualNode.find(CueLine);
+        const domNode = cueLines.at(1).getDOMNode();
+        const parentNode = domNode.parentNode;
+
+        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
+        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+
+        // THEN
+        expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
+    });
+
+    it("jumps to first cue", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
+        const cueLines = actualNode.find(CueLine);
+        const domNode = cueLines.at(0).getDOMNode();
+        const parentNode = domNode.parentNode;
+
+        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
+        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-first-button").simulate("click");
+
+        // THEN
+        expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
     });
 
 });

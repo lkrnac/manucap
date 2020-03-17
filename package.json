@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "",
   "author": "lkrnac",
   "license": "",
@@ -32,6 +32,7 @@
     "react-advanced-timefield": "^3.6.4"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-pro": "^5.12.1",
     "draft-js": "^0.11.3",
     "draft-js-export-html": "^1.4.1",
     "humanize-duration": "^3.21.0",
