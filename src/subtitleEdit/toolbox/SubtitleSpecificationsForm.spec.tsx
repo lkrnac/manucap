@@ -100,7 +100,7 @@ describe("SubtitleSpecificationsForm", () => {
                             <label>1</label>
                         </div>
                         <div>
-                            <label><strong>Max Characters Per Caption:&nbsp;</strong></label>
+                            <label><strong>Max Characters Per Line:&nbsp;</strong></label>
                             <label>40</label>
                         </div>
                         <div>

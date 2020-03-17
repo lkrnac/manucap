@@ -64,7 +64,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                                 <label>{props.subTitleSpecifications.maxLinesPerCaption}</label>
                             </div>
                             <div>
-                                <label><strong>Max Characters Per Caption:&nbsp;</strong></label>
+                                <label><strong>Max Characters Per Line:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.maxCharactersPerLine}</label>
                             </div>
                             <div>
