@@ -21,7 +21,7 @@ const KeyboardShortcuts = (): ReactElement => {
 
     return (
         <>
-            <Button variant="light" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
+            <Button variant="secondary" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
                 Keyboard Shortcuts
             </Button>
 
