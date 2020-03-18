@@ -484,4 +484,46 @@ describe("SubtitleEditHeader", () => {
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
             .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
     });
+
+    it("renders video duration rounded", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            mediaLength: 123456,
+        } as Track;
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 3 seconds</i></div>
+                </div>
+                <div style={{ flex: "2" }} />
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Completed: <b>0%</b></div>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
 });

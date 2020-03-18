@@ -6,6 +6,7 @@ import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
 import typescript from "rollup-plugin-typescript3";
 import url from "rollup-plugin-url";
+import json from '@rollup/plugin-json';
 
 import pkg from "./package.json";
 
@@ -23,6 +24,7 @@ export default {
     peerDepsExternal(),
     postcss(),
     url(),
+    json(),
     svgr(),
     resolve(),
     typescript({

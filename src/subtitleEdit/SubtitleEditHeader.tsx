@@ -21,7 +21,7 @@ const getTrackLength = (track: Track): ReactElement => {
     if (!track || !track.mediaLength || track.mediaLength <= 0) {
         return <i />;
     }
-    return <i>{humanizer({ delimiter: " " })(track.mediaLength)}</i>;
+    return <i>{humanizer({ delimiter: " ", round: true })(track.mediaLength)}</i>;
 };
 
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
