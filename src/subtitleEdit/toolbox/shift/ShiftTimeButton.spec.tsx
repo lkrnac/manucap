@@ -18,11 +18,10 @@ describe("ShiftTimeButton", () => {
             <Provider store={testingStore}>
                 <>
                     <button
-                        style={{ marginLeft: "10px" }}
                         type="button"
                         className="btn btn-secondary dotsub-shift-time-button"
                     >
-                        Shift All Tracks Time
+                        <i className="fas fa-angle-double-right" /> Shift All Tracks Time
                     </button>
 
                     <div>shown</div>
@@ -48,11 +47,10 @@ describe("ShiftTimeButton", () => {
             <Provider store={testingStore}>
                 <>
                     <button
-                        style={{ marginLeft: "10px" }}
                         type="button"
                         className="btn btn-secondary dotsub-shift-time-button"
                     >
-                        Shift All Tracks Time
+                        <i className="fas fa-angle-double-right" /> Shift All Tracks Time
                     </button>
 
                     <div />
