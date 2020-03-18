@@ -8,22 +8,34 @@ import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
-import testingStore from "../../testUtils/testingStore";
+import { createTestingStore } from "../../testUtils/testingStore";
+import { updateCues } from "../cues/cueSlices";
+import { CueDto } from "../model";
+import "video.js";
 
 jest.mock("./SubtitleSpecificationsModal");
 
 // @ts-ignore We are mocking module
 SubtitleSpecificationsModal.mockImplementation(({ show }): ReactElement => show ? <div>shown</div> : <div />);
 
+const cues = [
+    { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
+] as CueDto[];
+let testingStore = createTestingStore();
+
 describe("SubtitleSpecificationsButton", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+    });
     it("renders with shown modal", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
                     <button
-                        type="button"
                         className="dotsub-subtitle-specifications-button btn btn-secondary"
+                        type="button"
                     >
                         <i className="far fa-flag" /> Subtitle Specifications
                     </button>
@@ -34,14 +46,17 @@ describe("SubtitleSpecificationsButton", () => {
         );
 
         // WHEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsButton />
             </Provider>
         );
-        testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
-        );
+
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
 
         // THEN
@@ -54,8 +69,8 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <>
                     <button
-                        type="button"
                         className="dotsub-subtitle-specifications-button btn btn-secondary"
+                        type="button"
                     >
                         <i className="far fa-flag" /> Subtitle Specifications
                     </button>
@@ -66,13 +81,14 @@ describe("SubtitleSpecificationsButton", () => {
         );
 
         // WHEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsButton />
             </Provider>
-        );
-        testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
 
         // THEN
@@ -81,6 +97,10 @@ describe("SubtitleSpecificationsButton", () => {
 
     it("opens subtitle specifications modal when button is clicked", () => {
         // GIVEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsButton />
@@ -88,7 +108,8 @@ describe("SubtitleSpecificationsButton", () => {
         );
 
         // WHEN
-        actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
+        actualNode.find("button.dotsub-subtitle-specifications-button")
+            .simulate("click");
 
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
@@ -96,6 +117,10 @@ describe("SubtitleSpecificationsButton", () => {
 
     it("closes subtitle specifications modal when close button is clicked", () => {
         // GIVEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsButton />
@@ -106,6 +131,66 @@ describe("SubtitleSpecificationsButton", () => {
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
         actualNode.find(SubtitleSpecificationsModal).props().onClose();
         actualNode.update();
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+    });
+
+    it("Hides subtitle button if subtitle specification is null", () => {
+         // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find("button[hidden]").length).toEqual(1);
+    });
+
+    it("Auto shows subtitle specification if cues has default cue", () => {
+        // WHEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+    });
+
+    it("Auto shows subtitle specification if cues are empty", () => {
+        // WHEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        // @ts-ignore passing empty
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+    });
+
+    it("Does not auto show subtitle specification if subtitle specification is null", () => {
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
 
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
