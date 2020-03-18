@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import ReactMarkdown from "react-markdown";
 import { SubtitleSpecification } from "./model";
 
 export interface Props {
@@ -63,7 +64,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                                 <label>{props.subTitleSpecifications.maxLinesPerCaption}</label>
                             </div>
                             <div>
-                                <label><strong>Max Characters Per Caption:&nbsp;</strong></label>
+                                <label><strong>Max Characters Per Line:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.maxCharactersPerLine}</label>
                             </div>
                             <div>
@@ -83,6 +84,12 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => {
                     <hr />
                     <label><strong>Comments:&nbsp;</strong></label>
                     <label>{props.subTitleSpecifications.comments}</label>
+                    <br />
+                    <label><strong>Media Notes:&nbsp;</strong></label>
+                    <ReactMarkdown
+                        source={props.subTitleSpecifications.mediaNotes}
+                        disallowedTypes={["html", "virtualHtml"]}
+                    />
                 </>
             ) : null}
         </>

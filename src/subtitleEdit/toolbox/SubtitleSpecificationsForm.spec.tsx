@@ -23,7 +23,8 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: 0,
             minCaptionDurationInMillis: 0,
             maxCaptionDurationInMillis: 0,
-            comments: ""
+            comments: "",
+            mediaNotes: ""
         };
 
         const expectedNode = mount(
@@ -60,7 +61,8 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: 40,
             minCaptionDurationInMillis: 1000,
             maxCaptionDurationInMillis: 3000,
-            comments: "This is a sample comment"
+            comments: "This is a sample comment",
+            mediaNotes: "media **notes** ~~test~~"
         };
 
         const expectedNode = mount(
@@ -98,7 +100,7 @@ describe("SubtitleSpecificationsForm", () => {
                             <label>1</label>
                         </div>
                         <div>
-                            <label><strong>Max Characters Per Caption:&nbsp;</strong></label>
+                            <label><strong>Max Characters Per Line:&nbsp;</strong></label>
                             <label>40</label>
                         </div>
                         <div>
@@ -114,6 +116,9 @@ describe("SubtitleSpecificationsForm", () => {
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
                 <label>This is a sample comment</label>
+                <br />
+                <label><strong>Media Notes:&nbsp;</strong></label>
+                <p>media <strong>notes</strong> <del>test</del></p>
             </Provider>
         );
 
