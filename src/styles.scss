@@ -75,6 +75,27 @@ $green: rgb(0,87,0);
 
 // ------ Toolbox --------
 
+.sbte-button-toolbar {
+    flex-direction: row;
+}
+
+.sbte-button-toolbar button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 1200px) {
+    .sbte-button-toolbar {
+        flex-direction: column;
+    }
+    .sbte-button-toolbar button {
+        margin-right: 0px;
+    }
+    .sbte-button-toolbar button:last-child {
+        margin-bottom: 0px;
+    }
+}
+
 .sbte-form-control {
   color: $sbte-main-text-color;
   border-radius: 0;

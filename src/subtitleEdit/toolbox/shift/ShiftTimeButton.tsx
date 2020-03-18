@@ -8,13 +8,11 @@ const ShiftTimeButton = (): ReactElement => {
     return (
         <>
             <button
-                style={{ marginLeft: "10px" }}
                 onClick={handleShow}
                 type="button"
                 className="btn btn-secondary dotsub-shift-time-button"
-
             >
-                Shift All Tracks Time
+                <i className="fas fa-angle-double-right" /> Shift All Tracks Time
             </button>
 
             <ShiftTimeModal show={show} onClose={handleClose} />

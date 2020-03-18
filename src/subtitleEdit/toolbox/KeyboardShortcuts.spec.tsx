@@ -19,7 +19,7 @@ describe("KeyboardShortcuts", () => {
                     type="button"
                     className="dotsub-keyboard-shortcuts-button btn btn-secondary"
                 >
-                    Keyboard Shortcuts
+                    <i className="far fa-keyboard" /> Keyboard Shortcuts
                 </button>
                 <div className="fade modal-backdrop show" />
                 <div
