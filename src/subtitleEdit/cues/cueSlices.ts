@@ -3,6 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { copyNonConstructorProperties } from "./cueUtils";
+import { Constants } from "../constants";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -24,10 +25,8 @@ interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
 }
 
-const HALF_SECOND = 0.5;
-
 const applyInvalidEndTimePrevention = (vttCue: VTTCue): VTTCue => {
-    const maxEndTime = vttCue.startTime + HALF_SECOND;
+    const maxEndTime = vttCue.startTime + Constants.HALF_SECOND;
     if (maxEndTime >= vttCue.endTime) {
         vttCue.endTime = maxEndTime;
     }

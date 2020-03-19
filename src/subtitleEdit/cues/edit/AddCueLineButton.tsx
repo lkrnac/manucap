@@ -1,10 +1,11 @@
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { createAndAddCue, updateEditingCueIndex } from "../cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "../../model";
 import { KeyCombination } from "../../shortcutConstants";
 import Mousetrap from "mousetrap";
+import { Constants } from "../../constants";
 
 interface Props {
     cueIndex: number;
@@ -14,6 +15,9 @@ interface Props {
 const AddCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
+    const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const nextCueIndex = props.cueIndex + 1;
+    const [shouldAddCue, setShouldAddCue] = useState(true);
 
     useEffect(() => {
         const registerShortcuts = (): void => {
@@ -24,10 +28,18 @@ const AddCueLineButton = (props: Props): ReactElement => {
         };
         registerShortcuts();
     }, [dispatch, props, cuesCount]);
+
+    useEffect(() => {
+        setShouldAddCue(nextCueIndex == cues.length
+            || ((props.cue.vttCue.endTime + Constants.HALF_SECOND)
+                <= cues[nextCueIndex]?.vttCue?.startTime));
+    }, [nextCueIndex, cues, props.cue]);
+
     return (
         <button
             style={{ maxHeight: "38px", margin: "5px" }}
             className="btn btn-outline-secondary sbte-add-cue-button"
+            disabled={!shouldAddCue}
             onClick={(): AppThunk => dispatch(createAndAddCue(props.cue, props.cueIndex + 1))}
         >
             <b>+</b>
