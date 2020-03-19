@@ -10,6 +10,7 @@ import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
+import { Alert } from "react-bootstrap";
 
 export interface SubtitleEditProps {
     mp4: string;
@@ -31,6 +32,24 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         : cues;
     const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
 
+    const pendingCueChanges = useSelector((state: SubtitleEditState) => state.pendingCueChanges);
+    const [showAutoSaveAlert, setShowAutoSaveAlert] = useState(false);
+
+    useEffect(
+        () => {
+            const autoSaveInterval = setInterval(
+                () => {
+                    if (pendingCueChanges) {
+                        props.onSave();
+                        setShowAutoSaveAlert(true);
+                    }
+                },
+                10000 // this.props.autoSaveTimeout
+            );
+            return (): void => clearInterval(autoSaveInterval);
+        }, [ pendingCueChanges, props ]
+    );
+
     useEffect(
         () => {
             if (cues.length === 0) {
@@ -45,6 +64,20 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
             <SubtitleEditHeader />
+            <div className="float-right">
+                <Alert
+                    show={showAutoSaveAlert}
+                    onClose={(): void => setShowAutoSaveAlert(false)}
+                    style={{ padding: "6px" }}
+                    variant="success"
+                    dismissible
+                    // alertClass="alert-success"
+                    // autoCloseDelay={2000}
+                    // autoClose
+                >
+                    AutoSaved!
+                </Alert>
+            </div>
             <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                 <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                     <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />

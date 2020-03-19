@@ -119,6 +119,20 @@ export const sourceCuesSlice = createSlice({
     }
 });
 
+export const pendingCueChangesSlice = createSlice({
+    name: "pendingCueChangesSlice",
+    initialState: false,
+    reducers: {},
+    extraReducers: {
+        [cuesSlice.actions.updateVttCue.type]: (): boolean => true,
+        [cuesSlice.actions.updateCueCategory.type]: (): boolean => true,
+        [cuesSlice.actions.addCue.type]: (): boolean => true,
+        [cuesSlice.actions.deleteCue.type]: (): boolean => true,
+        [cuesSlice.actions.updateCues.type]: (): boolean => true,
+        [cuesSlice.actions.applyShiftTime.type]: (): boolean => true,
+    }
+});
+
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<VttCueAction>>): void => {
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue }));
