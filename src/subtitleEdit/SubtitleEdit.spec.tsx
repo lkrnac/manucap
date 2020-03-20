@@ -129,6 +129,16 @@ describe("SubtitleEdit", () => {
                             </div>
                         </div>
                     </div>
+                    <div style={{
+                        position: "absolute",
+                        top: 10,
+                        right: 10
+                    }}
+                    >
+                        <div className="fade toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div className="alert-success toast-body">Autosaved!</div>
+                        </div>
+                    </div>
                 </div>
             </Provider>
         );
