@@ -122,14 +122,8 @@ export const sourceCuesSlice = createSlice({
 export const pendingCueChangesSlice = createSlice({
     name: "pendingCueChangesSlice",
     initialState: false,
-    reducers: {},
-    extraReducers: {
-        [cuesSlice.actions.updateVttCue.type]: (): boolean => true,
-        [cuesSlice.actions.updateCueCategory.type]: (): boolean => true,
-        [cuesSlice.actions.addCue.type]: (): boolean => true,
-        [cuesSlice.actions.deleteCue.type]: (): boolean => true,
-        [cuesSlice.actions.updateCues.type]: (): boolean => true,
-        [cuesSlice.actions.applyShiftTime.type]: (): boolean => true,
+    reducers: {
+        setPendingCueChanges: (_state, action: PayloadAction<boolean>): boolean => action.payload
     }
 });
 
@@ -171,6 +165,11 @@ export const updateSourceCues = (cues: CueDto[]): AppThunk =>
 export const applyShiftTime = (shiftTime: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<number>>): void => {
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
+    };
+
+export const setPendingCueChanges = (pending: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
+        dispatch(pendingCueChangesSlice.actions.setPendingCueChanges(pending));
     };
 
 const ADD_END_TIME_INTERVAL_SECS = 3;

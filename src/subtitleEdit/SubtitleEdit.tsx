@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/js/all.js";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
+import { createAndAddCue, setPendingCueChanges, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -42,12 +42,13 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     if (pendingCueChanges) {
                         props.onSave();
                         setShowAutoSaveAlert(true);
+                        dispatch(setPendingCueChanges(false));
                     }
                 },
                 10000 // this.props.autoSaveTimeout
             );
             return (): void => clearInterval(autoSaveInterval);
-        }, [ pendingCueChanges, props ]
+        }, [ dispatch, pendingCueChanges, props ]
     );
 
     useEffect(

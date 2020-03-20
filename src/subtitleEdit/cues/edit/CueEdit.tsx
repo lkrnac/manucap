@@ -1,7 +1,7 @@
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { updateCueCategory, updateVttCue } from "../cueSlices";
+import { setPendingCueChanges, updateCueCategory, updateVttCue } from "../cueSlices";
 import { AppThunk } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
@@ -22,6 +22,7 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateVttCue(props.index, newCue));
+    dispatch(setPendingCueChanges(true));
 };
 
 const CueEdit = (props: Props): ReactElement => {
@@ -54,19 +55,25 @@ const CueEdit = (props: Props): ReactElement => {
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
-                        onChange={(startTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, startTime, props.cue.vttCue.endTime)}
+                        onChange={(startTime: number): void => {
+                            dispatch(setPendingCueChanges(true));
+                            updateCueAndCopyProperties(dispatch, props, startTime, props.cue.vttCue.endTime);
+                        }}
                     />
                     <TimeEditor
                         time={props.cue.vttCue.endTime}
-                        onChange={(endTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime)}
+                        onChange={(endTime: number): void => {
+                            dispatch(setPendingCueChanges(true));
+                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime);
+                        }}
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <CueCategoryButton
-                        onChange={(cueCategory: CueCategory): AppThunk =>
-                            dispatch(updateCueCategory(props.index, cueCategory))}
+                        onChange={(cueCategory: CueCategory): AppThunk => {
+                            dispatch(setPendingCueChanges(true));
+                            return dispatch(updateCueCategory(props.index, cueCategory));
+                        }}
                         category={props.cue.cueCategory}
                     />
                     <PositionButton
@@ -81,6 +88,7 @@ const CueEdit = (props: Props): ReactElement => {
                                 newCue[property] = newPositionProperties[property];
                             }
                             dispatch(updateVttCue(props.index, newCue));
+                            dispatch(setPendingCueChanges(true));
                         }}
                     />
                 </div>
