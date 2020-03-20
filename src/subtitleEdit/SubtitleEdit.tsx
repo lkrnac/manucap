@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/js/all.js";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { createAndAddCue, setPendingCueChanges, updateEditingCueIndex } from "./cues/cueSlices";
+import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -11,6 +11,7 @@ import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
 import { Toast } from "react-bootstrap";
+import { setPendingCueChanges } from "./cues/edit/editorStatesSlice";
 
 const autoSaveTimeout = 10000;
 

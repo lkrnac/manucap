@@ -27,6 +27,14 @@ export const editorStatesSlice = createSlice({
     }
 });
 
+export const pendingCueChangesSlice = createSlice({
+    name: "pendingCueChangesSlice",
+    initialState: false,
+    reducers: {
+        setPendingCueChanges: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    }
+});
+
 export const updateEditorState = (editorId: number, editorState: EditorState): AppThunk =>
     (dispatch: Dispatch<PayloadAction<EditorStateAction>>): void => {
         dispatch(editorStatesSlice.actions.updateEditorState({ editorId, editorState }));
@@ -34,3 +42,8 @@ export const updateEditorState = (editorId: number, editorState: EditorState): A
 
 export const reset = (): AppThunk => (dispatch: Dispatch<PayloadAction<undefined>>): void =>
     dispatch(editorStatesSlice.actions.reset());
+
+export const setPendingCueChanges = (pending: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
+        dispatch(pendingCueChangesSlice.actions.setPendingCueChanges(pending));
+    };

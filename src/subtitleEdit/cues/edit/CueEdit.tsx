@@ -1,7 +1,7 @@
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { setPendingCueChanges, updateCueCategory, updateVttCue } from "../cueSlices";
+import { updateCueCategory, updateVttCue } from "../cueSlices";
 import { AppThunk } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
@@ -10,6 +10,7 @@ import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch } from "react-redux";
+import { setPendingCueChanges } from "./editorStatesSlice";
 
 interface Props {
     index: number;
