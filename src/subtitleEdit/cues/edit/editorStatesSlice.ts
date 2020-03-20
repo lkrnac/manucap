@@ -32,6 +32,12 @@ export const pendingCueChangesSlice = createSlice({
     initialState: false,
     reducers: {
         setPendingCueChanges: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    },
+    extraReducers: {
+        [cuesSlice.actions.updateCueCategory.type]: (): boolean => true,
+        [cuesSlice.actions.deleteCue.type]: (): boolean => true,
+        [cuesSlice.actions.applyShiftTime.type]: (): boolean => true,
+        [editorStatesSlice.actions.updateEditorState.type]: (): boolean => true
     }
 });
 

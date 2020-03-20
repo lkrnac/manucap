@@ -56,25 +56,19 @@ const CueEdit = (props: Props): ReactElement => {
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
-                        onChange={(startTime: number): void => {
-                            dispatch(setPendingCueChanges(true));
-                            updateCueAndCopyProperties(dispatch, props, startTime, props.cue.vttCue.endTime);
-                        }}
+                        onChange={(startTime: number): void =>
+                            updateCueAndCopyProperties(dispatch, props, startTime, props.cue.vttCue.endTime)}
                     />
                     <TimeEditor
                         time={props.cue.vttCue.endTime}
-                        onChange={(endTime: number): void => {
-                            dispatch(setPendingCueChanges(true));
-                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime);
-                        }}
+                        onChange={(endTime: number): void =>
+                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime)}
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <CueCategoryButton
-                        onChange={(cueCategory: CueCategory): AppThunk => {
-                            dispatch(setPendingCueChanges(true));
-                            return dispatch(updateCueCategory(props.index, cueCategory));
-                        }}
+                        onChange={(cueCategory: CueCategory): AppThunk =>
+                            dispatch(updateCueCategory(props.index, cueCategory))}
                         category={props.cue.cueCategory}
                     />
                     <PositionButton

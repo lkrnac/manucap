@@ -17,7 +17,7 @@ import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import {setPendingCueChanges, updateVttCue} from "../cueSlices";
+import { updateVttCue } from "../cueSlices";
 
 const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");
@@ -109,7 +109,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, convertHtmlToVtt(text));
             copyNonConstructorProperties(vttCue, props.vttCue);
             dispatch(updateVttCue(props.index, vttCue));
-            dispatch(setPendingCueChanges(true));
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
