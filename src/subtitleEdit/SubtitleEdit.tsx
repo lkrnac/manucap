@@ -12,6 +12,8 @@ import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
 import { Toast } from "react-bootstrap";
 
+const autoSaveTimeout = 10000;
+
 export interface SubtitleEditProps {
     mp4: string;
     poster: string;
@@ -45,7 +47,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         dispatch(setPendingCueChanges(false));
                     }
                 },
-                10000 // this.props.autoSaveTimeout
+                autoSaveTimeout
             );
             return (): void => clearInterval(autoSaveInterval);
         }, [ dispatch, pendingCueChanges, props ]
@@ -65,22 +67,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
             <SubtitleEditHeader />
-            <div style={{
-                position: "absolute",
-                top: 10,
-                right: 10
-            }}
-            >
-                <Toast
-                    onClose={(): void => setShowAutoSaveAlert(false)}
-                    show={showAutoSaveAlert}
-                    delay={2000}
-                    autohide
-                >
-                    <Toast.Body className="alert-success">Autosaved!</Toast.Body>
-                </Toast>
-
-            </div>
             <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                 <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                     <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
@@ -167,6 +153,22 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </button>
                     </div>
                 </div>
+            </div>
+            <div style={{
+                position: "absolute",
+                top: 10,
+                right: 10
+            }}
+            >
+                <Toast
+                    onClose={(): void => setShowAutoSaveAlert(false)}
+                    show={showAutoSaveAlert}
+                    delay={2000}
+                    autohide
+                >
+                    <Toast.Body className="alert-success">Autosaved!</Toast.Body>
+                </Toast>
+
             </div>
         </div>
     );
