@@ -24,25 +24,39 @@ export interface CueAction extends CueIndexAction {
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
 }
+//
+// const applyInvalidEndTimePrevention = (vttCue: VTTCue, followingCue: CueDto): VTTCue => {
+//     console.log(followingCue);
+//     const maxEndTime = vttCue.startTime + Constants.HALF_SECOND;
+//     if (maxEndTime >= vttCue.endTime) {
+//         vttCue.endTime = maxEndTime;
+//     }
+//     return vttCue;
+// };
 
-const applyInvalidEndTimePrevention = (vttCue: VTTCue): VTTCue => {
-    const maxEndTime = vttCue.startTime + Constants.HALF_SECOND;
-    if (maxEndTime >= vttCue.endTime) {
-        vttCue.endTime = maxEndTime;
-    }
-    return vttCue;
-};
+const applyOverlapPrevention = (action: PayloadAction<VttCueAction>, previousCue: CueDto,
+                                followingCue: CueDto): VTTCue => {
 
-const applyOverlapPrevention = (action: PayloadAction<VttCueAction>, state: CueDto[]): VTTCue => {
     const vttCue = action.payload.vttCue;
-    const previousCue = state[action.payload.idx - 1];
-    if (previousCue && previousCue.vttCue.endTime > vttCue.startTime) {
+
+    if (vttCue.startTime < previousCue?.vttCue.endTime) {
         vttCue.startTime = previousCue.vttCue.endTime;
     }
-    const followingCue = state[action.payload.idx + 1];
-    if (followingCue && followingCue.vttCue.startTime < vttCue.endTime) {
+    if (vttCue.startTime - previousCue?.vttCue.startTime < Constants.HALF_SECOND) {
+        throw new Error("Not allowed");
+    }
+
+
+
+    if (vttCue.endTime - vttCue.startTime < Constants.HALF_SECOND) {
+        vttCue.startTime = previousCue?.vttCue.endTime | 0;
+    }
+
+
+    if (vttCue.endTime > followingCue?.vttCue.startTime) {
         vttCue.endTime = followingCue.vttCue.startTime;
     }
+
     return vttCue;
 };
 
@@ -54,8 +68,11 @@ export const cuesSlice = createSlice({
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
                 : "DIALOGUE";
-            const vttCueWithoutOverlap = applyOverlapPrevention(action, state);
-            const vttCue = applyInvalidEndTimePrevention(vttCueWithoutOverlap);
+            const previousCue = state[action.payload.idx - 1];
+            const followingCue = state[action.payload.idx + 1];
+
+            const vttCue = applyOverlapPrevention(action, previousCue,
+                followingCue);
             state[action.payload.idx] = { vttCue, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {

@@ -13,11 +13,13 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
+import { updateCues } from "../cueSlices";
+import { AnyAction } from "@reduxjs/toolkit";
 
 let testingStore = createTestingStore();
 
 const cues = [
-    { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
     { vttCue: new VTTCue(1, 7200, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
@@ -312,5 +314,88 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
     });
+
+    it("should limit editing cue time to next cue", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const vttCue = new VTTCue(0, 2, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+
+        // WHEN
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+    });
+
+    it("should not limit editing cue time to next cue if last cue", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const vttCue = new VTTCue(999, 10000, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+
+        // WHEN
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={1} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // THEN
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(999);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(10000);
+    });
+
+    it("should not increase cue startTime to max value relative" +
+        " to next cue if arrow up shortcut clicked", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const vttCue = new VTTCue(0.5, 1, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+
+        // WHEN
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+        simulant.fire(
+            document.documentElement, "keydown",
+            { keyCode: Character.ARROW_UP, shiftKey: true, altKey: true });
+
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0.5);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+    });
+
+    it("should not decrease cue startTime to min value relative" +
+        " to previous cue if arrow down shortcut clicked", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const vttCue = new VTTCue(0.5, 1.5, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+
+        // WHEN
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={1} cue={cue} playerTime={1} />
+            </Provider>
+        );
+        simulant.fire(
+            document.documentElement, "keydown",
+            { keyCode: Character.ARROW_DOWN, shiftKey: true, altKey: true });
+
+
+        // THEN
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(1.5);
+    });
+
 
 });

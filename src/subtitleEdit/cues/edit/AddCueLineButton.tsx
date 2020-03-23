@@ -22,25 +22,32 @@ const AddCueLineButton = (props: Props): ReactElement => {
     useEffect(() => {
         const registerShortcuts = (): void => {
             Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
-            Mousetrap.bind([KeyCombination.ENTER], () => props.cueIndex === cuesCount - 1
-                ? dispatch(createAndAddCue(props.cue, props.cueIndex + 1))
-                : dispatch(updateEditingCueIndex(-1)));
+            Mousetrap.bind([KeyCombination.ENTER], () => {
+                    props.cueIndex === cuesCount - 1 && shouldAddCue
+                        ? dispatch(createAndAddCue(props.cue, props.cueIndex + 1))
+                        : dispatch(updateEditingCueIndex(-1));
+            });
+
         };
         registerShortcuts();
-    }, [dispatch, props, cuesCount]);
+    }, [dispatch, shouldAddCue, props, cuesCount]);
 
     useEffect(() => {
-        setShouldAddCue(nextCueIndex == cues.length
-            || ((props.cue.vttCue.endTime + Constants.HALF_SECOND)
-                <= cues[nextCueIndex]?.vttCue?.startTime));
+        setShouldAddCue(
+            nextCueIndex == cues.length
+            || (cues[nextCueIndex]?.vttCue?.startTime - props.cue.vttCue.endTime >= Constants.HALF_SECOND)
+        );
     }, [nextCueIndex, cues, props.cue]);
 
     return (
         <button
             style={{ maxHeight: "38px", margin: "5px" }}
             className="btn btn-outline-secondary sbte-add-cue-button"
-            disabled={!shouldAddCue}
-            onClick={(): AppThunk => dispatch(createAndAddCue(props.cue, props.cueIndex + 1))}
+            onClick={(): (AppThunk | void) => {
+                if (shouldAddCue) {
+                    return dispatch(createAndAddCue(props.cue, props.cueIndex + 1));
+                }
+            }}
         >
             <b>+</b>
         </button>

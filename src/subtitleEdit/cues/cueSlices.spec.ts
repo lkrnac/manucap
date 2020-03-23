@@ -40,12 +40,12 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateVttCue(0, new VTTCue(2, 0, "Dummy Cue")) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 0, "Dummy Cue")) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.5);
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
         });
 
         it("apply invalid end time prevention on end time change", () => {
