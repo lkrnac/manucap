@@ -23,7 +23,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
         const registerShortcuts = (): void => {
             Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
             Mousetrap.bind([KeyCombination.ENTER], () => {
-                    props.cueIndex === cuesCount - 1 && shouldAddCue
+                    props.cueIndex === cuesCount - 1
                         ? dispatch(createAndAddCue(props.cue, props.cueIndex + 1))
                         : dispatch(updateEditingCueIndex(-1));
             });

@@ -56,7 +56,7 @@ describe("CueEdit", () => {
                                     padding: "5px",
                                     textAlign: "center"
                                 }}
-                                value="00:00:01.000"
+                                value="00:00:00.000"
                                 onChange={(): void => undefined}
                             />
                             <input
@@ -69,7 +69,7 @@ describe("CueEdit", () => {
                                     padding: "5px",
                                     textAlign: "center"
                                 }}
-                                value="00:00:02.000"
+                                value="00:00:01.000"
                                 onChange={(): void => undefined}
                             />
                         </div>
@@ -159,10 +159,10 @@ describe("CueEdit", () => {
 
         // WHEN
         actualNode.find("TimeField").at(0)
-            .simulate("change", { target: { value: "00:00:00.865", selectionEnd: 12 }});
+            .simulate("change", { target: { value: "00:00:00.500", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.500);
     });
 
     it("updates cue in redux store when end time changed", () => {
@@ -351,17 +351,15 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(10000);
     });
 
-    it("should not increase cue startTime to max value relative" +
-        " to next cue if arrow up shortcut clicked", () => {
+    it("Increases cue startTime to max value relative" +
+        " to cue endtime if arrow up shortcut clicked and player time overlaps", () => {
         // GIVEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const vttCue = new VTTCue(0.5, 1, "someText");
-        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
 
         // WHEN
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} />
+                <CueEdit index={0} cue={cues[0]} playerTime={0.6} />
             </Provider>
         );
         simulant.fire(
@@ -371,20 +369,17 @@ describe("CueEdit", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0.5);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
     });
 
-    it("should not decrease cue startTime to min value relative" +
-        " to previous cue if arrow down shortcut clicked", () => {
+    it("Sets cue endtime to min value relative" +
+        " to cue start time if arrow down shortcut clicked and player time overlaps", () => {
         // GIVEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const vttCue = new VTTCue(0.5, 1.5, "someText");
-        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
 
         // WHEN
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={1} cue={cue} playerTime={1} />
+                <CueEdit index={0} cue={cues[0]} playerTime={1.1} />
             </Provider>
         );
         simulant.fire(
@@ -393,8 +388,58 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(1.5);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+    });
+
+    it("Force set starttime to max value if passed invalid starttime range value", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(0)
+            .simulate("change", { target: { value: "00:00:00.600", selectionEnd: 12  }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0.5);
+    });
+
+    it("Force set endtime to lowest value if passed invalid endtime range value", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(1)
+            .simulate("change", { target: { value: "00:00:00.400", selectionEnd: 12  }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(0.5);
+    });
+
+    it("Force set endtime to lowest value if passed endtime value equals to startime", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cues[0]} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(1)
+            .simulate("change", { target: { value: "00:00:00.000", selectionEnd: 12  }});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(0.5);
     });
 
 

@@ -1,5 +1,5 @@
 import { CueCategory, CueDto } from "../../model";
-import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
+import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import { updateCueCategory, updateVttCue } from "../cueSlices";
 import { AppThunk } from "../../subtitleEditReducers";
@@ -10,6 +10,7 @@ import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch } from "react-redux";
+import { Constants } from "../../constants";
 
 interface Props {
     index: number;
@@ -17,11 +18,25 @@ interface Props {
     playerTime: number;
 }
 
-const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
-                                    startTime: number, endTime: number): void => {
+const updateCueAndCopyProperties = (dispatch: Dispatch<AppThunk>, props: Props,
+                                     startTime: number, endTime: number): void => {
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateVttCue(props.index, newCue));
+};
+
+const validateStartTimeAndUpdateCue = (dispatch: Dispatch<AppThunk>, props: Props,
+                                     startTime: number, endTime: number): void => {
+    startTime = (endTime - startTime < Constants.HALF_SECOND) ?
+        (endTime - Constants.HALF_SECOND) : startTime;
+    updateCueAndCopyProperties(dispatch, props, startTime, endTime);
+};
+
+const validateEndTimeAndUpdateCue = (dispatch: Dispatch<AppThunk>, props: Props,
+                                     startTime: number, endTime: number): void => {
+    endTime = (endTime - startTime < Constants.HALF_SECOND) ?
+        (startTime + Constants.HALF_SECOND) : endTime;
+    updateCueAndCopyProperties(dispatch, props, startTime, endTime);
 };
 
 const CueEdit = (props: Props): ReactElement => {
@@ -30,10 +45,10 @@ const CueEdit = (props: Props): ReactElement => {
     useEffect(() => {
         const registerShortcuts = (): void => {
             Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
-                updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
+                validateStartTimeAndUpdateCue(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
             });
             Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
-                updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
+                validateEndTimeAndUpdateCue(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
             });
         };
         registerShortcuts();
@@ -55,12 +70,12 @@ const CueEdit = (props: Props): ReactElement => {
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
                         onChange={(startTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, startTime, props.cue.vttCue.endTime)}
+                            validateStartTimeAndUpdateCue(dispatch, props, startTime, props.cue.vttCue.endTime)}
                     />
                     <TimeEditor
                         time={props.cue.vttCue.endTime}
                         onChange={(endTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime)}
+                            validateEndTimeAndUpdateCue(dispatch, props, props.cue.vttCue.startTime, endTime)}
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>

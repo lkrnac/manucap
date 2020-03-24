@@ -20,20 +20,20 @@ const TestApp = (): ReactElement => {
     // #############################################################################################
     // #################### Comment this out if you need to test Captioning mode ###################
     // #############################################################################################
-    // useEffect(() => {
-    //     setTimeout( // this simulates latency caused by server roundtrip
-    //         () => dispatch(updateSourceCues([
-    //             { vttCue: new VTTCue(0, 1, "<i>Source <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
-    //             {
-    //                 vttCue: new VTTCue(1, 2, "<i><lang en>Source</lang> <b>Line</b></i> 2\nWrapped text"),
-    //                 cueCategory: "ONSCREEN_TEXT"
-    //             },
-    //             { vttCue: new VTTCue(2, 3, "<i>Source <b>Line</b></i> 3\nWrapped text"), cueCategory: "DIALOGUE" },
-    //             { vttCue: new VTTCue(3, 4, "<i>Source <b>Line</b></i> 4\nWrapped text"), cueCategory: "DIALOGUE" },
-    //         ])),
-    //         500
-    //     );
-    // });
+    useEffect(() => {
+        setTimeout( // this simulates latency caused by server roundtrip
+            () => dispatch(updateSourceCues([
+                { vttCue: new VTTCue(0, 1, "<i>Source <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
+                {
+                    vttCue: new VTTCue(1, 2, "<i><lang en>Source</lang> <b>Line</b></i> 2\nWrapped text"),
+                    cueCategory: "ONSCREEN_TEXT"
+                },
+                { vttCue: new VTTCue(2, 3, "<i>Source <b>Line</b></i> 3\nWrapped text"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 4, "<i>Source <b>Line</b></i> 4\nWrapped text"), cueCategory: "DIALOGUE" },
+            ])),
+            500
+        );
+    });
     // #############################################################################################
 
     useEffect(() => {
