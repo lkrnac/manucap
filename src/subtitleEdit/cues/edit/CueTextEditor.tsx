@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
-import {setPendingCueChanges, updateEditorState} from "./editorStatesSlice";
+import { setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
 
 const characterBindings = new Map<Character, string>();
