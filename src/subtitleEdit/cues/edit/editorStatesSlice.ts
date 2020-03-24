@@ -27,6 +27,14 @@ export const editorStatesSlice = createSlice({
     }
 });
 
+export const autoSaveSuccessSlice = createSlice({
+    name: "autoSaveSuccessSlice",
+    initialState: false,
+    reducers: {
+        setAutoSaveSuccess: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    }
+});
+
 export const pendingCueChangesSlice = createSlice({
     name: "pendingCueChangesSlice",
     initialState: false,
@@ -37,7 +45,7 @@ export const pendingCueChangesSlice = createSlice({
         [cuesSlice.actions.updateCueCategory.type]: (): boolean => true,
         [cuesSlice.actions.deleteCue.type]: (): boolean => true,
         [cuesSlice.actions.applyShiftTime.type]: (): boolean => true,
-        [editorStatesSlice.actions.updateEditorState.type]: (): boolean => true
+        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (): boolean => false
     }
 });
 
@@ -52,4 +60,9 @@ export const reset = (): AppThunk => (dispatch: Dispatch<PayloadAction<undefined
 export const setPendingCueChanges = (pending: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean>>): void => {
         dispatch(pendingCueChangesSlice.actions.setPendingCueChanges(pending));
+    };
+
+export const setAutoSaveSuccess = (success: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
+        dispatch(autoSaveSuccessSlice.actions.setAutoSaveSuccess(success));
     };

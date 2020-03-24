@@ -11,7 +11,7 @@ import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
 import { Toast } from "react-bootstrap";
-import { setPendingCueChanges } from "./cues/edit/editorStatesSlice";
+import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 
 const autoSaveTimeout = 10000;
 
@@ -38,20 +38,28 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const pendingCueChanges = useSelector((state: SubtitleEditState) => state.pendingCueChanges);
     const [showAutoSaveAlert, setShowAutoSaveAlert] = useState(false);
 
+    const autoSaveSuccess = useSelector((state: SubtitleEditState) => state.autoSaveSuccess);
+
+    useEffect(
+        () => {
+            if (autoSaveSuccess) {
+                setShowAutoSaveAlert(true);
+            }
+        }, [ autoSaveSuccess ]
+    );
+
     useEffect(
         () => {
             const autoSaveInterval = setInterval(
                 () => {
                     if (pendingCueChanges) {
                         props.onSave();
-                        setShowAutoSaveAlert(true);
-                        dispatch(setPendingCueChanges(false));
                     }
                 },
                 autoSaveTimeout
             );
             return (): void => clearInterval(autoSaveInterval);
-        }, [ dispatch, pendingCueChanges, props ]
+        }, [ pendingCueChanges, props ]
     );
 
     useEffect(
@@ -162,14 +170,16 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             }}
             >
                 <Toast
-                    onClose={(): void => setShowAutoSaveAlert(false)}
+                    onClose={(): void => {
+                        setShowAutoSaveAlert(false);
+                        dispatch(setAutoSaveSuccess(false));
+                    }}
                     show={showAutoSaveAlert}
                     delay={2000}
                     autohide
                 >
                     <Toast.Body className="alert-success">Autosaved!</Toast.Body>
                 </Toast>
-
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ import { cuesSlice, editingCueIndexSlice, sourceCuesSlice } from "./cues/cueSlic
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { changePlayerTimeSlice } from "./player/playbackSlices";
-import { editorStatesSlice, pendingCueChangesSlice } from "./cues/edit/editorStatesSlice";
+import { autoSaveSuccessSlice, editorStatesSlice, pendingCueChangesSlice } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
 
 export const Reducers = {
@@ -15,7 +15,8 @@ export const Reducers = {
     editorStates: editorStatesSlice.reducer,
     sourceCues: sourceCuesSlice.reducer,
     changePlayerTime: changePlayerTimeSlice.reducer,
-    pendingCueChanges: pendingCueChangesSlice.reducer
+    pendingCueChanges: pendingCueChangesSlice.reducer,
+    autoSaveSuccess: autoSaveSuccessSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);
