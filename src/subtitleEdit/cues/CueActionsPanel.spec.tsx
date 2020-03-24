@@ -186,6 +186,8 @@ describe("CueActionsPanel", () => {
 
     it("opens next cue line for editing when add button is clicked", () => {
         // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
