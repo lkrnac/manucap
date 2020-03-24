@@ -14,9 +14,12 @@ import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
-import { reset } from "./cues/edit/editorStatesSlice";
+import { reset, setAutoSaveSuccess, setPendingCueChanges } from "./cues/edit/editorStatesSlice";
+import { Toast } from "react-bootstrap";
 
 let testingStore = createTestingStore();
+
+jest.useFakeTimers();
 
 const cues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -593,6 +596,78 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
+    });
+
+    it("renders auto save alert", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => {
+                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+                        return;
+                    }}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+        const expectedAlert = mount(
+            <Toast
+                show
+                delay={2000}
+                autohide
+                onClose={jest.fn()}
+            >
+                <Toast.Body className="alert-success">Autosaved!</Toast.Body>
+            </Toast>
+        );
+
+        //WHEN
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
+        jest.advanceTimersByTime(15);
+
+        //THEN
+        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("doesn't renders auto save alert on save failure",  () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => {
+                        testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
+                        return;
+                    }}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+        const expectedAlert = mount(
+            <Toast
+                show={false}
+                delay={2000}
+                autohide
+                onClose={jest.fn()}
+            >
+                <Toast.Body className="alert-success">Autosaved!</Toast.Body>
+            </Toast>
+        );
+
+        //WHEN
+        testingStore.dispatch(setPendingCueChanges(false) as {} as AnyAction);
+        jest.advanceTimersByTime(20);
+
+        //THEN
+        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
     });
 
 });

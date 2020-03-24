@@ -21,6 +21,7 @@ export interface SubtitleEditProps {
     onViewAllTracks: () => void;
     onSave: () => void;
     onComplete: () => void;
+    autoSaveTimeout?: number;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -56,7 +57,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         props.onSave();
                     }
                 },
-                autoSaveTimeout
+                props.autoSaveTimeout || autoSaveTimeout
             );
             return (): void => clearInterval(autoSaveInterval);
         }, [ pendingCueChanges, props ]
