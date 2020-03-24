@@ -663,8 +663,44 @@ describe("SubtitleEdit", () => {
         );
 
         //WHEN
-        testingStore.dispatch(setPendingCueChanges(false) as {} as AnyAction);
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
         jest.advanceTimersByTime(20);
+
+        //THEN
+        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("auto-hides auto save alert on save success",  () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => {
+                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+                        return;
+                    }}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+        const expectedAlert = mount(
+            <Toast
+                show={false}
+                delay={2000}
+                autohide
+                onClose={jest.fn()}
+            >
+                <Toast.Body className="alert-success">Autosaved!</Toast.Body>
+            </Toast>
+        );
+
+        //WHEN
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
+        jest.advanceTimersByTime(2020);
 
         //THEN
         expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
