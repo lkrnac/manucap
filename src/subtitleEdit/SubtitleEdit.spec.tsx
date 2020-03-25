@@ -132,14 +132,15 @@ describe("SubtitleEdit", () => {
                             </div>
                         </div>
                     </div>
-                    <div style={{
-                        position: "absolute",
-                        top: 10,
-                        right: 10
-                    }}
+                    <div
+                        style={{
+                            position: "absolute",
+                            left: "45%",
+                            top: "1%"
+                        }}
                     >
-                        <div className="fade toast" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div className="alert-success toast-body">Autosaved!</div>
+                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                            <i className="fa fa-thumbs-up" /> Saved
                         </div>
                     </div>
                 </div>
@@ -621,9 +622,11 @@ describe("SubtitleEdit", () => {
                 delay={2000}
                 autohide
                 onClose={jest.fn()}
+                className="sbte-alert"
             >
-                <Toast.Body className="alert-success">Autosaved!</Toast.Body>
+                <i className="fa fa-thumbs-up" /> Saved
             </Toast>
+
         );
 
         //WHEN
@@ -657,8 +660,9 @@ describe("SubtitleEdit", () => {
                 delay={2000}
                 autohide
                 onClose={jest.fn()}
+                className="sbte-alert"
             >
-                <Toast.Body className="alert-success">Autosaved!</Toast.Body>
+                <i className="fa fa-thumbs-up" /> Saved
             </Toast>
         );
 
@@ -693,8 +697,9 @@ describe("SubtitleEdit", () => {
                 delay={2000}
                 autohide
                 onClose={jest.fn()}
+                className="sbte-alert"
             >
-                <Toast.Body className="alert-success">Autosaved!</Toast.Body>
+                <i className="fa fa-thumbs-up" /> Saved
             </Toast>
         );
 
