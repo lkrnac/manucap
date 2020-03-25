@@ -43,9 +43,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
     useEffect(
         () => {
-            if (autoSaveSuccess) {
-                setShowAutoSaveAlert(true);
-            }
+            setShowAutoSaveAlert(autoSaveSuccess);
         }, [ autoSaveSuccess ]
     );
 
