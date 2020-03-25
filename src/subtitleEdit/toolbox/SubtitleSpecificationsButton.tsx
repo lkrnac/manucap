@@ -7,16 +7,16 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const [show, setShow] = useState(false);
-    const showOnlyOnce = useRef(true);
+    const showOnlyOnceRef = useRef(true);
 
     useEffect(
         () => {
-            const autoShow = subtitleSpecifications != null
+            const shouldAutoShow = subtitleSpecifications != null
                 && subtitleSpecifications.enabled
                 && (cues.length === 0 || (cues.length === 1 && cues[0]?.vttCue.text === ""));
-            if (showOnlyOnce.current && autoShow) {
+            if (showOnlyOnceRef.current && shouldAutoShow) {
                 setShow(true);
-                showOnlyOnce.current = false;
+                showOnlyOnceRef.current = false;
             }
         }, [subtitleSpecifications, cues]
     );

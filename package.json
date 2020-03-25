@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "",
   "author": "lkrnac",
   "license": "",
@@ -105,17 +105,5 @@
   },
   "files": [
     "dist"
-  ],
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  ]
 }
