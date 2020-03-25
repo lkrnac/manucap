@@ -213,27 +213,4 @@ describe("SubtitleSpecificationsButton", () => {
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
     });
-
-    it("Auto shows subtitle specification only once even with cues change", () => {
-        // GIVEN
-        testingStore.dispatch(
-            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
-        );
-        // @ts-ignore passing empty
-        testingStore.dispatch(updateCues([]) as {} as AnyAction);
-
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
-            </Provider>
-        );
-        actualNode.find(SubtitleSpecificationsModal).props().onClose();
-
-        //WHEN
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
-
-        // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
-    });
 });
