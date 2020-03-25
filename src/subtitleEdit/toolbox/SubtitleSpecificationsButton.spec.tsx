@@ -151,7 +151,7 @@ describe("SubtitleSpecificationsButton", () => {
     it("Auto shows subtitle specification if cues has default cue", () => {
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
 
         const actualNode = mount(
@@ -167,7 +167,7 @@ describe("SubtitleSpecificationsButton", () => {
     it("Auto shows subtitle specification if cues are empty", () => {
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
         // @ts-ignore passing empty
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
