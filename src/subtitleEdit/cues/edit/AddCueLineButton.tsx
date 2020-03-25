@@ -34,7 +34,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
 
     useEffect(() => {
         setShouldAddCue(
-            nextCueIndex == cues.length
+            nextCueIndex === cues.length
             || (cues[nextCueIndex]?.vttCue?.startTime - props.cue.vttCue.endTime >= Constants.HALF_SECOND)
         );
     }, [nextCueIndex, cues, props.cue]);
