@@ -663,7 +663,6 @@ describe("SubtitleEdit", () => {
             >
                 <i className="fa fa-thumbs-up" /> Saved
             </Toast>
-
         );
 
         //WHEN
@@ -672,6 +671,30 @@ describe("SubtitleEdit", () => {
 
         //THEN
         expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("calls onSave callback on auto save", () => {
+        // GIVEN
+        const mockOnSave = jest.fn();
+        mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={mockOnSave}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
+        jest.advanceTimersByTime(15);
+
+        // THEN
+        expect(mockOnSave.mock.calls.length).toBe(1);
     });
 
     it("doesn't renders save alert on auto save failure",  () => {
@@ -746,6 +769,29 @@ describe("SubtitleEdit", () => {
 
         //THEN
         expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("clears auto save interval on unmount",  () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+
+        //WHEN
+        actualNode.unmount();
+
+        //THEN
+        expect(setInterval).toHaveBeenCalledTimes(1);
+        expect(clearInterval).toHaveBeenCalledTimes(1);
     });
 
 });
