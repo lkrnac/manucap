@@ -11,8 +11,10 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     useEffect(
         () => {
             setShow(subtitleSpecifications != null
-                && (cues.length === 0 || (cues.length === 1 && cues[0]?.vttCue.text === "")));
-        }, [subtitleSpecifications, cues]
+                && subtitleSpecifications.enabled
+                && (cues.length === 0 || (cues.length === 1 && cues[0]?.vttCue.text === ""))
+                );
+        }, []
     );
 
     const handleClose = (): void => setShow(false);
