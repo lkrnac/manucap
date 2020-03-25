@@ -3,6 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { copyNonConstructorProperties } from "./cueUtils";
+import { Constants } from "../constants";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -24,19 +25,28 @@ interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
 }
 
+const applyInvalidRangePrevention = (vttCue: VTTCue, originalCue: CueDto): VTTCue => {
+
+    const isOutOfRange = (vttCue.endTime - vttCue.startTime < Constants.HALF_SECOND);
+    if (isOutOfRange && vttCue.startTime !== originalCue.vttCue.startTime) {
+        vttCue.startTime = Number((vttCue.endTime - Constants.HALF_SECOND).toFixed(3));
+
+    } else if(isOutOfRange && vttCue.endTime !== originalCue.vttCue.endTime) {
+        vttCue.endTime = Number((vttCue.startTime + Constants.HALF_SECOND).toFixed(3));
+    }
+    return vttCue;
+};
+
 const applyOverlapPrevention = (action: PayloadAction<VttCueAction>,
                                 previousCue: CueDto,
                                 followingCue: CueDto): VTTCue => {
     const vttCue = action.payload.vttCue;
-
     if (vttCue.startTime < previousCue?.vttCue.endTime) {
         vttCue.startTime = previousCue.vttCue.endTime;
     }
-
     if (vttCue.endTime > followingCue?.vttCue.startTime) {
         vttCue.endTime = followingCue.vttCue.startTime;
     }
-
     return vttCue;
 };
 
@@ -50,8 +60,11 @@ export const cuesSlice = createSlice({
                 : "DIALOGUE";
             const previousCue = state[action.payload.idx - 1];
             const followingCue = state[action.payload.idx + 1];
+            const originalCue = state[action.payload.idx];
 
-            const vttCue = applyOverlapPrevention(action, previousCue, followingCue);
+            const vttCueWithoutOverlap = applyOverlapPrevention(action, previousCue, followingCue);
+            const vttCue = applyInvalidRangePrevention(vttCueWithoutOverlap, originalCue);
+
             state[action.payload.idx] = { vttCue, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
