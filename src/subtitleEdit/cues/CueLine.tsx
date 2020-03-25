@@ -34,7 +34,17 @@ const CueLine = (props: Props): ReactElement => {
             onClick={props.onClickHandler}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <div className="sbte-cue-line-flap" style={{ paddingLeft: "8px", paddingTop: "10px" }} >
+            <div
+                className="sbte-cue-line-flap"
+                style={{
+                    paddingTop: "10px",
+                    width: "30px",
+                    color: "white",
+                    fontSize: "11px",
+                    fontWeight: "bold",
+                    textAlign: "center"
+                }}
+            >
                 {props.index + 1}
             </div>
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
