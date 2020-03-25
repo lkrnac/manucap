@@ -773,6 +773,9 @@ describe("SubtitleEdit", () => {
 
     it("clears auto save interval on unmount",  () => {
         // GIVEN
+        const clearIntervalSpy = jest.spyOn(window, "clearInterval");
+        const clearIntervalCallCount = clearIntervalSpy.mock.calls.length;
+
         const actualNode = mount(
             <Provider store={testingStore} >
                 <SubtitleEdit
@@ -781,7 +784,6 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
-                    autoSaveTimeout={10}
                 />
             </Provider>
         );
@@ -790,8 +792,7 @@ describe("SubtitleEdit", () => {
         actualNode.unmount();
 
         //THEN
-        expect(setInterval).toHaveBeenCalledTimes(1);
-        expect(clearInterval).toHaveBeenCalledTimes(1);
+        expect(clearIntervalSpy.mock.calls.length).toBe(clearIntervalCallCount + 1);
     });
 
 });
