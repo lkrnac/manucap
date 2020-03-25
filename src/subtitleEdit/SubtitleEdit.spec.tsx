@@ -599,7 +599,44 @@ describe("SubtitleEdit", () => {
         expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
     });
 
-    it("renders auto save alert", () => {
+    it("renders save alert on save button click", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => {
+                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+                        return;
+                    }}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+        const expectedAlert = mount(
+            <Toast
+                show
+                delay={2000}
+                autohide
+                onClose={jest.fn()}
+                className="sbte-alert"
+            >
+                <i className="fa fa-thumbs-up" /> Saved
+            </Toast>
+
+        );
+
+        //WHEN
+        actualNode.find("button.sbte-save-subtitle-btn").simulate("click");
+
+        //THEN
+        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("renders save alert on auto save", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore} >
@@ -637,7 +674,7 @@ describe("SubtitleEdit", () => {
         expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
     });
 
-    it("doesn't renders auto save alert on save failure",  () => {
+    it("doesn't renders save alert on auto save failure",  () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore} >
@@ -674,7 +711,7 @@ describe("SubtitleEdit", () => {
         expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
     });
 
-    it("auto-hides auto save alert on save success",  () => {
+    it("auto-hides save alert on save success",  () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore} >
