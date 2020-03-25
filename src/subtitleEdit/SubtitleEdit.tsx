@@ -164,12 +164,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     </div>
                 </div>
             </div>
-            <div style={{
-                position: "absolute",
-                top: 10,
-                right: 10
-            }}
-            >
+
+            <div style={{ position: "absolute", left: "45%", top: "1%" }}>
                 <Toast
                     onClose={(): void => {
                         setShowAutoSaveAlert(false);
@@ -178,8 +174,9 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     show={showAutoSaveAlert}
                     delay={2000}
                     autohide
+                    className="sbte-alert"
                 >
-                    <Toast.Body className="alert-success">Autosaved!</Toast.Body>
+                    <i className="fa fa-thumbs-up" /> Saved
                 </Toast>
             </div>
         </div>
