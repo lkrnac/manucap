@@ -1,8 +1,12 @@
 import "../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
-import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Provider } from "react-redux";
 import React from "react";
+import "@testing-library/jest-dom/extend-expect";
+import { render } from "@testing-library/react";
+import ReactDOM from "react-dom";
+
+import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { changePlayerTime } from "./playbackSlices";
@@ -37,5 +41,21 @@ describe("EditingVideoPlayer", () => {
 
         // THEN
         expect(actualNode.find(VideoPlayer).props().changePlayerTime).toEqual(2);
+    });
+
+    it("resets editing track state when unmounted", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const { container } = render(
+            <Provider store={testingStore}>
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" />
+            </Provider>
+        );
+
+        // WHEN
+        ReactDOM.unmountComponentAtNode(container);
+
+        // THEN
+        expect(testingStore.getState().editingTrack).toBeNull();
     });
 });

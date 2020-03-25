@@ -1,5 +1,5 @@
 import { Task, Track } from "./model";
-import { updateEditingTrack, updateTask } from "./trackSlices";
+import { resetEditingTrack, updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
@@ -28,6 +28,19 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().editingTrack).toEqual(testingTrack);
+        });
+    });
+
+    describe("resetEditingTrack", () => {
+        it("resets editing track", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingTrack).toEqual(null);
         });
     });
 
