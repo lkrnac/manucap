@@ -31,9 +31,16 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div
                         className="sbte-cue-line-flap"
-                        style={{ paddingTop: "10px", width: "30px",color: "white", fontSize: "11px",
-                     fontWeight: "bold", textAlign: "center" }}
-                    >2
+                        style={{
+                            paddingTop: "10px",
+                            width: "30px",
+                            color: "white",
+                            fontSize: "11px",
+                            fontWeight: "bold",
+                            textAlign: "center"
+                        }}
+                    >
+                        2
                     </div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
@@ -64,9 +71,16 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div
                         className="sbte-cue-line-flap"
-                        style={{ paddingTop: "10px", width: "30px",color: "white", fontSize: "11px",
-                     fontWeight: "bold", textAlign: "center" }}
-                    >2
+                        style={{
+                            paddingTop: "10px",
+                            width: "30px",
+                            color: "white",
+                            fontSize: "11px",
+                            fontWeight: "bold",
+                            textAlign: "center"
+                        }}
+                    >
+                        2
                     </div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
@@ -97,9 +111,16 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div
                         className="sbte-cue-line-flap"
-                        style={{ paddingTop: "10px", width: "30px",color: "white", fontSize: "11px",
-                     fontWeight: "bold", textAlign: "center" }}
-                    >2
+                        style={{
+                            paddingTop: "10px",
+                            width: "30px",
+                            color: "white",
+                            fontSize: "11px",
+                            fontWeight: "bold",
+                            textAlign: "center"
+                        }}
+                    >
+                        2
                     </div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
@@ -141,9 +162,16 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div
                         className="sbte-cue-line-flap"
-                        style={{ paddingTop: "10px", width: "30px",color: "white", fontSize: "11px",
-                     fontWeight: "bold", textAlign: "center" }}
-                    >2
+                        style={{
+                            paddingTop: "10px",
+                            width: "30px",
+                            color: "white",
+                            fontSize: "11px",
+                            fontWeight: "bold",
+                            textAlign: "center"
+                        }}
+                    >
+                        2
                     </div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
@@ -186,9 +214,16 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div
                         className="sbte-cue-line-flap"
-                        style={{ paddingTop: "10px", width: "30px",color: "white", fontSize: "11px",
-                     fontWeight: "bold", textAlign: "center" }}
-                    >2
+                        style={{
+                            paddingTop: "10px",
+                            width: "30px",
+                            color: "white",
+                            fontSize: "11px",
+                            fontWeight: "bold",
+                            textAlign: "center"
+                        }}
+                    >
+                        2
                     </div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
@@ -230,9 +265,16 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <div
                         className="sbte-cue-line-flap"
-                        style={{ paddingTop: "10px", width: "30px",color: "white", fontSize: "11px",
-                     fontWeight: "bold", textAlign: "center" }}
-                    >2
+                        style={{
+                            paddingTop: "10px",
+                            width: "30px",
+                            color: "white",
+                            fontSize: "11px",
+                            fontWeight: "bold",
+                            textAlign: "center"
+                        }}
+                    >
+                        2
                     </div>
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView

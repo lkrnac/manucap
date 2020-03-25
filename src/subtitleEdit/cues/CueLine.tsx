@@ -36,8 +36,14 @@ const CueLine = (props: Props): ReactElement => {
         >
             <div
                 className="sbte-cue-line-flap"
-                style={{ paddingTop: "10px", width: "30px",color: "white", fontSize: "11px",
-                     fontWeight: "bold", textAlign: "center" }}
+                style={{
+                    paddingTop: "10px",
+                    width: "30px",
+                    color: "white",
+                    fontSize: "11px",
+                    fontWeight: "bold",
+                    textAlign: "center"
+                }}
             >
                 {props.index + 1}
             </div>
