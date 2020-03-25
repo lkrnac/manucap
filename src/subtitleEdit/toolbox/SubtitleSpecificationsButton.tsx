@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
@@ -7,12 +7,16 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const [show, setShow] = useState(false);
+    const showOnlyOnceRef = useRef(true);
 
     useEffect(
         () => {
-            setShow(subtitleSpecifications != null
-                && subtitleSpecifications.enabled
-                && (cues.length === 0 || (cues.length === 1 && cues[0]?.vttCue.text === "")));
+            const shouldAutoShow = subtitleSpecifications != null
+                && (cues.length === 0 || (cues.length === 1 && cues[0]?.vttCue.text === ""));
+            if (showOnlyOnceRef.current && shouldAutoShow) {
+                setShow(true);
+                showOnlyOnceRef.current = false;
+            }
         }, [subtitleSpecifications, cues]
     );
 
