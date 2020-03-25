@@ -118,4 +118,19 @@ describe("InlineStyleButton", () => {
         // THEN
         expect(event.preventDefault).toBeCalled();
     });
+
+    it("sets pendingCueChanges flag on button toggle ", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(InlineStyleButton).simulate("click");
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
 });

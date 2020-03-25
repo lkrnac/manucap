@@ -223,6 +223,22 @@ describe("CueActionsPanel", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
     });
 
+
+    it("updates pendingCueChanges flag in redux store when delete button is clicked", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-delete-cue-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+
     it("doesn't propagate click event to parent DOM nodes", () => {
         // GIVEN
         const fakeEvent = { stopPropagation: jest.fn() };
