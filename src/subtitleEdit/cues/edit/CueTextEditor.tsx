@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
-import { updateEditorState } from "./editorStatesSlice";
+import { setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
 
 const characterBindings = new Map<Character, string>();
@@ -142,8 +142,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             >
                 <Editor
                     editorState={editorState}
-                    onChange={(editorState: EditorState): AppThunk =>
-                        dispatch(updateEditorState(props.index, editorState))}
+                    onChange={(editorState: EditorState): AppThunk => {
+                        if (editorState.getLastChangeType()) {
+                            dispatch(setPendingCueChanges(true));
+                        }
+                        return dispatch(updateEditorState(props.index, editorState));
+                    }}
                     spellCheck
                     keyBindingFn={keyShortcutBindings}
                     handleKeyCommand={handleKeyShortcut}
