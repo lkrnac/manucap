@@ -14,6 +14,7 @@ import testingStore from "./testUtils/testingStore";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
+import { setAutoSaveSuccess } from "./subtitleEdit/cues/edit/editorStatesSlice";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
@@ -97,7 +98,14 @@ const TestApp = (): ReactElement => {
             poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
             mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
             onViewAllTracks={(): void => undefined}
-            onSave={(): void => undefined}
+            onSave={(): void => {
+                setTimeout(
+                    () => {
+                        dispatch(setAutoSaveSuccess(true));
+                    }, 500
+                );
+                return;
+            }}
             onComplete={(): void => undefined}
         />
     );
