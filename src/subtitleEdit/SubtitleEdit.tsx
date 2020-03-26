@@ -10,6 +10,10 @@ import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
+import { Toast } from "react-bootstrap";
+import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
+
+const autoSaveTimeout = 10000;
 
 export interface SubtitleEditProps {
     mp4: string;
@@ -17,6 +21,7 @@ export interface SubtitleEditProps {
     onViewAllTracks: () => void;
     onSave: () => void;
     onComplete: () => void;
+    autoSaveTimeout?: number;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -30,6 +35,31 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         ? sourceCues
         : cues;
     const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
+
+    const pendingCueChanges = useSelector((state: SubtitleEditState) => state.pendingCueChanges);
+    const [showAutoSaveAlert, setShowAutoSaveAlert] = useState(false);
+
+    const autoSaveSuccess = useSelector((state: SubtitleEditState) => state.autoSaveSuccess);
+
+    useEffect(
+        () => {
+            setShowAutoSaveAlert(autoSaveSuccess);
+        }, [ autoSaveSuccess ]
+    );
+
+    useEffect(
+        () => {
+            const autoSaveInterval = setInterval(
+                () => {
+                    if (pendingCueChanges) {
+                        props.onSave();
+                    }
+                },
+                props.autoSaveTimeout || autoSaveTimeout
+            );
+            return (): void => clearInterval(autoSaveInterval);
+        }, [ pendingCueChanges, props ]
+    );
 
     useEffect(
         () => {
@@ -131,6 +161,21 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </button>
                     </div>
                 </div>
+            </div>
+
+            <div style={{ position: "absolute", left: "45%", top: "1%" }}>
+                <Toast
+                    onClose={(): void => {
+                        setShowAutoSaveAlert(false);
+                        dispatch(setAutoSaveSuccess(false));
+                    }}
+                    show={showAutoSaveAlert}
+                    delay={2000}
+                    autohide
+                    className="sbte-alert"
+                >
+                    <i className="fa fa-thumbs-up" /> Saved
+                </Toast>
             </div>
         </div>
     );
