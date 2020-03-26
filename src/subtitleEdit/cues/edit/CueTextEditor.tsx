@@ -8,10 +8,9 @@ import {
     convertFromHTML,
     getDefaultKeyBinding
 } from "draft-js";
-import { Options, stateToHTML } from "draft-js-export-html";
 import React, { ReactElement, useEffect } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
-import { convertHtmlToVtt, convertVttToHtml } from "../cueTextConverter";
+import { convertVttToHtml, getVttText } from "../cueTextConverter";
 import { useDispatch, useSelector } from "react-redux";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
@@ -66,17 +65,6 @@ export interface CueTextEditorProps{
     vttCue: VTTCue;
 }
 
-// @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
-// defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
-// TODO: is this would be updated in types definition, we can remove this explicit cast + ts-ignore
-const convertToHtmlOptions = {
-    inlineStyles: {
-        BOLD: { element: "b" },
-        ITALIC: { element: "i" },
-    },
-    defaultBlockTag: null
-} as Options;
-
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
@@ -84,6 +72,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
     );
+    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
@@ -93,7 +82,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     useEffect(
         () => {
-            dispatch(updateEditorState(props.index, editorState));
+            dispatch(updateEditorState(props.index, editorState, subtitleSpecifications));
         },
         // It is enough to detect changes on pieces of editor state that indicate content change.
         // E.g. editorState.getSelection() is not changing content, thus we don't need to store editor state
@@ -105,10 +94,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
-            const text = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
-            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, convertHtmlToVtt(text));
+            const vttText = getVttText(currentContent);
+            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
             copyNonConstructorProperties(vttCue, props.vttCue);
-            dispatch(updateVttCue(props.index, vttCue));
+            dispatch(updateVttCue(props.index, vttCue, subtitleSpecifications));
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
@@ -143,7 +132,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 <Editor
                     editorState={editorState}
                     onChange={(editorState: EditorState): AppThunk =>
-                        dispatch(updateEditorState(props.index, editorState))}
+                        dispatch(updateEditorState(props.index, editorState, subtitleSpecifications))}
                     spellCheck
                     keyBindingFn={keyShortcutBindings}
                     handleKeyCommand={handleKeyShortcut}

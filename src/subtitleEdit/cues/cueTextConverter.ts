@@ -1,3 +1,6 @@
+import { Options, stateToHTML } from "draft-js-export-html";
+import { ContentState } from "draft-js";
+
 const orderedVttToHtmlConversions = [
     { from: "\n", to: "<br>" }
 ];
@@ -25,3 +28,18 @@ export const convertHtmlToVtt = (html: string): string => {
     return vtt;
 };
 
+// @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
+// defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
+// TODO: if this would be updated in types definition, we can remove this explicit cast + ts-ignore
+const convertToHtmlOptions = {
+    inlineStyles: {
+        BOLD: { element: "b" },
+        ITALIC: { element: "i" },
+    },
+    defaultBlockTag: null
+} as Options;
+
+export const getVttText = (currentContent: ContentState): string => {
+    const htmlText = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
+    return convertHtmlToVtt(htmlText);
+};

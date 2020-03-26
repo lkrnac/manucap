@@ -2,7 +2,8 @@ import { CueCategory, CueDto, SubtitleEditAction } from "../model";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import { copyNonConstructorProperties } from "./cueUtils";
+import { checkCharacterLimitation, copyNonConstructorProperties } from "./cueUtils";
+import { SubtitleSpecification } from "../toolbox/model";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -10,6 +11,7 @@ export interface CueIndexAction extends SubtitleEditAction {
 
 export interface VttCueAction extends CueIndexAction {
     vttCue: VTTCue;
+    subtitleSpecifications: SubtitleSpecification | null;
 }
 
 export interface CueCategoryAction extends CueIndexAction {
@@ -34,8 +36,7 @@ const applyInvalidEndTimePrevention = (vttCue: VTTCue): VTTCue => {
     return vttCue;
 };
 
-const applyOverlapPrevention = (action: PayloadAction<VttCueAction>, state: CueDto[]): VTTCue => {
-    const vttCue = action.payload.vttCue;
+const applyOverlapPrevention = (vttCue: VTTCue, action: PayloadAction<VttCueAction>, state: CueDto[]): VTTCue => {
     const previousCue = state[action.payload.idx - 1];
     if (previousCue && previousCue.vttCue.endTime > vttCue.startTime) {
         vttCue.startTime = previousCue.vttCue.endTime;
@@ -47,16 +48,28 @@ const applyOverlapPrevention = (action: PayloadAction<VttCueAction>, state: CueD
     return vttCue;
 };
 
+const applyCharacterLimitation = (vttCue: VTTCue, action: PayloadAction<VttCueAction>, state: CueDto[]): VTTCue => {
+    if (!checkCharacterLimitation(vttCue.text, action.payload.subtitleSpecifications)) {
+        vttCue.text = state[action.payload.idx].vttCue.text;
+    }
+    return vttCue;
+};
+
 export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
     reducers: {
         updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
+            const oldVttCue = action.payload.vttCue;
+            const newVttCue = new VTTCue(oldVttCue.startTime, oldVttCue.endTime, oldVttCue.text);
+            copyNonConstructorProperties(newVttCue, oldVttCue);
+
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
                 : "DIALOGUE";
-            const vttCueWithoutOverlap = applyOverlapPrevention(action, state);
-            const vttCue = applyInvalidEndTimePrevention(vttCueWithoutOverlap);
+            const vttCueWithoutOverlap = applyOverlapPrevention(newVttCue, action, state);
+            const vttCueWithCharacterLimitation = applyCharacterLimitation(vttCueWithoutOverlap, action, state);
+            const vttCue = applyInvalidEndTimePrevention(vttCueWithCharacterLimitation);
             state[action.payload.idx] = { vttCue, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
@@ -119,9 +132,13 @@ export const sourceCuesSlice = createSlice({
     }
 });
 
-export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
+export const updateVttCue = (
+    idx: number,
+    vttCue: VTTCue,
+    subtitleSpecifications: SubtitleSpecification | null = null
+): AppThunk =>
     (dispatch: Dispatch<PayloadAction<VttCueAction>>): void => {
-        dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue }));
+        dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue, subtitleSpecifications }));
     };
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
