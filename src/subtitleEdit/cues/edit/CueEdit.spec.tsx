@@ -165,6 +165,22 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.500);
     });
 
+    it("updates pendingCueChanges flag in redux store when start time changes", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cues[1]} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(0)
+            .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+
     it("updates cue in redux store when end time changed", () => {
         // GIVEN
         const actualNode = mount(
@@ -179,6 +195,22 @@ describe("CueEdit", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
+    });
+
+    it("updates pendingCueChanges flag in redux store when end time changes", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cues[1]} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("TimeField").at(1)
+            .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
     });
 
     it("maintains cue styling when start time changes", () => {
@@ -243,6 +275,23 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
     });
 
+    it("updates pendingCueChanges flag in redux store when cue position changes", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cue} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(PositionButton).props().changePosition(Position.Row2Column5);
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+
     it("updates line category", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
@@ -259,6 +308,24 @@ describe("CueEdit", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
+    });
+
+    it("updates pendingCueChanges flag in redux store when line category changes", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cue} playerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find("button#cue-line-category").simulate("click");
+        actualNode.find("a.dropdown-item").at(1).simulate("click");
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
     });
 
     it("passes down current line category", () => {
