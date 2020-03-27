@@ -49,7 +49,7 @@ const applyOverlapPrevention = (action: PayloadAction<VttCueAction>, state: CueD
 
 const verifyNoOverlapOnAddCue = (cue: CueDto, index: number, currentCues: CueDto[]): boolean =>
     index === currentCues.length
-    ||(currentCues[index]?.vttCue?.startTime - cue.vttCue.endTime >= HALF_SECOND);
+    ||(Number((currentCues[index]?.vttCue?.startTime - cue.vttCue.endTime).toFixed(3)) >= HALF_SECOND);
 
 
 export const cuesSlice = createSlice({
