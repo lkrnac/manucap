@@ -7,7 +7,7 @@ import { render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import EditingVideoPlayer from "./EditingVideoPlayer";
-import {CueDto, Track} from "../model";
+import { CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { changePlayerTime } from "./playbackSlices";
 import { mount } from "enzyme";
