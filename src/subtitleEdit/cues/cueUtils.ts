@@ -198,6 +198,13 @@ export const checkCharacterLimitation = (
     subtitleSpecification: SubtitleSpecification | null
 ): boolean => {
     const lines = text.split("\n");
-    return subtitleSpecification === null
-        || lines.length <= subtitleSpecification.maxLinesPerCaption;
+    if (subtitleSpecification !== null) {
+        const charactersPerLineLimitOk = lines
+             .map(line => line.length <= subtitleSpecification.maxCharactersPerLine)
+             .reduce((accumulator, lineOk) => accumulator && lineOk);
+
+        const linesCountLimitOk = lines.length <= subtitleSpecification.maxLinesPerCaption;
+        return charactersPerLineLimitOk && linesCountLimitOk;
+    }
+    return true;
 };

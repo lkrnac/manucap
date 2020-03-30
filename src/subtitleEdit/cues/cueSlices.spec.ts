@@ -108,6 +108,42 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
         });
+
+        it("apply line character line count limitation to first line", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+
+
+            // WHEN
+            testingStore.dispatch(
+                updateVttCue(1, new VTTCue(0, 2, "Long line 1\nline 2"), testingSubtitleSpecification
+                ) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+        });
+
+        it("apply line character line count limitation to second line", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+
+
+            // WHEN
+            testingStore.dispatch(
+                updateVttCue(1, new VTTCue(0, 2, "line 1\nlong line 2"), testingSubtitleSpecification
+                ) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+        });
     });
 
     describe("updateCueCategory", () => {
