@@ -13,7 +13,7 @@ import { changePlayerTime } from "./playbackSlices";
 import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
-import {updateCues, updateSourceCues} from "../cues/cueSlices";
+import { updateCues, updateSourceCues } from "../cues/cueSlices";
 
 jest.mock("./VideoPlayer");
 

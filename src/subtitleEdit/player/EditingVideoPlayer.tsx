@@ -23,8 +23,8 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
         () => {
             return (): void => { // return means it will be executed during unmount
                 dispatch(resetEditingTrack());
-                dispatch(updateCues([]))
-                dispatch(updateSourceCues([]))
+                dispatch(updateCues([]));
+                dispatch(updateSourceCues([]));
             };
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
