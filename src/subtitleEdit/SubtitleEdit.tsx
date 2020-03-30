@@ -12,6 +12,9 @@ import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
 import { Toast } from "react-bootstrap";
 import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
+import { enableMapSet } from "immer";
+
+enableMapSet();
 
 const autoSaveTimeout = 10000;
 
