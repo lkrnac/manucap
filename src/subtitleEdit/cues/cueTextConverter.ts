@@ -14,8 +14,8 @@ export const convertVttToHtml = (vtt: string): string => {
 };
 
 const orderedHtmlToVttConversions = [
-    { from: "<br/>\n", to: "\n" },
-    { from: "<br>\n", to: "\n" },
+    { from: "\n<br/>", to: "\n" },
+    { from: "\n<br>", to: "\n" },
     { from: "<br>", to: "\n" },
     { from: "<br/>", to: "\n" }
 ];
