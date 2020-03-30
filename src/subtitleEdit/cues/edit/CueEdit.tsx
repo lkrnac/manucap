@@ -11,6 +11,7 @@ import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch } from "react-redux";
 import { setPendingCueChanges } from "./editorStatesSlice";
+import { changePlayerTime } from "../../player/playbackSlices";
 
 interface Props {
     index: number;
@@ -40,6 +41,12 @@ const CueEdit = (props: Props): ReactElement => {
         };
         registerShortcuts();
     }, [dispatch, props]);
+
+    useEffect(() => {
+        Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {
+            dispatch(changePlayerTime(props.cue.vttCue.startTime));
+        });
+    }, [ dispatch, props.cue.vttCue.startTime ]);
 
     return (
         <div style={{ display: "flex" }} className="bg-white">

@@ -380,4 +380,22 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
     });
 
+
+    it("plays cue when play shortcut is typed", () => {
+        // GIVEN
+        const vttCue = new VTTCue(1.6, 3, "someText");
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT" } as CueDto;
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.K_CHAR, shiftKey: true, altKey: true });
+
+        // THEN
+        expect(testingStore.getState().changePlayerTime).toEqual(1.6);
+    });
 });
