@@ -129,15 +129,18 @@ describe("cueSlices", () => {
 
         it("add cue in middle of cue array cues", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const vttCue = new VTTCue(0.5, 1, "Dummy Cue Insert");
+            testingStore.dispatch(updateCues( [
+                { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
+            const vttCue = new VTTCue(1, 2, "Dummy Cue Insert");
 
             // WHEN
             testingStore.dispatch(addCue(1, { vttCue, cueCategory: "DIALOGUE" }) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue).toEqual(vttCue);
-            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(1.225, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(4.225, 5, "Caption Line 2"));
             expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
@@ -174,8 +177,11 @@ describe("cueSlices", () => {
 
         it("deletes cue in the middle of the cue array", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const vttCue = new VTTCue(0.5, 1, "Dummy Cue Insert");
+            testingStore.dispatch(updateCues( [
+                { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
+            const vttCue = new VTTCue(1.225, 2, "Dummy Cue Insert");
             testingStore.dispatch(addCue(1, { vttCue, cueCategory: "DIALOGUE" }) as {} as AnyAction);
 
             // WHEN
@@ -183,7 +189,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 1.225, "Caption Line 1"));
-            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(1.225, 2, "Caption Line 2"));
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(4.225, 5, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });

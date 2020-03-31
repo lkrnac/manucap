@@ -169,4 +169,93 @@ describe("AddCueLineButton", () => {
         expect(testingStore.getState().cues.length).toEqual(1);
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
+
+    it("Does not add cue if clicking button creates overlap", () => {
+        // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <AddCueLineButton cueIndex={0} cue={testingCues[0]} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+
+        // THEN
+        expect(testingStore.getState().cues).toStrictEqual(testingCues);
+    });
+
+    it("Does not add cue if clicking button creates less than 0.5 gap", () => {
+        // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1.4, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <AddCueLineButton cueIndex={0} cue={testingCues[0]} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(2);
+        expect(testingStore.getState().cues).toStrictEqual(testingCues);
+    });
+
+    it("Add cue if clicking button if there is greater or equal 0.5 gap", () => {
+        // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(5.5, 6, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <AddCueLineButton cueIndex={0} cue={testingCues[0]} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(3);
+    });
+
+    it("Always add cue if clicking button on last cue", () => {
+        // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <AddCueLineButton cueIndex={1} cue={testingCues[1]} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-add-cue-button").simulate("click");
+
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(3);
+    });
 });
