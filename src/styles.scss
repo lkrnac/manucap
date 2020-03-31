@@ -70,7 +70,6 @@ $green: rgb(0,87,0);
   background-color: $secondary;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  color: white;
 }
 
 // ------ Toolbox --------
@@ -89,10 +88,10 @@ $green: rgb(0,87,0);
         flex-direction: column;
     }
     .sbte-button-toolbar button {
-        margin-right: 0px;
+        margin-right: 0;
     }
     .sbte-button-toolbar button:last-child {
-        margin-bottom: 0px;
+        margin-bottom: 0;
     }
 }
 
@@ -121,4 +120,17 @@ $green: rgb(0,87,0);
 }
 .video-js .vjs-remaining-time {
   display: none !important;
+}
+
+// ------ Alert --------
+
+.sbte-alert {
+    color: #155724 !important;
+    background-color: #d4edda !important;
+    border: 1px solid #c3e6cb !important;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: 0.25rem;
+    padding: 10px 15px 10px 15px;
 }

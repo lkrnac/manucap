@@ -14,9 +14,12 @@ import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
-import { reset } from "./cues/edit/editorStatesSlice";
+import { reset, setAutoSaveSuccess, setPendingCueChanges } from "./cues/edit/editorStatesSlice";
+import { Toast } from "react-bootstrap";
 
 let testingStore = createTestingStore();
+
+jest.useFakeTimers();
 
 const cues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -127,6 +130,17 @@ describe("SubtitleEdit", () => {
                                     Complete
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            left: "45%",
+                            top: "1%"
+                        }}
+                    >
+                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                            <i className="fa fa-thumbs-up" /> Saved
                         </div>
                     </div>
                 </div>
@@ -583,6 +597,202 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
+    });
+
+    it("renders save alert on save button click", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => {
+                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+                        return;
+                    }}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+        const expectedAlert = mount(
+            <Toast
+                show
+                delay={2000}
+                autohide
+                onClose={jest.fn()}
+                className="sbte-alert"
+            >
+                <i className="fa fa-thumbs-up" /> Saved
+            </Toast>
+
+        );
+
+        //WHEN
+        actualNode.find("button.sbte-save-subtitle-btn").simulate("click");
+
+        //THEN
+        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("renders save alert on auto save", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => {
+                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+                        return;
+                    }}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+        const expectedAlert = mount(
+            <Toast
+                show
+                delay={2000}
+                autohide
+                onClose={jest.fn()}
+                className="sbte-alert"
+            >
+                <i className="fa fa-thumbs-up" /> Saved
+            </Toast>
+        );
+
+        //WHEN
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
+        jest.advanceTimersByTime(15);
+
+        //THEN
+        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("calls onSave callback on auto save", () => {
+        // GIVEN
+        const mockOnSave = jest.fn();
+        mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={mockOnSave}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
+        jest.advanceTimersByTime(15);
+
+        // THEN
+        expect(mockOnSave.mock.calls.length).toBe(1);
+    });
+
+    it("doesn't renders save alert on auto save failure",  () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => {
+                        testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
+                        return;
+                    }}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+        const expectedAlert = mount(
+            <Toast
+                show={false}
+                delay={2000}
+                autohide
+                onClose={jest.fn()}
+                className="sbte-alert"
+            >
+                <i className="fa fa-thumbs-up" /> Saved
+            </Toast>
+        );
+
+        //WHEN
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
+        jest.advanceTimersByTime(20);
+
+        //THEN
+        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("auto-hides save alert on save success",  () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => {
+                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+                        return;
+                    }}
+                    onComplete={(): void => undefined}
+                    autoSaveTimeout={10}
+                />
+            </Provider>
+        );
+        const expectedAlert = mount(
+            <Toast
+                show={false}
+                delay={2000}
+                autohide
+                onClose={jest.fn()}
+                className="sbte-alert"
+            >
+                <i className="fa fa-thumbs-up" /> Saved
+            </Toast>
+        );
+
+        //WHEN
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
+        jest.advanceTimersByTime(2020);
+
+        //THEN
+        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+    });
+
+    it("clears auto save interval on unmount",  () => {
+        // GIVEN
+        const clearIntervalSpy = jest.spyOn(window, "clearInterval");
+        const clearIntervalCallCount = clearIntervalSpy.mock.calls.length;
+
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        //WHEN
+        actualNode.unmount();
+
+        //THEN
+        expect(clearIntervalSpy.mock.calls.length).toBe(clearIntervalCallCount + 1);
     });
 
 });

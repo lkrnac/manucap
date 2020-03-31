@@ -189,6 +189,22 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
+    it("updates pendingCueChanges flag in redux store when changed", () => {
+        // GIVEN
+        const editor = createEditorNode();
+
+        // WHEN
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => " Paste text to end",
+            }
+        });
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+
     /**
      * This is needed because of VTT vs HTML differences (HTML is native format of draft-js).
      * Currently this includes only line wrappings ('\n' vs '<br>').

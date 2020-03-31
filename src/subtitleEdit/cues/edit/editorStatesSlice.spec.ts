@@ -1,10 +1,11 @@
+import "video.js"; // VTTCue definition
 import { ContentState, EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
 import testingStore from "../../../testUtils/testingStore";
-import { updateEditorState } from "./editorStatesSlice";
+import { setAutoSaveSuccess, setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
+import { applyShiftTime, deleteCue, updateCueCategory } from "../cueSlices";
 import { SubtitleSpecification } from "../../toolbox/model";
-
 
 deepFreeze(testingStore.getState());
 
@@ -49,5 +50,68 @@ describe("editorStatesSlice", () => {
 
         // THEN
         expect(testingStore.getState().editorStates.get(1)).toBeUndefined();
+    });
+});
+
+describe("autoSaveSuccessSlice", () => {
+    it("sets the autoSave success flag to false", () => {
+        // WHEN
+        testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().autoSaveSuccess).toEqual(false);
+    });
+    it("sets the autoSave success flag to true", () => {
+        // WHEN
+        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().autoSaveSuccess).toEqual(true);
+    });
+});
+
+describe("pendingCueChangesSlice", () => {
+    it("sets the pendingCueChanges flag to false", () => {
+        // WHEN
+        testingStore.dispatch(setPendingCueChanges(false) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(false);
+    });
+
+    it("sets the pendingCueChanges flag to true", () => {
+        // WHEN
+        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+    it("sets the pendingCueChanges on cue category update", () => {
+        // WHEN
+        testingStore.dispatch(updateCueCategory(0, "ONSCREEN_TEXT") as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+    it("sets the pendingCueChanges on cue line delete", () => {
+        // WHEN
+        testingStore.dispatch(deleteCue(0) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+    it("sets the pendingCueChanges on shift time applied", () => {
+        // WHEN
+        testingStore.dispatch(applyShiftTime(1) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+    it("sets the pendingCueChanges on autoSave success flag set", () => {
+        // WHEN
+        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(false);
     });
 });
