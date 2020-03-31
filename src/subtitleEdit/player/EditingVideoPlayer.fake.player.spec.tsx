@@ -7,12 +7,13 @@ import { render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import EditingVideoPlayer from "./EditingVideoPlayer";
-import { Track } from "../model";
+import { CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { changePlayerTime } from "./playbackSlices";
 import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
+import { updateCues, updateSourceCues } from "../cues/cueSlices";
 
 jest.mock("./VideoPlayer");
 
@@ -24,6 +25,11 @@ const testingTrack = {
     language: { id: "en-US" },
     default: true,
 } as Track;
+
+const testingCues = [
+    { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+] as CueDto[];
 
 describe("EditingVideoPlayer", () => {
     it("passes down new time", () => {
@@ -43,9 +49,12 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().changePlayerTime).toEqual(2);
     });
 
-    it("resets editing track state when unmounted", () => {
+    it("resets editing track and cues state when unmounted", () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
+
         const { container } = render(
             <Provider store={testingStore}>
                 <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" />
@@ -57,5 +66,7 @@ describe("EditingVideoPlayer", () => {
 
         // THEN
         expect(testingStore.getState().editingTrack).toBeNull();
+        expect(testingStore.getState().cues).toEqual([]);
+        expect(testingStore.getState().sourceCues).toEqual([]);
     });
 });
