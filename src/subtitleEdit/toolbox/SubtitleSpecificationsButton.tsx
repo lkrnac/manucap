@@ -1,23 +1,24 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 
 const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
-    const cues = useSelector((state: SubtitleEditState) => state.cues);
     const [show, setShow] = useState(false);
 
-    useEffect(
-        () => {
-            setShow(subtitleSpecifications != null
-                && subtitleSpecifications.enabled
-                && (cues.length === 0 || (cues.length === 1 && cues[0]?.vttCue.text  === "")));
-            // ESLint suppress: because we want to show modal only for first render
-            // and subtitle specs is loaded
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [subtitleSpecifications]
-    );
+    // TODO to be enabled when doing https://dotsub.atlassian.net/browse/VTMS-2379
+    // const cues = useSelector((state: SubtitleEditState) => state.cues);
+    // useEffect(
+    //     () => {
+    //         setShow(subtitleSpecifications != null
+    //             && subtitleSpecifications.enabled
+    //             && (cues.length === 0 || (cues.length === 1 && cues[0]?.vttCue.text  === "")));
+    //         // ESLint suppress: because we want to show modal only for first render
+    //         // and subtitle specs is loaded
+    //         // eslint-disable-next-line react-hooks/exhaustive-deps
+    //     }, [subtitleSpecifications]
+    // );
 
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
