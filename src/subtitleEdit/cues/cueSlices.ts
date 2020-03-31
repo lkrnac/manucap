@@ -50,6 +50,11 @@ const applyOverlapPrevention = (action: PayloadAction<VttCueAction>,
     return vttCue;
 };
 
+const verifyNoOverlapOnAddCue = (cue: CueDto, index: number, currentCues: CueDto[]): boolean =>
+    index === currentCues.length
+    ||(Number((currentCues[index]?.vttCue?.startTime - cue.vttCue.endTime).toFixed(3)) >= Constants.HALF_SECOND);
+
+
 export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
@@ -138,8 +143,10 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     };
 
 export const addCue = (idx: number, cue: CueDto): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction>>): void => {
-        dispatch(cuesSlice.actions.addCue({ idx, cue }));
+    (dispatch: Dispatch<PayloadAction<CueAction>>, getState): void => {
+        if(verifyNoOverlapOnAddCue(cue, idx, getState().cues)) {
+            dispatch(cuesSlice.actions.addCue({ idx, cue }));
+        }
     };
 
 export const deleteCue = (idx: number): AppThunk =>
