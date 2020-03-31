@@ -31,6 +31,7 @@ const KeyboardShortcuts = (): ReactElement => {
                 </Modal.Header>
                 <Modal.Body>
                     <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
+                    <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Editing Line" />
                     <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
                     <KeyboardShortcutLabel character="→" name="Seek Ahead 1 Second" />
                     <KeyboardShortcutLabel character="↑" name="Set Caption Start Time" />
