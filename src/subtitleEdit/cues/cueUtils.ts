@@ -1,4 +1,5 @@
 import Immutable from "immutable";
+import sanitizeHtml from "sanitize-html";
 import { SubtitleSpecification } from "../toolbox/model";
 
 export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): void => {
@@ -193,6 +194,8 @@ export const scrollToElement = (element: Element): void => {
     }
 };
 
+const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTags: []});
+
 export const checkCharacterLimitation = (
     text: string,
     subtitleSpecification: SubtitleSpecification | null
@@ -200,7 +203,7 @@ export const checkCharacterLimitation = (
     const lines = text.split("\n");
     if (subtitleSpecification !== null) {
         const charactersPerLineLimitOk = lines
-             .map(line => line.length <= subtitleSpecification.maxCharactersPerLine)
+             .map(line => removeHtmlTags(line).length <= subtitleSpecification.maxCharactersPerLine)
              .reduce((accumulator, lineOk) => accumulator && lineOk);
 
         const linesCountLimitOk = lines.length <= subtitleSpecification.maxLinesPerCaption;

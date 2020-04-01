@@ -144,6 +144,24 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
         });
+
+        it("do not count HTML tags into line count limitation", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+
+
+            // WHEN
+            testingStore.dispatch(
+                updateVttCue(1, new VTTCue(0, 2, "line 1\n<i>l<b>ine</b></i> 2"), testingSubtitleSpecification
+                ) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\n<i>l<b>ine</b></i> 2");
+        });
     });
 
     describe("updateCueCategory", () => {
