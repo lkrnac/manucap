@@ -20,6 +20,7 @@ import { updateVttCue } from "../cueSlices";
 
 const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");
+characterBindings.set(Character.K_CHAR, "togglePlayPauseCue");
 characterBindings.set(Character.ARROW_LEFT, "seekBack");
 characterBindings.set(Character.ARROW_RIGHT, "seekAhead");
 characterBindings.set(Character.ARROW_UP, "setStartTime");
@@ -43,6 +44,7 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
 
 const mousetrapBindings = new Map<string, KeyCombination>();
 mousetrapBindings.set("togglePlayPause", KeyCombination.MOD_SHIFT_O);
+mousetrapBindings.set("togglePlayPauseCue", KeyCombination.MOD_SHIFT_K);
 mousetrapBindings.set("seekBack", KeyCombination.MOD_SHIFT_LEFT);
 mousetrapBindings.set("seekAhead", KeyCombination.MOD_SHIFT_RIGHT);
 mousetrapBindings.set("setStartTime", KeyCombination.MOD_SHIFT_UP);
@@ -60,7 +62,7 @@ const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
     return "not-handled";
 };
 
-export interface CueTextEditorProps{
+export interface CueTextEditorProps {
     index: number;
     vttCue: VTTCue;
 }

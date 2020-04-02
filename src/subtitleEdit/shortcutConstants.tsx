@@ -1,6 +1,7 @@
 
 export enum Character {
     O_CHAR = 79,
+    K_CHAR = 75,
     ARROW_LEFT = 37,
     ARROW_UP = 38,
     ARROW_RIGHT = 39,
@@ -13,6 +14,8 @@ export enum Character {
 export enum KeyCombination {
     MOD_SHIFT_O = "mod+shift+o",
     ALT_SHIFT_O = "alt+shift+o",
+    MOD_SHIFT_K = "mod+shift+k",
+    ALT_SHIFT_K = "alt+shift+k",
     MOD_SHIFT_LEFT = "mod+shift+left",
     ALT_SHIFT_LEFT = "alt+shift+left",
     MOD_SHIFT_UP = "mod+shift+up",

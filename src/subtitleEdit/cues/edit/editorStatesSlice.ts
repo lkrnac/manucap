@@ -1,5 +1,5 @@
 import { CueIndexAction, cuesSlice } from "../cueSlices";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
@@ -13,7 +13,13 @@ interface EditorStateAction {
     subtitleSpecifications: SubtitleSpecification | null;
 }
 
-export const editorStatesSlice = createSlice({
+// TODO: type declaration is needed to workaround draft-js type issue.
+//  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
+//  Can be removed once fixed.
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const editorStatesSlice: Slice<Map<number, EditorState>,
+    { updateEditorState: (arg0: any, action: PayloadAction<EditorStateAction>) => Map<number, EditorState>;
+        reset: () => Map<number, EditorState>; }, string> = createSlice({
     name: "editorStates",
     initialState: new Map<number, EditorState>(),
     reducers: {
@@ -41,6 +47,7 @@ export const editorStatesSlice = createSlice({
             }
     }
 });
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export const autoSaveSuccessSlice = createSlice({
     name: "autoSaveSuccessSlice",

@@ -54,6 +54,21 @@ describe("KeyboardShortcuts", () => {
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
                                     <span>Toggle Play / Pause</span>
                                 </div>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">k</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h5><span className="badge badge-secondary">k</span></h5>
+                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+                                    <span>Toggle Play / Pause Current Editing Line</span>
+                                </div>
                                 <div style={{ display: "flex", alignItems: "center" }}><h5>
                                     <span className="badge badge-secondary">Ctrl</span></h5>
                                     <span>&nbsp;+&nbsp;</span>
