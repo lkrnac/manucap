@@ -28,7 +28,6 @@ interface CuesAction extends SubtitleEditAction {
 }
 
 const applyInvalidRangePrevention = (vttCue: VTTCue, originalCue: CueDto): VTTCue => {
-
     const isOutOfRange = (vttCue.endTime - vttCue.startTime < Constants.HALF_SECOND);
     if (isOutOfRange && vttCue.startTime !== originalCue.vttCue.startTime) {
         vttCue.startTime = Number((vttCue.endTime - Constants.HALF_SECOND).toFixed(3));
@@ -41,7 +40,6 @@ const applyInvalidRangePrevention = (vttCue: VTTCue, originalCue: CueDto): VTTCu
 
 const applyOverlapPrevention = (
     vttCue: VTTCue,
-    action: PayloadAction<VttCueAction>,
     previousCue: CueDto,
     followingCue: CueDto
 ): VTTCue => {
@@ -81,7 +79,7 @@ export const cuesSlice = createSlice({
             const followingCue = state[action.payload.idx + 1];
             const originalCue = state[action.payload.idx];
 
-            const vttCueWithoutOverlap = applyOverlapPrevention(newVttCue, action, previousCue, followingCue);
+            const vttCueWithoutOverlap = applyOverlapPrevention(newVttCue, previousCue, followingCue);
             const vttCueWithCharacterLimitation = applyCharacterLimitation(vttCueWithoutOverlap, action, state);
             const vttCue = applyInvalidRangePrevention(vttCueWithCharacterLimitation, originalCue);
 
