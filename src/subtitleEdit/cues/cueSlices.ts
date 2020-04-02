@@ -56,9 +56,13 @@ const verifyNoOverlapOnAddCue = (cue: CueDto, index: number, currentCues: CueDto
     index === currentCues.length
     ||(Number((currentCues[index]?.vttCue?.startTime - cue.vttCue.endTime).toFixed(3)) >= Constants.HALF_SECOND);
 
-const applyCharacterLimitation = (vttCue: VTTCue, action: PayloadAction<VttCueAction>, state: CueDto[]): VTTCue => {
-    if (!checkCharacterLimitation(vttCue.text, action.payload.subtitleSpecifications)) {
-        vttCue.text = state[action.payload.idx].vttCue.text;
+const applyCharacterLimitation = (
+    vttCue: VTTCue,
+    originalCue: CueDto,
+    subtitleSpecifications: SubtitleSpecification | null
+): VTTCue => {
+    if (!checkCharacterLimitation(vttCue.text, subtitleSpecifications)) {
+        vttCue.text = originalCue.vttCue.text;
     }
     return vttCue;
 };
@@ -80,10 +84,11 @@ export const cuesSlice = createSlice({
             const originalCue = state[action.payload.idx];
 
             const vttCueWithoutOverlap = applyOverlapPrevention(newVttCue, previousCue, followingCue);
-            const vttCueWithCharacterLimitation = applyCharacterLimitation(vttCueWithoutOverlap, action, state);
-            const vttCue = applyInvalidRangePrevention(vttCueWithCharacterLimitation, originalCue);
+            const vttCueWithCharacterLimitation =
+                applyCharacterLimitation(vttCueWithoutOverlap, originalCue, action.payload.subtitleSpecifications);
+            const vttCueWithRangePrevention = applyInvalidRangePrevention(vttCueWithCharacterLimitation, originalCue);
 
-            state[action.payload.idx] = { vttCue, cueCategory };
+            state[action.payload.idx] = { vttCue: vttCueWithRangePrevention, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
