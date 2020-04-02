@@ -11,7 +11,7 @@ import { Provider } from "react-redux";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import each from "jest-each";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { reset } from "./editorStatesSlice";
+import { reset, setPendingCueChanges } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 
@@ -203,6 +203,36 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(testingStore.getState().pendingCueChanges).toEqual(true);
+    });
+
+    it("doesn't trigger autosave when user selects text", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} vttCue={vttCue} />
+            </Provider>
+        );
+
+        // simulate edit change
+        actualNode.find(".public-DraftEditor-content").simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => " Paste text to end",
+            }
+        });
+        testingStore.dispatch(setPendingCueChanges(false) as {} as AnyAction);
+
+        const editorState = actualNode.find(Editor).props().editorState;
+        const selectionState = editorState.getSelection();
+
+        // WHEN
+        // select first 5 characters
+        const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
+        actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
+
+        // THEN
+        expect(testingStore.getState().pendingCueChanges).toEqual(false);
     });
 
     /**

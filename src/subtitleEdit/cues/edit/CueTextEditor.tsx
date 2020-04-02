@@ -1,4 +1,4 @@
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../subtitleEditReducers";
 import { Character, KeyCombination } from "../../shortcutConstants";
 import {
     ContentState,
@@ -133,11 +133,11 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             >
                 <Editor
                     editorState={editorState}
-                    onChange={(editorState: EditorState): AppThunk => {
-                        if (editorState.getLastChangeType()) {
+                    onChange={(newEditorState: EditorState): void => {
+                        if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
                             dispatch(setPendingCueChanges(true));
                         }
-                        return dispatch(updateEditorState(props.index, editorState, subtitleSpecifications));
+                        dispatch(updateEditorState(props.index, newEditorState, subtitleSpecifications));
                     }}
                     spellCheck
                     keyBindingFn={keyShortcutBindings}
