@@ -17,9 +17,13 @@ interface EditorStateAction {
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
 //  Can be removed once fixed.
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const editorStatesSlice: Slice<Map<number, EditorState>,
-    { updateEditorState: (arg0: any, action: PayloadAction<EditorStateAction>) => Map<number, EditorState>;
-        reset: () => Map<number, EditorState>; }, string> = createSlice({
+export const editorStatesSlice: Slice<
+        Map<number, EditorState>,
+        {
+            updateEditorState: (state: any, action: PayloadAction<EditorStateAction>) => void;
+            reset: () => Map<number, EditorState>;
+        }
+    > = createSlice({
     name: "editorStates",
     initialState: new Map<number, EditorState>(),
     reducers: {
