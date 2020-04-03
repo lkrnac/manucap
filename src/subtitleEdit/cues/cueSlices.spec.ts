@@ -16,6 +16,7 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
 import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
+import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -98,12 +99,10 @@ describe("cueSlices", () => {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
             } as SubtitleSpecification;
-
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(
-                updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue"), testingSubtitleSpecification
-            ) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
@@ -116,12 +115,10 @@ describe("cueSlices", () => {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
             } as SubtitleSpecification;
-
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(
-                updateVttCue(1, new VTTCue(0, 2, "Long line 1\nline 2"), testingSubtitleSpecification
-                ) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Long line 1\nline 2")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
@@ -134,12 +131,10 @@ describe("cueSlices", () => {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
             } as SubtitleSpecification;
-
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(
-                updateVttCue(1, new VTTCue(0, 2, "line 1\nlong line 2"), testingSubtitleSpecification
-                ) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
@@ -152,12 +147,10 @@ describe("cueSlices", () => {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
             } as SubtitleSpecification;
-
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(
-                updateVttCue(1, new VTTCue(0, 2, "line 1\n<i>l<b>ine</b></i> 2"), testingSubtitleSpecification
-                ) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\n<i>l<b>ine</b></i> 2")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\n<i>l<b>ine</b></i> 2");
