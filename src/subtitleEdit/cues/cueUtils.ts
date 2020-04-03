@@ -1,4 +1,6 @@
 import Immutable from "immutable";
+import sanitizeHtml from "sanitize-html";
+import { SubtitleSpecification } from "../toolbox/model";
 
 export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): void => {
     newCue.position = oldCue.position;
@@ -190,4 +192,22 @@ export const scrollToElement = (element: Element): void => {
         // @ts-ignore Ignore TS compiler false positives
         element.parentNode.scrollTop = element.offsetTop - element.parentNode.offsetTop;
     }
+};
+
+const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTags: []});
+
+export const checkCharacterLimitation = (
+    text: string,
+    subtitleSpecification: SubtitleSpecification | null
+): boolean => {
+    const lines = text.split("\n");
+    if (subtitleSpecification !== null) {
+        const charactersPerLineLimitOk = lines
+             .map(line => removeHtmlTags(line).length <= subtitleSpecification.maxCharactersPerLine)
+             .reduce((accumulator, lineOk) => accumulator && lineOk);
+
+        const linesCountLimitOk = lines.length <= subtitleSpecification.maxLinesPerCaption;
+        return charactersPerLineLimitOk && linesCountLimitOk;
+    }
+    return true;
 };

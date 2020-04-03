@@ -12,6 +12,8 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import each from "jest-each";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { reset, setPendingCueChanges } from "./editorStatesSlice";
+import { SubtitleSpecification } from "../../toolbox/model";
+import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 
 let testingStore = createTestingStore();
 
@@ -562,4 +564,27 @@ describe("CueTextEditor", () => {
         // THEN
         expect(actualNode.find(".sbte-delete-cue-button")).toEqual({});
     });
+
+    it("doesn't updates cue in redux store if new text doesn't conform to subtitle specification", () => {
+        // GIVEN
+        const editor = createEditorNode();
+        const testingSubtitleSpecification = {
+            maxLinesPerCaption: 2,
+            maxCharactersPerLine: 30,
+        } as SubtitleSpecification;
+        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+        // WHEN
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => "\n Paste text \n with few lines",
+            }
+        });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
+        expect(testingStore.getState().editorStates[0]).toBeUndefined();
+    });
+
 });
