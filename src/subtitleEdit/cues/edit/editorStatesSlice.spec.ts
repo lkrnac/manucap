@@ -6,6 +6,7 @@ import testingStore from "../../../testUtils/testingStore";
 import { setAutoSaveSuccess, setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
 import { applyShiftTime, deleteCue, updateCueCategory } from "../cueSlices";
 import { SubtitleSpecification } from "../../toolbox/model";
+import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 
 deepFreeze(testingStore.getState());
 
@@ -44,14 +45,13 @@ describe("editorStatesSlice", () => {
             maxLinesPerCaption: 2,
             maxCharactersPerLine: 30,
         } as SubtitleSpecification;
-        testingStore
-            .dispatch(updateEditorState(1, initialEditorState, testingSubtitleSpecification) as {} as AnyAction);
+        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+        testingStore.dispatch(updateEditorState(1, initialEditorState) as {} as AnyAction);
         const incorrectContentState = ContentState.createFromText("editor1 \n\n text");
         const incorrectEditorState = EditorState.createWithContent(incorrectContentState);
 
         // WHEN
-        testingStore
-            .dispatch(updateEditorState(1, incorrectEditorState, testingSubtitleSpecification) as {} as AnyAction);
+        testingStore.dispatch(updateEditorState(1, incorrectEditorState) as {} as AnyAction);
 
         // THEN
         expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText())
