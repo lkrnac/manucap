@@ -150,12 +150,9 @@ export const sourceCuesSlice = createSlice({
     }
 });
 
-export const updateVttCue = (
-    idx: number,
-    vttCue: VTTCue,
-    subtitleSpecifications: SubtitleSpecification | null = null
-): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<VttCueAction>>): void => {
+export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<VttCueAction>>, getState): void => {
+        const subtitleSpecifications = getState().subtitleSpecifications;
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue, subtitleSpecifications }));
     };
 

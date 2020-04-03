@@ -74,7 +74,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
     );
-    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
@@ -84,7 +83,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     useEffect(
         () => {
-            dispatch(updateEditorState(props.index, editorState, subtitleSpecifications));
+            dispatch(updateEditorState(props.index, editorState));
         },
         // It is enough to detect changes on pieces of editor state that indicate content change.
         // E.g. editorState.getSelection() is not changing content, thus we don't need to store editor state
@@ -99,7 +98,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             const vttText = getVttText(currentContent);
             const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
             copyNonConstructorProperties(vttCue, props.vttCue);
-            dispatch(updateVttCue(props.index, vttCue, subtitleSpecifications));
+            dispatch(updateVttCue(props.index, vttCue));
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
@@ -137,7 +136,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
                             dispatch(setPendingCueChanges(true));
                         }
-                        dispatch(updateEditorState(props.index, newEditorState, subtitleSpecifications));
+                        dispatch(updateEditorState(props.index, newEditorState));
                     }}
                     spellCheck
                     keyBindingFn={keyShortcutBindings}

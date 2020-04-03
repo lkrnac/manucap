@@ -75,12 +75,9 @@ export const pendingCueChangesSlice = createSlice({
     }
 });
 
-export const updateEditorState = (
-    editorId: number,
-    editorState: EditorState,
-    subtitleSpecifications: SubtitleSpecification | null = null
-): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<EditorStateAction>>): void => {
+export const updateEditorState = (editorId: number, editorState: EditorState): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<EditorStateAction>>, getState): void => {
+        const subtitleSpecifications = getState().subtitleSpecifications;
         dispatch(editorStatesSlice.actions.updateEditorState({ editorId, editorState, subtitleSpecifications }));
     };
 
