@@ -2,9 +2,10 @@ import { CueCategory, CueDto, SubtitleEditAction } from "../model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import { copyNonConstructorProperties } from "./cueUtils";
 import { Constants } from "../constants";
+import { checkCharacterLimitation, copyNonConstructorProperties } from "./cueUtils";
 import { SubtitleSpecification } from "../toolbox/model";
+import { getTimeGapLimits } from "./cueUtils";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -12,7 +13,7 @@ export interface CueIndexAction extends SubtitleEditAction {
 
 export interface VttCueAction extends CueIndexAction {
     vttCue: VTTCue;
-    subtitleSpecification: SubtitleSpecification | null;
+    subtitleSpecifications: SubtitleSpecification | null;
 }
 
 export interface CueCategoryAction extends CueIndexAction {
@@ -27,25 +28,11 @@ interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
 }
 
-interface TimeGapLimit {
-    minGap: number;
-    maxGap: number;
-}
+const applyInvalidRangePrevention = (vttCue: VTTCue,
+                                     originalCue: CueDto,
+                                     subtitleSpecification: SubtitleSpecification | null): void => {
 
-const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
-    let minGap: number = Constants.DEFAULT_MIN_GAP;
-    let maxGap: number = Constants.DEFAULT_MAX_GAP;
-
-    if (subtitleSpecs?.enabled) {
-        minGap = subtitleSpecs.minCaptionDurationInMillis / 1000;
-        maxGap = subtitleSpecs.maxCaptionDurationInMillis / 1000;
-    }
-
-    return { minGap, maxGap };
-};
-
-
-const applyInvalidRangePrevention = (timeGapLimit: TimeGapLimit, vttCue: VTTCue, originalCue: CueDto): void => {
+    const timeGapLimit = getTimeGapLimits(subtitleSpecification);
     const isOutOfMinRange: boolean = (vttCue.endTime - vttCue.startTime) < timeGapLimit.minGap;
     const isOutOfMaxRange: boolean = (vttCue.endTime - vttCue.startTime) > timeGapLimit.maxGap;
 
@@ -66,9 +53,12 @@ const applyInvalidRangePrevention = (timeGapLimit: TimeGapLimit, vttCue: VTTCue,
     }
 };
 
-const applyOverlapPrevention = (vttCue: VTTCue,
-                                previousCue: CueDto,
-                                followingCue: CueDto): void => {
+
+const applyOverlapPrevention = (
+    vttCue: VTTCue,
+    previousCue: CueDto,
+    followingCue: CueDto
+): void => {
     if (vttCue.startTime < previousCue?.vttCue.endTime) {
         vttCue.startTime = previousCue.vttCue.endTime;
     }
@@ -81,12 +71,26 @@ const verifyNoOverlapOnAddCue = (cue: CueDto, index: number, currentCues: CueDto
     index === currentCues.length
     || (Number((currentCues[index]?.vttCue?.startTime - cue.vttCue.endTime).toFixed(3)) >= Constants.HALF_SECOND);
 
+const applyCharacterLimitation = (
+    vttCue: VTTCue,
+    originalCue: CueDto,
+    subtitleSpecifications: SubtitleSpecification | null
+): VTTCue => {
+    if (!checkCharacterLimitation(vttCue.text, subtitleSpecifications)) {
+        vttCue.text = originalCue.vttCue.text;
+    }
+    return vttCue;
+};
 
 export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
     reducers: {
         updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
+            const oldVttCue = action.payload.vttCue;
+            const newVttCue = new VTTCue(oldVttCue.startTime, oldVttCue.endTime, oldVttCue.text);
+            copyNonConstructorProperties(newVttCue, oldVttCue);
+
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
                 : "DIALOGUE";
@@ -94,15 +98,14 @@ export const cuesSlice = createSlice({
             const followingCue = state[action.payload.idx + 1];
             const originalCue = state[action.payload.idx];
 
-            const vttCue = action.payload.vttCue;
-            const subtitleSpecification = action.payload.subtitleSpecification;
+            const subtitleSpecification = action.payload.subtitleSpecifications;
 
-            const timeGapLimit: TimeGapLimit = getTimeGapLimits(subtitleSpecification);
+            applyOverlapPrevention(newVttCue, previousCue, followingCue);
+            applyCharacterLimitation(newVttCue, originalCue, subtitleSpecification);
+            applyInvalidRangePrevention(newVttCue, originalCue, subtitleSpecification);
 
-            applyOverlapPrevention(vttCue, previousCue, followingCue);
-            applyInvalidRangePrevention(timeGapLimit, vttCue, originalCue);
 
-            state[action.payload.idx] = { vttCue, cueCategory };
+            state[action.payload.idx] = { vttCue: newVttCue, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
@@ -113,12 +116,7 @@ export const cuesSlice = createSlice({
             }
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {
-            const cue = action.payload.cue;
-            const idx = action.payload.idx;
-
-            if (verifyNoOverlapOnAddCue(cue, idx, state)) {
-                state.splice(idx, 0, cue);
-            }
+            state.splice(action.payload.idx, 0, action.payload.cue);
         },
         deleteCue: (state, action: PayloadAction<CueIndexAction>): void => {
             if (state.length > 1) {
@@ -154,12 +152,7 @@ export const editingCueIndexSlice = createSlice({
     },
     extraReducers: {
         [cuesSlice.actions.addCue.type]:
-            (_state, action: PayloadAction<CueIndexAction>): number => {
-                 console.log(_state);
-                 console.log(action);
-
-                return action.payload.idx;
-            },
+            (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
         [cuesSlice.actions.deleteCue.type]: (): number => -1,
         [cuesSlice.actions.updateCues.type]: (): number => -1,
 
@@ -176,11 +169,8 @@ export const sourceCuesSlice = createSlice({
 
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<VttCueAction>>, getState): void => {
-        dispatch(cuesSlice.actions.updateVttCue({
-            idx,
-            vttCue,
-            subtitleSpecification: getState().subtitleSpecifications
-        }));
+        const subtitleSpecifications = getState().subtitleSpecifications;
+        dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue, subtitleSpecifications }));
     };
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
@@ -189,8 +179,10 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     };
 
 export const addCue = (idx: number, cue: CueDto): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction>>, _getState): void => {
+    (dispatch: Dispatch<PayloadAction<CueAction>>, getState): void => {
+        if (verifyNoOverlapOnAddCue(cue, idx, getState().cues)) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
+        }
     };
 
 export const deleteCue = (idx: number): AppThunk =>

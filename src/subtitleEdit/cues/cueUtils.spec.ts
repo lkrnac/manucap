@@ -1,13 +1,15 @@
 import "video.js"; // import VTTCue type
 import {
-    Position,
-    PositionStyle,
     copyNonConstructorProperties,
     findPositionIcon,
+    Position,
     positionIcons,
+    PositionStyle,
     positionStyles,
 } from "./cueUtils";
 import each from "jest-each";
+import { getTimeGapLimits } from "./cueUtils";
+import { SubtitleSpecification } from "../toolbox/model";
 
 describe("cueUtils", () => {
     describe("copyNonConstructorProperties", () => {
@@ -283,4 +285,47 @@ describe("cueUtils", () => {
             expect(actualPositionIcon.iconText).toEqual("↓↓");
         });
     });
+
+    describe("getTimeGapLimits", () => {
+        it("Gets default time gaps if subtitleSpecs is null", () => {
+            // GIVEN // WHEN
+            const timeGap = getTimeGapLimits(null);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.maxGap).toEqual(3);
+        });
+
+        it("Gets time gap limits from subtitle specs if provided and enabled", () => {
+            // GIVEN // WHEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 2000,
+                maxCaptionDurationInMillis: 6000,
+                enabled: true
+            } as SubtitleSpecification;
+
+            const timeGap = getTimeGapLimits(testingSubtitleSpecification);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(2);
+            expect(timeGap.maxGap).toEqual(6);
+        });
+
+        it("Gets time gap limits from subtitle specs if provided but not enabled", () => {
+            // GIVEN // WHEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 2000,
+                maxCaptionDurationInMillis: 6000,
+                enabled: false
+            } as SubtitleSpecification;
+
+            const timeGap = getTimeGapLimits(testingSubtitleSpecification);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.maxGap).toEqual(3);
+        });
+    });
+
+
 });

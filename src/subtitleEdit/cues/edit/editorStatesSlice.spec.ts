@@ -5,7 +5,8 @@ import deepFreeze from "deep-freeze";
 import testingStore from "../../../testUtils/testingStore";
 import { setAutoSaveSuccess, setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
 import { applyShiftTime, deleteCue, updateCueCategory } from "../cueSlices";
-
+import { SubtitleSpecification } from "../../toolbox/model";
+import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 
 deepFreeze(testingStore.getState());
 
@@ -34,6 +35,28 @@ describe("editorStatesSlice", () => {
         // THEN
         // @ts-ignore Test would fail if it returns null
         expect(testingStore.getState().editorStates.get(2).getCurrentContent().getPlainText()).toEqual("editor2 text");
+    });
+
+    it("doesn't updates editor state if subtitle specs limitations are not matched", () => {
+        // GIVEN
+        const initialContentState = ContentState.createFromText("editor1 \n text");
+        const initialEditorState = EditorState.createWithContent(initialContentState);
+        const testingSubtitleSpecification = {
+            maxLinesPerCaption: 2,
+            maxCharactersPerLine: 30,
+        } as SubtitleSpecification;
+        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+        testingStore.dispatch(updateEditorState(1, initialEditorState) as {} as AnyAction);
+        const incorrectContentState = ContentState.createFromText("editor1 \n\n text");
+        const incorrectEditorState = EditorState.createWithContent(incorrectContentState);
+
+        // WHEN
+        testingStore.dispatch(updateEditorState(1, incorrectEditorState) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText())
+            .toEqual("editor1 \n text");
+        expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
     });
 });
 
