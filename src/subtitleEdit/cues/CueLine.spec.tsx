@@ -11,7 +11,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { updateEditingCueIndex } from "./cueSlices";
+import { updateCues, updateEditingCueIndex } from "./cueSlices";
 
 let testingStore = createTestingStore();
 
@@ -26,6 +26,8 @@ describe("CueLine", () => {
     beforeEach(() => { testingStore = createTestingStore(); });
     it("renders edit line in captioning mode", () => {
         // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
@@ -106,6 +108,7 @@ describe("CueLine", () => {
 
     it("renders middle edit line in translation mode", () => {
         // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
@@ -157,6 +160,7 @@ describe("CueLine", () => {
 
     it("renders last edit line in translation mode", () => {
         // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
@@ -349,6 +353,7 @@ describe("CueLine", () => {
 
     it("passes down parameters into actions panel component", () => {
         // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -374,6 +379,7 @@ describe("CueLine", () => {
 
     it("scrolls to current cue if it enters editing mode", () => {
         // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <div className="testing-cues-container">
