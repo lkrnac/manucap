@@ -15,6 +15,8 @@ import { EditorState } from "draft-js";
 import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
 import { updateEditorState } from "./edit/editorStatesSlice";
+import { SubtitleSpecification } from "../toolbox/model";
+import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -32,7 +34,9 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateVttCue(3, new VTTCue(1, 2, "Dummy Cue")) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[3].vttCue).toEqual(new VTTCue(1, 2, "Dummy Cue"));
+            expect(testingStore.getState().cues[3].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(2);
         });
 
         it("apply invalid end time prevention on start time change", () => {
@@ -86,6 +90,70 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1.225);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+        });
+
+        it("apply line count prevention according to subtitle specs", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+        });
+
+        it("apply line character line count limitation to first line", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Long line 1\nline 2")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+        });
+
+        it("apply line character line count limitation to second line", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+        });
+
+        it("do not count HTML tags into line count limitation", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\n<i>l<b>ine</b></i> 2")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\n<i>l<b>ine</b></i> 2");
         });
     });
 
