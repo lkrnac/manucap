@@ -14,8 +14,15 @@ import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { reset, setPendingCueChanges } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
+import { CueDto } from "../../model";
+import { updateCues } from "../cueSlices";
 
 let testingStore = createTestingStore();
+
+const cues = [
+    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+    { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+];
 
 interface ReduxTestWrapperProps {
     store: Store;
@@ -143,6 +150,7 @@ describe("CueTextEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
     });
     it("renders empty", () => {
         // GIVEN
