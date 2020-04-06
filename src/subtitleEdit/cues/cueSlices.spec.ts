@@ -203,6 +203,51 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
         });
 
+        it("Adjust startTime to follow max caption gap passed from subtitle spec", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 500,
+                maxCaptionDurationInMillis: 1000,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+                enabled: true
+            } as SubtitleSpecification;
+
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(2.8, 4, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+        });
+
+
+        it("Adjust endtime to follow max caption gap passed from subtitle spec", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 500,
+                maxCaptionDurationInMillis: 1000,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+                enabled: true
+            } as SubtitleSpecification;
+
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 5, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+        });
+
 
     });
 
