@@ -23,6 +23,11 @@ const testingCues = [
     { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
 
+const testingCuesWithGaps = [
+    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE" },
+] as CueDto[];
+
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
@@ -320,6 +325,42 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editorStates.size).toEqual(0);
+        });
+
+        it("Adjust endTime to be following cue startTime if it exeeds following startTime", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(
+                addCue(1, { vttCue: new VTTCue(2, 5, "Dummy Cue End"), cueCategory: "LYRICS" }) as {} as AnyAction
+            );
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(3);
+            expect(testingStore.getState().cues[1].vttCue.starTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+        });
+
+        it("Does not add cue if duration is less than min gap limit", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 3000,
+                maxCaptionDurationInMillis: 5000,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(
+                addCue(1, { vttCue: new VTTCue(2, 4, "Dummy Cue End"), cueCategory: "LYRICS" }) as {} as AnyAction
+            );
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
         });
     });
 

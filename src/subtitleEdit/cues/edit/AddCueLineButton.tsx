@@ -1,6 +1,6 @@
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import React, { ReactElement, useEffect } from "react";
-import { createAndAddCue, updateEditingCueIndex } from "../cueSlices";
+import { addCue, updateEditingCueIndex } from "../cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "../../model";
 import { KeyCombination } from "../../shortcutConstants";
@@ -19,7 +19,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
         const registerShortcuts = (): void => {
             Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
             Mousetrap.bind([KeyCombination.ENTER], () => props.cueIndex === cuesCount - 1
-                ? dispatch(createAndAddCue(props.cue, props.cueIndex + 1))
+                ? dispatch(addCue(props.cue, props.cueIndex + 1))
                 : dispatch(updateEditingCueIndex(-1)));
         };
         registerShortcuts();
@@ -28,7 +28,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
         <button
             style={{ maxHeight: "38px", margin: "5px" }}
             className="btn btn-outline-secondary sbte-add-cue-button"
-            onClick={(): AppThunk => dispatch(createAndAddCue(props.cue, props.cueIndex + 1))}
+            onClick={(): AppThunk => dispatch(addCue(props.cue, props.cueIndex + 1))}
         >
             <b>+</b>
         </button>

@@ -213,7 +213,7 @@ export const checkCharacterLimitation = (
     return true;
 };
 
-interface TimeGapLimit {
+export interface TimeGapLimit {
     minGap: number;
     maxGap: number;
 }

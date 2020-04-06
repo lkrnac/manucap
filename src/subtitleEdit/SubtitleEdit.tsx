@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/js/all.js";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
+import { addCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -70,7 +70,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         () => {
             if (cues.length === 0) {
-                dispatch(createAndAddCue({ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }, 0));
+                dispatch(addCue({ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }, 0));
             }
         },
         [ dispatch, cues ]
@@ -116,7 +116,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         onClickHandler={(): void => {
                                             const previousCue = cues[cues.length - 1];
                                             idx >= cues.length
-                                                ? dispatch(createAndAddCue(previousCue, cues.length, sourceCue))
+                                                ? dispatch(addCue(previousCue, cues.length, sourceCue))
                                                 : dispatch(updateEditingCueIndex(idx));
                                         }}
                                     />
