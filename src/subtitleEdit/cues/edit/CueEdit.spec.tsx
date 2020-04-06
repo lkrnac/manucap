@@ -13,7 +13,7 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { updateCues } from "../cueSlices";
+import { updateCues, updateEditingCueIndex } from "../cueSlices";
 import { AnyAction } from "redux";
 
 let testingStore = createTestingStore();
@@ -509,8 +509,6 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1.5);
     });
 
-
-
     it("plays cue when play shortcut is typed", () => {
         // GIVEN
         const vttCue = new VTTCue(1.6, 3, "someText");
@@ -527,5 +525,70 @@ describe("CueEdit", () => {
 
         // THEN
         expect(testingStore.getState().changePlayerTime).toEqual(1.6);
+    });
+
+    it("adds cue when ENTER is pressed on last cue", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
+    it("closes cue editing mode when ENTER is pressed on non-last cue", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cues[0]} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
+    it("closes cue editing mode when ESCAPE is pressed", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ESCAPE });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 });
