@@ -179,6 +179,21 @@ describe("cueSlices", () => {
     });
 
     describe("addCue", () => {
+        it("adds first cue to the cue array", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(
+                addCue(0, { vttCue: new VTTCue(0, 3, "Dummy First Cue"), cueCategory: "DIALOGUE" }) as {} as AnyAction
+            );
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 3, "Dummy First Cue"));
+            expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+        });
+
         it("adds cue to the end of the cue array", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
