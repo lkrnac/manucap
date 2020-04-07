@@ -111,14 +111,11 @@ export const cuesSlice = createSlice({
             const oldVttCue = action.payload.vttCue;
             const newVttCue = new VTTCue(oldVttCue.startTime, oldVttCue.endTime, oldVttCue.text);
             copyNonConstructorProperties(newVttCue, oldVttCue);
+            const cueCategory = state[action.payload.idx].cueCategory;
 
-            const cueCategory = state[action.payload.idx]
-                ? state[action.payload.idx].cueCategory
-                : "DIALOGUE";
             const previousCue = state[action.payload.idx - 1];
             const followingCue = state[action.payload.idx + 1];
             const originalCue = state[action.payload.idx];
-
             const subtitleSpecification = action.payload.subtitleSpecifications;
 
             applyOverlapPrevention(newVttCue, previousCue, followingCue);
