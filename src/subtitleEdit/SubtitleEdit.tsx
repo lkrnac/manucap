@@ -13,6 +13,7 @@ import { scrollToElement } from "./cues/cueUtils";
 import { Toast } from "react-bootstrap";
 import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 import { enableMapSet } from "immer";
+import AddCueLineButton from "./cues/edit/AddCueLineButton";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -67,14 +68,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         }, [ pendingCueChanges, props ]
     );
 
-    useEffect(
-        () => {
-            if (cues.length === 0) {
-                dispatch(createAndAddCue({ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }, 0));
-            }
-        },
-        [ dispatch, cues ]
-    );
     return (
         <div
             className="sbte-subtitle-edit"
@@ -96,6 +89,15 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         justifyContent: "space-between"
                     }}
                 >
+                    {
+                        drivingCues.length === 0 ? (
+                            <AddCueLineButton
+                                text="Start Captioning"
+                                cueIndex={-1}
+                                cue={{ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }}
+                            />
+                        ) : null
+                    }
                     <div
                         ref={cuesRef}
                         style={{ overflowY: "scroll", height: "100%" }}
@@ -119,8 +121,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                                 ? dispatch(createAndAddCue(previousCue, cues.length, sourceCue))
                                                 : dispatch(updateEditingCueIndex(idx));
                                         }}
-                                    />
-                                );
+                                    />);
                             })
                         }
                     </div>
