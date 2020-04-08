@@ -592,25 +592,6 @@ describe("SubtitleEdit", () => {
         expect(mockOnComplete.mock.calls.length).toBe(1);
     });
 
-    it("doesn't add initial cue if there isn't one", () => {
-        // WHEN
-        mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onComplete={(): void => undefined}
-                    onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().cues.length).toEqual(0);
-    });
-
     it("jump to last cue in captioning mode", () => {
         // GIVEN
         const cues = [
