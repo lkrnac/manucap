@@ -27,10 +27,20 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     dispatch(setPendingCueChanges(true));
 };
 
+const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number): AppThunk => {
+    const sourceCue = sourceCues.length > 0
+        ? sourceCues[index + 1]
+        : undefined;
+    return sourceCues.length === 0 || sourceCues.length > index + 1
+        ? createAndAddCue(cue, index + 1, sourceCue)
+        : updateEditingCueIndex(-1);
+};
+
 const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
+    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     useEffect(() => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
@@ -41,10 +51,10 @@ const CueEdit = (props: Props): ReactElement => {
         });
         Mousetrap.bind([KeyCombination.ENTER], () => {
             return props.index === cuesCount - 1
-                ? dispatch(createAndAddCue(props.cue, props.index + 1))
+                ? dispatch(handleEnterForLastCue(sourceCues, props.cue, props.index))
                 : dispatch(updateEditingCueIndex(props.index + 1));
         });
-    }, [dispatch, props, cuesCount]);
+    }, [ dispatch, props, cuesCount, sourceCues ]);
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {

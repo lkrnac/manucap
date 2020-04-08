@@ -13,7 +13,7 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { updateCues, updateEditingCueIndex } from "../cueSlices";
+import { updateCues, updateEditingCueIndex, updateSourceCues } from "../cueSlices";
 import { AnyAction } from "redux";
 
 let testingStore = createTestingStore();
@@ -527,7 +527,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().changePlayerTime).toEqual(1.6);
     });
 
-    it("adds cue when ENTER is pressed on last cue", () => {
+    it("adds cue when ENTER is pressed on last caption cue", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
@@ -545,6 +545,57 @@ describe("CueEdit", () => {
         // THEN
         expect(testingStore.getState().cues.length).toEqual(2);
         expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
+    it("adds cue when on ENTER for last translation cue, where cue index is smaller than amount of source cues", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+    });
+
+    it("adds cue when on ENTER for last translation cue, where cue index is smaller than amount of source cues", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+        const sourceCues = [{ vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 
     it("moves cue editing mode to next cue when ENTER is pressed on non-last", () => {
