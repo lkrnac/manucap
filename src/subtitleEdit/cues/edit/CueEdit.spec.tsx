@@ -575,7 +575,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
     });
 
-    it("adds cue when on ENTER for last translation cue, where cue index is smaller than amount of source cues", () => {
+    it("escapes editing mode for last translation cue, where cue index is same last source cue index", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
