@@ -42,6 +42,7 @@ describe("editorStatesSlice", () => {
         const initialContentState = ContentState.createFromText("editor1 \n text");
         const initialEditorState = EditorState.createWithContent(initialContentState);
         const testingSubtitleSpecification = {
+            enabled: true,
             maxLinesPerCaption: 2,
             maxCharactersPerLine: 30,
         } as SubtitleSpecification;
