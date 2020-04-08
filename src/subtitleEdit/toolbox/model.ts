@@ -7,10 +7,10 @@ export interface SubtitleSpecification {
     spokenAudio: boolean;
     speakerIdentification: string;
     dialogueStyle: string;
-    maxLinesPerCaption: number;
-    maxCharactersPerLine: number;
-    minCaptionDurationInMillis: number;
-    maxCaptionDurationInMillis: number;
+    maxLinesPerCaption: number | null;
+    maxCharactersPerLine: number | null;
+    minCaptionDurationInMillis: number | null;
+    maxCaptionDurationInMillis: number | null;
     comments: string;
     mediaNotes?: string;
 }
