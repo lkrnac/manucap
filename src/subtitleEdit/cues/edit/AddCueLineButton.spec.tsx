@@ -36,6 +36,29 @@ describe("AddCueLineButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
+    it("renders with custom text", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(0, 1, ""), cueCategory: "DIALOGUE" } as CueDto;
+        const expectedNode = mount(
+            <button
+                style={{ maxHeight: "38px", margin: "5px" }}
+                className="btn btn-outline-secondary sbte-add-cue-button"
+            >
+                <span>Add Cue Line</span>
+            </button>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <AddCueLineButton text="Add Cue Line" cueIndex={0} cue={cue} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
     it("adds cue when clicked", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
