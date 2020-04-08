@@ -134,4 +134,91 @@ describe("SubtitleSpecificationsForm", () => {
             .toEqual(expectedNode.html());
     });
 
+    it("renders null character and length limitation values", () => {
+        // GIVEN
+        const subTitleSpecifications: SubtitleSpecification = {
+            subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
+            projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
+            enabled: true,
+            audioDescription: true,
+            onScreenText: false,
+            spokenAudio: false,
+            speakerIdentification: "GENDER",
+            dialogueStyle: "LINE_BREAKS",
+            maxLinesPerCaption: null,
+            maxCharactersPerLine: null,
+            minCaptionDurationInMillis: null,
+            maxCaptionDurationInMillis: null,
+            comments: "This is a sample comment",
+            mediaNotes: "media **notes** ~~test~~"
+        };
+
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <label><strong>Enabled:&nbsp;</strong></label>
+                <label>Yes</label>
+                <hr />
+                <div style={{ display: "flex", marginRight: "20px" }}>
+                    <div style={{ flexFlow: "column" }}>
+                        <div>
+                            <label><strong> Audio Description:&nbsp;</strong></label>
+                            <label>Yes</label>
+                        </div>
+                        <div>
+                            <label><strong>On-Screen Text:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div>
+                            <label><strong>Spoken Audio:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div>
+                            <label><strong>Speaker Identification:&nbsp;</strong></label>
+                            <label>Gender</label>
+                        </div>
+                        <div>
+                            <label><strong>Dialogue Style:&nbsp;</strong></label>
+                            <label>Line Breaks</label>
+                        </div>
+                    </div>
+                    <hr />
+                    <div style={{ flexFlow: "column" }}>
+                        <div>
+                            <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Characters Per Line:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
+                        <div>
+                            <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <label><strong>Comments:&nbsp;</strong></label>
+                <label>This is a sample comment</label>
+                <br />
+                <label><strong>Media Notes:&nbsp;</strong></label>
+                <p>media <strong>notes</strong> <del>test</del></p>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html())
+            .toEqual(expectedNode.html());
+    });
 });
