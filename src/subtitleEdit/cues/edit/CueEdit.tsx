@@ -42,13 +42,13 @@ const CueEdit = (props: Props): ReactElement => {
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     useEffect(() => {
-        Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
             updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
         });
         Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
             updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
         });
+        Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
             return props.index === cuesCount - 1
                 ? dispatch(handleEnterForLastCue(sourceCues, props.cue, props.index))
