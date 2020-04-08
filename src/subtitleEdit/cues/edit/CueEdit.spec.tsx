@@ -547,7 +547,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
 
-    it("closes cue editing mode when ENTER is pressed on non-last cue", () => {
+    it("moves cue editing mode to next cue when ENTER is pressed on non-last", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
