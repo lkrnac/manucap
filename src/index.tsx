@@ -50,23 +50,23 @@ const TestApp = (): ReactElement => {
         );
     });
     useEffect(() => {
-        setTimeout( // this simulates latency caused by server roundtrip
-            () => dispatch(updateCues([
-                { vttCue: new VTTCue(0, 1, "<i>Editing <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
-                {
-                    vttCue: new VTTCue(1, 2, "<i><lang en>Editing</lang> <b>Line</b></i> 2\nWrapped text"),
-                    cueCategory: "ONSCREEN_TEXT"
-                },
-            ])),
-            500
-        );
+       setTimeout( // this simulates latency caused by server roundtrip
+           () => dispatch(updateCues([
+               { vttCue: new VTTCue(0, 1, "<i>Editing <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
+               {
+                   vttCue: new VTTCue(1, 2, "<i><lang en>Editing</lang> <b>Line</b></i> 2\nWrapped text"),
+                   cueCategory: "ONSCREEN_TEXT"
+               },
+           ])),
+           500
+       );
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateTask({
-                type: "TASK_CAPTION",
-                projectName: "Project One",
-                dueDate: "2019/12/30 10:00AM"
+               type: "TASK_CAPTION",
+               projectName: "Project One",
+               dueDate: "2019/12/30 10:00AM"
             })),
             500
         );
@@ -84,8 +84,8 @@ const TestApp = (): ReactElement => {
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-                minCaptionDurationInMillis: 2000,
-                maxCaptionDurationInMillis: 6000,
+                minCaptionDurationInMillis: 1000,
+                maxCaptionDurationInMillis: 4000,
                 comments: "Note",
                 mediaNotes: "Media notes"
             })),
