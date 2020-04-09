@@ -1,4 +1,4 @@
-import {CueCategory, CueDto, SubtitleEditAction, TimeGapLimit} from "../model";
+import { CueCategory, CueDto, SubtitleEditAction, TimeGapLimit } from "../model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
@@ -90,8 +90,8 @@ const applyCharacterLimitation = (
 };
 
 const createAndAddCue = (previousCue: CueDto,
-                                maxGapLimit: number,
-                                sourceCue?: CueDto): CueDto => {
+                         maxGapLimit: number,
+                         sourceCue?: CueDto): CueDto => {
     const startTime = sourceCue
         ? sourceCue.vttCue.startTime
         : previousCue.vttCue.endTime;

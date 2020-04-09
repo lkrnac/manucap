@@ -1,8 +1,8 @@
 import Immutable from "immutable";
 import sanitizeHtml from "sanitize-html";
-import {SubtitleSpecification} from "../toolbox/model";
-import {Constants} from "../constants";
-import {TimeGapLimit} from "../model";
+import { SubtitleSpecification } from "../toolbox/model";
+import { Constants } from "../constants";
+import { TimeGapLimit } from "../model";
 
 
 export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): void => {
