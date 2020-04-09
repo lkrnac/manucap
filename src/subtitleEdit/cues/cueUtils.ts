@@ -224,8 +224,10 @@ export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): T
     let maxGap: number = Constants.DEFAULT_MAX_GAP;
 
     if (subtitleSpecs?.enabled) {
-        minGap = subtitleSpecs.minCaptionDurationInMillis / 1000;
-        maxGap = subtitleSpecs.maxCaptionDurationInMillis / 1000;
+        if (subtitleSpecs.minCaptionDurationInMillis)
+            minGap = subtitleSpecs.minCaptionDurationInMillis / 1000;
+        if (subtitleSpecs.maxCaptionDurationInMillis)
+            maxGap = subtitleSpecs.maxCaptionDurationInMillis / 1000;
     }
 
     return { minGap, maxGap };

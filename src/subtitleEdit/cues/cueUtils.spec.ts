@@ -125,13 +125,13 @@ describe("cueUtils", () => {
             [Position.Row5Column4, { line: 15, align: "end", positionAlign: "center", position: 35 }],
             [Position.Row5Column5, { line: 15, align: "end", positionAlign: "center", position: 49 }],
         ])
-        .it("are correctly initialized", (testingPosition: Position, expectedPositionStyle: PositionStyle) => {
-            // WHEN
-            const actualPositionStyle = positionStyles.get(testingPosition);
+            .it("are correctly initialized", (testingPosition: Position, expectedPositionStyle: PositionStyle) => {
+                // WHEN
+                const actualPositionStyle = positionStyles.get(testingPosition);
 
-            // THEN
-            expect(actualPositionStyle).toEqual(expectedPositionStyle);
-        });
+                // THEN
+                expect(actualPositionStyle).toEqual(expectedPositionStyle);
+            });
     });
 
     describe("positionIcons", () => {
@@ -163,20 +163,20 @@ describe("cueUtils", () => {
             [23, Position.Row5Column4, "↓↘", "11px" ],
             [24, Position.Row5Column5, "↘↘", "6px" ],
         ])
-        .it("are correctly initialized", (
-            index: number,
-            expectedPosition: Position,
-            expectedIconText: string,
-            expectedLeftPadding: string
-        ) => {
-            // WHEN
-            const actualPositionIcon = positionIcons[index];
+            .it("are correctly initialized", (
+                index: number,
+                expectedPosition: Position,
+                expectedIconText: string,
+                expectedLeftPadding: string
+            ) => {
+                // WHEN
+                const actualPositionIcon = positionIcons[index];
 
-            // THEN
-            expect(actualPositionIcon.position).toEqual(expectedPosition);
-            expect(actualPositionIcon.iconText).toEqual(expectedIconText);
-            expect(actualPositionIcon.leftPadding).toEqual(expectedLeftPadding);
-        });
+                // THEN
+                expect(actualPositionIcon.position).toEqual(expectedPosition);
+                expect(actualPositionIcon.iconText).toEqual(expectedIconText);
+                expect(actualPositionIcon.leftPadding).toEqual(expectedLeftPadding);
+            });
     });
 
     describe("findPositionIcon", () => {
@@ -323,6 +323,36 @@ describe("cueUtils", () => {
 
             // THEN
             expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.maxGap).toEqual(3);
+        });
+
+        it("Gets default min gap limit if subtitle specs is enabled but min caption is null", () => {
+            // GIVEN // WHEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: null,
+                maxCaptionDurationInMillis: 7500,
+                enabled: true
+            } as SubtitleSpecification;
+
+            const timeGap = getTimeGapLimits(testingSubtitleSpecification);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.maxGap).toEqual(7.5);
+        });
+
+        it("Gets default max gap limit if subtitle specs is enabled but max caption is null", () => {
+            // GIVEN // WHEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 1500,
+                maxCaptionDurationInMillis: null,
+                enabled: true
+            } as SubtitleSpecification;
+
+            const timeGap = getTimeGapLimits(testingSubtitleSpecification);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(1.5);
             expect(timeGap.maxGap).toEqual(3);
         });
     });
