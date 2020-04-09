@@ -103,6 +103,7 @@ describe("cueSlices", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const testingSubtitleSpecification = {
+                enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
             } as SubtitleSpecification;
@@ -115,10 +116,45 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
         });
 
-        it("apply line character line count limitation to first line", () => {
+        it("ignore line count prevention if null in subtitle specs", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: null,
+                maxCharactersPerLine: 30,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy \n\nCue");
+        });
+
+        it("ignore line count prevention if subtitle specs are disabled", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                enabled: false,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy \n\nCue");
+        });
+
+        it("apply character count limitation to first line", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
             } as SubtitleSpecification;
@@ -131,10 +167,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
         });
 
-        it("apply line character line count limitation to second line", () => {
+        it("apply character count limitation to second line", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const testingSubtitleSpecification = {
+                enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
             } as SubtitleSpecification;
@@ -151,6 +188,7 @@ describe("cueSlices", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const testingSubtitleSpecification = {
+                enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
             } as SubtitleSpecification;
@@ -161,6 +199,40 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\n<i>l<b>ine</b></i> 2");
+        });
+
+        it("ignore character line count limitation if null in subtitle specs", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\nlong line 2");
+        });
+
+        it("ignore character line count limitation if subtitle specs are disabled", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                enabled: false,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\nlong line 2");
         });
 
         it("Adjust startTime to follow min caption gap passed from subtitle spec", () => {

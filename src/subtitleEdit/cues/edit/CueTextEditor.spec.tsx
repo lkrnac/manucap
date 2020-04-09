@@ -577,6 +577,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const editor = createEditorNode();
         const testingSubtitleSpecification = {
+            enabled: true,
             maxLinesPerCaption: 2,
             maxCharactersPerLine: 30,
         } as SubtitleSpecification;
