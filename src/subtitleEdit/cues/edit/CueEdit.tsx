@@ -1,7 +1,7 @@
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { updateCueCategory, updateVttCue, updateEditingCueIndex, createAndAddCue } from "../cueSlices";
+import { updateCueCategory, updateVttCue, updateEditingCueIndex, addCue } from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
@@ -32,7 +32,7 @@ const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number)
         ? sourceCues[index + 1]
         : undefined;
     return sourceCues.length === 0 || sourceCues.length > index + 1
-        ? createAndAddCue(cue, index + 1, sourceCue)
+        ? addCue(cue, index + 1, sourceCue)
         : updateEditingCueIndex(-1);
 };
 
