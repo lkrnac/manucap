@@ -1,10 +1,7 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-// @ts-ignore - Doesn't have types definitions file
-import * as simulant from "simulant";
 import AddCueLineButton from "./AddCueLineButton";
 import { AnyAction } from "@reduxjs/toolkit";
-import { Character } from "../../shortcutConstants";
 import { CueDto } from "../../model";
 import { Provider } from "react-redux";
 import React from "react";
@@ -128,69 +125,6 @@ describe("AddCueLineButton", () => {
         expect(testingStore.getState().cues[1].vttCue.line).toEqual(8);
         expect(testingStore.getState().cues[1].vttCue.position).toEqual(35);
         expect(testingStore.getState().cues[1].vttCue.positionAlign).toEqual("center");
-    });
-
-    it("adds cue when ENTER is pressed on last cue", () => {
-        // GIVEN
-        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
-        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
-        mount(
-            <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={cue} />
-            </Provider>
-        );
-
-        // WHEN
-        simulant.fire(
-            document.documentElement, "keydown", { keyCode: Character.ENTER });
-
-
-        // THEN
-        expect(testingStore.getState().cues.length).toEqual(2);
-        expect(testingStore.getState().editingCueIndex).toEqual(1);
-    });
-
-    it("closes cue editing mode when ENTER is pressed on non-last cue", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        mount(
-            <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={cues[0]} />
-            </Provider>
-        );
-
-        // WHEN
-        simulant.fire(
-            document.documentElement, "keydown", { keyCode: Character.ENTER });
-
-
-        // THEN
-        expect(testingStore.getState().cues.length).toEqual(2);
-        expect(testingStore.getState().editingCueIndex).toEqual(-1);
-    });
-
-    it("closes cue editing mode when ESCAPE is pressed", () => {
-        // GIVEN
-        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
-        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
-        mount(
-            <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={cue} />
-            </Provider>
-        );
-
-        // WHEN
-        simulant.fire(
-            document.documentElement, "keydown", { keyCode: Character.ESCAPE });
-
-
-        // THEN
-        expect(testingStore.getState().cues.length).toEqual(1);
-        expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 
     it("Does not add cue if clicking button creates overlap", () => {

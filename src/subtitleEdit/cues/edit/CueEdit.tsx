@@ -1,15 +1,15 @@
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { updateCueCategory, updateVttCue } from "../cueSlices";
-import { AppThunk } from "../../subtitleEditReducers";
+import { updateCueCategory, updateVttCue, updateEditingCueIndex, createAndAddCue } from "../cueSlices";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
 import { KeyCombination } from "../../shortcutConstants";
 import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPendingCueChanges } from "./editorStatesSlice";
 import { changePlayerTime } from "../../player/playbackSlices";
 
@@ -27,20 +27,34 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     dispatch(setPendingCueChanges(true));
 };
 
+const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number): AppThunk => {
+    const sourceCue = sourceCues.length > 0
+        ? sourceCues[index + 1]
+        : undefined;
+    return sourceCues.length === 0 || sourceCues.length > index + 1
+        ? createAndAddCue(cue, index + 1, sourceCue)
+        : updateEditingCueIndex(-1);
+};
+
 const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
+    const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
+    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     useEffect(() => {
-        const registerShortcuts = (): void => {
-            Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
-                updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
-            });
-            Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
-                updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
-            });
-        };
-        registerShortcuts();
-    }, [dispatch, props]);
+        Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
+            updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
+        });
+        Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
+            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
+        });
+        Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
+        Mousetrap.bind([KeyCombination.ENTER], () => {
+            return props.index === cuesCount - 1
+                ? dispatch(handleEnterForLastCue(sourceCues, props.cue, props.index))
+                : dispatch(updateEditingCueIndex(props.index + 1));
+        });
+    }, [ dispatch, props, cuesCount, sourceCues ]);
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {
