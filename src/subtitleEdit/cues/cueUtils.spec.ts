@@ -293,7 +293,7 @@ describe("cueUtils", () => {
 
             // THEN
             expect(timeGap.minGap).toEqual(0.5);
-            expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
+                expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
 
         it("Gets time gap limits from subtitle specs if provided and enabled", () => {

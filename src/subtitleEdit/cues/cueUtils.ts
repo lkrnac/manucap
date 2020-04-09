@@ -221,7 +221,7 @@ export const checkCharacterLimitation = (
 
 export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
     let minGap: number = Constants.DEFAULT_MIN_GAP;
-    let maxGap: number = Number.MAX_SAFE_INTEGER;
+    let maxGap: number = Constants.DEFAULT_MAX_GAP;
 
     if (subtitleSpecs?.enabled) {
         if (subtitleSpecs.minCaptionDurationInMillis)
