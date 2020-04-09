@@ -4,6 +4,7 @@ import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { checkCharacterLimitation, copyNonConstructorProperties, getTimeGapLimits } from "./cueUtils";
 import { SubtitleSpecification } from "../toolbox/model";
+import { Constants } from "../constants";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -200,7 +201,8 @@ export const addCue = (previousCue: CueDto, idx: number, sourceCue?: CueDto): Ap
     (dispatch: Dispatch<PayloadAction<CueAction>>, getState): void => {
         const subtitleSpecifications = getState().subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
-        const cue = createAndAddCue(previousCue, timeGapLimit.maxGap, sourceCue);
+        const step = Math.min(timeGapLimit.maxGap, Constants.NEW_ADDED_CUE_DEFAULT_STEP);
+        const cue = createAndAddCue(previousCue, step, sourceCue);
         if (verifyNoOverlapOnAddCue(cue, idx, getState().cues, timeGapLimit)) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
         }

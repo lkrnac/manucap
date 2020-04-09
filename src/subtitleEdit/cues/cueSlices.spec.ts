@@ -26,6 +26,7 @@ const testingCues = [
 const testingCuesWithGaps = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(12, 18, "Caption Line 3"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
 
 let testingStore = createTestingStore();
@@ -357,12 +358,12 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(2.9, 6, "Dummy Cue")) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(2, new VTTCue(7.9, 18, "Dummy Cue")) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(8);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(18);
+            expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
         });
 
 
@@ -371,12 +372,12 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(4, 7.1, "Dummy Cue")) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(2, new VTTCue(12, 22.1, "Dummy Cue")) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(7);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(12);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(22);
+            expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
         });
 
     });
@@ -479,7 +480,7 @@ describe("cueSlices", () => {
             );
 
             // THEN
-            expect(testingStore.getState().cues.length).toEqual(3);
+            expect(testingStore.getState().cues.length).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
         });
@@ -500,9 +501,66 @@ describe("cueSlices", () => {
             );
 
             // THEN
-            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().cues.length).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+        });
+
+        it("Picks default step if it less than max gap limit provided by subtitle specs", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 3000,
+                maxCaptionDurationInMillis: 5000,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(
+                addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+            );
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
+        });
+
+        it("Picks subtitle specs max gap as step if it is greater than default step value", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 1000,
+                maxCaptionDurationInMillis: 2000,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(
+                addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+            );
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(8);
+        });
+
+        it("Uses default NEW_ADDED_CUE_DEFAULT_STEP if no subtitle specs provided", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(
+                addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+            );
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
         });
     });
 
