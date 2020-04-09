@@ -293,7 +293,7 @@ describe("cueUtils", () => {
 
             // THEN
             expect(timeGap.minGap).toEqual(0.5);
-            expect(timeGap.maxGap).toEqual(3);
+            expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
 
         it("Gets time gap limits from subtitle specs if provided and enabled", () => {
@@ -323,7 +323,7 @@ describe("cueUtils", () => {
 
             // THEN
             expect(timeGap.minGap).toEqual(0.5);
-            expect(timeGap.maxGap).toEqual(3);
+            expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
 
         it("Gets default min gap limit if subtitle specs is enabled but min caption is null", () => {
@@ -353,7 +353,7 @@ describe("cueUtils", () => {
 
             // THEN
             expect(timeGap.minGap).toEqual(1.5);
-            expect(timeGap.maxGap).toEqual(3);
+            expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
     });
 

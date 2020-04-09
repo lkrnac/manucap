@@ -358,10 +358,10 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateVttCue(2, new VTTCue(7.9, 18, "Dummy Cue")) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(2, new VTTCue(6, 18, "Dummy Cue")) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(8);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(18);
             expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
         });
@@ -372,11 +372,11 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateVttCue(2, new VTTCue(12, 22.1, "Dummy Cue")) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(2, new VTTCue(12, 999999, "Dummy Cue")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(12);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(22);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(999999);
             expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
         });
 
