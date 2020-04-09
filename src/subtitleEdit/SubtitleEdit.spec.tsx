@@ -16,6 +16,7 @@ import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import { reset, setAutoSaveSuccess, setPendingCueChanges } from "./cues/edit/editorStatesSlice";
 import { Toast } from "react-bootstrap";
+import AddCueLineButton from "./cues/edit/AddCueLineButton";
 
 let testingStore = createTestingStore();
 
@@ -165,6 +166,125 @@ describe("SubtitleEdit", () => {
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        // THEN
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+    });
+
+    it("renders with no cues and add cue button", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore} >
+                <div
+                    className="sbte-subtitle-edit"
+                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                >
+                    <header style={{ display: "flex", paddingBottom: "10px" }}>
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div><b>This is the video title</b> <i>Project One</i></div>
+                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
+                        </div>
+                        <div style={{ flex: "2" }} />
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Completed: <b>0%</b></div>
+                        </div>
+                    </header>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
+                            <VideoPlayer
+                                mp4="dummyMp4"
+                                poster="dummyPoster"
+                                tracks={[testingTrack]}
+                                languageCuesArray={[]}
+                            />
+                            <Toolbox />
+                        </div>
+                        <div
+                            style={{
+                                flex: "1 1 60%",
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <AddCueLineButton
+                                text="Start Captioning"
+                                cueIndex={-1}
+                                cue={{ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }}
+                            />
+                            <div style={{ overflowY: "scroll", height: "100%" }} className="sbte-cues-array-container">
+                            </div>
+                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                    View All Tracks
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <span style={{ flexGrow: 2 }} />
+                                <button
+                                    className="btn btn-primary sbte-save-subtitle-btn"
+                                    type="button"
+                                    style={{ marginRight: "10px" }}
+                                >
+                                    Save
+                                </button>
+                                <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
+                                    Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            left: "45%",
+                            top: "1%"
+                        }}
+                    >
+                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                            <i className="fa fa-thumbs-up" /> Saved
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
@@ -470,27 +590,6 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(mockOnComplete.mock.calls.length).toBe(1);
-    });
-
-    it("adds initial cue if there isn't one", () => {
-        // WHEN
-        mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onComplete={(): void => undefined}
-                    onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(0);
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
     });
 
     it("jump to last cue in captioning mode", () => {

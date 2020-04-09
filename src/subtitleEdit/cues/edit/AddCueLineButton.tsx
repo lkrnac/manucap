@@ -9,6 +9,7 @@ import Mousetrap from "mousetrap";
 interface Props {
     cueIndex: number;
     cue: CueDto;
+    text?: string;
 }
 
 const AddCueLineButton = (props: Props): ReactElement => {
@@ -30,7 +31,9 @@ const AddCueLineButton = (props: Props): ReactElement => {
             className="btn btn-outline-secondary sbte-add-cue-button"
             onClick={(): AppThunk => dispatch(addCue(props.cue, props.cueIndex + 1))}
         >
-            <b>+</b>
+            {
+                props.text ? <span>{props.text}</span> : <b>+</b>
+            }
         </button>
     );
 };
