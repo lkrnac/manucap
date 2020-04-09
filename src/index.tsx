@@ -84,8 +84,8 @@ const TestApp = (): ReactElement => {
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-                minCaptionDurationInMillis: 1000,
-                maxCaptionDurationInMillis: 4000,
+                minCaptionDurationInMillis: 2000,
+                maxCaptionDurationInMillis: 6000,
                 comments: "Note",
                 mediaNotes: "Media notes"
             })),

@@ -253,6 +253,59 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
         });
 
+        it("Adjust startTime to follow min caption gap with default gap limits values", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(3.6, 4, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3.5);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+        });
+
+
+        it("Adjust endtime to follow min caption gap with default gap limits values", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.4, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+        });
+
+        it("Adjust startTime to follow max caption gap with default gap limits values", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(2.9, 6, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+        });
+
+
+        it("Adjust endtime to follow max caption gap with default gap limits values", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(4, 7.1, "Dummy Cue")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(7);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+        });
 
     });
 
@@ -284,11 +337,12 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue(0, { vttCue: new VTTCue(0, 3, "Dummy First Cue"), cueCategory: "DIALOGUE" }) as {} as AnyAction
+                addCue({ vttCue: new VTTCue(0, 0, "Dummy First Cue"), cueCategory: "DIALOGUE" }, 0) as {} as AnyAction
             );
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 3, "Dummy First Cue"));
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
         });
