@@ -1,7 +1,13 @@
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
-import React, { Dispatch, ReactElement, useEffect } from "react";
-import { updateCueCategory, updateVttCue, updateEditingCueIndex, createAndAddCue } from "../cueSlices";
+import React, { Dispatch, ReactElement, useEffect, useState } from "react";
+import {
+    setValidationError,
+    updateCueCategory,
+    updateVttCue,
+    updateEditingCueIndex,
+    createAndAddCue
+} from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
@@ -38,6 +44,20 @@ const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number)
 
 const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+    const [showValidationError, setShowValidationError] = useState(false);
+    const validationError = useSelector((state: SubtitleEditState) => state.validationError);
+
+    useEffect(
+        () => {
+            if (validationError) {
+                setShowValidationError(true);
+                setTimeout(() => {
+                    setShowValidationError(false);
+                    dispatch(setValidationError(false));
+                }, 1000);
+            }
+        }, [ dispatch, validationError ]
+    );
 
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
@@ -62,8 +82,10 @@ const CueEdit = (props: Props): ReactElement => {
         });
     }, [ dispatch, props.cue.vttCue.startTime ]);
 
+    const className = showValidationError ? "blink-error-bg" : "bg-white";
+
     return (
-        <div style={{ display: "flex" }} className="bg-white">
+        <div style={{ display: "flex" }} className={className}>
             <div
                 style={{
                     flex: "1 1 300px",

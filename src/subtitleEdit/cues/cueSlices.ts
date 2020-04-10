@@ -72,23 +72,10 @@ export const cuesSlice = createSlice({
     initialState: [] as CueDto[],
     reducers: {
         updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
-            const oldVttCue = action.payload.vttCue;
-            const newVttCue = new VTTCue(oldVttCue.startTime, oldVttCue.endTime, oldVttCue.text);
-            copyNonConstructorProperties(newVttCue, oldVttCue);
-
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
                 : "DIALOGUE";
-            const previousCue = state[action.payload.idx - 1];
-            const followingCue = state[action.payload.idx + 1];
-            const originalCue = state[action.payload.idx];
-
-            const vttCueWithoutOverlap = applyOverlapPrevention(newVttCue, previousCue, followingCue);
-            const vttCueWithCharacterLimitation =
-                applyCharacterLimitation(vttCueWithoutOverlap, originalCue, action.payload.subtitleSpecifications);
-            const vttCueWithRangePrevention = applyInvalidRangePrevention(vttCueWithCharacterLimitation, originalCue);
-
-            state[action.payload.idx] = { vttCue: vttCueWithRangePrevention, cueCategory };
+            state[action.payload.idx] = { vttCue: action.payload.vttCue, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
@@ -150,9 +137,36 @@ export const sourceCuesSlice = createSlice({
     }
 });
 
-export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<VttCueAction>>, getState): void => {
+export const validationErrorSlice = createSlice({
+    name: "validationErrorSlice",
+    initialState: false,
+    reducers: {
+        setValidationError: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    }
+});
+
+export const updateVttCue = (idx: number, updatedVttCue: VTTCue): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<VttCueAction | boolean>>, getState): void => {
         const subtitleSpecifications = getState().subtitleSpecifications;
+
+        const oldVttCue = updatedVttCue;
+        const newVttCue = new VTTCue(oldVttCue.startTime, oldVttCue.endTime, oldVttCue.text);
+        copyNonConstructorProperties(newVttCue, oldVttCue);
+
+        const cues = getState();
+        const previousCue = cues[idx - 1];
+        const followingCue = cues[idx + 1];
+        const originalCue = cues[idx];
+
+        const vttCueWithoutOverlap = applyOverlapPrevention(newVttCue, previousCue, followingCue);
+        const vttCueWithCharacterLimitation =
+            applyCharacterLimitation(vttCueWithoutOverlap, originalCue, subtitleSpecifications);
+        const vttCue = applyInvalidRangePrevention(vttCueWithCharacterLimitation, originalCue);
+
+        if (JSON.stringify(updatedVttCue) !== JSON.stringify(vttCue)) {
+            dispatch(validationErrorSlice.actions.setValidationError(true));
+        }
+
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue, subtitleSpecifications }));
     };
 
@@ -162,9 +176,11 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     };
 
 export const addCue = (idx: number, cue: CueDto): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction>>, getState): void => {
-        if(verifyNoOverlapOnAddCue(cue, idx, getState().cues)) {
+    (dispatch: Dispatch<PayloadAction<CueAction | boolean>>, getState): void => {
+        if (verifyNoOverlapOnAddCue(cue, idx, getState().cues)) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
+        } else {
+            dispatch(validationErrorSlice.actions.setValidationError(true));
         }
     };
 
@@ -206,3 +222,9 @@ export const createAndAddCue = (previousCue: CueDto, index: number, sourceCue?: 
     const cue = { vttCue: newCue, cueCategory: previousCue.cueCategory };
     return addCue(index, cue);
 };
+
+export const setValidationError = (error: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
+        dispatch(validationErrorSlice.actions.setValidationError(error));
+    };
+
