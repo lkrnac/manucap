@@ -47,6 +47,15 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cuesState.cues[1].vttCue.endTime).toEqual(2.5);
         });
 
+        it("Sets cues and mark loaded as true", () => {
+            // WHEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cuesState.cues.length).toEqual(2);
+            expect(testingStore.getState().cuesState.loaded).toBeTruthy;
+        });
+
         it("apply invalid end time prevention on start time change", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
