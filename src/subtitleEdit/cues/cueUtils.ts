@@ -1,6 +1,9 @@
 import Immutable from "immutable";
 import sanitizeHtml from "sanitize-html";
 import { SubtitleSpecification } from "../toolbox/model";
+import { Constants } from "../constants";
+import { TimeGapLimit } from "../model";
+
 
 export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): void => {
     newCue.position = oldCue.position;
@@ -214,4 +217,18 @@ export const checkCharacterLimitation = (
         return charactersPerLineLimitOk && linesCountLimitOk;
     }
     return true;
+};
+
+export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
+    let minGap: number = Constants.DEFAULT_MIN_GAP;
+    let maxGap: number = Constants.DEFAULT_MAX_GAP;
+
+    if (subtitleSpecs?.enabled) {
+        if (subtitleSpecs.minCaptionDurationInMillis)
+            minGap = subtitleSpecs.minCaptionDurationInMillis / 1000;
+        if (subtitleSpecs.maxCaptionDurationInMillis)
+            maxGap = subtitleSpecs.maxCaptionDurationInMillis / 1000;
+    }
+
+    return { minGap, maxGap };
 };

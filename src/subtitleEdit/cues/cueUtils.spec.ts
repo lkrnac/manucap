@@ -1,13 +1,15 @@
 import "video.js"; // import VTTCue type
 import {
-    Position,
-    PositionStyle,
     copyNonConstructorProperties,
     findPositionIcon,
+    Position,
     positionIcons,
+    PositionStyle,
     positionStyles,
 } from "./cueUtils";
 import each from "jest-each";
+import { getTimeGapLimits } from "./cueUtils";
+import { SubtitleSpecification } from "../toolbox/model";
 
 describe("cueUtils", () => {
     describe("copyNonConstructorProperties", () => {
@@ -123,13 +125,13 @@ describe("cueUtils", () => {
             [Position.Row5Column4, { line: 15, align: "end", positionAlign: "center", position: 35 }],
             [Position.Row5Column5, { line: 15, align: "end", positionAlign: "center", position: 49 }],
         ])
-        .it("are correctly initialized", (testingPosition: Position, expectedPositionStyle: PositionStyle) => {
-            // WHEN
-            const actualPositionStyle = positionStyles.get(testingPosition);
+            .it("are correctly initialized", (testingPosition: Position, expectedPositionStyle: PositionStyle) => {
+                // WHEN
+                const actualPositionStyle = positionStyles.get(testingPosition);
 
-            // THEN
-            expect(actualPositionStyle).toEqual(expectedPositionStyle);
-        });
+                // THEN
+                expect(actualPositionStyle).toEqual(expectedPositionStyle);
+            });
     });
 
     describe("positionIcons", () => {
@@ -161,20 +163,20 @@ describe("cueUtils", () => {
             [23, Position.Row5Column4, "↓↘", "11px" ],
             [24, Position.Row5Column5, "↘↘", "6px" ],
         ])
-        .it("are correctly initialized", (
-            index: number,
-            expectedPosition: Position,
-            expectedIconText: string,
-            expectedLeftPadding: string
-        ) => {
-            // WHEN
-            const actualPositionIcon = positionIcons[index];
+            .it("are correctly initialized", (
+                index: number,
+                expectedPosition: Position,
+                expectedIconText: string,
+                expectedLeftPadding: string
+            ) => {
+                // WHEN
+                const actualPositionIcon = positionIcons[index];
 
-            // THEN
-            expect(actualPositionIcon.position).toEqual(expectedPosition);
-            expect(actualPositionIcon.iconText).toEqual(expectedIconText);
-            expect(actualPositionIcon.leftPadding).toEqual(expectedLeftPadding);
-        });
+                // THEN
+                expect(actualPositionIcon.position).toEqual(expectedPosition);
+                expect(actualPositionIcon.iconText).toEqual(expectedIconText);
+                expect(actualPositionIcon.leftPadding).toEqual(expectedLeftPadding);
+            });
     });
 
     describe("findPositionIcon", () => {
@@ -283,4 +285,77 @@ describe("cueUtils", () => {
             expect(actualPositionIcon.iconText).toEqual("↓↓");
         });
     });
+
+    describe("getTimeGapLimits", () => {
+        it("Gets default time gaps if subtitleSpecs is null", () => {
+            // GIVEN // WHEN
+            const timeGap = getTimeGapLimits(null);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(0.5);
+                expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
+        });
+
+        it("Gets time gap limits from subtitle specs if provided and enabled", () => {
+            // GIVEN // WHEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 2000,
+                maxCaptionDurationInMillis: 6000,
+                enabled: true
+            } as SubtitleSpecification;
+
+            const timeGap = getTimeGapLimits(testingSubtitleSpecification);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(2);
+            expect(timeGap.maxGap).toEqual(6);
+        });
+
+        it("Gets time gap limits from subtitle specs if provided but not enabled", () => {
+            // GIVEN // WHEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 2000,
+                maxCaptionDurationInMillis: 6000,
+                enabled: false
+            } as SubtitleSpecification;
+
+            const timeGap = getTimeGapLimits(testingSubtitleSpecification);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
+        });
+
+        it("Gets default min gap limit if subtitle specs is enabled but min caption is null", () => {
+            // GIVEN // WHEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: null,
+                maxCaptionDurationInMillis: 7500,
+                enabled: true
+            } as SubtitleSpecification;
+
+            const timeGap = getTimeGapLimits(testingSubtitleSpecification);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.maxGap).toEqual(7.5);
+        });
+
+        it("Gets default max gap limit if subtitle specs is enabled but max caption is null", () => {
+            // GIVEN // WHEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 1500,
+                maxCaptionDurationInMillis: null,
+                enabled: true
+            } as SubtitleSpecification;
+
+            const timeGap = getTimeGapLimits(testingSubtitleSpecification);
+
+            // THEN
+            expect(timeGap.minGap).toEqual(1.5);
+            expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
+        });
+    });
+
+
 });

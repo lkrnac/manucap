@@ -36,3 +36,8 @@ export interface Task {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SubtitleEditAction {
 }
+
+export interface TimeGapLimit {
+    minGap: number;
+    maxGap: number;
+}

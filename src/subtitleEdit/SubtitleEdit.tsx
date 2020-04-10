@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { createAndAddCue, updateEditingCueIndex } from "./cues/cueSlices";
+import { addCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -94,7 +94,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             <AddCueLineButton
                                 text="Start Captioning"
                                 cueIndex={-1}
-                                cue={{ vttCue: new VTTCue(-3, 0, ""), cueCategory: "DIALOGUE" }}
+                                cue={{ vttCue: new VTTCue(0, 0, ""), cueCategory: "DIALOGUE" }}
                             />
                         ) : null
                     }
@@ -118,7 +118,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         onClickHandler={(): void => {
                                             const previousCue = cues[cues.length - 1];
                                             idx >= cues.length
-                                                ? dispatch(createAndAddCue(previousCue, cues.length, sourceCue))
+                                                ? dispatch(addCue(previousCue, cues.length, sourceCue))
                                                 : dispatch(updateEditingCueIndex(idx));
                                         }}
                                     />);

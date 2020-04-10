@@ -2,11 +2,11 @@ import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect, useState } from "react";
 import {
-    setValidationError,
     updateCueCategory,
     updateVttCue,
     updateEditingCueIndex,
-    createAndAddCue
+    addCue,
+    setValidationError
 } from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
@@ -38,7 +38,7 @@ const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number)
         ? sourceCues[index + 1]
         : undefined;
     return sourceCues.length === 0 || sourceCues.length > index + 1
-        ? createAndAddCue(cue, index + 1, sourceCue)
+        ? addCue(cue, index + 1, sourceCue)
         : updateEditingCueIndex(-1);
 };
 
