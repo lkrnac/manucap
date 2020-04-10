@@ -114,7 +114,7 @@ describe("CueEdit", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
+                        <CueTextEditor key={1} index={0} vttCue={cues[0].vttCue} />
                     </div>
                 </div>
             </Provider>
@@ -123,7 +123,11 @@ describe("CueEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={1} cue={cues[0]} playerTime={0} />
+                <CueEdit
+                    index={0}
+                    cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                    playerTime={0}
+                />
             </Provider>
         );
 

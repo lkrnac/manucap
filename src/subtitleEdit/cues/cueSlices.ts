@@ -12,7 +12,6 @@ export interface CueIndexAction extends SubtitleEditAction {
 
 export interface VttCueAction extends CueIndexAction {
     vttCue: VTTCue;
-    subtitleSpecifications: SubtitleSpecification | null;
 }
 
 export interface CueCategoryAction extends CueIndexAction {
@@ -180,13 +179,13 @@ export const validationErrorSlice = createSlice({
     }
 });
 
-export const updateVttCue = (idx: number, updatedVttCue: VTTCue): AppThunk =>
+export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<VttCueAction | boolean>>, getState): void => {
 
-        const newVttCue = new VTTCue(updatedVttCue.startTime, updatedVttCue.endTime, updatedVttCue.text);
-        copyNonConstructorProperties(newVttCue, updatedVttCue);
+        const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
+        copyNonConstructorProperties(newVttCue, vttCue);
 
-        const cues = getState();
+        const cues = getState().cues;
         const previousCue = cues[idx - 1];
         const followingCue = cues[idx + 1];
         const originalCue = cues[idx];
@@ -196,11 +195,11 @@ export const updateVttCue = (idx: number, updatedVttCue: VTTCue): AppThunk =>
         applyCharacterLimitation(newVttCue, originalCue, subtitleSpecifications);
         applyInvalidRangePrevention(newVttCue, originalCue, subtitleSpecifications);
 
-        if (JSON.stringify(newVttCue) !== JSON.stringify(updatedVttCue)) {
+        if (JSON.stringify(newVttCue) !== JSON.stringify(vttCue)) {
             dispatch(validationErrorSlice.actions.setValidationError(true));
         }
 
-        dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue, subtitleSpecifications }));
+        dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue }));
     };
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
