@@ -1,10 +1,10 @@
-import { CueCategory, CueDto, SubtitleEditAction } from "../model";
+import { CueCategory, CueDto, SubtitleEditAction, TimeGapLimit } from "../model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import { Constants } from "../constants";
-import { checkCharacterLimitation, copyNonConstructorProperties } from "./cueUtils";
+import { checkCharacterLimitation, copyNonConstructorProperties, getTimeGapLimits } from "./cueUtils";
 import { SubtitleSpecification } from "../toolbox/model";
+import { Constants } from "../constants";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -27,34 +27,57 @@ interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
 }
 
-const applyInvalidRangePrevention = (vttCue: VTTCue, originalCue: CueDto): VTTCue => {
-    const isOutOfRange = (vttCue.endTime - vttCue.startTime < Constants.HALF_SECOND);
-    if (isOutOfRange && vttCue.startTime !== originalCue.vttCue.startTime) {
-        vttCue.startTime = Number((vttCue.endTime - Constants.HALF_SECOND).toFixed(3));
+const applyInvalidRangePrevention = (vttCue: VTTCue,
+                                     originalCue: CueDto,
+                                     subtitleSpecification: SubtitleSpecification | null): void => {
 
-    } else if(isOutOfRange && vttCue.endTime !== originalCue.vttCue.endTime) {
-        vttCue.endTime = Number((vttCue.startTime + Constants.HALF_SECOND).toFixed(3));
+    const timeGapLimit = getTimeGapLimits(subtitleSpecification);
+    const isOutOfMinRange: boolean = (vttCue.endTime - vttCue.startTime) < timeGapLimit.minGap;
+    const isOutOfMaxRange: boolean = (vttCue.endTime - vttCue.startTime) > timeGapLimit.maxGap;
+
+    const startTimeChange: boolean = vttCue.startTime !== originalCue.vttCue.startTime;
+    const endTimeChange: boolean = vttCue.endTime !== originalCue.vttCue.endTime;
+
+    if (isOutOfMinRange) {
+        vttCue.startTime = startTimeChange ?
+            Number((vttCue.endTime - timeGapLimit.minGap).toFixed(3)) : vttCue.startTime;
+        vttCue.endTime = endTimeChange ?
+            Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3)) : vttCue.endTime;
     }
-    return vttCue;
+    if (isOutOfMaxRange) {
+        vttCue.startTime = startTimeChange ?
+            Number((vttCue.endTime - timeGapLimit.maxGap).toFixed(3)) : vttCue.startTime;
+        vttCue.endTime = endTimeChange ?
+            Number((vttCue.startTime + timeGapLimit.maxGap).toFixed(3)) : vttCue.endTime;
+    }
 };
+
 
 const applyOverlapPrevention = (
     vttCue: VTTCue,
     previousCue: CueDto,
     followingCue: CueDto
-): VTTCue => {
+): void => {
     if (vttCue.startTime < previousCue?.vttCue.endTime) {
         vttCue.startTime = previousCue.vttCue.endTime;
     }
     if (vttCue.endTime > followingCue?.vttCue.startTime) {
         vttCue.endTime = followingCue.vttCue.startTime;
     }
-    return vttCue;
 };
 
-const verifyNoOverlapOnAddCue = (cue: CueDto, index: number, currentCues: CueDto[]): boolean =>
-    index === currentCues.length
-    ||(Number((currentCues[index]?.vttCue?.startTime - cue.vttCue.endTime).toFixed(3)) >= Constants.HALF_SECOND);
+const verifyNoOverlapOnAddCue = (cue: CueDto, index: number,
+                                 currentCues: CueDto[],
+                                 timeGapLimit: TimeGapLimit): boolean => {
+    const following = currentCues[index];
+    const vttCue = cue.vttCue;
+
+    if (vttCue.endTime > following?.vttCue.startTime) {
+        vttCue.endTime = following.vttCue.startTime;
+    }
+    const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
+    return cueDuration >= timeGapLimit.minGap;
+};
 
 const applyCharacterLimitation = (
     vttCue: VTTCue,
@@ -67,31 +90,41 @@ const applyCharacterLimitation = (
     return vttCue;
 };
 
+const createAndAddCue = (previousCue: CueDto,
+                         maxGapLimit: number,
+                         sourceCue?: CueDto): CueDto => {
+    const startTime = sourceCue
+        ? sourceCue.vttCue.startTime
+        : previousCue.vttCue.endTime;
+    const endTime = sourceCue
+        ? sourceCue.vttCue.endTime
+        : previousCue.vttCue.endTime + maxGapLimit;
+    const newCue = new VTTCue(startTime, endTime, "");
+    copyNonConstructorProperties(newCue, previousCue.vttCue);
+    return { vttCue: newCue, cueCategory: previousCue.cueCategory };
+};
+
 export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
     reducers: {
         updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
-            const actionVttCue = action.payload.vttCue;
+            const oldVttCue = action.payload.vttCue;
+            const newVttCue = new VTTCue(oldVttCue.startTime, oldVttCue.endTime, oldVttCue.text);
+            copyNonConstructorProperties(newVttCue, oldVttCue);
+            const cueCategory = state[action.payload.idx].cueCategory;
 
-            // We are creating new instance, so that we don't manipulate instance in action
-            // Manipulating action instance would break logic in editorStateSlice.updateEditorState reducer
-            const newVttCue = new VTTCue(actionVttCue.startTime, actionVttCue.endTime, actionVttCue.text);
-            copyNonConstructorProperties(newVttCue, actionVttCue);
-
-            const cueCategory = state[action.payload.idx]
-                ? state[action.payload.idx].cueCategory
-                : "DIALOGUE";
             const previousCue = state[action.payload.idx - 1];
             const followingCue = state[action.payload.idx + 1];
             const originalCue = state[action.payload.idx];
+            const subtitleSpecification = action.payload.subtitleSpecifications;
 
-            const vttCueWithoutOverlap = applyOverlapPrevention(newVttCue, previousCue, followingCue);
-            const vttCueWithCharacterLimitation =
-                applyCharacterLimitation(vttCueWithoutOverlap, originalCue, action.payload.subtitleSpecifications);
-            const vttCueWithRangePrevention = applyInvalidRangePrevention(vttCueWithCharacterLimitation, originalCue);
+            applyOverlapPrevention(newVttCue, previousCue, followingCue);
+            applyCharacterLimitation(newVttCue, originalCue, subtitleSpecification);
+            applyInvalidRangePrevention(newVttCue, originalCue, subtitleSpecification);
 
-            state[action.payload.idx] = { vttCue: vttCueWithRangePrevention, cueCategory };
+
+            state[action.payload.idx] = { vttCue: newVttCue, cueCategory };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
@@ -164,9 +197,13 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
     };
 
-export const addCue = (idx: number, cue: CueDto): AppThunk =>
+export const addCue = (previousCue: CueDto, idx: number, sourceCue?: CueDto): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueAction>>, getState): void => {
-        if(verifyNoOverlapOnAddCue(cue, idx, getState().cues)) {
+        const subtitleSpecifications = getState().subtitleSpecifications;
+        const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+        const step = Math.min(timeGapLimit.maxGap, Constants.NEW_ADDED_CUE_DEFAULT_STEP);
+        const cue = createAndAddCue(previousCue, step, sourceCue);
+        if (verifyNoOverlapOnAddCue(cue, idx, getState().cues, timeGapLimit)) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
         }
     };
@@ -195,17 +232,3 @@ export const applyShiftTime = (shiftTime: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<number>>): void => {
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
     };
-
-const ADD_END_TIME_INTERVAL_SECS = 3;
-export const createAndAddCue = (previousCue: CueDto, index: number, sourceCue?: CueDto): AppThunk => {
-    const startTime = sourceCue
-        ? sourceCue.vttCue.startTime
-        : previousCue.vttCue.endTime;
-    const endTime = sourceCue
-        ? sourceCue.vttCue.endTime
-        : previousCue.vttCue.endTime + ADD_END_TIME_INTERVAL_SECS;
-    const newCue = new VTTCue(startTime, endTime, "");
-    copyNonConstructorProperties(newCue, previousCue.vttCue);
-    const cue = { vttCue: newCue, cueCategory: previousCue.cueCategory };
-    return addCue(index, cue);
-};
