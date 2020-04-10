@@ -15,7 +15,7 @@ interface Props {
 const EditingVideoPlayer = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const editingCues = useSelector((state: SubtitleEditState) => state.cues);
+    const editingCues = useSelector((state: SubtitleEditState) => state.cuesState.cues);
     const newTime = useSelector((state: SubtitleEditState) => state.changePlayerTime);
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];
     const tracks = editingTrack ? [editingTrack] : [];
