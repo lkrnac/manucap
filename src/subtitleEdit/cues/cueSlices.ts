@@ -72,9 +72,12 @@ export const cuesSlice = createSlice({
     initialState: [] as CueDto[],
     reducers: {
         updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
-            const oldVttCue = action.payload.vttCue;
-            const newVttCue = new VTTCue(oldVttCue.startTime, oldVttCue.endTime, oldVttCue.text);
-            copyNonConstructorProperties(newVttCue, oldVttCue);
+            const actionVttCue = action.payload.vttCue;
+
+            // We are creating new instance, so that we don't manipulate instance in action
+            // Manipulating action instance would break logic in editorStateSlice.updateEditorState reducer
+            const newVttCue = new VTTCue(actionVttCue.startTime, actionVttCue.endTime, actionVttCue.text);
+            copyNonConstructorProperties(newVttCue, actionVttCue);
 
             const cueCategory = state[action.payload.idx]
                 ? state[action.payload.idx].cueCategory
