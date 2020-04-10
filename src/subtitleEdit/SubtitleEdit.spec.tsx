@@ -502,10 +502,10 @@ describe("SubtitleEdit", () => {
         actualNode.find(CueLine).at(2).simulate("click");
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(3);
-        expect(testingStore.getState().cues[2].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
-        expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(3);
+        expect(testingStore.getState().cuesState.cues.length).toEqual(3);
+        expect(testingStore.getState().cuesState.cues[2].vttCue.text).toEqual("");
+        expect(testingStore.getState().cuesState.cues[2].vttCue.startTime).toEqual(2);
+        expect(testingStore.getState().cuesState.cues[2].vttCue.endTime).toEqual(3);
     });
 
     it("calls onViewAllTrack callback when button is clicked", () => {

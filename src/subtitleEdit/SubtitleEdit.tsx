@@ -33,7 +33,7 @@ export interface SubtitleEditProps {
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
-    const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const cues = useSelector((state: SubtitleEditState) => state.cuesState.cues);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
 

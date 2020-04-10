@@ -15,7 +15,7 @@ interface Props {
 const ShiftTimeModal = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const [shift, setShift] = useState(0);
-    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
+    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cuesState.cues[0]?.vttCue.startTime);
 
     // TODO: Such local variable is totally not legal in React components.
     let isValid = true;

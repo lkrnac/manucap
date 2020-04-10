@@ -39,7 +39,7 @@ const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number)
 const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
-    const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
+    const cuesCount = useSelector((state: SubtitleEditState) => state.cuesState.cues.length);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     useEffect(() => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {

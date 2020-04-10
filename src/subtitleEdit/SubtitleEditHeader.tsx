@@ -61,7 +61,7 @@ const getProgress = (track: Track, editingCues: CueDto[]): ReactElement => {
 const SubtitleEditHeader = (): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const stateTask = useSelector((state: SubtitleEditState) => state.cuesTask);
-    const editingCues = useSelector((state: SubtitleEditState) => state.cues);
+    const editingCues = useSelector((state: SubtitleEditState) => state.cuesState.cues);
     const track = editingTrack ? editingTrack : {} as Track;
     const task = stateTask ? stateTask : {} as Task;
     return (

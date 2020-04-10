@@ -145,7 +145,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:15:00.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(900);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.endTime).toEqual(900);
     });
 
     it("updates cue in redux store when start time seconds changed", () => {
@@ -161,7 +161,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:10.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(10);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.endTime).toEqual(10);
     });
 
     it("updates cue in redux store when start time millis changed", () => {
@@ -177,7 +177,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:00.865", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.startTime).toEqual(.865);
     });
 
     it("updates pendingCueChanges flag in redux store when start time changes", () => {
@@ -209,7 +209,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:02.220", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.endTime).toEqual(2.22);
     });
 
     it("updates pendingCueChanges flag in redux store when end time changes", () => {
@@ -245,8 +245,8 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:15:00.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
-        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.position).toEqual(60);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.align).toEqual("end");
     });
 
     it("maintains cue styling when end time changes", () => {
@@ -266,8 +266,8 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:00.222", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
-        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.position).toEqual(60);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.align).toEqual("end");
     });
 
     it("updates cue position", () => {
@@ -284,10 +284,10 @@ describe("CueEdit", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column2);
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.line).toEqual(4);
-        expect(testingStore.getState().cues[0].vttCue.align).toEqual("start");
-        expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("center");
-        expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.line).toEqual(4);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.align).toEqual("start");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.positionAlign).toEqual("center");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.position).toEqual(65);
     });
 
     it("updates pendingCueChanges flag in redux store when cue position changes", () => {
@@ -322,7 +322,7 @@ describe("CueEdit", () => {
         actualNode.find("a.dropdown-item").at(1).simulate("click");
 
         // THEN
-        expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
+        expect(testingStore.getState().cuesState.cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
     });
 
     it("updates pendingCueChanges flag in redux store when line category changes", () => {
@@ -374,8 +374,8 @@ describe("CueEdit", () => {
             document.documentElement, "keydown", { keyCode: Character.ARROW_UP, shiftKey: true, altKey: true });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0.5);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.startTime).toEqual(0.5);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.endTime).toEqual(2);
     });
 
     it("should set player time to video end time on mod+shift+down shortcut", () => {
@@ -393,8 +393,8 @@ describe("CueEdit", () => {
             document.documentElement, "keydown", { keyCode: Character.ARROW_DOWN, shiftKey: true, altKey: true });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.endTime).toEqual(1);
     });
 
     it("should limit editing cue time to next cue", () => {
@@ -411,8 +411,8 @@ describe("CueEdit", () => {
         );
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.endTime).toEqual(3);
     });
 
     it("should not limit editing cue time to next cue if last cue", () => {
@@ -429,8 +429,8 @@ describe("CueEdit", () => {
         );
 
         // THEN
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(7);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(50);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.startTime).toEqual(7);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.endTime).toEqual(50);
     });
 
     it("Increases cue startTime to max value relative" +
@@ -450,7 +450,7 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.5);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.startTime).toEqual(1.5);
     });
 
     it("Sets cue endtime to min value relative" +
@@ -470,7 +470,7 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(0.5);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.endTime).toEqual(0.5);
     });
 
     it("Force set startTime to max value if passed invalid startTime range value", () => {
@@ -487,7 +487,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:01.600", selectionEnd: 12  }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.5);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.startTime).toEqual(1.5);
     });
 
     it("Force set endtime to lowest value if passed invalid endtime range value", () => {
@@ -504,7 +504,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:00.400", selectionEnd: 12  }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(0.5);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.endTime).toEqual(0.5);
     });
 
     it("Force set endtime to lowest value if passed endtime value equals to startime", () => {
@@ -521,7 +521,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:00.000", selectionEnd: 12  }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(0.5);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.endTime).toEqual(0.5);
     });
 
     it("plays cue when play shortcut is typed", () => {
@@ -558,7 +558,7 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().cuesState.cues.length).toEqual(2);
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
 
@@ -584,10 +584,10 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().cuesState.cues.length).toEqual(2);
         expect(testingStore.getState().editingCueIndex).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.endTime).toEqual(2);
     });
 
     it("escapes editing mode for last translation cue, where cue index is same last source cue index", () => {
@@ -609,7 +609,7 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().cuesState.cues.length).toEqual(1);
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 
@@ -633,7 +633,7 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().cuesState.cues.length).toEqual(2);
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
 
@@ -654,7 +654,7 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().cuesState.cues.length).toEqual(1);
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 });
