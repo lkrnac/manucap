@@ -18,7 +18,7 @@ export const Reducers = {
     changePlayerTime: changePlayerTimeSlice.reducer,
     pendingCueChanges: pendingCueChangesSlice.reducer,
     autoSaveSuccess: autoSaveSuccessSlice.reducer,
-    loadingIndicator: loadingIndicatorSlices.reducer
+    loadingIndicator: loadingIndicatorSlices.reducer,
 };
 
 const subtitleEditReducers = combineReducers(Reducers);
