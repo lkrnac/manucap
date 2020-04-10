@@ -148,40 +148,41 @@ describe("SubtitleSpecificationsButton", () => {
         expect(actualNode.find("button[hidden]").length).toEqual(1);
     });
 
-    // TODO to be enabled when doing https://dotsub.atlassian.net/browse/VTMS-2379
-    // it("Auto shows subtitle specification if cues has default cue", () => {
-    //     // WHEN
-    //     testingStore.dispatch(
-    //         readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
-    //     );
-    //
-    //     const actualNode = mount(
-    //         <Provider store={testingStore}>
-    //             <SubtitleSpecificationsButton />
-    //         </Provider>
-    //     );
-    //
-    //     // THEN
-    //     expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
-    // });
-    //
-    // it("Auto shows subtitle specification if cues are empty", () => {
-    //     // WHEN
-    //     testingStore.dispatch(
-    //         readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
-    //     );
-    //     // @ts-ignore passing empty
-    //     testingStore.dispatch(updateCues([]) as {} as AnyAction);
-    //
-    //     const actualNode = mount(
-    //         <Provider store={testingStore}>
-    //             <SubtitleSpecificationsButton />
-    //         </Provider>
-    //     );
-    //
-    //     // THEN
-    //     expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
-    // });
+    it("Auto shows subtitle specification if cues are empty", () => {
+        // WHEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+        );
+        // @ts-ignore passing empty
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+    });
+
+    it("Does not auto show subtitle specification if cues are not empty", () => {
+        // WHEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        // @ts-ignore passing empty
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+    });
 
     it("Does not auto show subtitle specification if subtitle specification is null", () => {
         // WHEN
