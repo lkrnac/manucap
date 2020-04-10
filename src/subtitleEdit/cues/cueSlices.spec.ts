@@ -45,6 +45,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("apply invalid end time prevention on start time change", () => {
@@ -58,6 +59,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.5);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("apply invalid end time prevention on end time change", () => {
@@ -71,8 +73,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
-
 
         it("apply overlap prevention for end time", () => {
             // GIVEN
@@ -85,6 +87,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("apply overlap prevention for start time", () => {
@@ -98,6 +101,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("apply line count prevention according to subtitle specs", () => {
@@ -115,6 +119,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("ignore line count prevention if null in subtitle specs", () => {
@@ -132,6 +137,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy \n\nCue");
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("ignore line count prevention if subtitle specs are disabled", () => {
@@ -149,6 +155,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy \n\nCue");
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("apply character count limitation to first line", () => {
@@ -166,6 +173,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("apply character count limitation to second line", () => {
@@ -183,6 +191,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("do not count HTML tags into line count limitation", () => {
@@ -200,6 +209,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\n<i>l<b>ine</b></i> 2");
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("ignore character line count limitation if null in subtitle specs", () => {
@@ -217,6 +227,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\nlong line 2");
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("ignore character line count limitation if subtitle specs are disabled", () => {
@@ -234,6 +245,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\nlong line 2");
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("Adjust startTime to follow min caption gap passed from subtitle spec", () => {
@@ -256,6 +268,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2.8);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
 
@@ -279,6 +292,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3.2);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("Adjust startTime to follow max caption gap passed from subtitle spec", () => {
@@ -301,6 +315,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
 
@@ -324,6 +339,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("Adjust startTime to follow min caption gap with default gap limits values", () => {
@@ -337,6 +353,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3.5);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
 
@@ -351,6 +368,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("Adjust startTime to follow max caption gap with default gap limits values", () => {
@@ -364,6 +382,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(18);
             expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
 
@@ -378,6 +397,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(12);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(999999);
             expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
     });
@@ -418,6 +438,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("adds cue to the end of the cue array", () => {
@@ -435,6 +456,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
             expect(testingStore.getState().cues[2].cueCategory).toEqual("LYRICS");
             expect(testingStore.getState().editingCueIndex).toEqual(2);
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("add cue in middle of cue array cues", () => {
@@ -453,6 +475,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4.225);
             expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("resets editor states map in Redux", () => {
@@ -483,6 +506,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues.length).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("Does not add cue if duration is less than min gap limit", () => {
@@ -504,6 +528,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues.length).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+            expect(testingStore.getState().validationError).toEqual(true);
         });
 
         it("Picks default step if it less than max gap limit provided by subtitle specs", () => {
