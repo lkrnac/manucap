@@ -7,7 +7,7 @@ import { autoSaveSuccessSlice, editorStatesSlice, pendingCueChangesSlice } from 
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
 
 export const Reducers = {
-    cues: cuesSlice.reducer,
+    cuesState: cuesSlice.reducer,
     editingCueIndex: editingCueIndexSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
     cuesTask: taskSlice.reducer,
