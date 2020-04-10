@@ -12,6 +12,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
         () => {
             setShow(subtitleSpecifications != null
                 && subtitleSpecifications.enabled
+                && cuesState.loaded
                 && (cuesState.cues.length === 0));
             // ESLint suppress: because we want to show modal only for first render
             // and subtitle specs is loaded
