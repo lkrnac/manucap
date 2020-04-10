@@ -66,7 +66,7 @@ describe("EditingVideoPlayer", () => {
 
         // THEN
         expect(testingStore.getState().editingTrack).toBeNull();
-        expect(testingStore.getState().cues).toEqual([]);
+        expect(testingStore.getState().cuesState.cues).toEqual([]);
         expect(testingStore.getState().sourceCues).toEqual([]);
     });
 });

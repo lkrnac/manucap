@@ -115,9 +115,10 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     actualNode.find("button").at(buttonIndex).simulate("click");
 
     // THEN
-    expect(testingStore.getState().cues[0].vttCue.text).toEqual(expectedText);
+    expect(testingStore.getState().cuesState.cues[0].vttCue.text).toEqual(expectedText);
     const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-    expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].vttCue.text);
+    expect(stateToHTML(currentContent, convertToHtmlOptions))
+        .toEqual(testingStore.getState().cuesState.cues[0].vttCue.text);
 };
 
 const testForContentState = (
@@ -142,7 +143,7 @@ const testForContentState = (
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-    expect(testingStore.getState().cues[0].vttCue.text).toEqual(vttCue.text);
+    expect(testingStore.getState().cuesState.cues[0].vttCue.text).toEqual(vttCue.text);
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };
 
@@ -194,7 +195,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
     it("updates pendingCueChanges flag in redux store when changed", () => {
@@ -260,7 +261,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some\nwrapped\ntext");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.text).toEqual("some\nwrapped\ntext");
     });
 
     it("updated cue when bold inline style is used", () => {
@@ -296,8 +297,8 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
-        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.position).toEqual(60);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.align).toEqual("end");
     });
 
     each([
@@ -407,7 +408,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.position).toEqual(6);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.position).toEqual(6);
     });
 
     it("updates cue in Redux if align property is changed", () => {
@@ -422,7 +423,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.align).toEqual("right");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.align).toEqual("right");
     });
 
     it("updates cue in Redux if lineAlign property is changed", () => {
@@ -437,7 +438,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.lineAlign).toEqual("end");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.lineAlign).toEqual("end");
     });
 
     it("updates cue in Redux if positionAlign property is changed", () => {
@@ -452,7 +453,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("line-right");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.positionAlign).toEqual("line-right");
     });
 
     it("updates cue in Redux if snapToLines property is changed", () => {
@@ -467,7 +468,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.snapToLines).toEqual(true);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.snapToLines).toEqual(true);
     });
 
     it("updates cue in Redux if size property is changed", () => {
@@ -482,7 +483,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.size).toEqual(30);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.size).toEqual(30);
     });
 
     it("updates cue in Redux if line property is changed", () => {
@@ -497,7 +498,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.line).toEqual(6);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.line).toEqual(6);
     });
 
     it("updates cue in Redux if vertical property is changed", () => {
@@ -512,7 +513,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.vertical).toEqual("lr");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.vertical).toEqual("lr");
     });
 
     it("updates cue in Redux if ID property is changed", () => {
@@ -526,7 +527,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.id).toEqual("differentId");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.id).toEqual("differentId");
     });
 
     it("updates cue in Redux if pauseOnExit property is changed", () => {
@@ -540,7 +541,7 @@ describe("CueTextEditor", () => {
         actualNode.setProps({ props: { index: 0, vttCue }});
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.pauseOnExit).toEqual(true);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.pauseOnExit).toEqual(true);
     });
 
     it("hides add cue button", () => {
@@ -592,7 +593,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.text).toEqual("someText");
         expect(testingStore.getState().editorStates[0]).toBeUndefined();
     });
 

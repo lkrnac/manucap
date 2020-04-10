@@ -49,9 +49,9 @@ describe("DeleteCueLineButton", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(1);
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Cue 2");
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cuesState.cues.length).toEqual(1);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.text).toEqual("Cue 2");
+        expect(testingStore.getState().cuesState.cues[0].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cuesState.cues[0].vttCue.endTime).toEqual(2);
     });
 });

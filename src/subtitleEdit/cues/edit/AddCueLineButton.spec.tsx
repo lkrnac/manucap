@@ -70,14 +70,14 @@ describe("AddCueLineButton", () => {
         actualNode.find(".sbte-add-cue-button").simulate("click");
 
         // THEN
-        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-        expect(testingStore.getState().cues[1].vttCue.align).toEqual("center");
-        expect(testingStore.getState().cues[1].vttCue.line).toEqual("auto");
-        expect(testingStore.getState().cues[1].vttCue.position).toEqual("auto");
-        expect(testingStore.getState().cues[1].vttCue.positionAlign).toEqual("auto");
-        expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.text).toEqual("");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.endTime).toEqual(4);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.align).toEqual("center");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.line).toEqual("auto");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.position).toEqual("auto");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.positionAlign).toEqual("auto");
+        expect(testingStore.getState().cuesState.cues[1].cueCategory).toEqual("DIALOGUE");
     });
 
     it("adds cue with non-default category when clicked", () => {
@@ -94,10 +94,10 @@ describe("AddCueLineButton", () => {
         actualNode.find(".sbte-add-cue-button").simulate("click");
 
         // THEN
-        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-        expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.text).toEqual("");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.endTime).toEqual(4);
+        expect(testingStore.getState().cuesState.cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
     });
 
     it("adds cue with non-default position when clicked", () => {
@@ -118,13 +118,13 @@ describe("AddCueLineButton", () => {
         actualNode.find(".sbte-add-cue-button").simulate("click");
 
         // THEN
-        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-        expect(testingStore.getState().cues[1].vttCue.align).toEqual("left");
-        expect(testingStore.getState().cues[1].vttCue.line).toEqual(8);
-        expect(testingStore.getState().cues[1].vttCue.position).toEqual(35);
-        expect(testingStore.getState().cues[1].vttCue.positionAlign).toEqual("center");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.text).toEqual("");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.endTime).toEqual(4);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.align).toEqual("left");
+        expect(testingStore.getState().cuesState.cues[1].vttCue.line).toEqual(8);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.position).toEqual(35);
+        expect(testingStore.getState().cuesState.cues[1].vttCue.positionAlign).toEqual("center");
     });
 
     it("Does not add cue if clicking button creates overlap", () => {
@@ -146,7 +146,7 @@ describe("AddCueLineButton", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues).toStrictEqual(testingCues);
+        expect(testingStore.getState().cuesState.cues).toStrictEqual(testingCues);
     });
 
     it("Does not add cue if clicking button creates less than 0.5 gap", () => {
@@ -168,8 +168,8 @@ describe("AddCueLineButton", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues).toHaveLength(2);
-        expect(testingStore.getState().cues).toStrictEqual(testingCues);
+        expect(testingStore.getState().cuesState.cues).toHaveLength(2);
+        expect(testingStore.getState().cuesState.cues).toStrictEqual(testingCues);
     });
 
     it("Add cue if clicking button if there is greater or equal 0.5 gap", () => {
@@ -191,7 +191,7 @@ describe("AddCueLineButton", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues).toHaveLength(3);
+        expect(testingStore.getState().cuesState.cues).toHaveLength(3);
     });
 
     it("Always add cue if clicking button on last cue", () => {
@@ -213,6 +213,6 @@ describe("AddCueLineButton", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues).toHaveLength(3);
+        expect(testingStore.getState().cuesState.cues).toHaveLength(3);
     });
 });
