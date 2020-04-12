@@ -2,7 +2,8 @@ import "video.js"; // VTTCue definition
 import {
     addCue,
     applyShiftTime,
-    deleteCue, setValidationError,
+    deleteCue,
+    setValidationError,
     updateCueCategory,
     updateCues,
     updateEditingCueIndex,
