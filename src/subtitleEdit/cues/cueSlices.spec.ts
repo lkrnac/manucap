@@ -2,7 +2,7 @@ import "video.js"; // VTTCue definition
 import {
     addCue,
     applyShiftTime,
-    deleteCue,
+    deleteCue, setValidationError,
     updateCueCategory,
     updateCues,
     updateEditingCueIndex,
@@ -749,6 +749,18 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
+        });
+    });
+
+    describe("setValidationError", () => {
+        it("sets validation error", () => {
+            //GIVEN
+
+            // WHEN
+            testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().validationError).toEqual(true);
         });
     });
 
