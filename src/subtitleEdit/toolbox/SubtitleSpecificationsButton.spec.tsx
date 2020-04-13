@@ -169,7 +169,7 @@ describe("SubtitleSpecificationsButton", () => {
     it("Does not auto show subtitle specification if cues are not empty", () => {
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
         );
         // @ts-ignore passing empty
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -205,6 +205,22 @@ describe("SubtitleSpecificationsButton", () => {
         );
         // @ts-ignore passing empty
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+    });
+
+    it("Does not auto show subtitle specification if cues are not loaded", () => {
+        // WHEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
 
         const actualNode = mount(
             <Provider store={testingStore}>
