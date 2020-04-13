@@ -12,20 +12,18 @@ const ShiftTimesForm = (props: Props): ReactElement => {
         props.onChange(time);
     };
     return (
-        <form>
-            <div className="form-group">
-                <label>Time Shift in Seconds.Milliseconds</label>
-                <input
-                    name="shift"
-                    className="form-control dotsub-track-line-shift margin-right-10"
-                    style={{ width: "120px" }}
-                    onChange={handleChange}
-                    type="number"
-                    placeholder="0.000"
-                    step={"0.100"}
-                />
-            </div>
-        </form>
+        <div className="form-group">
+            <label>Time Shift in Seconds.Milliseconds</label>
+            <input
+                name="shift"
+                className="form-control dotsub-track-line-shift margin-right-10 mousetrap"
+                style={{ width: "120px" }}
+                onChange={handleChange}
+                type="number"
+                placeholder="0.000"
+                step={"0.100"}
+            />
+        </div>
     );
 };
 

@@ -33,18 +33,16 @@ describe("ShiftTimesModal", () => {
                                 </button >
                             </div >
                             <div className="modal-body">
-                                <form >
-                                    <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
-                                        <input
-                                            name="shift"
-                                            className="form-control dotsub-track-line-shift margin-right-10"
-                                            style={{ width: "120px" }}
-                                            type="number"
-                                            placeholder="0.000"
-                                            step="0.100"
-                                        />
-                                    </div >
-                                </form >
+                                <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
+                                    <input
+                                        name="shift"
+                                        className="form-control dotsub-track-line-shift margin-right-10 mousetrap"
+                                        style={{ width: "120px" }}
+                                        type="number"
+                                        placeholder="0.000"
+                                        step="0.100"
+                                    />
+                                </div >
                                 <span className="alert alert-danger" style={{ display: "none" }}>
                                     Shift value is not valid (first track line time + shift)
                                     must be greater or equals 0.
@@ -96,18 +94,16 @@ describe("ShiftTimesModal", () => {
                             </button >
                         </div >
                         <div className="modal-body">
-                            <form >
-                                <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
-                                    <input
-                                        name="shift"
-                                        className="form-control dotsub-track-line-shift margin-right-10"
-                                        style={{ width: "120px" }}
-                                        type="number"
-                                        placeholder="0.000"
-                                        step="0.100"
-                                    />
-                                </div >
-                            </form >
+                            <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
+                                <input
+                                    name="shift"
+                                    className="form-control dotsub-track-line-shift margin-right-10 mousetrap"
+                                    style={{ width: "120px" }}
+                                    type="number"
+                                    placeholder="0.000"
+                                    step="0.100"
+                                />
+                            </div >
                             <span className="alert alert-danger" style={{ display: "block" }}>
                                 Shift value is not valid (first track line time + shift) must be greater or equals 0.
                             </span >
