@@ -376,28 +376,4 @@ describe("CueLine", () => {
         expect(actualProps.sourceCue).toEqual(sourceCue);
         expect(actualProps.lastCue).toEqual(true);
     });
-
-    it("scrolls to current cue if it enters editing mode", () => {
-        // GIVEN
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <div className="testing-cues-container">
-                    <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
-                </div>
-            </Provider>
-        );
-        const cueLine = actualNode.find(CueLine);
-        const domNode = cueLine.getDOMNode();
-        const parentNode = domNode.parentNode;
-
-        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
-        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
-
-        // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-
-        // THEN
-        expect(actualNode.find(".testing-cues-container").getDOMNode().scrollTop).toEqual(25);
-    });
 });
