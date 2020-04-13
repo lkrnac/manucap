@@ -14,6 +14,7 @@ import {
     pendingCueChangesSlice
 } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
+import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -26,7 +27,8 @@ export const Reducers = {
     changePlayerTime: changePlayerTimeSlice.reducer,
     pendingCueChanges: pendingCueChangesSlice.reducer,
     autoSaveSuccess: autoSaveSuccessSlice.reducer,
-    validationError: validationErrorSlice.reducer
+    validationError: validationErrorSlice.reducer,
+    loadingIndicator: loadingIndicatorSlices.reducer,
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

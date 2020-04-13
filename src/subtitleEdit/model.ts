@@ -41,3 +41,8 @@ export interface TimeGapLimit {
     minGap: number;
     maxGap: number;
 }
+
+export interface LoadingIndicator {
+    cuesLoaded: boolean;
+    sourceCuesLoaded: boolean;
+}
