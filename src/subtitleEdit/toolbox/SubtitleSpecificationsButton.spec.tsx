@@ -219,7 +219,7 @@ describe("SubtitleSpecificationsButton", () => {
     it("Does not auto show subtitle specification if cues are not loaded", () => {
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
         );
 
         const actualNode = mount(
