@@ -2,7 +2,7 @@ import {
     hasDataLoaded
 } from "./subtitleEditUtils";
 
-import {Language, LoadingIndicator, Track} from "./model";
+import { Language, LoadingIndicator, Track } from "./model";
 
 describe("cueUtils", () => {
     describe("hasDataLoaded", () => {
@@ -10,7 +10,7 @@ describe("cueUtils", () => {
             // GIVEN
             const testingTrack = {
                 type: "CAPTION",
-                language: {id: "en-US", name: "English (US)"} as Language,
+                language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
             } as Track;
@@ -29,7 +29,7 @@ describe("cueUtils", () => {
             // GIVEN
             const testingTrack = {
                 type: "TRANSLATION",
-                language: {id: "en-US", name: "English (US)"} as Language,
+                language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
             } as Track;
@@ -63,7 +63,7 @@ describe("cueUtils", () => {
             // GIVEN
             const testingTrack = {
                 type: "CAPTION",
-                language: {id: "en-US", name: "English (US)"} as Language,
+                language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
             } as Track;
@@ -82,7 +82,7 @@ describe("cueUtils", () => {
             // GIVEN
             const testingTrack = {
                 type: "TRANSLATION",
-                language: {id: "en-US", name: "English (US)"} as Language,
+                language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
             } as Track;
@@ -101,7 +101,7 @@ describe("cueUtils", () => {
             // GIVEN
             const testingTrack = {
                 type: "TRANSLATION",
-                language: {id: "en-US", name: "English (US)"} as Language,
+                language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
             } as Track;

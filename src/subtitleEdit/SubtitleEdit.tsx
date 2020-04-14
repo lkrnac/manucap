@@ -79,19 +79,19 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             <SubtitleEditHeader />
             {
                 !hasDataLoaded(editingTrack, loadingIndicator) ?
-                    <div style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white"}}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white" }}
                     >
-                        <div style={{width: "350px", height: "25px", display: "flex", alignItems: "center"}}>
-                            <i className="fas fa-sync fa-spin" style={{fontSize: "3em", fontWeight: 900}} />
-                            <span style={{marginLeft: "15px"}}>Hang in there, we're loading the track...</span>
+                        <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
+                            <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
+                            <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
                         </div>
                     </div>
                     :
-                    <div style={{display: "flex", alignItems: "flex-start", height: "93%"}}>
-                        <div style={{flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px"}}>
-                            <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange}/>
-                            <Toolbox/>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
+                            <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
+                            <Toolbox />
                         </div>
                         <div
                             style={{
@@ -108,14 +108,14 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     <AddCueLineButton
                                         text="Start Captioning"
                                         cueIndex={-1}
-                                        cue={{vttCue: new VTTCue(0, 0, ""),
-                                            cueCategory: "DIALOGUE"}}
+                                        cue={{ vttCue: new VTTCue(0, 0, ""),
+                                            cueCategory: "DIALOGUE" }}
                                     />
                                 ) : null
                             }
                             <div
                                 ref={cuesRef}
-                                style={{overflowY: "scroll", height: "100%"}}
+                                style={{ overflowY: "scroll", height: "100%" }}
                                 className="sbte-cues-array-container"
                             >
                                 {
@@ -140,7 +140,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     })
                                 }
                             </div>
-                            <div style={{marginTop: "15px", display: "flex", justifyContent: "flex-end"}}>
+                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
                                     className="btn btn-primary sbte-view-all-tracks-btn"
                                     type="button"
@@ -151,26 +151,26 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <button
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
-                                    style={{marginLeft: "10px"}}
+                                    style={{ marginLeft: "10px" }}
                                     onClick={(): void => scrollToElement(cuesRef.current.children[0])}
                                 >
-                                    <i className="fa fa-angle-double-up"/>
+                                    <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
                                     className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
-                                    style={{marginLeft: "10px"}}
+                                    style={{ marginLeft: "10px" }}
                                     onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
                                 >
-                                    <i className="fa fa-angle-double-down"/>
+                                    <i className="fa fa-angle-double-down" />
                                 </button>
 
-                                <span style={{flexGrow: 2}}/>
+                                <span style={{ flexGrow: 2 }} />
                                 <button
                                     className="btn btn-primary sbte-save-subtitle-btn"
                                     type="button"
                                     onClick={(): void => props.onSave()}
-                                    style={{marginRight: "10px"}}
+                                    style={{ marginRight: "10px" }}
                                 >
                                     Save
                                 </button>

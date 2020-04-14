@@ -322,15 +322,15 @@ describe("SubtitleEdit", () => {
                         <div style={{ flex: "2" }} />
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div/>
+                            <div />
                         </div>
                     </header>
-                    <div style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white"}}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white" }}
                     >
-                        <div style={{width: "350px", height: "25px", display: "flex", alignItems: "center"}}>
-                            <i className="fas fa-sync fa-spin" style={{fontSize: "3em", fontWeight: 900}} />
-                            <span style={{marginLeft: "15px"}}>Hang in there, we're loading the track...</span>
+                        <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
+                            <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
+                            <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
                         </div>
                     </div>
                     <div
@@ -383,21 +383,23 @@ describe("SubtitleEdit", () => {
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>
-                                Translation from <span><b>English (US)</b> to <b>French (France)</b></span> <i>4 seconds</i>
+                                Translation from <span>
+                                    <b>English (US)</b> to <b>French (France)</b>
+                                </span> <i>4 seconds</i>{/* eslint-disable-line react/jsx-closing-tag-location */}
                             </div>
                         </div>
                         <div style={{ flex: "2" }} />
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div/>
+                            <div />
                         </div>
                     </header>
-                    <div style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white"}}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white" }}
                     >
-                        <div style={{width: "350px", height: "25px", display: "flex", alignItems: "center"}}>
-                            <i className="fas fa-sync fa-spin" style={{fontSize: "3em", fontWeight: 900}} />
-                            <span style={{marginLeft: "15px"}}>Hang in there, we're loading the track...</span>
+                        <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
+                            <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
+                            <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
                         </div>
                     </div>
                     <div
