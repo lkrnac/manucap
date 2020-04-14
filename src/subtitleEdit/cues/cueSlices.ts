@@ -30,24 +30,28 @@ const areCuesEqual = (x: VTTCue, y: VTTCue): boolean => {
     return x.text === y.text && x.startTime === y.startTime && x.endTime === y.endTime;
 };
 
+const minRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
+    (vttCue.endTime - vttCue.startTime) >= timeGapLimit.minGap;
+
+const maxRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
+    (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
+
 const applyInvalidRangePrevention = (vttCue: VTTCue,
                                      originalCue: CueDto,
                                      subtitleSpecification: SubtitleSpecification | null): void => {
 
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
-    const isOutOfMinRange: boolean = (vttCue.endTime - vttCue.startTime) < timeGapLimit.minGap;
-    const isOutOfMaxRange: boolean = (vttCue.endTime - vttCue.startTime) > timeGapLimit.maxGap;
 
     const startTimeChange: boolean = vttCue.startTime !== originalCue.vttCue.startTime;
     const endTimeChange: boolean = vttCue.endTime !== originalCue.vttCue.endTime;
 
-    if (isOutOfMinRange) {
+    if (!minRangeOk(vttCue, timeGapLimit)) {
         vttCue.startTime = startTimeChange ?
             Number((vttCue.endTime - timeGapLimit.minGap).toFixed(3)) : vttCue.startTime;
         vttCue.endTime = endTimeChange ?
             Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3)) : vttCue.endTime;
     }
-    if (isOutOfMaxRange) {
+    if (!maxRangeOk(vttCue, timeGapLimit)) {
         vttCue.startTime = startTimeChange ?
             Number((vttCue.endTime - timeGapLimit.maxGap).toFixed(3)) : vttCue.startTime;
         vttCue.endTime = endTimeChange ?
