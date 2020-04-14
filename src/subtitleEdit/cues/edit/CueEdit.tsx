@@ -1,6 +1,6 @@
 import { CueCategory, CueDto } from "../../model";
 import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
-import React, { Dispatch, ReactElement, useEffect, useState } from "react";
+import React, { Dispatch, ReactElement, useEffect } from "react";
 import {
     updateCueCategory,
     updateVttCue,
@@ -44,15 +44,12 @@ const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number)
 
 const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const [showValidationError, setShowValidationError] = useState(false);
     const validationError = useSelector((state: SubtitleEditState) => state.validationError);
 
     useEffect(
         () => {
             if (validationError) {
-                setShowValidationError(true);
                 setTimeout(() => {
-                    setShowValidationError(false);
                     dispatch(setValidationError(false));
                 }, 1000);
             }
@@ -82,7 +79,7 @@ const CueEdit = (props: Props): ReactElement => {
         });
     }, [ dispatch, props.cue.vttCue.startTime ]);
 
-    const className = showValidationError ? "blink-error-bg" : "bg-white";
+    const className = validationError ? "blink-error-bg" : "bg-white";
 
     return (
         <div style={{ display: "flex" }} className={className}>
