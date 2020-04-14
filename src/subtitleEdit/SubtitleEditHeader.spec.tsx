@@ -53,6 +53,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -219,6 +220,34 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders without data loaded", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div><b /> <i /></div>
+                    <div />
+                </div>
+                <div style={{ flex: "2" }} />
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div />
+                    <div />
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -437,6 +466,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -479,6 +509,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -521,6 +552,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
