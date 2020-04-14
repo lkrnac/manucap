@@ -17,7 +17,6 @@ import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();
 
