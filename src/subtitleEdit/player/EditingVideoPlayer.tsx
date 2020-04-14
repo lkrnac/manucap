@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
 import { changePlayerTime } from "./playbackSlices";
 import { resetEditingTrack } from "../trackSlices";
-import { updateCues, updateSourceCues } from "../cues/cueSlices";
 
 interface Props {
     mp4: string;
@@ -23,8 +22,6 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
         () => {
             return (): void => { // return means it will be executed during unmount
                 dispatch(resetEditingTrack());
-                dispatch(updateCues([]));
-                dispatch(updateSourceCues([]));
             };
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
