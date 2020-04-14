@@ -40,7 +40,7 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateEditingTrack({
-                type: "CAPTION",
+                type: "TRANSLATION",
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
@@ -49,17 +49,23 @@ const TestApp = (): ReactElement => {
             500
         );
     });
+    // useEffect(() => {
+    //    setTimeout( // this simulates latency caused by server roundtrip
+    //        () => dispatch(updateCues([
+    //            { vttCue: new VTTCue(0, 1, "<i>Editing <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
+    //            {
+    //                vttCue: new VTTCue(1, 2, "<i><lang en>Editing</lang> <b>Line</b></i> 2\nWrapped text"),
+    //                cueCategory: "ONSCREEN_TEXT"
+    //            },
+    //        ])),
+    //        500
+    //    );
+    // });
     useEffect(() => {
-       setTimeout( // this simulates latency caused by server roundtrip
-           () => dispatch(updateCues([
-               { vttCue: new VTTCue(0, 1, "<i>Editing <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
-               {
-                   vttCue: new VTTCue(1, 2, "<i><lang en>Editing</lang> <b>Line</b></i> 2\nWrapped text"),
-                   cueCategory: "ONSCREEN_TEXT"
-               },
-           ])),
-           500
-       );
+        setTimeout( // this simulates latency caused by server roundtrip
+            () => dispatch(updateCues([])),
+            500
+        );
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
