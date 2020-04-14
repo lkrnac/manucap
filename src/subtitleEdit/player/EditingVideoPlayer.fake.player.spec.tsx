@@ -65,6 +65,8 @@ describe("EditingVideoPlayer", () => {
         ReactDOM.unmountComponentAtNode(container);
 
         // THEN
+        expect(testingStore.getState().loadingIndicator.cuesLoaded).toBeFalsy();
+        expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeFalsy();
         expect(testingStore.getState().editingTrack).toBeNull();
         expect(testingStore.getState().cues).toEqual([]);
         expect(testingStore.getState().sourceCues).toEqual([]);
