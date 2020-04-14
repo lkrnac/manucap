@@ -36,6 +36,12 @@ const minRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
 const maxRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
 
+const startOverlapOk = (vttCue: VTTCue, previousCue: CueDto): boolean =>
+    !previousCue || vttCue.startTime >= previousCue.vttCue.endTime;
+
+const endOverlapOk = (vttCue: VTTCue, followingCue: CueDto): boolean =>
+    !followingCue || vttCue.endTime <= followingCue.vttCue.startTime;
+
 const applyInvalidRangePrevention = (vttCue: VTTCue,
                                      originalCue: CueDto,
                                      subtitleSpecification: SubtitleSpecification | null): void => {
@@ -64,10 +70,10 @@ const applyOverlapPrevention = (
     previousCue: CueDto,
     followingCue: CueDto
 ): void => {
-    if (vttCue.startTime < previousCue?.vttCue.endTime) {
+    if (!startOverlapOk(vttCue, previousCue)) {
         vttCue.startTime = previousCue.vttCue.endTime;
     }
-    if (vttCue.endTime > followingCue?.vttCue.startTime) {
+    if (!endOverlapOk(vttCue, followingCue)) {
         vttCue.endTime = followingCue.vttCue.startTime;
     }
 };
