@@ -674,10 +674,8 @@ describe("CueEdit", () => {
         );
 
         // WHEN
-        act(() => {
-            testingStore.dispatch(setValidationError(true) as {} as AnyAction);
-            jest.advanceTimersByTime(1005);
-        });
+        testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+        jest.advanceTimersByTime(1005);
 
         // THEN
         expect(testingStore.getState().validationError).toEqual(false);
