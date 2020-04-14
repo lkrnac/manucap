@@ -2,7 +2,12 @@ import { CueCategory, CueDto, SubtitleEditAction, TimeGapLimit } from "../model"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import { checkCharacterLimitation, copyNonConstructorProperties, getTimeGapLimits } from "./cueUtils";
+import {
+    checkCharacterLimitation,
+    constructCueValuesArray,
+    copyNonConstructorProperties,
+    getTimeGapLimits
+} from "./cueUtils";
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
 
@@ -27,7 +32,7 @@ interface CuesAction extends SubtitleEditAction {
 }
 
 const areCuesEqual = (x: VTTCue, y: VTTCue): boolean => {
-    return x.text === y.text && x.startTime === y.startTime && x.endTime === y.endTime;
+    return JSON.stringify(constructCueValuesArray(x)) === JSON.stringify(constructCueValuesArray(y));
 };
 
 const applyInvalidRangePrevention = (vttCue: VTTCue,
