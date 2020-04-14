@@ -32,34 +32,34 @@ describe("ShiftTimesModal", () => {
                                     <span className="sr-only">Close</span >
                                 </button >
                             </div >
-                            <div className="modal-body">
-                                <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
-                                    <input
-                                        name="shift"
-                                        className="form-control dotsub-track-line-shift margin-right-10 mousetrap"
-                                        style={{ width: "120px" }}
-                                        type="number"
-                                        placeholder="0.000"
-                                        step="0.100"
-                                    />
+                            <form>
+                                <div className="modal-body">
+                                    <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
+                                        <input
+                                            name="shift"
+                                            type="number"
+                                            className="form-control dotsub-track-line-shift margin-right-10"
+                                            style={{ width: "120px" }}
+                                            placeholder="0.000"
+                                            step="0.100"
+                                            value=""
+                                            onChange={jest.fn()}
+                                        />
+                                    </div >
                                 </div >
-                                <span className="alert alert-danger" style={{ display: "none" }}>
-                                    Shift value is not valid (first track line time + shift)
-                                    must be greater or equals 0.
-                                </span>
-                            </div >
-                            <div className="modal-footer">
-                                <button
-                                    type="button"
-                                    className="dotsub-shift-modal-apply-button btn btn-primary"
-                                >Apply
-                                </button >
-                                <button
-                                    type="button"
-                                    className="dotsub-shift-modal-close-button btn btn-secondary"
-                                >Close
-                                </button >
-                            </div >
+                                <div className="modal-footer">
+                                    <button
+                                        type="submit"
+                                        className="dotsub-shift-modal-apply-button btn btn-primary"
+                                    >Apply
+                                    </button >
+                                    <button
+                                        type="button"
+                                        className="dotsub-shift-modal-close-button btn btn-secondary"
+                                    >Close
+                                    </button >
+                                </div>
+                            </form>
                         </div >
                     </div >
                 </div >
@@ -93,36 +93,40 @@ describe("ShiftTimesModal", () => {
                                 <span className="sr-only">Close</span >
                             </button >
                         </div >
-                        <div className="modal-body">
-                            <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
-                                <input
-                                    name="shift"
-                                    className="form-control dotsub-track-line-shift margin-right-10 mousetrap"
-                                    style={{ width: "120px" }}
-                                    type="number"
-                                    placeholder="0.000"
-                                    step="0.100"
-                                />
+                        <form>
+                            <div className="modal-body">
+                                <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
+                                    <input
+                                        name="shift"
+                                        type="number"
+                                        className="form-control dotsub-track-line-shift margin-right-10"
+                                        style={{ width: "120px" }}
+                                        placeholder="0.000"
+                                        step="0.100"
+                                        value="-1.000"
+                                        onChange={jest.fn()}
+                                    />
+                                </div >
+                                <span className="alert alert-danger" style={{ display: "block" }}>
+                                    The start time of the first cue plus the shift value must be greater or equal to 0
+                                </span >
                             </div >
-                            <span className="alert alert-danger" style={{ display: "block" }}>
-                                Shift value is not valid (first track line time + shift) must be greater or equals 0.
-                            </span >
-                        </div >
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                className="dotsub-shift-modal-apply-button btn btn-primary"
-                                disabled
-                            >
-                                Apply
-                            </button >
-                            <button
-                                type="button"
-                                className="dotsub-shift-modal-close-button btn btn-secondary"
-                            >
-                                Close
-                            </button >
-                        </div >
+                            <div className="modal-footer">
+                                <button
+                                    type="submit"
+                                    className="dotsub-shift-modal-apply-button btn btn-primary"
+                                    disabled
+                                >
+                                    Apply
+                                </button >
+                                <button
+                                    type="button"
+                                    className="dotsub-shift-modal-close-button btn btn-secondary"
+                                >
+                                    Close
+                                </button >
+                            </div>
+                        </form>
                     </div >
                 </div >
             </div >
