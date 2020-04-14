@@ -13,12 +13,15 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { updateCues, updateEditingCueIndex, updateSourceCues } from "../cueSlices";
+import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues } from "../cueSlices";
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
+import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();
+
+jest.useFakeTimers();
 
 const cues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -114,7 +117,7 @@ describe("CueEdit", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <CueTextEditor key={1} index={1} vttCue={cues[0].vttCue} />
+                        <CueTextEditor key={1} index={0} vttCue={cues[0].vttCue} />
                     </div>
                 </div>
             </Provider>
@@ -123,7 +126,11 @@ describe("CueEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={1} cue={cues[0]} playerTime={0} />
+                <CueEdit
+                    index={0}
+                    cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                    playerTime={0}
+                />
             </Provider>
         );
 
@@ -652,9 +659,27 @@ describe("CueEdit", () => {
         simulant.fire(
             document.documentElement, "keydown", { keyCode: Character.ESCAPE });
 
-
         // THEN
         expect(testingStore.getState().cues.length).toEqual(1);
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
+    });
+
+    it("auto sets validation error to false after receiving it", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        act(() => {
+            testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+            jest.advanceTimersByTime(1005);
+        });
+
+        // THEN
+        expect(testingStore.getState().validationError).toEqual(false);
     });
 });
