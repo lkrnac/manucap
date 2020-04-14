@@ -18,6 +18,7 @@ import deepFreeze from "deep-freeze";
 import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
+import { resetEditingTrack } from "../trackSlices";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -750,6 +751,28 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
         });
+    });
+
+    it("Resets cues on resetEditingTrack", () => {
+        //GIVEN
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+        //WHEN
+        testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(0);
+    });
+
+    it("Resets source cues on resetEditingTrack", () => {
+        //GIVEN
+        testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
+
+        //WHEN
+        testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().sourceCues.length).toEqual(0);
     });
 
     describe("setValidationError", () => {

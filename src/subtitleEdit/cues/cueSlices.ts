@@ -10,6 +10,7 @@ import {
 } from "./cueUtils";
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
+import { editingTrackSlice } from "../trackSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -146,6 +147,11 @@ export const cuesSlice = createSlice({
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
         }
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => {
+            return [];
+        }
     }
 });
 
@@ -169,6 +175,11 @@ export const sourceCuesSlice = createSlice({
     initialState: [] as CueDto[],
     reducers: {
         updateSourceCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => {
+            return [];
+        }
     }
 });
 
