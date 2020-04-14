@@ -398,7 +398,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(12);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(999999);
             expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
-            // expect(testingStore.getState().validationError).toEqual(true);
         });
 
     });
