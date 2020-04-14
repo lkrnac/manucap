@@ -2,6 +2,7 @@ import { createTestingStore } from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
 import { AnyAction } from "@reduxjs/toolkit";
 import { updateCues, updateSourceCues } from "./cues/cueSlices";
+import { resetEditingTrack } from "./trackSlices";
 
 const testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -27,5 +28,19 @@ describe("loadingIndicators", () => {
 
         // THEN
         expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeTruthy();
+    });
+
+    it("Resets sourceCuesLoaded and cuesLoaded on resetEditingTrack", () => {
+        //GIVEN
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues([]) as {} as AnyAction);
+
+
+        //WHEN
+        testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().loadingIndicator.cuesLoaded).toBeFalsy();
+        expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeFalsy();
     });
 });
