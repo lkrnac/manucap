@@ -58,6 +58,7 @@ describe("editorStatesSlice", () => {
         expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText())
             .toEqual("editor1 \n text");
         expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
+        expect(testingStore.getState().validationError).toEqual(true);
     });
 });
 

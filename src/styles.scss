@@ -51,6 +51,23 @@ $green: rgb(0,87,0);
   background-color: $gray-200;
 }
 
+@keyframes fade {
+    from { background-color: rgba(255,255,255,1); }
+    50% { background-color: rgba(255,140,140,0.5); }
+    to { background-color: rgba(255,255,255,1); }
+}
+
+@-webkit-keyframes fade {
+    from { background-color: rgba(255,255,255,1); }
+    50% { background-color: rgba(255,140,140,0.5); }
+    to { background-color: rgba(255,255,255,1); }
+}
+
+.blink-error-bg {
+    animation:fade 1000ms infinite;
+    -webkit-animation:fade 1000ms infinite;
+}
+
 // ----- Modal ------
 
 .sbte-medium-modal {

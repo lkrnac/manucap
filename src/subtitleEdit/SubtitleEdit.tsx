@@ -14,6 +14,7 @@ import { Toast } from "react-bootstrap";
 import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
+import { hasDataLoaded } from "./subtitleEditUtils";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -33,6 +34,8 @@ export interface SubtitleEditProps {
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
+    const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
@@ -74,100 +77,113 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
             <SubtitleEditHeader />
-            <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
-                    <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
-                    <Toolbox />
-                </div>
-                <div
-                    style={{
-                        flex: "1 1 60%",
-                        height: "100%",
-                        paddingLeft: "10px",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between"
-                    }}
-                >
-                    {
-                        drivingCues.length === 0 ? (
-                            <AddCueLineButton
-                                text="Start Captioning"
-                                cueIndex={-1}
-                                cue={{ vttCue: new VTTCue(0, 0, ""), cueCategory: "DIALOGUE" }}
-                            />
-                        ) : null
-                    }
-                    <div
-                        ref={cuesRef}
-                        style={{ overflowY: "scroll", height: "100%" }}
-                        className="sbte-cues-array-container"
+            {
+                !hasDataLoaded(editingTrack, loadingIndicator) ?
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white" }}
                     >
-                        {
-                            drivingCues.map((cue: CueDto, idx: number): ReactElement => {
-                                const sourceCue = sourceCues[idx];
-                                const editingCue = cues[idx] === cue ? cue : cues[idx];
-                                return (
-                                    <CueLine
-                                        key={idx}
-                                        index={idx}
-                                        sourceCue={sourceCue}
-                                        cue={editingCue}
-                                        playerTime={currentPlayerTime}
-                                        lastCue={idx === cues.length - 1}
-                                        onClickHandler={(): void => {
-                                            idx >= cues.length
-                                                ? dispatch(addCue(cues.length))
-                                                : dispatch(updateEditingCueIndex(idx));
-                                        }}
-                                    />);
-                            })
-                        }
+                        <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
+                            <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
+                            <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
+                        </div>
                     </div>
-                    <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
-                        <button
-                            className="btn btn-primary sbte-view-all-tracks-btn"
-                            type="button"
-                            onClick={(): void => props.onViewAllTracks()}
+                    :
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
+                            <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
+                            <Toolbox />
+                        </div>
+                        <div
+                            style={{
+                                flex: "1 1 60%",
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
+                            }}
                         >
-                            View All Tracks
-                        </button>
-                        <button
-                            className="btn btn-secondary sbte-jump-to-first-button"
-                            type="button"
-                            style={{ marginLeft: "10px" }}
-                            onClick={(): void => scrollToElement(cuesRef.current.children[0])}
-                        >
-                            <i className="fa fa-angle-double-up" />
-                        </button>
-                        <button
-                            className="btn btn-secondary sbte-jump-to-last-button"
-                            type="button"
-                            style={{ marginLeft: "10px" }}
-                            onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
-                        >
-                            <i className="fa fa-angle-double-down" />
-                        </button>
+                            {
+                                drivingCues.length === 0 ? (
+                                    <AddCueLineButton
+                                        text="Start Captioning"
+                                        cueIndex={-1}
+                                        cue={{ vttCue: new VTTCue(0, 0, ""),
+                                            cueCategory: "DIALOGUE" }}
+                                    />
+                                ) : null
+                            }
+                            <div
+                                ref={cuesRef}
+                                style={{ overflowY: "scroll", height: "100%" }}
+                                className="sbte-cues-array-container"
+                            >
+                                {
+                                    drivingCues.map((cue: CueDto, idx: number): ReactElement => {
+                                        const sourceCue = sourceCues[idx];
+                                        const editingCue = cues[idx] === cue ? cue : cues[idx];
+                                        return (
+                                            <CueLine
+                                                key={idx}
+                                                index={idx}
+                                                sourceCue={sourceCue}
+                                                cue={editingCue}
+                                                playerTime={currentPlayerTime}
+                                                lastCue={idx === cues.length - 1}
+                                                onClickHandler={(): void => {
+                                                    idx >= cues.length
+                                                        ? dispatch(addCue(cues.length))
+                                                        : dispatch(updateEditingCueIndex(idx));
+                                                }}
+                                            />);
+                                    })
+                                }
+                            </div>
+                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                                <button
+                                    className="btn btn-primary sbte-view-all-tracks-btn"
+                                    type="button"
+                                    onClick={(): void => props.onViewAllTracks()}
+                                >
+                                    View All Tracks
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => scrollToElement(cuesRef.current.children[0])}
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
 
-                        <span style={{ flexGrow: 2 }} />
-                        <button
-                            className="btn btn-primary sbte-save-subtitle-btn"
-                            type="button"
-                            onClick={(): void => props.onSave()}
-                            style={{ marginRight: "10px" }}
-                        >
-                            Save
-                        </button>
-                        <button
-                            className="btn btn-primary sbte-complete-subtitle-btn"
-                            type="button"
-                            onClick={(): void => props.onComplete()}
-                        >
-                            Complete
-                        </button>
+                                <span style={{ flexGrow: 2 }} />
+                                <button
+                                    className="btn btn-primary sbte-save-subtitle-btn"
+                                    type="button"
+                                    onClick={(): void => props.onSave()}
+                                    style={{ marginRight: "10px" }}
+                                >
+                                    Save
+                                </button>
+                                <button
+                                    className="btn btn-primary sbte-complete-subtitle-btn"
+                                    type="button"
+                                    onClick={(): void => props.onComplete()}
+                                >
+                                    Complete
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+            }
 
             <div style={{ position: "absolute", left: "45%", top: "1%" }}>
                 <Toast
