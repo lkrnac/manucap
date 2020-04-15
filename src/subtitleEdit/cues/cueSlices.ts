@@ -122,7 +122,8 @@ const applyCharacterLimitation = (
     originalCue: CueDto,
     subtitleSpecifications: SubtitleSpecification | null
 ): VTTCue => {
-    if (!checkCharacterLimitation(vttCue.text, subtitleSpecifications)) {
+    if (!checkCharacterLimitation(vttCue.text, subtitleSpecifications)
+        && checkCharacterLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
         vttCue.text = originalCue.vttCue.text;
     }
     return vttCue;

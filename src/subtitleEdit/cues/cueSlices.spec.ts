@@ -166,12 +166,12 @@ describe("cueSlices", () => {
             const testingSubtitleSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
-                maxCharactersPerLine: 10,
+                maxCharactersPerLine: 15,
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Long line 1\nline 2")) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Long long line 1\nline 2")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
@@ -184,12 +184,12 @@ describe("cueSlices", () => {
             const testingSubtitleSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
-                maxCharactersPerLine: 10,
+                maxCharactersPerLine: 15,
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong long line 2")) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
@@ -401,6 +401,23 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
         });
 
+        it("applies the change if current cue doesn't conform to character limitation rules", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+                enabled: true
+            } as SubtitleSpecification;
+
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Change to be applied")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Change to be applied");
+        });
     });
 
     describe("updateCueCategory", () => {
