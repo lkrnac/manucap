@@ -457,6 +457,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
             expect(testingStore.getState().cues[2].cueCategory).toEqual("LYRICS");
             expect(testingStore.getState().editingCueIndex).toEqual(2);
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("add cue in middle of cue array cues", () => {
@@ -475,6 +476,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4.225);
             expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("resets editor states map in Redux", () => {
