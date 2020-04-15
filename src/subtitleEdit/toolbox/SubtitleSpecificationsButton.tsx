@@ -8,17 +8,15 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const [show, setShow] = useState(false);
 
     const cues = useSelector((state: SubtitleEditState) => state.cues);
-    const cuesLoaded = useSelector((state: SubtitleEditState) => state.loadingIndicator.cuesLoaded);
     useEffect(
         () => {
             setShow(subtitleSpecifications != null
                 && subtitleSpecifications.enabled
-                && cuesLoaded
                 && cues.length === 0);
             // ESLint suppress: because we want to show modal only for first render
             // and subtitle specs is loaded
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [subtitleSpecifications, cuesLoaded]
+        }, [subtitleSpecifications]
     );
 
     const handleClose = (): void => setShow(false);
