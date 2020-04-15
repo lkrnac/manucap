@@ -64,39 +64,29 @@ const endOverlapOk = (vttCue: VTTCue, followingCue: CueDto): boolean =>
 
 const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
-    originalCue: CueDto,
     subtitleSpecification: SubtitleSpecification | null
 ): void => {
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
 
-    const startTimeChange: boolean = vttCue.startTime !== originalCue.vttCue.startTime;
-
     if (!minRangeOk(vttCue, timeGapLimit)) {
-        vttCue.startTime = startTimeChange ?
-            Number((vttCue.endTime - timeGapLimit.minGap).toFixed(3)) : vttCue.startTime;
+        vttCue.startTime = Number((vttCue.endTime - timeGapLimit.minGap).toFixed(3));
     }
     if (!maxRangeOk(vttCue, timeGapLimit)) {
-        vttCue.startTime = startTimeChange ?
-            Number((vttCue.endTime - timeGapLimit.maxGap).toFixed(3)) : vttCue.startTime;
+        vttCue.startTime = Number((vttCue.endTime - timeGapLimit.maxGap).toFixed(3));
     }
 };
 
 const applyInvalidRangePreventionEnd = (
     vttCue: VTTCue,
-     originalCue: CueDto,
-     subtitleSpecification: SubtitleSpecification | null
+    subtitleSpecification: SubtitleSpecification | null
 ): void => {
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
 
-    const endTimeChange: boolean = vttCue.endTime !== originalCue.vttCue.endTime;
-
     if (!minRangeOk(vttCue, timeGapLimit)) {
-        vttCue.endTime = endTimeChange ?
-            Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3)) : vttCue.endTime;
+        vttCue.endTime = Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3));
     }
     if (!maxRangeOk(vttCue, timeGapLimit)) {
-        vttCue.endTime = endTimeChange ?
-            Number((vttCue.startTime + timeGapLimit.maxGap).toFixed(3)) : vttCue.endTime;
+        vttCue.endTime = Number((vttCue.startTime + timeGapLimit.maxGap).toFixed(3));
     }
 };
 
@@ -240,10 +230,14 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         const originalCue = cues[idx];
         const subtitleSpecifications = getState().subtitleSpecifications;
 
-        applyOverlapPreventionStart(newVttCue, previousCue);
-        applyOverlapPreventionEnd(newVttCue, followingCue);
-        applyInvalidRangePreventionStart(newVttCue, originalCue, subtitleSpecifications);
-        applyInvalidRangePreventionEnd(newVttCue, originalCue, subtitleSpecifications);
+        if (vttCue.startTime !== originalCue.vttCue.startTime) {
+            applyOverlapPreventionStart(newVttCue, previousCue);
+            applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications);
+        }
+        if (vttCue.endTime !== originalCue.vttCue.endTime) {
+            applyOverlapPreventionEnd(newVttCue, followingCue);
+            applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications);
+        }
         applyCharacterLimitation(newVttCue, originalCue, subtitleSpecifications);
 
         if (!areCuesEqual(vttCue, newVttCue)) {
