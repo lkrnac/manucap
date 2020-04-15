@@ -1,10 +1,11 @@
-import React, { ReactElement } from "react";
+import React, { MutableRefObject, ReactElement, useEffect, useRef } from "react";
 import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
+import { scrollToElement } from "./cueUtils";
 
 interface Props {
     index: number;
@@ -18,8 +19,18 @@ interface Props {
 const CueLine = (props: Props): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const translationCueClassName = props.cue ? "sbte-gray-100-background" : "sbte-gray-200-background";
+    const ref = useRef() as MutableRefObject<HTMLDivElement>;
+    useEffect(
+        () => {
+            if (editingCueIndex === props.index && props.lastCue) {
+                scrollToElement(ref.current);
+            }
+        },
+        [ editingCueIndex, props.index, props.lastCue, ref ]
+    );
     return (
         <div
+            ref={ref}
             onClick={props.onClickHandler}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
