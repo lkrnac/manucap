@@ -45,9 +45,13 @@ const getDueDate = (task: Task): ReactElement => {
     return <div>Due Date: <b>{task.dueDate}</b></div>;
 };
 
+const getCueDuration = (cue: CueDto): number => Number((cue.vttCue.endTime - cue.vttCue.startTime) * 1000);
+
 const getProgressPercentage = (track: Track, editingCues: CueDto[]): number => {
     if (editingCues.length > 0) {
-        return Math.ceil(((editingCues[editingCues.length - 1].vttCue.endTime * 1000) / track.mediaLength) * 100);
+        const totalMs = editingCues.reduce((total, nextCue): number => total + getCueDuration(nextCue), 0);
+        const progress = (totalMs * 100) / track.mediaLength;
+        return progress > 100 ? 100 : Math.round(progress);
     }
     return 0;
 };
