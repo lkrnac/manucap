@@ -1,75 +1,85 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
-import ShiftTimeForm from "./ShiftTimeForm";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { applyShiftTime } from "../../cues/cueSlices";
+import { Field, Form } from "react-final-form";
+
+const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
+
+const isShiftTimeValid = (value: string, firstTrackTime: number): boolean => (parseFloat(value) + firstTrackTime) < 0;
+
+const normalizeValue = (value: string): string => parseFloat(value).toFixed(3);
 
 interface Props {
     show: boolean;
     onClose: () => void;
 }
 
-// TODO: This component seems to be very overcomplicated. Why not use redux-form to store the state instead of such
-// ugly state handling.
 const ShiftTimeModal = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const [shift, setShift] = useState(0);
     const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
 
-    // TODO: Such local variable is totally not legal in React components.
-    let isValid = true;
-
-    const clearState = (): void => {
-        setShift(0);
-        isValid = true;
-    };
-
-    const handleApplyShift = (): void => {
-        dispatch(applyShiftTime(shift));
-        clearState();
+    const handleApplyShift = (shift: string): void => {
+        const shiftValue = parseFloat(shift);
+        dispatch(applyShiftTime(shiftValue));
         props.onClose();
     };
 
     const handleCancelShift = (): void => {
-        clearState();
         props.onClose();
     };
-
-    if ((shift + firstTrackTime) < 0) {
-        isValid = false;
-    }
 
     return (
         <Modal show={props.show} onHide={handleCancelShift} centered dialogClassName="sbte-medium-modal">
             <Modal.Header closeButton>
                 <Modal.Title>Shift All Track Lines Time</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                <ShiftTimeForm  onChange={(shiftedTime: number): void =>
-                    setShift(shiftedTime)}
-                />
-                <span className="alert alert-danger" style={{ display: isValid? "none" : "block" }}>
-                    Shift value is not valid (first track line time + shift) must be greater or equals 0.
-                </span>
-            </Modal.Body>
-            <Modal.Footer>
-                <button
-                    type="button"
-                    disabled={!isValid}
-                    onClick={handleApplyShift}
-                    className="dotsub-shift-modal-apply-button btn btn-primary"
-                >
-                    Apply
-                </button>
-                <button
-                    type="button"
-                    onClick={handleCancelShift}
-                    className="dotsub-shift-modal-close-button btn btn-secondary"
-                >
-                    Close
-                </button>
-            </Modal.Footer>
+            <Form
+                onSubmit={(values): void => handleApplyShift(values.shift)}
+                render={({ handleSubmit, values }): ReactElement => (
+                    <form onSubmit={handleSubmit}>
+                        <Modal.Body>
+                            <div className="form-group">
+                                <label>Time Shift in Seconds.Milliseconds</label>
+                                <Field
+                                    name="shift"
+                                    component="input"
+                                    parse={normalizeValue}
+                                    className="form-control dotsub-track-line-shift margin-right-10"
+                                    style={{ width: "120px" }}
+                                    type="number"
+                                    placeholder="0.000"
+                                    step={"0.100"}
+                                />
+                            </div>
+                            {
+                                isShiftTimeValid(values.shift, firstTrackTime) ? (
+                                    <span className="alert alert-danger" style={{ display: "block" }}>
+                                        {INVALID_SHIFT_MSG}
+                                    </span>
+                                ): null
+                            }
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <button
+                                type="submit"
+                                disabled={isShiftTimeValid(values.shift, firstTrackTime)}
+                                className="dotsub-shift-modal-apply-button btn btn-primary"
+                            >
+                                Apply
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleCancelShift}
+                                className="dotsub-shift-modal-close-button btn btn-secondary"
+                            >
+                                Close
+                            </button>
+                        </Modal.Footer>
+                    </form>
+                )}
+            />
         </Modal>
     );
 };
