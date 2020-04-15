@@ -60,6 +60,30 @@ describe("editorStatesSlice", () => {
         expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
         expect(testingStore.getState().validationError).toEqual(true);
     });
+
+    it("does update editor state if subtitle specs limitations are not matched for old and new cue", () => {
+        // GIVEN
+        const initialContentState = ContentState.createFromText("editor1 \n\n text");
+        const initialEditorState = EditorState.createWithContent(initialContentState);
+        const testingSubtitleSpecification = {
+            enabled: true,
+            maxLinesPerCaption: 2,
+            maxCharactersPerLine: 30,
+        } as SubtitleSpecification;
+        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+        testingStore.dispatch(updateEditorState(1, initialEditorState) as {} as AnyAction);
+        const incorrectContentState = ContentState.createFromText("changed editor1 \n\n text");
+        const incorrectEditorState = EditorState.createWithContent(incorrectContentState);
+
+        // WHEN
+        testingStore.dispatch(updateEditorState(1, incorrectEditorState) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText())
+            .toEqual("changed editor1 \n\n text");
+        expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
+        expect(testingStore.getState().validationError).toEqual(false);
+    });
 });
 
 describe("autoSaveSuccessSlice", () => {
