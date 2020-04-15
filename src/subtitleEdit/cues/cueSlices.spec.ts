@@ -505,7 +505,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues.length).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().validationError).toEqual(true);
+            expect(testingStore.getState().validationError).toEqual(false);
         });
 
         it("Does not add cue if duration is less than min gap limit", () => {

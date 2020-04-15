@@ -229,16 +229,13 @@ export const addCue = (previousCue: CueDto, idx: number, sourceCue?: CueDto): Ap
         const cue = createAndAddCue(previousCue, step, sourceCue);
 
         const followingCue = getState().cues[idx];
-        const originalStartTime = cue.vttCue.startTime;
-        const originalEndTime = cue.vttCue.endTime;
         applyOverlapPrevention(cue.vttCue, previousCue, followingCue);
         const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
 
-        if (!validCueDuration || originalStartTime !== cue.vttCue.startTime || originalEndTime !== cue.vttCue.endTime) {
-            dispatch(validationErrorSlice.actions.setValidationError(true));
-        }
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
+        } else {
+            dispatch(validationErrorSlice.actions.setValidationError(true));
         }
     };
 
