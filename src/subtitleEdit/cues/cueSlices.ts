@@ -188,6 +188,9 @@ export const validationErrorSlice = createSlice({
     initialState: false,
     reducers: {
         setValidationError: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    },
+    extraReducers: {
+        [editingCueIndexSlice.actions.updateEditingCueIndex.type]: (): boolean => false
     }
 });
 
