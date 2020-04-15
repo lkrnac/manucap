@@ -35,11 +35,13 @@
     "@fortawesome/fontawesome-free": "^5.12.1",
     "draft-js": "^0.11.3",
     "draft-js-export-html": "^1.4.1",
+    "final-form": "^4.19.1",
     "humanize-duration": "^3.21.0",
     "immutable": "^4.0.0-rc.12",
     "mousetrap": "1.6.3",
     "platform": "^1.3.5",
     "react-bootstrap": "^1.0.0-beta.16",
+    "react-final-form": "^6.4.0",
     "react-markdown": "^4.3.1",
     "sanitize-html": "^1.21.1",
     "video.js": "7.7.4"
