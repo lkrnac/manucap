@@ -22,6 +22,7 @@ export interface Track {
     readonly mediaTitle: string;
     readonly mediaLength: number;
     readonly sourceLanguage?: Language;
+    readonly progress: number;
 }
 
 export interface Task {
