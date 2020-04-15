@@ -42,50 +42,77 @@ const minRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
 const maxRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
 
+// const rangeOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): boolean => {
+//     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
+//     return minRangeOk(vttCue, timeGapLimit) && maxRangeOk(vttCue, timeGapLimit);
+// };
+
 const startOverlapOk = (vttCue: VTTCue, previousCue: CueDto): boolean =>
     !previousCue || vttCue.startTime >= previousCue.vttCue.endTime;
 
 const endOverlapOk = (vttCue: VTTCue, followingCue: CueDto): boolean =>
     !followingCue || vttCue.endTime <= followingCue.vttCue.startTime;
 
-const applyInvalidRangePrevention = (vttCue: VTTCue,
-                                     originalCue: CueDto,
-                                     subtitleSpecification: SubtitleSpecification | null): void => {
+// const overlapOk = (vttCue: VTTCue, previousCue: CueDto, followingCue: CueDto): boolean =>
+//     startOverlapOk(vttCue, previousCue) && endOverlapOk(vttCue, followingCue);
 
+// const conformToRules = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null,
+//                         previousCue: CueDto, followingCue: CueDto): boolean =>
+//     checkCharacterLimitation(vttCue.text, subtitleSpecification)
+//         && rangeOk(vttCue, subtitleSpecification)
+//         && overlapOk(vttCue, previousCue, followingCue);
+
+const applyInvalidRangePreventionStart = (
+    vttCue: VTTCue,
+    originalCue: CueDto,
+    subtitleSpecification: SubtitleSpecification | null
+): void => {
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
 
     const startTimeChange: boolean = vttCue.startTime !== originalCue.vttCue.startTime;
-    const endTimeChange: boolean = vttCue.endTime !== originalCue.vttCue.endTime;
 
     if (!minRangeOk(vttCue, timeGapLimit)) {
         vttCue.startTime = startTimeChange ?
             Number((vttCue.endTime - timeGapLimit.minGap).toFixed(3)) : vttCue.startTime;
-        vttCue.endTime = endTimeChange ?
-            Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3)) : vttCue.endTime;
     }
     if (!maxRangeOk(vttCue, timeGapLimit)) {
         vttCue.startTime = startTimeChange ?
             Number((vttCue.endTime - timeGapLimit.maxGap).toFixed(3)) : vttCue.startTime;
+    }
+};
+
+const applyInvalidRangePreventionEnd = (
+    vttCue: VTTCue,
+     originalCue: CueDto,
+     subtitleSpecification: SubtitleSpecification | null
+): void => {
+    const timeGapLimit = getTimeGapLimits(subtitleSpecification);
+
+    const endTimeChange: boolean = vttCue.endTime !== originalCue.vttCue.endTime;
+
+    if (!minRangeOk(vttCue, timeGapLimit)) {
+        vttCue.endTime = endTimeChange ?
+            Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3)) : vttCue.endTime;
+    }
+    if (!maxRangeOk(vttCue, timeGapLimit)) {
         vttCue.endTime = endTimeChange ?
             Number((vttCue.startTime + timeGapLimit.maxGap).toFixed(3)) : vttCue.endTime;
     }
 };
 
-const applyOverlapPrevention = (
-    vttCue: VTTCue,
-    previousCue: CueDto,
-    followingCue: CueDto
-): void => {
+const applyOverlapPreventionStart = (vttCue: VTTCue, previousCue: CueDto): void => {
     if (!startOverlapOk(vttCue, previousCue)) {
         vttCue.startTime = previousCue.vttCue.endTime;
     }
+};
+
+const applyOverlapPreventionEnd = (vttCue: VTTCue, followingCue: CueDto): void => {
     if (!endOverlapOk(vttCue, followingCue)) {
         vttCue.endTime = followingCue.vttCue.startTime;
     }
 };
 
-const verifyCueDuration = (vttCue: VTTCue,
-                                 timeGapLimit: TimeGapLimit): boolean => {
+const verifyCueDuration = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean => {
     const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
     return cueDuration >= timeGapLimit.minGap;
 };
@@ -212,9 +239,11 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         const originalCue = cues[idx];
         const subtitleSpecifications = getState().subtitleSpecifications;
 
-        applyOverlapPrevention(newVttCue, previousCue, followingCue);
+        applyOverlapPreventionStart(newVttCue, previousCue);
+        applyOverlapPreventionEnd(newVttCue, followingCue);
+        applyInvalidRangePreventionStart(newVttCue, originalCue, subtitleSpecifications);
+        applyInvalidRangePreventionEnd(newVttCue, originalCue, subtitleSpecifications);
         applyCharacterLimitation(newVttCue, originalCue, subtitleSpecifications);
-        applyInvalidRangePrevention(newVttCue, originalCue, subtitleSpecifications);
 
         if (!areCuesEqual(vttCue, newVttCue)) {
             dispatch(validationErrorSlice.actions.setValidationError(true));
@@ -237,7 +266,8 @@ export const addCue = (previousCue: CueDto, idx: number, sourceCue?: CueDto): Ap
 
         const followingCue = getState().cues[idx];
         const originalCue = new VTTCue(cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text);
-        applyOverlapPrevention(cue.vttCue, previousCue, followingCue);
+        applyOverlapPreventionStart(cue.vttCue, previousCue);
+        applyOverlapPreventionEnd(cue.vttCue, followingCue);
         const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
 
         if (!validCueDuration || !areCuesEqual(originalCue, cue.vttCue)) {
