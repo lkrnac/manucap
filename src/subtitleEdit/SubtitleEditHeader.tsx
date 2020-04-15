@@ -3,6 +3,7 @@ import React, { ReactElement } from "react";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import { humanizer } from "humanize-duration";
 import { useSelector } from "react-redux";
+import { hasDataLoaded } from "./subtitleEditUtils";
 
 const getTrackType = (track: Track): string => {
     return track.type === "CAPTION" ? "Caption" : "Translation";
@@ -51,14 +52,15 @@ const getProgressPercentage = (track: Track, editingCues: CueDto[]): number => {
     return 0;
 };
 
-const getProgress = (track: Track, editingCues: CueDto[]): ReactElement => {
-    if (track && track.mediaLength) {
+const getProgress = (track: Track, editingCues: CueDto[], cuesDataLoaded: boolean | null): ReactElement => {
+    if (cuesDataLoaded && track && track.mediaLength) {
         return <div>Completed: <b>{getProgressPercentage(track, editingCues)}%</b></div>;
     }
     return <div />;
 };
 
 const SubtitleEditHeader = (): ReactElement => {
+    const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const stateTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const editingCues = useSelector((state: SubtitleEditState) => state.cues);
@@ -73,7 +75,7 @@ const SubtitleEditHeader = (): ReactElement => {
             <div style={{ flex: "2" }} />
             <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
-                {getProgress(track, editingCues)}
+                {getProgress(track, editingCues, hasDataLoaded(editingTrack, loadingIndicator))}
             </div>
         </header>
     );

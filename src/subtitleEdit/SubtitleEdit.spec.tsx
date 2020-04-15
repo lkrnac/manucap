@@ -35,8 +35,23 @@ const testingTrack = {
     mediaLength: 4000,
 } as Track;
 
+const testingTranslationTrack = {
+    type: "TRANSLATION",
+    language: { id: "fr-FR", name: "French (France)" } as Language,
+    sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+    default: true,
+    mediaTitle: "This is the video title",
+    mediaLength: 4000,
+} as Track;
+
 const testingTask = {
     type: "TASK_CAPTION",
+    projectName: "Project One",
+    dueDate: "2019/12/30 10:00AM"
+} as Task;
+
+const testingTranslationTask = {
+    type: "TASK_TRANSLATE",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM"
 } as Task;
@@ -66,7 +81,7 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
+                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
                             <VideoPlayer
                                 mp4="dummyMp4"
                                 poster="dummyPoster"
@@ -192,7 +207,7 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
+                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
                             <VideoPlayer
                                 mp4="dummyMp4"
                                 poster="dummyPoster"
@@ -291,6 +306,141 @@ describe("SubtitleEdit", () => {
             .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
     });
 
+    it("renders loading data when data is pending load for CAPTION", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore} >
+                <div
+                    className="sbte-subtitle-edit"
+                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                >
+                    <header style={{ display: "flex", paddingBottom: "10px" }}>
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div><b>This is the video title</b> <i>Project One</i></div>
+                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
+                        </div>
+                        <div style={{ flex: "2" }} />
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div />
+                        </div>
+                    </header>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white" }}
+                    >
+                        <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
+                            <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
+                            <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
+                        </div>
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            left: "45%",
+                            top: "1%"
+                        }}
+                    >
+                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                            <i className="fa fa-thumbs-up" /> Saved
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+    });
+
+    it("renders loading data when data is pending load for TRANSLATION source cues", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore} >
+                <div
+                    className="sbte-subtitle-edit"
+                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                >
+                    <header style={{ display: "flex", paddingBottom: "10px" }}>
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div><b>This is the video title</b> <i>Project One</i></div>
+                            <div>
+                                Translation from <span>
+                                    <b>English (US)</b> to <b>French (France)</b>
+                                </span> <i>4 seconds</i>{/* eslint-disable-line react/jsx-closing-tag-location */}
+                            </div>
+                        </div>
+                        <div style={{ flex: "2" }} />
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div />
+                        </div>
+                    </header>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white" }}
+                    >
+                        <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
+                            <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
+                            <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
+                        </div>
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            left: "45%",
+                            top: "1%"
+                        }}
+                    >
+                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                            <i className="fa fa-thumbs-up" /> Saved
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTranslationTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+        // THEN
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+    });
+
     it("shows cues when there are same amount of translation and caption cue lines", () => {
         // GIVEN
         const cues = [
@@ -315,6 +465,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
@@ -346,6 +497,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
 
@@ -382,6 +534,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
@@ -423,6 +576,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
@@ -462,6 +616,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
@@ -496,6 +651,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
@@ -528,6 +684,7 @@ describe("SubtitleEdit", () => {
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
 
         // WHEN
         actualNode.find("button.sbte-view-all-tracks-btn").simulate("click");
@@ -556,6 +713,7 @@ describe("SubtitleEdit", () => {
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
 
         // WHEN
         actualNode.find("button.sbte-save-subtitle-btn").simulate("click");
@@ -584,6 +742,7 @@ describe("SubtitleEdit", () => {
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
 
         // WHEN
         actualNode.find("button.sbte-complete-subtitle-btn").simulate("click");
@@ -609,6 +768,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
         const cueLines = actualNode.find(CueLine);
@@ -648,6 +808,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         actualNode.update();
@@ -682,6 +843,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
         const cueLines = actualNode.find(CueLine);
@@ -715,6 +877,9 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
         const expectedAlert = mount(
             <Toast
                 show
