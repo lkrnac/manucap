@@ -17,7 +17,6 @@ import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();
 
@@ -674,10 +673,8 @@ describe("CueEdit", () => {
         );
 
         // WHEN
-        act(() => {
-            testingStore.dispatch(setValidationError(true) as {} as AnyAction);
-            jest.advanceTimersByTime(1005);
-        });
+        testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+        jest.advanceTimersByTime(1005);
 
         // THEN
         expect(testingStore.getState().validationError).toEqual(false);
