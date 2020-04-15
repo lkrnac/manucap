@@ -92,14 +92,14 @@ const applyCharacterLimitation = (
 };
 
 const createAndAddCue = (previousCue: CueDto,
-                         maxGapLimit: number,
+                         step: number,
                          sourceCue?: CueDto): CueDto => {
     const startTime = sourceCue
         ? sourceCue.vttCue.startTime
         : previousCue.vttCue.endTime;
     const endTime = sourceCue
         ? sourceCue.vttCue.endTime
-        : previousCue.vttCue.endTime + maxGapLimit;
+        : previousCue.vttCue.endTime + step;
     const newCue = new VTTCue(startTime, endTime, "");
     copyNonConstructorProperties(newCue, previousCue.vttCue);
     return { vttCue: newCue, cueCategory: previousCue.cueCategory };
@@ -208,11 +208,16 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
     };
 
-export const addCue = (previousCue: CueDto, idx: number, sourceCue?: CueDto): AppThunk =>
+export const addCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueAction>>, getState): void => {
         const subtitleSpecifications = getState().subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
         const step = Math.min(timeGapLimit.maxGap, Constants.NEW_ADDED_CUE_DEFAULT_STEP);
+        const cues = getState().cues;
+        const sourceCues = getState().sourceCues;
+        const previousIndex = idx - 1;
+        const previousCue = cues[previousIndex] || Constants.DEFAULT_CUE;
+        const sourceCue = sourceCues[idx];
         const cue = createAndAddCue(previousCue, step, sourceCue);
         if (verifyNoOverlapOnAddCue(cue, idx, getState().cues, timeGapLimit)) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));

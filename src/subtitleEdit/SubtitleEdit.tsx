@@ -116,9 +116,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         playerTime={currentPlayerTime}
                                         lastCue={idx === cues.length - 1}
                                         onClickHandler={(): void => {
-                                            const previousCue = cues[cues.length - 1];
                                             idx >= cues.length
-                                                ? dispatch(addCue(previousCue, cues.length, sourceCue))
+                                                ? dispatch(addCue(cues.length))
                                                 : dispatch(updateEditingCueIndex(idx));
                                         }}
                                     />);
