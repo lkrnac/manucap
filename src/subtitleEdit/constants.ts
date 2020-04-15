@@ -1,4 +1,5 @@
 import { CueDto } from "./model";
+import "video.js";
 
 export class Constants {
     static readonly DEFAULT_MIN_GAP: number = 0.5;

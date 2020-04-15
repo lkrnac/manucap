@@ -587,6 +587,43 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
         });
+
+        it("adds first cue to the cue array", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues([]) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(
+                addCue(0) as {} as AnyAction
+            );
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+            expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().validationError).toEqual(false);
+        });
+
+        it("adds cue to the end of the cue array", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(
+                addCue( 1) as {} as AnyAction
+            );
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
+            expect(testingStore.getState().editingCueIndex).toEqual(2);
+            expect(testingStore.getState().validationError).toEqual(false);
+        });
     });
 
     describe("deleteCue", () => {
