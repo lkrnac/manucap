@@ -52,15 +52,15 @@ $green: rgb(0,87,0);
 }
 
 @keyframes fade {
-    from { background-color: rgba(255,255,255,1); }
-    50% { background-color: rgba(255,140,140,0.5); }
-    to { background-color: rgba(255,255,255,1); }
+    from { background-color: rgb(255, 255, 255); }
+    50% { background-color: rgb(255, 235, 235); }
+    to { background-color: rgb(255, 255, 255); }
 }
 
 @-webkit-keyframes fade {
-    from { background-color: rgba(255,255,255,1); }
-    50% { background-color: rgba(255,140,140,0.5); }
-    to { background-color: rgba(255,255,255,1); }
+    from { background-color: rgb(255, 255, 255); }
+    50% { background-color: rgb(255, 235, 235); }
+    to { background-color: rgb(255, 255, 255); }
 }
 
 .blink-error-bg {
