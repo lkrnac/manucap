@@ -2,11 +2,9 @@ import { AppThunk } from "../../subtitleEditReducers";
 import React, { ReactElement } from "react";
 import { addCue } from "../cueSlices";
 import { useDispatch } from "react-redux";
-import { CueDto } from "../../model";
 
 interface Props {
     cueIndex: number;
-    cue: CueDto;
     text?: string;
 }
 

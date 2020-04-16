@@ -108,8 +108,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     <AddCueLineButton
                                         text="Start Captioning"
                                         cueIndex={-1}
-                                        cue={{ vttCue: new VTTCue(0, 0, ""),
-                                            cueCategory: "DIALOGUE" }}
                                     />
                                 ) : null
                             }
