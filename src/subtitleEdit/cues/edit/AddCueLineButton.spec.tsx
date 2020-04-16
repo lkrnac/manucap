@@ -12,7 +12,6 @@ import { updateCues } from "../cueSlices";
 describe("AddCueLineButton", () => {
     it("renders", () => {
         // GIVEN
-        const cue = { vttCue: new VTTCue(0, 1, ""), cueCategory: "DIALOGUE" } as CueDto;
         const expectedNode = mount(
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
@@ -25,7 +24,7 @@ describe("AddCueLineButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={cue} />
+                <AddCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -35,7 +34,6 @@ describe("AddCueLineButton", () => {
 
     it("renders with custom text", () => {
         // GIVEN
-        const cue = { vttCue: new VTTCue(0, 1, ""), cueCategory: "DIALOGUE" } as CueDto;
         const expectedNode = mount(
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
@@ -48,7 +46,7 @@ describe("AddCueLineButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton text="Add Cue Line" cueIndex={0} cue={cue} />
+                <AddCueLineButton text="Add Cue Line" cueIndex={0} />
             </Provider>
         );
 
@@ -62,7 +60,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={cue} />
+                <AddCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -86,7 +84,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={cue} />
+                <AddCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -110,7 +108,7 @@ describe("AddCueLineButton", () => {
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={cue} />
+                <AddCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -137,7 +135,7 @@ describe("AddCueLineButton", () => {
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={testingCues[0]} />
+                <AddCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -159,7 +157,7 @@ describe("AddCueLineButton", () => {
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={testingCues[0]} />
+                <AddCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -182,7 +180,7 @@ describe("AddCueLineButton", () => {
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} cue={testingCues[0]} />
+                <AddCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -204,7 +202,7 @@ describe("AddCueLineButton", () => {
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={1} cue={testingCues[1]} />
+                <AddCueLineButton cueIndex={1} />
             </Provider>
         );
 
