@@ -216,6 +216,9 @@ export const validationErrorSlice = createSlice({
     initialState: false,
     reducers: {
         setValidationError: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    },
+    extraReducers: {
+        [editingCueIndexSlice.actions.updateEditingCueIndex.type]: (): boolean => false
     }
 });
 
@@ -260,16 +263,14 @@ export const addCue = (previousCue: CueDto, idx: number, sourceCue?: CueDto): Ap
         const cue = createAndAddCue(previousCue, step, sourceCue);
 
         const followingCue = getState().cues[idx];
-        const originalCue = new VTTCue(cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text);
         applyOverlapPreventionStart(cue.vttCue, previousCue);
         applyOverlapPreventionEnd(cue.vttCue, followingCue);
         const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
 
-        if (!validCueDuration || !areCuesEqual(originalCue, cue.vttCue)) {
-            dispatch(validationErrorSlice.actions.setValidationError(true));
-        }
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
+        } else {
+            dispatch(validationErrorSlice.actions.setValidationError(true));
         }
     };
 

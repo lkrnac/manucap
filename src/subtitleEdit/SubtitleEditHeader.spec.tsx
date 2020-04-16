@@ -53,6 +53,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -225,6 +226,34 @@ describe("SubtitleEditHeader", () => {
             .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
     });
 
+    it("renders without data loaded", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div><b /> <i /></div>
+                    <div />
+                </div>
+                <div style={{ flex: "2" }} />
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div />
+                    <div />
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
     it("renders without Task", () => {
         // GIVEN
         const testingTrack = {
@@ -334,7 +363,57 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2" }} />
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Completed: <b>47%</b></div>
+                    <div>Completed: <b>46%</b></div>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders max Progress 100%", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 20, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(20, 60, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(60, 90, "Caption Line 3"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(90, 120, "Caption Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(120, 150, "Caption Line 5"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            mediaLength: 130000,
+        } as Track;
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 10 seconds</i></div>
+                </div>
+                <div style={{ flex: "2" }} />
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Completed: <b>100%</b></div>
                 </div>
             </header>
         );
@@ -437,6 +516,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -479,6 +559,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
@@ -521,6 +602,7 @@ describe("SubtitleEditHeader", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
