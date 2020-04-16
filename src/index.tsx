@@ -44,7 +44,8 @@ const TestApp = (): ReactElement => {
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
-                mediaLength: 4250
+                mediaLength: 4250,
+                progress: 50
             })),
             500
         );
