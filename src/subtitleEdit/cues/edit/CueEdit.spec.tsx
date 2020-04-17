@@ -689,7 +689,7 @@ describe("CueEdit", () => {
     it("auto sets validation error to false after receiving it", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
-        mount(
+        const actualNode = mount(
             <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
@@ -701,5 +701,24 @@ describe("CueEdit", () => {
 
         // THEN
         expect(testingStore.getState().validationError).toEqual(false);
+        expect(actualNode.find("div").at(0).hasClass("bg-white")).toBeTruthy();
+    });
+
+    it("blinks background when when validation error occurs", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(testingStore.getState().validationError).toEqual(true);
+        expect(actualNode.find("div").at(0).hasClass("blink-error-bg")).toBeTruthy();
     });
 });
