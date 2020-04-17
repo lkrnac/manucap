@@ -67,7 +67,7 @@ const markCuesBreakingRules = (cues: CueDto[], subtitleSpecifications: SubtitleS
     cues.map((cue, index) => {
         const previousCue = cues[index - 1];
         const followingCue = cues[index + 1];
-        return { ... cue, corrupted: !conformToRules(cue.vttCue, subtitleSpecifications, previousCue, followingCue) };
+        return { ...cue, corrupted: !conformToRules(cue.vttCue, subtitleSpecifications, previousCue, followingCue) };
     });
 
 const applyInvalidRangePreventionStart = (
