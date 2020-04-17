@@ -15,7 +15,8 @@ $sbte-main-text-color: $secondary;
 $border-color: rgb(241,244,245);
 $input-border-color: rgb(108, 117, 125);
 $green: rgb(0,87,0);
-$background-error: rgb(255, 235, 235);
+$background-error-darker: rgb(255, 235, 235);
+$background-error-lighter: rgb(255, 245, 245);
 
 // ##############################
 // Subtitle Edit visuals
@@ -52,15 +53,23 @@ $background-error: rgb(255, 235, 235);
   background-color: $gray-200;
 }
 
+.sbte-background-error-darker {
+  background-color: $background-error-darker;
+}
+
+.sbte-background-error-lighter {
+  background-color: $background-error-lighter;
+}
+
 @keyframes fade {
     from { background-color: $white }
-    50% { background-color: $background-error }
+    50% { background-color: $background-error-lighter }
     to { background-color: $white }
 }
 
 @-webkit-keyframes fade {
     from { background-color: $white }
-    50% { background-color: $background-error }
+    50% { background-color: $background-error-lighter }
     to { background-color: $white }
 }
 
