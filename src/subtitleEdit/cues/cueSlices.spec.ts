@@ -792,11 +792,17 @@ describe("cueSlices", () => {
 
     describe("updateCues", () => {
         it("initializes cues", () => {
+            // GIVEN
+            const expectedCues = [
+                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
+                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
+            ] as CueDto[];
+
             // WHEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues).toEqual(testingCues);
+            expect(testingStore.getState().cues).toEqual(expectedCues);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
@@ -804,7 +810,7 @@ describe("cueSlices", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const replacementCues = [
-                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE", corrupted: false },
             ] as CueDto[];
 
             // WHEN
