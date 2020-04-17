@@ -91,6 +91,7 @@ $background-error-lighter: rgb(255, 245, 245);
   color: $sbte-main-text-color;
   border: 1px solid $input-border-color;
   border-radius: 4px;
+  background-color: inherit;
 }
 
 .sbte-cue-line-flap {
