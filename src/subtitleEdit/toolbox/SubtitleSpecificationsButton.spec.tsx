@@ -6,12 +6,13 @@ import { Provider } from "react-redux";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateCues } from "../cues/cueSlices";
 import { CueDto } from "../model";
 import "video.js";
+import { act } from "react-dom/test-utils";
 
 jest.mock("./SubtitleSpecificationsModal");
 
@@ -121,16 +122,20 @@ describe("SubtitleSpecificationsButton", () => {
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
-            </Provider>
-        );
+        let actualNode = {} as ReactWrapper;
+        act(() => {
+            actualNode = mount(
+                <Provider store={testingStore}>
+                    <SubtitleSpecificationsButton />
+                </Provider>
+            );
+        });
 
         // WHEN
-        actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
-        actualNode.find(SubtitleSpecificationsModal).props().onClose();
-        actualNode.update();
+        act(() => {
+            actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
+            actualNode.find(SubtitleSpecificationsModal).props().onClose();
+        });
 
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
@@ -224,16 +229,18 @@ describe("SubtitleSpecificationsButton", () => {
         // @ts-ignore passing empty
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
-            </Provider>
-        );
-        actualNode.find(SubtitleSpecificationsModal).props().onClose();
+        let actualNode = {} as ReactWrapper;
+        act(() => {
+             actualNode = mount(
+                 <Provider store={testingStore}>
+                     <SubtitleSpecificationsButton />
+                 </Provider>
+            );
+            actualNode.find(SubtitleSpecificationsModal).props().onClose();
+        });
 
         //WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
 
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
