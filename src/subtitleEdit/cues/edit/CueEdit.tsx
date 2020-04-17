@@ -16,8 +16,8 @@ import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
-import { setPendingCueChanges } from "./editorStatesSlice";
 import { changePlayerTime } from "../../player/playbackSlices";
+import { callSaveTrack } from "../../trackSlices";
 
 interface Props {
     index: number;
@@ -30,7 +30,7 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateVttCue(props.index, newCue));
-    dispatch(setPendingCueChanges(true));
+    dispatch(callSaveTrack());
 };
 
 const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number): AppThunk => {
@@ -123,7 +123,7 @@ const CueEdit = (props: Props): ReactElement => {
                                 newCue[property] = newPositionProperties[property];
                             }
                             dispatch(updateVttCue(props.index, newCue));
-                            dispatch(setPendingCueChanges(true));
+                            dispatch(callSaveTrack());
                         }}
                     />
                 </div>

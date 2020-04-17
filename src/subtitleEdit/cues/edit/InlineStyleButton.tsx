@@ -2,7 +2,8 @@ import { EditorState, RichUtils } from "draft-js";
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import { setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
+import { updateEditorState } from "./editorStatesSlice";
+import { callSaveTrack } from "../../trackSlices";
 
 interface Props{
     editorIndex: number;
@@ -28,7 +29,7 @@ const InlineStyleButton = (props: Props): ReactElement => {
             onClick={(): void => {
                 const newState = RichUtils.toggleInlineStyle(editorState, props.inlineStyle);
                 dispatch(updateEditorState(props.editorIndex, newState));
-                dispatch(setPendingCueChanges(true));
+                dispatch(callSaveTrack());
             }}
         >
             {props.label}

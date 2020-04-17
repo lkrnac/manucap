@@ -84,11 +84,6 @@ export const updateEditorState = (editorId: number, newEditorState: EditorState)
 export const reset = (): AppThunk => (dispatch: Dispatch<PayloadAction<undefined>>): void =>
     dispatch(editorStatesSlice.actions.reset());
 
-export const setPendingCueChanges = (pending: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
-        dispatch(pendingCueChangesSlice.actions.setPendingCueChanges(pending));
-    };
-
 export const setAutoSaveSuccess = (success: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean>>): void => {
         dispatch(autoSaveSuccessSlice.actions.setAutoSaveSuccess(success));

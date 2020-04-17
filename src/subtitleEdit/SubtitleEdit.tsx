@@ -11,17 +11,16 @@ import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
 import { Toast } from "react-bootstrap";
-import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { hasDataLoaded } from "./subtitleEditUtils";
+import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
+import { setSaveTrack } from "./trackSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
 //  Can be removed once fixed.
 enableMapSet();
-
-const autoSaveTimeout = 10000;
 
 export interface SubtitleEditProps {
     mp4: string;
@@ -29,7 +28,6 @@ export interface SubtitleEditProps {
     onViewAllTracks: () => void;
     onSave: () => void;
     onComplete: () => void;
-    autoSaveTimeout?: number;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -46,9 +44,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         : cues;
     const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
 
-    const pendingCueChanges = useSelector((state: SubtitleEditState) => state.pendingCueChanges);
     const [showAutoSaveAlert, setShowAutoSaveAlert] = useState(false);
-
     const autoSaveSuccess = useSelector((state: SubtitleEditState) => state.autoSaveSuccess);
 
     useEffect(
@@ -59,16 +55,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
     useEffect(
         () => {
-            const autoSaveInterval = setInterval(
-                () => {
-                    if (pendingCueChanges) {
-                        props.onSave();
-                    }
-                },
-                props.autoSaveTimeout || autoSaveTimeout
-            );
-            return (): void => clearInterval(autoSaveInterval);
-        }, [ pendingCueChanges, props ]
+            dispatch(setSaveTrack(props.onSave));
+        }, [ dispatch, props.onSave ]
     );
 
     return (

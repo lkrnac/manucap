@@ -15,8 +15,9 @@ import { useDispatch, useSelector } from "react-redux";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
-import { setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
+import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
+import { callSaveTrack } from "../../trackSlices";
 
 const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");
@@ -134,7 +135,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     editorState={editorState}
                     onChange={(newEditorState: EditorState): void => {
                         if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                            dispatch(setPendingCueChanges(true));
+                            dispatch(callSaveTrack());
                         }
                         dispatch(updateEditorState(props.index, newEditorState));
                     }}
