@@ -11,6 +11,7 @@ import {
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
 import { editingTrackSlice } from "../trackSlices";
+import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -42,10 +43,10 @@ const minRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
 const maxRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
 
-// const rangeOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): boolean => {
-//     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
-//     return minRangeOk(vttCue, timeGapLimit) && maxRangeOk(vttCue, timeGapLimit);
-// };
+const rangeOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): boolean => {
+    const timeGapLimit = getTimeGapLimits(subtitleSpecification);
+    return minRangeOk(vttCue, timeGapLimit) && maxRangeOk(vttCue, timeGapLimit);
+};
 
 const startOverlapOk = (vttCue: VTTCue, previousCue: CueDto): boolean =>
     !previousCue || vttCue.startTime >= previousCue.vttCue.endTime;
@@ -53,14 +54,22 @@ const startOverlapOk = (vttCue: VTTCue, previousCue: CueDto): boolean =>
 const endOverlapOk = (vttCue: VTTCue, followingCue: CueDto): boolean =>
     !followingCue || vttCue.endTime <= followingCue.vttCue.startTime;
 
-// const overlapOk = (vttCue: VTTCue, previousCue: CueDto, followingCue: CueDto): boolean =>
-//     startOverlapOk(vttCue, previousCue) && endOverlapOk(vttCue, followingCue);
+const overlapOk = (vttCue: VTTCue, previousCue: CueDto, followingCue: CueDto): boolean =>
+    startOverlapOk(vttCue, previousCue) && endOverlapOk(vttCue, followingCue);
 
-// const conformToRules = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null,
-//                         previousCue: CueDto, followingCue: CueDto): boolean =>
-//     checkCharacterLimitation(vttCue.text, subtitleSpecification)
-//         && rangeOk(vttCue, subtitleSpecification)
-//         && overlapOk(vttCue, previousCue, followingCue);
+const conformToRules = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null,
+                        previousCue: CueDto, followingCue: CueDto): boolean =>
+    checkCharacterLimitation(vttCue.text, subtitleSpecification)
+        && rangeOk(vttCue, subtitleSpecification)
+        && overlapOk(vttCue, previousCue, followingCue);
+
+const markCuesBreakingRules = (cues: CueDto[], subtitleSpecifications: SubtitleSpecification | null): void => {
+    cues.forEach((cue, index): void => {
+        const previousCue = cues[index - 1];
+        const followingCue = cues[index + 1];
+        cue.corrupted = !conformToRules(cue.vttCue, subtitleSpecifications, previousCue, followingCue);
+    });
+};
 
 const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
@@ -174,12 +183,16 @@ export const cuesSlice = createSlice({
                 copyNonConstructorProperties(newCue, vttCue);
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
+        },
+        checkErrors: (state, action: PayloadAction<SubtitleSpecificationAction>): void => {
+            markCuesBreakingRules(state, action.payload.subtitleSpecification);
         }
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => {
-            return [];
-        }
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
+        [subtitleSpecificationSlice.actions.readSubtitleSpecification.type]:
+            (state, action: PayloadAction<SubtitleSpecificationAction>): void =>
+                markCuesBreakingRules(state, action.payload.subtitleSpecification),
     }
 });
 
@@ -205,9 +218,7 @@ export const sourceCuesSlice = createSlice({
         updateSourceCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => {
-            return [];
-        }
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => []
     }
 });
 
@@ -223,7 +234,7 @@ export const validationErrorSlice = createSlice({
 });
 
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<VttCueAction | boolean>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
         copyNonConstructorProperties(newVttCue, vttCue);
 
@@ -248,6 +259,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         }
 
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue }));
+        dispatch(cuesSlice.actions.checkErrors({ subtitleSpecification: subtitleSpecifications }));
     };
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
@@ -280,7 +292,8 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<CuesAction>>, getState): void => {
+        markCuesBreakingRules(cues, getState().subtitleSpecifications);
         dispatch(cuesSlice.actions.updateCues({ cues }));
     };
 

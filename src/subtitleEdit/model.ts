@@ -8,6 +8,7 @@ export type CueCategory = "DIALOGUE" | "ONSCREEN_TEXT" | "AUDIO_DESCRIPTION" | "
 export interface CueDto {
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
+    corrupted?: boolean;
 }
 
 export interface LanguageCues {

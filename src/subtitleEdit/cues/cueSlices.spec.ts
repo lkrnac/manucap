@@ -107,6 +107,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[1].corrupted).toEqual(true);
+            expect(testingStore.getState().cues[0].corrupted).toEqual(true);
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
@@ -139,6 +141,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+            expect(testingStore.getState().cues[1].corrupted).toEqual(true);
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
@@ -286,6 +290,28 @@ describe("cueSlices", () => {
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
+        it("does not apply character limitation if previous cue doesn't conform to rules as well", () => {
+            // GIVEN
+            const cuesLong = [
+                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cuesLong) as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
+            expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+            expect(testingStore.getState().validationError).toEqual(false);
+        });
+
         it("Adjust startTime to follow min caption gap passed from subtitle spec", () => {
             // GIVEN
             const testingSubtitleSpecification = {
@@ -398,6 +424,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[0].corrupted).toEqual(true);
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
@@ -801,6 +828,31 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editorStates.size).toEqual(0);
+        });
+
+        it("mark cues as corrupted if  they doesn't conform to rules", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[3].corrupted).toBeTruthy();
         });
     });
 

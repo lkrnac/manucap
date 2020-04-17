@@ -204,7 +204,7 @@ export const checkCharacterLimitation = (
     subtitleSpecification: SubtitleSpecification | null
 ): boolean => {
     const lines = text.split("\n");
-    if (subtitleSpecification !== null && subtitleSpecification.enabled) {
+    if (subtitleSpecification && subtitleSpecification.enabled) {
         const charactersPerLineLimitOk = lines
              .map(
                  line => subtitleSpecification.maxCharactersPerLine === null
