@@ -63,13 +63,12 @@ const conformToRules = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecifica
         && rangeOk(vttCue, subtitleSpecification)
         && overlapOk(vttCue, previousCue, followingCue);
 
-const markCuesBreakingRules = (cues: CueDto[], subtitleSpecifications: SubtitleSpecification | null): void => {
-    cues.forEach((cue, index): void => {
+const markCuesBreakingRules = (cues: CueDto[], subtitleSpecifications: SubtitleSpecification | null): CueDto [] =>
+    cues.map((cue, index) => {
         const previousCue = cues[index - 1];
         const followingCue = cues[index + 1];
-        cue.corrupted = !conformToRules(cue.vttCue, subtitleSpecifications, previousCue, followingCue);
+        return { ... cue, corrupted: !conformToRules(cue.vttCue, subtitleSpecifications, previousCue, followingCue) };
     });
-};
 
 const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
@@ -184,14 +183,13 @@ export const cuesSlice = createSlice({
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
         },
-        checkErrors: (state, action: PayloadAction<SubtitleSpecificationAction>): void => {
-            markCuesBreakingRules(state, action.payload.subtitleSpecification);
-        }
+        checkErrors: (state, action: PayloadAction<SubtitleSpecificationAction>): CueDto[] =>
+            markCuesBreakingRules(state, action.payload.subtitleSpecification)
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
         [subtitleSpecificationSlice.actions.readSubtitleSpecification.type]:
-            (state, action: PayloadAction<SubtitleSpecificationAction>): void =>
+            (state, action: PayloadAction<SubtitleSpecificationAction>): CueDto[] =>
                 markCuesBreakingRules(state, action.payload.subtitleSpecification),
     }
 });
@@ -293,8 +291,8 @@ export const deleteCue = (idx: number): AppThunk =>
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CuesAction>>, getState): void => {
-        markCuesBreakingRules(cues, getState().subtitleSpecifications);
-        dispatch(cuesSlice.actions.updateCues({ cues }));
+        const checkedCues = markCuesBreakingRules(cues, getState().subtitleSpecifications);
+        dispatch(cuesSlice.actions.updateCues({ cues: checkedCues }));
     };
 
 export const updateEditingCueIndex = (idx: number): AppThunk =>
