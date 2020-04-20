@@ -37,7 +37,7 @@ export default {
             'node_modules/react-is/index.js': ['isValidElementType', 'isContextConsumer'],
             'node_modules/draft-js/lib/Draft.js': ['SelectionState', 'EditorState', 'RichUtils', 'convertFromHTML',
                 'ContentState', 'Editor', 'getDefaultKeyBinding'],
-            'node_modules/lodash/lodash.js': ['lodash']
+            'node_modules/lodash/lodash.js': ['lodash', 'debounce']
         }
     })
   ]
