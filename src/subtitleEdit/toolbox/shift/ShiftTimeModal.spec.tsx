@@ -9,6 +9,7 @@ import ShiftTimesModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
+import { setSaveTrack } from "../../trackSlices";
 
 const testCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -185,5 +186,26 @@ describe("ShiftTimesModal", () => {
 
         // THEN
         sinon.assert.called(onClose);
+    });
+
+    it("calls saveTrack in redux store when shift value", () => {
+        // // GIVEN
+        const mockSave = jest.fn();
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <ShiftTimesModal show onClose={jest.fn()} />
+            </Provider >
+        );
+
+        // WHEN
+        actualNode.find("input[type='number']").simulate("change", { target: { value: 1 }});
+        actualNode.find("form").simulate("submit");
+
+        // THEN
+        setTimeout(() => {
+            expect(mockSave).toBeCalled();
+        }, 600);
     });
 });
