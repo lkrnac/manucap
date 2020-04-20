@@ -2,7 +2,7 @@ import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateCues, updateSourceCues } from "./cues/cueSlices";
-import { updateEditingTrack, updateTask } from "./trackSlices";
+import { callSaveTrack, updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
 import { Provider } from "react-redux";
@@ -14,13 +14,11 @@ import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
-import { reset, setAutoSaveSuccess, setPendingCueChanges } from "./cues/edit/editorStatesSlice";
+import { reset, setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 import { Toast } from "react-bootstrap";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 
 let testingStore = createTestingStore();
-
-jest.useFakeTimers();
 
 const cues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -874,7 +872,6 @@ describe("SubtitleEdit", () => {
                         return;
                     }}
                     onComplete={(): void => undefined}
-                    autoSaveTimeout={10}
                 />
             </Provider>
         );
@@ -914,7 +911,6 @@ describe("SubtitleEdit", () => {
                         return;
                     }}
                     onComplete={(): void => undefined}
-                    autoSaveTimeout={10}
                 />
             </Provider>
         );
@@ -931,11 +927,12 @@ describe("SubtitleEdit", () => {
         );
 
         //WHEN
-        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
-        jest.advanceTimersByTime(15);
+        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
         //THEN
-        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+        setTimeout(() => {
+            expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+        }, 600);
     });
 
     it("calls onSave callback on auto save", () => {
@@ -949,17 +946,17 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={mockOnSave}
                     onComplete={(): void => undefined}
-                    autoSaveTimeout={10}
                 />
             </Provider>
         );
 
         // WHEN
-        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
-        jest.advanceTimersByTime(15);
+        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
         // THEN
-        expect(mockOnSave.mock.calls.length).toBe(1);
+        setTimeout(() => {
+            expect(mockOnSave.mock.calls.length).toBe(1);
+        }, 600);
     });
 
     it("doesn't renders save alert on auto save failure",  () => {
@@ -975,7 +972,6 @@ describe("SubtitleEdit", () => {
                         return;
                     }}
                     onComplete={(): void => undefined}
-                    autoSaveTimeout={10}
                 />
             </Provider>
         );
@@ -992,11 +988,12 @@ describe("SubtitleEdit", () => {
         );
 
         //WHEN
-        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
-        jest.advanceTimersByTime(20);
+        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
         //THEN
-        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+        setTimeout(() => {
+            expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+        }, 600);
     });
 
     it("auto-hides save alert on save success",  () => {
@@ -1012,7 +1009,6 @@ describe("SubtitleEdit", () => {
                         return;
                     }}
                     onComplete={(): void => undefined}
-                    autoSaveTimeout={10}
                 />
             </Provider>
         );
@@ -1029,35 +1025,12 @@ describe("SubtitleEdit", () => {
         );
 
         //WHEN
-        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
-        jest.advanceTimersByTime(2020);
+        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
         //THEN
-        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
-    });
-
-    it("clears auto save interval on unmount",  () => {
-        // GIVEN
-        const clearIntervalSpy = jest.spyOn(window, "clearInterval");
-        const clearIntervalCallCount = clearIntervalSpy.mock.calls.length;
-
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={(): void => undefined}
-                    onComplete={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        //WHEN
-        actualNode.unmount();
-
-        //THEN
-        expect(clearIntervalSpy.mock.calls.length).toBe(clearIntervalCallCount + 1);
+        setTimeout(() => {
+            expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+        }, 600);
     });
 
 });

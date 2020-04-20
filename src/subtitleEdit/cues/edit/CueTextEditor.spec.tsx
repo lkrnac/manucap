@@ -11,11 +11,12 @@ import { Provider } from "react-redux";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import each from "jest-each";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { reset, setPendingCueChanges } from "./editorStatesSlice";
+import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto } from "../../model";
 import { updateCues } from "../cueSlices";
+import { setSaveTrack } from "../../trackSlices";
 
 let testingStore = createTestingStore();
 
@@ -197,8 +198,10 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
-    it("updates pendingCueChanges flag in redux store when changed", () => {
+    it("calls saveTrack in redux store when changed", () => {
         // GIVEN
+        const mockSave = jest.fn();
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const editor = createEditorNode();
 
         // WHEN
@@ -210,11 +213,15 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+        setTimeout(() => {
+            expect(mockSave).toBeCalled();
+        }, 600);
     });
 
     it("doesn't trigger autosave when user selects text", () => {
         // GIVEN
+        const mockSave = jest.fn();
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -229,7 +236,6 @@ describe("CueTextEditor", () => {
                 getData: (): string => " Paste text to end",
             }
         });
-        testingStore.dispatch(setPendingCueChanges(false) as {} as AnyAction);
 
         const editorState = actualNode.find(Editor).props().editorState;
         const selectionState = editorState.getSelection();
@@ -240,7 +246,9 @@ describe("CueTextEditor", () => {
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(false);
+        setTimeout(() => {
+            expect(mockSave).toBeCalledTimes(0);
+        }, 600);
     });
 
     /**
