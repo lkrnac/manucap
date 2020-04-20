@@ -49,20 +49,6 @@ export const autoSaveSuccessSlice = createSlice({
     }
 });
 
-export const pendingCueChangesSlice = createSlice({
-    name: "pendingCueChangesSlice",
-    initialState: false,
-    reducers: {
-        setPendingCueChanges: (_state, action: PayloadAction<boolean>): boolean => action.payload
-    },
-    extraReducers: {
-        [cuesSlice.actions.updateCueCategory.type]: (): boolean => true,
-        [cuesSlice.actions.deleteCue.type]: (): boolean => true,
-        [cuesSlice.actions.applyShiftTime.type]: (): boolean => true,
-        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (): boolean => false
-    }
-});
-
 export const updateEditorState = (editorId: number, newEditorState: EditorState): AppThunk =>
     (dispatch: Dispatch<PayloadAction<EditorStateAction | boolean>>, getState): void => {
         const subtitleSpecifications = getState().subtitleSpecifications;
