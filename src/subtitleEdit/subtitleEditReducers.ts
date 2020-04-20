@@ -5,7 +5,7 @@ import {
     sourceCuesSlice,
     validationErrorSlice
 } from "./cues/cueSlices";
-import {editingTrackSlice, saveTrackSlice, taskSlice} from "./trackSlices";
+import { editingTrackSlice, saveTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { changePlayerTimeSlice } from "./player/playbackSlices";
 import {
