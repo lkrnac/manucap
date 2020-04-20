@@ -36,7 +36,8 @@ export default {
             'node_modules//platform/platform.js': ['os'],
             'node_modules/react-is/index.js': ['isValidElementType', 'isContextConsumer'],
             'node_modules/draft-js/lib/Draft.js': ['SelectionState', 'EditorState', 'RichUtils', 'convertFromHTML',
-                'ContentState', 'Editor', 'getDefaultKeyBinding']
+                'ContentState', 'Editor', 'getDefaultKeyBinding'],
+            'node_modules/lodash/lodash.js': ['lodash']
         }
     })
   ]
