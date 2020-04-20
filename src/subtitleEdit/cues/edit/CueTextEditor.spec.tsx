@@ -198,7 +198,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
-    it("calls saveTrack in redux store when changed", () => {
+    it("calls saveTrack in redux store when changed", (done) => {
         // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -215,13 +215,12 @@ describe("CueTextEditor", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
+            done();
         }, 600);
     });
 
-    it("doesn't trigger autosave when user selects text", () => {
+    it("doesn't trigger autosave when user selects text", (done) => {
         // GIVEN
-        const mockSave = jest.fn();
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -241,6 +240,9 @@ describe("CueTextEditor", () => {
         const selectionState = editorState.getSelection();
 
         // WHEN
+        const mockSave = jest.fn();
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+
         // select first 5 characters
         const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
@@ -248,6 +250,7 @@ describe("CueTextEditor", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalledTimes(0);
+            done();
         }, 600);
     });
 

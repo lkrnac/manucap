@@ -120,7 +120,7 @@ describe("InlineStyleButton", () => {
         expect(event.preventDefault).toBeCalled();
     });
 
-    it("calls saveTrack in redux store on button toggle ", () => {
+    it("calls saveTrack in redux store on button toggle ", (done) => {
         // GIVEN
         const processedHTML = convertFromHTML("<u>lala</u>");
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -142,6 +142,7 @@ describe("InlineStyleButton", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
+            done();
         }, 600);
     });
 });

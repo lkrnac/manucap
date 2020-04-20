@@ -227,7 +227,7 @@ describe("CueActionsPanel", () => {
     });
 
 
-    it("calls saveTrack in redux store when delete button is clicked", () => {
+    it("calls saveTrack in redux store when delete button is clicked", (done) => {
         // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -243,6 +243,7 @@ describe("CueActionsPanel", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
+            done();
         }, 600);
     });
 

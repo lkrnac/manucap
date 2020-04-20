@@ -21,8 +21,6 @@ import { setSaveTrack } from "../../trackSlices";
 
 let testingStore = createTestingStore();
 
-jest.useFakeTimers();
-
 const cues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
     { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
@@ -187,7 +185,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
     });
 
-    it("calls saveTrack in redux store when start time changes", () => {
+    it("calls saveTrack in redux store when start time changes", (done) => {
         // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -204,6 +202,7 @@ describe("CueEdit", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
+            done();
         }, 600);
     });
 
@@ -223,7 +222,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
     });
 
-    it("calls saveTrack in redux store when end time changes", () => {
+    it("calls saveTrack in redux store when end time changes", (done) => {
         // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -240,6 +239,7 @@ describe("CueEdit", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
+            done();
         }, 600);
     });
 
@@ -305,7 +305,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
     });
 
-    it("calls saveTrack in redux store when cue position changes", () => {
+    it("calls saveTrack in redux store when cue position changes", (done) => {
         // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -323,7 +323,8 @@ describe("CueEdit", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
-        }, 600);;
+            done();
+        }, 600);
     });
 
     it("updates line category", () => {
@@ -344,7 +345,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
     });
 
-    it("calls saveTrack in redux store when line category changes", () => {
+    it("calls saveTrack in redux store when line category changes", (done) => {
         // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -363,6 +364,7 @@ describe("CueEdit", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
+            done();
         }, 600);
     });
 
@@ -680,7 +682,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 
-    it("auto sets validation error to false after receiving it", () => {
+    it("auto sets validation error to false after receiving it", (done) => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         mount(
@@ -691,9 +693,11 @@ describe("CueEdit", () => {
 
         // WHEN
         testingStore.dispatch(setValidationError(true) as {} as AnyAction);
-        jest.advanceTimersByTime(1005);
 
         // THEN
-        expect(testingStore.getState().validationError).toEqual(false);
+        setTimeout(() => {
+            expect(testingStore.getState().validationError).toEqual(false);
+            done();
+        }, 1005);
     });
 });

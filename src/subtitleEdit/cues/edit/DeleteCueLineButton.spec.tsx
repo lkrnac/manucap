@@ -56,7 +56,7 @@ describe("DeleteCueLineButton", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
     });
 
-    it("calls saveTrack in redux store when delete button is clicked", () => {
+    it("calls saveTrack in redux store when delete button is clicked", (done) => {
         // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -77,6 +77,7 @@ describe("DeleteCueLineButton", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
+            done();
         }, 600);
     });
 });

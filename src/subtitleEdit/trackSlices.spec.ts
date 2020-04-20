@@ -67,7 +67,7 @@ describe("trackSlices", () => {
             expect(testingStore.getState().saveTrack).not.toBeNull();
         });
 
-        it("calls saveTrack", () => {
+        it("calls saveTrack", (done) => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -78,6 +78,7 @@ describe("trackSlices", () => {
             // THEN
             setTimeout(() => {
                 expect(saveTrack).toBeCalled();
+                done();
             }, 600);
         });
     });

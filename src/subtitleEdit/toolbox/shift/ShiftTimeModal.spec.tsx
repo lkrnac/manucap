@@ -188,7 +188,7 @@ describe("ShiftTimesModal", () => {
         sinon.assert.called(onClose);
     });
 
-    it("calls saveTrack in redux store when shift value", () => {
+    it("calls saveTrack in redux store when shift value", (done) => {
         // // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -206,6 +206,7 @@ describe("ShiftTimesModal", () => {
         // THEN
         setTimeout(() => {
             expect(mockSave).toBeCalled();
+            done();
         }, 600);
     });
 });

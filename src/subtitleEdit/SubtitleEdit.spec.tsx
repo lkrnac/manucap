@@ -898,7 +898,7 @@ describe("SubtitleEdit", () => {
         expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
     });
 
-    it("renders save alert on auto save", () => {
+    it("renders save alert on auto save", (done) => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore} >
@@ -932,10 +932,11 @@ describe("SubtitleEdit", () => {
         //THEN
         setTimeout(() => {
             expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+            done();
         }, 600);
     });
 
-    it("calls onSave callback on auto save", () => {
+    it("calls onSave callback on auto save", (done) => {
         // GIVEN
         const mockOnSave = jest.fn();
         mount(
@@ -956,10 +957,11 @@ describe("SubtitleEdit", () => {
         // THEN
         setTimeout(() => {
             expect(mockOnSave.mock.calls.length).toBe(1);
+            done();
         }, 600);
     });
 
-    it("doesn't renders save alert on auto save failure",  () => {
+    it("doesn't renders save alert on auto save failure",  (done) => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore} >
@@ -993,10 +995,11 @@ describe("SubtitleEdit", () => {
         //THEN
         setTimeout(() => {
             expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
+            done();
         }, 600);
     });
 
-    it("auto-hides save alert on save success",  () => {
+    it("auto-hides save alert on save success",  (done) => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore} >
@@ -1030,7 +1033,8 @@ describe("SubtitleEdit", () => {
         //THEN
         setTimeout(() => {
             expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
-        }, 600);
+            done();
+        }, 2600);
     });
 
 });
