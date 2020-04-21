@@ -33,6 +33,7 @@ const testingTrack = {
     default: true,
     mediaTitle: "This is the video title",
     mediaLength: 4000,
+    progress: 50
 } as Track;
 
 const testingTranslationTrack = {
@@ -294,7 +295,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
