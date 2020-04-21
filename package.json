@@ -1,8 +1,8 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "1.0.42",
+  "version": "1.0.43",
   "description": "",
-  "author": "lkrnac",
+  "author": "Dotsub",
   "license": "",
   "repository": "dotsub/vtms-subtitle-edit-ui",
   "main": "dist/index.js",
