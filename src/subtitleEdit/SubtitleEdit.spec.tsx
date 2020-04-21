@@ -139,13 +139,6 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <button
-                                    className="btn btn-primary sbte-save-subtitle-btn"
-                                    type="button"
-                                    style={{ marginRight: "10px" }}
-                                >
-                                    Save
-                                </button>
                                 <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
                                     Complete
                                 </button>
@@ -253,13 +246,6 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <button
-                                    className="btn btn-primary sbte-save-subtitle-btn"
-                                    type="button"
-                                    style={{ marginRight: "10px" }}
-                                >
-                                    Save
-                                </button>
                                 <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
                                     Complete
                                 </button>
@@ -669,35 +655,6 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(mockOnViewAllTracks.mock.calls.length).toBe(1);
-    });
-
-    it("calls onSave callback when button is clicked", () => {
-        // GIVEN
-        const mockOnSave = jest.fn();
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={mockOnSave}
-                    onComplete={(): void => undefined}
-                />
-            </Provider>
-        );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-        testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
-
-        // WHEN
-        actualNode.find("button.sbte-save-subtitle-btn").simulate("click");
-
-        // THEN
-        expect(mockOnSave.mock.calls.length).toBe(1);
     });
 
     it("calls onComplete callback when button is clicked", () => {

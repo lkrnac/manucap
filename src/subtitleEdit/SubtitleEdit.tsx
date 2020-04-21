@@ -144,14 +144,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
                                 <span style={{ flexGrow: 2 }} />
                                 <button
-                                    className="btn btn-primary sbte-save-subtitle-btn"
-                                    type="button"
-                                    onClick={(): void => props.onSave()}
-                                    style={{ marginRight: "10px" }}
-                                >
-                                    Save
-                                </button>
-                                <button
                                     className="btn btn-primary sbte-complete-subtitle-btn"
                                     type="button"
                                     onClick={(): void => props.onComplete()}
