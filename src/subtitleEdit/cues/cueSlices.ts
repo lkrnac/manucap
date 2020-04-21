@@ -5,7 +5,6 @@ import { Dispatch } from "react";
 import {
     constructCueValuesArray,
     copyNonConstructorProperties,
-    getTimeGapLimits
 } from "./cueUtils";
 import { Constants } from "../constants";
 import { editingTrackSlice } from "../trackSlices";
@@ -15,7 +14,9 @@ import {
     applyInvalidRangePreventionEnd,
     applyInvalidRangePreventionStart,
     applyOverlapPreventionEnd,
-    applyOverlapPreventionStart, markCuesBreakingRules, verifyCueDuration
+    applyOverlapPreventionStart, getTimeGapLimits,
+    markCuesBreakingRules,
+    verifyCueDuration
 } from "./cuesVerification";
 
 export interface CueIndexAction extends SubtitleEditAction {

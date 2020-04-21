@@ -1,6 +1,44 @@
+import sanitizeHtml from "sanitize-html";
+
 import { CueDto, TimeGapLimit } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
-import { checkCharacterLimitation, getTimeGapLimits } from "./cueUtils";
+import { Constants } from "../constants";
+
+const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTags: []});
+
+export const checkCharacterLimitation = (
+    text: string,
+    subtitleSpecification: SubtitleSpecification | null
+): boolean => {
+    const lines = text.split("\n");
+    if (subtitleSpecification && subtitleSpecification.enabled) {
+        const charactersPerLineLimitOk = lines
+            .map(
+                line => subtitleSpecification.maxCharactersPerLine === null
+                    || removeHtmlTags(line).length <= subtitleSpecification.maxCharactersPerLine
+            )
+            .reduce((accumulator, lineOk) => accumulator && lineOk);
+
+        const linesCountLimitOk = subtitleSpecification.maxLinesPerCaption === null
+            || lines.length <= subtitleSpecification.maxLinesPerCaption;
+        return charactersPerLineLimitOk && linesCountLimitOk;
+    }
+    return true;
+};
+
+export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
+    let minGap: number = Constants.DEFAULT_MIN_GAP;
+    let maxGap: number = Constants.DEFAULT_MAX_GAP;
+
+    if (subtitleSpecs?.enabled) {
+        if (subtitleSpecs.minCaptionDurationInMillis)
+            minGap = subtitleSpecs.minCaptionDurationInMillis / 1000;
+        if (subtitleSpecs.maxCaptionDurationInMillis)
+            maxGap = subtitleSpecs.maxCaptionDurationInMillis / 1000;
+    }
+
+    return { minGap, maxGap };
+};
 
 const minRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) >= timeGapLimit.minGap;
