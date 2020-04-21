@@ -5,12 +5,16 @@ import {
     sourceCuesSlice,
     validationErrorSlice
 } from "./cues/cueSlices";
-import { editingTrackSlice, saveTrackSlice, taskSlice } from "./trackSlices";
+import {
+    editingTrackSlice,
+    saveTrackSlice,
+    taskSlice
+} from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { changePlayerTimeSlice } from "./player/playbackSlices";
 import {
     autoSaveSuccessSlice,
-    editorStatesSlice
+    editorStatesSlice, saveStatusSlice
 } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
@@ -27,7 +31,8 @@ export const Reducers = {
     autoSaveSuccess: autoSaveSuccessSlice.reducer,
     validationError: validationErrorSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
-    saveTrack: saveTrackSlice.reducer
+    saveTrack: saveTrackSlice.reducer,
+    saveStatus: saveStatusSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

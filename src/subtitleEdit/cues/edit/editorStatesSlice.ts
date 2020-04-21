@@ -5,6 +5,7 @@ import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
 import { getVttText } from "../cueTextConverter";
 import { checkCharacterLimitation } from "../cueVerifications";
+import {saveTrackSlice} from "../../trackSlices";
 
 interface EditorStateAction {
     editorId: number;
@@ -46,6 +47,19 @@ export const autoSaveSuccessSlice = createSlice({
     initialState: false,
     reducers: {
         setAutoSaveSuccess: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    }
+});
+
+export const saveStatusSlice = createSlice({
+    name: "saveStatus",
+    initialState: "",
+    reducers: {
+        set: (_state, action: PayloadAction<string>): string => action.payload,
+    },
+    extraReducers: {
+        [saveTrackSlice.actions.call.type]: (): string => "Saving changes ...",
+        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
+            action.payload ? "All changes saved to server" : "Error saving latest changes"
     }
 });
 
