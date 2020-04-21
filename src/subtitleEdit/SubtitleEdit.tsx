@@ -104,14 +104,14 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             }}
                         >
                             {
-                                drivingCues.length === 0 && editingTrack?.type === "CAPTION"
-                                    || isDirectTranslationTrack(editingTrack) ? (
-                                    <AddCueLineButton
-                                        text="Start Captioning"
-                                        cueIndex={-1}
-                                        cue={{ vttCue: new VTTCue(0, 0, ""),
+                                drivingCues.length === 0 && (editingTrack?.type === "CAPTION"
+                                    || isDirectTranslationTrack(editingTrack)) ? (
+                                        <AddCueLineButton
+                                            text="Start Captioning"
+                                            cueIndex={-1}
+                                            cue={{ vttCue: new VTTCue(0, 0, ""),
                                             cueCategory: "DIALOGUE" }}
-                                    />
+                                        />
                                 ) : null
                             }
                             <div

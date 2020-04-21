@@ -511,6 +511,7 @@ describe("SubtitleEdit", () => {
         actualNode.update();
 
         // THEN
+        expect(actualNode.find(AddCueLineButton).length).toEqual(0);
         const cueLines = actualNode.find(CueLine);
         expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
         expect(cueLines.at(0).props().sourceCue).toBeUndefined();
@@ -625,6 +626,7 @@ describe("SubtitleEdit", () => {
         actualNode.update();
 
         // THEN
+        expect(actualNode.find(AddCueLineButton).length).toEqual(0);
         const cueLines = actualNode.find(CueLine);
         // console.log(actualNode.)
         expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
