@@ -2,9 +2,10 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { SubtitleSpecification } from "./model";
+import { SubtitleEditAction } from "../model";
 
-interface SubtitleSpecificationAction {
-    subtitleSpecification: SubtitleSpecification;
+export interface SubtitleSpecificationAction extends SubtitleEditAction{
+    subtitleSpecification: SubtitleSpecification | null;
 }
 
 export const subtitleSpecificationSlice = createSlice({
@@ -12,7 +13,7 @@ export const subtitleSpecificationSlice = createSlice({
     initialState: null as SubtitleSpecification | null,
     reducers: {
         readSubtitleSpecification:
-            (_state, action: PayloadAction<SubtitleSpecificationAction>): SubtitleSpecification =>
+            (_state, action: PayloadAction<SubtitleSpecificationAction>): SubtitleSpecification | null =>
                 action.payload.subtitleSpecification,
     }
 });

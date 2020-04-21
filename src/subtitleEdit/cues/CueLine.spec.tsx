@@ -106,6 +106,26 @@ describe("CueLine", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
+    it("renders corrupted view line in captioning mode", () => {
+        // GIVEN
+        const corruptedCue = {
+            vttCue: new VTTCue(0, 0, "Editing Line 1"),
+            cueCategory: "DIALOGUE",
+            corrupted: true
+        } as CueDto;
+
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine index={1} cue={corruptedCue} playerTime={0} onClickHandler={(): void => undefined} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueView).props().className).toEqual("sbte-background-error-darker");
+    });
+
     it("renders middle edit line in translation mode", () => {
         // GIVEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -260,6 +280,35 @@ describe("CueLine", () => {
         // THEN
         expect(removeDraftJsDynamicValues(actualNode.html()))
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    });
+
+    it("renders corrupted view line in translation mode", () => {
+        // GIVEN
+        const corruptedCue = {
+            vttCue: new VTTCue(0, 0, "Editing Line 1"),
+            cueCategory: "DIALOGUE",
+            corrupted: true
+        } as CueDto;
+
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine
+                    index={1}
+                    cue={corruptedCue}
+                    playerTime={0}
+                    sourceCue={sourceCue}
+                    onClickHandler={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueView).at(0).props().className)
+            .toEqual("sbte-bottom-border sbte-background-error-darker");
+        expect(actualNode.find(CueView).at(0).props().className)
+            .toEqual("sbte-bottom-border sbte-background-error-darker");
     });
 
     it("renders empty line in translation mode", () => {

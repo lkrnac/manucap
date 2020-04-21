@@ -1,16 +1,23 @@
-import { CueCategory, CueDto, SubtitleEditAction, TimeGapLimit } from "../model";
+import { CueCategory, CueDto, SubtitleEditAction } from "../model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import {
-    checkCharacterLimitation,
     constructCueValuesArray,
     copyNonConstructorProperties,
-    getTimeGapLimits
 } from "./cueUtils";
-import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
 import { editingTrackSlice } from "../trackSlices";
+import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
+import {
+    applyCharacterLimitation,
+    applyInvalidRangePreventionEnd,
+    applyInvalidRangePreventionStart,
+    applyOverlapPreventionEnd,
+    applyOverlapPreventionStart, getTimeGapLimits,
+    markCuesBreakingRules,
+    verifyCueDuration
+} from "./cueVerifications";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -34,61 +41,6 @@ interface CuesAction extends SubtitleEditAction {
 
 const areCuesEqual = (x: VTTCue, y: VTTCue): boolean => {
     return JSON.stringify(constructCueValuesArray(x)) === JSON.stringify(constructCueValuesArray(y));
-};
-
-const applyInvalidRangePrevention = (vttCue: VTTCue,
-                                     originalCue: CueDto,
-                                     subtitleSpecification: SubtitleSpecification | null): void => {
-
-    const timeGapLimit = getTimeGapLimits(subtitleSpecification);
-    const isOutOfMinRange: boolean = (vttCue.endTime - vttCue.startTime) < timeGapLimit.minGap;
-    const isOutOfMaxRange: boolean = (vttCue.endTime - vttCue.startTime) > timeGapLimit.maxGap;
-
-    const startTimeChange: boolean = vttCue.startTime !== originalCue.vttCue.startTime;
-    const endTimeChange: boolean = vttCue.endTime !== originalCue.vttCue.endTime;
-
-    if (isOutOfMinRange) {
-        vttCue.startTime = startTimeChange ?
-            Number((vttCue.endTime - timeGapLimit.minGap).toFixed(3)) : vttCue.startTime;
-        vttCue.endTime = endTimeChange ?
-            Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3)) : vttCue.endTime;
-    }
-    if (isOutOfMaxRange) {
-        vttCue.startTime = startTimeChange ?
-            Number((vttCue.endTime - timeGapLimit.maxGap).toFixed(3)) : vttCue.startTime;
-        vttCue.endTime = endTimeChange ?
-            Number((vttCue.startTime + timeGapLimit.maxGap).toFixed(3)) : vttCue.endTime;
-    }
-};
-
-const applyOverlapPrevention = (
-    vttCue: VTTCue,
-    previousCue: CueDto,
-    followingCue: CueDto
-): void => {
-    if (vttCue.startTime < previousCue?.vttCue.endTime) {
-        vttCue.startTime = previousCue.vttCue.endTime;
-    }
-    if (vttCue.endTime > followingCue?.vttCue.startTime) {
-        vttCue.endTime = followingCue.vttCue.startTime;
-    }
-};
-
-const verifyCueDuration = (vttCue: VTTCue,
-                                 timeGapLimit: TimeGapLimit): boolean => {
-    const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
-    return cueDuration >= timeGapLimit.minGap;
-};
-
-const applyCharacterLimitation = (
-    vttCue: VTTCue,
-    originalCue: CueDto,
-    subtitleSpecifications: SubtitleSpecification | null
-): VTTCue => {
-    if (!checkCharacterLimitation(vttCue.text, subtitleSpecifications)) {
-        vttCue.text = originalCue.vttCue.text;
-    }
-    return vttCue;
 };
 
 const createAndAddCue = (previousCue: CueDto,
@@ -146,12 +98,15 @@ export const cuesSlice = createSlice({
                 copyNonConstructorProperties(newCue, vttCue);
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
-        }
+        },
+        checkErrors: (state, action: PayloadAction<SubtitleSpecificationAction>): CueDto[] =>
+            markCuesBreakingRules(state, action.payload.subtitleSpecification)
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => {
-            return [];
-        }
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
+        [subtitleSpecificationSlice.actions.readSubtitleSpecification.type]:
+            (state, action: PayloadAction<SubtitleSpecificationAction>): CueDto[] =>
+                markCuesBreakingRules(state, action.payload.subtitleSpecification),
     }
 });
 
@@ -177,9 +132,7 @@ export const sourceCuesSlice = createSlice({
         updateSourceCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => {
-            return [];
-        }
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => []
     }
 });
 
@@ -195,7 +148,7 @@ export const validationErrorSlice = createSlice({
 });
 
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<VttCueAction | boolean>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
         copyNonConstructorProperties(newVttCue, vttCue);
 
@@ -205,15 +158,22 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         const originalCue = cues[idx];
         const subtitleSpecifications = getState().subtitleSpecifications;
 
-        applyOverlapPrevention(newVttCue, previousCue, followingCue);
+        if (vttCue.startTime !== originalCue.vttCue.startTime) {
+            applyOverlapPreventionStart(newVttCue, previousCue);
+            applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications);
+        }
+        if (vttCue.endTime !== originalCue.vttCue.endTime) {
+            applyOverlapPreventionEnd(newVttCue, followingCue);
+            applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications);
+        }
         applyCharacterLimitation(newVttCue, originalCue, subtitleSpecifications);
-        applyInvalidRangePrevention(newVttCue, originalCue, subtitleSpecifications);
 
         if (!areCuesEqual(vttCue, newVttCue)) {
             dispatch(validationErrorSlice.actions.setValidationError(true));
         }
 
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue }));
+        dispatch(cuesSlice.actions.checkErrors({ subtitleSpecification: subtitleSpecifications }));
     };
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
@@ -229,7 +189,8 @@ export const addCue = (previousCue: CueDto, idx: number, sourceCue?: CueDto): Ap
         const cue = createAndAddCue(previousCue, step, sourceCue);
 
         const followingCue = getState().cues[idx];
-        applyOverlapPrevention(cue.vttCue, previousCue, followingCue);
+        applyOverlapPreventionStart(cue.vttCue, previousCue);
+        applyOverlapPreventionEnd(cue.vttCue, followingCue);
         const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
 
         if (validCueDuration) {
@@ -245,8 +206,9 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
-        dispatch(cuesSlice.actions.updateCues({ cues }));
+    (dispatch: Dispatch<PayloadAction<CuesAction>>, getState): void => {
+        const checkedCues = markCuesBreakingRules(cues, getState().subtitleSpecifications);
+        dispatch(cuesSlice.actions.updateCues({ cues: checkedCues }));
     };
 
 export const updateEditingCueIndex = (idx: number): AppThunk =>

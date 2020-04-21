@@ -50,357 +50,490 @@ describe("cueSlices", () => {
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
-        it("apply invalid end time prevention on start time change", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        describe("range prevention", () => {
+            it("apply invalid end time prevention on start time change", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2, "Dummy Cue")) as {} as AnyAction);
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2, "Dummy Cue")) as {} as AnyAction);
 
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.5);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.5);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("apply invalid end time prevention on end time change", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 0, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("Adjust startTime to follow min caption gap passed from subtitle spec", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 1200,
+                    maxCaptionDurationInMillis: 4000,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 30,
+                    enabled: true
+                } as SubtitleSpecification;
+
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(3, 4, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2.8);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("doesn't apply min range limitation for start/end time if time values weren't changed", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 3000,
+                    maxCaptionDurationInMillis: 4000,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 30,
+                    enabled: true
+                } as SubtitleSpecification;
+
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("Adjust endtime to follow min caption gap passed from subtitle spec", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 1200,
+                    maxCaptionDurationInMillis: 4000,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 30,
+                    enabled: true
+                } as SubtitleSpecification;
+
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 3, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3.2);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("Adjust startTime to follow max caption gap passed from subtitle spec", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 500,
+                    maxCaptionDurationInMillis: 1000,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 30,
+                    enabled: true
+                } as SubtitleSpecification;
+
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2.8, 4, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("doesn't apply max range limitation for start/end time if time values weren't changed", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 1200,
+                    maxCaptionDurationInMillis: 1500,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 30,
+                    enabled: true
+                } as SubtitleSpecification;
+
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+
+            it("Adjust endtime to follow max caption gap passed from subtitle spec", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 500,
+                    maxCaptionDurationInMillis: 1000,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 30,
+                    enabled: true
+                } as SubtitleSpecification;
+
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 5, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("Adjust startTime to follow min caption gap with default gap limits values", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(3.6, 4, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3.5);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+
+            it("Adjust endtime to follow min caption gap with default gap limits values", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.4, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("Adjust startTime to follow max caption gap with default gap limits values", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(5, 18, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(18);
+                expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+
+            it("Adjust endtime to follow max caption gap with default gap limits values", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(12, 999999, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(12);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(999999);
+                expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
+            });
+
+            it("applies the change if current cue doesn't conform to character limitation rules", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 10,
+                    enabled: true
+                } as SubtitleSpecification;
+
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Change to be applied")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Change to be applied");
+            });
         });
 
-        it("apply invalid end time prevention on end time change", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        describe("overlap prevention", () => {
+            it("apply overlap prevention for end time", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(1, 0, "Dummy Cue")) as {} as AnyAction);
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Dummy Cue")) as {} as AnyAction);
 
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("doesn't apply overlap prevention for end time if wasn't changed", () => {
+                // GIVEN
+                const cuesOverlapped = [
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[];
+                testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(1, 4, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().cues[1].corrupted).toEqual(true);
+                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("apply overlap prevention for start time", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 4, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("doesn't apply overlap prevention for end time if not changed", () => {
+                // GIVEN
+                const cuesOverlapped = [
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[];
+                testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+                expect(testingStore.getState().cues[1].corrupted).toEqual(true);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
         });
 
-        it("apply overlap prevention for end time", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        describe("character/line count limitation", () => {
+            it("apply line count prevention according to subtitle specs", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: true,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 30,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Dummy Cue")) as {} as AnyAction);
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
 
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("ignore line count prevention if null in subtitle specs", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: true,
+                    maxLinesPerCaption: null,
+                    maxCharactersPerLine: 30,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy \n\nCue");
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("ignore line count prevention if subtitle specs are disabled", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: false,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 30,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy \n\nCue");
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("apply character count limitation to first line", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: true,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 15,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Long long line 1\nline 2")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("apply character count limitation to second line", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: true,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 15,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong long line 2")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("do not count HTML tags into line count limitation", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: true,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 10,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(0, 2, "line 1\n<i>l<b>ine</b></i> 2")) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\n<i>l<b>ine</b></i> 2");
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("ignore character line count limitation if null in subtitle specs", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: true,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: null,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("ignore character line count limitation if subtitle specs are disabled", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: false,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 10,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("does not apply character limitation if previous cue doesn't conform to rules as well", () => {
+                // GIVEN
+                const cuesLong = [
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                ] as CueDto[];
+                testingStore.dispatch(updateCues(cuesLong) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    enabled: true,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: 10,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
+                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
         });
-
-        it("apply overlap prevention for start time", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-        it("apply line count prevention according to subtitle specs", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                enabled: true,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-        it("ignore line count prevention if null in subtitle specs", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                enabled: true,
-                maxLinesPerCaption: null,
-                maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy \n\nCue");
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
-        it("ignore line count prevention if subtitle specs are disabled", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                enabled: false,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy \n\nCue");
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
-        it("apply character count limitation to first line", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                enabled: true,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 10,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Long line 1\nline 2")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-        it("apply character count limitation to second line", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                enabled: true,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 10,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-        it("do not count HTML tags into line count limitation", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                enabled: true,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 10,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\n<i>l<b>ine</b></i> 2")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\n<i>l<b>ine</b></i> 2");
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
-        it("ignore character line count limitation if null in subtitle specs", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                enabled: true,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: null,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
-        it("ignore character line count limitation if subtitle specs are disabled", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                enabled: false,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 10,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
-        it("Adjust startTime to follow min caption gap passed from subtitle spec", () => {
-            // GIVEN
-            const testingSubtitleSpecification = {
-                minCaptionDurationInMillis: 1200,
-                maxCaptionDurationInMillis: 4000,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
-                enabled: true
-            } as SubtitleSpecification;
-
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(3, 4, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2.8);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-
-        it("Adjust endtime to follow min caption gap passed from subtitle spec", () => {
-            // GIVEN
-            const testingSubtitleSpecification = {
-                minCaptionDurationInMillis: 1200,
-                maxCaptionDurationInMillis: 4000,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
-                enabled: true
-            } as SubtitleSpecification;
-
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 3, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3.2);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-        it("Adjust startTime to follow max caption gap passed from subtitle spec", () => {
-            // GIVEN
-            const testingSubtitleSpecification = {
-                minCaptionDurationInMillis: 500,
-                maxCaptionDurationInMillis: 1000,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
-                enabled: true
-            } as SubtitleSpecification;
-
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(2.8, 4, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-
-        it("Adjust endtime to follow max caption gap passed from subtitle spec", () => {
-            // GIVEN
-            const testingSubtitleSpecification = {
-                minCaptionDurationInMillis: 500,
-                maxCaptionDurationInMillis: 1000,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
-                enabled: true
-            } as SubtitleSpecification;
-
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 5, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-        it("Adjust startTime to follow min caption gap with default gap limits values", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(3.6, 4, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3.5);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-
-        it("Adjust endtime to follow min caption gap with default gap limits values", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.4, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-        it("Adjust startTime to follow max caption gap with default gap limits values", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(2, new VTTCue(5, 18, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(18);
-            expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-
-        it("Adjust endtime to follow max caption gap with default gap limits values", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(2, new VTTCue(12, 999999, "Dummy Cue")) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(12);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(999999);
-            expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
-        });
-
     });
 
     describe("updateCueCategory", () => {
@@ -494,99 +627,101 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editorStates.size).toEqual(0);
         });
 
-        it("Adjust endTime to be following cue startTime if it exceeds following startTime", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+        describe("range prevention", () => {
+            it("Adjust endTime to be following cue startTime if it exceeds following startTime", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(
-                addCue( { vttCue: new VTTCue(0, 2, "Dummy Cue End"), cueCategory: "LYRICS" }, 1) as {} as AnyAction
-            );
+                // WHEN
+                testingStore.dispatch(
+                    addCue( { vttCue: new VTTCue(0, 2, "Dummy Cue End"), cueCategory: "LYRICS" }, 1) as {} as AnyAction
+                );
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(4);
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
 
-        it("Does not add cue if duration is less than min gap limit", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                minCaptionDurationInMillis: 3000,
-                maxCaptionDurationInMillis: 5000,
-                enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            it("Does not add cue if duration is less than min gap limit", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 3000,
+                    maxCaptionDurationInMillis: 5000,
+                    enabled: true
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(
-                addCue({ vttCue: new VTTCue(2, 4, "Dummy Cue End"), cueCategory: "LYRICS" }, 1) as {} as AnyAction
-            );
+                // WHEN
+                testingStore.dispatch(
+                    addCue({ vttCue: new VTTCue(2, 4, "Dummy Cue End"), cueCategory: "LYRICS" }, 1) as {} as AnyAction
+                );
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(3);
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
 
-        it("Picks default step if it less than max gap limit provided by subtitle specs", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                minCaptionDurationInMillis: 3000,
-                maxCaptionDurationInMillis: 5000,
-                enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            it("Picks default step if it less than max gap limit provided by subtitle specs", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 3000,
+                    maxCaptionDurationInMillis: 5000,
+                    enabled: true
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(
-                addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
-            );
+                // WHEN
+                testingStore.dispatch(
+                    addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+                );
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(4);
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
-        });
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(4);
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
+            });
 
-        it("Picks subtitle specs max gap as step if it is greater than default step value", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
-            const testingSubtitleSpecification = {
-                minCaptionDurationInMillis: 1000,
-                maxCaptionDurationInMillis: 2000,
-                enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            it("Picks subtitle specs max gap as step if it is greater than default step value", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 1000,
+                    maxCaptionDurationInMillis: 2000,
+                    enabled: true
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(
-                addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
-            );
+                // WHEN
+                testingStore.dispatch(
+                    addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+                );
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(4);
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(8);
-        });
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(4);
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(8);
+            });
 
-        it("Uses default NEW_ADDED_CUE_DEFAULT_STEP if no subtitle specs provided", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+            it("Uses default NEW_ADDED_CUE_DEFAULT_STEP if no subtitle specs provided", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(
-                addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
-            );
+                // WHEN
+                testingStore.dispatch(
+                    addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+                );
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(4);
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(4);
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
+            });
         });
     });
 
@@ -667,11 +802,17 @@ describe("cueSlices", () => {
 
     describe("updateCues", () => {
         it("initializes cues", () => {
+            // GIVEN
+            const expectedCues = [
+                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
+                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
+            ] as CueDto[];
+
             // WHEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues).toEqual(testingCues);
+            expect(testingStore.getState().cues).toEqual(expectedCues);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
@@ -679,7 +820,7 @@ describe("cueSlices", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const replacementCues = [
-                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE", corrupted: false },
             ] as CueDto[];
 
             // WHEN
@@ -703,6 +844,31 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editorStates.size).toEqual(0);
+        });
+
+        it("mark cues as corrupted if  they doesn't conform to rules", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[3].corrupted).toBeTruthy();
         });
     });
 

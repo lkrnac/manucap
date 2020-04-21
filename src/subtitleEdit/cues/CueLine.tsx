@@ -18,7 +18,11 @@ interface Props {
 
 const CueLine = (props: Props): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const translationCueClassName = props.cue ? "sbte-gray-100-background" : "sbte-gray-200-background";
+    const captionClassName =  props.cue && props.cue.corrupted
+        ? "sbte-background-error-darker"
+        : "sbte-gray-100-background";
+    const translationCueClassName = props.cue ? captionClassName : "sbte-gray-200-background";
+
     const ref = useRef() as MutableRefObject<HTMLDivElement>;
     useEffect(
         () => {
@@ -54,7 +58,7 @@ const CueLine = (props: Props): ReactElement => {
                             index={props.index}
                             cue={props.sourceCue}
                             playerTime={props.playerTime}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className={"sbte-bottom-border " + captionClassName}
                           />
                         : <div />
                 }
@@ -70,7 +74,7 @@ const CueLine = (props: Props): ReactElement => {
                                 index={props.index}
                                 cue={props.cue}
                                 playerTime={props.playerTime}
-                                className="sbte-gray-100-background"
+                                className={captionClassName}
                               />
                         : <CueView
                             index={props.index}

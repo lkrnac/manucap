@@ -3,8 +3,8 @@ import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
-import { checkCharacterLimitation } from "../cueUtils";
 import { getVttText } from "../cueTextConverter";
+import { checkCharacterLimitation } from "../cueVerifications";
 
 interface EditorStateAction {
     editorId: number;
@@ -56,9 +56,16 @@ export const updateEditorState = (editorId: number, newEditorState: EditorState)
         const editorStates = getState().editorStates;
         const vttText = getVttText(newEditorState.getCurrentContent());
         const currentEditorState = editorStates.get(editorId);
+        const currentVttText = currentEditorState
+            ? getVttText(currentEditorState.getCurrentContent())
+            : null;
 
         let editorState = newEditorState;
-        if (!checkCharacterLimitation(vttText, subtitleSpecifications) && currentEditorState) {
+        if (!checkCharacterLimitation(vttText, subtitleSpecifications)
+            && currentEditorState
+            && currentVttText
+            && checkCharacterLimitation(currentVttText, subtitleSpecifications)
+        ) {
             dispatch(validationErrorSlice.actions.setValidationError(true));
             // Force creation of different EditorState instance, so that CueTextEditor re-renders with old content
             editorState = RichUtils.toggleCode(RichUtils.toggleCode(currentEditorState));

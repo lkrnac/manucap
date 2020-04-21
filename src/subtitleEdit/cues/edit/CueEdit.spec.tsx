@@ -137,6 +137,29 @@ describe("CueEdit", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
+    it("renders for corrupted cue", () => {
+        // GIVEN
+        const corruptedCue = {
+            vttCue: new VTTCue(0, 2, "Caption Line 1"),
+            cueCategory: "DIALOGUE",
+            corrupted: true
+        } as CueDto;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit
+                    index={0}
+                    cue={corruptedCue}
+                    playerTime={0}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find("div").at(0).hasClass("sbte-background-error-lighter")).toBeTruthy();
+    });
+
     it("updates cue in redux store when start time minutes changed", () => {
         // GIVEN
         const actualNode = mount(
@@ -685,7 +708,7 @@ describe("CueEdit", () => {
     it("auto sets validation error to false after receiving it", (done) => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
-        mount(
+        const actualNode = mount(
             <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
@@ -697,7 +720,26 @@ describe("CueEdit", () => {
         // THEN
         setTimeout(() => {
             expect(testingStore.getState().validationError).toEqual(false);
+            expect(actualNode.find("div").at(0).hasClass("bg-white")).toBeTruthy();
             done();
         }, 1005);
+    });
+
+    it("blinks background when when validation error occurs", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(testingStore.getState().validationError).toEqual(true);
+        expect(actualNode.find("div").at(0).hasClass("blink-error-bg")).toBeTruthy();
     });
 });
