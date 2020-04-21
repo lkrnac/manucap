@@ -1,5 +1,5 @@
 import {
-    hasDataLoaded
+    hasDataLoaded, isDirectTranslationTrack
 } from "./subtitleEditUtils";
 
 import { Language, LoadingIndicator, Track } from "./model";
@@ -153,6 +153,68 @@ describe("cueUtils", () => {
 
             // WHEN
             const result = hasDataLoaded(testingTrack, loadingIndicator);
+
+            // THEN
+            expect(result).toBeFalsy();
+        });
+    });
+
+    describe("isDirectTranslationTrack", () => {
+        it("return false for Caption track", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+            } as Track;
+
+            // WHEN
+            const result = isDirectTranslationTrack(testingTrack);
+
+            // THEN
+            expect(result).toBeFalsy();
+        });
+
+        it("return false for Translation track", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                language: { id: "it-IT", name: "Italian" } as Language,
+                sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+            } as Track;
+
+            // WHEN
+            const result = isDirectTranslationTrack(testingTrack);
+
+            // THEN
+            expect(result).toBeFalsy();
+        });
+
+        it("return true for Direct Translation track", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                language: { id: "it-IT", name: "Italian" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+            } as Track;
+
+            // WHEN
+            const result = isDirectTranslationTrack(testingTrack);
+
+            // THEN
+            expect(result).toBeTruthy();
+        });
+
+        it("return false for null track", () => {
+            // GIVEN
+            const testingTrack = null;
+
+            // WHEN
+            const result = isDirectTranslationTrack(testingTrack);
 
             // THEN
             expect(result).toBeFalsy();
