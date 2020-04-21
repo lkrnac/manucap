@@ -1,7 +1,7 @@
-import { getTimeGapLimits } from "./cuesVerification";
+import { getTimeGapLimits } from "./cueVerifications";
 import { SubtitleSpecification } from "../toolbox/model";
 
-describe("cuesVerification", () => {
+describe("cueVerifications", () => {
     describe("getTimeGapLimits", () => {
         it("Gets default time gaps if subtitleSpecs is null", () => {
             // GIVEN // WHEN

@@ -17,7 +17,7 @@ import {
     applyOverlapPreventionStart, getTimeGapLimits,
     markCuesBreakingRules,
     verifyCueDuration
-} from "./cuesVerification";
+} from "./cueVerifications";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;

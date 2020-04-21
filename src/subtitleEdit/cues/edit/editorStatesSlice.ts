@@ -4,7 +4,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
 import { getVttText } from "../cueTextConverter";
-import { checkCharacterLimitation } from "../cuesVerification";
+import { checkCharacterLimitation } from "../cueVerifications";
 
 interface EditorStateAction {
     editorId: number;
