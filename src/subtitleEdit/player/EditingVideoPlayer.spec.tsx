@@ -78,8 +78,8 @@ describe("EditingVideoPlayer", () => {
             {
                 languageId: "en-US",
                 cues: [
-                    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
+                    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
                 ]
             }
         ];
