@@ -3,8 +3,8 @@ import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
-import { checkCharacterLimitation } from "../cueUtils";
 import { getVttText } from "../cueTextConverter";
+import { checkCharacterLimitation } from "../cueVerifications";
 
 interface EditorStateAction {
     editorId: number;
