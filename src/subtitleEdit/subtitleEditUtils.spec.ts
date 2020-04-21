@@ -29,13 +29,33 @@ describe("cueUtils", () => {
             // GIVEN
             const testingTrack = {
                 type: "TRANSLATION",
-                language: { id: "en-US", name: "English (US)" } as Language,
+                language: { id: "it-IT", name: "Italian" } as Language,
+                sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
             } as Track;
             const loadingIndicator = {
                 cuesLoaded: true,
                 sourceCuesLoaded: true
+            } as LoadingIndicator;
+
+            // WHEN
+            const result = hasDataLoaded(testingTrack, loadingIndicator);
+
+            // THEN
+            expect(result).toBeTruthy();
+        });
+
+        it("return true if all data is loaded for Direct Translation track", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+            } as Track;
+            const loadingIndicator = {
+                cuesLoaded: true,
             } as LoadingIndicator;
 
             // WHEN
@@ -82,7 +102,8 @@ describe("cueUtils", () => {
             // GIVEN
             const testingTrack = {
                 type: "TRANSLATION",
-                language: { id: "en-US", name: "English (US)" } as Language,
+                language: { id: "it-IT", name: "Italian" } as Language,
+                sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
             } as Track;
@@ -101,13 +122,33 @@ describe("cueUtils", () => {
             // GIVEN
             const testingTrack = {
                 type: "TRANSLATION",
-                language: { id: "en-US", name: "English (US)" } as Language,
+                language: { id: "it-IT", name: "Italian" } as Language,
+                sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
             } as Track;
             const loadingIndicator = {
                 cuesLoaded: true,
                 sourceCuesLoaded: false
+            } as LoadingIndicator;
+
+            // WHEN
+            const result = hasDataLoaded(testingTrack, loadingIndicator);
+
+            // THEN
+            expect(result).toBeFalsy();
+        });
+
+        it("return false if cues are not loaded for Direct Translation", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                language: { id: "it-IT", name: "Italian" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+            } as Track;
+            const loadingIndicator = {
+                cuesLoaded: false,
             } as LoadingIndicator;
 
             // WHEN
