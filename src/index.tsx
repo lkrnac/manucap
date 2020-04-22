@@ -40,7 +40,8 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateEditingTrack({
-                type: "TRANSLATION", // ** Change track type to CAPTION
+                type: "TRANSLATION",
+                // type: "CAPTION", // ** Change track type to CAPTION
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",

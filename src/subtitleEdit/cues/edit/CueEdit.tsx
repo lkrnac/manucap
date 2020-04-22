@@ -33,12 +33,9 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     dispatch(setPendingCueChanges(true));
 };
 
-const handleEnterForLastCue = (sourceCues: CueDto[], cue: CueDto, index: number): AppThunk => {
-    const sourceCue = sourceCues.length > 0
-        ? sourceCues[index + 1]
-        : undefined;
+const handleEnterForLastCue = (sourceCues: CueDto[], index: number): AppThunk => {
     return sourceCues.length === 0 || sourceCues.length > index + 1
-        ? addCue(cue, index + 1, sourceCue)
+        ? addCue(index + 1)
         : updateEditingCueIndex(-1);
 };
 
@@ -68,7 +65,7 @@ const CueEdit = (props: Props): ReactElement => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
             return props.index === cuesCount - 1
-                ? dispatch(handleEnterForLastCue(sourceCues, props.cue, props.index))
+                ? dispatch(handleEnterForLastCue(sourceCues, props.index))
                 : dispatch(updateEditingCueIndex(props.index + 1));
         });
     }, [ dispatch, props, cuesCount, sourceCues ]);

@@ -2,11 +2,9 @@ import { AppThunk } from "../../subtitleEditReducers";
 import React, { ReactElement } from "react";
 import { addCue } from "../cueSlices";
 import { useDispatch } from "react-redux";
-import { CueDto } from "../../model";
 
 interface Props {
     cueIndex: number;
-    cue: CueDto;
     text?: string;
 }
 
@@ -16,7 +14,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
         <button
             style={{ maxHeight: "38px", margin: "5px" }}
             className="btn btn-outline-secondary sbte-add-cue-button"
-            onClick={(): AppThunk => dispatch(addCue(props.cue, props.cueIndex + 1))}
+            onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1))}
         >
             {
                 props.text ? <span>{props.text}</span> : <b>+</b>
