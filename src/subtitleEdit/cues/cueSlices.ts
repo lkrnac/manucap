@@ -192,7 +192,7 @@ export const addCue = (idx: number): AppThunk =>
         const sourceCue = state.sourceCues[idx];
         const cue = createAndAddCue(previousCue, step, sourceCue);
 
-        const followingCue = getState().cues[idx];
+        const followingCue = cues[idx];
         applyOverlapPreventionStart(cue.vttCue, previousCue);
         applyOverlapPreventionEnd(cue.vttCue, followingCue);
         const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
