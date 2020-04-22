@@ -1,4 +1,4 @@
-import { CueDto, Task, Track } from "./model";
+import { Task, Track } from "./model";
 import React, { ReactElement } from "react";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import { humanizer } from "humanize-duration";
@@ -45,29 +45,13 @@ const getDueDate = (task: Task): ReactElement => {
     return <div>Due Date: <b>{task.dueDate}</b></div>;
 };
 
-const getCueDuration = (cue: CueDto): number => Number((cue.vttCue.endTime - cue.vttCue.startTime) * 1000);
-
-const getProgressPercentage = (track: Track, editingCues: CueDto[]): number => {
-    if (editingCues.length > 0) {
-        const totalMs = editingCues.reduce((total, nextCue): number => total + getCueDuration(nextCue), 0);
-        const progress = (totalMs * 100) / track.mediaLength;
-        return progress > 100 ? 100 : Math.round(progress);
-    }
-    return 0;
-};
-
-const getProgress = (track: Track, editingCues: CueDto[], cuesDataLoaded: boolean | null): ReactElement => {
-    if (cuesDataLoaded && track && track.mediaLength) {
-        return <div>Completed: <b>{getProgressPercentage(track, editingCues)}%</b></div>;
-    }
-    return <div />;
-};
+const getProgress = (track: Track, cuesDataLoaded: boolean | null): ReactElement =>
+    cuesDataLoaded ? (<div>Completed: <b>{track.progress}%</b></div>) : <div />;
 
 const SubtitleEditHeader = (): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const stateTask = useSelector((state: SubtitleEditState) => state.cuesTask);
-    const editingCues = useSelector((state: SubtitleEditState) => state.cues);
     const track = editingTrack ? editingTrack : {} as Track;
     const task = stateTask ? stateTask : {} as Task;
     return (
@@ -79,7 +63,7 @@ const SubtitleEditHeader = (): ReactElement => {
             <div style={{ flex: "2" }} />
             <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
-                {getProgress(track, editingCues, hasDataLoaded(editingTrack, loadingIndicator))}
+                {getProgress(track, hasDataLoaded(editingTrack, loadingIndicator))}
             </div>
         </header>
     );

@@ -128,8 +128,8 @@ describe("AddCueLineButton", () => {
     it("Does not add cue if clicking button creates overlap", () => {
         // GIVEN
         const testingCues = [
-            { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
+            { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
         ] as CueDto[];
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
@@ -150,8 +150,8 @@ describe("AddCueLineButton", () => {
     it("Does not add cue if clicking button creates less than 0.5 gap", () => {
         // GIVEN
         const testingCues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1.4, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
+            { vttCue: new VTTCue(1.4, 2, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
         ] as CueDto[];
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 

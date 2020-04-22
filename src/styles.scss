@@ -15,6 +15,8 @@ $sbte-main-text-color: $secondary;
 $border-color: rgb(241,244,245);
 $input-border-color: rgb(108, 117, 125);
 $green: rgb(0,87,0);
+$background-error-darker: rgb(255, 235, 235);
+$background-error-lighter: rgb(255, 245, 245);
 
 // ##############################
 // Subtitle Edit visuals
@@ -51,16 +53,24 @@ $green: rgb(0,87,0);
   background-color: $gray-200;
 }
 
+.sbte-background-error-darker {
+  background-color: $background-error-darker;
+}
+
+.sbte-background-error-lighter {
+  background-color: $background-error-lighter;
+}
+
 @keyframes fade {
-    from { background-color: rgba(255,255,255,1); }
-    50% { background-color: rgba(255,140,140,0.5); }
-    to { background-color: rgba(255,255,255,1); }
+    from { background-color: $white }
+    50% { background-color: $background-error-lighter }
+    to { background-color: $white }
 }
 
 @-webkit-keyframes fade {
-    from { background-color: rgba(255,255,255,1); }
-    50% { background-color: rgba(255,140,140,0.5); }
-    to { background-color: rgba(255,255,255,1); }
+    from { background-color: $white }
+    50% { background-color: $background-error-lighter }
+    to { background-color: $white }
 }
 
 .blink-error-bg {
@@ -81,6 +91,7 @@ $green: rgb(0,87,0);
   color: $sbte-main-text-color;
   border: 1px solid $input-border-color;
   border-radius: 4px;
+  background-color: inherit;
 }
 
 .sbte-cue-line-flap {

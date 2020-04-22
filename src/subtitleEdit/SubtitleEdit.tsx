@@ -14,7 +14,7 @@ import { Toast } from "react-bootstrap";
 import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
-import { hasDataLoaded } from "./subtitleEditUtils";
+import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -104,11 +104,12 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             }}
                         >
                             {
-                                drivingCues.length === 0 ? (
-                                    <AddCueLineButton
-                                        text="Start Captioning"
-                                        cueIndex={-1}
-                                    />
+                                drivingCues.length === 0 && (editingTrack?.type === "CAPTION"
+                                    || isDirectTranslationTrack(editingTrack)) ? (
+                                        <AddCueLineButton
+                                            text="Start Captioning"
+                                            cueIndex={-1}
+                                        />
                                 ) : null
                             }
                             <div
