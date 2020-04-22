@@ -36,7 +36,7 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
         if (e.keyCode === Character.ESCAPE) {
             return "closeEditor";
         } else if (e.keyCode === Character.ENTER) {
-            return "closeEditorAndCreateIfLast";
+            return "editNext";
         }
     }
     return getDefaultKeyBinding(e);
@@ -51,7 +51,7 @@ mousetrapBindings.set("setStartTime", KeyCombination.MOD_SHIFT_UP);
 mousetrapBindings.set("setEndTime", KeyCombination.MOD_SHIFT_DOWN);
 mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
 mousetrapBindings.set("closeEditor", KeyCombination.ESCAPE);
-mousetrapBindings.set("closeEditorAndCreateIfLast", KeyCombination.ENTER);
+mousetrapBindings.set("editNext", KeyCombination.ENTER);
 
 const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
