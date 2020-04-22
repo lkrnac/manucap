@@ -236,7 +236,6 @@ describe("SubtitleEdit", () => {
                             <AddCueLineButton
                                 text="Start Captioning"
                                 cueIndex={-1}
-                                cue={{ vttCue: new VTTCue(0, 0, ""), cueCategory: "DIALOGUE" }}
                             />
                             <div style={{ overflowY: "scroll", height: "100%" }} className="sbte-cues-array-container">
                             </div>

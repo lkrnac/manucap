@@ -564,7 +564,7 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue({ vttCue: new VTTCue(0, 0, "Dummy First Cue"), cueCategory: "DIALOGUE" }, 0) as {} as AnyAction
+                addCue(0) as {} as AnyAction
             );
 
             // THEN
@@ -581,14 +581,14 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue({ vttCue: new VTTCue(2, 4, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+                addCue( 2) as {} as AnyAction
             );
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
-            expect(testingStore.getState().cues[2].cueCategory).toEqual("LYRICS");
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().editingCueIndex).toEqual(2);
             expect(testingStore.getState().validationError).toEqual(false);
         });
@@ -599,10 +599,9 @@ describe("cueSlices", () => {
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[]) as {} as AnyAction);
-            const vttCue = new VTTCue(0, 2, "Dummy Cue Insert");
 
             // WHEN
-            testingStore.dispatch(addCue({ vttCue, cueCategory: "DIALOGUE" }, 1) as {} as AnyAction);
+            testingStore.dispatch(addCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
@@ -620,7 +619,7 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue({ vttCue: new VTTCue(2, 3, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+                addCue(2) as {} as AnyAction
             );
 
             // THEN
@@ -628,13 +627,13 @@ describe("cueSlices", () => {
         });
 
         describe("range prevention", () => {
-            it("Adjust endTime to be following cue startTime if it exceeds following startTime", () => {
+            it("adjusts endTime to be following cue startTime if it exceeds following startTime", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue( { vttCue: new VTTCue(0, 2, "Dummy Cue End"), cueCategory: "LYRICS" }, 1) as {} as AnyAction
+                    addCue( 1) as {} as AnyAction
                 );
 
                 // THEN
@@ -644,7 +643,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
-            it("Does not add cue if duration is less than min gap limit", () => {
+            it("does not add cue if duration is less than min gap limit", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const testingSubtitleSpecification = {
@@ -656,7 +655,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue({ vttCue: new VTTCue(2, 4, "Dummy Cue End"), cueCategory: "LYRICS" }, 1) as {} as AnyAction
+                    addCue(1) as {} as AnyAction
                 );
 
                 // THEN
@@ -666,7 +665,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationError).toEqual(true);
             });
 
-            it("Picks default step if it less than max gap limit provided by subtitle specs", () => {
+            it("picks default step if it less than max gap limit provided by subtitle specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const testingSubtitleSpecification = {
@@ -678,7 +677,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+                    addCue(2) as {} as AnyAction
                 );
 
                 // THEN
@@ -687,7 +686,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
             });
 
-            it("Picks subtitle specs max gap as step if it is greater than default step value", () => {
+            it("picks subtitle specs max gap as step if it is greater than default step value", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const testingSubtitleSpecification = {
@@ -699,7 +698,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+                    addCue(2) as {} as AnyAction
                 );
 
                 // THEN
@@ -708,13 +707,13 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(8);
             });
 
-            it("Uses default NEW_ADDED_CUE_DEFAULT_STEP if no subtitle specs provided", () => {
+            it("uses default NEW_ADDED_CUE_DEFAULT_STEP if no subtitle specs provided", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue({ vttCue: new VTTCue(4, 6, "Dummy Cue End"), cueCategory: "LYRICS" }, 2) as {} as AnyAction
+                    addCue(2) as {} as AnyAction
                 );
 
                 // THEN
@@ -745,8 +744,7 @@ describe("cueSlices", () => {
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[]) as {} as AnyAction);
-            const vttCue = new VTTCue(2, 2, "Dummy Cue Insert");
-            testingStore.dispatch(addCue({ vttCue, cueCategory: "DIALOGUE" }, 1) as {} as AnyAction);
+            testingStore.dispatch(addCue(1) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(deleteCue(1) as {} as AnyAction);

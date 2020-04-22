@@ -32,7 +32,7 @@ describe("CueActionsPanel", () => {
                 >
                     <DeleteCueLineButton cueIndex={1} />
                     <PlayCueButton cue={cues[1]} />
-                    <AddCueLineButton cueIndex={1} cue={cues[1]} />
+                    <AddCueLineButton cueIndex={1} />
                 </div>
             </Provider>
         );
@@ -141,7 +141,7 @@ describe("CueActionsPanel", () => {
                 >
                     <div />
                     <PlayCueButton cue={cues[1]} />
-                    <AddCueLineButton cueIndex={1} cue={cues[1]} />
+                    <AddCueLineButton cueIndex={1} />
                 </div>
             </Provider>
         );

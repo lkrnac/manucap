@@ -1,6 +1,6 @@
 import { CueCategory, CueDto, SubtitleEditAction } from "../model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import {
     constructCueValuesArray,
@@ -181,14 +181,18 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
     };
 
-export const addCue = (previousCue: CueDto, idx: number, sourceCue?: CueDto): AppThunk =>
+export const addCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueAction | boolean>>, getState): void => {
-        const subtitleSpecifications = getState().subtitleSpecifications;
+        const state: SubtitleEditState = getState();
+        const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
         const step = Math.min(timeGapLimit.maxGap, Constants.NEW_ADDED_CUE_DEFAULT_STEP);
+        const cues = state.cues;
+        const previousCue = cues[idx - 1] || Constants.DEFAULT_CUE;
+        const sourceCue = state.sourceCues[idx];
         const cue = createAndAddCue(previousCue, step, sourceCue);
 
-        const followingCue = getState().cues[idx];
+        const followingCue = cues[idx];
         applyOverlapPreventionStart(cue.vttCue, previousCue);
         applyOverlapPreventionEnd(cue.vttCue, followingCue);
         const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
