@@ -17,7 +17,7 @@ import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { setPendingCueChanges } from "./editorStatesSlice";
-import { changePlayerTime } from "../../player/playbackSlices";
+import { playVideoSection } from "../../player/playbackSlices";
 
 interface Props {
     index: number;
@@ -72,9 +72,9 @@ const CueEdit = (props: Props): ReactElement => {
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {
-            dispatch(changePlayerTime(props.cue.vttCue.startTime));
+            dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime));
         });
-    }, [ dispatch, props.cue.vttCue.startTime ]);
+    }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
     const staticBackground = props.cue.corrupted ? "sbte-background-error-lighter" : "bg-white";
     const className = validationError ? "blink-error-bg" : staticBackground;
