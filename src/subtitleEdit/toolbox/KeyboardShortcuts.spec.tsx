@@ -67,7 +67,7 @@ describe("KeyboardShortcuts", () => {
                                     <span>&nbsp;+&nbsp;</span>
                                     <h4><span className="badge badge-secondary">k</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Toggle Play / Pause Current Editing Line</span>
+                                    <span>Toggle Play / Pause Current Cue</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center" }}><h4>
                                     <span className="badge badge-secondary">Ctrl</span></h4>
@@ -112,7 +112,7 @@ describe("KeyboardShortcuts", () => {
                                     <span>&nbsp;+&nbsp;</span>
                                     <h4><span className="badge badge-secondary">↑</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Set Caption Start Time</span>
+                                    <span>Set Cue Start Time</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center" }}>
                                     <h4><span className="badge badge-secondary">Ctrl</span></h4>
@@ -127,7 +127,7 @@ describe("KeyboardShortcuts", () => {
                                     <span>&nbsp;+&nbsp;</span>
                                     <h4><span className="badge badge-secondary">↓</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Set Caption End Time</span>
+                                    <span>Set Cue End Time</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center" }}>
                                     <h4><span className="badge badge-secondary">Ctrl</span></h4>

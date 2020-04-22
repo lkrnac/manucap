@@ -31,11 +31,11 @@ const KeyboardShortcuts = (): ReactElement => {
                 </Modal.Header>
                 <Modal.Body>
                     <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
-                    <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Editing Line" />
+                    <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Cue" />
                     <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
                     <KeyboardShortcutLabel character="→" name="Seek Ahead 1 Second" />
-                    <KeyboardShortcutLabel character="↑" name="Set Caption Start Time" />
-                    <KeyboardShortcutLabel character="↓" name="Set Caption End Time" />
+                    <KeyboardShortcutLabel character="↑" name="Set Cue Start Time" />
+                    <KeyboardShortcutLabel character="↓" name="Set Cue End Time" />
                     <KeyboardShortcutLabel character="Esc" name="Edit Previous Cue" />
                 </Modal.Body>
                 <Modal.Footer>
