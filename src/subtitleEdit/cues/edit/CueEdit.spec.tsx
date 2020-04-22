@@ -577,7 +577,7 @@ describe("CueEdit", () => {
             document.documentElement, "keydown", { keyCode: Character.K_CHAR, shiftKey: true, altKey: true });
 
         // THEN
-        expect(testingStore.getState().changePlayerTime).toEqual(1.6);
+        expect(testingStore.getState().videoSectionToPlay).toEqual({ startTime: 1.6, endTime: 3 });
     });
 
     it("adds cue when ENTER is pressed on last caption cue", () => {

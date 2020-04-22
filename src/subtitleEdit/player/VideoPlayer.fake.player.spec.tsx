@@ -172,7 +172,7 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        actualNode.setProps({ changePlayerTime: 1, resetPlayerTimeChange });
+        actualNode.setProps({ playSection: { startTime: 1 }, resetPlayerTimeChange });
 
         // THEN
         expect(currentTime).toBeCalledWith(1);

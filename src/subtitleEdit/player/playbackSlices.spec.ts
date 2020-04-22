@@ -1,15 +1,15 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import { changePlayerTime } from "./playbackSlices";
+import { playVideoSection } from "./playbackSlices";
 import testingStore from "../../testUtils/testingStore";
 
 describe("playbackSlices", () => {
     describe("changePlayerTime", () => {
         it("configured new player time in redux", () => {
             // WHEN
-            testingStore.dispatch(changePlayerTime(1) as {} as AnyAction);
+            testingStore.dispatch(playVideoSection(1) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().changePlayerTime).toEqual(1);
+            expect(testingStore.getState().videoSectionToPlay).toEqual({ startTime: 1 });
         });
     });
 });

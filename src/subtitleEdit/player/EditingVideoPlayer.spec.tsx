@@ -5,7 +5,7 @@ import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Provider } from "react-redux";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import { changePlayerTime } from "./playbackSlices";
+import { playVideoSection } from "./playbackSlices";
 import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
 import { updateCues } from "../cues/cueSlices";
@@ -108,10 +108,10 @@ describe("EditingVideoPlayer", () => {
         );
 
         // WHEN
-        testingStore.dispatch(changePlayerTime(2) as {} as AnyAction);
+        testingStore.dispatch(playVideoSection(2) as {} as AnyAction);
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(VideoPlayer).props().changePlayerTime).toEqual(-1);
+        expect(actualNode.find(VideoPlayer).props().playSection).toEqual({ startTime: -1 });
     });
 });
