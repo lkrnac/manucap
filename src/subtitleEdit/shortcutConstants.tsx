@@ -8,7 +8,7 @@ export enum Character {
     ARROW_DOWN = 40,
     SLASH_CHAR = 191,
     ENTER = 13,
-    ESCAPE = 27
+    ESCAPE = 27,
 }
 
 export enum KeyCombination {
@@ -28,4 +28,6 @@ export enum KeyCombination {
     ALT_SHIFT_SLASH = "alt+shift+/",
     ESCAPE = "escape",
     ENTER = "enter",
+    MOD_SHIFT_ESCAPE = "mod+shift+escape",
+    ALT_SHIFT_ESCAPE = "alt+shift+escape",
 }

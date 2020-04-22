@@ -319,6 +319,9 @@ describe("CueTextEditor", () => {
         [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, true, true, false, false],
         [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, false, true, true, false],
         [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, false, true, false, true],
+        [KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, true, true, false, false],
+        [KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, false, true, true, false],
+        [KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, false, true, false, true],
     ])
     .it("should handle '%s' keyboard shortcut", (
         expectedKeyCombination: KeyCombination,

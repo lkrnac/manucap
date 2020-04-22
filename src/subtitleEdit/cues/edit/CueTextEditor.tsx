@@ -26,6 +26,7 @@ characterBindings.set(Character.ARROW_RIGHT, "seekAhead");
 characterBindings.set(Character.ARROW_UP, "setStartTime");
 characterBindings.set(Character.ARROW_DOWN, "setEndTime");
 characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
+characterBindings.set(Character.ESCAPE, "editPrevious");
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = characterBindings.get(e.keyCode);
@@ -52,6 +53,7 @@ mousetrapBindings.set("setEndTime", KeyCombination.MOD_SHIFT_DOWN);
 mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
 mousetrapBindings.set("closeEditor", KeyCombination.ESCAPE);
 mousetrapBindings.set("editNext", KeyCombination.ENTER);
+mousetrapBindings.set("editPrevious", KeyCombination.MOD_SHIFT_ESCAPE);
 
 const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
