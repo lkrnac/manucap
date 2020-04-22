@@ -129,6 +129,21 @@ describe("KeyboardShortcuts", () => {
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
                                     <span>Set Caption End Time</span>
                                 </div>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Esc</span></h4>
+                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Alt</span></h4>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Esc</span></h4>
+                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+                                    <span>Edit Previous Cue</span>
+                                </div>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-primary">Close</button>
