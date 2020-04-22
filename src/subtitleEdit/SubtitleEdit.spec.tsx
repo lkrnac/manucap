@@ -45,6 +45,14 @@ const testingTranslationTrack = {
     mediaLength: 4000,
 } as Track;
 
+const testingDirectTranslationTrack = {
+    type: "TRANSLATION",
+    language: { id: "fr-FR", name: "French (France)" } as Language,
+    default: true,
+    mediaTitle: "This is the video title",
+    mediaLength: 4000,
+} as Track;
+
 const testingTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
@@ -188,7 +196,7 @@ describe("SubtitleEdit", () => {
             .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
     });
 
-    it("renders with no cues and add cue button", () => {
+    it("renders with no cues and add cue button for CAPTION track", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore} >
@@ -503,6 +511,7 @@ describe("SubtitleEdit", () => {
         actualNode.update();
 
         // THEN
+        expect(actualNode.find(AddCueLineButton).length).toEqual(0);
         const cueLines = actualNode.find(CueLine);
         expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
         expect(cueLines.at(0).props().sourceCue).toBeUndefined();
@@ -590,6 +599,87 @@ describe("SubtitleEdit", () => {
         expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
         expect((cueLines.at(1).props().sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
         expect(cueLines.at(2)).toEqual({});
+    });
+
+    it("shows cues as caption cues for direct translation track", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingDirectTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(AddCueLineButton).length).toEqual(0);
+        const cueLines = actualNode.find(CueLine);
+        // console.log(actualNode.)
+        expect((cueLines.at(0).props().cue as CueDto).vttCue.text).toEqual("Editing Line 1");
+        expect(cueLines.at(0).props().sourceCue as CueDto).toBeUndefined();
+        expect((cueLines.at(1).props().cue as CueDto).vttCue.text).toEqual("Editing Line 2");
+        expect(cueLines.at(1).props().sourceCue as CueDto).toBeUndefined();
+        expect((cueLines.at(2).props().cue as CueDto).vttCue.text).toEqual("Editing Line 3");
+        expect(cueLines.at(2).props().sourceCue as CueDto).toBeUndefined();
+    });
+
+    it("shows starts captioning button for empty direct translation track", () => {
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingDirectTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(AddCueLineButton).length).toEqual(1);
+        expect(actualNode.find(CueLine).length).toEqual(0);
+    });
+
+    it("does not show starts captioning button for translation track empty source cues", () => {
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues([]) as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(AddCueLineButton).length).toEqual(0);
+        expect(actualNode.find(CueLine).length).toEqual(0);
     });
 
     it("opens cue for editing", () => {
