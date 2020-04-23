@@ -1,8 +1,8 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateCues, updateSourceCues } from "./cues/cueSlices";
-import { callSaveTrack, updateEditingTrack, updateTask } from "./trackSlices";
+import { updateCues, updateSourceCues, callSaveTrack } from "./cues/cueSlices";
+import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
 import { Provider } from "react-redux";

@@ -11,7 +11,6 @@ import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { changePlayerTime } from "../../player/playbackSlices";
-import { callSaveTrack } from "../../trackSlices";
 
 interface Props {
     index: number;
@@ -24,7 +23,6 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateVttCue(props.index, newCue));
-    dispatch(callSaveTrack());
 };
 
 const handleEnterForLastCue = (sourceCues: CueDto[], index: number): AppThunk => {
@@ -102,10 +100,8 @@ const CueEdit = (props: Props): ReactElement => {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <CueCategoryButton
-                        onChange={(cueCategory: CueCategory): AppThunk => {
-                            dispatch(callSaveTrack());
-                            return dispatch(updateCueCategory(props.index, cueCategory));
-                        }}
+                        onChange={(cueCategory: CueCategory): AppThunk =>
+                            dispatch(updateCueCategory(props.index, cueCategory))}
                         category={props.cue.cueCategory}
                     />
                     <PositionButton
@@ -120,7 +116,6 @@ const CueEdit = (props: Props): ReactElement => {
                                 newCue[property] = newPositionProperties[property];
                             }
                             dispatch(updateVttCue(props.index, newCue));
-                            dispatch(callSaveTrack());
                         }}
                     />
                 </div>

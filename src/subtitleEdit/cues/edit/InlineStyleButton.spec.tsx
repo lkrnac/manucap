@@ -7,7 +7,7 @@ import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
-import { setSaveTrack } from "../../trackSlices";
+import { setSaveTrack } from "../cueSlices";
 import _ from "lodash";
 
 jest.mock("lodash");

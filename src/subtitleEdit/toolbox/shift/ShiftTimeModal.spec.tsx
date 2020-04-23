@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { applyShiftTime, updateCues } from "../../cues/cueSlices";
+import { applyShiftTime, updateCues, setSaveTrack } from "../../cues/cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../../model";
 import { Provider } from "react-redux";
@@ -9,7 +9,6 @@ import ShiftTimesModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
-import { setSaveTrack } from "../../trackSlices";
 import _ from "lodash";
 
 jest.mock("lodash");

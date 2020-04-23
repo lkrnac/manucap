@@ -15,8 +15,7 @@ import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto } from "../../model";
-import { updateCues } from "../cueSlices";
-import { setSaveTrack } from "../../trackSlices";
+import { setSaveTrack, updateCues } from "../cueSlices";
 import _ from "lodash";
 
 jest.mock("lodash");

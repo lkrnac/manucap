@@ -11,8 +11,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import testingStore from "../../testUtils/testingStore";
-import { updateCues } from "./cueSlices";
-import { setSaveTrack } from "../trackSlices";
+import { updateCues, setSaveTrack } from "./cueSlices";
 import _ from "lodash";
 
 jest.mock("lodash");
