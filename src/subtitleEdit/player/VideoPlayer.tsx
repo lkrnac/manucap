@@ -1,6 +1,7 @@
 import "video.js/dist/video-js.css";
 import { CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
+import Mousetrap from "mousetrap";
 import { Character, KeyCombination } from "../shortcutConstants";
 import React, { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
@@ -70,7 +71,7 @@ export default class VideoPlayer extends React.Component<Props> {
             tracks: textTrackOptions,
             fluid: true,
             userActions: {
-                hotkeys: (event: KeyboardEvent) => {
+                hotkeys: (event: KeyboardEvent): void => {
                     const functionKeysClicked = (event.metaKey || event.ctrlKey || event.altKey) && event.shiftKey;
                     if (functionKeysClicked && event.key === Character.O_CHAR_STR) {
                         this.playPause();
