@@ -695,6 +695,52 @@ describe("CueEdit", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 
+    it("edits previous cue ALT+SHIFT+ESCAPE is pressed", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Cue 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={2} cue={cues[2]} playerTime={2} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ESCAPE, shiftKey: true, altKey: true });
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
+    it("edits previous cue CTRL+SHIFT+ESCAPE is pressed", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Cue 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={2} cue={cues[2]} playerTime={2} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ESCAPE, shiftKey: true, ctrlKey: true });
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
     it("auto sets validation error to false after receiving it", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
@@ -712,6 +758,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().validationError).toEqual(false);
         expect(actualNode.find("div").at(0).hasClass("bg-white")).toBeTruthy();
     });
+
 
     it("blinks background when when validation error occurs", () => {
         // GIVEN

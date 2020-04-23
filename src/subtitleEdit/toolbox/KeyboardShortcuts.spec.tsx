@@ -40,94 +40,109 @@ describe("KeyboardShortcuts", () => {
                             </div>
                             <div className="modal-body">
                                 <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">o</span></h5>
+                                    <h4><span className="badge badge-secondary">o</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <h4><span className="badge badge-secondary">Alt</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">o</span></h5>
+                                    <h4><span className="badge badge-secondary">o</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
                                     <span>Toggle Play / Pause</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">k</span></h5>
+                                    <h4><span className="badge badge-secondary">k</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <h4><span className="badge badge-secondary">Alt</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">k</span></h5>
+                                    <h4><span className="badge badge-secondary">k</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Toggle Play / Pause Current Editing Line</span>
+                                    <span>Toggle Play / Pause Current Cue</span>
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center" }}><h5>
-                                    <span className="badge badge-secondary">Ctrl</span></h5>
+                                <div style={{ display: "flex", alignItems: "center" }}><h4>
+                                    <span className="badge badge-secondary">Ctrl</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">←</span></h5>
+                                    <h4><span className="badge badge-secondary">←</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <h4><span className="badge badge-secondary">Alt</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">←</span></h5>
+                                    <h4><span className="badge badge-secondary">←</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
                                     <span>Seek Back 1 Second</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">→</span></h5>
+                                    <h4><span className="badge badge-secondary">→</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <h4><span className="badge badge-secondary">Alt</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">→</span></h5>
+                                    <h4><span className="badge badge-secondary">→</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
                                     <span>Seek Ahead 1 Second</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">↑</span></h5>
+                                    <h4><span className="badge badge-secondary">↑</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <h4><span className="badge badge-secondary">Alt</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">↑</span></h5>
+                                    <h4><span className="badge badge-secondary">↑</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Set Caption Start Time</span>
+                                    <span>Set Cue Start Time</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h5><span className="badge badge-secondary">Ctrl</span></h5>
+                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">↓</span></h5>
+                                    <h4><span className="badge badge-secondary">↓</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Alt</span></h5>
+                                    <h4><span className="badge badge-secondary">Alt</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">Shift</span></h5>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
                                     <span>&nbsp;+&nbsp;</span>
-                                    <h5><span className="badge badge-secondary">↓</span></h5>
+                                    <h4><span className="badge badge-secondary">↓</span></h4>
                                     <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Set Caption End Time</span>
+                                    <span>Set Cue End Time</span>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Esc</span></h4>
+                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Alt</span></h4>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Shift</span></h4>
+                                    <span>&nbsp;+&nbsp;</span>
+                                    <h4><span className="badge badge-secondary">Esc</span></h4>
+                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+                                    <span>Edit Previous Cue</span>
                                 </div>
                             </div>
                             <div className="modal-footer">

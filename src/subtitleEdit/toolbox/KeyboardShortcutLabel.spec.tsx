@@ -13,17 +13,17 @@ describe("KeyboardShortcutLabel", () => {
         const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
         const expectedNode = mount(
             <div style={{ display: "flex", alignItems: "center" }}>
-                <h5><span className="badge badge-secondary">{commandKey}</span></h5>
+                <h4><span className="badge badge-secondary">{commandKey}</span></h4>
                 <span>&#160;+&#160;</span>
-                <h5><span className="badge badge-secondary">Shift</span></h5>
+                <h4><span className="badge badge-secondary">Shift</span></h4>
                 <span>&#160;+&#160;</span>
-                <h5><span className="badge badge-secondary">o</span></h5>
+                <h4><span className="badge badge-secondary">o</span></h4>
                 <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
-                <h5><span className="badge badge-secondary">Alt</span></h5>
+                <h4><span className="badge badge-secondary">Alt</span></h4>
                 <span>&#160;+&#160;</span>
-                <h5><span className="badge badge-secondary">Shift</span></h5>
+                <h4><span className="badge badge-secondary">Shift</span></h4>
                 <span>&#160;+&#160;</span>
-                <h5><span className="badge badge-secondary">o</span></h5>
+                <h4><span className="badge badge-secondary">o</span></h4>
                 <span>&#160;&#160;&#160;:&#160;&#160;&#160;</span>
                 <span>Toggle Play / Pause</span>
             </div>
