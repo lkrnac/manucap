@@ -1,13 +1,7 @@
 import { CueCategory, CueDto } from "../../model";
-import { Position, copyNonConstructorProperties, positionStyles } from "../cueUtils";
+import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import {
-    updateCueCategory,
-    updateVttCue,
-    updateEditingCueIndex,
-    addCue,
-    setValidationError
-} from "../cueSlices";
+import { addCue, setValidationError, updateCueCategory, updateEditingCueIndex, updateVttCue } from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
@@ -68,6 +62,9 @@ const CueEdit = (props: Props): ReactElement => {
                 ? dispatch(handleEnterForLastCue(sourceCues, props.index))
                 : dispatch(updateEditingCueIndex(props.index + 1));
         });
+        Mousetrap.bind([KeyCombination.MOD_SHIFT_ESCAPE, KeyCombination.ALT_SHIFT_ESCAPE],
+            () => dispatch(updateEditingCueIndex(props.index - 1))
+        );
     }, [ dispatch, props, cuesCount, sourceCues ]);
 
     useEffect(() => {
