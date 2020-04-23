@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { addCue, updateEditingCueIndex } from "./cues/cueSlices";
+import { addCue, updateEditingCueIndex, setSaveTrack } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -12,8 +12,7 @@ import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
 import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
-import { hasDataLoaded } from "./subtitleEditUtils";
-import { setSaveTrack } from "./trackSlices";
+import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -81,13 +80,12 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             }}
                         >
                             {
-                                drivingCues.length === 0 ? (
-                                    <AddCueLineButton
-                                        text="Start Captioning"
-                                        cueIndex={-1}
-                                        cue={{ vttCue: new VTTCue(0, 0, ""),
-                                            cueCategory: "DIALOGUE" }}
-                                    />
+                                drivingCues.length === 0 && (editingTrack?.type === "CAPTION"
+                                    || isDirectTranslationTrack(editingTrack)) ? (
+                                        <AddCueLineButton
+                                            text="Start Captioning"
+                                            cueIndex={-1}
+                                        />
                                 ) : null
                             }
                             <div
@@ -108,9 +106,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                                 playerTime={currentPlayerTime}
                                                 lastCue={idx === cues.length - 1}
                                                 onClickHandler={(): void => {
-                                                    const previousCue = cues[cues.length - 1];
                                                     idx >= cues.length
-                                                        ? dispatch(addCue(previousCue, cues.length, sourceCue))
+                                                        ? dispatch(addCue(cues.length))
                                                         : dispatch(updateEditingCueIndex(idx));
                                                 }}
                                             />);

@@ -3,7 +3,7 @@ import "video.js"; // VTTCue definition
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import { Character } from "../../shortcutConstants";
-import { CueDto } from "../../model";
+import { CueDto, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
@@ -13,13 +13,24 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues } from "../cueSlices";
+import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues, setSaveTrack } from "../cueSlices";
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { setSaveTrack } from "../../trackSlices";
+import { updateEditingTrack } from "../../trackSlices";
+import SubtitleEdit from "../../SubtitleEdit";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 let testingStore = createTestingStore();
+
+const testingTrack = {
+    type: "CAPTION",
+    language: { id: "en-US" },
+    default: true,
+    mediaTitle: "This is the video title",
+} as Track;
 
 const cues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -208,9 +219,13 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
     });
 
-    it("calls saveTrack in redux store when start time changes", (done) => {
+    it("calls saveTrack in redux store when start time changes", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -223,10 +238,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("updates cue in redux store when end time changed", () => {
@@ -245,9 +257,13 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
     });
 
-    it("calls saveTrack in redux store when end time changes", (done) => {
+    it("calls saveTrack in redux store when end time changes", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -260,10 +276,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("maintains cue styling when start time changes", () => {
@@ -328,9 +341,13 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
     });
 
-    it("calls saveTrack in redux store when cue position changes", (done) => {
+    it("calls saveTrack in redux store when cue position changes", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
@@ -344,10 +361,7 @@ describe("CueEdit", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column5);
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("updates line category", () => {
@@ -368,9 +382,13 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
     });
 
-    it("calls saveTrack in redux store when line category changes", (done) => {
+    it("calls saveTrack in redux store when line category changes", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
@@ -385,10 +403,7 @@ describe("CueEdit", () => {
         actualNode.find("a.dropdown-item").at(1).simulate("click");
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("passes down current line category", () => {
@@ -705,6 +720,52 @@ describe("CueEdit", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 
+    it("edits previous cue ALT+SHIFT+ESCAPE is pressed", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Cue 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={2} cue={cues[2]} playerTime={2} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ESCAPE, shiftKey: true, altKey: true });
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
+    it("edits previous cue CTRL+SHIFT+ESCAPE is pressed", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Cue 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={2} cue={cues[2]} playerTime={2} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ESCAPE, shiftKey: true, ctrlKey: true });
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
     it("auto sets validation error to false after receiving it", (done) => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
@@ -741,5 +802,63 @@ describe("CueEdit", () => {
         // THEN
         expect(testingStore.getState().validationError).toEqual(true);
         expect(actualNode.find("div").at(0).hasClass("blink-error-bg")).toBeTruthy();
+    });
+
+    it("adds first cue if clicked translation cue and cues are empty", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-cue-editor").at(0).simulate("click");
+
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().validationError).toEqual(false);
+    });
+
+    it("adds first cue if clicked second translation cue without creating first cue", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-cue-editor").at(1).simulate("click");
+
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().validationError).toEqual(false);
     });
 });

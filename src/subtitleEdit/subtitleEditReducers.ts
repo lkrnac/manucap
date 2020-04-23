@@ -2,14 +2,11 @@ import { Action, combineReducers } from "@reduxjs/toolkit";
 import {
     cuesSlice,
     editingCueIndexSlice,
+    saveTrackSlice,
     sourceCuesSlice,
     validationErrorSlice
 } from "./cues/cueSlices";
-import {
-    editingTrackSlice,
-    saveTrackSlice,
-    taskSlice
-} from "./trackSlices";
+import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { changePlayerTimeSlice } from "./player/playbackSlices";
 import {

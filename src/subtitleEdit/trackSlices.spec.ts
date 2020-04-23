@@ -1,5 +1,5 @@
 import { Task, Track } from "./model";
-import { callSaveTrack, resetEditingTrack, setSaveTrack, updateEditingTrack, updateTask } from "./trackSlices";
+import { resetEditingTrack, updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
@@ -51,35 +51,6 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().cuesTask).toEqual(testingTask);
-        });
-    });
-
-    describe("saveTrack", () => {
-        it("sets saveTrack", () => {
-            // GIVEN
-            const saveTrack = jest.fn();
-            expect(testingStore.getState().saveTrack).toBeNull();
-
-            // WHEN
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().saveTrack).not.toBeNull();
-        });
-
-        it("calls saveTrack", (done) => {
-            // GIVEN
-            const saveTrack = jest.fn();
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-            // THEN
-            setTimeout(() => {
-                expect(saveTrack).toBeCalled();
-                done();
-            }, 600);
         });
     });
 });

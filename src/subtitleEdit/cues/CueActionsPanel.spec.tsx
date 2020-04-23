@@ -11,8 +11,10 @@ import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import testingStore from "../../testUtils/testingStore";
-import { updateCues } from "./cueSlices";
-import { setSaveTrack } from "../trackSlices";
+import { updateCues, setSaveTrack } from "./cueSlices";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -32,7 +34,7 @@ describe("CueActionsPanel", () => {
                 >
                     <DeleteCueLineButton cueIndex={1} />
                     <PlayCueButton cue={cues[1]} />
-                    <AddCueLineButton cueIndex={1} cue={cues[1]} />
+                    <AddCueLineButton cueIndex={1} />
                 </div>
             </Provider>
         );
@@ -141,7 +143,7 @@ describe("CueActionsPanel", () => {
                 >
                     <div />
                     <PlayCueButton cue={cues[1]} />
-                    <AddCueLineButton cueIndex={1} cue={cues[1]} />
+                    <AddCueLineButton cueIndex={1} />
                 </div>
             </Provider>
         );
@@ -247,9 +249,13 @@ describe("CueActionsPanel", () => {
     });
 
 
-    it("calls saveTrack in redux store when delete button is clicked", (done) => {
+    it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -261,10 +267,7 @@ describe("CueActionsPanel", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("doesn't propagate click event to parent DOM nodes", () => {

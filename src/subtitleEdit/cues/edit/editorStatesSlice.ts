@@ -1,11 +1,10 @@
-import { CueIndexAction, cuesSlice, validationErrorSlice } from "../cueSlices";
+import { CueIndexAction, cuesSlice, saveTrackSlice, validationErrorSlice } from "../cueSlices";
 import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
 import { getVttText } from "../cueTextConverter";
 import { checkCharacterLimitation } from "../cueVerifications";
-import {saveTrackSlice} from "../../trackSlices";
 
 interface EditorStateAction {
     editorId: number;

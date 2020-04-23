@@ -16,8 +16,7 @@ import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../cueSlices";
-import { callSaveTrack } from "../../trackSlices";
+import { updateVttCue, callSaveTrack } from "../cueSlices";
 
 const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");
@@ -27,6 +26,7 @@ characterBindings.set(Character.ARROW_RIGHT, "seekAhead");
 characterBindings.set(Character.ARROW_UP, "setStartTime");
 characterBindings.set(Character.ARROW_DOWN, "setEndTime");
 characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
+characterBindings.set(Character.ESCAPE, "editPrevious");
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = characterBindings.get(e.keyCode);
@@ -37,7 +37,7 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
         if (e.keyCode === Character.ESCAPE) {
             return "closeEditor";
         } else if (e.keyCode === Character.ENTER) {
-            return "closeEditorAndCreateIfLast";
+            return "editNext";
         }
     }
     return getDefaultKeyBinding(e);
@@ -52,7 +52,8 @@ mousetrapBindings.set("setStartTime", KeyCombination.MOD_SHIFT_UP);
 mousetrapBindings.set("setEndTime", KeyCombination.MOD_SHIFT_DOWN);
 mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
 mousetrapBindings.set("closeEditor", KeyCombination.ESCAPE);
-mousetrapBindings.set("closeEditorAndCreateIfLast", KeyCombination.ENTER);
+mousetrapBindings.set("editNext", KeyCombination.ENTER);
+mousetrapBindings.set("editPrevious", KeyCombination.MOD_SHIFT_ESCAPE);
 
 const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
