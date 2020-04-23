@@ -17,6 +17,9 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSl
 import { CueDto } from "../../model";
 import { updateCues } from "../cueSlices";
 import { setSaveTrack } from "../../trackSlices";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 let testingStore = createTestingStore();
 
@@ -148,6 +151,12 @@ const testForContentState = (
 };
 
 describe("CueTextEditor", () => {
+    beforeAll(() => {
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+    });
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
@@ -198,7 +207,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
-    it("calls saveTrack in redux store when changed", (done) => {
+    it("calls saveTrack in redux store when changed", () => {
         // GIVEN
         const mockSave = jest.fn();
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
@@ -213,13 +222,10 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
-    it("doesn't trigger autosave when user selects text", (done) => {
+    it("doesn't trigger autosave when user selects text", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
@@ -248,10 +254,7 @@ describe("CueTextEditor", () => {
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalledTimes(0);
-            done();
-        }, 600);
+        expect(mockSave).toBeCalledTimes(1); // it is called once on set
     });
 
     /**

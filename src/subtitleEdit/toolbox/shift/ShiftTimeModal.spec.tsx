@@ -10,6 +10,9 @@ import { mount } from "enzyme";
 import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
 import { setSaveTrack } from "../../trackSlices";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 const testCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -188,9 +191,13 @@ describe("ShiftTimesModal", () => {
         sinon.assert.called(onClose);
     });
 
-    it("calls saveTrack in redux store when shift value", (done) => {
+    it("calls saveTrack in redux store when shift value", () => {
         // // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
         const actualNode = mount(
@@ -204,9 +211,6 @@ describe("ShiftTimesModal", () => {
         actualNode.find("form").simulate("submit");
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 });

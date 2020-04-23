@@ -20,6 +20,9 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSl
 import { setSaveTrack } from "../../trackSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import SubtitleEdit from "../../SubtitleEdit";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 let testingStore = createTestingStore();
 
@@ -217,9 +220,13 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
     });
 
-    it("calls saveTrack in redux store when start time changes", (done) => {
+    it("calls saveTrack in redux store when start time changes", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -232,10 +239,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("updates cue in redux store when end time changed", () => {
@@ -254,9 +258,13 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
     });
 
-    it("calls saveTrack in redux store when end time changes", (done) => {
+    it("calls saveTrack in redux store when end time changes", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -269,10 +277,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("maintains cue styling when start time changes", () => {
@@ -337,9 +342,13 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
     });
 
-    it("calls saveTrack in redux store when cue position changes", (done) => {
+    it("calls saveTrack in redux store when cue position changes", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
@@ -353,10 +362,7 @@ describe("CueEdit", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column5);
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("updates line category", () => {
@@ -377,9 +383,13 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
     });
 
-    it("calls saveTrack in redux store when line category changes", (done) => {
+    it("calls saveTrack in redux store when line category changes", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
@@ -394,10 +404,7 @@ describe("CueEdit", () => {
         actualNode.find("a.dropdown-item").at(1).simulate("click");
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 
     it("passes down current line category", () => {

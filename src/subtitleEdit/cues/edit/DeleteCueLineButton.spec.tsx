@@ -9,6 +9,9 @@ import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateCues } from "../cueSlices";
 import { setSaveTrack } from "../../trackSlices";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 describe("DeleteCueLineButton", () => {
     it("renders", () => {
@@ -56,9 +59,13 @@ describe("DeleteCueLineButton", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
     });
 
-    it("calls saveTrack in redux store when delete button is clicked", (done) => {
+    it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
         const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const cues = [
             { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
@@ -75,9 +82,6 @@ describe("DeleteCueLineButton", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        setTimeout(() => {
-            expect(mockSave).toBeCalled();
-            done();
-        }, 600);
+        expect(mockSave).toBeCalled();
     });
 });
