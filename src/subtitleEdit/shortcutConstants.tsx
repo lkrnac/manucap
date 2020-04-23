@@ -1,10 +1,13 @@
 
 export enum Character {
     O_CHAR = 79,
+    O_CHAR_STR = "o",
     K_CHAR = 75,
     ARROW_LEFT = 37,
+    ARROW_LEFT_STR = "ArrowLeft",
     ARROW_UP = 38,
     ARROW_RIGHT = 39,
+    ARROW_RIGHT_STR = "ArrowRight",
     ARROW_DOWN = 40,
     SLASH_CHAR = 191,
     ENTER = 13,

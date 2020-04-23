@@ -1,10 +1,8 @@
 import "video.js/dist/video-js.css";
 import { CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
-import { KeyCombination } from "../shortcutConstants";
-import Mousetrap from "mousetrap";
-import React from "react";
-import { ReactElement } from "react";
+import { Character, KeyCombination } from "../shortcutConstants";
+import React, { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
@@ -71,6 +69,20 @@ export default class VideoPlayer extends React.Component<Props> {
             poster: this.props.poster,
             tracks: textTrackOptions,
             fluid: true,
+            userActions: {
+                hotkeys: (event: KeyboardEvent) => {
+                    const functionKeysClicked = (event.metaKey || event.ctrlKey || event.altKey) && event.shiftKey;
+                    if (functionKeysClicked && event.key === Character.O_CHAR_STR) {
+                        this.playPause();
+                    }
+                    if (functionKeysClicked && event.key === Character.ARROW_LEFT_STR) {
+                        this.shiftTime(-SECOND);
+                    }
+                    if (functionKeysClicked && event.key === Character.ARROW_RIGHT_STR) {
+                        this.shiftTime(SECOND);
+                    }
+                }
+            }
         } as VideoJsPlayerOptions;
 
         this.player = videojs(this.videoNode, options) as VideoJsPlayer;
