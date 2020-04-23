@@ -162,7 +162,6 @@ export const saveTrackSlice = createSlice({
     },
     extraReducers: {
         [cuesSlice.actions.applyShiftTime.type]: (state): void => state ? state() : null,
-        [cuesSlice.actions.updateVttCue.type]: (state): void => state ? state() : null,
         [cuesSlice.actions.updateCueCategory.type]: (state): void => state ? state() : null,
         [cuesSlice.actions.deleteCue.type]: (state): void => state ? state() : null,
     }
