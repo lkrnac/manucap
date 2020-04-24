@@ -9,6 +9,8 @@ import { mount } from "enzyme";
 import { simulateComponentDidUpdate } from "../../testUtils/testUtils";
 import videojs from "video.js";
 
+jest.useFakeTimers();
+
 jest.mock("video.js");
 jest.mock("../cues/cueUtils");
 
@@ -177,6 +179,40 @@ describe("VideoPlayer tested with fake player", () => {
         // THEN
         expect(currentTime).toBeCalledWith(1);
         expect(play).toBeCalled();
+        expect(resetPlayerTimeChange).toBeCalled();
+    });
+
+    it("playSection stops at end time", () => {
+        // GIVEN
+        const play = jest.fn();
+        const pause = jest.fn();
+        const currentTime = jest.fn();
+        const resetPlayerTimeChange = jest.fn();
+        currentTime.mockReturnValueOnce(5);
+        const playerMock = {
+            paused: (): boolean => true,
+            play,
+            pause,
+            currentTime,
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
+
+        // WHEN
+        actualNode.setProps({ playSection: { startTime: 1, endTime: 1.2 }, resetPlayerTimeChange });
+        jest.runAllTimers();
+
+        // THEN
+        expect(currentTime).toBeCalledWith(1);
+        expect(currentTime).toBeCalledWith(1.2);
+        expect(play).toBeCalled();
+        expect(pause).toBeCalled();
         expect(resetPlayerTimeChange).toBeCalled();
     });
 
