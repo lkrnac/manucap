@@ -2,7 +2,7 @@ import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
-import { changePlayerTime } from "./playbackSlices";
+import { playVideoSection } from "./playbackSlices";
 import { resetEditingTrack } from "../trackSlices";
 
 interface Props {
@@ -15,7 +15,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingCues = useSelector((state: SubtitleEditState) => state.cues);
-    const newTime = useSelector((state: SubtitleEditState) => state.changePlayerTime);
+    const videoSectionToPlay = useSelector((state: SubtitleEditState) => state.videoSectionToPlay);
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];
     const tracks = editingTrack ? [editingTrack] : [];
     useEffect(
@@ -35,8 +35,8 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 tracks={tracks}
                 onTimeChange={props.onTimeChange}
                 languageCuesArray={languageCuesArray}
-                changePlayerTime={newTime}
-                resetPlayerTimeChange={(): AppThunk => dispatch(changePlayerTime(-1))}
+                playSection={videoSectionToPlay}
+                resetPlayerTimeChange={(): AppThunk => dispatch(playVideoSection(-1))}
             />
         )
         : <p>Editing track not available!</p>;

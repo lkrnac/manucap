@@ -9,7 +9,7 @@ import ReactDOM from "react-dom";
 import EditingVideoPlayer from "./EditingVideoPlayer";
 import { CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
-import { changePlayerTime } from "./playbackSlices";
+import { playVideoSection } from "./playbackSlices";
 import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
@@ -32,7 +32,7 @@ const testingCues = [
 ] as CueDto[];
 
 describe("EditingVideoPlayer", () => {
-    it("passes down new time", () => {
+    it("passes down new video section to play", () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = mount(
@@ -42,11 +42,11 @@ describe("EditingVideoPlayer", () => {
         );
 
         // WHEN
-        testingStore.dispatch(changePlayerTime(2) as {} as AnyAction);
+        testingStore.dispatch(playVideoSection(2, 3) as {} as AnyAction);
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(VideoPlayer).props().changePlayerTime).toEqual(2);
+        expect(actualNode.find(VideoPlayer).props().playSection).toEqual({ startTime: 2, endTime: 3 });
     });
 
     it("resets editing track and cues state when unmounted", () => {
