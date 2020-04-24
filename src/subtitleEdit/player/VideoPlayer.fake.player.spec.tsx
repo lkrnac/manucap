@@ -9,6 +9,8 @@ import { mount } from "enzyme";
 import { simulateComponentDidUpdate } from "../../testUtils/testUtils";
 import videojs from "video.js";
 
+jest.useFakeTimers();
+
 jest.mock("video.js");
 jest.mock("../cues/cueUtils");
 
@@ -151,7 +153,7 @@ describe("VideoPlayer tested with fake player", () => {
         expect(actualTime).toEqual(5000);
     });
 
-    it("moves time", () => {
+    it("plays video section from cue start time", () => {
         // GIVEN
         const play = jest.fn();
         const currentTime = jest.fn();
@@ -172,7 +174,7 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        actualNode.setProps({ changePlayerTime: 1, resetPlayerTimeChange });
+        actualNode.setProps({ playSection: { startTime: 1 }, resetPlayerTimeChange });
 
         // THEN
         expect(currentTime).toBeCalledWith(1);
@@ -180,7 +182,41 @@ describe("VideoPlayer tested with fake player", () => {
         expect(resetPlayerTimeChange).toBeCalled();
     });
 
-    it("moves time if requested time is less than 0", () => {
+    it("plays video section from cue start time and pauses at end time", () => {
+        // GIVEN
+        const play = jest.fn();
+        const pause = jest.fn();
+        const currentTime = jest.fn();
+        const resetPlayerTimeChange = jest.fn();
+        currentTime.mockReturnValueOnce(5);
+        const playerMock = {
+            paused: (): boolean => true,
+            play,
+            pause,
+            currentTime,
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+        );
+
+        // WHEN
+        actualNode.setProps({ playSection: { startTime: 1, endTime: 1.2 }, resetPlayerTimeChange });
+        jest.runAllTimers();
+
+        // THEN
+        expect(currentTime).toBeCalledWith(1);
+        expect(currentTime).toBeCalledWith(1.2);
+        expect(play).toBeCalled();
+        expect(pause).toBeCalled();
+        expect(resetPlayerTimeChange).toBeCalled();
+    });
+
+    it("doesn't play video section if start time is less than 0", () => {
         // GIVEN
         const play = jest.fn();
         const currentTime = jest.fn();
@@ -201,7 +237,7 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        actualNode.setProps({ changePlayerTime: -1, resetPlayerTimeChange });
+        actualNode.setProps({ playSection: { startTime: -1 }, resetPlayerTimeChange });
 
         // THEN
         expect(currentTime).not.toBeCalled();
@@ -209,7 +245,7 @@ describe("VideoPlayer tested with fake player", () => {
         expect(resetPlayerTimeChange).not.toBeCalled();
     });
 
-    it("doesn't move time when resetPlayerTimeChange callback is not defined", () => {
+    it("doesn't play video section if resetPlayerTimeChange callback is not defined", () => {
         // GIVEN
         const play = jest.fn();
         const currentTime = jest.fn();
@@ -230,7 +266,7 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        actualNode.setProps({ changePlayerTime: 1 });
+        actualNode.setProps({ playSection: { startTime: 1 }} );
 
         // THEN
         expect(currentTime).not.toBeCalled();

@@ -8,7 +8,7 @@ import {
 } from "./cues/cueSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
-import { changePlayerTimeSlice } from "./player/playbackSlices";
+import { playVideoSectionSlice } from "./player/playbackSlices";
 import {
     autoSaveSuccessSlice,
     editorStatesSlice, saveStatusSlice
@@ -24,7 +24,7 @@ export const Reducers = {
     subtitleSpecifications: subtitleSpecificationSlice.reducer,
     editorStates: editorStatesSlice.reducer,
     sourceCues: sourceCuesSlice.reducer,
-    changePlayerTime: changePlayerTimeSlice.reducer,
+    videoSectionToPlay: playVideoSectionSlice.reducer,
     autoSaveSuccess: autoSaveSuccessSlice.reducer,
     validationError: validationErrorSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
