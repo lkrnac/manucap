@@ -153,7 +153,7 @@ describe("VideoPlayer tested with fake player", () => {
         expect(actualTime).toEqual(5000);
     });
 
-    it("moves time", () => {
+    it("plays video section from cue start time", () => {
         // GIVEN
         const play = jest.fn();
         const currentTime = jest.fn();
@@ -182,7 +182,7 @@ describe("VideoPlayer tested with fake player", () => {
         expect(resetPlayerTimeChange).toBeCalled();
     });
 
-    it("playSection stops at end time", () => {
+    it("plays video section from cue start time and pauses at end time", () => {
         // GIVEN
         const play = jest.fn();
         const pause = jest.fn();
@@ -216,7 +216,7 @@ describe("VideoPlayer tested with fake player", () => {
         expect(resetPlayerTimeChange).toBeCalled();
     });
 
-    it("moves time if requested time is less than 0", () => {
+    it("doesn't play video section if start time is less than 0", () => {
         // GIVEN
         const play = jest.fn();
         const currentTime = jest.fn();
@@ -237,7 +237,7 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        actualNode.setProps({ changePlayerTime: -1, resetPlayerTimeChange });
+        actualNode.setProps({ playSection: { startTime: -1 }, resetPlayerTimeChange });
 
         // THEN
         expect(currentTime).not.toBeCalled();
@@ -245,7 +245,7 @@ describe("VideoPlayer tested with fake player", () => {
         expect(resetPlayerTimeChange).not.toBeCalled();
     });
 
-    it("doesn't move time when resetPlayerTimeChange callback is not defined", () => {
+    it("doesn't play video section if resetPlayerTimeChange callback is not defined", () => {
         // GIVEN
         const play = jest.fn();
         const currentTime = jest.fn();
@@ -266,7 +266,7 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        actualNode.setProps({ changePlayerTime: 1 });
+        actualNode.setProps({ playSection: { startTime: 1 }} );
 
         // THEN
         expect(currentTime).not.toBeCalled();

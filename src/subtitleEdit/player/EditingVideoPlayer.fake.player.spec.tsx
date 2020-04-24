@@ -32,7 +32,7 @@ const testingCues = [
 ] as CueDto[];
 
 describe("EditingVideoPlayer", () => {
-    it("passes down new time", () => {
+    it("passes down new video section to play", () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = mount(
