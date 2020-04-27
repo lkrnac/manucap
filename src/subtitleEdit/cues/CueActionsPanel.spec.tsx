@@ -140,7 +140,7 @@ describe("CueActionsPanel", () => {
                 >
                     <div />
                     <PlayCueButton cue={cues[1]} />
-                    <AddCueLineButton cueIndex={1} />
+                    <div />
                 </div>
             </Provider>
         );
