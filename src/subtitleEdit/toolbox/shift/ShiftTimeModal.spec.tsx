@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { applyShiftTime, updateCues } from "../../cues/cueSlices";
+import { applyShiftTime, updateCues, setSaveTrack } from "../../cues/cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../../model";
 import { Provider } from "react-redux";
@@ -9,6 +9,9 @@ import ShiftTimesModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 const testCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -185,5 +188,28 @@ describe("ShiftTimesModal", () => {
 
         // THEN
         sinon.assert.called(onClose);
+    });
+
+    it("calls saveTrack in redux store when shift value", () => {
+        // // GIVEN
+        const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <ShiftTimesModal show onClose={jest.fn()} />
+            </Provider >
+        );
+
+        // WHEN
+        actualNode.find("input[type='number']").simulate("change", { target: { value: 1 }});
+        actualNode.find("form").simulate("submit");
+
+        // THEN
+        expect(mockSave).toBeCalled();
     });
 });

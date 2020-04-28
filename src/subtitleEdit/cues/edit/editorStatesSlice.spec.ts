@@ -2,9 +2,8 @@ import "video.js"; // VTTCue definition
 import { ContentState, EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
+import { setAutoSaveSuccess, updateEditorState } from "./editorStatesSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { setAutoSaveSuccess, setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
-import { applyShiftTime, deleteCue, updateCueCategory } from "../cueSlices";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 
@@ -102,51 +101,5 @@ describe("autoSaveSuccessSlice", () => {
 
         // THEN
         expect(testingStore.getState().autoSaveSuccess).toEqual(true);
-    });
-});
-
-describe("pendingCueChangesSlice", () => {
-    it("sets the pendingCueChanges flag to false", () => {
-        // WHEN
-        testingStore.dispatch(setPendingCueChanges(false) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(false);
-    });
-
-    it("sets the pendingCueChanges flag to true", () => {
-        // WHEN
-        testingStore.dispatch(setPendingCueChanges(true) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
-    });
-    it("sets the pendingCueChanges on cue category update", () => {
-        // WHEN
-        testingStore.dispatch(updateCueCategory(0, "ONSCREEN_TEXT") as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
-    });
-    it("sets the pendingCueChanges on cue line delete", () => {
-        // WHEN
-        testingStore.dispatch(deleteCue(0) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
-    });
-    it("sets the pendingCueChanges on shift time applied", () => {
-        // WHEN
-        testingStore.dispatch(applyShiftTime(1) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
-    });
-    it("sets the pendingCueChanges on autoSave success flag set", () => {
-        // WHEN
-        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(false);
     });
 });

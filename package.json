@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -33,11 +33,13 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
+    "@types/lodash": "^4.14.149",
     "draft-js": "^0.11.3",
     "draft-js-export-html": "^1.4.1",
     "final-form": "^4.19.1",
     "humanize-duration": "^3.21.0",
     "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.15",
     "mousetrap": "1.6.3",
     "platform": "^1.3.5",
     "react-bootstrap": "^1.0.0-beta.16",

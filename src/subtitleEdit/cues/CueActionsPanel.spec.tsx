@@ -11,7 +11,10 @@ import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import testingStore from "../../testUtils/testingStore";
-import { updateCues } from "./cueSlices";
+import { updateCues, setSaveTrack } from "./cueSlices";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -246,8 +249,14 @@ describe("CueActionsPanel", () => {
     });
 
 
-    it("updates pendingCueChanges flag in redux store when delete button is clicked", () => {
+    it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
+        const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
@@ -258,7 +267,7 @@ describe("CueActionsPanel", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+        expect(mockSave).toBeCalled();
     });
 
     it("doesn't propagate click event to parent DOM nodes", () => {
