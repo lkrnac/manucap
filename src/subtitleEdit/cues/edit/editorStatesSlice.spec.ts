@@ -6,7 +6,7 @@ import { setAutoSaveSuccess, updateEditorState } from "./editorStatesSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import {callSaveTrack} from "../cueSlices";
+import { callSaveTrack } from "../cueSlices";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
