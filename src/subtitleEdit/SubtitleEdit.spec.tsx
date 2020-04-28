@@ -83,7 +83,7 @@ describe("SubtitleEdit", () => {
                         <div style={{ flex: "2", position: "relative", height: "100%" }}>
                             <div
                                 style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                                className="sbte-small-font sbte-light-gray-text"
+                                className="sbte-light-gray-text"
                             >
                             </div>
                         </div>
@@ -197,7 +197,7 @@ describe("SubtitleEdit", () => {
                         <div style={{ flex: "2", position: "relative", height: "100%" }}>
                             <div
                                 style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                                className="sbte-small-font sbte-light-gray-text"
+                                className="sbte-light-gray-text"
                             >
                             </div>
                         </div>
@@ -303,7 +303,7 @@ describe("SubtitleEdit", () => {
                         <div style={{ flex: "2", position: "relative", height: "100%" }}>
                             <div
                                 style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                                className="sbte-small-font sbte-light-gray-text"
+                                className="sbte-light-gray-text"
                             >
                             </div>
                         </div>
@@ -367,7 +367,7 @@ describe("SubtitleEdit", () => {
                         <div style={{ flex: "2", position: "relative", height: "100%" }}>
                             <div
                                 style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                                className="sbte-small-font sbte-light-gray-text"
+                                className="sbte-light-gray-text"
                             >
                             </div>
                         </div>

@@ -42,7 +42,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -91,7 +91,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -138,7 +138,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -185,7 +185,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -233,7 +233,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -269,7 +269,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -309,7 +309,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -361,7 +361,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -415,7 +415,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -465,7 +465,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -515,7 +515,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -565,7 +565,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                     </div>
                 </div>
@@ -615,7 +615,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                         Saving changes ...
                     </div>
@@ -667,7 +667,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                         All changes saved to server
                     </div>
@@ -719,7 +719,7 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ flex: "2", position: "relative", height: "100%" }}>
                     <div
                         style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                        className="sbte-small-font sbte-light-gray-text"
+                        className="sbte-light-gray-text"
                     >
                         Error saving latest changes
                     </div>

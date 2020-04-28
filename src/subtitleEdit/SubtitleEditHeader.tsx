@@ -52,7 +52,7 @@ const getSaveStatus = (saveStatus: string): ReactElement => {
     return (
         <div
             style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-            className="sbte-small-font sbte-light-gray-text"
+            className="sbte-light-gray-text"
         >
             { saveStatus }
         </div>
