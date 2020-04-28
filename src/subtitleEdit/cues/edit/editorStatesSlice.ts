@@ -52,9 +52,7 @@ export const autoSaveSuccessSlice = createSlice({
 export const saveStatusSlice = createSlice({
     name: "saveStatus",
     initialState: "",
-    reducers: {
-        set: (_state, action: PayloadAction<string>): string => action.payload,
-    },
+    reducers: {},
     extraReducers: {
         [saveTrackSlice.actions.call.type]: (): string => "Saving changes ...",
         [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
