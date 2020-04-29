@@ -7,7 +7,7 @@ describe("ToggleButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button type="button">
+            <button type="button" className="">
                 Click me!
             </button>
         );
