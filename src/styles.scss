@@ -79,10 +79,8 @@ $background-error-lighter: rgb(255, 245, 245);
 }
 
 .sbte-toggled-btn {
-    background: #495055;
-    -webkit-box-shadow: inset 0px 0px 15px #202020;
-    -moz-box-shadow: inset 0px 0px 15px #202020;
-    box-shadow: inset 0px 0px 15px #202020;
+    color: $secondary !important;
+    background-color: white !important;
     outline: none;
 }
 
