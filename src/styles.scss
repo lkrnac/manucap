@@ -78,6 +78,14 @@ $background-error-lighter: rgb(255, 245, 245);
     -webkit-animation:fade 1000ms infinite;
 }
 
+.sbte-toggled-btn {
+    background: #495055;
+    -webkit-box-shadow: inset 0px 0px 15px #202020;
+    -moz-box-shadow: inset 0px 0px 15px #202020;
+    box-shadow: inset 0px 0px 15px #202020;
+    outline: none;
+}
+
 // ----- Modal ------
 
 .sbte-medium-modal {
