@@ -13,15 +13,15 @@ describe("shortcutConstants.spec", () => {
 
     it("fills characterBindings with values", () => {
         //THEN
-        Object.keys(Character).forEach((e: string) => {
-            expect(Array.from(characterBindings.keys()).includes(e));
+        Object.values(Character).forEach((key: Character) => {
+            expect(Array.from(characterBindings.keys()).includes(key));
         });
     });
 
     it("fills mousetrapBindings with values", () => {
         //THEN
-        Object.keys(KeyCombination).forEach((e: string) => {
-            expect(Array.from(mousetrapBindings.values()).includes(e));
+        Object.values(KeyCombination).forEach((key: KeyCombination) => {
+            expect(Array.from(mousetrapBindings.values()).includes(key));
         });
     });
 

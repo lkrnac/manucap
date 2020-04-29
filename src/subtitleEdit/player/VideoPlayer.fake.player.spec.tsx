@@ -424,6 +424,8 @@ describe("VideoPlayer tested with fake player", () => {
         // GIVEN
 
         const triggerMouseTrapActionSpy = jest.spyOn(shortcutConstants, "triggerMouseTrapAction");
+        const handleKeyDownMock = jest.fn();
+
 
         const textTracks = [
             {
@@ -456,9 +458,9 @@ describe("VideoPlayer tested with fake player", () => {
         // WHEN
         simulateComponentDidUpdate(actualNode, {});
         //@ts-ignore
-        playerMock.handleKeyDown({});
+        playerMock.handleKeyDown(handleKeyDownMock);
 
         // THEN
-        expect(triggerMouseTrapActionSpy).toBeCalled();
+        expect(triggerMouseTrapActionSpy).toBeCalledWith(handleKeyDownMock);
     });
 });
