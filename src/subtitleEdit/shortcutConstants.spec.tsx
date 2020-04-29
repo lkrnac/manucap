@@ -13,7 +13,8 @@ describe("shortcutConstants.spec", () => {
 
     it("fills characterBindings with values", () => {
         //THEN
-        Object.keys(Character).forEach((key: Character) => {
+        //@ts-ignore the IDE reports some misleading error on the key type
+        Object.values(Character).forEach((key: Character) => {
             //@ts-ignore for some reason tslint fails for includes
             expect(Array.from(characterBindings.keys()).includes(key));
         });
@@ -21,7 +22,7 @@ describe("shortcutConstants.spec", () => {
 
     it("fills mousetrapBindings with values", () => {
         //THEN
-        Object.values(KeyCombination).forEach((key: any) => {
+        Object.values(KeyCombination).forEach((key: KeyCombination) => {
             //@ts-ignore for some reason tslint fails for includes
             expect(Array.from(mousetrapBindings.values()).includes(key));
         });
