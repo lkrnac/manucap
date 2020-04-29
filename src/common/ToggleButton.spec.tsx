@@ -67,6 +67,27 @@ describe("ToggleButton", () => {
         expect(mockOnClick).toBeCalled();
     });
 
+    it("appends toggle class on toggle", () => {
+        // GIVEN
+        const mockOnClick = jest.fn();
+        const actualNode = mount(
+            <ToggleButton
+                onClick={mockOnClick}
+                className="btn-secondary"
+                render={(): ReactElement => (
+                    <>Click me!</>
+                )}
+            />
+        );
+
+        // WHEN
+        actualNode.find("ToggleButton").simulate("click");
+
+        // THEN
+        expect(actualNode.find("button").props().className)
+            .toEqual("btn-secondary sbte-toggled-btn");
+    });
+
     it("passes toggle state to render prop", () => {
         // GIVEN
         const render = jest.fn();

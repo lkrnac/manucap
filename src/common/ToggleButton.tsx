@@ -13,11 +13,10 @@ interface Props {
 
 const ToggleButton: FunctionComponent<Props> = (props: PropsWithChildren<Props>) => {
     const [toggle, setToggle] = useState(false);
-    const classes = toggle ? "sbte-toggled-btn" : "";
     return (
         <button
             type="button"
-            className={classes + " " + props.className ? props.className : ""}
+            className={(props.className ? props.className : "") + (toggle ? " sbte-toggled-btn" : "")}
             onClick={(): void => {
                 setToggle(!toggle);
                 props.onClick && props.onClick();
