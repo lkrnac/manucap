@@ -2,7 +2,7 @@ import "video.js/dist/video-js.css";
 import { CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
-import { Character, KeyCombination } from "../shortcutConstants";
+import { KeyCombination, triggerMouseTrapAction } from "../shortcutConstants";
 import React, { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
@@ -71,18 +71,7 @@ export default class VideoPlayer extends React.Component<Props> {
             tracks: textTrackOptions,
             fluid: true,
             userActions: {
-                hotkeys: (event: KeyboardEvent): void => {
-                    const functionKeysClicked = (event.metaKey || event.ctrlKey || event.altKey) && event.shiftKey;
-                    if (functionKeysClicked && event.key === Character.O_CHAR_STR) {
-                        this.playPause();
-                    }
-                    if (functionKeysClicked && event.key === Character.ARROW_LEFT_STR) {
-                        this.shiftTime(-SECOND);
-                    }
-                    if (functionKeysClicked && event.key === Character.ARROW_RIGHT_STR) {
-                        this.shiftTime(SECOND);
-                    }
-                }
+                hotkeys: false
             }
         } as VideoJsPlayerOptions;
 
@@ -98,6 +87,11 @@ export default class VideoPlayer extends React.Component<Props> {
         });
 
         registerPlayerShortcuts(this);
+
+        // @ts-ignore that is becuase videojs is not fully typescript friendly
+        this.player.handleKeyDown = (event: React.KeyboardEvent<{}>) => {
+            triggerMouseTrapAction(event);
+        };
 
         videojs.setFormatTime((x: number): string =>
             getTimeString(x, (hours: number): boolean => hours === 0)

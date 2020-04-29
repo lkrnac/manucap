@@ -1,17 +1,16 @@
+import React from "react";
+import Mousetrap from "mousetrap";
 
 export enum Character {
     O_CHAR = 79,
-    O_CHAR_STR = "o",
     K_CHAR = 75,
     ARROW_LEFT = 37,
-    ARROW_LEFT_STR = "ArrowLeft",
     ARROW_UP = 38,
     ARROW_RIGHT = 39,
-    ARROW_RIGHT_STR = "ArrowRight",
     ARROW_DOWN = 40,
     SLASH_CHAR = 191,
     ENTER = 13,
-    ESCAPE = 27,
+    ESCAPE = 27
 }
 
 export enum KeyCombination {
@@ -34,3 +33,43 @@ export enum KeyCombination {
     MOD_SHIFT_ESCAPE = "mod+shift+escape",
     ALT_SHIFT_ESCAPE = "alt+shift+escape",
 }
+
+
+export const mousetrapBindings = new Map<string, KeyCombination>();
+mousetrapBindings.set("togglePlayPause", KeyCombination.MOD_SHIFT_O);
+mousetrapBindings.set("togglePlayPauseCue", KeyCombination.MOD_SHIFT_K);
+mousetrapBindings.set("seekBack", KeyCombination.MOD_SHIFT_LEFT);
+mousetrapBindings.set("seekAhead", KeyCombination.MOD_SHIFT_RIGHT);
+mousetrapBindings.set("setStartTime", KeyCombination.MOD_SHIFT_UP);
+mousetrapBindings.set("setEndTime", KeyCombination.MOD_SHIFT_DOWN);
+mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
+mousetrapBindings.set("closeEditor", KeyCombination.ESCAPE);
+mousetrapBindings.set("editNext", KeyCombination.ENTER);
+mousetrapBindings.set("editPrevious", KeyCombination.MOD_SHIFT_ESCAPE);
+
+export const characterBindings = new Map<Character, string>();
+characterBindings.set(Character.O_CHAR, "togglePlayPause");
+characterBindings.set(Character.K_CHAR, "togglePlayPauseCue");
+characterBindings.set(Character.ARROW_LEFT, "seekBack");
+characterBindings.set(Character.ARROW_RIGHT, "seekAhead");
+characterBindings.set(Character.ARROW_UP, "setStartTime");
+characterBindings.set(Character.ARROW_DOWN, "setEndTime");
+characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
+characterBindings.set(Character.ESCAPE, "editPrevious");
+
+export const getActionByKeyboardEvent = (e: React.KeyboardEvent<{}>): string | undefined => {
+    const action = characterBindings.get(e.keyCode);
+    if (e.shiftKey && (e.metaKey || e.altKey || e.ctrlKey) && action) {
+        return action;
+    }
+    return undefined;
+};
+
+export const triggerMouseTrapAction = (e: React.KeyboardEvent<{}>): void => {
+    const action = getActionByKeyboardEvent(e);
+    if (action) {
+        const mouseTrapAction = mousetrapBindings.get(action);
+        if (mouseTrapAction != null)
+            Mousetrap.trigger(mouseTrapAction);
+    }
+};
