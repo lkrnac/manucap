@@ -167,6 +167,14 @@ export const saveTrackSlice = createSlice({
     }
 });
 
+export const overlapCaptionsSlice = createSlice({
+    name: "overlapCaptions",
+    initialState: false,
+    reducers: {
+        setOverlapCaptions: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    }
+});
+
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
@@ -263,4 +271,9 @@ export const setSaveTrack = (saveTrack: Function): AppThunk =>
 export const callSaveTrack = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<void>>): void => {
         dispatch(saveTrackSlice.actions.call());
+    };
+
+export const setOverlapCaptions = (overlap: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
+        dispatch(overlapCaptionsSlice.actions.setOverlapCaptions(overlap));
     };

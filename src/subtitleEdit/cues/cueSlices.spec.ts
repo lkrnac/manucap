@@ -10,7 +10,8 @@ import {
     updateCues,
     updateEditingCueIndex,
     updateSourceCues,
-    updateVttCue
+    updateVttCue,
+    setOverlapCaptions
 } from "./cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../model";
@@ -981,6 +982,18 @@ describe("cueSlices", () => {
                 expect(saveTrack).toBeCalled();
                 done();
             }, 600);
+        });
+    });
+
+    describe("overlapCaptions", () => {
+        it("sets overlap captions flag", () => {
+            //GIVEN
+
+            // WHEN
+            testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().overlapCaptions).toEqual(true);
         });
     });
 
