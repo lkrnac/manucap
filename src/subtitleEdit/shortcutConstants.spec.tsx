@@ -13,14 +13,16 @@ describe("shortcutConstants.spec", () => {
 
     it("fills characterBindings with values", () => {
         //THEN
-        Object.values(Character).forEach((key: Character) => {
+        Object.keys(Character).forEach((key: Character) => {
+            //@ts-ignore for some reason tslint fails for includes
             expect(Array.from(characterBindings.keys()).includes(key));
         });
     });
 
     it("fills mousetrapBindings with values", () => {
         //THEN
-        Object.values(KeyCombination).forEach((key: KeyCombination) => {
+        Object.values(KeyCombination).forEach((key: any) => {
+            //@ts-ignore for some reason tslint fails for includes
             expect(Array.from(mousetrapBindings.values()).includes(key));
         });
     });
