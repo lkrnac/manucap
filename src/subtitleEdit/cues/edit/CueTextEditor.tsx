@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
-import { setPendingCueChanges, updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../cueSlices";
+import { updateEditorState } from "./editorStatesSlice";
+import { updateVttCue, callSaveTrack } from "../cueSlices";
 
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
@@ -110,7 +110,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     editorState={editorState}
                     onChange={(newEditorState: EditorState): void => {
                         if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                            dispatch(setPendingCueChanges(true));
+                            dispatch(callSaveTrack());
                         }
                         dispatch(updateEditorState(props.index, newEditorState));
                     }}

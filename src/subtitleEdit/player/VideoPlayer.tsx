@@ -7,6 +7,7 @@ import React, { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
+import { PlayVideoAction } from "./playbackSlices";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -32,7 +33,7 @@ export interface Props {
     tracks: Track[];
     onTimeChange?: (time: number) => void;
     languageCuesArray: LanguageCues[];
-    changePlayerTime?: number;
+    playSection?: PlayVideoAction;
     resetPlayerTimeChange?: () => void;
 }
 
@@ -109,12 +110,22 @@ export default class VideoPlayer extends React.Component<Props> {
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
 
-        if (this.props.changePlayerTime !== undefined
+        if (this.props.playSection !== undefined
             && this.props.resetPlayerTimeChange
-            && this.props.changePlayerTime >= 0
-            && prevProps.changePlayerTime !== this.props.changePlayerTime) {
-            this.player.currentTime(this.props.changePlayerTime);
+            && this.props.playSection.startTime >= 0
+            && prevProps.playSection !== this.props.playSection) {
+            const startTime = this.props.playSection.startTime;
+            const endTime = this.props.playSection.endTime;
+            this.player.currentTime(startTime);
             this.player.play();
+            if (endTime) {
+                // for some reason it was stopping around 100ms short
+                const waitTime = ((endTime - startTime) * 1000) + 100;
+                setTimeout(() => {
+                    this.player.pause();
+                    this.player.currentTime(endTime);
+                }, waitTime);
+            }
             this.props.resetPlayerTimeChange();
         }
     }

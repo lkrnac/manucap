@@ -1,7 +1,14 @@
 import { CueCategory, CueDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { addCue, setValidationError, updateCueCategory, updateEditingCueIndex, updateVttCue } from "../cueSlices";
+import {
+    addCue,
+    callSaveTrack,
+    setValidationError,
+    updateCueCategory,
+    updateEditingCueIndex,
+    updateVttCue
+} from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
@@ -10,8 +17,7 @@ import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
-import { setPendingCueChanges } from "./editorStatesSlice";
-import { changePlayerTime } from "../../player/playbackSlices";
+import { playVideoSection } from "../../player/playbackSlices";
 
 interface Props {
     index: number;
@@ -24,7 +30,7 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateVttCue(props.index, newCue));
-    dispatch(setPendingCueChanges(true));
+    dispatch(callSaveTrack());
 };
 
 const handleEnterForLastCue = (sourceCues: CueDto[], index: number): AppThunk => {
@@ -69,9 +75,9 @@ const CueEdit = (props: Props): ReactElement => {
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {
-            dispatch(changePlayerTime(props.cue.vttCue.startTime));
+            dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime));
         });
-    }, [ dispatch, props.cue.vttCue.startTime ]);
+    }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
     const staticBackground = props.cue.corrupted ? "sbte-background-error-lighter" : "bg-white";
     const className = validationError ? "blink-error-bg" : staticBackground;
@@ -118,7 +124,7 @@ const CueEdit = (props: Props): ReactElement => {
                                 newCue[property] = newPositionProperties[property];
                             }
                             dispatch(updateVttCue(props.index, newCue));
-                            dispatch(setPendingCueChanges(true));
+                            dispatch(callSaveTrack());
                         }}
                     />
                 </div>

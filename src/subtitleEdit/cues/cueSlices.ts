@@ -18,6 +18,7 @@ import {
     markCuesBreakingRules,
     verifyCueDuration
 } from "./cueVerifications";
+import { debounce } from "lodash";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -147,6 +148,25 @@ export const validationErrorSlice = createSlice({
     }
 });
 
+const DEBOUNCE_TIMEOUT = 500;
+
+export const saveTrackSlice = createSlice({
+    name: "saveTrack",
+    initialState: null as Function | null,
+    reducers: {
+        set: (_state, action: PayloadAction<Function>): void => {
+            // @ts-ignore debounce expects any type
+            return debounce(action.payload, DEBOUNCE_TIMEOUT);
+        },
+        call: (state): void => state ? state() : null,
+    },
+    extraReducers: {
+        [cuesSlice.actions.applyShiftTime.type]: (state): void => state ? state() : null,
+        [cuesSlice.actions.updateCueCategory.type]: (state): void => state ? state() : null,
+        [cuesSlice.actions.deleteCue.type]: (state): void => state ? state() : null,
+    }
+});
+
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
@@ -233,4 +253,14 @@ export const applyShiftTime = (shiftTime: number): AppThunk =>
 export const setValidationError = (error: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean>>): void => {
         dispatch(validationErrorSlice.actions.setValidationError(error));
+    };
+
+export const setSaveTrack = (saveTrack: Function): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<Function>>): void => {
+        dispatch(saveTrackSlice.actions.set(saveTrack));
+    };
+
+export const callSaveTrack = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<void>>): void => {
+        dispatch(saveTrackSlice.actions.call());
     };

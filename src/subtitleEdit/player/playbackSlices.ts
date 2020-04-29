@@ -2,19 +2,20 @@ import { Dispatch, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../subtitleEditReducers";
 import { SubtitleEditAction } from "../model";
 
-interface ChangePlayerTimeAction extends SubtitleEditAction {
-    newTime: number;
+export interface PlayVideoAction extends SubtitleEditAction {
+    startTime: number;
+    endTime?: number;
 }
 
-export const changePlayerTimeSlice = createSlice({
-    name: "changePlayerTime",
-    initialState: -1,
+export const playVideoSectionSlice = createSlice({
+    name: "playVideoSection",
+    initialState: {} as PlayVideoAction,
     reducers: {
-        changePlayerTime: (_state, action: PayloadAction<ChangePlayerTimeAction>): number => action.payload.newTime,
+        playVideoSectionSlice: (_state, action: PayloadAction<PlayVideoAction>): PlayVideoAction => action.payload
     }
 });
 
-export const changePlayerTime = (newTime: number): AppThunk =>
+export const playVideoSection = (startTime: number, endTime?: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
-        dispatch(changePlayerTimeSlice.actions.changePlayerTime({ newTime }));
+        dispatch(playVideoSectionSlice.actions.playVideoSectionSlice({ startTime, endTime }));
     };
