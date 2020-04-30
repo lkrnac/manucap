@@ -1,6 +1,13 @@
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { Character, KeyCombination } from "../../shortcutConstants";
-import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
+import {
+    ContentState,
+    DraftHandleValue,
+    Editor,
+    EditorState,
+    convertFromHTML,
+    getDefaultKeyBinding
+} from "draft-js";
 import React, { ReactElement, useEffect } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
@@ -9,8 +16,7 @@ import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import { callSaveTrack, updateVttCue } from "../cueSlices";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import { updateVttCue, callSaveTrack } from "../cueSlices";
 
 const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");
@@ -86,7 +92,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         // into redux when changed.
         // (Also some tests would fail if you include editorState object itself, but behavior is still OK)
         // eslint-disable-next-line
-        [currentContent, currentInlineStyle, dispatch, props.index]
+        [ currentContent, currentInlineStyle, dispatch, props.index ]
     );
 
     useEffect(
@@ -100,7 +106,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         //  - props.vttCue is not included, because it causes endless FLUX loop.
         //  - spread operator for cue values is used so that all the VTTCue properties code can be in single file.
         // eslint-disable-next-line
-        [currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue)]
+        [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
     );
 
     return (
@@ -140,27 +146,9 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 />
             </div>
             <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
-                <TooltipWrapper
-                    tooltipId="boldBtnTooltip"
-                    text="Bold"
-                    placement="bottom"
-                >
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
-                </TooltipWrapper>
-                <TooltipWrapper
-                    tooltipId="italicBtnTooltip"
-                    text="Italic"
-                    placement="bottom"
-                >
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
-                </TooltipWrapper>
-                <TooltipWrapper
-                    tooltipId="underlineBtnTooltip"
-                    text="Underline"
-                    placement="bottom"
-                >
-                    <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
-                </TooltipWrapper>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
             </div>
         </div>
     );
