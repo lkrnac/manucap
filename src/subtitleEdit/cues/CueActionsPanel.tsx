@@ -33,7 +33,7 @@ export const CueActionsPanel = (props: Props): ReactElement => {
                     : <div />
             }
             {
-                props.editingCueIndex === props.index && (props.sourceCue === undefined || props.lastCue)
+                props.editingCueIndex === props.index && props.sourceCue === undefined
                     // @ts-ignore If cue is undefined, sourceCue is passed in (ensured by SubtitleEdit tests)
                     ? <AddCueLineButton cueIndex={props.index} cue={props.cue} />
                     : <div />
