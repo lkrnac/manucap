@@ -15,7 +15,7 @@ describe("CaptionOverlapToggle", () => {
        // GIVEN
        const expectedNode = shallow(
            <button type="button" className="btn btn-secondary">
-               <i className="fas fa-lock-open" /> Allow Overlapping Captions
+               <i className="fas fa-lock-open" /> Enable Overlapping
            </button>
        );
 
@@ -34,7 +34,7 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const expectedNode = shallow(
             <button type="button" className="btn btn-secondary sbte-toggled-btn">
-                <i className="fas fa-lock" /> Prevent Overlapping Captions
+                <i className="fas fa-lock" /> Disable Overlapping
             </button>
         );
 
@@ -54,7 +54,7 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const expectedNode = shallow(
             <button type="button" className="btn btn-secondary">
-                <i className="fas fa-lock-open" /> Allow Overlapping Captions
+                <i className="fas fa-lock-open" /> Enable Overlapping
             </button>
         );
 

@@ -15,8 +15,8 @@ export const CaptionOverlapToggle = (): ReactElement => {
             }}
             render={(toggle): ReactElement => (
                 toggle ?
-                    <><i className="fas fa-lock" /> Prevent Overlapping Captions</> :
-                    <><i className="fas fa-lock-open" /> Allow Overlapping Captions</>
+                    <><i className="fas fa-lock" /> Disable Overlapping</> :
+                    <><i className="fas fa-lock-open" /> Enable Overlapping</>
             )}
         />
     );
