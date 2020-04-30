@@ -3,7 +3,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 interface Props {
     text: string;
-    trigger?: "click" | "focus" | "hover" | undefined;
+    trigger?: "click" | "focus" | "hover" |  string[] | undefined;
     placement: "auto-start"| "auto" | "auto-end" | "top-start" | "top"
         | "top-end" | "right-start"| "right"| "right-end"| "bottom-end"
         | "bottom" | "bottom-start" | "left-end" | "left" | "left-start";
@@ -12,8 +12,10 @@ interface Props {
 
 }
 export const TooltipWrapper = (props: Props): ReactElement => {
+
     return (
         <OverlayTrigger
+            // @ts-ignore ignores type of trigger, passing strings instead
             trigger={props.trigger || ["hover", "focus"]}
             placement={props.placement}
             delay={{ show: 100, hide: 100 }}
