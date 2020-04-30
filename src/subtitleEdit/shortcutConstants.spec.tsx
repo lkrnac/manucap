@@ -11,21 +11,17 @@ import Mousetrap from "mousetrap";
 
 describe("shortcutConstants.spec", () => {
 
-    it("fills characterBindings with values", () => {
+    it("fills characterBindings with Character as keys", () => {
         //THEN
-        //@ts-ignore
-        Object.values(Character).forEach((key: any) => {
-            //@ts-ignore for some reason tslint fails for includes
-            expect(Array.from(characterBindings.keys()).includes(key));
+        Array.from(characterBindings.keys()).forEach((key: Character) => {
+            expect(Object.values(Character).includes(key));
         });
     });
 
-    it("fills mousetrapBindings with values", () => {
+    it("fills mousetrapBindings with KeyCombination as values", () => {
         //THEN
-        //@ts-ignore
-        Object.values(KeyCombination).forEach((key: any) => {
-            //@ts-ignore for some reason tslint fails for includes
-            expect(Array.from(mousetrapBindings.values()).includes(key));
+        Array.from(mousetrapBindings.values()).forEach((value: KeyCombination) => {
+            expect(Object.values(KeyCombination).includes(value));
         });
     });
 
