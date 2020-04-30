@@ -1,4 +1,4 @@
-import { CueIndexAction, cuesSlice, validationErrorSlice } from "../cueSlices";
+import { CueIndexAction, cuesSlice, saveTrackSlice, validationErrorSlice } from "../cueSlices";
 import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
@@ -49,17 +49,14 @@ export const autoSaveSuccessSlice = createSlice({
     }
 });
 
-export const pendingCueChangesSlice = createSlice({
-    name: "pendingCueChangesSlice",
-    initialState: false,
-    reducers: {
-        setPendingCueChanges: (_state, action: PayloadAction<boolean>): boolean => action.payload
-    },
+export const saveStatusSlice = createSlice({
+    name: "saveStatus",
+    initialState: "",
+    reducers: {},
     extraReducers: {
-        [cuesSlice.actions.updateCueCategory.type]: (): boolean => true,
-        [cuesSlice.actions.deleteCue.type]: (): boolean => true,
-        [cuesSlice.actions.applyShiftTime.type]: (): boolean => true,
-        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (): boolean => false
+        [saveTrackSlice.actions.call.type]: (): string => "Saving changes ...",
+        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
+            action.payload ? "All changes saved to server" : "Error saving latest changes"
     }
 });
 
@@ -90,11 +87,6 @@ export const updateEditorState = (editorId: number, newEditorState: EditorState)
 
 export const reset = (): AppThunk => (dispatch: Dispatch<PayloadAction<undefined>>): void =>
     dispatch(editorStatesSlice.actions.reset());
-
-export const setPendingCueChanges = (pending: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
-        dispatch(pendingCueChangesSlice.actions.setPendingCueChanges(pending));
-    };
 
 export const setAutoSaveSuccess = (success: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean>>): void => {

@@ -7,6 +7,10 @@ import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
+import { setSaveTrack } from "../cueSlices";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 /**
  * On click actions are covered by CueTextEditor tests
@@ -119,8 +123,20 @@ describe("InlineStyleButton", () => {
         expect(event.preventDefault).toBeCalled();
     });
 
-    it("sets pendingCueChanges flag on button toggle ", () => {
+    it("calls saveTrack in redux store on button toggle ", () => {
         // GIVEN
+        const processedHTML = convertFromHTML("<u>lala</u>");
+        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+
+        testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
+
+        const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
@@ -131,6 +147,6 @@ describe("InlineStyleButton", () => {
         actualNode.find(InlineStyleButton).simulate("click");
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+        expect(mockSave).toBeCalled();
     });
 });

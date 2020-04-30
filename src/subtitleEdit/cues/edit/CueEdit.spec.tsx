@@ -13,12 +13,15 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues } from "../cueSlices";
+import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues, setSaveTrack } from "../cueSlices";
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { updateEditingTrack } from "../../trackSlices";
 import SubtitleEdit from "../../SubtitleEdit";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 let testingStore = createTestingStore();
 
@@ -28,8 +31,6 @@ const testingTrack = {
     default: true,
     mediaTitle: "This is the video title",
 } as Track;
-
-jest.useFakeTimers();
 
 const cues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -218,8 +219,14 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
     });
 
-    it("updates pendingCueChanges flag in redux store when start time changes", () => {
+    it("calls saveTrack in redux store when start time changes", () => {
         // GIVEN
+        const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueEdit index={0} cue={cues[1]} playerTime={0} />
@@ -231,7 +238,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+        expect(mockSave).toBeCalled();
     });
 
     it("updates cue in redux store when end time changed", () => {
@@ -250,8 +257,14 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
     });
 
-    it("updates pendingCueChanges flag in redux store when end time changes", () => {
+    it("calls saveTrack in redux store when end time changes", () => {
         // GIVEN
+        const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueEdit index={0} cue={cues[1]} playerTime={0} />
@@ -263,7 +276,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+        expect(mockSave).toBeCalled();
     });
 
     it("maintains cue styling when start time changes", () => {
@@ -328,8 +341,14 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
     });
 
-    it("updates pendingCueChanges flag in redux store when cue position changes", () => {
+    it("calls saveTrack in redux store when cue position changes", () => {
         // GIVEN
+        const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
@@ -342,7 +361,7 @@ describe("CueEdit", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column5);
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+        expect(mockSave).toBeCalled();
     });
 
     it("updates line category", () => {
@@ -363,8 +382,14 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
     });
 
-    it("updates pendingCueChanges flag in redux store when line category changes", () => {
+    it("calls saveTrack in redux store when line category changes", () => {
         // GIVEN
+        const mockSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
@@ -378,7 +403,7 @@ describe("CueEdit", () => {
         actualNode.find("a.dropdown-item").at(1).simulate("click");
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+        expect(mockSave).toBeCalled();
     });
 
     it("passes down current line category", () => {
@@ -741,7 +766,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
 
-    it("auto sets validation error to false after receiving it", () => {
+    it("auto sets validation error to false after receiving it", (done) => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
@@ -752,13 +777,14 @@ describe("CueEdit", () => {
 
         // WHEN
         testingStore.dispatch(setValidationError(true) as {} as AnyAction);
-        jest.advanceTimersByTime(1005);
 
         // THEN
-        expect(testingStore.getState().validationError).toEqual(false);
-        expect(actualNode.find("div").at(0).hasClass("bg-white")).toBeTruthy();
+        setTimeout(() => {
+            expect(testingStore.getState().validationError).toEqual(false);
+            expect(actualNode.find("div").at(0).hasClass("bg-white")).toBeTruthy();
+            done();
+        }, 1005);
     });
-
 
     it("blinks background when when validation error occurs", () => {
         // GIVEN

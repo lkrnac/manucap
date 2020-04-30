@@ -11,11 +11,14 @@ import { Provider } from "react-redux";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import each from "jest-each";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { reset, setPendingCueChanges } from "./editorStatesSlice";
+import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto } from "../../model";
-import { updateCues } from "../cueSlices";
+import { setSaveTrack, updateCues } from "../cueSlices";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 let testingStore = createTestingStore();
 
@@ -147,6 +150,12 @@ const testForContentState = (
 };
 
 describe("CueTextEditor", () => {
+    beforeAll(() => {
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
+    });
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
@@ -197,8 +206,10 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
-    it("updates pendingCueChanges flag in redux store when changed", () => {
+    it("calls saveTrack in redux store when changed", () => {
         // GIVEN
+        const mockSave = jest.fn();
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
         const editor = createEditorNode();
 
         // WHEN
@@ -210,7 +221,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(true);
+        expect(mockSave).toBeCalled();
     });
 
     it("doesn't trigger autosave when user selects text", () => {
@@ -229,18 +240,20 @@ describe("CueTextEditor", () => {
                 getData: (): string => " Paste text to end",
             }
         });
-        testingStore.dispatch(setPendingCueChanges(false) as {} as AnyAction);
 
         const editorState = actualNode.find(Editor).props().editorState;
         const selectionState = editorState.getSelection();
 
         // WHEN
+        const mockSave = jest.fn();
+        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+
         // select first 5 characters
         const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
         // THEN
-        expect(testingStore.getState().pendingCueChanges).toEqual(false);
+        expect(mockSave).toBeCalledTimes(1); // it is called once on set
     });
 
     /**
