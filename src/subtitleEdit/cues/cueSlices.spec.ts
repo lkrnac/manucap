@@ -1082,8 +1082,6 @@ describe("cueSlices", () => {
 
     describe("overlapCaptions", () => {
         it("sets overlap captions flag", () => {
-            //GIVEN
-
             // WHEN
             testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
 
