@@ -188,11 +188,11 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         const overlapCaptionsAllowed = getState().overlapCaptions;
 
         if (vttCue.startTime !== originalCue.vttCue.startTime) {
-            !overlapCaptionsAllowed && applyOverlapPreventionStart(newVttCue, previousCue);
+            overlapCaptionsAllowed || applyOverlapPreventionStart(newVttCue, previousCue);
             applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications);
         }
         if (vttCue.endTime !== originalCue.vttCue.endTime) {
-            !overlapCaptionsAllowed && applyOverlapPreventionEnd(newVttCue, followingCue);
+            overlapCaptionsAllowed || applyOverlapPreventionEnd(newVttCue, followingCue);
             applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications);
         }
         applyCharacterLimitation(newVttCue, originalCue, subtitleSpecifications);
