@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { addCue, updateEditingCueIndex, setSaveTrack } from "./cues/cueSlices";
+import { addCue, setSaveTrack, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -15,6 +15,7 @@ import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
+import { TooltipWrapper } from "./TooltipWrapper";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -49,13 +50,13 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         () => {
             setShowAutoSaveAlert(autoSaveSuccess);
-        }, [ autoSaveSuccess ]
+        }, [autoSaveSuccess]
     );
 
     useEffect(
         () => {
             dispatch(setSaveTrack(props.onSave));
-        }, [ dispatch, props.onSave ]
+        }, [dispatch, props.onSave]
     );
 
     return (
@@ -66,8 +67,10 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             <SubtitleEditHeader />
             {
                 !hasDataLoaded(editingTrack, loadingIndicator) ?
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white" }}
+                    <div style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white"
+                    }}
                     >
                         <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
                             <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
@@ -133,22 +136,34 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 >
                                     View All Tracks
                                 </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-first-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => scrollToElement(cuesRef.current.children[0])}
+                                <TooltipWrapper
+                                    tooltipId="scrollToTopBtnTooltip"
+                                    text="Scroll to top"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-up" />
-                                </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-last-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                        style={{ marginLeft: "10px" }}
+                                        onClick={(): void => scrollToElement(cuesRef.current.children[0])}
+                                    >
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
+                                </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="scrollToBottomTooltip"
+                                    text="Scroll to bottom"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-down" />
-                                </button>
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                        style={{ marginLeft: "10px" }}
+                                        onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
+                                    >
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
+                                </TooltipWrapper>
 
                                 <span style={{ flexGrow: 2 }} />
                                 <button

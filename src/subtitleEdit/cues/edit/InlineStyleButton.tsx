@@ -21,6 +21,7 @@ const InlineStyleButton = (props: Props): ReactElement => {
 
     return (
         <button
+            {...props}
             style={{ marginRight: "5px" }}
             className={buttonStyle}
             // Following prevents taking focus from editor, so that we can toggle inline style for current

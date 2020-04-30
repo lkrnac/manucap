@@ -1,6 +1,7 @@
-import { Position, PositionIcon, findPositionIcon, positionIcons } from "../cueUtils";
+import { findPositionIcon, Position, PositionIcon, positionIcons } from "../cueUtils";
 import React, { ReactElement } from "react";
 import { Dropdown } from "react-bootstrap";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
     vttCue: VTTCue;
@@ -9,9 +10,15 @@ interface Props {
 
 const PositionButton = (props: Props): ReactElement => (
     <Dropdown style={{ marginBottom: "5px", marginRight: "10px" }}>
-        <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-            {findPositionIcon(props.vttCue).iconText} <span className="caret" />
-        </Dropdown.Toggle>
+        <TooltipWrapper
+            tooltipId="postionBtnTooltip"
+            text="Set where to set the subtitle line on the video screen"
+            placement="top"
+        >
+            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+                {findPositionIcon(props.vttCue).iconText} <span className="caret" />
+            </Dropdown.Toggle>
+        </TooltipWrapper>
         <Dropdown.Menu style={{ minWidth: "210px", width: "210px" }}>
             <div style={{ display: "flex", flexFlow: "row wrap" }}>
                 {
