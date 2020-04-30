@@ -14,8 +14,7 @@ import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
-import { reset, setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
-import { Toast } from "react-bootstrap";
+import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 
 let testingStore = createTestingStore();
@@ -81,7 +80,13 @@ describe("SubtitleEdit", () => {
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
-                        <div style={{ flex: "2" }} />
+                        <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                            <div
+                                style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                                className="sbte-light-gray-text"
+                            >
+                            </div>
+                        </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Completed: <b>50%</b></div>
@@ -142,28 +147,10 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <button
-                                    className="btn btn-primary sbte-save-subtitle-btn"
-                                    type="button"
-                                    style={{ marginRight: "10px" }}
-                                >
-                                    Save
-                                </button>
                                 <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
                                     Complete
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                    <div
-                        style={{
-                            position: "absolute",
-                            left: "45%",
-                            top: "1%"
-                        }}
-                    >
-                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
-                            <i className="fa fa-thumbs-up" /> Saved
                         </div>
                     </div>
                 </div>
@@ -207,7 +194,13 @@ describe("SubtitleEdit", () => {
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
-                        <div style={{ flex: "2" }} />
+                        <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                            <div
+                                style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                                className="sbte-light-gray-text"
+                            >
+                            </div>
+                        </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Completed: <b>0%</b></div>
@@ -260,28 +253,10 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <button
-                                    className="btn btn-primary sbte-save-subtitle-btn"
-                                    type="button"
-                                    style={{ marginRight: "10px" }}
-                                >
-                                    Save
-                                </button>
                                 <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
                                     Complete
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                    <div
-                        style={{
-                            position: "absolute",
-                            left: "45%",
-                            top: "1%"
-                        }}
-                    >
-                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
-                            <i className="fa fa-thumbs-up" /> Saved
                         </div>
                     </div>
                 </div>
@@ -325,7 +300,13 @@ describe("SubtitleEdit", () => {
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
-                        <div style={{ flex: "2" }} />
+                        <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                            <div
+                                style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                                className="sbte-light-gray-text"
+                            >
+                            </div>
+                        </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div />
@@ -337,17 +318,6 @@ describe("SubtitleEdit", () => {
                         <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
                             <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
                             <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
-                        </div>
-                    </div>
-                    <div
-                        style={{
-                            position: "absolute",
-                            left: "45%",
-                            top: "1%"
-                        }}
-                    >
-                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
-                            <i className="fa fa-thumbs-up" /> Saved
                         </div>
                     </div>
                 </div>
@@ -394,7 +364,13 @@ describe("SubtitleEdit", () => {
                                 </span> <i>4 seconds</i>{/* eslint-disable-line react/jsx-closing-tag-location */}
                             </div>
                         </div>
-                        <div style={{ flex: "2" }} />
+                        <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                            <div
+                                style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                                className="sbte-light-gray-text"
+                            >
+                            </div>
+                        </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div />
@@ -406,17 +382,6 @@ describe("SubtitleEdit", () => {
                         <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
                             <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
                             <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
-                        </div>
-                    </div>
-                    <div
-                        style={{
-                            position: "absolute",
-                            left: "45%",
-                            top: "1%"
-                        }}
-                    >
-                        <div className="fade toast sbte-alert" role="alert" aria-live="assertive" aria-atomic="true">
-                            <i className="fa fa-thumbs-up" /> Saved
                         </div>
                     </div>
                 </div>
@@ -781,35 +746,6 @@ describe("SubtitleEdit", () => {
         expect(mockOnViewAllTracks.mock.calls.length).toBe(1);
     });
 
-    it("calls onSave callback when button is clicked", () => {
-        // GIVEN
-        const mockOnSave = jest.fn();
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={mockOnSave}
-                    onComplete={(): void => undefined}
-                />
-            </Provider>
-        );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-        testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
-
-        // WHEN
-        actualNode.find("button.sbte-save-subtitle-btn").simulate("click");
-
-        // THEN
-        expect(mockOnSave.mock.calls.length).toBe(1);
-    });
-
     it("calls onComplete callback when button is clicked", () => {
         // GIVEN
         const mockOnComplete = jest.fn();
@@ -948,83 +884,6 @@ describe("SubtitleEdit", () => {
         expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
     });
 
-    it("renders save alert on save button click", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={(): void => {
-                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-                        return;
-                    }}
-                    onComplete={(): void => undefined}
-                />
-            </Provider>
-        );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
-        const expectedAlert = mount(
-            <Toast
-                show
-                delay={2000}
-                autohide
-                onClose={jest.fn()}
-                className="sbte-alert"
-            >
-                <i className="fa fa-thumbs-up" /> Saved
-            </Toast>
-
-        );
-
-        //WHEN
-        actualNode.find("button.sbte-save-subtitle-btn").simulate("click");
-
-        //THEN
-        expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
-    });
-
-    it("renders save alert on auto save", (done) => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={(): void => {
-                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-                        return;
-                    }}
-                    onComplete={(): void => undefined}
-                />
-            </Provider>
-        );
-        const expectedAlert = mount(
-            <Toast
-                show
-                delay={2000}
-                autohide
-                onClose={jest.fn()}
-                className="sbte-alert"
-            >
-                <i className="fa fa-thumbs-up" /> Saved
-            </Toast>
-        );
-
-        //WHEN
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-        //THEN
-        setTimeout(() => {
-            expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
-            done();
-        }, 600);
-    });
-
     it("calls onSave callback on auto save", (done) => {
         // GIVEN
         const mockOnSave = jest.fn();
@@ -1048,82 +907,6 @@ describe("SubtitleEdit", () => {
             expect(mockOnSave.mock.calls.length).toBe(1);
             done();
         }, 600);
-    });
-
-    it("doesn't renders save alert on auto save failure",  (done) => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={(): void => {
-                        testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-                        return;
-                    }}
-                    onComplete={(): void => undefined}
-                />
-            </Provider>
-        );
-        const expectedAlert = mount(
-            <Toast
-                show={false}
-                delay={2000}
-                autohide
-                onClose={jest.fn()}
-                className="sbte-alert"
-            >
-                <i className="fa fa-thumbs-up" /> Saved
-            </Toast>
-        );
-
-        //WHEN
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-        //THEN
-        setTimeout(() => {
-            expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
-            done();
-        }, 600);
-    });
-
-    it("auto-hides save alert on save success",  (done) => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={(): void => {
-                        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-                        return;
-                    }}
-                    onComplete={(): void => undefined}
-                />
-            </Provider>
-        );
-        const expectedAlert = mount(
-            <Toast
-                show={false}
-                delay={2000}
-                autohide
-                onClose={jest.fn()}
-                className="sbte-alert"
-            >
-                <i className="fa fa-thumbs-up" /> Saved
-            </Toast>
-        );
-
-        //WHEN
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-        //THEN
-        setTimeout(() => {
-            expect(actualNode.find("Toast").html()).toEqual(expectedAlert.html());
-            done();
-        }, 2600);
     });
 
 });

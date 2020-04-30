@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { addCue, setSaveTrack, updateEditingCueIndex } from "./cues/cueSlices";
+import { addCue, updateEditingCueIndex, setSaveTrack } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -10,10 +10,8 @@ import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
-import { Toast } from "react-bootstrap";
 import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
-import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
 import { TooltipWrapper } from "./TooltipWrapper";
 
@@ -44,19 +42,10 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         : cues;
     const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
 
-    const [showAutoSaveAlert, setShowAutoSaveAlert] = useState(false);
-    const autoSaveSuccess = useSelector((state: SubtitleEditState) => state.autoSaveSuccess);
-
-    useEffect(
-        () => {
-            setShowAutoSaveAlert(autoSaveSuccess);
-        }, [autoSaveSuccess]
-    );
-
     useEffect(
         () => {
             dispatch(setSaveTrack(props.onSave));
-        }, [dispatch, props.onSave]
+        }, [ dispatch, props.onSave ]
     );
 
     return (
@@ -67,10 +56,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             <SubtitleEditHeader />
             {
                 !hasDataLoaded(editingTrack, loadingIndicator) ?
-                    <div style={{
-                        display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white"
-                    }}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white" }}
                     >
                         <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
                             <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
@@ -167,14 +154,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
                                 <span style={{ flexGrow: 2 }} />
                                 <button
-                                    className="btn btn-primary sbte-save-subtitle-btn"
-                                    type="button"
-                                    onClick={(): void => props.onSave()}
-                                    style={{ marginRight: "10px" }}
-                                >
-                                    Save
-                                </button>
-                                <button
                                     className="btn btn-primary sbte-complete-subtitle-btn"
                                     type="button"
                                     onClick={(): void => props.onComplete()}
@@ -185,21 +164,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </div>
                     </div>
             }
-
-            <div style={{ position: "absolute", left: "45%", top: "1%" }}>
-                <Toast
-                    onClose={(): void => {
-                        setShowAutoSaveAlert(false);
-                        dispatch(setAutoSaveSuccess(false));
-                    }}
-                    show={showAutoSaveAlert}
-                    delay={2000}
-                    autohide
-                    className="sbte-alert"
-                >
-                    <i className="fa fa-thumbs-up" /> Saved
-                </Toast>
-            </div>
         </div>
     );
 };
