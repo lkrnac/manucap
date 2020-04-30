@@ -9,7 +9,8 @@ import SubtitleEditHeader from "./SubtitleEditHeader";
 import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateCues } from "./cues/cueSlices";
+import { callSaveTrack, updateCues } from "./cues/cueSlices";
+import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 
 let testingStore = createTestingStore();
 
@@ -38,7 +39,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>2 minutes 5 seconds</i></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div>Completed: <b>0%</b></div>
@@ -81,7 +88,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span> <i /></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div />
@@ -122,7 +135,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Direct Translation <span> to <b>Italian</b></span> <i /></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div />
@@ -163,7 +182,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Review of <b>English (US)</b> Caption <i /></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div />
@@ -205,7 +230,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Review of <span><b>English (US)</b> to <b>Italian</b></span> Translation <i /></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div />
@@ -235,7 +266,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b /> <i /></div>
                     <div />
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div />
                     <div />
@@ -269,7 +306,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i /></div>
                     <div />
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div />
                     <div />
@@ -315,7 +358,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>2 minutes</i></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div>Completed: <b>50%</b></div>
@@ -363,7 +412,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i /></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div>Completed: <b>0%</b></div>
@@ -407,7 +462,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>2 minutes</i></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div>Completed: <b>0%</b></div>
@@ -451,7 +512,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>1 hour 2 minutes 10 seconds</i></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div>Completed: <b>0%</b></div>
@@ -495,7 +562,13 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>2 minutes 3 seconds</i></div>
                 </div>
-                <div style={{ flex: "2" }} />
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                    </div>
+                </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                     <div>Completed: <b>0%</b></div>
@@ -512,6 +585,162 @@ describe("SubtitleEditHeader", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders save status label when save is called", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            mediaLength: 123456,
+            progress: 0
+        } as Track;
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 3 seconds</i></div>
+                </div>
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                        Saving changes ...
+                    </div>
+                </div>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Completed: <b>0%</b></div>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders save status label when save is successful", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            mediaLength: 123456,
+            progress: 0
+        } as Track;
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 3 seconds</i></div>
+                </div>
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                        All changes saved to server
+                    </div>
+                </div>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Completed: <b>0%</b></div>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders save status label when save fails", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            mediaLength: 123456,
+            progress: 0
+        } as Track;
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM"
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 3 seconds</i></div>
+                </div>
+                <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                    <div
+                        style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+                        className="sbte-light-gray-text"
+                    >
+                        Error saving latest changes
+                    </div>
+                </div>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Completed: <b>0%</b></div>
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
 
         // THEN
         expect(removeVideoPlayerDynamicValue(actualNode.html()))
