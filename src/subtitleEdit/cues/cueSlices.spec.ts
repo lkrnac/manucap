@@ -709,6 +709,43 @@ describe("cueSlices", () => {
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
+        it("doesn't add cue in middle of cue array cues if there's overlap", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues( [
+                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(addCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().validationError).toEqual(true);
+        });
+
+        it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues( [
+                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+            testingStore.dispatch(addCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(3);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().validationError).toEqual(false);
+        });
+
         it("resets editor states map in Redux", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);

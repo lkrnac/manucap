@@ -223,10 +223,13 @@ export const addCue = (idx: number): AppThunk =>
         const previousCue = cues[idx - 1] || Constants.DEFAULT_CUE;
         const sourceCue = state.sourceCues[idx];
         const cue = createAndAddCue(previousCue, step, sourceCue);
+        const overlapCaptionsAllowed = getState().overlapCaptions;
 
-        const followingCue = cues[idx];
-        applyOverlapPreventionStart(cue.vttCue, previousCue);
-        applyOverlapPreventionEnd(cue.vttCue, followingCue);
+        if (!overlapCaptionsAllowed) {
+            const followingCue = cues[idx];
+            applyOverlapPreventionStart(cue.vttCue, previousCue);
+            applyOverlapPreventionEnd(cue.vttCue, followingCue);
+        }
         const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
 
         if (validCueDuration) {
