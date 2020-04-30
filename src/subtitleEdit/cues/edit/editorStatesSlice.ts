@@ -1,4 +1,4 @@
-import { CueIndexAction, cuesSlice, validationErrorSlice } from "../cueSlices";
+import { CueIndexAction, cuesSlice, saveTrackSlice, validationErrorSlice } from "../cueSlices";
 import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
@@ -46,6 +46,17 @@ export const autoSaveSuccessSlice = createSlice({
     initialState: false,
     reducers: {
         setAutoSaveSuccess: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    }
+});
+
+export const saveStatusSlice = createSlice({
+    name: "saveStatus",
+    initialState: "",
+    reducers: {},
+    extraReducers: {
+        [saveTrackSlice.actions.call.type]: (): string => "Saving changes ...",
+        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
+            action.payload ? "All changes saved to server" : "Error saving latest changes"
     }
 });
 

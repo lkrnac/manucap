@@ -12,7 +12,7 @@ import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
 import {
     autoSaveSuccessSlice,
-    editorStatesSlice
+    editorStatesSlice, saveStatusSlice
 } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
@@ -30,7 +30,8 @@ export const Reducers = {
     validationError: validationErrorSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
-    overlapCaptions: overlapCaptionsSlice.reducer
+    overlapCaptions: overlapCaptionsSlice.reducer,
+    saveStatus: saveStatusSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

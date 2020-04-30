@@ -10,10 +10,8 @@ import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { scrollToElement } from "./cues/cueUtils";
-import { Toast } from "react-bootstrap";
 import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
-import { setAutoSaveSuccess } from "./cues/edit/editorStatesSlice";
 import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
@@ -42,15 +40,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         ? sourceCues
         : cues;
     const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
-
-    const [showAutoSaveAlert, setShowAutoSaveAlert] = useState(false);
-    const autoSaveSuccess = useSelector((state: SubtitleEditState) => state.autoSaveSuccess);
-
-    useEffect(
-        () => {
-            setShowAutoSaveAlert(autoSaveSuccess);
-        }, [ autoSaveSuccess ]
-    );
 
     useEffect(
         () => {
@@ -152,14 +141,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
                                 <span style={{ flexGrow: 2 }} />
                                 <button
-                                    className="btn btn-primary sbte-save-subtitle-btn"
-                                    type="button"
-                                    onClick={(): void => props.onSave()}
-                                    style={{ marginRight: "10px" }}
-                                >
-                                    Save
-                                </button>
-                                <button
                                     className="btn btn-primary sbte-complete-subtitle-btn"
                                     type="button"
                                     onClick={(): void => props.onComplete()}
@@ -170,21 +151,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </div>
                     </div>
             }
-
-            <div style={{ position: "absolute", left: "45%", top: "1%" }}>
-                <Toast
-                    onClose={(): void => {
-                        setShowAutoSaveAlert(false);
-                        dispatch(setAutoSaveSuccess(false));
-                    }}
-                    show={showAutoSaveAlert}
-                    delay={2000}
-                    autohide
-                    className="sbte-alert"
-                >
-                    <i className="fa fa-thumbs-up" /> Saved
-                </Toast>
-            </div>
         </div>
     );
 };
