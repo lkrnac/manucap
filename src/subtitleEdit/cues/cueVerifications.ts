@@ -61,19 +61,26 @@ const overlapOk = (vttCue: VTTCue, previousCue: CueDto, followingCue: CueDto): b
     startOverlapOk(vttCue, previousCue) && endOverlapOk(vttCue, followingCue);
 
 const conformToRules = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null,
-                        previousCue: CueDto, followingCue: CueDto): boolean =>
+                        previousCue: CueDto, followingCue: CueDto, overlapCaptions: boolean): boolean =>
     checkCharacterLimitation(vttCue.text, subtitleSpecification)
     && rangeOk(vttCue, subtitleSpecification)
-    && overlapOk(vttCue, previousCue, followingCue);
+    && (overlapCaptions || overlapOk(vttCue, previousCue, followingCue));
 
 export const markCuesBreakingRules =
-    (cues: CueDto[], subtitleSpecifications: SubtitleSpecification | null): CueDto [] =>
+    (cues: CueDto[], subtitleSpecifications: SubtitleSpecification | null,
+     overlapCaptions: boolean | undefined): CueDto [] =>
         cues.map((cue, index) => {
             const previousCue = cues[index - 1];
             const followingCue = cues[index + 1];
             return {
                 ...cue,
-                corrupted: !conformToRules(cue.vttCue, subtitleSpecifications, previousCue, followingCue)
+                corrupted: !conformToRules(
+                    cue.vttCue,
+                    subtitleSpecifications,
+                    previousCue,
+                    followingCue,
+                    overlapCaptions || false
+                )
             };
         });
 
