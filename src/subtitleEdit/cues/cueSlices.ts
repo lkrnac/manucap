@@ -148,7 +148,7 @@ export const validationErrorSlice = createSlice({
     }
 });
 
-const DEBOUNCE_TIMEOUT = 500;
+const DEBOUNCE_TIMEOUT = 2500;
 
 export const saveTrackSlice = createSlice({
     name: "saveTrack",
