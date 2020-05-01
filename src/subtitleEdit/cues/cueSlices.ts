@@ -148,6 +148,14 @@ export const validationErrorSlice = createSlice({
     }
 });
 
+export const autoSaveSuccessSlice = createSlice({
+    name: "autoSaveSuccess",
+    initialState: false,
+    reducers: {
+        setAutoSaveSuccess: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    }
+});
+
 const DEBOUNCE_TIMEOUT = 2500;
 
 export const saveTrackSlice = createSlice({
@@ -164,6 +172,8 @@ export const saveTrackSlice = createSlice({
         [cuesSlice.actions.applyShiftTime.type]: (state): void => state ? state() : null,
         [cuesSlice.actions.updateCueCategory.type]: (state): void => state ? state() : null,
         [cuesSlice.actions.deleteCue.type]: (state): void => state ? state() : null,
+        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (state, action: PayloadAction<boolean>): void =>
+            (!action.payload && state) ? state() : null
     }
 });
 
@@ -258,6 +268,11 @@ export const setValidationError = (error: boolean): AppThunk =>
 export const setSaveTrack = (saveTrack: Function): AppThunk =>
     (dispatch: Dispatch<PayloadAction<Function>>): void => {
         dispatch(saveTrackSlice.actions.set(saveTrack));
+    };
+
+export const setAutoSaveSuccess = (success: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
+        dispatch(autoSaveSuccessSlice.actions.setAutoSaveSuccess(success));
     };
 
 export const callSaveTrack = (): AppThunk =>

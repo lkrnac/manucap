@@ -1,5 +1,6 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
 import {
+    autoSaveSuccessSlice,
     cuesSlice,
     editingCueIndexSlice,
     saveTrackSlice,
@@ -10,7 +11,6 @@ import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
 import {
-    autoSaveSuccessSlice,
     editorStatesSlice, saveStatusSlice
 } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";

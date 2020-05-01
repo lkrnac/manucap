@@ -1,4 +1,4 @@
-import { CueIndexAction, cuesSlice, saveTrackSlice, validationErrorSlice } from "../cueSlices";
+import { autoSaveSuccessSlice, CueIndexAction, cuesSlice, saveTrackSlice, validationErrorSlice } from "../cueSlices";
 import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
@@ -41,14 +41,6 @@ export const editorStatesSlice: Slice<
 });
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-export const autoSaveSuccessSlice = createSlice({
-    name: "autoSaveSuccessSlice",
-    initialState: false,
-    reducers: {
-        setAutoSaveSuccess: (_state, action: PayloadAction<boolean>): boolean => action.payload
-    }
-});
-
 export const saveStatusSlice = createSlice({
     name: "saveStatus",
     initialState: "",
@@ -87,8 +79,3 @@ export const updateEditorState = (editorId: number, newEditorState: EditorState)
 
 export const reset = (): AppThunk => (dispatch: Dispatch<PayloadAction<undefined>>): void =>
     dispatch(editorStatesSlice.actions.reset());
-
-export const setAutoSaveSuccess = (success: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
-        dispatch(autoSaveSuccessSlice.actions.setAutoSaveSuccess(success));
-    };
