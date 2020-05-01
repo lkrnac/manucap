@@ -172,8 +172,11 @@ export const saveTrackSlice = createSlice({
         [cuesSlice.actions.applyShiftTime.type]: (state): void => state ? state() : null,
         [cuesSlice.actions.updateCueCategory.type]: (state): void => state ? state() : null,
         [cuesSlice.actions.deleteCue.type]: (state): void => state ? state() : null,
-        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (state, action: PayloadAction<boolean>): void =>
-            (!action.payload && state) ? state() : null
+        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (state, action: PayloadAction<boolean>): void => {
+            if (!action.payload && state) {
+                state();
+            }
+        }
     }
 });
 
