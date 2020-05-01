@@ -164,7 +164,7 @@ export const saveTrackSlice = createSlice({
     reducers: {
         set: (_state, action: PayloadAction<Function>): void => {
             // @ts-ignore debounce expects any type
-            return debounce(action.payload, DEBOUNCE_TIMEOUT);
+            return debounce(action.payload, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
         },
         call: (state): void => state ? state() : null,
     },
