@@ -276,6 +276,9 @@ export const setAutoSaveSuccess = (success: boolean): AppThunk =>
     };
 
 export const callSaveTrack = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<void>>): void => {
-        dispatch(saveTrackSlice.actions.call());
+    (dispatch: Dispatch<PayloadAction<void>>, getState): void => {
+        const saveStatus = getState().saveStatus;
+        if (saveStatus !== "Saving changes ...") {
+            dispatch(saveTrackSlice.actions.call());
+        }
     };
