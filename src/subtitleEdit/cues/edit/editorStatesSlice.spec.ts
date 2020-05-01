@@ -2,11 +2,11 @@ import "video.js"; // VTTCue definition
 import { ContentState, EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
-import { setAutoSaveSuccess, updateEditorState } from "./editorStatesSlice";
+import { updateEditorState } from "./editorStatesSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { callSaveTrack } from "../cueSlices";
+import { callSaveTrack, setAutoSaveSuccess } from "../cueSlices";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -85,23 +85,6 @@ describe("editorStatesSlice", () => {
             .toEqual("changed editor1 \n\n text");
         expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
         expect(testingStore.getState().validationError).toEqual(false);
-    });
-});
-
-describe("autoSaveSuccessSlice", () => {
-    it("sets the autoSave success flag to false", () => {
-        // WHEN
-        testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().autoSaveSuccess).toEqual(false);
-    });
-    it("sets the autoSave success flag to true", () => {
-        // WHEN
-        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().autoSaveSuccess).toEqual(true);
     });
 });
 

@@ -16,6 +16,9 @@ import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 let testingStore = createTestingStore();
 
@@ -884,9 +887,13 @@ describe("SubtitleEdit", () => {
         expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
     });
 
-    it("calls onSave callback on auto save", (done) => {
+    it("calls onSave callback on auto save", () => {
         // GIVEN
         const mockOnSave = jest.fn();
+        // @ts-ignore
+        _.debounce.mockImplementation((saveCallback) => {
+            saveCallback();
+        });
         mount(
             <Provider store={testingStore} >
                 <SubtitleEdit
@@ -903,10 +910,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
         // THEN
-        setTimeout(() => {
-            expect(mockOnSave.mock.calls.length).toBe(1);
-            done();
-        }, 600);
+        expect(mockOnSave.mock.calls.length).toBe(1);
     });
 
 });

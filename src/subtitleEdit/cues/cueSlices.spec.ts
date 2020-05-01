@@ -10,7 +10,7 @@ import {
     updateCues,
     updateEditingCueIndex,
     updateSourceCues,
-    updateVttCue
+    updateVttCue, setAutoSaveSuccess
 } from "./cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../model";
@@ -21,6 +21,9 @@ import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import { resetEditingTrack } from "../trackSlices";
+import _ from "lodash";
+
+jest.mock("lodash");
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -956,31 +959,55 @@ describe("cueSlices", () => {
     });
 
     describe("saveTrack", () => {
-        it("sets saveTrack", () => {
+        it("calls saveTrack", () => {
             // GIVEN
             const saveTrack = jest.fn();
-            expect(testingStore.getState().saveTrack).toBeNull();
-
-            // WHEN
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().saveTrack).not.toBeNull();
-        });
-
-        it("calls saveTrack", (done) => {
-            // GIVEN
-            const saveTrack = jest.fn();
+            // @ts-ignore
+            _.debounce.mockImplementation((saveCallback) => {
+                saveCallback();
+            });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            jest.advanceTimersToNextTimer();
 
             // THEN
-            setTimeout(() => {
-                expect(saveTrack).toBeCalled();
-                done();
-            }, 600);
+            expect(saveTrack).toBeCalled();
+        });
+
+        it("doesn't calls saveTrack if there's a pending call", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            // @ts-ignore
+            _.debounce.mockImplementation((saveCallback) => {
+                saveCallback();
+            });
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+
+            // THEN
+            expect(saveTrack).toBeCalledTimes(1);
+        });
+    });
+
+    describe("autoSaveSuccessSlice", () => {
+        it("sets the autoSave success flag to false", () => {
+            // WHEN
+            testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().autoSaveSuccess).toEqual(false);
+        });
+        it("sets the autoSave success flag to true", () => {
+            // WHEN
+            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().autoSaveSuccess).toEqual(true);
         });
     });
 
