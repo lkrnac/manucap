@@ -47,6 +47,9 @@ export const saveStatusSlice = createSlice({
     reducers: {},
     extraReducers: {
         [saveTrackSlice.actions.call.type]: (): string => "Saving changes ...",
+        [cuesSlice.actions.applyShiftTime.type]: (): string => "Saving changes ...",
+        [cuesSlice.actions.updateCueCategory.type]: (): string => "Saving changes ...",
+        [cuesSlice.actions.deleteCue.type]: (): string => "Saving changes ...",
         [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
             action.payload ? "All changes saved to server" : "Error saving latest changes"
     }
