@@ -1,5 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
-import { ContentState, EditorState, convertFromHTML } from "draft-js";
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import InlineStyleButton from "./InlineStyleButton";
 import { Provider } from "react-redux";
@@ -9,6 +9,7 @@ import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
 import { setSaveTrack } from "../cueSlices";
 import _ from "lodash";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 /**
  * On click actions are covered by CueTextEditor tests
@@ -145,5 +146,26 @@ describe("InlineStyleButton", () => {
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
+    });
+
+    it("renders overlay with text provided to InlineStyleButton", () => {
+        //GIVEN
+        const expectedText = "BOLD";
+        const expectedToolTipId = "BOLD0";
+
+        //WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <InlineStyleButton
+                    editorIndex={0}
+                    inlineStyle={expectedText}
+                    label={<b>B</b>}
+                />
+            </Provider>
+        );
+
+        //THEN
+        expect(actualNode.find(TooltipWrapper).props().text).toEqual(expectedText);
+        expect(actualNode.find(TooltipWrapper).props().tooltipId).toEqual(expectedToolTipId);
     });
 });

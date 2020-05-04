@@ -13,6 +13,7 @@ import { scrollToElement } from "./cues/cueUtils";
 import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
+import { TooltipWrapper } from "./TooltipWrapper";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -122,22 +123,34 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 >
                                     View All Tracks
                                 </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-first-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => scrollToElement(cuesRef.current.children[0])}
+                                <TooltipWrapper
+                                    tooltipId="scrollToTopBtnTooltip"
+                                    text="Scroll to top"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-up" />
-                                </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-last-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                        style={{ marginLeft: "10px" }}
+                                        onClick={(): void => scrollToElement(cuesRef.current.children[0])}
+                                    >
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
+                                </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="scrollToBottomTooltip"
+                                    text="Scroll to bottom"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-down" />
-                                </button>
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                        style={{ marginLeft: "10px" }}
+                                        onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
+                                    >
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
+                                </TooltipWrapper>
 
                                 <span style={{ flexGrow: 2 }} />
                                 <button
