@@ -457,7 +457,8 @@ describe("VideoPlayer tested with fake player", () => {
 
         // WHEN
         simulateComponentDidUpdate(actualNode, {});
-        //@ts-ignore @types/video.js is missing this function rom video.js signature
+        // @ts-ignore @types/video.js is missing this function rom video.js signature check
+        // https://www.npmjs.com/package/@types/video.js for updates
         playerMock.handleKeyDown(handleKeyDownMock);
 
         // THEN
