@@ -336,37 +336,37 @@ describe("CueTextEditor", () => {
         [KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, false, true, true, false],
         [KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, false, true, false, true],
     ])
-    .it("should handle '%s' keyboard shortcut", (
-        expectedKeyCombination: KeyCombination,
-        character: Character, metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
-    ) => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        mousetrapSpy.mockReset();
-        const editor = createEditorNode();
+        .it("should handle '%s' keyboard shortcut", (
+            expectedKeyCombination: KeyCombination,
+            character: Character, metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
+        ) => {
+            // GIVEN
+            const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+            mousetrapSpy.mockReset();
+            const editor = createEditorNode();
 
-        // WHEN
-        editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+            // WHEN
+            editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
 
-        // THEN
-        expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
-    });
+            // THEN
+            expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
+        });
 
     each([
         [KeyCombination.ENTER, Character.ENTER],
         [KeyCombination.ESCAPE, Character.ESCAPE],
     ])
-    .it("should handle '%s' keyboard shortcut", (expectedKeyCombination: KeyCombination, character: Character) => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        const editor = createEditorNode();
+        .it("should handle '%s' keyboard shortcut", (expectedKeyCombination: KeyCombination, character: Character) => {
+            // GIVEN
+            const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+            const editor = createEditorNode();
 
-        // WHEN
-        editor.simulate("keyDown", { keyCode: character });
+            // WHEN
+            editor.simulate("keyDown", { keyCode: character });
 
-        // THEN
-        expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
-    });
+            // THEN
+            expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
+        });
 
     each([
         [KeyCombination.ESCAPE, Character.ESCAPE, true, false, false, false],
@@ -378,21 +378,21 @@ describe("CueTextEditor", () => {
         [KeyCombination.ENTER, Character.ENTER, false, false, true, false],
         [KeyCombination.ENTER, Character.ENTER, false, false, false, true],
     ])
-    .it("doesn't handle '%s' keypress if modifier keys are pressed", (
-        _expectedKeyCombination: KeyCombination, character: Character,
-        metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
-    ) => {
-        // GIVEN
-        const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-        mousetrapSpy.mockReset();
-        const editor = createEditorNode();
+        .it("doesn't handle '%s' keypress if modifier keys are pressed", (
+            _expectedKeyCombination: KeyCombination, character: Character,
+            metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
+        ) => {
+            // GIVEN
+            const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+            mousetrapSpy.mockReset();
+            const editor = createEditorNode();
 
-        // WHEN
-        editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+            // WHEN
+            editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
 
-        // THEN
-        expect(mousetrapSpy).not.toBeCalled();
-    });
+            // THEN
+            expect(mousetrapSpy).not.toBeCalled();
+        });
 
     it("should handle unbound key shortcuts", () => {
         // GIVEN

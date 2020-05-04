@@ -1,3 +1,4 @@
+import { os } from "platform";
 
 export enum Character {
     O_CHAR = 79,
@@ -31,3 +32,8 @@ export enum KeyCombination {
     MOD_SHIFT_ESCAPE = "mod+shift+escape",
     ALT_SHIFT_ESCAPE = "alt+shift+escape",
 }
+
+export const getShortcutAsText = (char: string): string => {
+    const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
+    return commandKey + "/Alt + Shift + " + char;
+};
