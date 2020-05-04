@@ -978,7 +978,7 @@ describe("cueSlices", () => {
             expect(saveTrack).toHaveBeenCalledTimes(1);
         });
 
-        it("doesn't calls saveTrack again if there's a pending call", () => {
+        it("doesn't call saveTrack again if there's a pending call", () => {
             // WHEN
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
