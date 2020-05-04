@@ -11,8 +11,8 @@ interface Props {
 const PositionButton = (props: Props): ReactElement => (
     <Dropdown style={{ marginBottom: "5px", marginRight: "10px" }}>
         <TooltipWrapper
-            tooltipId="postionBtnTooltip"
-            text="Set where to set the subtitle line on the video screen"
+            tooltipId="positionBtnTooltip"
+            text="Set the position of this subtitle"
             placement="top"
         >
             <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">

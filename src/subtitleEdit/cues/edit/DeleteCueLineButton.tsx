@@ -15,7 +15,7 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
         <>
             <TooltipWrapper
                 tooltipId="deleteBtnTooltip"
-                text="Delete this subtitle line"
+                text="Delete this subtitle"
                 placement="left"
             >
                 <button

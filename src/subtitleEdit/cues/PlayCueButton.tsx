@@ -16,7 +16,7 @@ const PlayCueButton = (props: Props): ReactElement => {
     return (
         <TooltipWrapper
             tooltipId="playBtnTooltip"
-            text={`Play current subtitle line (Type: ${shortcutText})`}
+            text={`Play this subtitle (${shortcutText})`}
             placement="left"
         >
             <button
