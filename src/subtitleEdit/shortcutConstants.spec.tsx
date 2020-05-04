@@ -27,17 +27,20 @@ describe("shortcutConstants.spec", () => {
 
     describe("getActionByKeyboardEvent", () => {
 
-        it("gets action from getActionByKeyboardEvent", () => {
-            //GIVEN
-            const event = { shiftKey: true, metaKey: true, keyCode: Character.O_CHAR };
+        test.each(Object.values(Character))(
+            "gets action from getActionByKeyboardEvent when the input is %s",
+            (char: Character | string) => {
+                //GIVEN
+                const event = { shiftKey: true, metaKey: true, keyCode: char };
 
-            //WHEN
-            //@ts-ignore since KB event is created manually
-            const action = getActionByKeyboardEvent(event);
+                //WHEN
+                //@ts-ignore since KB event is created manually
+                const action = getActionByKeyboardEvent(event);
 
-            //THEN
-            expect(action).toEqual("togglePlayPause");
-        });
+                //THEN
+                //@ts-ignore since char can be string because we use object.values as iteration over the enum Character
+                expect(action).toEqual(characterBindings.get(char));
+            });
 
         it("returns undefined if one of the action keys is not clicked", () => {
             //GIVEN
@@ -84,7 +87,8 @@ describe("shortcutConstants.spec", () => {
                 triggerMouseTrapAction(event);
 
                 //THEN
-                expect(mouseTrapTriggerSpy).toBeCalled;            },
+                expect(mouseTrapTriggerSpy).toBeCalled;
+            },
         );
 
         it("does not trigger mousetrap action if one of the action keys is not clicked", () => {
