@@ -9,8 +9,7 @@ import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateCues, setSaveTrack } from "../cueSlices";
 import _ from "lodash";
-
-jest.mock("lodash");
+import sinon from "sinon";
 
 describe("DeleteCueLineButton", () => {
     it("renders", () => {
@@ -60,12 +59,11 @@ describe("DeleteCueLineButton", () => {
 
     it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
-        const mockSave = jest.fn();
+        const saveTrack = sinon.spy();
         // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const cues = [
             { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
@@ -81,6 +79,6 @@ describe("DeleteCueLineButton", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        expect(mockSave).toBeCalled();
+        sinon.assert.calledOnce(saveTrack);
     });
 });

@@ -17,8 +17,7 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSl
 import { CueDto } from "../../model";
 import { setSaveTrack, updateCues } from "../cueSlices";
 import _ from "lodash";
-
-jest.mock("lodash");
+import sinon from "sinon";
 
 let testingStore = createTestingStore();
 
@@ -150,11 +149,11 @@ const testForContentState = (
 };
 
 describe("CueTextEditor", () => {
+    const saveTrack = sinon.spy();
+
     beforeAll(() => {
         // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
+        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
     });
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -208,8 +207,9 @@ describe("CueTextEditor", () => {
 
     it("calls saveTrack in redux store when changed", () => {
         // GIVEN
-        const mockSave = jest.fn();
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        saveTrack.resetHistory();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const editor = createEditorNode();
 
         // WHEN
@@ -221,11 +221,14 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(mockSave).toBeCalled();
+        sinon.assert.calledOnce(saveTrack);
     });
 
     it("doesn't trigger autosave when user selects text", () => {
         // GIVEN
+        saveTrack.resetHistory();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -245,15 +248,12 @@ describe("CueTextEditor", () => {
         const selectionState = editorState.getSelection();
 
         // WHEN
-        const mockSave = jest.fn();
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
-
         // select first 5 characters
         const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
         // THEN
-        expect(mockSave).toBeCalledTimes(1); // it is called once on set
+        sinon.assert.calledOnce(saveTrack); // called on paste, not on select
     });
 
     /**

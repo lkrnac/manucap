@@ -11,8 +11,6 @@ import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
 import _ from "lodash";
 
-jest.mock("lodash");
-
 const testCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -192,13 +190,12 @@ describe("ShiftTimesModal", () => {
 
     it("calls saveTrack in redux store when shift value", () => {
         // // GIVEN
-        const mockSave = jest.fn();
+        const saveTrack = sinon.spy();
         // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <ShiftTimesModal show onClose={jest.fn()} />
@@ -210,6 +207,6 @@ describe("ShiftTimesModal", () => {
         actualNode.find("form").simulate("submit");
 
         // THEN
-        expect(mockSave).toBeCalled();
+        sinon.assert.calledOnce(saveTrack);
     });
 });

@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateCues, updateSourceCues, callSaveTrack } from "./cues/cueSlices";
+import { updateCues, updateSourceCues, callSaveTrack, setSaveTrack } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -17,8 +17,7 @@ import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice"
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import _ from "lodash";
-
-jest.mock("lodash");
+import sinon from "sinon";
 
 let testingStore = createTestingStore();
 
@@ -889,18 +888,18 @@ describe("SubtitleEdit", () => {
 
     it("calls onSave callback on auto save", () => {
         // GIVEN
-        const mockOnSave = jest.fn();
+        const saveTrack = sinon.spy();
         // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
+        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         mount(
             <Provider store={testingStore} >
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewAllTracks={(): void => undefined}
-                    onSave={mockOnSave}
+                    onSave={saveTrack}
                     onComplete={(): void => undefined}
                 />
             </Provider>
@@ -910,7 +909,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
         // THEN
-        expect(mockOnSave.mock.calls.length).toBe(1);
+        sinon.assert.calledOnce(saveTrack);
     });
 
 });

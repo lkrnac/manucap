@@ -21,9 +21,8 @@ import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import { resetEditingTrack } from "../trackSlices";
+import sinon from "sinon";
 import _ from "lodash";
-
-jest.mock("lodash");
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -959,38 +958,43 @@ describe("cueSlices", () => {
     });
 
     describe("saveTrack", () => {
-        it("calls saveTrack", () => {
-            // GIVEN
-            const saveTrack = jest.fn();
+        const saveTrack = sinon.spy();
+
+        beforeAll(() => {
             // @ts-ignore
-            _.debounce.mockImplementation((saveCallback) => {
-                saveCallback();
-            });
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-            jest.advanceTimersToNextTimer();
-
-            // THEN
-            expect(saveTrack).toBeCalled();
+            sinon.stub(_, "debounce").returns(() => { saveTrack(); });
         });
 
-        it("doesn't calls saveTrack if there's a pending call", () => {
+        beforeEach(() => {
             // GIVEN
-            const saveTrack = jest.fn();
-            // @ts-ignore
-            _.debounce.mockImplementation((saveCallback) => {
-                saveCallback();
-            });
+            saveTrack.resetHistory();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        });
 
+        it("calls saveTrack", () => {
+            // WHEN
+            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+
+            // THEN
+            sinon.assert.calledOnce(saveTrack);
+        });
+
+        it("doesn't calls saveTrack again if there's a pending call", () => {
             // WHEN
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             // THEN
-            expect(saveTrack).toBeCalledTimes(1);
+            sinon.assert.calledOnce(saveTrack);
+        });
+
+        it("calls saveTrack if previous call failed", () => {
+            // WHEN
+            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
+
+            // THEN
+            sinon.assert.calledTwice(saveTrack);
         });
     });
 
