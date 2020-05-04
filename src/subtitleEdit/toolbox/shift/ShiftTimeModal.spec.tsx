@@ -190,9 +190,9 @@ describe("ShiftTimesModal", () => {
 
     it("calls saveTrack in redux store when shift value", () => {
         // // GIVEN
-        const saveTrack = sinon.spy();
+        const saveTrack = jest.fn();
         // @ts-ignore
-        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
 
@@ -207,6 +207,6 @@ describe("ShiftTimesModal", () => {
         actualNode.find("form").simulate("submit");
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 });

@@ -13,7 +13,6 @@ import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import testingStore from "../../testUtils/testingStore";
 import { updateCues, setSaveTrack } from "./cueSlices";
 import _ from "lodash";
-import sinon from "sinon";
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -250,9 +249,9 @@ describe("CueActionsPanel", () => {
 
     it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
-        const saveTrack = sinon.spy();
+        const saveTrack = jest.fn();
         // @ts-ignore
-        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const actualNode = mount(
@@ -265,7 +264,7 @@ describe("CueActionsPanel", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("doesn't propagate click event to parent DOM nodes", () => {

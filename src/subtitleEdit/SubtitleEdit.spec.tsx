@@ -17,7 +17,6 @@ import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice"
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import _ from "lodash";
-import sinon from "sinon";
 
 let testingStore = createTestingStore();
 
@@ -888,9 +887,9 @@ describe("SubtitleEdit", () => {
 
     it("calls onSave callback on auto save", () => {
         // GIVEN
-        const saveTrack = sinon.spy();
+        const saveTrack = jest.fn();
         // @ts-ignore
-        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         mount(
@@ -909,7 +908,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
 });

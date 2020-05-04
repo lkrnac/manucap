@@ -20,7 +20,6 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSl
 import { updateEditingTrack } from "../../trackSlices";
 import SubtitleEdit from "../../SubtitleEdit";
 import _ from "lodash";
-import sinon from "sinon";
 
 let testingStore = createTestingStore();
 
@@ -37,11 +36,11 @@ const cues = [
 ];
 
 describe("CueEdit", () => {
-    const saveTrack = sinon.spy();
+    const saveTrack = jest.fn();
 
     beforeAll(() => {
         // @ts-ignore
-        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
     });
 
     beforeEach(() => {
@@ -227,7 +226,7 @@ describe("CueEdit", () => {
 
     it("calls saveTrack in redux store when start time changes", () => {
         // GIVEN
-        saveTrack.resetHistory();
+        saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const actualNode = mount(
@@ -241,7 +240,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("updates cue in redux store when end time changed", () => {
@@ -262,7 +261,7 @@ describe("CueEdit", () => {
 
     it("calls saveTrack in redux store when end time changes", () => {
         // GIVEN
-        saveTrack.resetHistory();
+        saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const actualNode = mount(
@@ -276,7 +275,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("maintains cue styling when start time changes", () => {
@@ -343,7 +342,7 @@ describe("CueEdit", () => {
 
     it("calls saveTrack in redux store when cue position changes", () => {
         // GIVEN
-        saveTrack.resetHistory();
+        saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "someText");
@@ -358,7 +357,7 @@ describe("CueEdit", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column5);
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("updates line category", () => {
@@ -381,7 +380,7 @@ describe("CueEdit", () => {
 
     it("calls saveTrack in redux store when line category changes", () => {
         // GIVEN
-        saveTrack.resetHistory();
+        saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "someText");
@@ -397,7 +396,7 @@ describe("CueEdit", () => {
         actualNode.find("a.dropdown-item").at(1).simulate("click");
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("passes down current line category", () => {

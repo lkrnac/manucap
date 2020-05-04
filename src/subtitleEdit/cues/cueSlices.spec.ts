@@ -21,7 +21,6 @@ import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import { resetEditingTrack } from "../trackSlices";
-import sinon from "sinon";
 import _ from "lodash";
 
 const testingCues = [
@@ -958,16 +957,16 @@ describe("cueSlices", () => {
     });
 
     describe("saveTrack", () => {
-        const saveTrack = sinon.spy();
+        const saveTrack = jest.fn();
 
         beforeAll(() => {
             // @ts-ignore
-            sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+            jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         });
 
         beforeEach(() => {
             // GIVEN
-            saveTrack.resetHistory();
+            saveTrack.mockReset();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         });
 
@@ -976,7 +975,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             // THEN
-            sinon.assert.calledOnce(saveTrack);
+            expect(saveTrack).toHaveBeenCalledTimes(1);
         });
 
         it("doesn't calls saveTrack again if there's a pending call", () => {
@@ -985,7 +984,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             // THEN
-            sinon.assert.calledOnce(saveTrack);
+            expect(saveTrack).toHaveBeenCalledTimes(1);
         });
 
         it("calls saveTrack if previous call failed", () => {
@@ -994,7 +993,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
 
             // THEN
-            sinon.assert.calledTwice(saveTrack);
+            expect(saveTrack).toHaveBeenCalledTimes(2);
         });
     });
 

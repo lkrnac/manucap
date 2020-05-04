@@ -17,7 +17,6 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSl
 import { CueDto } from "../../model";
 import { setSaveTrack, updateCues } from "../cueSlices";
 import _ from "lodash";
-import sinon from "sinon";
 
 let testingStore = createTestingStore();
 
@@ -149,11 +148,11 @@ const testForContentState = (
 };
 
 describe("CueTextEditor", () => {
-    const saveTrack = sinon.spy();
+    const saveTrack = jest.fn();
 
     beforeAll(() => {
         // @ts-ignore
-        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
     });
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -207,7 +206,7 @@ describe("CueTextEditor", () => {
 
     it("calls saveTrack in redux store when changed", () => {
         // GIVEN
-        saveTrack.resetHistory();
+        saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const editor = createEditorNode();
@@ -221,12 +220,12 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("doesn't trigger autosave when user selects text", () => {
         // GIVEN
-        saveTrack.resetHistory();
+        saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
@@ -253,7 +252,7 @@ describe("CueTextEditor", () => {
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
         // THEN
-        sinon.assert.calledOnce(saveTrack); // called on paste, not on select
+        expect(saveTrack).toHaveBeenCalledTimes(1); // called on paste, not on select
     });
 
     /**

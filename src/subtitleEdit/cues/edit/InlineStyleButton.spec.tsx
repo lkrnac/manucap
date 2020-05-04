@@ -9,7 +9,6 @@ import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
 import { setSaveTrack } from "../cueSlices";
 import _ from "lodash";
-import sinon from "sinon";
 
 /**
  * On click actions are covered by CueTextEditor tests
@@ -130,9 +129,9 @@ describe("InlineStyleButton", () => {
 
         testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
-        const saveTrack = sinon.spy();
+        const saveTrack = jest.fn();
         // @ts-ignore
-        sinon.stub(_, "debounce").returns(() => { saveTrack(); });
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const actualNode = mount(
@@ -145,6 +144,6 @@ describe("InlineStyleButton", () => {
         actualNode.find(InlineStyleButton).simulate("click");
 
         // THEN
-        sinon.assert.calledOnce(saveTrack);
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 });
