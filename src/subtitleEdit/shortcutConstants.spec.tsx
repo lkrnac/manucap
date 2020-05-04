@@ -32,7 +32,7 @@ describe("shortcutConstants.spec", () => {
             const event = { shiftKey: true, metaKey: true, keyCode: Character.O_CHAR };
 
             //WHEN
-            //@ts-ignore
+            //@ts-ignore since KB event is created manually
             const action = getActionByKeyboardEvent(event);
 
             //THEN
@@ -45,7 +45,7 @@ describe("shortcutConstants.spec", () => {
 
             //WHEN
             event.shiftKey = false;
-            //@ts-ignore
+            //@ts-ignore since KB event is created manually
             const action = getActionByKeyboardEvent(event);
 
             //THEN
@@ -58,7 +58,7 @@ describe("shortcutConstants.spec", () => {
 
             //WHEN
             event.keyCode = 33;
-            //@ts-ignore
+            //@ts-ignore since KB event is created manually
             const action = getActionByKeyboardEvent(event);
 
             //THEN
@@ -69,20 +69,23 @@ describe("shortcutConstants.spec", () => {
 
     describe("triggerMouseTrapAction", () => {
         const mouseTrapTriggerSpy = jest.spyOn(Mousetrap, "trigger");
-        beforeEach(()=>{
+        beforeEach(() => {
             mouseTrapTriggerSpy.mockReset();
         });
-        it("triggers mousetrap action", () => {
-            //GIVEN
-            const event = { shiftKey: true, metaKey: true, keyCode: Character.O_CHAR };
 
-            //WHEN
-            //@ts-ignore
-            triggerMouseTrapAction(event);
+        test.each(Object.values(Character))(
+            "triggers mousetrap action when the input is %s",
+            (char: Character | string) => {
+                //GIVEN
+                const event = { shiftKey: true, metaKey: true, keyCode: char };
 
-            //THEN
-            expect(mouseTrapTriggerSpy).toBeCalled;
-        });
+                //WHEN
+                //@ts-ignore since KB event is created manually
+                triggerMouseTrapAction(event);
+
+                //THEN
+                expect(mouseTrapTriggerSpy).toBeCalled;            },
+        );
 
         it("does not trigger mousetrap action if one of the action keys is not clicked", () => {
             //GIVEN
@@ -90,7 +93,7 @@ describe("shortcutConstants.spec", () => {
 
             //WHEN
             event.shiftKey = false;
-            //@ts-ignore
+            //@ts-ignore since KB event is created manually
             triggerMouseTrapAction(event);
 
             //THEN
@@ -103,7 +106,7 @@ describe("shortcutConstants.spec", () => {
 
             //WHEN
             event.keyCode = 33;
-            //@ts-ignore
+            //@ts-ignore since KB event is created manually
             triggerMouseTrapAction(event);
 
             //THEN

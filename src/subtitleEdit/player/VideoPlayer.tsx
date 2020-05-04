@@ -89,7 +89,7 @@ export default class VideoPlayer extends React.Component<Props> {
 
         registerPlayerShortcuts(this);
 
-        // @ts-ignore that is becuase videojs is not fully typescript friendly
+        // @ts-ignore @types/video.js is missing this function rom video.js signature
         this.player.handleKeyDown = (event: React.KeyboardEvent<{}>): void => {
             triggerMouseTrapAction(event);
         };

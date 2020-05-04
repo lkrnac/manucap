@@ -48,10 +48,22 @@ const getDueDate = (task: Task): ReactElement => {
 const getProgress = (track: Track, cuesDataLoaded: boolean | null): ReactElement =>
     cuesDataLoaded ? (<div>Completed: <b>{track.progress}%</b></div>) : <div />;
 
+const getSaveStatus = (saveStatus: string): ReactElement => {
+    return (
+        <div
+            style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
+            className="sbte-light-gray-text"
+        >
+            { saveStatus }
+        </div>
+    );
+};
+
 const SubtitleEditHeader = (): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const stateTask = useSelector((state: SubtitleEditState) => state.cuesTask);
+    const saveStatus = useSelector((state: SubtitleEditState) => state.saveStatus);
     const track = editingTrack ? editingTrack : {} as Track;
     const task = stateTask ? stateTask : {} as Task;
     return (
@@ -60,7 +72,9 @@ const SubtitleEditHeader = (): ReactElement => {
                 <div><b>{track.mediaTitle}</b> <i>{task.projectName}</i></div>
                 {getTrackDescription(task, track)}
             </div>
-            <div style={{ flex: "2" }} />
+            <div style={{ flex: "2", position: "relative", height: "100%" }}>
+                {getSaveStatus(saveStatus)}
+            </div>
             <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
                 {getProgress(track, hasDataLoaded(editingTrack, loadingIndicator))}
