@@ -1,5 +1,6 @@
 import React from "react";
 import Mousetrap from "mousetrap";
+import { os } from "platform";
 
 export enum Character {
     O_CHAR = 79,
@@ -72,4 +73,9 @@ export const triggerMouseTrapAction = (e: React.KeyboardEvent<{}>): void => {
         if (mouseTrapAction != null)
             Mousetrap.trigger(mouseTrapAction);
     }
+};
+
+export const getShortcutAsText = (char: string): string => {
+    const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
+    return commandKey + "/Alt + Shift + " + char;
 };
