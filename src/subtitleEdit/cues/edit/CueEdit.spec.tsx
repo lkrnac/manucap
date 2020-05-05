@@ -13,15 +13,19 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues, setSaveTrack } from "../cueSlices";
+import {
+    setValidationError,
+    updateCues,
+    updateEditingCueIndex,
+    updateSourceCues
+} from "../cueSlices";
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { updateEditingTrack } from "../../trackSlices";
 import SubtitleEdit from "../../SubtitleEdit";
 import _ from "lodash";
-
-jest.mock("lodash");
+import { setSaveTrack } from "../saveSlices";
 
 let testingStore = createTestingStore();
 
@@ -38,6 +42,13 @@ const cues = [
 ];
 
 describe("CueEdit", () => {
+    const saveTrack = jest.fn();
+
+    beforeAll(() => {
+        // @ts-ignore
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+    });
+
     beforeEach(() => {
         testingStore = createTestingStore();
         const testingSubtitleSpecification = {
@@ -221,12 +232,9 @@ describe("CueEdit", () => {
 
     it("calls saveTrack in redux store when start time changes", () => {
         // GIVEN
-        const mockSave = jest.fn();
-        // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        saveTrack.mockReset();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueEdit index={0} cue={cues[1]} playerTime={0} />
@@ -238,7 +246,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
         // THEN
-        expect(mockSave).toBeCalled();
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("updates cue in redux store when end time changed", () => {
@@ -259,12 +267,9 @@ describe("CueEdit", () => {
 
     it("calls saveTrack in redux store when end time changes", () => {
         // GIVEN
-        const mockSave = jest.fn();
-        // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        saveTrack.mockReset();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueEdit index={0} cue={cues[1]} playerTime={0} />
@@ -276,7 +281,7 @@ describe("CueEdit", () => {
             .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
 
         // THEN
-        expect(mockSave).toBeCalled();
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("maintains cue styling when start time changes", () => {
@@ -343,12 +348,9 @@ describe("CueEdit", () => {
 
     it("calls saveTrack in redux store when cue position changes", () => {
         // GIVEN
-        const mockSave = jest.fn();
-        // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        saveTrack.mockReset();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
@@ -361,7 +363,7 @@ describe("CueEdit", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column5);
 
         // THEN
-        expect(mockSave).toBeCalled();
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("updates line category", () => {
@@ -384,12 +386,9 @@ describe("CueEdit", () => {
 
     it("calls saveTrack in redux store when line category changes", () => {
         // GIVEN
-        const mockSave = jest.fn();
-        // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        saveTrack.mockReset();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
@@ -403,7 +402,7 @@ describe("CueEdit", () => {
         actualNode.find("a.dropdown-item").at(1).simulate("click");
 
         // THEN
-        expect(mockSave).toBeCalled();
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("passes down current line category", () => {

@@ -1,5 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
-import { ContentState, EditorState, convertFromHTML } from "draft-js";
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import InlineStyleButton from "./InlineStyleButton";
 import { Provider } from "react-redux";
@@ -7,10 +7,9 @@ import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
-import { setSaveTrack } from "../cueSlices";
 import _ from "lodash";
-
-jest.mock("lodash");
+import { TooltipWrapper } from "../../TooltipWrapper";
+import { setSaveTrack } from "../saveSlices";
 
 /**
  * On click actions are covered by CueTextEditor tests
@@ -131,12 +130,11 @@ describe("InlineStyleButton", () => {
 
         testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
-        const mockSave = jest.fn();
+        const saveTrack = jest.fn();
         // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
@@ -147,6 +145,27 @@ describe("InlineStyleButton", () => {
         actualNode.find(InlineStyleButton).simulate("click");
 
         // THEN
-        expect(mockSave).toBeCalled();
+        expect(saveTrack).toHaveBeenCalledTimes(1);
+    });
+
+    it("renders overlay with text provided to InlineStyleButton", () => {
+        //GIVEN
+        const expectedText = "BOLD";
+        const expectedToolTipId = "BOLD0";
+
+        //WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <InlineStyleButton
+                    editorIndex={0}
+                    inlineStyle={expectedText}
+                    label={<b>B</b>}
+                />
+            </Provider>
+        );
+
+        //THEN
+        expect(actualNode.find(TooltipWrapper).props().text).toEqual(expectedText);
+        expect(actualNode.find(TooltipWrapper).props().tooltipId).toEqual(expectedToolTipId);
     });
 });

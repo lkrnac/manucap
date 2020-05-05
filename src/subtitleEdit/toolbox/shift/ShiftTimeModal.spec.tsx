@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { applyShiftTime, updateCues, setSaveTrack } from "../../cues/cueSlices";
+import { applyShiftTime, updateCues } from "../../cues/cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../../model";
 import { Provider } from "react-redux";
@@ -10,8 +10,7 @@ import { mount } from "enzyme";
 import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
 import _ from "lodash";
-
-jest.mock("lodash");
+import { setSaveTrack } from "../../cues/saveSlices";
 
 const testCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -192,13 +191,12 @@ describe("ShiftTimesModal", () => {
 
     it("calls saveTrack in redux store when shift value", () => {
         // // GIVEN
-        const mockSave = jest.fn();
+        const saveTrack = jest.fn();
         // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <ShiftTimesModal show onClose={jest.fn()} />
@@ -210,6 +208,6 @@ describe("ShiftTimesModal", () => {
         actualNode.find("form").simulate("submit");
 
         // THEN
-        expect(mockSave).toBeCalled();
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 });
