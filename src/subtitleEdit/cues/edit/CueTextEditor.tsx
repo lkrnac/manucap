@@ -16,7 +16,8 @@ import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue, callSaveTrack } from "../cueSlices";
+import { updateVttCue } from "../cueSlices";
+import { callSaveTrack } from "../saveSlices";
 
 const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");

@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { addCue, updateEditingCueIndex, setSaveTrack } from "./cues/cueSlices";
+import { addCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -14,6 +14,7 @@ import { enableMapSet } from "immer";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
 import { TooltipWrapper } from "./TooltipWrapper";
+import { setSaveTrack } from "./cues/saveSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426

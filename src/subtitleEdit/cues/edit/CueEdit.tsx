@@ -3,7 +3,6 @@ import { copyNonConstructorProperties, Position, positionStyles } from "../cueUt
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import {
     addCue,
-    callSaveTrack,
     setValidationError,
     updateCueCategory,
     updateEditingCueIndex,
@@ -18,6 +17,7 @@ import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { playVideoSection } from "../../player/playbackSlices";
+import { callSaveTrack } from "../saveSlices";
 
 interface Props {
     index: number;
