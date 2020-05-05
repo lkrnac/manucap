@@ -9,7 +9,8 @@ import SubtitleEditHeader from "./SubtitleEditHeader";
 import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { callSaveTrack, setAutoSaveSuccess, updateCues } from "./cues/cueSlices";
+import { updateCues } from "./cues/cueSlices";
+import { callSaveTrack, setAutoSaveSuccess } from "./cues/saveSlices";
 
 let testingStore = createTestingStore();
 

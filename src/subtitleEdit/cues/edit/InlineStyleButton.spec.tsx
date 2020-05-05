@@ -7,9 +7,9 @@ import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
-import { setSaveTrack } from "../cueSlices";
 import _ from "lodash";
 import { TooltipWrapper } from "../../TooltipWrapper";
+import { setSaveTrack } from "../saveSlices";
 
 /**
  * On click actions are covered by CueTextEditor tests

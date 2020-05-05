@@ -2,7 +2,6 @@ import "./testUtils/initBrowserEnvironment";
 import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
 import {
-    setAutoSaveSuccess,
     updateCues,
     updateSourceCues
 } from "./subtitleEdit/cues/cueSlices";
@@ -12,6 +11,7 @@ import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
+import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";

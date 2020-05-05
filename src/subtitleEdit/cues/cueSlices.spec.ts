@@ -2,15 +2,13 @@ import "video.js"; // VTTCue definition
 import {
     addCue,
     applyShiftTime,
-    callSaveTrack,
-    setSaveTrack,
     deleteCue,
     setValidationError,
     updateCueCategory,
     updateCues,
     updateEditingCueIndex,
     updateSourceCues,
-    updateVttCue, setAutoSaveSuccess
+    updateVttCue
 } from "./cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../model";
@@ -21,7 +19,6 @@ import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import { resetEditingTrack } from "../trackSlices";
-import _ from "lodash";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -953,64 +950,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().validationError).toEqual(true);
-        });
-    });
-
-    describe("saveTrack", () => {
-        const saveTrack = jest.fn();
-
-        beforeAll(() => {
-            // @ts-ignore
-            jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
-        });
-
-        beforeEach(() => {
-            // GIVEN
-            saveTrack.mockReset();
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        });
-
-        it("calls saveTrack", () => {
-            // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-            // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
-        });
-
-        it("doesn't call saveTrack again if there's a pending call", () => {
-            // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-            // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
-        });
-
-        it("calls saveTrack if previous call failed", () => {
-            // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-            testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-
-            // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(2);
-        });
-    });
-
-    describe("autoSaveSuccessSlice", () => {
-        it("sets the autoSave success flag to false", () => {
-            // WHEN
-            testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().autoSaveSuccess).toEqual(false);
-        });
-        it("sets the autoSave success flag to true", () => {
-            // WHEN
-            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().autoSaveSuccess).toEqual(true);
         });
     });
 

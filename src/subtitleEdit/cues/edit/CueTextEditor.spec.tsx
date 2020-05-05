@@ -15,8 +15,9 @@ import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto } from "../../model";
-import { setSaveTrack, updateCues } from "../cueSlices";
+import { updateCues } from "../cueSlices";
 import _ from "lodash";
+import { setSaveTrack } from "../saveSlices";
 
 let testingStore = createTestingStore();
 

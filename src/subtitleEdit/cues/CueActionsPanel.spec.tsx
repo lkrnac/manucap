@@ -11,8 +11,9 @@ import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import testingStore from "../../testUtils/testingStore";
-import { updateCues, setSaveTrack } from "./cueSlices";
+import { updateCues } from "./cueSlices";
 import _ from "lodash";
+import { setSaveTrack } from "./saveSlices";
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,

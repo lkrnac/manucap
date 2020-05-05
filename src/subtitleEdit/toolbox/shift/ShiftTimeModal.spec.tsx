@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { applyShiftTime, updateCues, setSaveTrack } from "../../cues/cueSlices";
+import { applyShiftTime, updateCues } from "../../cues/cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto } from "../../model";
 import { Provider } from "react-redux";
@@ -10,6 +10,7 @@ import { mount } from "enzyme";
 import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
 import _ from "lodash";
+import { setSaveTrack } from "../../cues/saveSlices";
 
 const testCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },

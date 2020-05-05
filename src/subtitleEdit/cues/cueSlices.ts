@@ -18,7 +18,6 @@ import {
     markCuesBreakingRules,
     verifyCueDuration
 } from "./cueVerifications";
-import { debounce } from "lodash";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -148,37 +147,6 @@ export const validationErrorSlice = createSlice({
     }
 });
 
-export const autoSaveSuccessSlice = createSlice({
-    name: "autoSaveSuccess",
-    initialState: false,
-    reducers: {
-        setAutoSaveSuccess: (_state, action: PayloadAction<boolean>): boolean => action.payload
-    }
-});
-
-const DEBOUNCE_TIMEOUT = 2500;
-
-export const saveTrackSlice = createSlice({
-    name: "saveTrack",
-    initialState: null as Function | null,
-    reducers: {
-        set: (_state, action: PayloadAction<Function>): Function =>
-            // @ts-ignore debounce expects any type
-            debounce(action.payload, DEBOUNCE_TIMEOUT, { leading: false, trailing: true }),
-        call: (state): void => state ? state() : null,
-    },
-    extraReducers: {
-        [cuesSlice.actions.applyShiftTime.type]: (state): void => state ? state() : null,
-        [cuesSlice.actions.updateCueCategory.type]: (state): void => state ? state() : null,
-        [cuesSlice.actions.deleteCue.type]: (state): void => state ? state() : null,
-        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (state, action: PayloadAction<boolean>): void => {
-            if (!action.payload && state) {
-                state();
-            }
-        }
-    }
-});
-
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
@@ -267,20 +235,3 @@ export const setValidationError = (error: boolean): AppThunk =>
         dispatch(validationErrorSlice.actions.setValidationError(error));
     };
 
-export const setSaveTrack = (saveTrack: Function): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<Function>>): void => {
-        dispatch(saveTrackSlice.actions.set(saveTrack));
-    };
-
-export const setAutoSaveSuccess = (success: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
-        dispatch(autoSaveSuccessSlice.actions.setAutoSaveSuccess(success));
-    };
-
-export const callSaveTrack = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<void>>, getState): void => {
-        const saveStatus = getState().saveStatus;
-        if (saveStatus !== "Saving changes ...") {
-            dispatch(saveTrackSlice.actions.call());
-        }
-    };

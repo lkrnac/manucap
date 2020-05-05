@@ -6,7 +6,6 @@ import { updateEditorState } from "./editorStatesSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { callSaveTrack, setAutoSaveSuccess } from "../cueSlices";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -88,26 +87,3 @@ describe("editorStatesSlice", () => {
     });
 });
 
-describe("saveStatus", () => {
-    it("sets save status when saveTrack is called", () => {
-        // WHEN
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().saveStatus).toEqual("Saving changes ...");
-    });
-    it("sets save status after successful save", () => {
-        // WHEN
-        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().saveStatus).toEqual("All changes saved to server");
-    });
-    it("sets save status after failed save", () => {
-        // WHEN
-        testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-
-        // THEN
-        expect(testingStore.getState().saveStatus).toEqual("Error saving latest changes");
-    });
-});

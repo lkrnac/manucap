@@ -7,8 +7,9 @@ import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
-import { updateCues, setSaveTrack } from "../cueSlices";
+import { updateCues } from "../cueSlices";
 import _ from "lodash";
+import { setSaveTrack } from "../saveSlices";
 
 describe("DeleteCueLineButton", () => {
     it("renders", () => {
