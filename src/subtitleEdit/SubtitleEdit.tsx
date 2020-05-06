@@ -1,19 +1,15 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
-import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { addCue, updateEditingCueIndex, setSaveTrack } from "./cues/cueSlices";
+import React, { ReactElement, useEffect, useState } from "react";
+import { setSaveTrack } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
-import { CueDto } from "./model";
-import CueLine from "./cues/CueLine";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
-import { scrollToElement } from "./cues/cueUtils";
 import { enableMapSet } from "immer";
-import AddCueLineButton from "./cues/edit/AddCueLineButton";
-import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
-import { TooltipWrapper } from "./TooltipWrapper";
+import { hasDataLoaded } from "./subtitleEditUtils";
+import CuesList from "./cues/CuesList";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -32,15 +28,10 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const cues = useSelector((state: SubtitleEditState) => state.cues);
-    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
-
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
-    const drivingCues = sourceCues.length > 0
-        ? sourceCues
-        : cues;
-    const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
+
+    // const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
 
     useEffect(
         () => {
@@ -80,41 +71,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            {
-                                drivingCues.length === 0 && (editingTrack?.type === "CAPTION"
-                                    || isDirectTranslationTrack(editingTrack)) ? (
-                                        <AddCueLineButton
-                                            text="Start Captioning"
-                                            cueIndex={-1}
-                                        />
-                                ) : null
-                            }
-                            <div
-                                ref={cuesRef}
-                                style={{ overflowY: "scroll", height: "100%" }}
-                                className="sbte-cues-array-container"
-                            >
-                                {
-                                    drivingCues.map((cue: CueDto, idx: number): ReactElement => {
-                                        const sourceCue = sourceCues[idx];
-                                        const editingCue = cues[idx] === cue ? cue : cues[idx];
-                                        return (
-                                            <CueLine
-                                                key={idx}
-                                                index={idx}
-                                                sourceCue={sourceCue}
-                                                cue={editingCue}
-                                                playerTime={currentPlayerTime}
-                                                lastCue={idx === cues.length - 1}
-                                                onClickHandler={(): void => {
-                                                    idx >= cues.length
-                                                        ? dispatch(addCue(cues.length))
-                                                        : dispatch(updateEditingCueIndex(idx));
-                                                }}
-                                            />);
-                                    })
-                                }
-                            </div>
+                            <CuesList editingTrack={editingTrack} currentPlayerTime={currentPlayerTime} />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
                                     className="btn btn-primary sbte-view-all-tracks-btn"
@@ -123,6 +80,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 >
                                     View All Tracks
                                 </button>
+                                { /*
+                                TODO: figure out how to re-enable these buttons
                                 <TooltipWrapper
                                     tooltipId="scrollToTopBtnTooltip"
                                     text="Scroll to top"
@@ -151,7 +110,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         <i className="fa fa-angle-double-down" />
                                     </button>
                                 </TooltipWrapper>
-
+                                */}
                                 <span style={{ flexGrow: 2 }} />
                                 <button
                                     className="btn btn-primary sbte-complete-subtitle-btn"
