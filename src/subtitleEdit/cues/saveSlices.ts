@@ -52,20 +52,35 @@ export const saveStatusSlice = createSlice({
     }
 });
 
+export const pendingSaveSlice = createSlice({
+    name: "pendingSave",
+    initialState: false,
+    reducers: {
+        setPendingSave: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    }
+});
+
 export const setSaveTrack = (saveTrack: Function): AppThunk =>
     (dispatch: Dispatch<PayloadAction<Function>>): void => {
         dispatch(saveTrackSlice.actions.set(saveTrack));
     };
 
 export const setAutoSaveSuccess = (success: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
+    (dispatch: Dispatch<PayloadAction<boolean | void>>, getState): void => {
         dispatch(autoSaveSuccessSlice.actions.setAutoSaveSuccess(success));
+        const pendingSave = getState().pendingSave;
+        if (pendingSave) {
+            dispatch(saveTrackSlice.actions.call());
+            dispatch(pendingSaveSlice.actions.setPendingSave(false));
+        }
     };
 
 export const callSaveTrack = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<void>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<void | boolean>>, getState): void => {
         const saveStatus = getState().saveStatus;
         if (saveStatus !== SAVING_CHANGES_MSG) {
             dispatch(saveTrackSlice.actions.call());
+        } else {
+            dispatch(pendingSaveSlice.actions.setPendingSave(true));
         }
     };
