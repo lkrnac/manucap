@@ -2,8 +2,6 @@ import "video.js"; // VTTCue definition
 import {
     addCue,
     applyShiftTime,
-    callSaveTrack,
-    setSaveTrack,
     deleteCue,
     setValidationError,
     updateCueCategory,
@@ -952,35 +950,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().validationError).toEqual(true);
-        });
-    });
-
-    describe("saveTrack", () => {
-        it("sets saveTrack", () => {
-            // GIVEN
-            const saveTrack = jest.fn();
-            expect(testingStore.getState().saveTrack).toBeNull();
-
-            // WHEN
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().saveTrack).not.toBeNull();
-        });
-
-        it("calls saveTrack", (done) => {
-            // GIVEN
-            const saveTrack = jest.fn();
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-            // THEN
-            setTimeout(() => {
-                expect(saveTrack).toBeCalled();
-                done();
-            }, 600);
         });
     });
 

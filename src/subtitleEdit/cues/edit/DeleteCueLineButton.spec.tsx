@@ -7,10 +7,9 @@ import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
-import { updateCues, setSaveTrack } from "../cueSlices";
+import { updateCues } from "../cueSlices";
 import _ from "lodash";
-
-jest.mock("lodash");
+import { setSaveTrack } from "../saveSlices";
 
 describe("DeleteCueLineButton", () => {
     it("renders", () => {
@@ -60,12 +59,11 @@ describe("DeleteCueLineButton", () => {
 
     it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
-        const mockSave = jest.fn();
+        const saveTrack = jest.fn();
         // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const cues = [
             { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
@@ -81,6 +79,6 @@ describe("DeleteCueLineButton", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        expect(mockSave).toBeCalled();
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 });
