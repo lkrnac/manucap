@@ -4,6 +4,10 @@ import { mount, shallow } from "enzyme";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
+import { render } from "@testing-library/react";
+import ReactDOM from "react-dom";
+import { setOverlapCaptions } from "../cues/cueSlices";
+import { AnyAction } from "redux";
 
 let testingStore = createTestingStore();
 
@@ -84,5 +88,21 @@ describe("CaptionOverlapToggle", () => {
 
         // THEN
         expect(testingStore.getState().overlapCaptions).toEqual(true);
+    });
+    
+    it("resets editing track and cues state when unmounted", () => {
+        // GIVEN
+        const { container } = render(
+            <Provider store={testingStore}>
+                <CaptionOverlapToggle />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+        ReactDOM.unmountComponentAtNode(container);
+
+        // THEN
+        expect(testingStore.getState().overlapCaptions).toBeFalsy();
     });
 });
