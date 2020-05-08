@@ -118,9 +118,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     editorState={editorState}
                     onChange={(newEditorState: EditorState): void => {
                         dispatch(updateEditorState(props.index, newEditorState));
-                        if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                            dispatch(callSaveTrack());
-                        }
                     }}
                     spellCheck
                     keyBindingFn={keyShortcutBindings}
