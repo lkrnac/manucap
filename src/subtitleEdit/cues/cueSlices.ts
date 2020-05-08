@@ -152,6 +152,9 @@ export const overlapCaptionsSlice = createSlice({
     initialState: false,
     reducers: {
         setOverlapCaptions: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
     }
 });
 
