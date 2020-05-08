@@ -89,8 +89,8 @@ describe("CaptionOverlapToggle", () => {
         // THEN
         expect(testingStore.getState().overlapCaptions).toEqual(true);
     });
-    
-    it("resets editing track and cues state when unmounted", () => {
+
+    it("resets caption overlap flag when unmounted", () => {
         // GIVEN
         const { container } = render(
             <Provider store={testingStore}>
