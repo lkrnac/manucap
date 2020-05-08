@@ -6,6 +6,7 @@ import { SubtitleEditAction } from "../model";
 
 export interface SubtitleSpecificationAction extends SubtitleEditAction{
     subtitleSpecification: SubtitleSpecification | null;
+    overlapCaptions?: boolean;
 }
 
 export const subtitleSpecificationSlice = createSlice({

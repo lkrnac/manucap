@@ -2,6 +2,7 @@ import { Action, combineReducers } from "@reduxjs/toolkit";
 import {
     cuesSlice,
     editingCueIndexSlice,
+    overlapCaptionsSlice,
     sourceCuesSlice,
     validationErrorSlice
 } from "./cues/cueSlices";
@@ -26,6 +27,7 @@ export const Reducers = {
     validationError: validationErrorSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
+    overlapCaptions: overlapCaptionsSlice.reducer,
     saveStatus: saveStatusSlice.reducer
 };
 

@@ -13,6 +13,7 @@ import Toolbox from "./Toolbox";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../testUtils/testingStore";
+import CaptionOverlapToggle from "./CaptionOverlapToggle";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -30,6 +31,7 @@ describe("Toolbox", () => {
                                     <KeyboardShortcuts />
                                     <SubtitleSpecificationsButton />
                                     <ShiftTimeButton />
+                                    <CaptionOverlapToggle />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>

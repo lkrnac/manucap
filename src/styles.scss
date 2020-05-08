@@ -82,6 +82,12 @@ $background-error-lighter: rgb(255, 245, 245);
     -webkit-animation:fade 1000ms infinite;
 }
 
+.sbte-toggled-btn {
+    background-color: $primary !important;
+    border-color: $primary !important;
+    outline: none;
+}
+
 // ----- Modal ------
 
 .sbte-medium-modal {
@@ -113,6 +119,7 @@ $background-error-lighter: rgb(255, 245, 245);
 .sbte-button-toolbar button {
     margin-right: 10px;
     margin-bottom: 10px;
+    min-width: 200px;
 }
 
 @media (max-width: 1200px) {

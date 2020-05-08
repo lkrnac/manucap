@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
+import CaptionOverlapToggle from "./CaptionOverlapToggle";
 
 const Toolbox = (): ReactElement => {
     return (
@@ -19,6 +20,7 @@ const Toolbox = (): ReactElement => {
                             <KeyboardShortcuts />
                             <SubtitleSpecificationsButton />
                             <ShiftTimeButton />
+                            <CaptionOverlapToggle />
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>
