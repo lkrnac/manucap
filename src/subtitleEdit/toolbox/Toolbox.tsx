@@ -6,8 +6,13 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
+import { useSelector } from "react-redux";
+import { SubtitleEditState } from "../subtitleEditReducers";
+import { Track } from "../model";
 
 const Toolbox = (): ReactElement => {
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const track = editingTrack ? editingTrack : {} as Track;
     return (
         <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
             <Card>
@@ -20,7 +25,9 @@ const Toolbox = (): ReactElement => {
                             <KeyboardShortcuts />
                             <SubtitleSpecificationsButton />
                             <ShiftTimeButton />
-                            <CaptionOverlapToggle />
+                            {
+                                track.type !== "TRANSLATION" ? <CaptionOverlapToggle /> : null
+                            }
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>
