@@ -782,7 +782,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().validationError).toEqual(false);
             expect(actualNode.find("div").at(0).hasClass("bg-white")).toBeTruthy();
             done();
-        }, 1005);
+        }, 1100);
     });
 
     it("blinks background when when validation error occurs", () => {
