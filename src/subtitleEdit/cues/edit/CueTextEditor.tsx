@@ -1,7 +1,7 @@
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
 import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useRef } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +45,7 @@ export interface CueTextEditorProps {
 }
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
+    const isFirstRender = useRef(true);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
@@ -76,6 +77,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
             copyNonConstructorProperties(vttCue, props.vttCue);
             dispatch(updateVttCue(props.index, vttCue));
+            // this if is so we don't trigger a save on first render
+            if (isFirstRender.current) {
+                isFirstRender.current = false;
+                return;
+            }
+            dispatch(callSaveTrack());
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
