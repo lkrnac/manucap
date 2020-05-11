@@ -32,6 +32,7 @@
     "react-advanced-timefield": "^3.6.4"
   },
   "dependencies": {
+    "@dotsub/react-smart-scroll": "^1.1.6",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@types/lodash": "^4.14.149",
     "draft-js": "^0.11.3",
@@ -46,7 +47,6 @@
     "react-bootstrap": "^1.0.0-beta.16",
     "react-final-form": "^6.4.0",
     "react-markdown": "^4.3.1",
-    "react-smart-scroll": "^1.1.5",
     "sanitize-html": "^1.21.1",
     "video.js": "7.7.4"
   },
@@ -92,9 +92,9 @@
     "jsdom-global": "^3.0.2",
     "node-sass": "^4.13.0",
     "prop-types": "^15.5.4",
-    "react": "^16.12.0",
+    "react": "^16.13.1",
     "react-advanced-timefield": "^3.6.4",
-    "react-dom": "^16.12.0",
+    "react-dom": "^16.13.1",
     "react-redux": "^7.1.3",
     "react-scripts": "^3.2.0",
     "redux-logger": "^3.0.6",
