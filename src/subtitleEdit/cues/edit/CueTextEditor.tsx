@@ -73,6 +73,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
+            isFirstRender.current = true;
+        }, [ props.index ]
+    );
+
+    useEffect(
+        () => {
             const vttText = getVttText(currentContent);
             const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
             copyNonConstructorProperties(vttCue, props.vttCue);
