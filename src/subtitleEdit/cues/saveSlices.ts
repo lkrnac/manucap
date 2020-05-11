@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { debounce } from "lodash";
-import { cuesSlice } from "./cueSlices";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 
@@ -27,9 +26,6 @@ export const saveTrackSlice = createSlice({
         call: (state): void => state ? state() : null,
     },
     extraReducers: {
-        [cuesSlice.actions.applyShiftTime.type]: (state): void => state ? state() : null,
-        [cuesSlice.actions.updateCueCategory.type]: (state): void => state ? state() : null,
-        [cuesSlice.actions.deleteCue.type]: (state): void => state ? state() : null,
         [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (state, action: PayloadAction<boolean>): void => {
             if (!action.payload && state) {
                 state();
@@ -44,9 +40,6 @@ export const saveStatusSlice = createSlice({
     reducers: {},
     extraReducers: {
         [saveTrackSlice.actions.call.type]: (): string => SAVING_CHANGES_MSG,
-        [cuesSlice.actions.applyShiftTime.type]: (): string => SAVING_CHANGES_MSG,
-        [cuesSlice.actions.updateCueCategory.type]: (): string => SAVING_CHANGES_MSG,
-        [cuesSlice.actions.deleteCue.type]: (): string => SAVING_CHANGES_MSG,
         [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
             action.payload ? CHANGES_SAVED_MSG : ERROR_SAVING_MSG
     }
