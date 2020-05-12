@@ -29,15 +29,9 @@ const getScrollCueIndex = (cues: CueWithSource[], scrollCue: "first" | "last" | 
 
 const CuesList = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const cues = useSelector((state: SubtitleEditState) => state.cues, (left, right) => left.length === right.length);
-    const sourceCues = useSelector(
-        (state: SubtitleEditState) => state.sourceCues,
-        (left, right) => left.length === right.length
-    );
-    const editingCueIndex= useSelector(
-        (state: SubtitleEditState) => state.editingCueIndex,
-        () => true
-    );
+    const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
+    const editingCueIndex= useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const drivingCues = sourceCues.length > 0
         ? sourceCues
         : cues;
