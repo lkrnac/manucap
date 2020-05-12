@@ -1,7 +1,7 @@
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
 import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
-import React, { ReactElement, useEffect, useRef, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,7 +45,6 @@ export interface CueTextEditorProps {
 }
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
-    const isFirstRender = useRef(true);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
@@ -70,12 +69,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         // (Also some tests would fail if you include editorState object itself, but behavior is still OK)
         // eslint-disable-next-line
         [ currentContent, currentInlineStyle, dispatch, props.index ]
-    );
-
-    useEffect(
-        () => {
-            isFirstRender.current = true;
-        }, [ props.index ]
     );
 
     useEffect(
