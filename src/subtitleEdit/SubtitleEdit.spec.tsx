@@ -18,6 +18,8 @@ import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import _ from "lodash";
 import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
+import { render } from "@testing-library/react";
+import ReactDOM from "react-dom";
 
 let testingStore = createTestingStore();
 
@@ -912,4 +914,32 @@ describe("SubtitleEdit", () => {
         expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
+    it("resets editing track and cues state when unmounted", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+
+        const { container } = render(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        ReactDOM.unmountComponentAtNode(container);
+
+        // THEN
+        expect(testingStore.getState().loadingIndicator.cuesLoaded).toBeFalsy();
+        expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeFalsy();
+        expect(testingStore.getState().editingTrack).toBeNull();
+        expect(testingStore.getState().cues).toEqual([]);
+        expect(testingStore.getState().sourceCues).toEqual([]);
+    });
 });
