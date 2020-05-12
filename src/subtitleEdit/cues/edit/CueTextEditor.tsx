@@ -1,7 +1,7 @@
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
 import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
-import React, { ReactElement, useEffect, useRef } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
 import { useDispatch, useSelector } from "react-redux";
@@ -59,6 +59,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     }
     const currentContent = editorState.getCurrentContent();
     const currentInlineStyle = editorState.getCurrentInlineStyle();
+    const [textChanged, setTextChanged] = useState(false);
     useEffect(
         () => {
             dispatch(updateEditorState(props.index, editorState));
@@ -84,11 +85,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             copyNonConstructorProperties(vttCue, props.vttCue);
             dispatch(updateVttCue(props.index, vttCue));
             // this if is so we don't trigger a save on first render
-            if (isFirstRender.current) {
-                isFirstRender.current = false;
-                return;
+            if (textChanged) {
+                dispatch(callSaveTrack());
+                setTextChanged(false);
             }
-            dispatch(callSaveTrack());
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
@@ -124,6 +124,9 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     editorState={editorState}
                     onChange={(newEditorState: EditorState): void => {
                         dispatch(updateEditorState(props.index, newEditorState));
+                        if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
+                            setTextChanged(true);
+                        }
                     }}
                     spellCheck
                     keyBindingFn={keyShortcutBindings}
