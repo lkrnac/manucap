@@ -445,4 +445,44 @@ describe("CuesList",() => {
         // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
         expect(actualNode.find("ReactSmartScroll").props().startAt).toBeUndefined();
     });
+
+    it("scrolls to last cue", () => {
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollCue="last" />
+            </Provider>
+        );
+
+        // THEN
+        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(2);
+    });
+
+    it("scrolls to first cue", () => {
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollCue="first" />
+            </Provider>
+        );
+
+        // THEN
+        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(0);
+    });
 });

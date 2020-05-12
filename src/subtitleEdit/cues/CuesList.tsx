@@ -14,7 +14,18 @@ import { SubtitleEditState } from "../subtitleEditReducers";
 interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
+    scrollCue?: "first" | "last";
 }
+
+const getScrollCueIndex = (cues: CueWithSource[], scrollCue: "first" | "last" | undefined): number | undefined => {
+    if (scrollCue === "first") {
+        return 0;
+    }
+    if (scrollCue === "last") {
+        return cues.length - 1;
+    }
+    return undefined;
+};
 
 const CuesList = (props: Props): ReactElement => {
     const dispatch = useDispatch();
@@ -32,9 +43,11 @@ const CuesList = (props: Props): ReactElement => {
         : cues;
     const cuesWithSource = drivingCues.map((cue: CueDto, idx: number): CueWithSource =>
         ({ cue: (cues[idx] === cue ? cue : cues[idx]), sourceCue: sourceCues[idx] }));
+
+
     const startAt = cuesWithSource.length - 1 === editingCueIndex
         ? editingCueIndex
-        : undefined;
+        : getScrollCueIndex(cuesWithSource, props.scrollCue);
     return (
         <>
             {

@@ -3,10 +3,10 @@ import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
 import {
     updateCues,
-    updateSourceCues
+    // updateSourceCues
 } from "./subtitleEdit/cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
-import { Language } from "./subtitleEdit/model";
+import { CueDto, Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
@@ -21,20 +21,29 @@ const TestApp = (): ReactElement => {
     // #############################################################################################
     // #################### Comment this out if you need to test Captioning mode ###################
     // #############################################################################################
-    useEffect(() => {
-        setTimeout( // this simulates latency caused by server roundtrip
-            () => dispatch(updateSourceCues([
-                { vttCue: new VTTCue(0, 1, "<i>Source <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
-                {
-                    vttCue: new VTTCue(1, 2, "<i><lang en>Source</lang> <b>Line</b></i> 2\nWrapped text"),
-                    cueCategory: "ONSCREEN_TEXT"
-                },
-                { vttCue: new VTTCue(2, 3, "<i>Source <b>Line</b></i> 3\nWrapped text"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(3, 4, "<i>Source <b>Line</b></i> 4\nWrapped text"), cueCategory: "DIALOGUE" },
-            ])),
-            500
-        );
-    });
+    // useEffect(() => {
+    //     const cues = [] as CueDto[];
+    //     for(let idx = 0; idx < 1000; idx++) {
+    //         cues.push({
+    //             vttCue: new VTTCue(idx, idx + 1, `<i>Editing <b>Line</b></i> ${idx + 1}\nWrapped text`),
+    //             cueCategory: "DIALOGUE"
+    //         });
+    //     }
+    //     // const cues = [
+    //     //     { vttCue: new VTTCue(0, 1, "<i>Source <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
+    //     //     {
+    //     //         vttCue: new VTTCue(1, 2, "<i><lang en>Source</lang> <b>Line</b></i> 2\nWrapped text"),
+    //     //         cueCategory: "ONSCREEN_TEXT"
+    //     //     },
+    //     //     { vttCue: new VTTCue(2, 3, "<i>Source <b>Line</b></i> 3\nWrapped text"), cueCategory: "DIALOGUE" },
+    //     //     { vttCue: new VTTCue(3, 4, "<i>Source <b>Line</b></i> 4\nWrapped text"), cueCategory: "DIALOGUE" },
+    //     // ];
+    //     setTimeout( // this simulates latency caused by server roundtrip
+    //
+    //         () => dispatch(updateSourceCues(cues)),
+    //         500
+    //     );
+    // });
     // #############################################################################################
 
     useEffect(() => {
@@ -52,14 +61,22 @@ const TestApp = (): ReactElement => {
         );
     });
     useEffect(() => {
-       setTimeout( // this simulates latency caused by server roundtrip
-           () => dispatch(updateCues([
-               { vttCue: new VTTCue(0, 1, "<i>Editing <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
-               {
-                   vttCue: new VTTCue(1, 2, "<i><lang en>Editing</lang> <b>Line</b></i> 2\nWrapped text"),
-                   cueCategory: "ONSCREEN_TEXT"
-               },
-           ])),
+        const cues = [] as CueDto[];
+        for(let idx = 0; idx < 9999; idx++) {
+            cues.push({
+                vttCue: new VTTCue(idx, idx + 1, `<i>Editing <b>Line</b></i> ${idx + 1}\nWrapped text`),
+                cueCategory: "DIALOGUE"
+            });
+        }
+        // const cues = [
+        //     { vttCue: new VTTCue(0, 1, "<i>Editing <b>Line</b></i> 1\nWrapped text"), cueCategory: "DIALOGUE" },
+        //     {
+        //         vttCue: new VTTCue(1, 2, "<i><lang en>Editing</lang> <b>Line</b></i> 2\nWrapped text"),
+        //         cueCategory: "ONSCREEN_TEXT"
+        //     },
+        // ];
+        setTimeout( // this simulates latency caused by server roundtrip
+           () => dispatch(updateCues(cues)),
            500
        );
     });
@@ -92,7 +109,7 @@ const TestApp = (): ReactElement => {
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-                minCaptionDurationInMillis: 1000,
+                minCaptionDurationInMillis: 500,
                 maxCaptionDurationInMillis: 4000,
                 comments: "Note",
                 mediaNotes: "Media notes"

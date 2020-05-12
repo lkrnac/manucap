@@ -10,6 +10,7 @@ import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
 import { hasDataLoaded } from "./subtitleEditUtils";
 import CuesList from "./cues/CuesList";
+import { TooltipWrapper } from "./TooltipWrapper";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -29,9 +30,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
+    const [scrollCue, setScrollCue] = useState<"first" | "last" | undefined>();
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
-
-    // const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
 
     useEffect(
         () => {
@@ -71,7 +71,11 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <CuesList editingTrack={editingTrack} currentPlayerTime={currentPlayerTime} />
+                            <CuesList
+                                editingTrack={editingTrack}
+                                currentPlayerTime={currentPlayerTime}
+                                scrollCue={scrollCue}
+                            />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
                                     className="btn btn-primary sbte-view-all-tracks-btn"
@@ -80,8 +84,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 >
                                     View All Tracks
                                 </button>
-                                { /*
-                                TODO: figure out how to re-enable these buttons
                                 <TooltipWrapper
                                     tooltipId="scrollToTopBtnTooltip"
                                     text="Scroll to top"
@@ -91,7 +93,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         className="btn btn-secondary sbte-jump-to-first-button"
                                         type="button"
                                         style={{ marginLeft: "10px" }}
-                                        onClick={(): void => scrollToElement(cuesRef.current.children[0])}
+                                        onClick={(): void => setScrollCue("first")}
                                     >
                                         <i className="fa fa-angle-double-up" />
                                     </button>
@@ -105,12 +107,11 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         className="btn btn-secondary sbte-jump-to-last-button"
                                         type="button"
                                         style={{ marginLeft: "10px" }}
-                                        onClick={(): void => scrollToElement(cuesRef.current.children[cues.length - 1])}
+                                        onClick={(): void => setScrollCue("last")}
                                     >
                                         <i className="fa fa-angle-double-down" />
                                     </button>
                                 </TooltipWrapper>
-                                */}
                                 <span style={{ flexGrow: 2 }} />
                                 <button
                                     className="btn btn-primary sbte-complete-subtitle-btn"

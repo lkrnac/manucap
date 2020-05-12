@@ -8,9 +8,9 @@ import subtitleEditReducers from "../subtitleEdit/subtitleEditReducers";
 
 // NOTE: Perf. tuning should be done when React/Redux browser plugins are off and immutable check is off
 // (uncomment following commented out command)
-// const middleware = [...getDefaultMiddleware({ serializableCheck: false, immutableCheck: false })];
+const middleware = [...getDefaultMiddleware({ serializableCheck: false, immutableCheck: false })];
 
-const middleware = [...getDefaultMiddleware({ serializableCheck: false })];
+// const middleware = [...getDefaultMiddleware({ serializableCheck: false })];
 
 export const createTestingStore = (): EnhancedStore => configureStore({ reducer: subtitleEditReducers, middleware });
 export default createTestingStore();

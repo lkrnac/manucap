@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateCues, callSaveTrack } from "./cues/cueSlices";
+import { updateCues, callSaveTrack, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -119,7 +119,6 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                {/*
                                 <button
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
@@ -136,7 +135,6 @@ describe("SubtitleEdit", () => {
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
-                                */}
                                 <span style={{ flexGrow: 2 }} />
                                 <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
                                     Complete
@@ -229,7 +227,6 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                {/*
                                 <button
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
@@ -246,7 +243,6 @@ describe("SubtitleEdit", () => {
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
-                                */}
                                 <span style={{ flexGrow: 2 }} />
                                 <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
                                     Complete
@@ -436,143 +432,125 @@ describe("SubtitleEdit", () => {
         expect(mockOnViewAllTracks.mock.calls.length).toBe(1);
     });
 
-    // it("calls onComplete callback when button is clicked", () => {
-    //     // GIVEN
-    //     const mockOnComplete = jest.fn();
-    //     const actualNode = mount(
-    //         <Provider store={testingStore} >
-    //             <SubtitleEdit
-    //                 mp4="dummyMp4"
-    //                 poster="dummyPoster"
-    //                 onViewAllTracks={(): void => undefined}
-    //                 onSave={(): void => undefined}
-    //                 onComplete={mockOnComplete}
-    //             />
-    //         </Provider>
-    //     );
-    //     testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-    //     testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-    //     testingStore.dispatch(
-    //         readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
-    //     );
-    //     testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-    //     actualNode.update();
-    //
-    //     // WHEN
-    //     actualNode.find("button.sbte-complete-subtitle-btn").simulate("click");
-    //
-    //     // THEN
-    //     expect(mockOnComplete.mock.calls.length).toBe(1);
-    // });
-    //
-    // it("jump to last cue in captioning mode", () => {
-    //     // GIVEN
-    //     const cues = [
-    //         { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-    //         { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-    //     ] as CueDto[];
-    //     const actualNode = mount(
-    //         <Provider store={testingStore} >
-    //             <SubtitleEdit
-    //                 mp4="dummyMp4"
-    //                 poster="dummyPoster"
-    //                 onComplete={(): void => undefined}
-    //                 onSave={(): void => undefined}
-    //                 onViewAllTracks={(): void => undefined}
-    //             />
-    //         </Provider>
-    //     );
-    //     testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-    //     testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-    //     actualNode.update();
-    //     const cueLines = actualNode.find(CueLine);
-    //     const domNode = cueLines.at(1).getDOMNode();
-    //     const parentNode = domNode.parentNode;
-    //
-    //     Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
-    //     Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
-    //
-    //     // WHEN
-    //     actualNode.find(".sbte-jump-to-last-button").simulate("click");
-    //
-    //     // THEN
-    //     expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
-    // });
-    //
-    // it("jump to last cue in translation mode", () => {
-    //     // GIVEN
-    //     const cues = [
-    //         { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-    //         { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-    //     ] as CueDto[];
-    //
-    //     const sourceCues = [
-    //         { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
-    //         { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
-    //         { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
-    //     ] as CueDto[];
-    //     const actualNode = mount(
-    //         <Provider store={testingStore} >
-    //             <SubtitleEdit
-    //                 mp4="dummyMp4"
-    //                 poster="dummyPoster"
-    //                 onComplete={(): void => undefined}
-    //                 onSave={(): void => undefined}
-    //                 onViewAllTracks={(): void => undefined}
-    //             />
-    //         </Provider>
-    //     );
-    //     testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
-    //     testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-    //     testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-    //     actualNode.update();
-    //     const cueLines = actualNode.find(CueLine);
-    //     const domNode = cueLines.at(1).getDOMNode();
-    //     const parentNode = domNode.parentNode;
-    //
-    //     Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
-    //     Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
-    //
-    //     // WHEN
-    //     actualNode.find(".sbte-jump-to-last-button").simulate("click");
-    //
-    //     // THEN
-    //     expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
-    // });
-    //
-    // it("jumps to first cue", () => {
-    //     // GIVEN
-    //     const cues = [
-    //         { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-    //         { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-    //     ] as CueDto[];
-    //     const actualNode = mount(
-    //         <Provider store={testingStore} >
-    //             <SubtitleEdit
-    //                 mp4="dummyMp4"
-    //                 poster="dummyPoster"
-    //                 onComplete={(): void => undefined}
-    //                 onSave={(): void => undefined}
-    //                 onViewAllTracks={(): void => undefined}
-    //             />
-    //         </Provider>
-    //     );
-    //     testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-    //     testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-    //     actualNode.update();
-    //     const cueLines = actualNode.find(CueLine);
-    //     const domNode = cueLines.at(0).getDOMNode();
-    //     const parentNode = domNode.parentNode;
-    //
-    //     Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
-    //     Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
-    //
-    //     // WHEN
-    //     actualNode.find(".sbte-jump-to-first-button").simulate("click");
-    //
-    //     // THEN
-    //     expect(actualNode.find(".sbte-cues-array-container").getDOMNode().scrollTop).toEqual(25);
-    // });
+    it("calls onComplete callback when button is clicked", () => {
+        // GIVEN
+        const mockOnComplete = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={mockOnComplete}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
+
+        // WHEN
+        actualNode.find("button.sbte-complete-subtitle-btn").simulate("click");
+
+        // THEN
+        expect(mockOnComplete.mock.calls.length).toBe(1);
+    });
+
+    it("jump to last cue in captioning mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+
+        // THEN
+        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(1);
+    });
+
+    it("jump to last cue in translation mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+
+        // THEN
+        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(2);
+    });
+
+    it("jumps to first cue", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-first-button").simulate("click");
+
+        // THEN
+        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(0);
+    });
 
     it("calls onSave callback on auto save", (done) => {
         // GIVEN
