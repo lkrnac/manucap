@@ -22,7 +22,7 @@ describe("saveSlices", () => {
 
         beforeAll(() => {
             // @ts-ignore
-            jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+            jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
         });
 
         beforeEach(() => {
@@ -70,7 +70,19 @@ describe("saveSlices", () => {
                 expect(saveTrack).toHaveBeenCalledTimes(2);
                 done();
             }, 300);
+        });
 
+        it("call saveTrack passes the cues in store", (done) => {
+            // WHEN
+            const cues = testingStore.getState().cues;
+            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+
+            setTimeout(() => {
+                // THEN
+                expect(saveTrack).toHaveBeenCalledTimes(1);
+                expect(saveTrack).toHaveBeenCalledWith(cues);
+                done();
+            }, 300);
         });
     });
 
