@@ -104,6 +104,16 @@ $background-error-lighter: rgb(255, 245, 245);
   border-bottom-left-radius: 10px;
 }
 
+// ------ Cues List ------
+
+.sbte-smart-scroll {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 150px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+}
+
 // ------ Toolbox --------
 
 .sbte-button-toolbar {

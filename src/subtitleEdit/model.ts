@@ -11,6 +11,11 @@ export interface CueDto {
     corrupted?: boolean;
 }
 
+export interface CueWithSource {
+    cue?: CueDto;
+    sourceCue?: CueDto;
+}
+
 export interface LanguageCues {
     readonly languageId: string;
     readonly cues: CueDto[];
