@@ -16,8 +16,7 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto } from "../../model";
 import { updateCues } from "../cueSlices";
-import _ from "lodash";
-import { setSaveTrack } from "../saveSlices";
+import * as saveSlices from "../saveSlices";
 
 let testingStore = createTestingStore();
 
@@ -149,17 +148,12 @@ const testForContentState = (
 };
 
 describe("CueTextEditor", () => {
-    const saveTrack = jest.fn();
-
-    beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
-    });
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
     });
+
     it("renders empty", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "");
@@ -207,9 +201,7 @@ describe("CueTextEditor", () => {
 
     it("calls saveTrack in redux store when changed", () => {
         // GIVEN
-        saveTrack.mockReset();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
+        const spy = jest.spyOn(saveSlices, "callSaveTrack").mockImplementationOnce(() => jest.fn());
         const editor = createEditorNode();
 
         // WHEN
@@ -221,13 +213,13 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(1);
+        expect(saveSlices.callSaveTrack).toHaveBeenCalledTimes(1);
+        spy.mockRestore();
     });
 
     it("doesn't trigger autosave when user selects text", () => {
         // GIVEN
-        saveTrack.mockReset();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const spy = jest.spyOn(saveSlices, "callSaveTrack").mockImplementationOnce(() => jest.fn());
 
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
@@ -253,7 +245,8 @@ describe("CueTextEditor", () => {
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
         // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(1); // called on paste, not on select
+        expect(saveSlices.callSaveTrack).toHaveBeenCalledTimes(1); // called on paste, not on select
+        spy.mockRestore();
     });
 
     /**
@@ -611,5 +604,4 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
         expect(testingStore.getState().editorStates[0]).toBeUndefined();
     });
-
 });
