@@ -7,7 +7,7 @@ import { mount, ReactWrapper } from "enzyme";
 import { CueDto, CueWithSource, Language, Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import CueLine, { CueLineRowProps } from "./CueLine";
-import { updateCues, updateSourceCues } from "./cueSlices";
+import { updateCues, updateEditingCueIndex, updateSourceCues } from "./cueSlices";
 import CuesList from "./CuesList";
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { createTestingStore } from "../../testUtils/testingStore";
@@ -404,5 +404,45 @@ describe("CuesList",() => {
         expect(cueLines.at(0).props().rowProps.playerTime).toEqual(5.5);
         expect(cueLines.at(1).props().rowProps.cuesLength).toEqual(2);
         expect(cueLines.at(1).props().rowProps.playerTime).toEqual(5.5);
+    });
+
+    it("scrolls to current last cue in editing mode", () => {
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
+            </Provider>
+        );
+
+        // THEN
+        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(1);
+    });
+
+    it("doesn't scroll to non-last cue in editing mode", () => {
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
+            </Provider>
+        );
+
+        // THEN
+        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toBeUndefined();
     });
 });
