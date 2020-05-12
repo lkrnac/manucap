@@ -104,19 +104,16 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div style={{ overflowY: "scroll", height: "100%" }} className="sbte-cues-array-container">
-                                <CueLine
-                                    index={0}
-                                    cue={cues[0]}
-                                    playerTime={0}
-                                    onClickHandler={(): void => undefined}
-                                />
-                                <CueLine
-                                    index={1}
-                                    cue={cues[1]}
-                                    playerTime={0}
-                                    onClickHandler={(): void => undefined}
-                                />
+                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                                    <CueLine
+                                        rowIndex={0}
+                                        data={{ cue: cues[0] }}
+                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        rowRef={React.createRef()}
+                                        onClick={(): void => undefined}
+                                    />
+                                </div>
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
@@ -224,7 +221,9 @@ describe("SubtitleEdit", () => {
                                 text="Start Captioning"
                                 cueIndex={-1}
                             />
-                            <div style={{ overflowY: "scroll", height: "100%" }} className="sbte-cues-array-container">
+                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                                </div>
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
