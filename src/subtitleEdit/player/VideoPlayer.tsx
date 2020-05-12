@@ -1,10 +1,9 @@
 import "video.js/dist/video-js.css";
 import { CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
-import { KeyCombination } from "../shortcutConstants";
 import Mousetrap from "mousetrap";
-import React from "react";
-import { ReactElement } from "react";
+import { KeyCombination, triggerMouseTrapAction } from "../shortcutConstants";
+import React, { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
@@ -72,6 +71,9 @@ export default class VideoPlayer extends React.Component<Props> {
             poster: this.props.poster,
             tracks: textTrackOptions,
             fluid: true,
+            userActions: {
+                hotkeys: false
+            }
         } as VideoJsPlayerOptions;
 
         this.player = videojs(this.videoNode, options) as VideoJsPlayer;
@@ -86,6 +88,12 @@ export default class VideoPlayer extends React.Component<Props> {
         });
 
         registerPlayerShortcuts(this);
+
+        // @ts-ignore @types/video.js is missing this function rom video.js signature check
+        // https://www.npmjs.com/package/@types/video.js for updates
+        this.player.handleKeyDown = (event: React.KeyboardEvent<{}>): void => {
+            triggerMouseTrapAction(event);
+        };
 
         videojs.setFormatTime((x: number): string =>
             getTimeString(x, (hours: number): boolean => hours === 0)

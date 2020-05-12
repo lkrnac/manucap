@@ -11,10 +11,10 @@ import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
+import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
-import { setAutoSaveSuccess } from "./subtitleEdit/cues/edit/editorStatesSlice";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();

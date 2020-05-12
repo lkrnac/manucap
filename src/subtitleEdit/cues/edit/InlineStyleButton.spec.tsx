@@ -7,11 +7,9 @@ import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
-import { setSaveTrack } from "../cueSlices";
 import _ from "lodash";
 import { TooltipWrapper } from "../../TooltipWrapper";
-
-jest.mock("lodash");
+import { setSaveTrack } from "../saveSlices";
 
 /**
  * On click actions are covered by CueTextEditor tests
@@ -132,12 +130,11 @@ describe("InlineStyleButton", () => {
 
         testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
-        const mockSave = jest.fn();
+        const saveTrack = jest.fn();
         // @ts-ignore
-        _.debounce.mockImplementation((saveCallback) => {
-            saveCallback();
-        });
-        testingStore.dispatch(setSaveTrack(mockSave) as {} as AnyAction);
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
@@ -148,7 +145,7 @@ describe("InlineStyleButton", () => {
         actualNode.find(InlineStyleButton).simulate("click");
 
         // THEN
-        expect(mockSave).toBeCalled();
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("renders overlay with text provided to InlineStyleButton", () => {

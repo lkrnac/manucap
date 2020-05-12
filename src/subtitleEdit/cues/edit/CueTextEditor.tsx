@@ -1,13 +1,6 @@
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import { Character, KeyCombination } from "../../shortcutConstants";
-import {
-    ContentState,
-    DraftHandleValue,
-    Editor,
-    EditorState,
-    convertFromHTML,
-    getDefaultKeyBinding
-} from "draft-js";
+import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
+import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
 import React, { ReactElement, useEffect } from "react";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
@@ -16,21 +9,13 @@ import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue, callSaveTrack } from "../cueSlices";
+import { updateVttCue } from "../cueSlices";
+import { callSaveTrack } from "../saveSlices";
 
-const characterBindings = new Map<Character, string>();
-characterBindings.set(Character.O_CHAR, "togglePlayPause");
-characterBindings.set(Character.K_CHAR, "togglePlayPauseCue");
-characterBindings.set(Character.ARROW_LEFT, "seekBack");
-characterBindings.set(Character.ARROW_RIGHT, "seekAhead");
-characterBindings.set(Character.ARROW_UP, "setStartTime");
-characterBindings.set(Character.ARROW_DOWN, "setEndTime");
-characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
-characterBindings.set(Character.ESCAPE, "editPrevious");
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
-    const action = characterBindings.get(e.keyCode);
-    if (e.shiftKey && (e.metaKey || e.altKey || e.ctrlKey) && action) {
+    const action = getActionByKeyboardEvent(e);
+    if (action) {
         return action;
     }
     if ((!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)) {
@@ -43,17 +28,7 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     return getDefaultKeyBinding(e);
 };
 
-const mousetrapBindings = new Map<string, KeyCombination>();
-mousetrapBindings.set("togglePlayPause", KeyCombination.MOD_SHIFT_O);
-mousetrapBindings.set("togglePlayPauseCue", KeyCombination.MOD_SHIFT_K);
-mousetrapBindings.set("seekBack", KeyCombination.MOD_SHIFT_LEFT);
-mousetrapBindings.set("seekAhead", KeyCombination.MOD_SHIFT_RIGHT);
-mousetrapBindings.set("setStartTime", KeyCombination.MOD_SHIFT_UP);
-mousetrapBindings.set("setEndTime", KeyCombination.MOD_SHIFT_DOWN);
-mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
-mousetrapBindings.set("closeEditor", KeyCombination.ESCAPE);
-mousetrapBindings.set("editNext", KeyCombination.ENTER);
-mousetrapBindings.set("editPrevious", KeyCombination.MOD_SHIFT_ESCAPE);
+
 
 const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);

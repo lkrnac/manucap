@@ -79,7 +79,7 @@ describe("CueCategoryButton", () => {
                         left: "0px",
                         opacity: "0",
                         pointerEvents: "none",
-                        margin: "0"
+                        margin: "0px"
                     }}
                     className="dropdown-menu show"
                 >

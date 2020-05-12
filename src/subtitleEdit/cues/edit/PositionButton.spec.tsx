@@ -55,7 +55,7 @@ describe("PositionButton", () => {
                         left: "0px",
                         opacity: "0",
                         pointerEvents: "none",
-                        margin: 0
+                        margin: "0px"
                     }}
                     x-placement="bottom-start"
                     aria-labelledby="dropdown-basic"

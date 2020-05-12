@@ -3,8 +3,8 @@ import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { updateEditorState } from "./editorStatesSlice";
-import { callSaveTrack } from "../cueSlices";
 import { TooltipWrapper } from "../../TooltipWrapper";
+import { callSaveTrack } from "../saveSlices";
 
 interface Props {
     editorIndex: number;

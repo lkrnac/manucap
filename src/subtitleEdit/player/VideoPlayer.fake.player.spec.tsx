@@ -8,6 +8,7 @@ import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { mount } from "enzyme";
 import { simulateComponentDidUpdate } from "../../testUtils/testUtils";
 import videojs from "video.js";
+import * as shortcutConstants from "../shortcutConstants";
 
 jest.useFakeTimers();
 
@@ -177,7 +178,7 @@ describe("VideoPlayer tested with fake player", () => {
         actualNode.setProps({ playSection: { startTime: 1 }, resetPlayerTimeChange });
 
         // THEN
-        expect(currentTime).toBeCalledWith(1);
+        expect(currentTime).toBeCalledTimes(1);
         expect(play).toBeCalled();
         expect(resetPlayerTimeChange).toBeCalled();
     });
@@ -417,5 +418,50 @@ describe("VideoPlayer tested with fake player", () => {
 
         // THEN
         expect(videojs.setFormatTime).toBeCalled();
+    });
+
+    it("Calls triggerMouseTrapAction on keydown event", () => {
+        // GIVEN
+
+        const triggerMouseTrapActionSpy = jest.spyOn(shortcutConstants, "triggerMouseTrapAction");
+        const handleKeyDownMock = jest.fn();
+
+
+        const textTracks = [
+            {
+                language: "en-US",
+                addCue: jest.fn(),
+                removeCue: jest.fn(),
+                length: 4000,
+                cues: [new VTTCue(0, 1, "Caption Line 1")],
+                dispatchEvent: jest.fn()
+            }
+        ];
+        textTracks["addEventListener"] = jest.fn();
+
+        const playerMock = {
+            textTracks: (): FakeTextTrack[] => textTracks,
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer
+                mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+                poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
+                tracks={initialTestingTracks}
+                languageCuesArray={initialTestingLanguageCuesArray}
+            />
+        );
+
+        // WHEN
+        simulateComponentDidUpdate(actualNode, {});
+        // @ts-ignore @types/video.js is missing this function rom video.js signature check
+        // https://www.npmjs.com/package/@types/video.js for updates
+        playerMock.handleKeyDown(handleKeyDownMock);
+
+        // THEN
+        expect(triggerMouseTrapActionSpy).toBeCalledWith(handleKeyDownMock);
     });
 });

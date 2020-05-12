@@ -1,7 +1,6 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { ReactElement, useEffect, useState } from "react";
-import { setSaveTrack } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
@@ -11,6 +10,7 @@ import { enableMapSet } from "immer";
 import { hasDataLoaded } from "./subtitleEditUtils";
 import CuesList from "./cues/CuesList";
 import { TooltipWrapper } from "./TooltipWrapper";
+import { setSaveTrack } from "./cues/saveSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
