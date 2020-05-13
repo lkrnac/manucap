@@ -816,6 +816,8 @@ describe("CueEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
                 />
             </Provider>
         );
@@ -845,6 +847,8 @@ describe("CueEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
                 />
             </Provider>
         );
