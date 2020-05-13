@@ -39,8 +39,10 @@ export interface Props {
 
 const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
     videoJsTrack.addCue(vttCue);
-    const addedCue = videoJsTrack.cues[index] as VTTCue;
-    copyNonConstructorProperties(addedCue, vttCue);
+    if (videoJsTrack.cues) {
+        const addedCue = videoJsTrack.cues[index] as VTTCue;
+        copyNonConstructorProperties(addedCue, vttCue);
+    }
 };
 
 const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void => {
@@ -104,8 +106,10 @@ export default class VideoPlayer extends React.Component<Props> {
     componentDidUpdate(prevProps: Props): void {
         for (let trackIdx = 0; trackIdx < this.player.textTracks().length; trackIdx++) {
             const videoJsTrack = (this.player.textTracks())[trackIdx];
-            for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
-                videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
+            if (videoJsTrack.cues) {
+                for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
+                    videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
+                }
             }
             updateCuesForVideoJsTrack(this.props, videoJsTrack);
             videoJsTrack.dispatchEvent(new Event("cuechange"));

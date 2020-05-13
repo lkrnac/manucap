@@ -12,6 +12,15 @@ import _ from "lodash";
 import { setSaveTrack } from "../saveSlices";
 
 describe("DeleteCueLineButton", () => {
+
+    const saveTrack = jest.fn();
+
+    beforeAll(() => {
+        // @ts-ignore
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+    });
+
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
@@ -59,11 +68,6 @@ describe("DeleteCueLineButton", () => {
 
     it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
-        const saveTrack = jest.fn();
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
         const cues = [
             { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },

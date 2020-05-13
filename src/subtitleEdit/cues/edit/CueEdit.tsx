@@ -108,8 +108,10 @@ const CueEdit = (props: Props): ReactElement => {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <CueCategoryButton
-                        onChange={(cueCategory: CueCategory): AppThunk =>
-                            dispatch(updateCueCategory(props.index, cueCategory))}
+                        onChange={(cueCategory: CueCategory): void => {
+                            dispatch(updateCueCategory(props.index, cueCategory));
+                            dispatch(callSaveTrack());
+                        }}
                         category={props.cue.cueCategory}
                     />
                     <PositionButton

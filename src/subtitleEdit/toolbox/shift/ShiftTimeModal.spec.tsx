@@ -18,6 +18,15 @@ const testCues = [
 ] as CueDto[];
 
 describe("ShiftTimesModal", () => {
+
+    const saveTrack = jest.fn();
+
+    beforeAll(() => {
+        // @ts-ignore
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+    });
+
     it("renders with error message", () => {
         // GIVEN
         const expectedNode = mount(
@@ -191,10 +200,6 @@ describe("ShiftTimesModal", () => {
 
     it("calls saveTrack in redux store when shift value", () => {
         // // GIVEN
-        const saveTrack = jest.fn();
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
 
         const actualNode = mount(

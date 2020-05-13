@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react";
-import { AppThunk } from "../../subtitleEditReducers";
 import { deleteCue } from "../cueSlices";
 import { useDispatch } from "react-redux";
 import { TooltipWrapper } from "../../TooltipWrapper";
+import { callSaveTrack } from "../saveSlices";
 
 interface Props {
     cueIndex: number;
@@ -21,7 +21,10 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
                 <button
                     style={{ maxHeight: "38px", margin: "5px" }}
                     className="btn btn-outline-secondary sbte-delete-cue-button"
-                    onClick={(): AppThunk => dispatch(deleteCue(props.cueIndex))}
+                    onClick={(): void => {
+                        dispatch(deleteCue(props.cueIndex));
+                        dispatch(callSaveTrack());
+                    }}
                 >
                     <i className="fa fa-trash" />
                 </button>
