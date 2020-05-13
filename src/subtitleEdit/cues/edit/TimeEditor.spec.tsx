@@ -2,7 +2,6 @@ import "../../../testUtils/initBrowserEnvironment";
 import React from "react";
 import TimeEditor from "./TimeEditor";
 import { mount } from "enzyme";
-import sinon from "sinon";
 
 describe("TimeEditor", () => {
     it("renders", () => {
@@ -180,9 +179,21 @@ describe("TimeEditor", () => {
         expect(actualNode.find("TimeField").props().value).toEqual("00:00:00.000");
     });
 
-    it("call onChange with correct value", () => {
+    it("doesn't call onChange immediately", () => {
         // GIVEN
-        const onChange = sinon.spy();
+        const onChange = jest.fn();
+        const actualNode = mount(<TimeEditor onChange={onChange} />);
+
+        // WHEN
+        actualNode.find("TimeField").simulate("change", { target: { value: "60:00:00.000", selectionEnd: 12 }});
+
+        // THEN
+        expect(onChange).not.toBeCalled();
+    });
+
+    it("call onChange debounced with correct value", (done) => {
+        // GIVEN
+        const onChange = jest.fn();
         const actualNode = mount(
             <TimeEditor onChange={onChange} />
         );
@@ -191,8 +202,13 @@ describe("TimeEditor", () => {
         actualNode.find("TimeField").simulate("change", { target: { value: "60:00:00.000", selectionEnd: 12 }});
 
         // THEN
-        sinon.assert.calledWith(onChange, 216000);
-        sinon.assert.calledOnce(onChange);
+        setTimeout(
+            () => {
+                expect(onChange).toBeCalledWith(216000);
+                expect(onChange).toBeCalledTimes(1);
+                done();
+            },
+            150
+        );
     });
-
 });
