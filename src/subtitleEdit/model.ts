@@ -53,3 +53,9 @@ export interface LoadingIndicator {
     cuesLoaded: boolean;
     sourceCuesLoaded: boolean;
 }
+
+export interface CueChange {
+    changeType: "ADD" | "EDIT" | "REMOVE";
+    index: number;
+    vttCue: VTTCue;
+}

@@ -1,4 +1,4 @@
-import { CueCategory, CueDto, SubtitleEditAction } from "../model";
+import { CueCategory, CueChange, CueDto, SubtitleEditAction } from "../model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { Dispatch } from "react";
@@ -158,6 +158,14 @@ export const overlapCaptionsSlice = createSlice({
     }
 });
 
+export const lastCueChangeSlice = createSlice({
+    name: "lastCueChange",
+    initialState: null as CueChange | null,
+    reducers: {
+        recordCueChange: (_state, action: PayloadAction<CueChange>): CueChange => action.payload
+    }
+});
+
 export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
@@ -185,6 +193,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         }
 
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue }));
+        dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue }));
         dispatch(cuesSlice.actions.checkErrors({
             subtitleSpecification: subtitleSpecifications,
             overlapCaptions: overlapCaptionsAllowed

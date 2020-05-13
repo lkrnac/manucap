@@ -2,6 +2,7 @@ import { Action, combineReducers } from "@reduxjs/toolkit";
 import {
     cuesSlice,
     editingCueIndexSlice,
+    lastCueChangeSlice,
     overlapCaptionsSlice,
     sourceCuesSlice,
     validationErrorSlice
@@ -28,7 +29,8 @@ export const Reducers = {
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
     overlapCaptions: overlapCaptionsSlice.reducer,
-    saveStatus: saveStatusSlice.reducer
+    saveStatus: saveStatusSlice.reducer,
+    lastCueChange: lastCueChangeSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);
