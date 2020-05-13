@@ -72,15 +72,16 @@ describe("saveSlices", () => {
             }, 300);
         });
 
-        it("call saveTrack passes the cues in store", (done) => {
+        it("passes cues and editingTrack from store to call to saveTrack", (done) => {
             // WHEN
             const cues = testingStore.getState().cues;
+            const editingTrack = testingStore.getState().editingTrack;
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             setTimeout(() => {
                 // THEN
                 expect(saveTrack).toHaveBeenCalledTimes(1);
-                expect(saveTrack).toHaveBeenCalledWith(cues);
+                expect(saveTrack).toHaveBeenCalledWith({ cues, editingTrack });
                 done();
             }, 300);
         });
