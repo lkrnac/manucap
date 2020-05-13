@@ -14,7 +14,15 @@ interface Props {
 const EditingVideoPlayer = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const editingCues = useSelector((state: SubtitleEditState) => state.cues);
+
+    /**
+     * This expects that EditingVideoPlayer would be rendered with cues initialized in Redux.
+     * It is not updated (hence () => true) when cues are updated,
+     * because replacing all the cues was not performant.
+     * We instead use lastCueUpdate property to change cues in already rendered player.
+     */
+    const editingCues = useSelector((state: SubtitleEditState) => state.cues, () => true);
+    const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange);
     const videoSectionToPlay = useSelector((state: SubtitleEditState) => state.videoSectionToPlay);
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];
     const tracks = editingTrack ? [editingTrack] : [];
@@ -36,6 +44,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 onTimeChange={props.onTimeChange}
                 languageCuesArray={languageCuesArray}
                 playSection={videoSectionToPlay}
+                lastCueChange={lastCueChange}
                 resetPlayerTimeChange={(): AppThunk => dispatch(playVideoSection(-1))}
             />
         )

@@ -13,7 +13,7 @@ import { playVideoSection } from "./playbackSlices";
 import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
-import { updateCues, updateSourceCues } from "../cues/cueSlices";
+import { updateCues, updateSourceCues, updateVttCue } from "../cues/cueSlices";
 
 jest.mock("./VideoPlayer");
 
@@ -70,5 +70,25 @@ describe("EditingVideoPlayer", () => {
         expect(testingStore.getState().editingTrack).toBeNull();
         expect(testingStore.getState().cues).toEqual([]);
         expect(testingStore.getState().sourceCues).toEqual([]);
+    });
+
+    it("passes down last cue change when updated", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Cue")) as {} as AnyAction);
+        actualNode.setProps({}); // trigger update + re-render
+
+        // THEN
+        expect(actualNode.find(VideoPlayer).props().lastCueChange)
+            .toEqual({ changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 1, "Cue") });
     });
 });

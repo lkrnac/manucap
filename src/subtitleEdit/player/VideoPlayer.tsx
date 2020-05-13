@@ -1,5 +1,5 @@
 import "video.js/dist/video-js.css";
-import { CueDto, LanguageCues, Track } from "../model";
+import { CueChange, CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../shortcutConstants";
@@ -35,9 +35,10 @@ export interface Props {
     languageCuesArray: LanguageCues[];
     playSection?: PlayVideoAction;
     resetPlayerTimeChange?: () => void;
+    lastCueChange: CueChange | null;
 }
 
-const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
+const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
     videoJsTrack.addCue(vttCue);
     const addedCue = videoJsTrack.cues[index] as VTTCue;
     copyNonConstructorProperties(addedCue, vttCue);
@@ -49,7 +50,7 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
     props.languageCuesArray
         .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
         .forEach((languageCues: LanguageCues) => {
-            languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
+            languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCueAndCopyStyles(videoJsTrack));
         });
 };
 
@@ -102,12 +103,15 @@ export default class VideoPlayer extends React.Component<Props> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        for (let trackIdx = 0; trackIdx < this.player.textTracks().length; trackIdx++) {
-            const videoJsTrack = (this.player.textTracks())[trackIdx];
-            for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
-                videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
-            }
-            updateCuesForVideoJsTrack(this.props, videoJsTrack);
+        const lastCueChange = this.props.lastCueChange;
+        if (lastCueChange) {
+            const videoJsTrack = (this.player.textTracks())[0];
+            const cue = videoJsTrack.cues[lastCueChange.index] as VTTCue;
+            cue.text = lastCueChange.vttCue.text;
+            cue.startTime = lastCueChange.vttCue.startTime;
+            cue.endTime = lastCueChange.vttCue.endTime;
+            copyNonConstructorProperties(cue, lastCueChange.vttCue);
+
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
 
