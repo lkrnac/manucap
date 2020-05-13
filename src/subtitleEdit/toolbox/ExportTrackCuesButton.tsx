@@ -9,7 +9,7 @@ const ExportTrackCuesButton = (props: Props): ReactElement => {
         <button
             type="button"
             className="sbte-export-button btn btn-secondary"
-            onClick={props.handleExport}
+            onClick={(): void => props.handleExport()}
         >
             <i className="fas fa-file-export" /> Export File
         </button>
