@@ -29,8 +29,6 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     return getDefaultKeyBinding(e);
 };
 
-
-
 const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
     if (keyCombination) {
