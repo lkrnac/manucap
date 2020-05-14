@@ -93,6 +93,7 @@ describe("SubtitleEdit", () => {
                                 poster="dummyPoster"
                                 tracks={[testingTrack]}
                                 languageCuesArray={[]}
+                                lastCueChange={null}
                             />
                             <Toolbox />
                         </div>
@@ -204,6 +205,7 @@ describe("SubtitleEdit", () => {
                                 poster="dummyPoster"
                                 tracks={[testingTrack]}
                                 languageCuesArray={[]}
+                                lastCueChange={null}
                             />
                             <Toolbox />
                         </div>
