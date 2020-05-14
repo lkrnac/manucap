@@ -206,7 +206,7 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     };
 
 export const addCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueAction | boolean>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const state: SubtitleEditState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
@@ -226,14 +226,17 @@ export const addCue = (idx: number): AppThunk =>
 
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
+            dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
         } else {
             dispatch(validationErrorSlice.actions.setValidationError(true));
         }
     };
 
 export const deleteCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueIndexAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(cuesSlice.actions.deleteCue({ idx }));
+        dispatch(lastCueChangeSlice.actions
+            .recordCueChange({ changeType: "REMOVE", index: idx, vttCue: new VTTCue(0, 0, "") }));
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>

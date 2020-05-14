@@ -54,6 +54,28 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
         });
 };
 
+const handleCueEditIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
+    if (lastCueChange.changeType === "EDIT") {
+        const cue = videoJsTrack.cues[lastCueChange.index] as VTTCue;
+        cue.text = lastCueChange.vttCue.text;
+        cue.startTime = lastCueChange.vttCue.startTime;
+        cue.endTime = lastCueChange.vttCue.endTime;
+        copyNonConstructorProperties(cue, lastCueChange.vttCue);
+    }
+};
+
+const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
+    if (lastCueChange.changeType === "ADD") {
+        const cuesTail = [];
+        for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
+            cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
+            videoJsTrack.removeCue(videoJsTrack.cues[idx]);
+        }
+        videoJsTrack.addCue(lastCueChange.vttCue);
+        cuesTail.forEach(cue => videoJsTrack.addCue(cue));
+    }
+};
+
 export default class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
     private videoNode?: Node;
@@ -106,12 +128,12 @@ export default class VideoPlayer extends React.Component<Props> {
         const lastCueChange = this.props.lastCueChange;
         if (lastCueChange) {
             const videoJsTrack = (this.player.textTracks())[0];
-            const cue = videoJsTrack.cues[lastCueChange.index] as VTTCue;
-            cue.text = lastCueChange.vttCue.text;
-            cue.startTime = lastCueChange.vttCue.startTime;
-            cue.endTime = lastCueChange.vttCue.endTime;
-            copyNonConstructorProperties(cue, lastCueChange.vttCue);
-
+            console.log(videoJsTrack.cues);
+            handleCueEditIfNeeded(lastCueChange, videoJsTrack);
+            handleCueAddIfNeeded(lastCueChange, videoJsTrack);
+            if (lastCueChange.changeType === "REMOVE") {
+                videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
+            }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
 
