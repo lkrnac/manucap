@@ -56,18 +56,17 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
         });
 };
 
-const handleCueEditIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
+const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void => {
     if (lastCueChange.changeType === "EDIT") {
-        const cue = videoJsTrack.cues[lastCueChange.index] as VTTCue;
-        cue.text = lastCueChange.vttCue.text;
-        cue.startTime = lastCueChange.vttCue.startTime;
-        cue.endTime = lastCueChange.vttCue.endTime;
-        copyNonConstructorProperties(cue, lastCueChange.vttCue);
+        vttCue.text = lastCueChange.vttCue.text;
+        vttCue.startTime = lastCueChange.vttCue.startTime;
+        vttCue.endTime = lastCueChange.vttCue.endTime;
+        copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
     }
 };
 
 const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
-    if (lastCueChange.changeType === "ADD") {
+    if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
             cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
@@ -129,8 +128,8 @@ export default class VideoPlayer extends React.Component<Props> {
     componentDidUpdate(prevProps: Props): void {
         const lastCueChange = this.props.lastCueChange;
         const videoJsTrack = (this.player.textTracks())[0];
-        if (lastCueChange && videoJsTrack.cues) {
-            handleCueEditIfNeeded(lastCueChange, videoJsTrack);
+        if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
+            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue);
             handleCueAddIfNeeded(lastCueChange, videoJsTrack);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
