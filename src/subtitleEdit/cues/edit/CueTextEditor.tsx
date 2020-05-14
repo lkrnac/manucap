@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, Dispatch } from "react";
+import React, { ReactElement, useEffect, Dispatch, useState } from "react";
 import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
@@ -46,12 +46,19 @@ export interface CueTextEditorProps {
 const changeVttCueInRedux = (
     currentContent: ContentState,
     props: CueTextEditorProps,
-    dispatch: Dispatch<AppThunk>
+    dispatch: Dispatch<AppThunk>,
+    textChanged: boolean,
+    setTextChanged: (textChanged: boolean) => void
 ): void => {
     const vttText = getVttText(currentContent);
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
     dispatch(updateVttCue(props.index, vttCue));
+    // this if is so we don't trigger a save on first render
+    if (textChanged) {
+        dispatch(callSaveTrack());
+        setTextChanged(false);
+    }
 };
 
 const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 100);
@@ -70,6 +77,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     }
     const currentContent = editorState.getCurrentContent();
     const currentInlineStyle = editorState.getCurrentInlineStyle();
+    const [textChanged, setTextChanged] = useState(false);
     useEffect(
         () => {
             dispatch(updateEditorState(props.index, editorState));
@@ -84,7 +92,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
-            changeVttCueInReduxDebounced(currentContent, props, dispatch);
+            changeVttCueInReduxDebounced(currentContent, props, dispatch, textChanged, setTextChanged);
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
@@ -119,10 +127,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 <Editor
                     editorState={editorState}
                     onChange={(newEditorState: EditorState): void => {
-                        if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                            dispatch(callSaveTrack());
-                        }
                         dispatch(updateEditorState(props.index, newEditorState));
+                        if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
+                            setTextChanged(true);
+                        }
                     }}
                     spellCheck
                     keyBindingFn={keyShortcutBindings}

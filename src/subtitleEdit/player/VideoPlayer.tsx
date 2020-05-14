@@ -40,8 +40,10 @@ export interface Props {
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
     videoJsTrack.addCue(vttCue);
-    const addedCue = videoJsTrack.cues[index] as VTTCue;
-    copyNonConstructorProperties(addedCue, vttCue);
+    if (videoJsTrack.cues) {
+        const addedCue = videoJsTrack.cues[index] as VTTCue;
+        copyNonConstructorProperties(addedCue, vttCue);
+    }
 };
 
 const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void => {
@@ -126,8 +128,8 @@ export default class VideoPlayer extends React.Component<Props> {
 
     componentDidUpdate(prevProps: Props): void {
         const lastCueChange = this.props.lastCueChange;
-        if (lastCueChange) {
-            const videoJsTrack = (this.player.textTracks())[0];
+        const videoJsTrack = (this.player.textTracks())[0];
+        if (lastCueChange && videoJsTrack.cues) {
             handleCueEditIfNeeded(lastCueChange, videoJsTrack);
             handleCueAddIfNeeded(lastCueChange, videoJsTrack);
             if (lastCueChange.changeType === "REMOVE") {

@@ -23,6 +23,15 @@ const cues = [
 const sourceCue = { vttCue: new VTTCue(0, 0, "Source Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
 describe("CueActionsPanel", () => {
+
+    const saveTrack = jest.fn();
+
+    beforeAll(() => {
+        // @ts-ignore
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+    });
+
     it("renders for caption cue in edit mode", () => {
         // GIVEN
         const expectedNode = mount(
@@ -250,11 +259,6 @@ describe("CueActionsPanel", () => {
 
     it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
-        const saveTrack = jest.fn();
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
