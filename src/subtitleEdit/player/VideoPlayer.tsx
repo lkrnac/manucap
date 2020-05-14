@@ -128,7 +128,6 @@ export default class VideoPlayer extends React.Component<Props> {
         const lastCueChange = this.props.lastCueChange;
         if (lastCueChange) {
             const videoJsTrack = (this.player.textTracks())[0];
-            console.log(videoJsTrack.cues);
             handleCueEditIfNeeded(lastCueChange, videoJsTrack);
             handleCueAddIfNeeded(lastCueChange, videoJsTrack);
             if (lastCueChange.changeType === "REMOVE") {
