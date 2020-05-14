@@ -485,4 +485,56 @@ describe("CuesList",() => {
         // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
         expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(0);
     });
+
+    it("adds first cue if clicked translation cue and cues are empty", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+            { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+        ];
+
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-cue-editor").at(0).simulate("click");
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().validationError).toEqual(false);
+    });
+
+    it("adds first cue if clicked second translation cue without creating first cue", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+            { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+        ];
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-cue-editor").at(1).simulate("click");
+
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().validationError).toEqual(false);
+    });
 });
