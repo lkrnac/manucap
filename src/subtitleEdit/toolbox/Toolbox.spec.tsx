@@ -62,30 +62,32 @@ describe("Toolbox", () => {
     it("passes exportFile function to export file button", () => {
         // GIVEN
         const mockExportFile = jest.fn();
-
-        // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
                 <Toolbox handleExportFile={mockExportFile} handleImportFile={jest.fn()} />
             </Provider>
         );
 
+        // WHEN
+        actualNode.find(".sbte-export-button").simulate("click");
+
         // THEN
-        expect(actualNode.find(".sbte-export-button").props().onClick).toEqual(mockExportFile);
+        expect(mockExportFile).toHaveBeenCalled();
     });
 
     it("passes importFile function to import file button", () => {
         // GIVEN
         const mockImportFile = jest.fn();
-
-        // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
                 <Toolbox handleExportFile={jest.fn()} handleImportFile={mockImportFile} />
             </Provider>
         );
 
+        // WHEN
+        actualNode.find(".sbte-import-button").simulate("click");
+
         // THEN
-        expect(actualNode.find(".sbte-import-button").props().onClick).toEqual(mockImportFile);
+        expect(mockImportFile).toHaveBeenCalled();
     });
 });
