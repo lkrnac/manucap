@@ -349,10 +349,10 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[1].corrupted).toEqual(false);
-                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 

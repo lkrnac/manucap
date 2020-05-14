@@ -2,10 +2,7 @@ import { CueCategory, CueChange, CueDto, SubtitleEditAction } from "../model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import {
-    constructCueValuesArray,
-    copyNonConstructorProperties,
-} from "./cueUtils";
+import { constructCueValuesArray, copyNonConstructorProperties, } from "./cueUtils";
 import { Constants } from "../constants";
 import { editingTrackSlice } from "../trackSlices";
 import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
@@ -14,7 +11,8 @@ import {
     applyInvalidRangePreventionEnd,
     applyInvalidRangePreventionStart,
     applyOverlapPreventionEnd,
-    applyOverlapPreventionStart, getTimeGapLimits,
+    applyOverlapPreventionStart, conformToRules,
+    getTimeGapLimits,
     markCuesBreakingRules,
     verifyCueDuration
 } from "./cueVerifications";
@@ -37,6 +35,11 @@ export interface CueAction extends CueIndexAction {
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
+}
+
+interface CheckOptions extends SubtitleSpecificationAction {
+    overlapCaptions?: boolean;
+    index?: number;
 }
 
 const areCuesEqual = (x: VTTCue, y: VTTCue): boolean => {
@@ -99,13 +102,35 @@ export const cuesSlice = createSlice({
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
         },
-        checkErrors: (state, action: PayloadAction<SubtitleSpecificationAction>): CueDto[] =>
-            markCuesBreakingRules(state, action.payload.subtitleSpecification, action.payload.overlapCaptions)
+        checkErrors: (state, action: PayloadAction<CheckOptions>): void => {
+            const index = action.payload.index;
+            if (index !== undefined) {
+                const subtitleSpecification = action.payload.subtitleSpecification;
+                const overlapCaptions = action.payload.overlapCaptions;
+
+                const previousCue = state[index - 1];
+                const currentCue = state[index];
+                const followingCue = state[index + 1];
+                if (previousCue) {
+                    previousCue.corrupted = !conformToRules(
+                        previousCue.vttCue, subtitleSpecification, undefined, currentCue, overlapCaptions
+                    );
+                }
+                currentCue.corrupted = !conformToRules(
+                    currentCue.vttCue, subtitleSpecification, previousCue, followingCue, overlapCaptions
+                );
+                if (followingCue) {
+                    followingCue.corrupted = !conformToRules(
+                        followingCue.vttCue, subtitleSpecification, currentCue, undefined, overlapCaptions
+                    );
+                }
+            }
+        }
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
         [subtitleSpecificationSlice.actions.readSubtitleSpecification.type]:
-            (state, action: PayloadAction<SubtitleSpecificationAction>): CueDto[] =>
+            (state, action: PayloadAction<CheckOptions>): CueDto[] =>
                 markCuesBreakingRules(state, action.payload.subtitleSpecification, action.payload.overlapCaptions),
     }
 });
@@ -196,7 +221,8 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue }));
         dispatch(cuesSlice.actions.checkErrors({
             subtitleSpecification: subtitleSpecifications,
-            overlapCaptions: overlapCaptionsAllowed
+            overlapCaptions: overlapCaptionsAllowed,
+            index: idx
         }));
     };
 

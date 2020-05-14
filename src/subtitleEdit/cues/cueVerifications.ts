@@ -51,38 +51,45 @@ const rangeOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | 
     return minRangeOk(vttCue, timeGapLimit) && maxRangeOk(vttCue, timeGapLimit);
 };
 
-const startOverlapOk = (vttCue: VTTCue, previousCue: CueDto): boolean =>
+const startOverlapOk = (vttCue: VTTCue, previousCue?: CueDto): boolean =>
     !previousCue || vttCue.startTime >= previousCue.vttCue.endTime;
 
-const endOverlapOk = (vttCue: VTTCue, followingCue: CueDto): boolean =>
+const endOverlapOk = (vttCue: VTTCue, followingCue?: CueDto): boolean =>
     !followingCue || vttCue.endTime <= followingCue.vttCue.startTime;
 
-const overlapOk = (vttCue: VTTCue, previousCue: CueDto, followingCue: CueDto): boolean =>
+const overlapOk = (vttCue: VTTCue, previousCue?: CueDto, followingCue?: CueDto): boolean =>
     startOverlapOk(vttCue, previousCue) && endOverlapOk(vttCue, followingCue);
 
-const conformToRules = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null,
-                        previousCue: CueDto, followingCue: CueDto, overlapCaptions: boolean): boolean =>
+export const conformToRules = (
+    vttCue: VTTCue,
+    subtitleSpecification: SubtitleSpecification | null,
+    previousCue?: CueDto,
+    followingCue?: CueDto,
+    overlapCaptions?: boolean,
+): boolean =>
     checkCharacterLimitation(vttCue.text, subtitleSpecification)
     && rangeOk(vttCue, subtitleSpecification)
     && (overlapCaptions || overlapOk(vttCue, previousCue, followingCue));
 
-export const markCuesBreakingRules =
-    (cues: CueDto[], subtitleSpecifications: SubtitleSpecification | null,
-     overlapCaptions: boolean | undefined): CueDto [] =>
-        cues.map((cue, index) => {
-            const previousCue = cues[index - 1];
-            const followingCue = cues[index + 1];
-            return {
-                ...cue,
-                corrupted: !conformToRules(
-                    cue.vttCue,
-                    subtitleSpecifications,
-                    previousCue,
-                    followingCue,
-                    overlapCaptions || false
-                )
-            };
-        });
+export const markCuesBreakingRules = (
+    cues: CueDto[],
+    subtitleSpecifications: SubtitleSpecification | null,
+    overlapCaptions: boolean | undefined
+): CueDto [] =>
+    cues.map((cue, index) => {
+        const previousCue = cues[index - 1];
+        const followingCue = cues[index + 1];
+        return {
+            ...cue,
+            corrupted: !conformToRules(
+                cue.vttCue,
+                subtitleSpecifications,
+                previousCue,
+                followingCue,
+                overlapCaptions || false
+            )
+        };
+    });
 
 export const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
