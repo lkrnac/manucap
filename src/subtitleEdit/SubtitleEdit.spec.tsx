@@ -914,7 +914,7 @@ describe("SubtitleEdit", () => {
         expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
-    it("resets editing track and cues state when unmounted", () => {
+    it("resets all editing track data when unmounted", () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
