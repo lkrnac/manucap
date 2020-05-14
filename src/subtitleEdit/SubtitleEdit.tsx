@@ -15,6 +15,7 @@ import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { hasDataLoaded, isDirectTranslationTrack } from "./subtitleEditUtils";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
+import { resetEditingTrack } from "./trackSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -42,6 +43,14 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         ? sourceCues
         : cues;
     const cuesRef = useRef() as MutableRefObject<HTMLDivElement>;
+
+    useEffect(
+        () =>  (): void => {
+                dispatch(resetEditingTrack());
+            },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [] // Run only once -> unmount
+    );
 
     useEffect(
         () => {

@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateCues, updateSourceCues } from "./cues/cueSlices";
+import { setOverlapCaptions, updateCues, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -18,6 +18,8 @@ import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import _ from "lodash";
 import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
+import { render } from "@testing-library/react";
+import ReactDOM from "react-dom";
 
 let testingStore = createTestingStore();
 
@@ -912,4 +914,34 @@ describe("SubtitleEdit", () => {
         expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
+    it("resets all editing track data when unmounted", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+
+        const { container } = render(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        ReactDOM.unmountComponentAtNode(container);
+
+        // THEN
+        expect(testingStore.getState().loadingIndicator.cuesLoaded).toBeFalsy();
+        expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeFalsy();
+        expect(testingStore.getState().editingTrack).toBeNull();
+        expect(testingStore.getState().cues).toEqual([]);
+        expect(testingStore.getState().sourceCues).toEqual([]);
+        expect(testingStore.getState().overlapCaptions).toBeFalsy();
+    });
 });
