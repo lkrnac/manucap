@@ -11,6 +11,7 @@ import { hasDataLoaded } from "./subtitleEditUtils";
 import CuesList from "./cues/CuesList";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
+import { resetEditingTrack } from "./trackSlices";
 import { ScrollPosition } from "./model";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
@@ -33,6 +34,14 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
     const [scrollPosition, setScrollPosition] = useState<ScrollPosition>();
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
+
+    useEffect(
+        () =>  (): void => {
+                dispatch(resetEditingTrack());
+            },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [] // Run only once -> unmount
+    );
 
     useEffect(
         () => {
