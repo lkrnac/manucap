@@ -11,7 +11,8 @@ import {
     applyInvalidRangePreventionEnd,
     applyInvalidRangePreventionStart,
     applyOverlapPreventionEnd,
-    applyOverlapPreventionStart, conformToRules,
+    applyOverlapPreventionStart,
+    conformToRules,
     getTimeGapLimits,
     markCuesBreakingRules,
     verifyCueDuration
