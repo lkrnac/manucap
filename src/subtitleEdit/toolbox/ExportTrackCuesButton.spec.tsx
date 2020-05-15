@@ -4,6 +4,15 @@ import { mount, shallow } from "enzyme";
 import ExportTrackCuesButton from "./ExportTrackCuesButton";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
+import {updateEditingTrack} from "../trackSlices";
+import {AnyAction} from "@reduxjs/toolkit";
+import {Track} from "../model";
+
+const testingTrack = {
+    type: "CAPTION",
+    language: { id: "en-US" },
+    default: true,
+} as Track;
 
 let testingStore = createTestingStore();
 
@@ -33,6 +42,7 @@ describe("ExportTrackCuesButton", () => {
     it("calls handleExport when clicked", () => {
         // GIVEN
         const mockHandleExport = jest.fn();
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <ExportTrackCuesButton handleExport={mockHandleExport} />
@@ -43,6 +53,6 @@ describe("ExportTrackCuesButton", () => {
         actualNode.find(".sbte-export-button").simulate("click");
 
         // THEN
-        expect(mockHandleExport).toHaveBeenCalled();
+        expect(mockHandleExport).toHaveBeenCalledWith(testingTrack);
     });
 });
