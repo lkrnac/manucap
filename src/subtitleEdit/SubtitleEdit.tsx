@@ -36,9 +36,9 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
 
     useEffect(
-        () =>  (): void => {
-                dispatch(resetEditingTrack());
-            },
+        () => (): void => { // nested arrow function is needed, because React will call it as callback when unmounted
+            dispatch(resetEditingTrack());
+        },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once -> unmount
     );
@@ -47,6 +47,14 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         () => {
             dispatch(setSaveTrack(props.onSave));
         }, [ dispatch, props.onSave ]
+    );
+
+    useEffect(
+        (): void => {
+            setScrollPosition(ScrollPosition.FIRST);
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [] // Run only once
     );
 
     return (

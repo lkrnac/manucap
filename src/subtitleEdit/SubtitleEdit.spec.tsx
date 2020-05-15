@@ -547,7 +547,7 @@ describe("SubtitleEdit", () => {
         verifyScrollPosition(actualNode, 2, 3, done);
     });
 
-    it("jumps to first cue", (done) => {
+    it("jumps to first cue when button is clicked", (done) => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
@@ -572,6 +572,33 @@ describe("SubtitleEdit", () => {
 
         // THEN
         verifyScrollPosition(actualNode, 0, 2, done);
+    });
+
+    it("jumps to first cue on first render", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(0);
     });
 
     it("calls onSave callback on auto save", () => {
