@@ -1029,6 +1029,8 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
                 />
             </Provider>
         );
