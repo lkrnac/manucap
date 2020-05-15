@@ -11,6 +11,7 @@ import { hasDataLoaded } from "./subtitleEditUtils";
 import CuesList from "./cues/CuesList";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
+import { ScrollPosition } from "./model";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -30,7 +31,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
-    const [scrollCue, setScrollCue] = useState<"first" | "last" | undefined>();
+    const [scrollPosition, setScrollPosition] = useState<ScrollPosition>();
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
 
     useEffect(
@@ -74,7 +75,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             <CuesList
                                 editingTrack={editingTrack}
                                 currentPlayerTime={currentPlayerTime}
-                                scrollCue={scrollCue}
+                                scrollPosition={scrollPosition}
                             />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
@@ -93,7 +94,10 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         className="btn btn-secondary sbte-jump-to-first-button"
                                         type="button"
                                         style={{ marginLeft: "10px" }}
-                                        onClick={(): void => setScrollCue("first")}
+                                        onClick={(): void => {
+                                            setScrollPosition(ScrollPosition.NONE);
+                                            setTimeout(() => setScrollPosition(ScrollPosition.FIRST), 10);
+                                        }}
                                     >
                                         <i className="fa fa-angle-double-up" />
                                     </button>
@@ -107,7 +111,10 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         className="btn btn-secondary sbte-jump-to-last-button"
                                         type="button"
                                         style={{ marginLeft: "10px" }}
-                                        onClick={(): void => setScrollCue("last")}
+                                        onClick={(): void => {
+                                            setScrollPosition(ScrollPosition.NONE);
+                                            setTimeout(() => setScrollPosition(ScrollPosition.LAST), 10);
+                                        }}
                                     >
                                         <i className="fa fa-angle-double-down" />
                                     </button>

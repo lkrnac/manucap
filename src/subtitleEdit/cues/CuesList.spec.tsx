@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import { mount, ReactWrapper } from "enzyme";
 
-import { CueDto, CueWithSource, Language, Track } from "../model";
+import { CueDto, CueWithSource, Language, ScrollPosition, Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import { updateCues, updateEditingCueIndex, updateSourceCues } from "./cueSlices";
@@ -51,7 +51,7 @@ const simulateEnoughSpaceForCues = (actualNode: ReactWrapper): void => act(() =>
     window.dispatchEvent(new Event("resize")); // trigger smart scroll space re-calculation
 });
 
-describe("CuesList",() => {
+describe("CuesList", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
@@ -65,7 +65,7 @@ describe("CuesList",() => {
         ] as CueDto[];
 
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
                     <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                         <CueLine
@@ -75,17 +75,17 @@ describe("CuesList",() => {
                             rowRef={React.createRef()}
                             onClick={(): void => undefined}
                         />
-                    </div>
-                </div>
-            </Provider>
+                    </div >
+                </div >
+            </Provider >
         );
 
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
 
         // THEN
@@ -102,7 +102,7 @@ describe("CuesList",() => {
         ] as CueDto[];
 
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
                     <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                         <CueLine
@@ -119,17 +119,17 @@ describe("CuesList",() => {
                             rowRef={React.createRef()}
                             onClick={(): void => undefined}
                         />
-                    </div>
-                </div>
-            </Provider>
+                    </div >
+                </div >
+            </Provider >
         );
 
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider>
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.FIRST} />
+            </Provider >
         );
         simulateEnoughSpaceForCues(actualNode);
         actualNode.setProps({}); // re-render component
@@ -153,9 +153,9 @@ describe("CuesList",() => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
@@ -178,9 +178,9 @@ describe("CuesList",() => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.setProps({}); // re-render component
@@ -209,9 +209,9 @@ describe("CuesList",() => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
@@ -242,9 +242,9 @@ describe("CuesList",() => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -270,9 +270,9 @@ describe("CuesList",() => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.setProps({}); // re-render component
@@ -291,9 +291,9 @@ describe("CuesList",() => {
     it("shows starts captioning button for empty direct translation track", () => {
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
         actualNode.setProps({}); // re-render component
@@ -306,9 +306,9 @@ describe("CuesList",() => {
     it("does not show starts captioning button for translation track empty source cues", () => {
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
@@ -335,9 +335,13 @@ describe("CuesList",() => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
-                <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider>
+            <Provider store={testingStore}>
+                <CuesList
+                    editingTrack={testingTranslationTrack}
+                    currentPlayerTime={0}
+                    scrollPosition={ScrollPosition.FIRST}
+                />
+            </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
@@ -364,9 +368,13 @@ describe("CuesList",() => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
-                <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider>
+            <Provider store={testingStore}>
+                <CuesList
+                    editingTrack={testingTranslationTrack}
+                    currentPlayerTime={0}
+                    scrollPosition={ScrollPosition.FIRST}
+                />
+            </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
@@ -390,9 +398,9 @@ describe("CuesList",() => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
-                <CuesList editingTrack={testingTrack} currentPlayerTime={5.5} />
-            </Provider>
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingTrack} currentPlayerTime={5.5} scrollPosition={ScrollPosition.FIRST} />
+            </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         simulateEnoughSpaceForCues(actualNode);
@@ -416,9 +424,9 @@ describe("CuesList",() => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
 
         // THEN
@@ -436,14 +444,14 @@ describe("CuesList",() => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
 
         // THEN
         // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(actualNode.find("ReactSmartScroll").props().startAt).toBeUndefined();
+        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(2);
     });
 
     it("scrolls to last cue", () => {
@@ -456,9 +464,9 @@ describe("CuesList",() => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollCue="last" />
-            </Provider>
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.LAST} />
+            </Provider >
         );
 
         // THEN
@@ -476,9 +484,9 @@ describe("CuesList",() => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollCue="first" />
-            </Provider>
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.FIRST} />
+            </Provider >
         );
 
         // THEN
@@ -496,9 +504,9 @@ describe("CuesList",() => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
 
         // WHEN
@@ -521,9 +529,9 @@ describe("CuesList",() => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider>
+            </Provider >
         );
 
         // WHEN

@@ -12,7 +12,7 @@ import { SubtitleSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
@@ -55,6 +55,25 @@ const testingTranslationTask = {
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM"
 } as Task;
+
+const verifyScrollPosition = (
+    actualNode: ReactWrapper,
+    expectedPosition: number,
+    cuesLength: number,
+    done: Function
+): void => {
+    // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+    expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(cuesLength);
+    setTimeout(
+        () => {
+            actualNode.setProps({}); // update + trigger re-render
+            // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+            expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(expectedPosition);
+            done();
+        },
+        50
+    );
+};
 
 describe("SubtitleEdit", () => {
     beforeEach(() => {
@@ -465,7 +484,7 @@ describe("SubtitleEdit", () => {
         expect(mockOnComplete.mock.calls.length).toBe(1);
     });
 
-    it("jump to last cue in captioning mode", () => {
+    it("jump to last cue in captioning mode", (done) => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
@@ -489,11 +508,10 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(1);
+        verifyScrollPosition(actualNode, 1, 2, done);
     });
 
-    it("jump to last cue in translation mode", () => {
+    it("jump to last cue in translation mode", (done) => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
@@ -524,11 +542,10 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(2);
+        verifyScrollPosition(actualNode, 2, 3, done);
     });
 
-    it("jumps to first cue", () => {
+    it("jumps to first cue", (done) => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
@@ -552,8 +569,7 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-first-button").simulate("click");
 
         // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(0);
+        verifyScrollPosition(actualNode, 0, 2, done);
     });
 
     it("calls onSave callback on auto save", () => {

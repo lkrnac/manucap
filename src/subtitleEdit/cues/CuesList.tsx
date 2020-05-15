@@ -1,12 +1,11 @@
-import React from "react";
-import { ReactElement } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { ReactElement } from "react";
+import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
 import ReactSmartScroll from "@dotsub/react-smart-scroll";
 
 import { isDirectTranslationTrack } from "../subtitleEditUtils";
 import AddCueLineButton from "./edit/AddCueLineButton";
-import { CueDto, Track, CueWithSource } from "../model";
+import { CueDto, CueWithSource, ScrollPosition, Track } from "../model";
 import CueLine from "./CueLine";
 import { addCue, updateEditingCueIndex } from "./cueSlices";
 import { SubtitleEditState } from "../subtitleEditReducers";
@@ -14,17 +13,17 @@ import { SubtitleEditState } from "../subtitleEditReducers";
 interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
-    scrollCue?: "first" | "last";
+    scrollPosition?: ScrollPosition;
 }
 
-const getScrollCueIndex = (cues: CueWithSource[], scrollCue: "first" | "last" | undefined): number | undefined => {
-    if (scrollCue === "first") {
+const getScrollCueIndex = (cues: CueWithSource[], scrollPosition?: ScrollPosition): number => {
+    if (scrollPosition === ScrollPosition.FIRST) {
         return 0;
     }
-    if (scrollCue === "last") {
+    if (scrollPosition === ScrollPosition.LAST) {
         return cues.length - 1;
     }
-    return undefined;
+    return cues.length;
 };
 
 const CuesList = (props: Props): ReactElement => {
@@ -41,7 +40,7 @@ const CuesList = (props: Props): ReactElement => {
 
     const startAt = cuesWithSource.length - 1 === editingCueIndex
         ? editingCueIndex
-        : getScrollCueIndex(cuesWithSource, props.scrollCue);
+        : getScrollCueIndex(cuesWithSource, props.scrollPosition);
     return (
         <>
             {

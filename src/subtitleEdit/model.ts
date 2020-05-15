@@ -59,3 +59,9 @@ export interface CueChange {
     index: number;
     vttCue: VTTCue;
 }
+
+export enum ScrollPosition {
+    NONE,
+    FIRST,
+    LAST
+}
