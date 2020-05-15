@@ -41,6 +41,7 @@ const CuesList = (props: Props): ReactElement => {
     const startAt = cuesWithSource.length - 1 === editingCueIndex
         ? editingCueIndex
         : getScrollCueIndex(cuesWithSource, props.scrollPosition);
+    const rowHeight = sourceCues.length > 0 ? 161 : 81; // Values are from Elements > Computed from browser DEV tools
     return (
         <>
             {
@@ -54,7 +55,7 @@ const CuesList = (props: Props): ReactElement => {
                 data={cuesWithSource}
                 row={CueLine}
                 rowProps={{ playerTime: props.currentPlayerTime, cuesLength: cues.length }}
-                rowHeight={81} // This was calculated in browser
+                rowHeight={rowHeight}
                 startAt={startAt}
                 onClick={(idx: number): void => {
                     idx >= cues.length

@@ -545,4 +545,55 @@ describe("CuesList", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(0);
         expect(testingStore.getState().validationError).toEqual(false);
     });
+
+    it("configures row height for captioning mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.FIRST} />
+            </Provider >
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.setProps({}); // re-render component
+
+        // THEN
+        const smartScroll = actualNode.find("ReactSmartScroll");
+        // @ts-ignore
+        expect(smartScroll.props().rowHeight).toEqual(81);
+    });
+
+    it("configures row height for translation mode", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.FIRST} />
+            </Provider >
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        actualNode.setProps({}); // re-render component
+
+        // THEN
+        const smartScroll = actualNode.find("ReactSmartScroll");
+        // @ts-ignore
+        expect(smartScroll.props().rowHeight).toEqual(161);
+    });
 });
