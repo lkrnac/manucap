@@ -6,12 +6,12 @@ import { setOverlapCaptions } from "../cues/cueSlices";
 
 export const CaptionOverlapToggle = (): ReactElement => {
     const dispatch = useDispatch();
-    const overlapCaptions = useSelector((state: SubtitleEditState) => state.overlapCaptions);
+    const overlapEnabled = useSelector((state: SubtitleEditState) => state.overlapEnabled);
     return (
         <ToggleButton
             className="btn btn-secondary"
             onClick={(): void => {
-                dispatch(setOverlapCaptions(!overlapCaptions));
+                dispatch(setOverlapCaptions(!overlapEnabled));
             }}
             render={(toggle): ReactElement => (
                 toggle ?

@@ -100,13 +100,13 @@ export const cuesSlice = createSlice({
             });
         },
         checkErrors: (state, action: PayloadAction<SubtitleSpecificationAction>): CueDto[] =>
-            markCuesBreakingRules(state, action.payload.subtitleSpecification, action.payload.overlapCaptions)
+            markCuesBreakingRules(state, action.payload.subtitleSpecification, action.payload.overlapEnabled)
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
         [subtitleSpecificationSlice.actions.readSubtitleSpecification.type]:
             (state, action: PayloadAction<SubtitleSpecificationAction>): CueDto[] =>
-                markCuesBreakingRules(state, action.payload.subtitleSpecification, action.payload.overlapCaptions),
+                markCuesBreakingRules(state, action.payload.subtitleSpecification, action.payload.overlapEnabled)
     }
 });
 
@@ -148,7 +148,7 @@ export const validationErrorSlice = createSlice({
 });
 
 export const overlapCaptionsSlice = createSlice({
-    name: "overlapCaptions",
+    name: "overlapEnabled",
     initialState: false,
     reducers: {
         setOverlapCaptions: (_state, action: PayloadAction<boolean>): boolean => action.payload
@@ -168,7 +168,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         const followingCue = cues[idx + 1];
         const originalCue = cues[idx];
         const subtitleSpecifications = getState().subtitleSpecifications;
-        const overlapCaptionsAllowed = getState().overlapCaptions;
+        const overlapCaptionsAllowed = getState().overlapEnabled;
 
         if (vttCue.startTime !== originalCue.vttCue.startTime) {
             overlapCaptionsAllowed || applyOverlapPreventionStart(newVttCue, previousCue);
@@ -187,7 +187,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue }));
         dispatch(cuesSlice.actions.checkErrors({
             subtitleSpecification: subtitleSpecifications,
-            overlapCaptions: overlapCaptionsAllowed
+            overlapEnabled: overlapCaptionsAllowed
         }));
     };
 
@@ -206,7 +206,7 @@ export const addCue = (idx: number): AppThunk =>
         const previousCue = cues[idx - 1] || Constants.DEFAULT_CUE;
         const sourceCue = state.sourceCues[idx];
         const cue = createAndAddCue(previousCue, step, sourceCue);
-        const overlapCaptionsAllowed = getState().overlapCaptions;
+        const overlapCaptionsAllowed = getState().overlapEnabled;
 
         if (!overlapCaptionsAllowed) {
             const followingCue = cues[idx];
@@ -232,7 +232,7 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
         const checkedCues = markCuesBreakingRules(
             cues,
             getState().subtitleSpecifications,
-            getState().overlapCaptions
+            getState().overlapEnabled
         );
         dispatch(cuesSlice.actions.updateCues({ cues: checkedCues }));
     };
@@ -257,7 +257,7 @@ export const setValidationError = (error: boolean): AppThunk =>
         dispatch(validationErrorSlice.actions.setValidationError(error));
     };
 
-export const setOverlapCaptions = (overlap: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
-        dispatch(overlapCaptionsSlice.actions.setOverlapCaptions(overlap));
+export const setOverlapCaptions = (overlapEnabled: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean | SubtitleSpecificationAction>>): void => {
+        dispatch(overlapCaptionsSlice.actions.setOverlapCaptions(overlapEnabled));
     };

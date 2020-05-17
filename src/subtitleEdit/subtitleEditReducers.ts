@@ -34,7 +34,7 @@ export const Reducers = {
     saveTrack: saveTrackSlice.reducer,
     saveStatus: saveStatusSlice.reducer,
     pendingSave: pendingSaveSlice.reducer,
-    overlapCaptions: overlapCaptionsSlice.reducer
+    overlapEnabled: overlapCaptionsSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

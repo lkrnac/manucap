@@ -1086,13 +1086,13 @@ describe("cueSlices", () => {
         });
     });
 
-    describe("overlapCaptions", () => {
+    describe("overlapEnabled", () => {
         it("sets overlap captions flag", () => {
             // WHEN
             testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().overlapCaptions).toEqual(true);
+            expect(testingStore.getState().overlapEnabled).toEqual(true);
         });
         it("resets overlap caption flag on resetEditingTrack", () => {
             //GIVEN
@@ -1102,7 +1102,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().overlapCaptions).toBeFalsy();
+            expect(testingStore.getState().overlapEnabled).toBeFalsy();
         });
     });
 

@@ -942,6 +942,6 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().editingTrack).toBeNull();
         expect(testingStore.getState().cues).toEqual([]);
         expect(testingStore.getState().sourceCues).toEqual([]);
-        expect(testingStore.getState().overlapCaptions).toBeFalsy();
+        expect(testingStore.getState().overlapEnabled).toBeFalsy();
     });
 });
