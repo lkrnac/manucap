@@ -10,6 +10,7 @@ export const CaptionOverlapToggle = (): ReactElement => {
     return (
         <ToggleButton
             className="btn btn-secondary"
+            toggled={overlapEnabled}
             onClick={(): void => {
                 dispatch(setOverlapCaptions(!overlapEnabled));
             }}

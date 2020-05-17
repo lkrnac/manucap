@@ -25,6 +25,30 @@ describe("ToggleButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
+    it("renders toggled", () => {
+        // GIVEN
+        const expectedNode = shallow(
+            <button type="button" className="btn-secondary sbte-toggled-btn">
+                Click me!
+            </button>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <ToggleButton
+                className="btn-secondary"
+                toggled
+                render={(): ReactElement => (
+                    <>Click me!</>
+                )}
+            />
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+
     it("renders with class", () => {
         // GIVEN
         const expectedNode = shallow(
