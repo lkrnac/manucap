@@ -132,7 +132,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.NONE));
-                                            // dispatch(changeScrollPosition(ScrollPosition.LAST))
                                             setTimeout(
                                                 () => dispatch(changeScrollPosition(ScrollPosition.LAST)),
                                                 10
