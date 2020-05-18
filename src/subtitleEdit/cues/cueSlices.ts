@@ -1,4 +1,4 @@
-import { CueCategory, CueChange, CueDto, SubtitleEditAction } from "../model";
+import { CueCategory, CueChange, CueDto, ScrollPosition, SubtitleEditAction } from "../model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { Dispatch } from "react";
@@ -17,6 +17,7 @@ import {
     markCuesBreakingRules,
     verifyCueDuration
 } from "./cueVerifications";
+import { scrollPositionSlice } from "./cuesListScrollSlice";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -254,6 +255,7 @@ export const addCue = (idx: number): AppThunk =>
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
+            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.LAST));
         } else {
             dispatch(validationErrorSlice.actions.setValidationError(true));
         }

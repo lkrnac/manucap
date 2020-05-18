@@ -12,7 +12,7 @@ import {
     setOverlapCaptions
 } from "./cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
-import { CueDto } from "../model";
+import { CueDto, ScrollPosition } from "../model";
 import { EditorState } from "draft-js";
 import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
@@ -776,6 +776,17 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editorStates.size).toEqual(0);
+        });
+
+        it("scrolls to bottom", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(addCue(0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.LAST);
         });
 
         describe("range prevention", () => {
