@@ -12,6 +12,7 @@ import CuesList from "./cues/CuesList";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
+import { changeScrollPosition } from "./cues/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
@@ -32,7 +33,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
-    const [scrollPosition, setScrollPosition] = useState<ScrollPosition>();
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
 
     useEffect(
@@ -51,7 +51,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
     useEffect(
         (): void => {
-            setScrollPosition(ScrollPosition.FIRST);
+            dispatch(changeScrollPosition(ScrollPosition.FIRST));
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once
@@ -92,7 +92,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             <CuesList
                                 editingTrack={editingTrack}
                                 currentPlayerTime={currentPlayerTime}
-                                scrollPosition={scrollPosition}
                             />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
@@ -112,8 +111,11 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
-                                            setScrollPosition(ScrollPosition.NONE);
-                                            setTimeout(() => setScrollPosition(ScrollPosition.FIRST), 10);
+                                            dispatch(changeScrollPosition(ScrollPosition.NONE));
+                                            setTimeout(
+                                                () => dispatch(changeScrollPosition(ScrollPosition.FIRST)),
+                                                10
+                                            );
                                         }}
                                     >
                                         <i className="fa fa-angle-double-up" />
@@ -129,8 +131,12 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
-                                            setScrollPosition(ScrollPosition.NONE);
-                                            setTimeout(() => setScrollPosition(ScrollPosition.LAST), 10);
+                                            dispatch(changeScrollPosition(ScrollPosition.NONE));
+                                            // dispatch(changeScrollPosition(ScrollPosition.LAST))
+                                            setTimeout(
+                                                () => dispatch(changeScrollPosition(ScrollPosition.LAST)),
+                                                10
+                                            );
                                         }}
                                     >
                                         <i className="fa fa-angle-double-down" />

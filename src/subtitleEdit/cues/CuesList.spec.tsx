@@ -7,13 +7,14 @@ import { mount, ReactWrapper } from "enzyme";
 import { CueDto, CueWithSource, Language, ScrollPosition, Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import CueLine, { CueLineRowProps } from "./CueLine";
-import { updateCues, updateEditingCueIndex, updateSourceCues } from "./cueSlices";
+import { updateCues, updateSourceCues } from "./cueSlices";
 import CuesList from "./CuesList";
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { reset } from "./edit/editorStatesSlice";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import { act } from "react-dom/test-utils";
+import { changeScrollPosition } from "./cuesListScrollSlice";
 
 let testingStore = createTestingStore();
 
@@ -126,9 +127,10 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.FIRST} />
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
             </Provider >
         );
         simulateEnoughSpaceForCues(actualNode);
@@ -339,12 +341,12 @@ describe("CuesList", () => {
                 <CuesList
                     editingTrack={testingTranslationTrack}
                     currentPlayerTime={0}
-                    scrollPosition={ScrollPosition.FIRST}
                 />
             </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
         simulateEnoughSpaceForCues(actualNode);
         actualNode.setProps({}); // re-render component
         actualNode.find(CueLine).at(1).simulate("click");
@@ -372,12 +374,12 @@ describe("CuesList", () => {
                 <CuesList
                     editingTrack={testingTranslationTrack}
                     currentPlayerTime={0}
-                    scrollPosition={ScrollPosition.FIRST}
                 />
             </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
         simulateEnoughSpaceForCues(actualNode);
         actualNode.setProps({}); // re-render component
         actualNode.find(CueLine).at(2).simulate("click");
@@ -399,10 +401,11 @@ describe("CuesList", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={5.5} scrollPosition={ScrollPosition.FIRST} />
+                <CuesList editingTrack={testingTrack} currentPlayerTime={5.5} />
             </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
         simulateEnoughSpaceForCues(actualNode);
         actualNode.setProps({}); // re-render component
 
@@ -414,26 +417,6 @@ describe("CuesList", () => {
         expect(cueLines.at(1).props().rowProps.playerTime).toEqual(5.5);
     });
 
-    it("scrolls to current last cue in editing mode", () => {
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-
-        // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(1);
-    });
-
     it("doesn't scroll to non-last cue in editing mode", () => {
         const cues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -442,7 +425,6 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
@@ -463,9 +445,10 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.LAST} />
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
             </Provider >
         );
 
@@ -483,9 +466,10 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.FIRST} />
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
             </Provider >
         );
 
@@ -556,7 +540,7 @@ describe("CuesList", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.FIRST} />
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
             </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -584,7 +568,7 @@ describe("CuesList", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} scrollPosition={ScrollPosition.FIRST} />
+                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
             </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);

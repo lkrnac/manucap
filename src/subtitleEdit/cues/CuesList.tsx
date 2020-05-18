@@ -13,7 +13,6 @@ import { SubtitleEditState } from "../subtitleEditReducers";
 interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
-    scrollPosition?: ScrollPosition;
 }
 
 const getScrollCueIndex = (cues: CueWithSource[], scrollPosition?: ScrollPosition): number => {
@@ -23,24 +22,21 @@ const getScrollCueIndex = (cues: CueWithSource[], scrollPosition?: ScrollPositio
     if (scrollPosition === ScrollPosition.LAST) {
         return cues.length - 1;
     }
-    return cues.length;
+    return cues.length; // out of range value, because need to trigger change of ReactSmartScroll.startAt
 };
 
 const CuesList = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
-    const editingCueIndex= useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const drivingCues = sourceCues.length > 0
         ? sourceCues
         : cues;
     const cuesWithSource = drivingCues.map((cue: CueDto, idx: number): CueWithSource =>
         ({ cue: (cues[idx] === cue ? cue : cues[idx]), sourceCue: sourceCues[idx] }));
 
-
-    const startAt = cuesWithSource.length - 1 === editingCueIndex
-        ? editingCueIndex
-        : getScrollCueIndex(cuesWithSource, props.scrollPosition);
+    const scrollPosition = useSelector((state: SubtitleEditState) => state.scrollPosition);
+    const startAt = getScrollCueIndex(cuesWithSource, scrollPosition);
     const rowHeight = sourceCues.length > 0 ? 161 : 81; // Values are from Elements > Computed from browser DEV tools
     return (
         <>
