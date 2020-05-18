@@ -19,6 +19,7 @@ import {
     saveStatusSlice,
     saveTrackSlice
 } from "./cues/saveSlices";
+import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -36,7 +37,8 @@ export const Reducers = {
     saveStatus: saveStatusSlice.reducer,
     pendingSave: pendingSaveSlice.reducer,
     overlapCaptions: overlapCaptionsSlice.reducer,
-    lastCueChange: lastCueChangeSlice.reducer
+    lastCueChange: lastCueChangeSlice.reducer,
+    scrollPosition: scrollPositionSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);
