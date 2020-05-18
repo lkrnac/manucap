@@ -24,6 +24,7 @@ export interface Track {
     readonly mediaLength: number;
     readonly sourceLanguage?: Language;
     readonly progress: number;
+    overlapEnabled?: boolean;
 }
 
 export interface Task {

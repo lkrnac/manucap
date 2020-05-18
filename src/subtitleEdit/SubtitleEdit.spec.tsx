@@ -944,4 +944,52 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().sourceCues).toEqual([]);
         expect(testingStore.getState().overlapEnabled).toBeFalsy();
     });
+
+    it("sets saveTrack when mounted", () => {
+        // GIVEN
+        // WHEN
+        mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(testingStore.getState().saveTrack).toBeDefined();
+    });
+
+    it("sets overlapCaptions when track is loaded", () => {
+        // GIVEN
+        // WHEN
+        const testingTrackWithOverlap = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            mediaLength: 4000,
+            progress: 50,
+            overlapEnabled: true
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrackWithOverlap) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(testingStore.getState().overlapEnabled).toBeTruthy();
+    });
 });

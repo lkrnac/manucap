@@ -1,7 +1,7 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
-import { addCue, updateEditingCueIndex } from "./cues/cueSlices";
+import { addCue, updateEditingCueIndex, setOverlapCaptions } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { CueDto } from "./model";
 import CueLine from "./cues/CueLine";
@@ -56,6 +56,13 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         () => {
             dispatch(setSaveTrack(props.onSave));
         }, [ dispatch, props.onSave ]
+    );
+
+    useEffect(
+        () => {
+            dispatch(setOverlapCaptions(editingTrack?.overlapEnabled || false));
+        },
+        [ dispatch, editingTrack ]
     );
 
     return (
