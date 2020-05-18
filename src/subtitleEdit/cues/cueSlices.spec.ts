@@ -1094,6 +1094,21 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().overlapEnabled).toEqual(true);
         });
+        it("checks for errors after setting overlap captions flag", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 1.5, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(setOverlapCaptions(false) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
+        });
         it("resets overlap caption flag on resetEditingTrack", () => {
             //GIVEN
             testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
