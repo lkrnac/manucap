@@ -258,6 +258,8 @@ export const setValidationError = (error: boolean): AppThunk =>
     };
 
 export const setOverlapCaptions = (overlapEnabled: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean | SubtitleSpecificationAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<boolean | SubtitleSpecificationAction>>, getState): void => {
         dispatch(overlapCaptionsSlice.actions.setOverlapCaptions(overlapEnabled));
+        const subtitleSpecification = getState().subtitleSpecifications;
+        dispatch(cuesSlice.actions.checkErrors({ subtitleSpecification, overlapEnabled }));
     };
