@@ -10,6 +10,8 @@ import {
     setAutoSaveSuccess,
     setSaveTrack
 } from "./saveSlices";
+import { updateEditingTrack } from "../trackSlices";
+import { Track } from "../model";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -29,6 +31,7 @@ describe("saveSlices", () => {
             // GIVEN
             saveTrack.mockReset();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
         });
 
         it("calls saveTrack", () => {
@@ -75,7 +78,11 @@ describe("saveSlices", () => {
         it("passes cues and editingTrack from store to call to saveTrack", (done) => {
             // WHEN
             const cues = testingStore.getState().cues;
-            const editingTrack = testingStore.getState().editingTrack;
+            const track = testingStore.getState().editingTrack;
+            const editingTrack = {
+                ...track,
+                overlapEnabled: false
+            };
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             setTimeout(() => {

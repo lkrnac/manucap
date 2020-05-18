@@ -14,10 +14,11 @@ import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { CueDto } from "../../model";
+import { CueDto, Track } from "../../model";
 import { updateCues } from "../cueSlices";
 import _ from "lodash";
 import { setSaveTrack } from "../saveSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 let testingStore = createTestingStore();
 
@@ -209,6 +210,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         const editor = createEditorNode();
 
@@ -228,6 +230,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(

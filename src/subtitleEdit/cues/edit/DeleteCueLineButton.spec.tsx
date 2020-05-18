@@ -1,7 +1,7 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { AnyAction } from "redux";
-import { CueDto } from "../../model";
+import { CueDto, Track } from "../../model";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import { Provider } from "react-redux";
 import React from "react";
@@ -10,6 +10,7 @@ import testingStore from "../../../testUtils/testingStore";
 import { updateCues } from "../cueSlices";
 import _ from "lodash";
 import { setSaveTrack } from "../saveSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 describe("DeleteCueLineButton", () => {
 
@@ -19,6 +20,7 @@ describe("DeleteCueLineButton", () => {
         // @ts-ignore
         jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });
 
     it("renders", () => {

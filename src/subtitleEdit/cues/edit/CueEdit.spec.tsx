@@ -234,6 +234,7 @@ describe("CueEdit", () => {
         // GIVEN
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -269,6 +270,7 @@ describe("CueEdit", () => {
         // GIVEN
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -350,6 +352,7 @@ describe("CueEdit", () => {
         // GIVEN
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
@@ -388,6 +391,7 @@ describe("CueEdit", () => {
         // GIVEN
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;

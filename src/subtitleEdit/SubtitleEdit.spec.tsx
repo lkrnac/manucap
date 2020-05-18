@@ -894,6 +894,7 @@ describe("SubtitleEdit", () => {
         // @ts-ignore
         jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         mount(
             <Provider store={testingStore} >

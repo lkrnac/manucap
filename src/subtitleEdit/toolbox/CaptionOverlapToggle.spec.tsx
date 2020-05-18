@@ -83,6 +83,6 @@ describe("CaptionOverlapToggle", () => {
         actualNode.find("ToggleButton").simulate("click");
 
         // THEN
-        expect(testingStore.getState().overlapCaptions).toEqual(true);
+        expect(testingStore.getState().overlapEnabled).toEqual(true);
     });
 });
