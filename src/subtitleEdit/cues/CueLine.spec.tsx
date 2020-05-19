@@ -4,7 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto } from "../model";
 import CueEdit from "./edit/CueEdit";
-import CueLine from "./CueLine";
+import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView from "./view/CueView";
 import { Provider } from "react-redux";
 import React from "react";
@@ -52,12 +52,20 @@ describe("CueLine", () => {
                 </div>
             </Provider>
         );
+        const cueWithSource = { cue: cues[1] };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
+                />
             </Provider>
         );
 
@@ -92,12 +100,20 @@ describe("CueLine", () => {
                 </div>
             </Provider>
         );
+        const cueWithSource = { cue: cues[1] };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
+                />
             </Provider>
         );
 
@@ -113,12 +129,20 @@ describe("CueLine", () => {
             cueCategory: "DIALOGUE",
             corrupted: true
         } as CueDto;
+        const cueWithSource = { cue: corruptedCue };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={corruptedCue} playerTime={0} onClickHandler={(): void => undefined} />
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
+                />
             </Provider>
         );
 
@@ -158,17 +182,19 @@ describe("CueLine", () => {
                 </div>
             </Provider>
         );
+        const cueWithSource = { cue: cues[1], sourceCue };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine
-                    index={1}
-                    cue={cues[1]}
-                    playerTime={0}
-                    sourceCue={sourceCue}
-                    onClickHandler={(): void => undefined}
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
                 />
             </Provider>
         );
@@ -210,18 +236,19 @@ describe("CueLine", () => {
                 </div>
             </Provider>
         );
+        const cueWithSource = { cue: cues[1], sourceCue };
+        const cueLineRowProps = { playerTime: 0, cuesLength: 1 } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine
-                    index={1}
-                    cue={cues[1]}
-                    playerTime={0}
-                    sourceCue={sourceCue}
-                    onClickHandler={(): void => undefined}
-                    lastCue
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
                 />
             </Provider>
         );
@@ -262,17 +289,19 @@ describe("CueLine", () => {
                 </div>
             </Provider>
         );
+        const cueWithSource = { cue: cues[1], sourceCue };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine
-                    index={1}
-                    cue={cues[1]}
-                    playerTime={0}
-                    sourceCue={sourceCue}
-                    onClickHandler={(): void => undefined}
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
                 />
             </Provider>
         );
@@ -289,17 +318,19 @@ describe("CueLine", () => {
             cueCategory: "DIALOGUE",
             corrupted: true
         } as CueDto;
+        const cueWithSource = { cue: corruptedCue, sourceCue };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine
-                    index={1}
-                    cue={corruptedCue}
-                    playerTime={0}
-                    sourceCue={sourceCue}
-                    onClickHandler={(): void => undefined}
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
                 />
             </Provider>
         );
@@ -348,17 +379,19 @@ describe("CueLine", () => {
                 </div>
             </Provider>
         );
+        const cueWithSource = { sourceCue };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine
-                    index={1}
-                    cue={undefined}
-                    playerTime={0}
-                    sourceCue={sourceCue}
-                    onClickHandler={(): void => undefined}
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
                 />
             </Provider>
         );
@@ -367,13 +400,21 @@ describe("CueLine", () => {
         expect(removeDraftJsDynamicValues(actualNode.html()))
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
+    const cueWithSource = { cue: cues[1] };
+    const cueLineRowProps = { playerTime: 1 } as CueLineRowProps;
 
     it("passes down properties to cue view component", () => {
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={1} onClickHandler={(): void => undefined} />
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
+                />
             </Provider>
         );
 
@@ -387,9 +428,18 @@ describe("CueLine", () => {
     it("opens cue line for editing when clicked", () => {
         // GIVEN
         const onClickHandler = jest.fn();
+        const cueWithSource = { cue: cues[1] };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
+
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={onClickHandler} />
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={onClickHandler}
+                />
             </Provider>
         );
 
@@ -402,17 +452,18 @@ describe("CueLine", () => {
 
     it("passes down parameters into actions panel component", () => {
         // WHEN
+        const cueWithSource = { cue: cues[1], sourceCue };
+        const cueLineRowProps = { playerTime: 0, cuesLength: 2 } as CueLineRowProps;
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueLine
-                    index={1}
-                    cue={cues[1]}
-                    playerTime={0}
-                    sourceCue={sourceCue}
-                    lastCue
-                    onClickHandler={(): void => undefined}
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
                 />
             </Provider>
         );
@@ -426,51 +477,26 @@ describe("CueLine", () => {
         expect(actualProps.lastCue).toEqual(true);
     });
 
-    it("scrolls to current cue if it enters editing mode if it is the last cue", () => {
+    it("passes down rowReference to ", () => {
         // GIVEN
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <div className="testing-cues-container">
-                    <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} lastCue />
-                </div>
-            </Provider>
-        );
-        const cueLine = actualNode.find(CueLine);
-        const domNode = cueLine.getDOMNode();
-        const parentNode = domNode.parentNode;
-
-        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
-        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
+        const cueWithSource = { cue: cues[1] };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
+        const rowRef = React.createRef() as React.RefObject<HTMLDivElement>;
 
         // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-
-        // THEN
-        expect(actualNode.find(".testing-cues-container").getDOMNode().scrollTop).toEqual(25);
-    });
-
-    it("does not scroll to current cue if it enters editing mode if it isn't the last cue", () => {
-        // GIVEN
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <div className="testing-cues-container">
-                    <CueLine index={1} cue={cues[1]} playerTime={0} onClickHandler={(): void => undefined} />
-                </div>
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={rowRef}
+                    onClick={(): void => undefined}
+                />
             </Provider>
         );
-        const cueLine = actualNode.find(CueLine);
-        const domNode = cueLine.getDOMNode();
-        const parentNode = domNode.parentNode;
-
-        Object.defineProperty(parentNode, "offsetTop", { configurable: true, value: 30 });
-        Object.defineProperty(domNode, "offsetTop", { configurable: true, value: 55 });
-
-        // WHEN
-        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
 
         // THEN
-        expect(actualNode.find(".testing-cues-container").getDOMNode().scrollTop).toEqual(0);
+        expect(rowRef.current).toEqual(actualNode.find("div").at(0).instance());
     });
 });

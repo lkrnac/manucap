@@ -11,6 +11,11 @@ export interface CueDto {
     corrupted?: boolean;
 }
 
+export interface CueWithSource {
+    cue?: CueDto;
+    sourceCue?: CueDto;
+}
+
 export interface LanguageCues {
     readonly languageId: string;
     readonly cues: CueDto[];
@@ -48,4 +53,16 @@ export interface TimeGapLimit {
 export interface LoadingIndicator {
     cuesLoaded: boolean;
     sourceCuesLoaded: boolean;
+}
+
+export interface CueChange {
+    changeType: "ADD" | "EDIT" | "REMOVE";
+    index: number;
+    vttCue: VTTCue;
+}
+
+export enum ScrollPosition {
+    NONE,
+    FIRST,
+    LAST
 }

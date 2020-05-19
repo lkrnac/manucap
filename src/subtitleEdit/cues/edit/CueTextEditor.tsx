@@ -1,17 +1,18 @@
-import { SubtitleEditState } from "../../subtitleEditReducers";
-import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
+import React, { ReactElement, useEffect, Dispatch, useState } from "react";
 import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
-import React, { ReactElement, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Mousetrap from "mousetrap";
+import _ from "lodash";
+
+import { SubtitleEditState, AppThunk } from "../../subtitleEditReducers";
+import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
-import { useDispatch, useSelector } from "react-redux";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
-import Mousetrap from "mousetrap";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
 import { callSaveTrack } from "../saveSlices";
-
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
@@ -28,8 +29,6 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     return getDefaultKeyBinding(e);
 };
 
-
-
 const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
     if (keyCombination) {
@@ -43,6 +42,26 @@ export interface CueTextEditorProps {
     index: number;
     vttCue: VTTCue;
 }
+
+const changeVttCueInRedux = (
+    currentContent: ContentState,
+    props: CueTextEditorProps,
+    dispatch: Dispatch<AppThunk>,
+    textChanged: boolean,
+    setTextChanged: (textChanged: boolean) => void
+): void => {
+    const vttText = getVttText(currentContent);
+    const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
+    copyNonConstructorProperties(vttCue, props.vttCue);
+    dispatch(updateVttCue(props.index, vttCue));
+    // this if is so we don't trigger a save on first render
+    if (textChanged) {
+        dispatch(callSaveTrack());
+        setTextChanged(false);
+    }
+};
+
+const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 100);
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
@@ -73,15 +92,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
-            const vttText = getVttText(currentContent);
-            const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
-            copyNonConstructorProperties(vttCue, props.vttCue);
-            dispatch(updateVttCue(props.index, vttCue));
-            // this if is so we don't trigger a save on first render
-            if (textChanged) {
-                dispatch(callSaveTrack());
-                setTextChanged(false);
-            }
+            changeVttCueInReduxDebounced(currentContent, props, dispatch, textChanged, setTextChanged);
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.

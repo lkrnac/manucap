@@ -22,6 +22,7 @@ interface FakeTrack {
 const dispatchEventForTrack = (player: VideoJsPlayer, textTrack: FakeTrack): void => {
     const trackEventEn = new Event("addtrack") as TrackEvent;
     // @ts-ignore We need to force this for testing
+    // noinspection JSConstantReassignment
     trackEventEn.track = textTrack;
     player.textTracks().dispatchEvent(trackEventEn);
 };
@@ -44,7 +45,13 @@ describe("VideoPlayer", () => {
 
         // WHEN
         const actualVideoView = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
 
         // THEN
@@ -65,12 +72,18 @@ describe("VideoPlayer", () => {
 
         // WHEN
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={tracks} languageCuesArray={[]} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={tracks}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
 
         // THEN
         const actualComponent = actualNode.instance() as VideoPlayer;
-        expect(actualComponent.player.options_.playbackRates).toEqual([ 0.5, 0.75, 1, 1.25 ]);
+        expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.tracks).toEqual(expectedTextTrackOptions);
     });
@@ -78,7 +91,13 @@ describe("VideoPlayer", () => {
     it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
 
         // THEN
@@ -115,6 +134,7 @@ describe("VideoPlayer", () => {
                 mp4="dummyMp4Url"
                 tracks={initialTestingTracks}
                 languageCuesArray={languageCuesArray}
+                lastCueChange={null}
             />
         );
         const component = actualNode.instance() as VideoPlayer;
@@ -150,7 +170,7 @@ describe("VideoPlayer", () => {
             }
         ] as Track[];
         const textTracks = [
-            { language: "en-CA", addCue: jest.fn(), cues: [ new VTTCue(0, 1, "Caption Line 1") ]},
+            { language: "en-CA", addCue: jest.fn(), cues: [new VTTCue(0, 1, "Caption Line 1")]},
         ];
         const actualNode = mount(
             <VideoPlayer
@@ -158,6 +178,7 @@ describe("VideoPlayer", () => {
                 mp4="dummyMp4Url"
                 tracks={initialTestingTracks}
                 languageCuesArray={languageCuesArray}
+                lastCueChange={null}
             />
         );
         const component = actualNode.instance() as VideoPlayer;
@@ -172,7 +193,13 @@ describe("VideoPlayer", () => {
     it("should toggle play/pause with key shortcut", () => {
         // GIVEN
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
         const actualComponent = actualNode.instance() as VideoPlayer;
         const playPauseSpy = sinon.spy();
@@ -189,7 +216,13 @@ describe("VideoPlayer", () => {
     it("should shiftTime -1 second with key shortcut", () => {
         // GIVEN
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
         const actualComponent = actualNode.instance() as VideoPlayer;
         const shiftTimeSpy = sinon.spy();
@@ -206,7 +239,13 @@ describe("VideoPlayer", () => {
     it("should call shiftTime 1 second with key shortcut", () => {
         // GIVEN
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
         const actualComponent = actualNode.instance() as VideoPlayer;
         const shiftTimeSpy = sinon.spy();
@@ -230,6 +269,7 @@ describe("VideoPlayer", () => {
                 tracks={[]}
                 onTimeChange={onTimeChange}
                 languageCuesArray={[]}
+                lastCueChange={null}
             />
         );
         const actualComponent = actualNode.instance() as VideoPlayer;
@@ -244,7 +284,13 @@ describe("VideoPlayer", () => {
     it("should work correctly after player timeupdate event when no onTimeChange prop is provided", () => {
         // GIVEN
         const actualNode = mount(
-            <VideoPlayer poster="dummyPosterUrl" mp4="dummyMp4Url" tracks={[]} languageCuesArray={[]} />
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
         const actualComponent = actualNode.instance() as VideoPlayer;
         const playPauseSpy = sinon.spy();
