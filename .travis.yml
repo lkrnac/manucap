@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 10
+  - 12
 cache: npm
 env:
   - NODE_OPTIONS=--max_old_space_size=8192
@@ -17,7 +17,7 @@ script:
 
 after_success:
   - npm run lint
-  - if [[ ("$TRAVIS_BRANCH" != "release") || ("$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_BRANCH" = "master") ]] ; then bash <(curl -s https://codecov.io/bash) ; fi
+  - bash <(curl -s https://codecov.io/bash)
   - ./scripts/post-build.sh
 
 deploy:

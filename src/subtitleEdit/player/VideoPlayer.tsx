@@ -1,5 +1,5 @@
 import "video.js/dist/video-js.css";
-import { CueDto, LanguageCues, Track } from "../model";
+import { CueChange, CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../shortcutConstants";
@@ -35,9 +35,10 @@ export interface Props {
     languageCuesArray: LanguageCues[];
     playSection?: PlayVideoAction;
     resetPlayerTimeChange?: () => void;
+    lastCueChange: CueChange | null;
 }
 
-const updateCue = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
+const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
     videoJsTrack.addCue(vttCue);
     if (videoJsTrack.cues) {
         const addedCue = videoJsTrack.cues[index] as VTTCue;
@@ -51,8 +52,29 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
     props.languageCuesArray
         .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
         .forEach((languageCues: LanguageCues) => {
-            languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCue(videoJsTrack));
+            languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCueAndCopyStyles(videoJsTrack));
         });
+};
+
+const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void => {
+    if (lastCueChange.changeType === "EDIT") {
+        vttCue.text = lastCueChange.vttCue.text;
+        vttCue.startTime = lastCueChange.vttCue.startTime;
+        vttCue.endTime = lastCueChange.vttCue.endTime;
+        copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
+    }
+};
+
+const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
+    if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
+        const cuesTail = [];
+        for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
+            cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
+            videoJsTrack.removeCue(videoJsTrack.cues[idx]);
+        }
+        videoJsTrack.addCue(lastCueChange.vttCue);
+        cuesTail.forEach(cue => videoJsTrack.addCue(cue));
+    }
 };
 
 export default class VideoPlayer extends React.Component<Props> {
@@ -104,14 +126,14 @@ export default class VideoPlayer extends React.Component<Props> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        for (let trackIdx = 0; trackIdx < this.player.textTracks().length; trackIdx++) {
-            const videoJsTrack = (this.player.textTracks())[trackIdx];
-            if (videoJsTrack.cues) {
-                for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
-                    videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
-                }
+        const lastCueChange = this.props.lastCueChange;
+        const videoJsTrack = (this.player.textTracks())[0];
+        if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
+            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue);
+            handleCueAddIfNeeded(lastCueChange, videoJsTrack);
+            if (lastCueChange.changeType === "REMOVE") {
+                videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
-            updateCuesForVideoJsTrack(this.props, videoJsTrack);
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
 

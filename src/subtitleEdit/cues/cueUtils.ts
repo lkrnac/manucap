@@ -178,16 +178,3 @@ export const cueCategoryToPrettyName = {
     AUDIO_DESCRIPTION: "Audio Descriptions",
     LYRICS: "Lyrics"
 };
-
-export const scrollToElement = (element: Element): void => {
-    if (element && element.parentNode) {
-        // TODO: enable scrollIntoView after spec finalization + support by all browsers
-        // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-        // element.scrollIntoView();
-
-        // Workaround until scrollIntoView will be ready:
-        // Inspired by https://stackoverflow.com/a/11041376/1919879
-        // @ts-ignore Ignore TS compiler false positives
-        element.parentNode.scrollTop = element.offsetTop - element.parentNode.offsetTop;
-    }
-};

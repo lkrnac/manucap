@@ -1,9 +1,8 @@
-import React, {
-    ReactElement,
-    SyntheticEvent
-} from "react";
-import { getTimeFromString, getTimeString } from "../timeUtils";
+import React, { ReactElement, SyntheticEvent } from "react";
 import TimeField from "react-advanced-timefield";
+import _ from "lodash";
+
+import { getTimeFromString, getTimeString } from "../timeUtils";
 
 interface Props {
     time?: number;
@@ -18,10 +17,13 @@ const styles = {
     textAlign: "center"
 };
 
+const onChange = (props: Props, time: number): void => props.onChange(time);
+const onChangeDebounced = _.debounce(onChange, 100);
+
 const TimeEditor = (props: Props): ReactElement => {
     const handleChange = (_e: SyntheticEvent<HTMLInputElement>, timeString: string): void => {
         const time = getTimeFromString(timeString);
-        props.onChange(time);
+        onChangeDebounced(props, time);
     };
     return (
         <TimeField
