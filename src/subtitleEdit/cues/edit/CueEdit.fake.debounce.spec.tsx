@@ -3,7 +3,7 @@ import "video.js"; // VTTCue definition
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import { Character } from "../../shortcutConstants";
-import { CueDto } from "../../model";
+import { CueDto, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
@@ -23,6 +23,7 @@ import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
