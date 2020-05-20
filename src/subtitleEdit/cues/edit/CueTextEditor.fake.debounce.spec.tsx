@@ -1,23 +1,28 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
+import React, { ReactElement } from "react";
 import { AnyAction, Store } from "@reduxjs/toolkit";
-import { Character, KeyCombination } from "../../shortcutConstants";
-import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
+import { Provider } from "react-redux";
 import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
-import React, { ReactElement } from "react";
+
 import { ReactWrapper, mount } from "enzyme";
-import { Provider } from "react-redux";
-import { createTestingStore } from "../../../testUtils/testingStore";
 import each from "jest-each";
+
+import { Character, KeyCombination } from "../../shortcutConstants";
+import { createTestingStore } from "../../../testUtils/testingStore";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto } from "../../model";
 import { updateCues } from "../cueSlices";
-import _ from "lodash";
+import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
+
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 
 let testingStore = createTestingStore();
 
@@ -149,17 +154,12 @@ const testForContentState = (
 };
 
 describe("CueTextEditor", () => {
-    const saveTrack = jest.fn();
-
-    beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
-    });
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
     });
+
     it("renders empty", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "");
@@ -207,9 +207,8 @@ describe("CueTextEditor", () => {
 
     it("calls saveTrack in redux store when changed", () => {
         // GIVEN
-        saveTrack.mockReset();
+        const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
         const editor = createEditorNode();
 
         // WHEN
@@ -226,7 +225,7 @@ describe("CueTextEditor", () => {
 
     it("doesn't trigger autosave when user selects text", () => {
         // GIVEN
-        saveTrack.mockReset();
+        const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
@@ -253,7 +252,7 @@ describe("CueTextEditor", () => {
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
         // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(1); // called on paste, not on select
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     /**
@@ -611,5 +610,4 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
         expect(testingStore.getState().editorStates[0]).toBeUndefined();
     });
-
 });

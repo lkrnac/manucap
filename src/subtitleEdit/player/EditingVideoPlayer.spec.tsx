@@ -1,15 +1,18 @@
 import "../../testUtils/initBrowserEnvironment";
-import { CueDto, Track } from "../model";
 import { AnyAction } from "@reduxjs/toolkit";
-import EditingVideoPlayer from "./EditingVideoPlayer";
 import { Provider } from "react-redux";
 import React from "react";
+import { mount } from "enzyme";
+
+import EditingVideoPlayer from "./EditingVideoPlayer";
+import { CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
-import { mount } from "enzyme";
-import testingStore from "../../testUtils/testingStore";
+import { createTestingStore } from "../../testUtils/testingStore";
 import { updateCues } from "../cues/cueSlices";
 import { updateEditingTrack } from "../trackSlices";
+
+let testingStore = createTestingStore();
 
 const testingTrack = {
     type: "CAPTION",
@@ -23,6 +26,8 @@ const testingCues = [
 ] as CueDto[];
 
 describe("EditingVideoPlayer", () => {
+    beforeEach(() => testingStore = createTestingStore());
+
     it("renders without player if track is not defined", () => {
         // GIVEN
         const expectedNode = mount(<p>Editing track not available!</p>);
@@ -66,14 +71,9 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("passes down correct properties", () => {
+    it("passes down cues array with correct language when first rendered", () => {
         // GIVEN
         const handleTimeChange = jest.fn();
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
-            </Provider>
-        );
         const expectedLanguageCuesArray = [
             {
                 languageId: "en-US",
@@ -87,7 +87,28 @@ describe("EditingVideoPlayer", () => {
         // WHEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-        actualNode.update();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(VideoPlayer).props().languageCuesArray).toEqual(expectedLanguageCuesArray);
+    });
+
+    it("passes down correct properties when updated", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        actualNode.setProps({}); // trigger update + re-render
 
         // THEN
         expect(actualNode.find(VideoPlayer).props().mp4).toEqual("dummyMp4");
@@ -95,8 +116,32 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().tracks[0]).toEqual(testingTrack);
         expect(actualNode.find(VideoPlayer).props().tracks.length).toEqual(1);
         expect(actualNode.find(VideoPlayer).props().onTimeChange).toEqual(handleTimeChange);
-        expect(actualNode.find(VideoPlayer).props().languageCuesArray).toEqual(expectedLanguageCuesArray);
     });
+
+    /**
+     * This test cases expects that EditingVideoPlayer would be rendered with cues initialized in Redux.
+     * It is not updated when cues are updated, because replacing all the cues was not performant.
+     * We instead use lastCueUpdate property to change cues in already rendered player.
+     */
+    it("update of cues in redux doesn't initialize cues", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        actualNode.setProps({}); // trigger update + re-render
+
+        // THEN
+        expect(actualNode.find(VideoPlayer).props().languageCuesArray)
+            .toEqual([{ "cues": [], "languageId": "en-US" }]);
+    });
+
 
     it("adjust new player time to negative value so that it can be changed to same value again", () => {
         // GIVEN
@@ -109,7 +154,7 @@ describe("EditingVideoPlayer", () => {
 
         // WHEN
         testingStore.dispatch(playVideoSection(2) as {} as AnyAction);
-        actualNode.update();
+        actualNode.setProps({}); // trigger update + re-render
 
         // THEN
         expect(actualNode.find(VideoPlayer).props().playSection).toEqual({ startTime: -1 });

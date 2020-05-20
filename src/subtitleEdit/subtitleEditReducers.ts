@@ -2,6 +2,7 @@ import { Action, combineReducers } from "@reduxjs/toolkit";
 import {
     cuesSlice,
     editingCueIndexSlice,
+    lastCueChangeSlice,
     overlapCaptionsSlice,
     sourceCuesSlice,
     validationErrorSlice
@@ -18,6 +19,7 @@ import {
     saveStatusSlice,
     saveTrackSlice
 } from "./cues/saveSlices";
+import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -34,7 +36,9 @@ export const Reducers = {
     saveTrack: saveTrackSlice.reducer,
     saveStatus: saveStatusSlice.reducer,
     pendingSave: pendingSaveSlice.reducer,
-    overlapCaptions: overlapCaptionsSlice.reducer
+    overlapCaptions: overlapCaptionsSlice.reducer,
+    lastCueChange: lastCueChangeSlice.reducer,
+    scrollPosition: scrollPositionSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

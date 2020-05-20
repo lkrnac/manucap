@@ -12,7 +12,7 @@ import {
     setOverlapCaptions
 } from "./cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
-import { CueDto } from "../model";
+import { CueDto, ScrollPosition } from "../model";
 import { EditorState } from "draft-js";
 import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
@@ -49,6 +49,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
             expect(testingStore.getState().validationError).toEqual(false);
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
+            expect(testingStore.getState().lastCueChange.index).toEqual(1);
+            expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
+                .toBeTruthy();
         });
 
         describe("range prevention", () => {
@@ -346,10 +351,10 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[1].corrupted).toEqual(false);
-                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
@@ -671,13 +676,29 @@ describe("cueSlices", () => {
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
+        it("record cues change when cue is added", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(addCue(0) as {} as AnyAction);
+
+            // THEN
+            const lastCueChange = testingStore.getState().lastCueChange;
+            expect(lastCueChange.changeType).toEqual("ADD");
+            expect(lastCueChange.index).toEqual(0);
+            expect(lastCueChange.vttCue.text).toEqual("");
+            expect(lastCueChange.vttCue.startTime).toEqual(0);
+            expect(lastCueChange.vttCue.endTime).toEqual(3);
+        });
+
         it("adds cue to the end of the cue array", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(
-                addCue( 2) as {} as AnyAction
+                addCue(2) as {} as AnyAction
             );
 
             // THEN
@@ -757,6 +778,17 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editorStates.size).toEqual(0);
+        });
+
+        it("scrolls to bottom", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(addCue(0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.LAST);
         });
 
         describe("range prevention", () => {
@@ -869,6 +901,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
+            expect(testingStore.getState().lastCueChange.index).toEqual(0);
         });
 
         it("deletes cue in the middle of the cue array", () => {
@@ -887,6 +921,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(4.225, 5, "Caption Line 2"));
             expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
+            expect(testingStore.getState().lastCueChange.index).toEqual(1);
         });
 
         it("deletes cue at the end of the cue array", () => {
@@ -900,6 +936,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 2, "Caption Line 1"));
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
+            expect(testingStore.getState().lastCueChange.index).toEqual(1);
         });
 
         it("removes editor states for certain index from Redux", () => {
