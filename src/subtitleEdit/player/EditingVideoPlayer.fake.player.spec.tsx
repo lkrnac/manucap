@@ -5,7 +5,7 @@ import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 
 import EditingVideoPlayer from "./EditingVideoPlayer";
-import { CueDto, Track } from "../model";
+import { CueChange, CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { mount } from "enzyme";
@@ -63,7 +63,11 @@ describe("EditingVideoPlayer", () => {
         actualNode.setProps({}); // trigger update + re-render
 
         // THEN
-        expect(actualNode.find(VideoPlayer).props().lastCueChange)
-            .toEqual({ changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 1, "Cue") });
+        const lastCueChange = actualNode.find(VideoPlayer).props().lastCueChange as CueChange;
+        expect(lastCueChange.changeType).toEqual("EDIT");
+        expect(lastCueChange.index).toEqual(0);
+        expect(lastCueChange.vttCue.text).toEqual("Cue");
+        expect(lastCueChange.vttCue.startTime).toEqual(0);
+        expect(lastCueChange.vttCue.endTime).toEqual(1);
     });
 });
