@@ -3,7 +3,7 @@ import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
 import { addCue, updateEditingCueIndex } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
-import { CueDto } from "./model";
+import { CueDto, Track } from "./model";
 import CueLine from "./cues/CueLine";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
@@ -22,12 +22,17 @@ import { resetEditingTrack } from "./trackSlices";
 //  Can be removed once fixed.
 enableMapSet();
 
+interface CompleteAction {
+    editingTrack: Track | null;
+    cues: CueDto[];
+}
+
 export interface SubtitleEditProps {
     mp4: string;
     poster: string;
     onViewAllTracks: () => void;
     onSave: () => void;
-    onComplete: () => void;
+    onComplete: (completeAction: CompleteAction) => void;
     onExportFile: () => void;
     onImportFile: () => void;
 }
@@ -168,7 +173,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <button
                                     className="btn btn-primary sbte-complete-subtitle-btn"
                                     type="button"
-                                    onClick={(): void => props.onComplete()}
+                                    onClick={(): void => props.onComplete({ editingTrack, cues })}
                                 >
                                     Complete
                                 </button>

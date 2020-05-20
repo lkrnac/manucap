@@ -806,7 +806,8 @@ describe("SubtitleEdit", () => {
         actualNode.find("button.sbte-complete-subtitle-btn").simulate("click");
 
         // THEN
-        expect(mockOnComplete.mock.calls.length).toBe(1);
+        expect(mockOnComplete).toHaveBeenCalledWith(
+            { editingTrack: testingStore.getState().editingTrack, cues: testingStore.getState().cues });
     });
 
     it("calls onExportFile callback when button is clicked", () => {
