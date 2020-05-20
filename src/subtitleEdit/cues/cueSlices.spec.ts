@@ -49,9 +49,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(testingStore.getState().lastCueChange).toEqual(
-                { changeType: "EDIT", index: 1, vttCue: new VTTCue(2, 2.5, "Dummy Cue") }
-            );
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
+            expect(testingStore.getState().lastCueChange.index).toEqual(1);
+            expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
+                .toBeTruthy();
         });
 
         describe("range prevention", () => {
