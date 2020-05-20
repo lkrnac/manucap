@@ -208,7 +208,7 @@ describe("TimeEditor", () => {
                 expect(onChange).toBeCalledTimes(1);
                 done();
             },
-            150
+            550
         );
     });
 });

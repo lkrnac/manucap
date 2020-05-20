@@ -18,7 +18,7 @@ const styles = {
 };
 
 const onChange = (props: Props, time: number): void => props.onChange(time);
-const onChangeDebounced = _.debounce(onChange, 100);
+const onChangeDebounced = _.debounce(onChange, 500);
 
 const TimeEditor = (props: Props): ReactElement => {
     const handleChange = (_e: SyntheticEvent<HTMLInputElement>, timeString: string): void => {
