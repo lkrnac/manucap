@@ -59,7 +59,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once
     );
-    console.log("in rendering"); //eslint-disable-line
+
     return (
         <div
             className="sbte-subtitle-edit"
