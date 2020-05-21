@@ -160,7 +160,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
+                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                                     Complete
                                 </button>
                             </div>
@@ -271,7 +271,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <button className="btn btn-primary sbte-complete-subtitle-btn" type="button">
+                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                                     Complete
                                 </button>
                             </div>
@@ -495,7 +495,8 @@ describe("SubtitleEdit", () => {
         actualNode.find("button.sbte-complete-subtitle-btn").simulate("click");
 
         // THEN
-        expect(mockOnComplete.mock.calls.length).toBe(1);
+        expect(mockOnComplete).toHaveBeenCalledWith(
+            { editingTrack: testingStore.getState().editingTrack, cues: testingStore.getState().cues});
     });
 
     it("calls onExportFile callback when button is clicked", () => {
@@ -672,6 +673,8 @@ describe("SubtitleEdit", () => {
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
                     onViewAllTracks={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
                 />
             </Provider>
         );

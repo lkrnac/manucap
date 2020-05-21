@@ -2,7 +2,6 @@ import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CueDto, Track } from "./model";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { SubtitleEditState } from "./subtitleEditReducers";
@@ -15,23 +14,19 @@ import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition } from "./cues/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
+import CompleteButton from "./CompleteButton";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
 //  Can be removed once fixed.
 enableMapSet();
 
-interface CompleteAction {
-    editingTrack: Track | null;
-    cues: CueDto[];
-}
-
 export interface SubtitleEditProps {
     mp4: string;
     poster: string;
     onViewAllTracks: () => void;
     onSave: () => void;
-    onComplete: (completeAction: CompleteAction) => void;
+    onComplete: () => void;
     onExportFile: () => void;
     onImportFile: () => void;
 }
@@ -64,7 +59,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once
     );
-
+    console.log("in rendering"); //eslint-disable-line
     return (
         <div
             className="sbte-subtitle-edit"
@@ -150,13 +145,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     </button>
                                 </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
-                                <button
-                                    className="btn btn-primary sbte-complete-subtitle-btn"
-                                    type="button"
-                                    onClick={(): void => props.onComplete({ editingTrack, cues })}
-                                >
-                                    Complete
-                                </button>
+                                <CompleteButton onComplete={props.onComplete} />
                             </div>
                         </div>
                     </div>
