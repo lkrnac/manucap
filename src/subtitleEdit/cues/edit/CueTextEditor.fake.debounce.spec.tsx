@@ -38,7 +38,7 @@ interface ReduxTestWrapperProps {
 
 const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     <Provider store={props.store}>
-        <CueTextEditor index={props.props.index} vttCue={props.props.vttCue} />
+        <CueTextEditor index={props.props.index} vttCue={props.props.vttCue} editUuid={props.props.editUuid} />
     </Provider>
 );
 
@@ -86,9 +86,10 @@ const createExpectedNode = (
 
 const createEditorNode = (text = "someText"): ReactWrapper => {
     const vttCue = new VTTCue(0, 1, text);
+    const editUuid = testingStore.getState().cues[0].editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} />
+            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
         </Provider>
     );
     return actualNode.find(".public-DraftEditor-content");
@@ -107,9 +108,10 @@ const convertToHtmlOptions = {
 
 const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: string): void => {
     // GIVEN
+    const editUuid = testingStore.getState().cues[0].editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} />
+            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
         </Provider>
     );
     const editorState = actualNode.find(Editor).props().editorState;
@@ -138,11 +140,12 @@ const testForContentState = (
     let editorState = EditorState.createWithContent(contentState);
     editorState = EditorState.moveFocusToEnd(editorState);
     const expectedNode = createExpectedNode(editorState, duration, characters, words);
+    const editUuid = testingStore.getState().cues[0].editUuid;
 
     // WHEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} />
+            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
         </Provider>
     );
 
@@ -292,9 +295,10 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.position = 60;
         vttCue.align = "end";
+        const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} />
+                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -414,12 +418,13 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.position = 3;
+        const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.position = 6;
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(6);
@@ -429,12 +434,13 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.align = "left";
+        const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.align = "right";
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.align).toEqual("right");
@@ -444,12 +450,13 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.lineAlign = "start";
+        const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.lineAlign = "end";
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.lineAlign).toEqual("end");
@@ -459,12 +466,13 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.positionAlign = "line-left";
+        const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.positionAlign = "line-right";
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("line-right");
@@ -474,12 +482,13 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.snapToLines = false;
+        const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.snapToLines = true;
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.snapToLines).toEqual(true);
@@ -489,12 +498,12 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.size = 80;
-
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.size = 30;
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.size).toEqual(30);
@@ -504,12 +513,13 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.line = 3;
+        const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.line = 6;
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.line).toEqual(6);
@@ -519,12 +529,12 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.vertical = "rl";
-
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.vertical = "lr";
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.vertical).toEqual("lr");
@@ -534,11 +544,12 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.id = "id";
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.id = "differentId";
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.id).toEqual("differentId");
@@ -548,11 +559,12 @@ describe("CueTextEditor", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.pauseOnExit = false;
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue }} />);
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
 
         // WHEN
         vttCue.pauseOnExit = true;
-        actualNode.setProps({ props: { index: 0, vttCue }});
+        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.pauseOnExit).toEqual(true);

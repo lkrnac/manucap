@@ -26,10 +26,10 @@ interface Props {
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
-                                    startTime: number, endTime: number): void => {
+                                    startTime: number, endTime: number, editUuid?: string): void => {
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
-    dispatch(updateVttCue(props.index, newCue));
+    dispatch(updateVttCue(props.index, newCue, editUuid));
     dispatch(callSaveTrack());
 };
 
@@ -57,10 +57,12 @@ const CueEdit = (props: Props): ReactElement => {
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
     useEffect(() => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
-            updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime);
+            updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime, props.cue.editUuid);
         });
         Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
-            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, props.playerTime);
+            updateCueAndCopyProperties(
+                dispatch, props, props.cue.vttCue.startTime, props.playerTime, props.cue.editUuid
+            );
         });
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
@@ -98,12 +100,16 @@ const CueEdit = (props: Props): ReactElement => {
                     <TimeEditor
                         time={props.cue.vttCue.startTime}
                         onChange={(startTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, startTime, props.cue.vttCue.endTime)}
+                            updateCueAndCopyProperties(
+                                dispatch, props, startTime, props.cue.vttCue.endTime, props.cue.editUuid
+                            )}
                     />
                     <TimeEditor
                         time={props.cue.vttCue.endTime}
                         onChange={(endTime: number): void =>
-                            updateCueAndCopyProperties(dispatch, props, props.cue.vttCue.startTime, endTime)}
+                            updateCueAndCopyProperties(
+                                dispatch, props, props.cue.vttCue.startTime, endTime, props.cue.editUuid
+                            )}
                     />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -125,7 +131,7 @@ const CueEdit = (props: Props): ReactElement => {
                                 // noinspection JSUnfilteredForInLoop
                                 newCue[property] = newPositionProperties[property];
                             }
-                            dispatch(updateVttCue(props.index, newCue));
+                            dispatch(updateVttCue(props.index, newCue, props.cue.editUuid));
                             dispatch(callSaveTrack());
                         }}
                     />
@@ -136,6 +142,7 @@ const CueEdit = (props: Props): ReactElement => {
                     key={props.index}
                     index={props.index}
                     vttCue={props.cue.vttCue}
+                    editUuid={props.cue.editUuid}
                 />
             </div>
         </div>
