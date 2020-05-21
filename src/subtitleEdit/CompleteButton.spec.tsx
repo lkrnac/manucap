@@ -4,10 +4,10 @@ import { mount, shallow } from "enzyme";
 import CompleteButton from "./CompleteButton";
 import { createTestingStore } from "../testUtils/testingStore";
 import { Provider } from "react-redux";
-import {updateEditingTrack} from "./trackSlices";
-import {AnyAction} from "@reduxjs/toolkit";
-import {CueDto, Track} from "./model";
-import {updateCues} from "./cues/cueSlices";
+import { updateEditingTrack } from "./trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
+import { CueDto, Track } from "./model";
+import { updateCues } from "./cues/cueSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -61,6 +61,6 @@ describe("CompleteButton", () => {
 
         // THEN
         expect(mockOnComplete).toHaveBeenCalledWith(
-            { editingTrack: testingStore.getState().editingTrack, cues: testingStore.getState().cues});
+            { editingTrack: testingStore.getState().editingTrack, cues: testingStore.getState().cues });
     });
 });

@@ -4,9 +4,9 @@ import { mount, shallow } from "enzyme";
 import ExportTrackCuesButton from "./ExportTrackCuesButton";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
-import {updateEditingTrack} from "../trackSlices";
-import {AnyAction} from "@reduxjs/toolkit";
-import {Track} from "../model";
+import { updateEditingTrack } from "../trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
+import { Track } from "../model";
 
 const testingTrack = {
     type: "CAPTION",

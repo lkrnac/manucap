@@ -496,7 +496,7 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(mockOnComplete).toHaveBeenCalledWith(
-            { editingTrack: testingStore.getState().editingTrack, cues: testingStore.getState().cues});
+            { editingTrack: testingStore.getState().editingTrack, cues: testingStore.getState().cues });
     });
 
     it("calls onExportFile callback when button is clicked", () => {

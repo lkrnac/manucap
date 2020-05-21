@@ -34,8 +34,8 @@ describe("Toolbox", () => {
                                     <SubtitleSpecificationsButton />
                                     <ShiftTimeButton />
                                     <CaptionOverlapToggle />
-                                    <ExportTrackCuesButton handleExport={() => {}} />
-                                    <ImportTrackCuesButton handleImport={() => {}} />
+                                    <ExportTrackCuesButton handleExport={jest.fn()} />
+                                    <ImportTrackCuesButton handleImport={jest.fn()} />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>

@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
-import {useSelector} from "react-redux";
-import {SubtitleEditState} from "../subtitleEditReducers";
-import {Track} from "../model";
+import { useSelector } from "react-redux";
+import { SubtitleEditState } from "../subtitleEditReducers";
+import { Track } from "../model";
 
 interface Props {
     handleExport: (editingTrack: Track | null) => void;
