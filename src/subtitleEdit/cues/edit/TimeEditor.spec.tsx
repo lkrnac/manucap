@@ -179,19 +179,7 @@ describe("TimeEditor", () => {
         expect(actualNode.find("TimeField").props().value).toEqual("00:00:00.000");
     });
 
-    it("doesn't call onChange immediately", () => {
-        // GIVEN
-        const onChange = jest.fn();
-        const actualNode = mount(<TimeEditor onChange={onChange} />);
-
-        // WHEN
-        actualNode.find("TimeField").simulate("change", { target: { value: "60:00:00.000", selectionEnd: 12 }});
-
-        // THEN
-        expect(onChange).not.toBeCalled();
-    });
-
-    it("call onChange debounced with correct value", (done) => {
+    it("call onChange with correct value", () => {
         // GIVEN
         const onChange = jest.fn();
         const actualNode = mount(
@@ -202,13 +190,7 @@ describe("TimeEditor", () => {
         actualNode.find("TimeField").simulate("change", { target: { value: "60:00:00.000", selectionEnd: 12 }});
 
         // THEN
-        setTimeout(
-            () => {
-                expect(onChange).toBeCalledWith(216000);
-                expect(onChange).toBeCalledTimes(1);
-                done();
-            },
-            550
-        );
+        expect(onChange).toBeCalledWith(216000);
+        expect(onChange).toBeCalledTimes(1);
     });
 });

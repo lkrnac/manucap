@@ -41,6 +41,7 @@ const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
 export interface CueTextEditorProps {
     index: number;
     vttCue: VTTCue;
+    editUuid?: string;
 }
 
 const changeVttCueInRedux = (
@@ -53,7 +54,7 @@ const changeVttCueInRedux = (
     const vttText = getVttText(currentContent);
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
-    dispatch(updateVttCue(props.index, vttCue));
+    dispatch(updateVttCue(props.index, vttCue, props.editUuid));
     // this if is so we don't trigger a save on first render
     if (textChanged) {
         dispatch(callSaveTrack());

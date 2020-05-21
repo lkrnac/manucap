@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { v4 as uuidv4 } from "uuid";
 
 import { CueDto, TimeGapLimit } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
@@ -71,7 +72,7 @@ export const conformToRules = (
     && rangeOk(vttCue, subtitleSpecification)
     && (overlapCaptions || overlapOk(vttCue, previousCue, followingCue));
 
-export const markCuesBreakingRules = (
+export const markCues = (
     cues: CueDto[],
     subtitleSpecifications: SubtitleSpecification | null,
     overlapCaptions: boolean | undefined
@@ -87,7 +88,8 @@ export const markCuesBreakingRules = (
                 previousCue,
                 followingCue,
                 overlapCaptions || false
-            )
+            ),
+            editUuid: uuidv4()
         };
     });
 

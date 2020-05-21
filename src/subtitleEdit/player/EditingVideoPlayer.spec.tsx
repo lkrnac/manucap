@@ -94,7 +94,9 @@ describe("EditingVideoPlayer", () => {
         );
 
         // THEN
-        expect(actualNode.find(VideoPlayer).props().languageCuesArray).toEqual(expectedLanguageCuesArray);
+        const languageCuesArray = actualNode.find(VideoPlayer).props().languageCuesArray;
+        expect(languageCuesArray[0].cues[0].vttCue).toEqual(expectedLanguageCuesArray[0].cues[0].vttCue);
+        expect(languageCuesArray[0].cues[1].vttCue).toEqual(expectedLanguageCuesArray[0].cues[1].vttCue);
     });
 
     it("passes down correct properties when updated", () => {
