@@ -362,20 +362,20 @@ describe("cueSlices", () => {
                 // GIVEN
                 const cuesOverlapped = [
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(1, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
-                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().cues[1].corrupted).toEqual(true);
-                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+                expect(testingStore.getState().cues[1].corrupted).toEqual(false);
+                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
@@ -445,7 +445,7 @@ describe("cueSlices", () => {
                 // GIVEN
                 const cuesOverlapped = [
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
@@ -457,8 +457,8 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
-                expect(testingStore.getState().cues[1].corrupted).toEqual(true);
+                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+                expect(testingStore.getState().cues[1].corrupted).toEqual(false);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
