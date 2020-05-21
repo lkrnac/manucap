@@ -21,9 +21,10 @@ const cues = [
 
 const createEditorNode = (text = "someText"): ReactWrapper => {
     const vttCue = new VTTCue(0, 1, text);
+    const editUuid = testingStore.getState().cues[0].editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} />
+            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
         </Provider>
     );
     return actualNode.find(".public-DraftEditor-content");

@@ -1,4 +1,9 @@
 import "video.js"; // VTTCue definition
+import { EditorState } from "draft-js";
+import { AnyAction } from "@reduxjs/toolkit";
+import deepFreeze from "deep-freeze";
+import { v4 as uuidv4 } from "uuid";
+
 import {
     addCue,
     applyShiftTime,
@@ -11,11 +16,8 @@ import {
     updateVttCue,
     setOverlapCaptions
 } from "./cueSlices";
-import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, ScrollPosition } from "../model";
-import { EditorState } from "draft-js";
 import { createTestingStore } from "../../testUtils/testingStore";
-import deepFreeze from "deep-freeze";
 import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
@@ -23,7 +25,7 @@ import { resetEditingTrack } from "../trackSlices";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
 ] as CueDto[];
 
 const testingCuesWithGaps = [
@@ -39,30 +41,48 @@ describe("cueSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
     describe("updateVttCue", () => {
         it("update top level cue", () => {
-            // WHEN
+            // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[1].editUuid;
 
-            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue")) as {} as AnyAction);
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
+            expect(testingStore.getState().lastCueChange).toBeUndefined;
             expect(testingStore.getState().lastCueChange.index).toEqual(1);
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
         });
 
+        it("doesn't update top level cue when editUuid is different", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue"), uuidv4()) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().validationError).toEqual(false);
+            expect(testingStore.getState().lastCueChange).toBeUndefined;
+        });
+
         describe("range prevention", () => {
             it("apply invalid end time prevention on start time change", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.5);
@@ -74,9 +94,10 @@ describe("cueSlices", () => {
             it("apply invalid end time prevention on end time change", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 0, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 0, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
@@ -97,9 +118,10 @@ describe("cueSlices", () => {
 
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(3, 4, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(3, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2.8);
@@ -120,9 +142,10 @@ describe("cueSlices", () => {
 
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -143,9 +166,10 @@ describe("cueSlices", () => {
 
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 3, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 3, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
@@ -166,9 +190,10 @@ describe("cueSlices", () => {
 
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(2.8, 4, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2.8, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
@@ -189,9 +214,10 @@ describe("cueSlices", () => {
 
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -214,9 +240,10 @@ describe("cueSlices", () => {
 
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 5, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 5, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
@@ -228,9 +255,10 @@ describe("cueSlices", () => {
             it("Adjust startTime to follow min caption gap with default gap limits values", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(3.6, 4, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(3.6, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3.5);
@@ -243,9 +271,10 @@ describe("cueSlices", () => {
             it("Adjust endtime to follow min caption gap with default gap limits values", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.4, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.4, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
@@ -257,9 +286,10 @@ describe("cueSlices", () => {
             it("Adjust startTime to follow max caption gap with default gap limits values", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(2, new VTTCue(5, 18, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(2, new VTTCue(5, 18, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
@@ -272,9 +302,12 @@ describe("cueSlices", () => {
             it("Adjust endtime to follow max caption gap with default gap limits values", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(2, new VTTCue(12, 999999, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(2, new VTTCue(12, 999999, "Dummy Cue"), editUuid) as {} as AnyAction
+                );
 
                 // THEN
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(12);
@@ -292,9 +325,12 @@ describe("cueSlices", () => {
 
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Change to be applied")) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(0, 2, "Change to be applied"), editUuid) as {} as AnyAction
+                );
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Change to be applied");
@@ -305,9 +341,10 @@ describe("cueSlices", () => {
             it("apply overlap prevention for end time", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -323,9 +360,10 @@ describe("cueSlices", () => {
                     { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(1, 4, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(1, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
@@ -343,10 +381,11 @@ describe("cueSlices", () => {
                     { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
                 testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Caption Line 1")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Caption Line 1"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -361,9 +400,10 @@ describe("cueSlices", () => {
             it("apply overlap prevention for start time", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 4, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
@@ -379,10 +419,11 @@ describe("cueSlices", () => {
                     { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
                 testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
-                testingStore.dispatch(updateVttCue(1, new VTTCue(1, 4, "Caption Line 2")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(1, 4, "Caption Line 2"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
@@ -400,9 +441,10 @@ describe("cueSlices", () => {
                     { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -422,10 +464,11 @@ describe("cueSlices", () => {
                     { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
                 testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Caption Line 1")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Caption Line 1"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -450,10 +493,13 @@ describe("cueSlices", () => {
                     { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesOverlapped) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
                 testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
-                testingStore.dispatch(updateVttCue(1, new VTTCue(1.5, 2.4, "Caption Line 2")) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1.5, 2.4, "Caption Line 2"), editUuid) as {} as AnyAction
+                );
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -476,9 +522,10 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: 30,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
@@ -494,9 +541,10 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: 30,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy \n\nCue");
@@ -512,9 +560,10 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: 30,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy \n\nCue")) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy \n\nCue");
@@ -530,9 +579,12 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: 15,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Long long line 1\nline 2")) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(0, 2, "Long long line 1\nline 2"), editUuid) as {} as AnyAction
+                );
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
@@ -548,9 +600,12 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: 15,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "line 1\nlong long line 2")) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(0, 2, "line 1\nlong long line 2"), editUuid) as {} as AnyAction
+                );
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
@@ -566,10 +621,11 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: 10,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
                 testingStore.dispatch(
-                    updateVttCue(0, new VTTCue(0, 2, "line 1\n<i>l<b>ine</b></i> 2")) as {} as AnyAction
+                    updateVttCue(0, new VTTCue(0, 2, "line 1\n<i>l<b>ine</b></i> 2"), editUuid) as {} as AnyAction
                 );
 
                 // THEN
@@ -586,9 +642,12 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: null,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2"), editUuid) as {} as AnyAction
+                );
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
@@ -604,9 +663,12 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: 10,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2"), editUuid) as {} as AnyAction
+                );
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
@@ -625,9 +687,12 @@ describe("cueSlices", () => {
                     maxCharactersPerLine: 10,
                 } as SubtitleSpecification;
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2")) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(0, 2, "line 1\nlong line 2"), editUuid) as {} as AnyAction
+                );
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
@@ -672,6 +737,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+            expect(testingStore.getState().cues[0].editUuid).not.toBeEmpty;
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().validationError).toEqual(false);
         });
@@ -705,7 +771,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
-            expect(testingStore.getState().cues[2].cueCategory).toEqual("DIALOGUE");
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().editingCueIndex).toEqual(2);
             expect(testingStore.getState().validationError).toEqual(false);
         });
@@ -974,14 +1040,21 @@ describe("cueSlices", () => {
             // GIVEN
             const expectedCues = [
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
-                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
+                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT", corrupted: false },
             ] as CueDto[];
 
             // WHEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues).toEqual(expectedCues);
+            expect(testingStore.getState().cues[0].vttCue).toEqual(expectedCues[0].vttCue);
+            expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+            expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+            expect(testingStore.getState().cues[0].editUuid).not.toBeEmpty;
+            expect(testingStore.getState().cues[1].vttCue).toEqual(expectedCues[1].vttCue);
+            expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().cues[1].corrupted).toEqual(false);
+            expect(testingStore.getState().cues[1].editUuid).not.toBeEmpty;
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
@@ -996,7 +1069,10 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(replacementCues) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues).toEqual(replacementCues);
+            expect(testingStore.getState().cues[0].vttCue).toEqual(replacementCues[0].vttCue);
+            expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+            expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+            expect(testingStore.getState().cues[0].editUuid).not.toBeEmpty;
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 

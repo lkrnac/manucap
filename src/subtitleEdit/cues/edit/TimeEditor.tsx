@@ -1,6 +1,5 @@
 import React, { ReactElement, SyntheticEvent } from "react";
 import TimeField from "react-advanced-timefield";
-import _ from "lodash";
 
 import { getTimeFromString, getTimeString } from "../timeUtils";
 
@@ -18,12 +17,11 @@ const styles = {
 };
 
 const onChange = (props: Props, time: number): void => props.onChange(time);
-const onChangeDebounced = _.debounce(onChange, 500);
 
 const TimeEditor = (props: Props): ReactElement => {
     const handleChange = (_e: SyntheticEvent<HTMLInputElement>, timeString: string): void => {
         const time = getTimeFromString(timeString);
-        onChangeDebounced(props, time);
+        onChange(props, time);
     };
     return (
         <TimeField
