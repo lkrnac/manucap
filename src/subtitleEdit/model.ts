@@ -9,6 +9,7 @@ export interface CueDto {
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
     corrupted?: boolean;
+    editUuid?: string;
 }
 
 export interface CueWithSource {

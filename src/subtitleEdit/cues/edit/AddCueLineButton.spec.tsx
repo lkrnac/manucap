@@ -144,7 +144,7 @@ describe("AddCueLineButton", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues).toStrictEqual(testingCues);
+        expect(testingStore.getState().cues.length).toEqual(2);
     });
 
     it("Does not add cue if clicking button creates less than 0.5 gap", () => {
@@ -167,7 +167,6 @@ describe("AddCueLineButton", () => {
 
         // THEN
         expect(testingStore.getState().cues).toHaveLength(2);
-        expect(testingStore.getState().cues).toStrictEqual(testingCues);
     });
 
     it("Add cue if clicking button if there is greater or equal 0.5 gap", () => {

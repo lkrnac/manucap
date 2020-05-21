@@ -59,7 +59,8 @@ describe("EditingVideoPlayer", () => {
         // WHEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-        testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Cue")) as {} as AnyAction);
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Cue"), editUuid) as {} as AnyAction);
         actualNode.setProps({}); // trigger update + re-render
 
         // THEN
