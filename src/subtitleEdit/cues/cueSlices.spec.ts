@@ -14,14 +14,19 @@ import {
     updateEditingCueIndex,
     updateSourceCues,
     updateVttCue,
-    setOverlapCaptions
 } from "./cueSlices";
-import { CueDto, ScrollPosition } from "../model";
+import { CueDto, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
-import { resetEditingTrack } from "../trackSlices";
+import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
+
+const testingTrack = {
+    type: "CAPTION",
+    language: { id: "en-US" },
+    default: true,
+} as Track;
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -384,7 +389,8 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
                 testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Caption Line 1"), editUuid) as {} as AnyAction);
 
                 // THEN
@@ -412,7 +418,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationError).toEqual(true);
             });
 
-            it("apply overlap prevention for start time if overlapping is enabled", () => {
+            it("doesn't apply overlap prevention for start time if overlapping is enabled", () => {
                 // GIVEN
                 const cuesOverlapped = [
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -422,7 +428,8 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
                 testingStore.dispatch(updateVttCue(1, new VTTCue(1, 4, "Caption Line 2"), editUuid) as {} as AnyAction);
 
                 // THEN
@@ -434,7 +441,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
-            it("doesn't apply overlap prevention for end time if not changed", () => {
+            it("doesn't apply overlap prevention for start time if not changed", () => {
                 // GIVEN
                 const cuesOverlapped = [
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -467,7 +474,8 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
-                testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
                 testingStore.dispatch(updateVttCue(0, new VTTCue(0, 3, "Caption Line 1"), editUuid) as {} as AnyAction);
 
                 // THEN
@@ -496,7 +504,8 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
                 testingStore.dispatch(
                     updateVttCue(1, new VTTCue(1.5, 2.4, "Caption Line 2"), editUuid) as {} as AnyAction
                 );
@@ -819,7 +828,8 @@ describe("cueSlices", () => {
             ] as CueDto[]) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
+            testingTrack.overlapEnabled = true;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(addCue(1) as {} as AnyAction);
 
             // THEN
@@ -1197,41 +1207,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().validationError).toEqual(true);
-        });
-    });
-
-    describe("overlapEnabled", () => {
-        it("sets overlap captions flag", () => {
-            // WHEN
-            testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().overlapEnabled).toEqual(true);
-        });
-        it("checks for errors after setting overlap captions flag", () => {
-            // GIVEN
-            const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 1.5, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(1, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(setOverlapCaptions(false) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
-        });
-        it("resets overlap caption flag on resetEditingTrack", () => {
-            //GIVEN
-            testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
-
-            //WHEN
-            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().overlapEnabled).toBeFalsy();
         });
     });
 

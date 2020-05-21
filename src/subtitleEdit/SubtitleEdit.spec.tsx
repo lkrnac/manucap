@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { setOverlapCaptions, updateCues, updateSourceCues } from "./cues/cueSlices";
+import { updateCues, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -633,7 +633,6 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
-        testingStore.dispatch(setOverlapCaptions(true) as {} as AnyAction);
 
         const { container } = render(
             <Provider store={testingStore}>
@@ -656,7 +655,6 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().editingTrack).toBeNull();
         expect(testingStore.getState().cues).toEqual([]);
         expect(testingStore.getState().sourceCues).toEqual([]);
-        expect(testingStore.getState().overlapEnabled).toBeFalsy();
     });
 
     it("sets saveTrack when mounted", () => {
@@ -676,34 +674,5 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(testingStore.getState().saveTrack).toBeDefined();
-    });
-
-    it("sets overlapCaptions when track is loaded", () => {
-        // GIVEN
-        // WHEN
-        const testingTrackWithOverlap = {
-            type: "CAPTION",
-            language: { id: "en-US", name: "English (US)" } as Language,
-            default: true,
-            mediaTitle: "This is the video title",
-            mediaLength: 4000,
-            progress: 50,
-            overlapEnabled: true
-        } as Track;
-        testingStore.dispatch(updateEditingTrack(testingTrackWithOverlap) as {} as AnyAction);
-        mount(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={(): void => undefined}
-                    onComplete={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // THEN
-        expect(testingStore.getState().overlapEnabled).toBeTruthy();
     });
 });

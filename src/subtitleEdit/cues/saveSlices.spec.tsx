@@ -78,11 +78,7 @@ describe("saveSlices", () => {
         it("passes cues and editingTrack from store to call to saveTrack", (done) => {
             // WHEN
             const cues = testingStore.getState().cues;
-            const track = testingStore.getState().editingTrack;
-            const editingTrack = {
-                ...track,
-                overlapEnabled: false
-            };
+            const editingTrack = testingStore.getState().editingTrack;
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             setTimeout(() => {

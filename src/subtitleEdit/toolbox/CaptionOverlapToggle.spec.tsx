@@ -4,6 +4,9 @@ import { mount, shallow } from "enzyme";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
+import { updateEditingTrack } from "../trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
+import { Track } from "../model";
 
 let testingStore = createTestingStore();
 
@@ -73,6 +76,13 @@ describe("CaptionOverlapToggle", () => {
 
     it("toggles overlap caption flag in store on toggle", () => {
         // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US" },
+            default: true,
+            overlapEnabled: false
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CaptionOverlapToggle />
@@ -83,6 +93,6 @@ describe("CaptionOverlapToggle", () => {
         actualNode.find("ToggleButton").simulate("click");
 
         // THEN
-        expect(testingStore.getState().overlapEnabled).toEqual(true);
+        expect(testingStore.getState().editingTrack.overlapEnabled).toEqual(true);
     });
 });
