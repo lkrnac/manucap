@@ -174,17 +174,6 @@ export const validationErrorSlice = createSlice({
     }
 });
 
-export const overlapCaptionsSlice = createSlice({
-    name: "overlapEnabled",
-    initialState: false,
-    reducers: {
-        setOverlapCaptions: (_state, action: PayloadAction<boolean>): boolean => action.payload
-    },
-    extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
-    }
-});
-
 export const lastCueChangeSlice = createSlice({
     name: "lastCueChange",
     initialState: null as CueChange | null,
@@ -203,7 +192,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue): AppThunk =>
         const followingCue = cues[idx + 1];
         const originalCue = cues[idx];
         const subtitleSpecifications = getState().subtitleSpecifications;
-        const overlapCaptionsAllowed = getState().overlapEnabled;
+        const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
 
         if (vttCue.startTime !== originalCue.vttCue.startTime) {
             overlapCaptionsAllowed || applyOverlapPreventionStart(newVttCue, previousCue);
@@ -243,7 +232,7 @@ export const addCue = (idx: number): AppThunk =>
         const previousCue = cues[idx - 1] || Constants.DEFAULT_CUE;
         const sourceCue = state.sourceCues[idx];
         const cue = createAndAddCue(previousCue, step, sourceCue);
-        const overlapCaptionsAllowed = getState().overlapEnabled;
+        const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
 
         if (!overlapCaptionsAllowed) {
             const followingCue = cues[idx];
@@ -273,7 +262,7 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
         const checkedCues = markCuesBreakingRules(
             cues,
             getState().subtitleSpecifications,
-            getState().overlapEnabled
+            getState().editingTrack?.overlapEnabled
         );
         dispatch(cuesSlice.actions.updateCues({ cues: checkedCues }));
     };
@@ -296,11 +285,4 @@ export const applyShiftTime = (shiftTime: number): AppThunk =>
 export const setValidationError = (error: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean>>): void => {
         dispatch(validationErrorSlice.actions.setValidationError(error));
-    };
-
-export const setOverlapCaptions = (overlapEnabled: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean | SubtitleSpecificationAction>>, getState): void => {
-        dispatch(overlapCaptionsSlice.actions.setOverlapCaptions(overlapEnabled));
-        const subtitleSpecification = getState().subtitleSpecifications;
-        dispatch(cuesSlice.actions.checkErrors({ subtitleSpecification, overlapEnabled }));
     };

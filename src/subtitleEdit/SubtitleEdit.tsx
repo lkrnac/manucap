@@ -1,7 +1,6 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import React, { ReactElement, useEffect, useState } from "react";
-import { setOverlapCaptions } from "./cues/cueSlices";
 import { useDispatch, useSelector } from "react-redux";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
@@ -48,13 +47,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         () => {
             dispatch(setSaveTrack(props.onSave));
         }, [ dispatch, props.onSave ]
-    );
-
-    useEffect(
-        () => {
-            dispatch(setOverlapCaptions(editingTrack?.overlapEnabled || false));
-        },
-        [ dispatch, editingTrack ]
     );
 
     useEffect(

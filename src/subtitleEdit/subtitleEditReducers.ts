@@ -3,7 +3,6 @@ import {
     cuesSlice,
     editingCueIndexSlice,
     lastCueChangeSlice,
-    overlapCaptionsSlice,
     sourceCuesSlice,
     validationErrorSlice
 } from "./cues/cueSlices";
@@ -36,7 +35,6 @@ export const Reducers = {
     saveTrack: saveTrackSlice.reducer,
     saveStatus: saveStatusSlice.reducer,
     pendingSave: pendingSaveSlice.reducer,
-    overlapEnabled: overlapCaptionsSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
     scrollPosition: scrollPositionSlice.reducer
 };

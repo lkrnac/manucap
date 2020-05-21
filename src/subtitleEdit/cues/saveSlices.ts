@@ -81,12 +81,8 @@ export const callSaveTrack = (): AppThunk =>
         const saveStatus = getState().saveStatus;
         if (saveStatus !== SAVING_CHANGES_MSG) {
             const cues = getState().cues;
-            const track = getState().editingTrack;
-            if (track && cues) {
-                const editingTrack = {
-                    ...track,
-                    overlapEnabled: getState().overlapEnabled
-                };
+            const editingTrack = getState().editingTrack;
+            if (cues && editingTrack) {
                 dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
             }
         } else {
