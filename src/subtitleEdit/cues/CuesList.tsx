@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
 import ReactSmartScroll from "@dotsub/react-smart-scroll";
@@ -9,6 +9,8 @@ import { CueDto, CueWithSource, ScrollPosition, Track } from "../model";
 import CueLine from "./CueLine";
 import { addCue, updateEditingCueIndex } from "./cueSlices";
 import { SubtitleEditState } from "../subtitleEditReducers";
+import Mousetrap from "mousetrap";
+import { KeyCombination } from "../shortcutConstants";
 
 interface Props {
     editingTrack: Track | null;
@@ -38,11 +40,20 @@ const CuesList = (props: Props): ReactElement => {
     const scrollPosition = useSelector((state: SubtitleEditState) => state.scrollPosition);
     const startAt = getScrollCueIndex(cuesWithSource, scrollPosition);
     const rowHeight = sourceCues.length > 0 ? 161 : 81; // Values are from Elements > Computed from browser DEV tools
+    const showStartCaptioning = drivingCues.length === 0
+        && (props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack));
+    useEffect(() => {
+        Mousetrap.bind([KeyCombination.ENTER], () => {
+            if (showStartCaptioning) {
+                dispatch(addCue(0));
+            }
+            return false;
+        });
+    }, [dispatch, showStartCaptioning]);
     return (
         <>
             {
-                drivingCues.length === 0
-                    && (props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack))
+                showStartCaptioning
                     ? <AddCueLineButton text="Start Captioning" cueIndex={-1} />
                     : null
             }
