@@ -82,7 +82,9 @@ export const callSaveTrack = (): AppThunk =>
         if (saveStatus !== SAVING_CHANGES_MSG) {
             const cues = getState().cues;
             const editingTrack = getState().editingTrack;
-            dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
+            if (cues && editingTrack) {
+                dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
+            }
         } else {
             dispatch(pendingSaveSlice.actions.setPendingSave(true));
         }

@@ -3,7 +3,7 @@ import "video.js"; // VTTCue definition
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
-import { CueDto } from "../model";
+import { CueDto, Track } from "../model";
 import DeleteCueLineButton from "./edit/DeleteCueLineButton";
 import PlayCueButton from "./PlayCueButton";
 import { Provider } from "react-redux";
@@ -14,6 +14,7 @@ import testingStore from "../../testUtils/testingStore";
 import { updateCues } from "./cueSlices";
 import _ from "lodash";
 import { setSaveTrack } from "./saveSlices";
+import { updateEditingTrack } from "../trackSlices";
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -30,6 +31,7 @@ describe("CueActionsPanel", () => {
         // @ts-ignore
         jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });
 
     it("renders for caption cue in edit mode", () => {

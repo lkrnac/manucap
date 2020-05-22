@@ -10,6 +10,8 @@ import {
     setAutoSaveSuccess,
     setSaveTrack
 } from "./saveSlices";
+import { updateEditingTrack } from "../trackSlices";
+import { Track } from "../model";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -29,6 +31,7 @@ describe("saveSlices", () => {
             // GIVEN
             saveTrack.mockReset();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
         });
 
         it("calls saveTrack", () => {

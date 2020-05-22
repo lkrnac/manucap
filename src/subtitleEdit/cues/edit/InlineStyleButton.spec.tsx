@@ -10,6 +10,8 @@ import { updateEditorState } from "./editorStatesSlice";
 import _ from "lodash";
 import { TooltipWrapper } from "../../TooltipWrapper";
 import { setSaveTrack } from "../saveSlices";
+import { updateEditingTrack } from "../../trackSlices";
+import { Track } from "../../model";
 
 /**
  * On click actions are covered by CueTextEditor tests
@@ -134,6 +136,7 @@ describe("InlineStyleButton", () => {
         // @ts-ignore
         jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
