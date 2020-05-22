@@ -755,6 +755,8 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
                 />
             </Provider>
         );
