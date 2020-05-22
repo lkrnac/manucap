@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, Dispatch, useState } from "react";
+import React, { ReactElement, useEffect, Dispatch, useState, useRef } from "react";
 import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
@@ -77,6 +77,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         editorState = EditorState.moveFocusToEnd(editorState);
     }
     const currentContent = editorState.getCurrentContent();
+    const unmountContentRef = useRef(currentContent);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     const [textChanged, setTextChanged] = useState(false);
     useEffect(
@@ -93,6 +94,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
+            unmountContentRef.current = currentContent;
             changeVttCueInReduxDebounced(currentContent, props, dispatch, textChanged, setTextChanged);
         },
         // Two bullet points in this suppression:
@@ -100,6 +102,16 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         //  - spread operator for cue values is used so that all the VTTCue properties code can be in single file.
         // eslint-disable-next-line
         [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
+    );
+
+    // Fire update VTTCue action when component is unmounted.
+    // So content is not lost when unmounbted before next debounce.
+    useEffect(
+        () => (): void => {
+            changeVttCueInRedux(unmountContentRef.current, props, dispatch, textChanged, setTextChanged);
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
     );
 
     return (
