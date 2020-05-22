@@ -55,7 +55,7 @@ describe("CueTextEditor", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
                 done();
             },
-            550
+            100
         );
     });
 

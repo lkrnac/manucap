@@ -62,7 +62,7 @@ const changeVttCueInRedux = (
     }
 };
 
-const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 500);
+const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 50);
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
