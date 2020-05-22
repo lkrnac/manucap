@@ -55,7 +55,7 @@ describe("CueTextEditor", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
                 done();
             },
-            550
+            100
         );
     });
 
@@ -73,5 +73,29 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+    });
+
+    it("update cue in redux when unmounted, before debounce timeout", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => " Paste text to end",
+            }
+        });
+
+        // WHEN
+        actualNode.unmount();
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 });
