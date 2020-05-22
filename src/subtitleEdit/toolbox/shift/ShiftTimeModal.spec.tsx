@@ -2,7 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { applyShiftTime, updateCues } from "../../cues/cueSlices";
 import { AnyAction } from "@reduxjs/toolkit";
-import { CueDto } from "../../model";
+import { CueDto, Track } from "../../model";
 import { Provider } from "react-redux";
 import React from "react";
 import ShiftTimesModal from "./ShiftTimeModal";
@@ -11,6 +11,7 @@ import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
 import _ from "lodash";
 import { setSaveTrack } from "../../cues/saveSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 const testCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -25,6 +26,7 @@ describe("ShiftTimesModal", () => {
         // @ts-ignore
         jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });
 
     it("renders with error message", () => {

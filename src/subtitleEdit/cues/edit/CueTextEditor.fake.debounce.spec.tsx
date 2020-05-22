@@ -15,10 +15,11 @@ import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { CueDto } from "../../model";
+import { CueDto, Track } from "../../model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -212,6 +213,8 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+
         const editor = createEditorNode();
 
         // WHEN
@@ -230,6 +233,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
