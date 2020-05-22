@@ -45,7 +45,7 @@ describe("CompleteButton", () => {
        expect(actualNode.html()).toEqual(expectedNode.html());
    });
 
-    it("calls handleExport when clicked", () => {
+    it("calls onComplete when clicked", () => {
         // GIVEN
         const mockOnComplete = jest.fn();
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);

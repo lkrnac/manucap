@@ -30,7 +30,7 @@ describe("ImportTrackCuesButton", () => {
        expect(actualNode.html()).toEqual(expectedNode.html());
    });
 
-    it("calls handleExport when clicked", () => {
+    it("calls handleImport when clicked", () => {
         // GIVEN
         const mockHandleImport = jest.fn();
         const actualNode = mount(
