@@ -42,14 +42,18 @@ const CuesList = (props: Props): ReactElement => {
     const rowHeight = sourceCues.length > 0 ? 161 : 81; // Values are from Elements > Computed from browser DEV tools
     const showStartCaptioning = drivingCues.length === 0
         && (props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack));
-    useEffect(() => {
-        Mousetrap.bind([KeyCombination.ENTER], () => {
-            if (showStartCaptioning) {
-                dispatch(addCue(0));
-            }
-            return false;
-        });
-    }, [dispatch, showStartCaptioning]);
+    useEffect(
+        () => {
+            Mousetrap.bind([KeyCombination.ENTER], () => {
+                if (showStartCaptioning) {
+                    dispatch(addCue(0));
+                }
+                return false;
+            });
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [] // Run only once -> mount
+    );
     return (
         <>
             {
