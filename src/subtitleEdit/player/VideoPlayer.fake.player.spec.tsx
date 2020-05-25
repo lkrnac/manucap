@@ -558,6 +558,50 @@ describe("VideoPlayer tested with fake player", () => {
         expect(textTracks[0].cues[2].text).toEqual("Caption Line 4");
     });
 
+    it("does not edit cue if not doesn't exist in track already", () => {
+        // GIVEN
+        const captionCues = [new VTTCue(0, 1, "Caption Line 1"), new VTTCue(1, 2, "Caption Line 2")];
+        const textTracks = [
+            {
+                language: "en-US",
+                addCue: (cue: VTTCue): number => captionCues.push(cue),
+                removeCue: (cue: VTTCue): VTTCue[] => captionCues.splice(captionCues.indexOf(cue), 1),
+                length: 2,
+                cues: captionCues,
+                dispatchEvent: jest.fn()
+            },
+        ];
+        textTracks["addEventListener"] = jest.fn();
+
+        const playerMock = {
+            textTracks: (): FakeTextTrack[] => textTracks,
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={initialTestingTracks}
+                languageCuesArray={initialTestingLanguageCuesArray}
+                lastCueChange={null}
+            />
+        );
+
+        // WHEN
+        actualNode.setProps({
+            lastCueChange: { changeType: "EDIT", index: 3, vttCue: new VTTCue(0, 1, "Updated Caption") }
+        });
+
+        // THEN
+        expect(textTracks[0].cues[0].text).toEqual("Caption Line 1");
+        expect(textTracks[0].cues[1].text).toEqual("Caption Line 2");
+        expect(textTracks[0].cues).toHaveLength(2);
+    });
+
+
     it("maintains cue styles when cue is updated", () => {
         // GIVEN
         const textTracks = [

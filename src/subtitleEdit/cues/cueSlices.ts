@@ -193,8 +193,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string): Ap
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
-
-        if (editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
+        if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
             const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
             copyNonConstructorProperties(newVttCue, vttCue);
 

@@ -57,7 +57,7 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
 };
 
 const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void => {
-    if (lastCueChange.changeType === "EDIT") {
+    if (lastCueChange.changeType === "EDIT" && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
