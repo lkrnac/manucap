@@ -57,7 +57,7 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
 };
 
 const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void => {
-    if (lastCueChange.changeType === "EDIT") {
+    if (lastCueChange.changeType === "EDIT" && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
@@ -66,7 +66,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void =
 };
 
 const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
-    if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
+    if (lastCueChange.changeType === "ADD") {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
             cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
