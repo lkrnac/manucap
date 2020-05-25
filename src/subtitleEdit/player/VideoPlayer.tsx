@@ -66,7 +66,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void =
 };
 
 const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
-    if (lastCueChange.changeType === "ADD") {
+    if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
             cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
