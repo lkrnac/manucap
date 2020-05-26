@@ -80,6 +80,17 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange).toBeUndefined;
         });
 
+        it("doesn't update top level cue when not existing already in the array", () => {
+            // WHEN
+            testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2.5, "Dummy Cue"), uuidv4()) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(0);
+            expect(testingStore.getState().validationError).toEqual(false);
+            expect(testingStore.getState().lastCueChange).toBeUndefined;
+        });
+
+
         describe("range prevention", () => {
             it("apply invalid end time prevention on start time change", () => {
                 // GIVEN
