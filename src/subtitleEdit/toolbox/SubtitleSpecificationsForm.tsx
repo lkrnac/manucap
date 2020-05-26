@@ -29,9 +29,9 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
         {props.subTitleSpecifications.enabled ? (
             <>
                 <hr />
-                <div style={{ display: "flex", flexDirection: "column"}}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                     <div style={{ display: "flex", marginRight: "20px" }}>
-                        <div style={{ flexFlow: "column" }}>
+                        <div style={{ flexFlow: "column", flex: 1 }}>
                             <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
                                 <label>{props.subTitleSpecifications.audioDescription ? "Yes" : "No"}</label>
@@ -57,8 +57,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                                 </label>
                             </div>
                         </div>
-                        <hr />
-                        <div style={{ flexFlow: "column" }}>
+                        <div style={{ flexFlow: "column", flex: 1 }}>
                             <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                                 <label>

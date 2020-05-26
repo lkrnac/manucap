@@ -70,9 +70,9 @@ describe("SubtitleSpecificationsForm", () => {
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
                 <hr />
-                <div style={{ display: "flex", flexDirection: "column"}}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                     <div style={{ display: "flex", marginRight: "20px" }}>
-                        <div style={{ flexFlow: "column" }}>
+                        <div style={{ flexFlow: "column", flex: 1 }}>
                             <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
                                 <label>Yes</label>
@@ -94,8 +94,7 @@ describe("SubtitleSpecificationsForm", () => {
                                 <label>Line Breaks</label>
                             </div>
                         </div>
-                        <hr />
-                        <div style={{ flexFlow: "column" }}>
+                        <div style={{ flexFlow: "column", flex: 1 }}>
                             <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                                 <label>1</label>
@@ -162,9 +161,9 @@ describe("SubtitleSpecificationsForm", () => {
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
                 <hr />
-                <div style={{ display: "flex", flexDirection: "column"}}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                     <div style={{ display: "flex", marginRight: "20px" }}>
-                        <div style={{ flexFlow: "column" }}>
+                        <div style={{ flexFlow: "column", flex: 1 }}>
                             <div>
                                 <label><strong> Audio Description:&nbsp;</strong></label>
                                 <label>Yes</label>
@@ -186,8 +185,7 @@ describe("SubtitleSpecificationsForm", () => {
                                 <label>Line Breaks</label>
                             </div>
                         </div>
-                        <hr />
-                        <div style={{ flexFlow: "column" }}>
+                        <div style={{ flexFlow: "column", flex: 1 }}>
                             <div>
                                 <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                                 <label>n/a</label>
