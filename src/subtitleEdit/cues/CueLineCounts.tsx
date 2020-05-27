@@ -8,7 +8,12 @@ interface Props {
     vttCue: VTTCue;
 }
 
-const getCharacterCount = (text: string): number => text ? text.length : 0;
+const getCharacterCount = (text: string): string => {
+    const total = text ? text.replace(/(\r\n|\n|\r)/gm, "").length : 0;
+    const lines = text.match(/[^\r\n]+/g) || [text];
+    const countByLine = lines.map((line: string): number => line.length);
+    return total + (lines.length > 1 ? " (" + countByLine.toString() + ")" : "");
+};
 
 const getWordCount = (text: string): number => {
     const matches = text ? text.match(/\S+/g) : [];

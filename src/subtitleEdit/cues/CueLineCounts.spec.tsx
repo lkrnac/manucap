@@ -14,7 +14,7 @@ const testContentRendered = (
     startTime: number,
     endTime: number,
     duration: number,
-    characters: number,
+    characters: string,
     words: number
 ): void => {
     // GIVEN
@@ -23,7 +23,7 @@ const testContentRendered = (
     const editorState = EditorState.createWithContent(contentState);
     testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
-    const vttCue = new VTTCue(startTime, endTime, "");
+    const vttCue = new VTTCue(startTime, endTime, text);
     const expectedNode = mount(
         <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
             <span>DURATION: <span className="sbte-green-text">{duration}s</span>, </span>
@@ -45,31 +45,31 @@ const testContentRendered = (
 
 describe("CueLineCounts", () => {
     it("renders", () => {
-        testContentRendered("", 0, 1,1, 0, 0);
+        testContentRendered("", 0, 1,1, "0", 0);
     });
 
     it("renders with text", () => {
-        testContentRendered("i am a subtitle line", 0, 1, 1, 20, 5);
+        testContentRendered("i am a subtitle line", 0, 1, 1, "20", 5);
     });
 
     it("renders with text and line breaks, spaces and tabs ", () => {
-        testContentRendered("    this is      sample " +
-            "     text with      multiple        blanks", 0, 1, 1, 62, 7);
+        testContentRendered("    this is      sample <br>" +
+            "     text with      multiple        blanks", 0, 1, 1, "62 (20,42)", 7);
     });
 
     it("renders with html", () => {
-        testContentRendered("i <i>am</i> <b>a subtitle</b> line", 0, 1, 1, 20, 5);
+        testContentRendered("i <i>am</i> <b>a subtitle</b> line", 0, 1, 1, "20", 5);
     });
 
     it("renders with long text and duration", () => {
         testContentRendered("" +
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vestibulum vel ligula in fermentum. " +
-            "Etiam semper tristique sapien, ac viverra sem sodales eget. Quisque rutrum ipsum eu justo semper, " +
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vestibulum ligula in fermen tum.<br>" +
+            "Etiam semper tristique sapien, ac viverra sem sodales eget. Quisque rutrum ipsum eu justo semper,<br>" +
             "mattis bibendum sapien tincidunt. Nullam quis metus ut arcu pulvinar eleifend.",
             15,
             3898.45,
             3883.45,
-            280,
+            "275 (100,97,78)",
             40);
     });
 });
