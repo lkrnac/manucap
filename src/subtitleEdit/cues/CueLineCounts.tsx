@@ -8,16 +8,27 @@ interface Props {
     vttCue: VTTCue;
 }
 
-const getCharacterCount = (text: string): string => {
-    const total = text ? text.replace(/(\r\n|\n|\r)/gm, "").length : 0;
+export const getCharacterCountPerLine = (text: string): number[] => {
     const lines = text.match(/[^\r\n]+/g) || [text];
-    const countByLine = lines.map((line: string): number => line.length);
-    return total + (lines.length > 1 ? " (" + countByLine.toString() + ")" : "");
+    return lines.map((line: string): number => line.length);
 };
 
-const getWordCount = (text: string): number => {
+export const getWordCountPerLine = (text: string): number[] => {
+    const lines = text.match(/[^\r\n]+/g) || [text];
+    return lines.map((line: string): number => line.match(/\S+/g)?.length || 0);
+};
+
+const getCharacterCount = (text: string): string => {
+    const total = text ? text.replace(/(\r\n|\n|\r)/gm, "").length : 0;
+    const countPerLine = getCharacterCountPerLine(text);
+    return total + (countPerLine.length > 1 ? " (" + countPerLine.toString() + ")" : "");
+};
+
+const getWordCount = (text: string): string => {
     const matches = text ? text.match(/\S+/g) : [];
-    return matches ? matches.length : 0;
+    const total = matches ? matches.length : 0;
+    const countPerLine = getWordCountPerLine(text);
+    return total + (countPerLine.length > 1 ? " (" + countPerLine.toString() + ")" : "");
 };
 
 const NUM_DECIMAL = 3;
