@@ -91,8 +91,7 @@ $background-error-lighter: rgb(255, 245, 245);
 // ----- Modal ------
 
 .sbte-medium-modal {
-  max-width: 100%;
-  width: 650px;
+  max-width: 50% !important;
 }
 
 // ------ Cue -------
@@ -161,6 +160,11 @@ $background-error-lighter: rgb(255, 245, 245);
 
 .sbte-toolbox .btn-toolbar .btn {
   font-size: 15px;
+}
+
+.sbte-subspec-freeform-text {
+    overflow: auto;
+    height: 18vh;
 }
 
 // ------ Videojs --------

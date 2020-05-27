@@ -71,7 +71,7 @@ describe("SubtitleSpecificationsForm", () => {
                 <label>Yes</label>
                 <hr />
                 <div style={{ display: "flex", marginRight: "20px" }}>
-                    <div style={{ flexFlow: "column" }}>
+                    <div style={{ flex: 1 }}>
                         <div>
                             <label><strong> Audio Description:&nbsp;</strong></label>
                             <label>Yes</label>
@@ -93,8 +93,7 @@ describe("SubtitleSpecificationsForm", () => {
                             <label>Line Breaks</label>
                         </div>
                     </div>
-                    <hr />
-                    <div style={{ flexFlow: "column" }}>
+                    <div style={{ flex: 1 }}>
                         <div>
                             <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                             <label>1</label>
@@ -115,10 +114,12 @@ describe("SubtitleSpecificationsForm", () => {
                 </div>
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
-                <label>This is a sample comment</label>
+                <div className="sbte-subspec-freeform-text">This is a sample comment</div>
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
-                <p>media <strong>notes</strong> <del>test</del></p>
+                <div className="sbte-subspec-freeform-text">
+                    <p>media <strong>notes</strong> <del>test</del></p>
+                </div>
             </Provider>
         );
 
@@ -159,7 +160,7 @@ describe("SubtitleSpecificationsForm", () => {
                 <label>Yes</label>
                 <hr />
                 <div style={{ display: "flex", marginRight: "20px" }}>
-                    <div style={{ flexFlow: "column" }}>
+                    <div style={{ flex: 1 }}>
                         <div>
                             <label><strong> Audio Description:&nbsp;</strong></label>
                             <label>Yes</label>
@@ -181,8 +182,7 @@ describe("SubtitleSpecificationsForm", () => {
                             <label>Line Breaks</label>
                         </div>
                     </div>
-                    <hr />
-                    <div style={{ flexFlow: "column" }}>
+                    <div style={{ flex: 1 }}>
                         <div>
                             <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                             <label>n/a</label>
@@ -203,10 +203,12 @@ describe("SubtitleSpecificationsForm", () => {
                 </div>
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
-                <label>This is a sample comment</label>
+                <div className="sbte-subspec-freeform-text">This is a sample comment</div>
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
-                <p>media <strong>notes</strong> <del>test</del></p>
+                <div className="sbte-subspec-freeform-text">
+                    <p>media <strong>notes</strong> <del>test</del></p>
+                </div>
             </Provider>
         );
 
