@@ -70,57 +70,55 @@ describe("SubtitleSpecificationsForm", () => {
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
                 <hr />
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div style={{ display: "flex", marginRight: "20px" }}>
-                        <div style={{ flexFlow: "column", flex: 1 }}>
-                            <div>
-                                <label><strong> Audio Description:&nbsp;</strong></label>
-                                <label>Yes</label>
-                            </div>
-                            <div>
-                                <label><strong>On-Screen Text:&nbsp;</strong></label>
-                                <label>No</label>
-                            </div>
-                            <div>
-                                <label><strong>Spoken Audio:&nbsp;</strong></label>
-                                <label>No</label>
-                            </div>
-                            <div>
-                                <label><strong>Speaker Identification:&nbsp;</strong></label>
-                                <label>Gender</label>
-                            </div>
-                            <div>
-                                <label><strong>Dialogue Style:&nbsp;</strong></label>
-                                <label>Line Breaks</label>
-                            </div>
+                <div style={{ display: "flex", marginRight: "20px" }}>
+                    <div style={{ flex: 1 }}>
+                        <div>
+                            <label><strong> Audio Description:&nbsp;</strong></label>
+                            <label>Yes</label>
                         </div>
-                        <div style={{ flexFlow: "column", flex: 1 }}>
-                            <div>
-                                <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
-                                <label>1</label>
-                            </div>
-                            <div>
-                                <label><strong>Max Characters Per Line:&nbsp;</strong></label>
-                                <label>40</label>
-                            </div>
-                            <div>
-                                <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
-                                <label>1</label>
-                            </div>
-                            <div>
-                                <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
-                                <label>3</label>
-                            </div>
+                        <div>
+                            <label><strong>On-Screen Text:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div>
+                            <label><strong>Spoken Audio:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div>
+                            <label><strong>Speaker Identification:&nbsp;</strong></label>
+                            <label>Gender</label>
+                        </div>
+                        <div>
+                            <label><strong>Dialogue Style:&nbsp;</strong></label>
+                            <label>Line Breaks</label>
                         </div>
                     </div>
-                    <hr />
-                    <label><strong>Comments:&nbsp;</strong></label>
-                    <div className="sbte-subspec-freeform-text">This is a sample comment</div>
-                    <br />
-                    <label><strong>Media Notes:&nbsp;</strong></label>
-                    <div className="sbte-subspec-freeform-text">
-                        <p>media <strong>notes</strong> <del>test</del></p>
+                    <div style={{ flex: 1 }}>
+                        <div>
+                            <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
+                            <label>1</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Characters Per Line:&nbsp;</strong></label>
+                            <label>40</label>
+                        </div>
+                        <div>
+                            <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
+                            <label>1</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
+                            <label>3</label>
+                        </div>
                     </div>
+                </div>
+                <hr />
+                <label><strong>Comments:&nbsp;</strong></label>
+                <div className="sbte-subspec-freeform-text">This is a sample comment</div>
+                <br />
+                <label><strong>Media Notes:&nbsp;</strong></label>
+                <div className="sbte-subspec-freeform-text">
+                    <p>media <strong>notes</strong> <del>test</del></p>
                 </div>
             </Provider>
         );
@@ -161,57 +159,55 @@ describe("SubtitleSpecificationsForm", () => {
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
                 <hr />
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div style={{ display: "flex", marginRight: "20px" }}>
-                        <div style={{ flexFlow: "column", flex: 1 }}>
-                            <div>
-                                <label><strong> Audio Description:&nbsp;</strong></label>
-                                <label>Yes</label>
-                            </div>
-                            <div>
-                                <label><strong>On-Screen Text:&nbsp;</strong></label>
-                                <label>No</label>
-                            </div>
-                            <div>
-                                <label><strong>Spoken Audio:&nbsp;</strong></label>
-                                <label>No</label>
-                            </div>
-                            <div>
-                                <label><strong>Speaker Identification:&nbsp;</strong></label>
-                                <label>Gender</label>
-                            </div>
-                            <div>
-                                <label><strong>Dialogue Style:&nbsp;</strong></label>
-                                <label>Line Breaks</label>
-                            </div>
+                <div style={{ display: "flex", marginRight: "20px" }}>
+                    <div style={{ flex: 1 }}>
+                        <div>
+                            <label><strong> Audio Description:&nbsp;</strong></label>
+                            <label>Yes</label>
                         </div>
-                        <div style={{ flexFlow: "column", flex: 1 }}>
-                            <div>
-                                <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
-                                <label>n/a</label>
-                            </div>
-                            <div>
-                                <label><strong>Max Characters Per Line:&nbsp;</strong></label>
-                                <label>n/a</label>
-                            </div>
-                            <div>
-                                <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
-                                <label>n/a</label>
-                            </div>
-                            <div>
-                                <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
-                                <label>n/a</label>
-                            </div>
+                        <div>
+                            <label><strong>On-Screen Text:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div>
+                            <label><strong>Spoken Audio:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div>
+                            <label><strong>Speaker Identification:&nbsp;</strong></label>
+                            <label>Gender</label>
+                        </div>
+                        <div>
+                            <label><strong>Dialogue Style:&nbsp;</strong></label>
+                            <label>Line Breaks</label>
                         </div>
                     </div>
-                    <hr />
-                    <label><strong>Comments:&nbsp;</strong></label>
-                    <div className="sbte-subspec-freeform-text">This is a sample comment</div>
-                    <br />
-                    <label><strong>Media Notes:&nbsp;</strong></label>
-                    <div className="sbte-subspec-freeform-text">
-                        <p>media <strong>notes</strong> <del>test</del></p>
+                    <div style={{ flex: 1 }}>
+                        <div>
+                            <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Characters Per Line:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
+                        <div>
+                            <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
                     </div>
+                </div>
+                <hr />
+                <label><strong>Comments:&nbsp;</strong></label>
+                <div className="sbte-subspec-freeform-text">This is a sample comment</div>
+                <br />
+                <label><strong>Media Notes:&nbsp;</strong></label>
+                <div className="sbte-subspec-freeform-text">
+                    <p>media <strong>notes</strong> <del>test</del></p>
                 </div>
             </Provider>
         );
