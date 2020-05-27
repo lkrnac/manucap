@@ -30,7 +30,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
             <>
                 <hr />
                 <div style={{ display: "flex", marginRight: "20px" }}>
-                    <div style={{ flexFlow: "column" }}>
+                    <div style={{ flex: 1 }}>
                         <div>
                             <label><strong> Audio Description:&nbsp;</strong></label>
                             <label>{props.subTitleSpecifications.audioDescription ? "Yes" : "No"}</label>
@@ -56,8 +56,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                             </label>
                         </div>
                     </div>
-                    <hr />
-                    <div style={{ flexFlow: "column" }}>
+                    <div style={{ flex: 1 }}>
                         <div>
                             <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                             <label>
@@ -94,12 +93,13 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 </div>
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
-                <label>{props.subTitleSpecifications.comments}</label>
+                <div className="sbte-subspec-freeform-text">{props.subTitleSpecifications.comments}</div>
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
                 <ReactMarkdown
                     source={props.subTitleSpecifications.mediaNotes}
                     disallowedTypes={["html", "virtualHtml"]}
+                    className="sbte-subspec-freeform-text"
                 />
             </>
         ) : null}

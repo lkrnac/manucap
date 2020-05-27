@@ -18,7 +18,7 @@ export const TooltipWrapper = (props: Props): ReactElement => {
             // @ts-ignore ignores type of trigger, passing strings instead
             trigger={props.trigger || ["hover", "focus"]}
             placement={props.placement}
-            delay={{ show: 100, hide: 100 }}
+            delay={{ show: 600, hide: 100 }}
             overlay={<Tooltip id={props.tooltipId}>{props.text}</Tooltip>}
         >
             {props.children}

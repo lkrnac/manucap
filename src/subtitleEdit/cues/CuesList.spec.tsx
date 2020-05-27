@@ -15,6 +15,9 @@ import { reset } from "./edit/editorStatesSlice";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import { act } from "react-dom/test-utils";
 import { changeScrollPosition } from "./cuesListScrollSlice";
+import { Character } from "../shortcutConstants";
+// @ts-ignore - Doesn't have types definitions file
+import * as simulant from "simulant";
 
 let testingStore = createTestingStore();
 
@@ -579,5 +582,24 @@ describe("CuesList", () => {
         const smartScroll = actualNode.find("ReactSmartScroll");
         // @ts-ignore
         expect(smartScroll.props().rowHeight).toEqual(161);
+    });
+
+    it("adds first cue when ENTER is pressed", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
+            </Provider >
+        );
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        actualNode.setProps({}); // re-render component
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
     });
 });
