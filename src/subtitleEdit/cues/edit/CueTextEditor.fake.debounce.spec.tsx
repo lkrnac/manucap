@@ -46,8 +46,8 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
 const createExpectedNode = (
     editorState: EditorState,
     duration: number,
-    characters: number,
-    words: number
+    characters: string,
+    words: string
 ): ReactWrapper => mount(
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div
@@ -68,6 +68,8 @@ const createExpectedNode = (
         <div
             className="sbte-form-control sbte-bottom-border"
             style={{
+                display: "flex",
+                flexDirection: "row",
                 flexBasis: "50%",
                 paddingLeft: "10px",
                 paddingTop: "5px",
@@ -75,7 +77,15 @@ const createExpectedNode = (
                 minHeight: "54px"
             }}
         >
-            <Editor editorState={editorState} onChange={jest.fn} spellCheck />
+            <div style={{ flexBasis: "85%", }}>
+                <Editor editorState={editorState} onChange={jest.fn} spellCheck />
+            </div>
+            <div style={{ flexBasis: "10%", }}>
+                <div><span className="sbte-count-tag">{characters} ch</span><br /></div>
+            </div>
+            <div style={{ flexBasis: "10%", }}>
+                <div><span className="sbte-count-tag">{words} w</span><br /></div>
+            </div>
         </div>
         <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
             <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
