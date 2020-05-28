@@ -70,7 +70,7 @@ describe("saveSlices", () => {
                 testingStore.dispatch(callSaveTrack() as {} as AnyAction);
                 testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
 
-                expect(saveTrack).toHaveBeenCalledTimes(2);
+                expect(saveTrack).toHaveBeenCalledTimes(1);
                 done();
             }, 300);
         });
@@ -109,25 +109,34 @@ describe("saveSlices", () => {
 
     describe("saveStatus", () => {
         it("sets save status when saveTrack is called", () => {
+            //GIVEN
+            const expectedStatus = { "message": SAVING_CHANGES_MSG, "pendingChanges": true };
+
             // WHEN
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().saveStatus).toEqual(SAVING_CHANGES_MSG);
+            expect(testingStore.getState().saveStatus).toEqual(expectedStatus);
         });
         it("sets save status after successful save", () => {
+            //GIVEN
+            const expectedStatus = { "message": CHANGES_SAVED_MSG, "pendingChanges": false };
+
             // WHEN
             testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().saveStatus).toEqual(CHANGES_SAVED_MSG);
+            expect(testingStore.getState().saveStatus).toEqual(expectedStatus);
         });
         it("sets save status after failed save", () => {
+            //GIVEN
+            const expectedStatus = { "message": ERROR_SAVING_MSG, "pendingChanges": false };
+
             // WHEN
             testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().saveStatus).toEqual(ERROR_SAVING_MSG);
+            expect(testingStore.getState().saveStatus).toEqual(expectedStatus);
         });
     });
 });

@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { debounce } from "lodash";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import { CueDto, SubtitleEditAction, Track } from "../model";
+import { CueDto, SaveStatus, SubtitleEditAction, Track } from "../model";
 
 const DEBOUNCE_TIMEOUT = 2500;
-export const SAVING_CHANGES_MSG = "Saving changes ...";
+export const SAVING_CHANGES_MSG = "Saving changes";
 export const CHANGES_SAVED_MSG = "All changes saved to server";
 export const ERROR_SAVING_MSG = "Error saving latest changes";
 
@@ -42,20 +42,21 @@ export const saveTrackSlice = createSlice({
 
 export const saveStatusSlice = createSlice({
     name: "saveStatus",
-    initialState: "",
+    initialState: { message: "", pendingChanges: false } as SaveStatus,
     reducers: {},
     extraReducers: {
-        [saveTrackSlice.actions.call.type]: (): string => SAVING_CHANGES_MSG,
-        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
-            action.payload ? CHANGES_SAVED_MSG : ERROR_SAVING_MSG
-    }
-});
+        [saveTrackSlice.actions.call.type]: (state): SaveStatus => {
+            state.pendingChanges = true;
+            state.message = SAVING_CHANGES_MSG;
+            return state;
+        },
+        [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]:
+            (state, action: PayloadAction<boolean>): SaveStatus => {
+                state.pendingChanges = false;
+                state.message = action.payload ? CHANGES_SAVED_MSG : ERROR_SAVING_MSG;
+                return state;
+            }
 
-export const pendingSaveSlice = createSlice({
-    name: "pendingSave",
-    initialState: false,
-    reducers: {
-        setPendingSave: (_state, action: PayloadAction<boolean>): boolean => action.payload
     }
 });
 
@@ -65,27 +66,18 @@ export const setSaveTrack = (saveTrack: Function): AppThunk =>
     };
 
 export const setAutoSaveSuccess = (success: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean | SaveAction>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<boolean | SaveAction>>): void => {
         dispatch(autoSaveSuccessSlice.actions.setAutoSaveSuccess(success));
-        const pendingSave = getState().pendingSave;
-        if (pendingSave) {
-            const cues = getState().cues;
-            const editingTrack = getState().editingTrack;
-            dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
-            dispatch(pendingSaveSlice.actions.setPendingSave(false));
-        }
     };
 
 export const callSaveTrack = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SaveAction | boolean>>, getState): void => {
-        const saveStatus = getState().saveStatus;
-        if (saveStatus !== SAVING_CHANGES_MSG) {
+        const pendingChange = getState().saveStatus.pendingChanges;
+        if (!pendingChange) {
             const cues = getState().cues;
             const editingTrack = getState().editingTrack;
             if (cues && editingTrack) {
                 dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
             }
-        } else {
-            dispatch(pendingSaveSlice.actions.setPendingSave(true));
         }
     };
