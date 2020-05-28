@@ -189,13 +189,18 @@ export const lastCueChangeSlice = createSlice({
     }
 });
 
-export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string): AppThunk =>
+export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
-            const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
-            copyNonConstructorProperties(newVttCue, vttCue);
+            let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
+            if (textOnly) {
+                newVttCue = new VTTCue(originalCue.vttCue.startTime, originalCue.vttCue.endTime, vttCue.text);
+                copyNonConstructorProperties(newVttCue, originalCue.vttCue);
+            } else {
+                copyNonConstructorProperties(newVttCue, vttCue);
+            }
 
             const previousCue = cues[idx - 1];
             const followingCue = cues[idx + 1];
