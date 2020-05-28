@@ -54,7 +54,7 @@ const changeVttCueInRedux = (
     const vttText = getVttText(currentContent);
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
-    dispatch(updateVttCue(props.index, vttCue, props.editUuid));
+    dispatch(updateVttCue(props.index, vttCue, props.editUuid, true));
     // this if is so we don't trigger a save on first render
     if (textChanged) {
         dispatch(callSaveTrack());
@@ -105,7 +105,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     );
 
     // Fire update VTTCue action when component is unmounted.
-    // So content is not lost when unmounbted before next debounce.
+    // So content is not lost when unmounted before next debounce.
     useEffect(
         () => (): void => {
             changeVttCueInRedux(unmountContentRef.current, props, dispatch, textChanged, setTextChanged);

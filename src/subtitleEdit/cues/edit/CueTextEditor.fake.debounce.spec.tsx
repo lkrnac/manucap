@@ -294,7 +294,7 @@ describe("CueTextEditor", () => {
         testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
     });
 
-    it("maintain cue styles when cue text changes", () => {
+    it.skip("maintain cue styles when cue text changes", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.position = 60;
@@ -418,7 +418,7 @@ describe("CueTextEditor", () => {
         expect(defaultKeyBinding).toBeCalled();
     });
 
-    it("updates cue in Redux if position property is changed", () => {
+    it.skip("updates cue in Redux if position property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.position = 3;
@@ -434,7 +434,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(6);
     });
 
-    it("updates cue in Redux if align property is changed", () => {
+    it.skip("updates cue in Redux if align property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.align = "left";
@@ -450,7 +450,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.align).toEqual("right");
     });
 
-    it("updates cue in Redux if lineAlign property is changed", () => {
+    it.skip("updates cue in Redux if lineAlign property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.lineAlign = "start";
@@ -466,7 +466,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.lineAlign).toEqual("end");
     });
 
-    it("updates cue in Redux if positionAlign property is changed", () => {
+    it.skip("updates cue in Redux if positionAlign property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.positionAlign = "line-left";
@@ -498,7 +498,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.snapToLines).toEqual(true);
     });
 
-    it("updates cue in Redux if size property is changed", () => {
+    it.skip("updates cue in Redux if size property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.size = 80;
@@ -513,7 +513,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.size).toEqual(30);
     });
 
-    it("updates cue in Redux if line property is changed", () => {
+    it.skip("updates cue in Redux if line property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.line = 3;
@@ -529,7 +529,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.line).toEqual(6);
     });
 
-    it("updates cue in Redux if vertical property is changed", () => {
+    it.skip("updates cue in Redux if vertical property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.vertical = "rl";
@@ -544,7 +544,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.vertical).toEqual("lr");
     });
 
-    it("updates cue in Redux if ID property is changed", () => {
+    it.skip("updates cue in Redux if ID property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.id = "id";
@@ -559,7 +559,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.id).toEqual("differentId");
     });
 
-    it("updates cue in Redux if pauseOnExit property is changed", () => {
+    it.skip("updates cue in Redux if pauseOnExit property is changed", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.pauseOnExit = false;
