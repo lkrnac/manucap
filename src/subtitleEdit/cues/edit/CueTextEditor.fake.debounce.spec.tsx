@@ -46,8 +46,8 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
 const createExpectedNode = (
     editorState: EditorState,
     duration: number,
-    characters: string,
-    words: string
+    characters: number,
+    words: number
 ): ReactWrapper => mount(
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div
@@ -145,8 +145,8 @@ const testForContentState = (
     vttCue: VTTCue,
     expectedStateHtml: string,
     duration: number,
-    characters: string,
-    words: string
+    characters: number,
+    words: number
 ): void => {
     let editorState = EditorState.createWithContent(contentState);
     editorState = EditorState.moveFocusToEnd(editorState);
@@ -183,7 +183,7 @@ describe("CueTextEditor", () => {
         // See following line in their code
         // eslint-disable-next-line max-len
         // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
-        testForContentState(contentState, vttCue, "<br>", 1, "0", "0");
+        testForContentState(contentState, vttCue, "<br>", 1, 0, 0);
     });
 
     it("renders with text", () => {
@@ -191,7 +191,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         const contentState = ContentState.createFromText(vttCue.text);
 
-        testForContentState(contentState, vttCue, "someText", 1, "8", "1");
+        testForContentState(contentState, vttCue, "someText", 1, 8, 1);
     });
 
     it("renders with html", () => {
@@ -200,7 +200,7 @@ describe("CueTextEditor", () => {
         const processedHTML = convertFromHTML(vttCue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample", 1, "21", "4");
+        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample", 1, 21, 4);
     });
 
     it("updates cue in redux store when changed", () => {

@@ -14,8 +14,8 @@ const testContentRendered = (
     startTime: number,
     endTime: number,
     duration: number,
-    characters: string,
-    words: string
+    characters: number,
+    words: number
 ): void => {
     // GIVEN
     const processedHTML = convertFromHTML(text);
@@ -45,20 +45,20 @@ const testContentRendered = (
 
 describe("CueLineCounts", () => {
     it("renders", () => {
-        testContentRendered("", 0, 1,1, "0", "0");
+        testContentRendered("", 0, 1,1, 0, 0);
     });
 
     it("renders with text", () => {
-        testContentRendered("i am a subtitle line", 0, 1, 1, "20", "5");
+        testContentRendered("i am a subtitle line", 0, 1, 1, 20, 5);
     });
 
     it("renders with text and line breaks, spaces and tabs ", () => {
         testContentRendered("    this is      sample <br>" +
-            "     text with      multiple        blanks", 0, 1, 1, "62 (20,42)", "7 (3,4)");
+            "     text with      multiple        blanks", 0, 1, 1, 62, 7);
     });
 
     it("renders with html", () => {
-        testContentRendered("i <i>am</i> <b>a subtitle</b> line", 0, 1, 1, "20", "5");
+        testContentRendered("i <i>am</i> <b>a subtitle</b> line", 0, 1, 1, 20, 5);
     });
 
     it("renders with long text and duration", () => {
@@ -69,7 +69,7 @@ describe("CueLineCounts", () => {
             15,
             3898.45,
             3883.45,
-            "275 (100,97,78)",
-            "40 (14,15,11)");
+            275,
+            40);
     });
 });

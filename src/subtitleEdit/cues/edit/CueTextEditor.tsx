@@ -8,7 +8,7 @@ import { SubtitleEditState, AppThunk } from "../../subtitleEditReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
-import CueLineCounts, { getCharacterCountPerLine, getWordCountPerLine } from "../CueLineCounts";
+import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
@@ -63,6 +63,16 @@ const changeVttCueInRedux = (
 };
 
 const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 50);
+
+const getCharacterCountPerLine = (text: string): number[] => {
+    const lines = text.match(/[^\r\n]+/g) || [text];
+    return lines.map((line: string): number => line.length);
+};
+
+const getWordCountPerLine = (text: string): number[] => {
+    const lines = text.match(/[^\r\n]+/g) || [text];
+    return lines.map((line: string): number => line.match(/\S+/g)?.length || 0);
+};
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
