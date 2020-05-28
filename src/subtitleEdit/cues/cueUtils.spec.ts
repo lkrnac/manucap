@@ -103,26 +103,26 @@ describe("cueUtils", () => {
             [Position.Row1Column3, { line: 0, align: "center", positionAlign: "auto", position: "auto"  }],
             [Position.Row1Column4, { line: 0, align: "end", positionAlign: "center", position: 35 }],
             [Position.Row1Column5, { line: 0, align: "end", positionAlign: "center", position: 49 }],
-            [Position.Row2Column1, { line: 4, align: "start", positionAlign: "center", position: 51 }],
-            [Position.Row2Column2, { line: 4, align: "start", positionAlign: "center", position: 65 }],
-            [Position.Row2Column3, { line: 4, align: "center", positionAlign: "auto", position: "auto" }],
-            [Position.Row2Column4, { line: 4, align: "end", positionAlign: "center", position: 35 }],
-            [Position.Row2Column5, { line: 4, align: "end", positionAlign: "center", position: 49 }],
-            [Position.Row3Column1, { line: 8, align: "start", positionAlign: "center", position: 51 }],
-            [Position.Row3Column2, { line: 8, align: "start", positionAlign: "center", position: 65 }],
-            [Position.Row3Column3, { line: 8, align: "center", positionAlign: "auto", position: "auto" }],
-            [Position.Row3Column4, { line: 8, align: "end", positionAlign: "center", position: 35 }],
-            [Position.Row3Column5, { line: 8, align: "end", positionAlign: "center", position: 49 }],
-            [Position.Row4Column1, { line: 12, align: "start", positionAlign: "center", position: 51 }],
-            [Position.Row4Column2, { line: 12, align: "start", positionAlign: "center", position: 65 }],
-            [Position.Row4Column3, { line: 12, align: "center", positionAlign: "auto", position: "auto" }],
-            [Position.Row4Column4, { line: 12, align: "end", positionAlign: "center", position: 35 }],
-            [Position.Row4Column5, { line: 12, align: "end", positionAlign: "center", position: 49 }],
-            [Position.Row5Column1, { line: 15, align: "start", positionAlign: "center", position: 51 }],
-            [Position.Row5Column2, { line: 15, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row2Column1, { line: 3, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row2Column2, { line: 3, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row2Column3, { line: 3, align: "center", positionAlign: "auto", position: "auto" }],
+            [Position.Row2Column4, { line: 3, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row2Column5, { line: 3, align: "end", positionAlign: "center", position: 49 }],
+            [Position.Row3Column1, { line: 7, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row3Column2, { line: 7, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row3Column3, { line: 7, align: "center", positionAlign: "auto", position: "auto" }],
+            [Position.Row3Column4, { line: 7, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row3Column5, { line: 7, align: "end", positionAlign: "center", position: 49 }],
+            [Position.Row4Column1, { line: 11, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row4Column2, { line: 11, align: "start", positionAlign: "center", position: 65 }],
+            [Position.Row4Column3, { line: 11, align: "center", positionAlign: "auto", position: "auto" }],
+            [Position.Row4Column4, { line: 11, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row4Column5, { line: 11, align: "end", positionAlign: "center", position: 49 }],
+            [Position.Row5Column1, { line: 14, align: "start", positionAlign: "center", position: 51 }],
+            [Position.Row5Column2, { line: 14, align: "start", positionAlign: "center", position: 65 }],
             [Position.Row5Column3, { line: "auto", align: "center", positionAlign: "auto", position: "auto" }],
-            [Position.Row5Column4, { line: 15, align: "end", positionAlign: "center", position: 35 }],
-            [Position.Row5Column5, { line: 15, align: "end", positionAlign: "center", position: 49 }],
+            [Position.Row5Column4, { line: 14, align: "end", positionAlign: "center", position: 35 }],
+            [Position.Row5Column5, { line: 14, align: "end", positionAlign: "center", position: 49 }],
         ])
             .it("are correctly initialized", (testingPosition: Position, expectedPositionStyle: PositionStyle) => {
                 // WHEN
@@ -182,7 +182,7 @@ describe("cueUtils", () => {
         it("finds icon for Row2Column2 position", () => {
             // GIVEN
             const vttCue = new VTTCue(0, 1, "some text");
-            vttCue.line = 4;
+            vttCue.line = 3;
             vttCue.align = "start";
             vttCue.positionAlign = "center";
             vttCue.position = 65;
@@ -197,7 +197,7 @@ describe("cueUtils", () => {
         it("finds icon for Row4Column3 position", () => {
             // GIVEN
             const vttCue = new VTTCue(0, 1, "some text");
-            vttCue.line = 12;
+            vttCue.line = 11;
             vttCue.align = "center";
             vttCue.positionAlign = "auto";
             vttCue.position = "auto";
