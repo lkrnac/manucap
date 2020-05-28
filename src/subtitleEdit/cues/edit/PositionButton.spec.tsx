@@ -292,7 +292,7 @@ describe("PositionButton", () => {
     it("initializes icon on button according to vttCue styles", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "some text");
-        vttCue.line = 4;
+        vttCue.line = 3;
         vttCue.align = "start";
         vttCue.positionAlign = "center";
         vttCue.position = 65;
