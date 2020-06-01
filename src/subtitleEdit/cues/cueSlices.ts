@@ -282,8 +282,11 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
     };
 
 export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueIndexAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
+        if (idx >= 0) {
+            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
+        }
     };
 
 export const updateSourceCues = (cues: CueDto[]): AppThunk =>

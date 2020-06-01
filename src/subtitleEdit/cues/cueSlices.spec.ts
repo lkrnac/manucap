@@ -95,7 +95,7 @@ describe("cueSlices", () => {
             it("apply invalid end time prevention on start time change", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[0].editUuid;
+                const editUuid = testingStore.getState().cue[0].editUuid;
 
                 // WHEN
                 testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2, "Dummy Cue"), editUuid) as {} as AnyAction);
@@ -1145,6 +1145,30 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(5);
+        });
+
+        it("update scroll position when zero", () => {
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("update scroll position when positive", () => {
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(5) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("doesn't update scroll position when less than zero", () => {
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().scrollPosition).toBeUndefined;
         });
     });
 
