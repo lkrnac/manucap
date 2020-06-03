@@ -90,7 +90,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange).toBeUndefined;
         });
 
-
         describe("range prevention", () => {
             it("apply invalid end time prevention on start time change", () => {
                 // GIVEN
@@ -1145,6 +1144,30 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(5);
+        });
+
+        it("update scroll position when zero", () => {
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("update scroll position when positive", () => {
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(5) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("doesn't update scroll position when less than zero", () => {
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().scrollPosition).toBeUndefined;
         });
     });
 

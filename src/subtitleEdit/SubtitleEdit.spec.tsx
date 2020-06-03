@@ -1,5 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
-import { CueDto, Language, Task, Track } from "./model";
+import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateCues, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
@@ -12,7 +12,7 @@ import { SubtitleSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
-import { mount, ReactWrapper } from "enzyme";
+import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
@@ -20,6 +20,7 @@ import _ from "lodash";
 import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
 import { render } from "@testing-library/react";
 import ReactDOM from "react-dom";
+import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
 
 let testingStore = createTestingStore();
 
@@ -57,25 +58,6 @@ const testingTranslationTask = {
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM"
 } as Task;
-
-const verifyScrollPosition = (
-    actualNode: ReactWrapper,
-    expectedPosition: number,
-    cuesLength: number,
-    done: Function
-): void => {
-    // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-    expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(cuesLength);
-    setTimeout(
-        () => {
-            actualNode.setProps({}); // update + trigger re-render
-            // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-            expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(expectedPosition);
-            done();
-        },
-        50
-    );
-};
 
 describe("SubtitleEdit", () => {
     beforeEach(() => {
@@ -133,6 +115,13 @@ describe("SubtitleEdit", () => {
                                     <CueLine
                                         rowIndex={0}
                                         data={{ cue: cues[0] }}
+                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        rowRef={React.createRef()}
+                                        onClick={(): void => undefined}
+                                    />
+                                    <CueLine
+                                        rowIndex={1}
+                                        data={{ cue: cues[1] }}
                                         rowProps={{ playerTime: 0, cuesLength: 2 }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
@@ -486,8 +475,11 @@ describe("SubtitleEdit", () => {
         expect(mockOnComplete.mock.calls.length).toBe(1);
     });
 
-    it("jump to last cue in captioning mode", (done) => {
+    it("jump to last cue in captioning mode", () => {
         // GIVEN
+        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        // changeScrollPosition.mockImplementation(() => {});
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
@@ -505,15 +497,20 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
 
         // WHEN
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        verifyScrollPosition(actualNode, 1, 2, done);
+        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
-    it("jump to last cue in translation mode", (done) => {
+    it("jump to last cue in translation mode", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
@@ -539,15 +536,20 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
 
         // WHEN
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        verifyScrollPosition(actualNode, 2, 3, done);
+        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
-    it("jumps to first cue when button is clicked", (done) => {
+    it("jumps to first cue when button is clicked", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
@@ -566,12 +568,17 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
 
         // WHEN
         actualNode.find(".sbte-jump-to-first-button").simulate("click");
 
         // THEN
-        verifyScrollPosition(actualNode, 0, 2, done);
+        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.FIRST);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to first cue on first render", () => {
@@ -582,9 +589,11 @@ describe("SubtitleEdit", () => {
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
 
         // WHEN
-        const actualNode = mount(
+        mount(
             <Provider store={testingStore} >
                 <SubtitleEdit
                     mp4="dummyMp4"
@@ -597,8 +606,11 @@ describe("SubtitleEdit", () => {
         );
 
         // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(actualNode.find("ReactSmartScroll").props().startAt).toEqual(0);
+        expect(changeScrollPositionSpy).toBeCalledTimes(4);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.FIRST);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.FIRST);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("calls onSave callback on auto save", () => {
