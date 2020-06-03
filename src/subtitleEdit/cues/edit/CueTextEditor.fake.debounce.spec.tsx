@@ -77,13 +77,13 @@ const createExpectedNode = (
                 minHeight: "54px"
             }}
         >
-            <div style={{ flexBasis: "85%", }}>
+            <div style={{ flex: 1 }}>
                 <Editor editorState={editorState} onChange={jest.fn} spellCheck />
             </div>
-            <div style={{ flexBasis: "10%", }}>
+            <div style={{ flex: 0 }}>
                 <div><span className="sbte-count-tag">{characters} ch</span><br /></div>
             </div>
-            <div style={{ flexBasis: "10%", }}>
+            <div style={{ flex: 0, paddingRight: "5px" }}>
                 <div><span className="sbte-count-tag">{words} w</span><br /></div>
             </div>
         </div>

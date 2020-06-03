@@ -151,7 +151,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     minHeight: "54px"
                 }}
             >
-                <div style={{ flexBasis: "85%", }}>
+                <div style={{ flex: 1 }}>
                     <Editor
                         editorState={editorState}
                         onChange={(newEditorState: EditorState): void => {
@@ -165,12 +165,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         handleKeyCommand={handleKeyShortcut}
                     />
                 </div>
-                <div style={{ flexBasis: "10%", }}>
+                <div style={{ flex: 0 }}>
                     { charCountPerLine.map((count: number, index: number) => (
                         <div key={index}><span className="sbte-count-tag">{count} ch</span><br /></div>
                     )) }
                 </div>
-                <div style={{ flexBasis: "10%", }}>
+                <div style={{ flex: 0, paddingRight: "5px" }}>
                     { wordCountPerLine.map((count: number, index: number) => (
                         <div key={index}><span className="sbte-count-tag">{count} w</span><br /></div>
                     )) }
