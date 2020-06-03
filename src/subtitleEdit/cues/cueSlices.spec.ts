@@ -90,12 +90,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange).toBeUndefined;
         });
 
-
         describe("range prevention", () => {
             it("apply invalid end time prevention on start time change", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const editUuid = testingStore.getState().cue[0].editUuid;
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
                 testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2, "Dummy Cue"), editUuid) as {} as AnyAction);
