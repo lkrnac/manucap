@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.0.20",
+  "version": "2.1.0",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -32,7 +32,7 @@
     "react-advanced-timefield": "^3.6.4"
   },
   "dependencies": {
-    "@dotsub/react-smart-scroll": "1.1.7",
+    "@dotsub/react-smart-scroll": "2.0.1",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@types/lodash": "^4.14.149",
     "draft-js": "^0.11.3",

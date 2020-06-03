@@ -65,5 +65,6 @@ export interface CueChange {
 export enum ScrollPosition {
     NONE,
     FIRST,
-    LAST
+    LAST,
+    CURRENT
 }
