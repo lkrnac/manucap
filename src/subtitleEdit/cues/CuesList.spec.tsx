@@ -663,7 +663,7 @@ describe("CuesList", () => {
         // THEN
         const smartScroll = actualNode.find(ReactSmartScroll);
         // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(smartScroll.props().rowHeight).toEqual(161);
+        expect(smartScroll.props().rowHeight).toEqual(180);
     });
 
     it("adds first cue when ENTER is pressed", () => {

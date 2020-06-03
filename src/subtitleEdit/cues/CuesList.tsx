@@ -48,7 +48,14 @@ const CuesList = (props: Props): ReactElement => {
     const scrollPosition = useSelector((state: SubtitleEditState) => state.scrollPosition);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const startAt = getScrollCueIndex(cuesWithSource, editingCueIndex, scrollPosition);
-    const rowHeight = sourceCues.length > 0 ? 161 : 81; // Values are from Elements > Computed from browser DEV tools
+    const rowHeight = sourceCues.length > 0
+        ? 180 // This is bigger than real translation view cue, because if there is at least one
+              // editing cue, bigger rowHeight scrolls properly to bottom
+        : 81; // Value is taken from Elements > Computed from browser DEV tools
+              // yes, we don't use bigger value as in translation mode,
+              // because we needed to properly scroll to added cue
+              // -> yes, there is glitch where if there is some editing cue on top, jump to bottom
+              // does not scroll so that last cue is in view port. I didn't figure out fix for this issue so far.
     useEffect(
         () => {
             dispatch(changeScrollPosition(ScrollPosition.NONE));
