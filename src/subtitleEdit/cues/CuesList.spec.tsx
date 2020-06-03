@@ -69,11 +69,12 @@ describe("CuesList", () => {
         testingStore.dispatch(reset() as {} as AnyAction);
     });
 
-    it("renders renders only one cue when there isn't enough space in viewport", () => {
+    it("renders only few cues when there isn't enough space in viewport", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
 
         const expectedNode = mount(
@@ -83,6 +84,13 @@ describe("CuesList", () => {
                         <CueLine
                             rowIndex={0}
                             data={{ cue: cues[0] }}
+                            rowProps={{ playerTime: 0 } as CueLineRowProps}
+                            rowRef={React.createRef()}
+                            onClick={(): void => undefined}
+                        />
+                        <CueLine
+                            rowIndex={1}
+                            data={{ cue: cues[1] }}
                             rowProps={{ playerTime: 0 } as CueLineRowProps}
                             rowRef={React.createRef()}
                             onClick={(): void => undefined}
@@ -111,6 +119,7 @@ describe("CuesList", () => {
         const cues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
 
         const expectedNode = mount(
@@ -127,6 +136,13 @@ describe("CuesList", () => {
                         <CueLine
                             rowIndex={1}
                             data={{ cue: cues[1] }}
+                            rowProps={{ playerTime: 0 } as CueLineRowProps}
+                            rowRef={React.createRef()}
+                            onClick={(): void => undefined}
+                        />
+                        <CueLine
+                            rowIndex={2}
+                            data={{ cue: cues[2] }}
                             rowProps={{ playerTime: 0 } as CueLineRowProps}
                             rowRef={React.createRef()}
                             onClick={(): void => undefined}
@@ -453,6 +469,7 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
 
         setTimeout(() => {
             // THEN
@@ -479,9 +496,11 @@ describe("CuesList", () => {
         );
         simulateEnoughSpaceForCues(actualNode, 100);
         testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
 
         // WHEN
         testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
 
         // THEN
         setTimeout(() => {
@@ -509,9 +528,11 @@ describe("CuesList", () => {
         );
         simulateEnoughSpaceForCues(actualNode, 100);
         testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
 
         // THEN
         setTimeout(() => {
