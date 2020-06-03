@@ -119,6 +119,13 @@ describe("SubtitleEdit", () => {
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
+                                    <CueLine
+                                        rowIndex={1}
+                                        data={{ cue: cues[1] }}
+                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        rowRef={React.createRef()}
+                                        onClick={(): void => undefined}
+                                    />
                                 </div>
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
