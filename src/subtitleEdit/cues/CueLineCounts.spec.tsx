@@ -23,7 +23,7 @@ const testContentRendered = (
     const editorState = EditorState.createWithContent(contentState);
     testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
-    const vttCue = new VTTCue(startTime, endTime, "");
+    const vttCue = new VTTCue(startTime, endTime, text);
     const expectedNode = mount(
         <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
             <span>DURATION: <span className="sbte-green-text">{duration}s</span>, </span>
@@ -53,7 +53,7 @@ describe("CueLineCounts", () => {
     });
 
     it("renders with text and line breaks, spaces and tabs ", () => {
-        testContentRendered("    this is      sample " +
+        testContentRendered("    this is      sample <br>" +
             "     text with      multiple        blanks", 0, 1, 1, 62, 7);
     });
 
@@ -63,13 +63,13 @@ describe("CueLineCounts", () => {
 
     it("renders with long text and duration", () => {
         testContentRendered("" +
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vestibulum vel ligula in fermentum. " +
-            "Etiam semper tristique sapien, ac viverra sem sodales eget. Quisque rutrum ipsum eu justo semper, " +
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vestibulum ligula in fermen tum.<br>" +
+            "Etiam semper tristique sapien, ac viverra sem sodales eget. Quisque rutrum ipsum eu justo semper,<br>" +
             "mattis bibendum sapien tincidunt. Nullam quis metus ut arcu pulvinar eleifend.",
             15,
             3898.45,
             3883.45,
-            280,
+            275,
             40);
     });
 });
