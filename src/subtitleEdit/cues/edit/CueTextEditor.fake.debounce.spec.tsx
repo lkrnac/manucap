@@ -20,6 +20,7 @@ import { updateCues } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
+import { convertVttToHtml } from "../cueTextConverter";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -209,10 +210,11 @@ describe("CueTextEditor", () => {
 
     it("renders with multiple lines", () => {
         // GIVEN
-        const vttCue = new VTTCue(0, 2, "line 1\nsecond 2");
-        const contentState = ContentState.createFromText(vttCue.text);
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i>\n <b>Text</b> sample");
+        const processedHTML = convertFromHTML(convertVttToHtml(vttCue.text));
+        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, vttCue, "line 1\nline 2", 2, [6,8], [2,2]);
+        testForContentState(contentState, vttCue, "some <i>HTML</i><br>\n <b>Text</b> sample", 1, [9,12], [2,2]);
     });
 
     it("updates cue in redux store when changed", () => {
