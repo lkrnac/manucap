@@ -189,13 +189,18 @@ export const lastCueChangeSlice = createSlice({
     }
 });
 
-export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string): AppThunk =>
+export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
-            const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
-            copyNonConstructorProperties(newVttCue, vttCue);
+            let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
+            if (textOnly) {
+                newVttCue = new VTTCue(originalCue.vttCue.startTime, originalCue.vttCue.endTime, vttCue.text);
+                copyNonConstructorProperties(newVttCue, originalCue.vttCue);
+            } else {
+                copyNonConstructorProperties(newVttCue, vttCue);
+            }
 
             const previousCue = cues[idx - 1];
             const followingCue = cues[idx + 1];
@@ -253,7 +258,7 @@ export const addCue = (idx: number): AppThunk =>
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
-            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.LAST));
+            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
         } else {
             dispatch(validationErrorSlice.actions.setValidationError(true));
         }
@@ -277,8 +282,11 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
     };
 
 export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueIndexAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
+        if (idx >= 0) {
+            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
+        }
     };
 
 export const updateSourceCues = (cues: CueDto[]): AppThunk =>

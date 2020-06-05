@@ -114,11 +114,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
-                                            dispatch(changeScrollPosition(ScrollPosition.NONE));
-                                            setTimeout(
-                                                () => dispatch(changeScrollPosition(ScrollPosition.FIRST)),
-                                                10
-                                            );
+                                            dispatch(changeScrollPosition(ScrollPosition.FIRST));
                                         }}
                                     >
                                         <i className="fa fa-angle-double-up" />
@@ -134,11 +130,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
-                                            dispatch(changeScrollPosition(ScrollPosition.NONE));
-                                            setTimeout(
-                                                () => dispatch(changeScrollPosition(ScrollPosition.LAST)),
-                                                10
-                                            );
+                                            dispatch(changeScrollPosition(ScrollPosition.LAST));
                                         }}
                                     >
                                         <i className="fa fa-angle-double-down" />

@@ -456,7 +456,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
     });
 
-    it("should limit editing cue time to next cue", () => {
+    it.skip("should limit editing cue time to next cue", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 4, "someText");
         const editUuid = testingStore.getState().cues[0].editUuid;
@@ -474,7 +474,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
     });
 
-    it("should not limit editing cue time to next cue if last cue", () => {
+    it.skip("should not limit editing cue time to next cue if last cue", () => {
         // GIVEN
         const vttCue = new VTTCue(7, 50, "someText");
         const editUuid = testingStore.getState().cues[1].editUuid;
