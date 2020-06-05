@@ -258,7 +258,7 @@ export const addCue = (idx: number): AppThunk =>
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
-            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.LAST));
+            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
         } else {
             dispatch(validationErrorSlice.actions.setValidationError(true));
         }
