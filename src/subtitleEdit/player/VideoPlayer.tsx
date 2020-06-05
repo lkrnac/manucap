@@ -12,6 +12,23 @@ import { PlayVideoAction } from "./playbackSlices";
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
+
+/**
+ * In order to change the fontsize in videojs, you will need to calculate
+ * font size change ratio to maintain position as well
+ * this value should must include the line height as well
+ * for current font face used in videojs line height is 13.12% of the font size
+ * so following ratio is calculated as following:
+ * currentFontSize + 13.12% of font size / defaultVideoJSFontSize + 13.12% of font size
+ * So [(17.2 + ((17.2*13.12)/100)) / (13.6 + (13.6*13.12)/100))]
+ */
+const VIDEOJS_OVERRIDEN_FONT_RATIO = 1.264682865;
+
+const customizeLinePosition = (vttCue: VTTCue): void => {
+    if (vttCue.line != "auto") {
+        vttCue.line = (vttCue.line/VIDEOJS_OVERRIDEN_FONT_RATIO);
+    }
+};
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
         videoPlayer.playPause();
@@ -62,6 +79,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void =
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
         copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
+        customizeLinePosition(vttCue);
     }
 };
 
@@ -74,6 +92,7 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack)
         }
         videoJsTrack.addCue(lastCueChange.vttCue);
         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
+        customizeLinePosition(lastCueChange.vttCue);
     }
 };
 
