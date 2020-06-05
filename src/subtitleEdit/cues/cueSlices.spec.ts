@@ -874,7 +874,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(addCue(0) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.LAST);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
 
         describe("range prevention", () => {
