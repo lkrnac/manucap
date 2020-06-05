@@ -110,6 +110,8 @@ const TestApp = (): ReactElement => {
                 return;
             }}
             onComplete={(): void => undefined}
+            onExportFile={(): void => undefined}
+            onImportFile={(): void => undefined}
         />
     );
 };

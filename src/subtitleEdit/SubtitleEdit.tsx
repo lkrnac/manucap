@@ -14,6 +14,7 @@ import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition } from "./cues/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
+import CompleteButton from "./CompleteButton";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -26,6 +27,8 @@ export interface SubtitleEditProps {
     onViewAllTracks: () => void;
     onSave: () => void;
     onComplete: () => void;
+    onExportFile: () => void;
+    onImportFile: () => void;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -77,7 +80,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
-                            <Toolbox />
+                            <Toolbox handleExportFile={props.onExportFile} handleImportFile={props.onImportFile} />
                         </div>
                         <div
                             style={{
@@ -134,13 +137,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     </button>
                                 </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
-                                <button
-                                    className="btn btn-primary sbte-complete-subtitle-btn"
-                                    type="button"
-                                    onClick={(): void => props.onComplete()}
-                                >
-                                    Complete
-                                </button>
+                                <CompleteButton onComplete={props.onComplete} />
                             </div>
                         </div>
                     </div>

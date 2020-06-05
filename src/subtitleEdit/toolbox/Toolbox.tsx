@@ -6,8 +6,15 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
+import ExportTrackCuesButton from "./ExportTrackCuesButton";
+import ImportTrackCuesButton from "./ImportTrackCuesButton";
 
-const Toolbox = (): ReactElement => {
+interface Props {
+    handleExportFile: () => void;
+    handleImportFile: () => void;
+}
+
+const Toolbox = (props: Props): ReactElement => {
     return (
         <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
             <Card>
@@ -21,6 +28,8 @@ const Toolbox = (): ReactElement => {
                             <SubtitleSpecificationsButton />
                             <ShiftTimeButton />
                             <CaptionOverlapToggle />
+                            <ExportTrackCuesButton handleExport={props.handleExportFile} />
+                            <ImportTrackCuesButton handleImport={props.handleImportFile} />
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>
