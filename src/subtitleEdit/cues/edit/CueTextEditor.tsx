@@ -64,6 +64,16 @@ const changeVttCueInRedux = (
 
 const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 50);
 
+const getCharacterCountPerLine = (text: string): number[] => {
+    const lines = text.match(/[^\r\n]+/g) || [text];
+    return lines.map((line: string): number => line.length);
+};
+
+const getWordCountPerLine = (text: string): number[] => {
+    const lines = text.match(/[^\r\n]+/g) || [text];
+    return lines.map((line: string): number => line.match(/\S+/g)?.length || 0);
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
@@ -80,6 +90,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const unmountContentRef = useRef(currentContent);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     const [textChanged, setTextChanged] = useState(false);
+    const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
+    const wordCountPerLine = getWordCountPerLine(currentContent.getPlainText());
     useEffect(
         () => {
             dispatch(updateEditorState(props.index, editorState));
@@ -130,6 +142,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             <div
                 className="sbte-form-control sbte-bottom-border"
                 style={{
+                    display: "flex",
+                    flexDirection: "row",
                     flexBasis: "50%",
                     paddingLeft: "10px",
                     paddingTop: "5px",
@@ -137,18 +151,30 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     minHeight: "54px"
                 }}
             >
-                <Editor
-                    editorState={editorState}
-                    onChange={(newEditorState: EditorState): void => {
-                        dispatch(updateEditorState(props.index, newEditorState));
-                        if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                            setTextChanged(true);
-                        }
-                    }}
-                    spellCheck
-                    keyBindingFn={keyShortcutBindings}
-                    handleKeyCommand={handleKeyShortcut}
-                />
+                <div style={{ flex: 1 }}>
+                    <Editor
+                        editorState={editorState}
+                        onChange={(newEditorState: EditorState): void => {
+                            dispatch(updateEditorState(props.index, newEditorState));
+                            if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
+                                setTextChanged(true);
+                            }
+                        }}
+                        spellCheck
+                        keyBindingFn={keyShortcutBindings}
+                        handleKeyCommand={handleKeyShortcut}
+                    />
+                </div>
+                <div style={{ flex: 0 }}>
+                    { charCountPerLine.map((count: number, index: number) => (
+                        <div key={index}><span className="sbte-count-tag">{count} ch</span><br /></div>
+                    )) }
+                </div>
+                <div style={{ flex: 0, paddingRight: "5px" }}>
+                    { wordCountPerLine.map((count: number, index: number) => (
+                        <div key={index}><span className="sbte-count-tag">{count} w</span><br /></div>
+                    )) }
+                </div>
             </div>
             <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
                 <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />

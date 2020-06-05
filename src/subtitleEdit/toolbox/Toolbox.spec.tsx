@@ -14,6 +14,8 @@ import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../testUtils/testingStore";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
+import ExportTrackCuesButton from "./ExportTrackCuesButton";
+import ImportTrackCuesButton from "./ImportTrackCuesButton";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -32,6 +34,8 @@ describe("Toolbox", () => {
                                     <SubtitleSpecificationsButton />
                                     <ShiftTimeButton />
                                     <CaptionOverlapToggle />
+                                    <ExportTrackCuesButton handleExport={jest.fn()} />
+                                    <ImportTrackCuesButton handleImport={jest.fn()} />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>
@@ -43,7 +47,7 @@ describe("Toolbox", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <Toolbox />
+                <Toolbox handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
             </Provider>
         );
         testingStore.dispatch(
@@ -53,5 +57,37 @@ describe("Toolbox", () => {
         // THEN
         expect(actualNode.html())
             .toEqual(expectedNode.html());
+    });
+
+    it("passes exportFile function to export file button", () => {
+        // GIVEN
+        const mockExportFile = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <Toolbox handleExportFile={mockExportFile} handleImportFile={jest.fn()} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-export-button").simulate("click");
+
+        // THEN
+        expect(mockExportFile).toHaveBeenCalled();
+    });
+
+    it("passes importFile function to import file button", () => {
+        // GIVEN
+        const mockImportFile = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <Toolbox handleExportFile={jest.fn()} handleImportFile={mockImportFile} />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-import-button").simulate("click");
+
+        // THEN
+        expect(mockImportFile).toHaveBeenCalled();
     });
 });

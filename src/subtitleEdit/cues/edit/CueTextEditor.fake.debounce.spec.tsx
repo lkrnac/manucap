@@ -20,6 +20,7 @@ import { updateCues } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
+import { convertVttToHtml } from "../cueTextConverter";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -46,8 +47,8 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
 const createExpectedNode = (
     editorState: EditorState,
     duration: number,
-    characters: number,
-    words: number
+    chars: number[],
+    words: number[]
 ): ReactWrapper => mount(
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div
@@ -61,13 +62,15 @@ const createExpectedNode = (
         >
             <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
                 <span>DURATION: <span className="sbte-green-text">{duration}s</span>, </span>
-                <span>CHARACTERS: <span className="sbte-green-text">{characters}</span>, </span>
-                <span>WORDS: <span className="sbte-green-text">{words}</span></span>
+                <span>CHARACTERS: <span className="sbte-green-text">{chars.reduce((a, b) => a + b, 0)}</span>, </span>
+                <span>WORDS: <span className="sbte-green-text">{words.reduce((a, b) => a + b, 0)}</span></span>
             </div>
         </div>
         <div
             className="sbte-form-control sbte-bottom-border"
             style={{
+                display: "flex",
+                flexDirection: "row",
                 flexBasis: "50%",
                 paddingLeft: "10px",
                 paddingTop: "5px",
@@ -75,7 +78,19 @@ const createExpectedNode = (
                 minHeight: "54px"
             }}
         >
-            <Editor editorState={editorState} onChange={jest.fn} spellCheck />
+            <div style={{ flex: 1 }}>
+                <Editor editorState={editorState} onChange={jest.fn} spellCheck />
+            </div>
+            <div style={{ flex: 0 }}>
+                { chars.map((character: number, index: number) => (
+                    <div key={index}><span className="sbte-count-tag">{character} ch</span><br /></div>
+                )) }
+            </div>
+            <div style={{ flex: 0, paddingRight: "5px" }}>
+                { words.map((word: number, index: number) => (
+                    <div key={index}><span className="sbte-count-tag">{word} w</span><br /></div>
+                )) }
+            </div>
         </div>
         <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
             <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
@@ -135,8 +150,8 @@ const testForContentState = (
     vttCue: VTTCue,
     expectedStateHtml: string,
     duration: number,
-    characters: number,
-    words: number
+    characters: number[],
+    words: number[]
 ): void => {
     let editorState = EditorState.createWithContent(contentState);
     editorState = EditorState.moveFocusToEnd(editorState);
@@ -173,7 +188,7 @@ describe("CueTextEditor", () => {
         // See following line in their code
         // eslint-disable-next-line max-len
         // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
-        testForContentState(contentState, vttCue, "<br>", 1, 0, 0);
+        testForContentState(contentState, vttCue, "<br>", 1, [0], [0]);
     });
 
     it("renders with text", () => {
@@ -181,7 +196,7 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         const contentState = ContentState.createFromText(vttCue.text);
 
-        testForContentState(contentState, vttCue, "someText", 1, 8, 1);
+        testForContentState(contentState, vttCue, "someText", 1, [8], [1]);
     });
 
     it("renders with html", () => {
@@ -190,7 +205,16 @@ describe("CueTextEditor", () => {
         const processedHTML = convertFromHTML(vttCue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample", 1, 21, 4);
+        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample", 1, [21], [4]);
+    });
+
+    it("renders with multiple lines", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i>\n <b>Text</b> sample");
+        const processedHTML = convertFromHTML(convertVttToHtml(vttCue.text));
+        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+
+        testForContentState(contentState, vttCue, "some <i>HTML</i><br>\n <b>Text</b> sample", 1, [9,12], [2,2]);
     });
 
     it("updates cue in redux store when changed", () => {

@@ -11,20 +11,28 @@ import { addCue, updateEditingCueIndex } from "./cueSlices";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../shortcutConstants";
+import { changeScrollPosition } from "./cuesListScrollSlice";
 
 interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
 }
 
-const getScrollCueIndex = (cues: CueWithSource[], scrollPosition?: ScrollPosition): number => {
+const getScrollCueIndex = (
+    cues: CueWithSource[],
+    editingCueIndex: number,
+    scrollPosition?: ScrollPosition
+): number | undefined => {
     if (scrollPosition === ScrollPosition.FIRST) {
         return 0;
     }
     if (scrollPosition === ScrollPosition.LAST) {
         return cues.length - 1;
     }
-    return cues.length; // out of range value, because need to trigger change of ReactSmartScroll.startAt
+    if (scrollPosition === ScrollPosition.CURRENT) {
+        return editingCueIndex;
+    }
+    return undefined; // out of range value, because need to trigger change of ReactSmartScroll.startAt
 };
 
 const CuesList = (props: Props): ReactElement => {
@@ -38,8 +46,21 @@ const CuesList = (props: Props): ReactElement => {
         ({ cue: (cues[idx] === cue ? cue : cues[idx]), sourceCue: sourceCues[idx] }));
 
     const scrollPosition = useSelector((state: SubtitleEditState) => state.scrollPosition);
-    const startAt = getScrollCueIndex(cuesWithSource, scrollPosition);
-    const rowHeight = sourceCues.length > 0 ? 161 : 81; // Values are from Elements > Computed from browser DEV tools
+    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const startAt = getScrollCueIndex(cuesWithSource, editingCueIndex, scrollPosition);
+    const rowHeight = sourceCues.length > 0
+        ? 180 // This is bigger than real translation view cue, because if there is at least one
+              // editing cue, bigger rowHeight scrolls properly to bottom
+        : 81; // Value is taken from Elements > Computed from browser DEV tools
+              // yes, we don't use bigger value as in translation mode,
+              // because we needed to properly scroll to added cue
+              // -> yes, there is glitch where if there is some editing cue on top, jump to bottom
+              // does not scroll so that last cue is in view port. I didn't figure out fix for this issue so far.
+    useEffect(
+        () => {
+            dispatch(changeScrollPosition(ScrollPosition.NONE));
+        }
+    );
     const showStartCaptioning = drivingCues.length === 0
         && (props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack));
     useEffect(
