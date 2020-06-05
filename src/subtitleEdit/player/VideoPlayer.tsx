@@ -25,7 +25,7 @@ const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 const VIDEOJS_OVERRIDEN_FONT_RATIO = 1.264682865;
 
 const customizeLinePosition = (vttCue: VTTCue): void => {
-    if (vttCue.line != "auto") {
+    if (vttCue.line !== "auto") {
         vttCue.line = (vttCue.line/VIDEOJS_OVERRIDEN_FONT_RATIO);
     }
 };
