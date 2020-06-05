@@ -333,7 +333,7 @@ describe("CueEdit", () => {
         actualNode.find(PositionButton).props().changePosition(Position.Row2Column2);
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.line).toEqual(3);
+        expect(testingStore.getState().cues[0].vttCue.line).toEqual(4);
         expect(testingStore.getState().cues[0].vttCue.align).toEqual("start");
         expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("center");
         expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
