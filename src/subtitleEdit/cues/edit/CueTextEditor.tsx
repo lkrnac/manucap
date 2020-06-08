@@ -120,6 +120,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     // So content is not lost when unmounted before next debounce.
     useEffect(
         () => (): void => {
+            changeVttCueInReduxDebounced.cancel();
             changeVttCueInRedux(unmountContentRef.current, props, dispatch, textChanged, setTextChanged);
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
