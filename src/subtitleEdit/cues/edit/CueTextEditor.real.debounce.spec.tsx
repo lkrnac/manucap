@@ -8,9 +8,11 @@ import { mount, ReactWrapper } from "enzyme";
 
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "./editorStatesSlice";
-import { CueDto } from "../../model";
+import { CueDto, Track } from "../../model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor from "./CueTextEditor";
+import { setSaveTrack } from "../saveSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 let testingStore = createTestingStore();
 
@@ -97,5 +99,38 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
+    });
+
+    it("cancel save debounce when unmounted", (done) => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+        const vttCue = new VTTCue(0, 1, "someText");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+            </Provider>
+        );
+        const editor = actualNode.find(".public-DraftEditor-content");
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => " Paste text to end",
+            }
+        });
+
+        // WHEN
+        actualNode.unmount();
+
+        // THEN
+        setTimeout(
+            () => {
+                expect(saveTrack).not.toBeCalled();
+                done();
+            },
+            3000
+        );
     });
 });
