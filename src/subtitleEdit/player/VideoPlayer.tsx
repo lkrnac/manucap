@@ -12,21 +12,9 @@ import { PlayVideoAction } from "./playbackSlices";
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
-
-/**
- * In order to change the fontsize in videojs, you will need to calculate
- * font size change ratio to maintain position as well
- * this value should must include the line height as well
- * for current font face used in videojs line height is 13.12% of the font size
- * so following ratio is calculated as following:
- * currentFontSize + 13.12% of font size / defaultVideoJSFontSize + 13.12% of font size
- * So [(17.2 + ((17.2*13.12)/100)) / (13.6 + (13.6*13.12)/100))]
- */
-const VIDEOJS_OVERRIDEN_FONT_RATIO = 1.264682865;
-
-const customizeLinePosition = (vttCue: VTTCue): void => {
-    if (vttCue.line !== "auto") {
-        vttCue.line = (vttCue.line/VIDEOJS_OVERRIDEN_FONT_RATIO);
+const customizeLinePosition = (vttCue: VTTCue, trackFontPercent?: number): void => {
+    if (vttCue.line !== "auto" && trackFontPercent) {
+        vttCue.line = vttCue.line / trackFontPercent;
     }
 };
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
@@ -53,6 +41,7 @@ export interface Props {
     playSection?: PlayVideoAction;
     resetPlayerTimeChange?: () => void;
     lastCueChange: CueChange | null;
+    trackFontPercent?: 0.50 | 0.75 | 1.00 | 1.25 | 1.50 | 1.75 | 2.00 | 3.00 | 4.00;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
@@ -73,17 +62,17 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
         });
 };
 
-const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void => {
+const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontPercent?: number): void => {
     if (lastCueChange.changeType === "EDIT" && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
         copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
-        customizeLinePosition(vttCue);
+        customizeLinePosition(vttCue, trackFontPercent);
     }
 };
 
-const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
+const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack, trackFontPercent?: number): void => {
     if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
@@ -92,7 +81,7 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack)
         }
         videoJsTrack.addCue(lastCueChange.vttCue);
         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
-        customizeLinePosition(lastCueChange.vttCue);
+        customizeLinePosition(lastCueChange.vttCue, trackFontPercent);
     }
 };
 
@@ -107,7 +96,7 @@ export default class VideoPlayer extends React.Component<Props> {
     }
 
     public componentDidMount(): void {
-        const textTrackOptions = this.props.tracks.map(convertToTextTrackOptions);
+        const textTrackOptions =    this.props.tracks.map(convertToTextTrackOptions);
         const options = {
             playbackRates: PLAYBACK_RATES,
             sources: [{ src: this.props.mp4, type: "video/mp4" }],
@@ -129,6 +118,17 @@ export default class VideoPlayer extends React.Component<Props> {
                 this.props.onTimeChange(this.player.currentTime());
             }
         });
+        if (this.props.trackFontPercent && this.props.trackFontPercent != 1.00) {
+            this.player.on("ready", () => {
+                // @ts-ignore @types/video.js player is missing textTrackSettings check
+                // https://www.npmjs.com/package/@types/video.js for updates
+                const settings: videojs.TextTrackSettings = this.player.textTrackSettings;
+                settings.setValues({
+                    "fontPercent": this.props.trackFontPercent
+                });
+                settings.updateDisplay();
+            });
+        }
 
         registerPlayerShortcuts(this);
 
@@ -148,8 +148,10 @@ export default class VideoPlayer extends React.Component<Props> {
         const lastCueChange = this.props.lastCueChange;
         const videoJsTrack = (this.player.textTracks())[0];
         if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
-            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue);
-            handleCueAddIfNeeded(lastCueChange, videoJsTrack);
+            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
+                prevProps.trackFontPercent);
+            handleCueAddIfNeeded(lastCueChange, videoJsTrack,
+                prevProps.trackFontPercent);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }

@@ -303,4 +303,149 @@ describe("VideoPlayer", () => {
         // THEN
         sinon.assert.calledOnce(playPauseSpy);
     });
+
+    it("should set text settings when player is ready", () => {
+        // GIVEN
+        const settings = { setValues: jest.fn(), updateDisplay: jest.fn() };
+        const expectedTextSettings = {
+            "fontPercent": 1.25
+        } as any;
+
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+                trackFontPercent={1.25}
+            />
+        );
+        const actualComponent = actualNode.instance() as VideoPlayer;
+
+        // @ts-ignore @types/video.js player is missing textTrackSettings check
+        // https://www.npmjs.com/package/@types/video.js for updates
+        actualComponent.player.textTrackSettings = settings;
+
+        // WHEN
+        actualComponent.player.trigger("ready");
+
+
+        // THEN
+        expect(settings.setValues).toBeCalledWith(expectedTextSettings);
+        expect(settings.updateDisplay).toBeCalled();
+    });
+
+    it("should not set text settings if not passing fontpercent", () => {
+        // GIVEN
+        const settings = { setValues: jest.fn(), updateDisplay: jest.fn() };
+
+
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+        const actualComponent = actualNode.instance() as VideoPlayer;
+
+        // @ts-ignore @types/video.js player is missing textTrackSettings check
+        // https://www.npmjs.com/package/@types/video.js for updates
+        actualComponent.player.textTrackSettings = settings;
+
+        // WHEN
+        actualComponent.player.trigger("ready");
+
+
+        // THEN
+        expect(settings.setValues).not.toBeCalled();
+        expect(settings.updateDisplay).not.toBeCalled();
+    });
+
+    it("should not set text settings if not passing 1.00 as fontpercent", () => {
+        // GIVEN
+        const settings = { setValues: jest.fn(), updateDisplay: jest.fn() };
+
+
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+                trackFontPercent={1.00}
+            />
+        );
+        const actualComponent = actualNode.instance() as VideoPlayer;
+
+        // @ts-ignore @types/video.js player is missing textTrackSettings check
+        // https://www.npmjs.com/package/@types/video.js for updates
+        actualComponent.player.textTrackSettings = settings;
+
+        // WHEN
+        actualComponent.player.trigger("ready");
+
+
+        // THEN
+        expect(settings.setValues).not.toBeCalled();
+        expect(settings.updateDisplay).not.toBeCalled();
+    });
+
+    it("should not update lines if passing auto value", () => {
+        // GIVEN
+        const settings = { setValues: jest.fn(), updateDisplay: jest.fn() };
+        const vttCue = new VTTCue(0, 1, "Caption Line 1");
+
+        const captionCues = [
+            { vttCue: vttCue, cueCategory: "DIALOGUE" },
+        ];
+        const languageCuesArray = [
+            { languageId: "en-US", cues: captionCues },
+        ] as LanguageCues[];
+
+        const expectedTextSettings = {
+            "fontPercent": 1.25
+        } as any;
+        const tracks = [
+            { type: "CAPTION", language: { id: "en-US" }, default: true } as Track
+        ];
+        const textTracks = [
+            { language: "en-US", addCue: jest.fn(), cues: captionCues },
+        ];
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={tracks}
+                languageCuesArray={languageCuesArray}
+                lastCueChange={null}
+                trackFontPercent={1.25}
+            />
+        );
+
+
+        //WHEN
+        const actualComponent = actualNode.instance() as VideoPlayer;
+        dispatchEventForTrack(actualComponent.player, textTracks[0]);
+
+        vttCue.line="auto";
+        actualNode.setProps({ languageCuesArray: languageCuesArray,
+            lastCueChange: { changeType: "EDIT", index: 0,  vttCue: vttCue }});
+
+
+
+        // @ts-ignore @types/video.js player is missing textTrackSettings check
+        // https://www.npmjs.com/package/@types/video.js for updates
+        actualComponent.player.textTrackSettings = settings;
+
+
+        // THEN
+        expect(settings.setValues).toBeCalledWith(expectedTextSettings);
+        expect(settings.updateDisplay).toBeCalled();
+    });
+
 });
