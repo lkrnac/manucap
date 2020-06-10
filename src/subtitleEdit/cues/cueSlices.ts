@@ -48,17 +48,9 @@ interface CheckOptions extends SubtitleSpecificationAction {
 }
 
 const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
-    const initialCue = new VTTCue(x.startTime, x.endTime, x.text);
-    const updatedCue = new VTTCue(y.startTime, y.endTime, y.text);
-    copyNonConstructorProperties(initialCue, x);
-    copyNonConstructorProperties(updatedCue, y);
-    if (textOnly) { // VTMS-2545
-        initialCue.startTime = 0;
-        initialCue.endTime = 0;
-        updatedCue.startTime = 0;
-        updatedCue.endTime = 0;
-    }
-    return JSON.stringify(constructCueValuesArray(initialCue)) === JSON.stringify(constructCueValuesArray(updatedCue));
+    return textOnly ?
+        x.text !== y.text :
+        JSON.stringify(constructCueValuesArray(x)) !== JSON.stringify(constructCueValuesArray(y));
 };
 
 const createAndAddCue = (previousCue: CueDto,
@@ -227,7 +219,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }
             applyCharacterLimitation(newVttCue, originalCue, subtitleSpecifications);
 
-            if (!shouldBlink(vttCue, newVttCue, textOnly)) {
+            if (shouldBlink(vttCue, newVttCue, textOnly)) {
                 dispatch(validationErrorSlice.actions.setValidationError(true));
             }
 

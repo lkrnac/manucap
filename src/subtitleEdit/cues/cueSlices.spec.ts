@@ -719,6 +719,37 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationError).toEqual(false);
             });
         });
+
+        describe("text only update", () => {
+            it("ignores time code changes if text only change", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), editUuid, true) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line X");
+            });
+
+            it("doesn't set validation error if change is text only and time codes are different", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), editUuid, true) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line X");
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+        });
     });
 
     describe("updateCueCategory", () => {
