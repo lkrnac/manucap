@@ -34,9 +34,16 @@ describe("CompleteButton", () => {
                 <>
                     <div
                         style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
-                        className="sbte-light-gray-text"
                     >
-                        <span> &nbsp;<i hidden className="fas fa-sync fa-spin"></i></span>
+                        <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                        <span hidden className="text-success">
+                            All changes saved to server
+                            &nbsp;<i className="fa fa-check-circle"></i>
+                        </span>
+                        <span hidden className="text-danger">
+                            Error saving latest changes
+                            &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                        </span>
                     </div>
 
                     <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
@@ -98,9 +105,16 @@ describe("CompleteButton", () => {
                     <>
                         <div
                             style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
-                            className="sbte-light-gray-text"
                         >
                             <span>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                            <span hidden className="text-success">
+                                All changes saved to server
+                                &nbsp;<i className="fa fa-check-circle"></i>
+                            </span>
+                            <span hidden className="text-danger">
+                                Error saving latest changes
+                                &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                            </span>
                         </div>
                         <button
                             type="button"
@@ -135,10 +149,15 @@ describe("CompleteButton", () => {
                     <>
                         <div
                             style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
-                            className="sbte-light-gray-text"
                         >
-                            <span>
-                                All changes saved to server &nbsp;<i hidden className="fas fa-sync fa-spin" ></i>
+                            <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                            <span className="text-success">
+                                All changes saved to server
+                                &nbsp;<i className="fa fa-check-circle"></i>
+                            </span>
+                            <span hidden className="text-danger">
+                                Error saving latest changes
+                                &nbsp;<i className="fa fa-exclamation-triangle"></i>
                             </span>
                         </div>
                         <button
@@ -173,10 +192,15 @@ describe("CompleteButton", () => {
                     <>
                         <div
                             style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
-                            className="sbte-light-gray-text"
                         >
-                            <span>
-                                Error saving latest changes &nbsp;<i hidden className="fas fa-sync fa-spin"></i>
+                            <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                            <span hidden className="text-success">
+                                All changes saved to server
+                                &nbsp;<i className="fa fa-check-circle"></i>
+                            </span>
+                            <span className="text-danger">
+                                Error saving latest changes
+                                &nbsp;<i className="fa fa-exclamation-triangle"></i>
                             </span>
                         </div>
                         <button
