@@ -3,12 +3,9 @@ import { debounce } from "lodash";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, Track } from "../model";
+import { Constants } from "../constants";
 
 const DEBOUNCE_TIMEOUT = 2500;
-export const SAVING_CHANGES_MSG = "Saving changes ...";
-export const CHANGES_SAVED_MSG = "All changes saved to server";
-export const ERROR_SAVING_MSG = "Error saving latest changes";
-
 interface SaveAction extends SubtitleEditAction {
     cues: CueDto[];
     editingTrack: Track | null;
@@ -45,9 +42,9 @@ export const saveStatusSlice = createSlice({
     initialState: "",
     reducers: {},
     extraReducers: {
-        [saveTrackSlice.actions.call.type]: (): string => SAVING_CHANGES_MSG,
+        [saveTrackSlice.actions.call.type]: (): string => Constants.AUTO_SAVE_SAVING_CHANGES_MSG,
         [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
-            action.payload ? CHANGES_SAVED_MSG : ERROR_SAVING_MSG
+            action.payload ? Constants.AUTO_SAVE_SUCCESS_CHANGES_SAVED_MSG : Constants.AUTO_SAVE_ERROR_SAVING_MSG
     }
 });
 
@@ -79,7 +76,7 @@ export const setAutoSaveSuccess = (success: boolean): AppThunk =>
 export const callSaveTrack = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SaveAction | boolean>>, getState): void => {
         const saveStatus = getState().saveStatus;
-        if (saveStatus !== SAVING_CHANGES_MSG) {
+        if (saveStatus !== Constants.AUTO_SAVE_SAVING_CHANGES_MSG) {
             const cues = getState().cues;
             const editingTrack = getState().editingTrack;
             if (cues && editingTrack) {
