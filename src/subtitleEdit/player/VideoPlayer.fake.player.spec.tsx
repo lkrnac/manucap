@@ -764,7 +764,7 @@ describe("VideoPlayer tested with fake player", () => {
                 tracks={initialTestingTracks}
                 languageCuesArray={initialTestingLanguageCuesArray}
                 lastCueChange={null}
-                trackFontPercent={0.5}
+                trackFontSizePercent={0.5}
             />
         );
 
@@ -810,7 +810,7 @@ describe("VideoPlayer tested with fake player", () => {
                 tracks={initialTestingTracks}
                 languageCuesArray={initialTestingLanguageCuesArray}
                 lastCueChange={null}
-                trackFontPercent={fontPercent}
+                trackFontSizePercent={fontPercent}
             />
         );
 

@@ -12,9 +12,9 @@ import { PlayVideoAction } from "./playbackSlices";
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
-const customizeLinePosition = (vttCue: VTTCue, trackFontPercent?: number): void => {
-    if (vttCue.line !== "auto" && trackFontPercent) {
-        vttCue.line = vttCue.line / trackFontPercent;
+    const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
+    if (vttCue.line !== "auto" && trackFontSizePercent) {
+        vttCue.line = vttCue.line / trackFontSizePercent;
     }
 };
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
@@ -41,7 +41,7 @@ export interface Props {
     playSection?: PlayVideoAction;
     resetPlayerTimeChange?: () => void;
     lastCueChange: CueChange | null;
-    trackFontPercent?: 0.50 | 0.75 | 1.00 | 1.25 | 1.50 | 1.75 | 2.00 | 3.00 | 4.00;
+    trackFontSizePercent?: number;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
@@ -62,17 +62,18 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
         });
 };
 
-const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontPercent?: number): void => {
+const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
     if (lastCueChange.changeType === "EDIT" && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
         copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
-        customizeLinePosition(vttCue, trackFontPercent);
+        customizeLinePosition(vttCue, trackFontSizePercent);
     }
 };
 
-const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack, trackFontPercent?: number): void => {
+const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
+                              trackFontSizePercent?: number): void => {
     if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
@@ -81,7 +82,7 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
         }
         videoJsTrack.addCue(lastCueChange.vttCue);
         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
-        customizeLinePosition(lastCueChange.vttCue, trackFontPercent);
+        customizeLinePosition(lastCueChange.vttCue, trackFontSizePercent);
     }
 };
 
@@ -118,17 +119,6 @@ export default class VideoPlayer extends React.Component<Props> {
                 this.props.onTimeChange(this.player.currentTime());
             }
         });
-        if (this.props.trackFontPercent && this.props.trackFontPercent != 1.00) {
-            this.player.on("ready", () => {
-                // @ts-ignore @types/video.js player is missing textTrackSettings check
-                // https://www.npmjs.com/package/@types/video.js for updates
-                const settings: videojs.TextTrackSettings = this.player.textTrackSettings;
-                settings.setValues({
-                    "fontPercent": this.props.trackFontPercent
-                });
-                settings.updateDisplay();
-            });
-        }
 
         registerPlayerShortcuts(this);
 
@@ -149,9 +139,9 @@ export default class VideoPlayer extends React.Component<Props> {
         const videoJsTrack = (this.player.textTracks())[0];
         if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
             handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
-                prevProps.trackFontPercent);
+                prevProps.trackFontSizePercent);
             handleCueAddIfNeeded(lastCueChange, videoJsTrack,
-                prevProps.trackFontPercent);
+                prevProps.trackFontSizePercent);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
