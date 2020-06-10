@@ -68,8 +68,3 @@ export enum ScrollPosition {
     LAST,
     CURRENT
 }
-
-export interface SaveStatus {
-    message: string;
-    pendingChanges: boolean;
-}
