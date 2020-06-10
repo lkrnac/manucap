@@ -96,7 +96,7 @@ export default class VideoPlayer extends React.Component<Props> {
     }
 
     public componentDidMount(): void {
-        const textTrackOptions =    this.props.tracks.map(convertToTextTrackOptions);
+        const textTrackOptions = this.props.tracks.map(convertToTextTrackOptions);
         const options = {
             playbackRates: PLAYBACK_RATES,
             sources: [{ src: this.props.mp4, type: "video/mp4" }],
