@@ -144,9 +144,16 @@ describe("SubtitleEdit", () => {
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
-                                    className="sbte-light-gray-text"
                                 >
-                                    <span> &nbsp;<i hidden className="fas fa-sync fa-spin"></i></span>
+                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                                    <span hidden className="text-success">
+                                        All changes saved to server
+                                        &nbsp;<i className="fa fa-check-circle"></i>
+                                    </span>
+                                    <span hidden className="text-danger">
+                                        Error saving latest changes
+                                        &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                                    </span>
                                 </div>
                                 <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                                     Complete
@@ -254,10 +261,18 @@ describe("SubtitleEdit", () => {
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
-                                    className="sbte-light-gray-text"
                                 >
-                                    <span> &nbsp;<i hidden className="fas fa-sync fa-spin"></i></span>
+                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                                    <span hidden className="text-success">
+                                        All changes saved to server
+                                        &nbsp;<i className="fa fa-check-circle"></i>
+                                    </span>
+                                    <span hidden className="text-danger">
+                                        Error saving latest changes
+                                        &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                                    </span>
                                 </div>
+
                                 <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                                     Complete
                                 </button>
