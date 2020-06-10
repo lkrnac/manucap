@@ -33,7 +33,7 @@ describe("CompleteButton", () => {
             <Provider store={testingStore}>
                 <>
                     <div
-                        style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
+                        style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                     >
                         <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
                         <span hidden className="text-success">
@@ -104,7 +104,7 @@ describe("CompleteButton", () => {
                 <Provider store={testingStore}>
                     <>
                         <div
-                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
+                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                         >
                             <span>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
                             <span hidden className="text-success">
@@ -148,7 +148,7 @@ describe("CompleteButton", () => {
                 <Provider store={testingStore}>
                     <>
                         <div
-                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
+                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                         >
                             <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
                             <span className="text-success">
@@ -191,7 +191,7 @@ describe("CompleteButton", () => {
                 <Provider store={testingStore}>
                     <>
                         <div
-                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
+                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                         >
                             <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
                             <span hidden className="text-success">

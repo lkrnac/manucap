@@ -23,7 +23,7 @@ const CompleteButton = (props: Props): ReactElement => {
     return (
         <>
             <div
-                style={{ textAlign: "center", margin: "8px 10px 0px 0px" }}
+                style={{ textAlign: "center", margin: "8px 10px 0px 0px", fontWeight: "bold" }}
             >
                 <span hidden={!isPending}>
                     {Constants.AUTO_SAVE_SAVING_CHANGES_MSG} &nbsp;

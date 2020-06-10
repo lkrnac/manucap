@@ -143,7 +143,7 @@ describe("SubtitleEdit", () => {
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
+                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                                 >
                                     <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
                                     <span hidden className="text-success">
@@ -260,7 +260,7 @@ describe("SubtitleEdit", () => {
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px" }}
+                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                                 >
                                     <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
                                     <span hidden className="text-success">
