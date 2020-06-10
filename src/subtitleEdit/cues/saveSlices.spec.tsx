@@ -4,14 +4,12 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
 import {
     callSaveTrack,
-    CHANGES_SAVED_MSG,
-    ERROR_SAVING_MSG,
-    SAVING_CHANGES_MSG,
     setAutoSaveSuccess,
     setSaveTrack
 } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
 import { Track } from "../model";
+import { Constants } from "../constants";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -113,21 +111,21 @@ describe("saveSlices", () => {
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().saveStatus).toEqual(SAVING_CHANGES_MSG);
+            expect(testingStore.getState().saveStatus).toEqual(Constants.AUTO_SAVE_SAVING_CHANGES_MSG);
         });
         it("sets save status after successful save", () => {
             // WHEN
             testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().saveStatus).toEqual(CHANGES_SAVED_MSG);
+            expect(testingStore.getState().saveStatus).toEqual(Constants.AUTO_SAVE_SUCCESS_CHANGES_SAVED_MSG);
         });
         it("sets save status after failed save", () => {
             // WHEN
             testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().saveStatus).toEqual(ERROR_SAVING_MSG);
+            expect(testingStore.getState().saveStatus).toEqual(Constants.AUTO_SAVE_ERROR_SAVING_MSG);
         });
     });
 });

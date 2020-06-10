@@ -77,13 +77,6 @@ describe("SubtitleEdit", () => {
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
-                        <div style={{ flex: "2", position: "relative", height: "100%" }}>
-                            <div
-                                style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                                className="sbte-light-gray-text"
-                            >
-                            </div>
-                        </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Completed: <b>50%</b></div>
@@ -149,6 +142,19 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
+                                <div
+                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
+                                >
+                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                                    <span hidden className="text-success">
+                                        All changes saved to server
+                                        &nbsp;<i className="fa fa-check-circle"></i>
+                                    </span>
+                                    <span hidden className="text-danger">
+                                        Error saving latest changes
+                                        &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                                    </span>
+                                </div>
                                 <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                                     Complete
                                 </button>
@@ -197,13 +203,6 @@ describe("SubtitleEdit", () => {
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
-                        </div>
-                        <div style={{ flex: "2", position: "relative", height: "100%" }}>
-                            <div
-                                style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                                className="sbte-light-gray-text"
-                            >
-                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -260,6 +259,20 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
+                                <div
+                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
+                                >
+                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                                    <span hidden className="text-success">
+                                        All changes saved to server
+                                        &nbsp;<i className="fa fa-check-circle"></i>
+                                    </span>
+                                    <span hidden className="text-danger">
+                                        Error saving latest changes
+                                        &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                                    </span>
+                                </div>
+
                                 <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                                     Complete
                                 </button>
@@ -308,13 +321,6 @@ describe("SubtitleEdit", () => {
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
-                        </div>
-                        <div style={{ flex: "2", position: "relative", height: "100%" }}>
-                            <div
-                                style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                                className="sbte-light-gray-text"
-                            >
-                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -373,13 +379,6 @@ describe("SubtitleEdit", () => {
                                 Translation from <span>
                                     <b>English (US)</b> to <b>French (France)</b>
                                 </span> <i>4 seconds</i>{/* eslint-disable-line react/jsx-closing-tag-location */}
-                            </div>
-                        </div>
-                        <div style={{ flex: "2", position: "relative", height: "100%" }}>
-                            <div
-                                style={{ textAlign: "center", width: "100%", position: "absolute", bottom: "0" }}
-                                className="sbte-light-gray-text"
-                            >
                             </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
