@@ -44,6 +44,6 @@ describe("PlayCueButton", () => {
         actualNode.find("button").simulate("click");
 
         // THEN
-        expect(testingStore.getState().videoSectionToPlay).toEqual({ startTime: 2, endTime: 3 });
+        expect(testingStore.getState().videoSectionToPlay).toEqual({ startTime: 2, endTime: 2.999 });
     });
 });

@@ -23,7 +23,7 @@ const PlayCueButton = (props: Props): ReactElement => {
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary"
                 onClick={(): AppThunk =>
-                    dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime))}
+                    dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime - .001))}
             >
                 <i className="fa fa-play" />
             </button>
