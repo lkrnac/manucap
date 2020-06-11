@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { updateEditingTrack } from "../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Track } from "../model";
+import { callSaveTrack, setAutoSaveSuccess } from "../cues/saveSlices";
 
 let testingStore = createTestingStore();
 
@@ -94,5 +95,61 @@ describe("CaptionOverlapToggle", () => {
 
         // THEN
         expect(testingStore.getState().editingTrack.overlapEnabled).toEqual(true);
+    });
+
+    it("disables button while saving", () => {
+        // GIVEN
+        const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CaptionOverlapToggle />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find("button").props().disabled).toBeTruthy();
+    });
+
+    it("enables button after successful save", () => {
+        // GIVEN
+        const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CaptionOverlapToggle />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find("button").props().disabled).toBeFalsy();
+    });
+
+    it("enables button after failed save", () => {
+        // GIVEN
+        const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CaptionOverlapToggle />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find("button").props().disabled).toBeFalsy();
     });
 });

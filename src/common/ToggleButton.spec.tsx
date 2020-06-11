@@ -48,7 +48,6 @@ describe("ToggleButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-
     it("renders with class", () => {
         // GIVEN
         const expectedNode = shallow(
@@ -61,6 +60,29 @@ describe("ToggleButton", () => {
         const actualNode = mount(
             <ToggleButton
                 className="btn-secondary"
+                render={(): ReactElement => (
+                    <>Click me!</>
+                )}
+            />
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    it("renders disabled", () => {
+        // GIVEN
+        const expectedNode = shallow(
+            <button type="button" className="btn-secondary" disabled>
+                Click me!
+            </button>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <ToggleButton
+                className="btn-secondary"
+                disabled
                 render={(): ReactElement => (
                     <>Click me!</>
                 )}
