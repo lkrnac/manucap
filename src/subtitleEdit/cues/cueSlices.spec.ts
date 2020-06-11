@@ -1049,9 +1049,16 @@ describe("cueSlices", () => {
             testingStore.dispatch(deleteCue(0) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 3, ""));
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues.length).toEqual(1);
+
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+            expect(testingStore.getState().cues[0].vttCue.align).toEqual("center");
+            expect(testingStore.getState().cues[0].vttCue.line).toEqual("auto");
+            expect(testingStore.getState().cues[0].vttCue.position).toEqual("auto");
+            expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("auto");
         });
     });
 

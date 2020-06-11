@@ -93,8 +93,11 @@ export const cuesSlice = createSlice({
                 state.splice(action.payload.idx, 1);
             } else {
                 // default empty cue
+                const newVttCue = new VTTCue(0, 3, "");
+                // this is a hack just to avoid uninitialized properties
+                copyNonConstructorProperties(newVttCue, newVttCue);
                 state[0] = {
-                    vttCue: new VTTCue(0, 3, ""),
+                    vttCue: newVttCue,
                     cueCategory: "DIALOGUE"
                 };
             }
