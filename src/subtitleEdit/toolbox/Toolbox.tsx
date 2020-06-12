@@ -8,6 +8,9 @@ import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
+import SyncCuesButton from "./SyncCuesButton";
+import { useSelector } from "react-redux";
+import { SubtitleEditState } from "../subtitleEditReducers";
 
 interface Props {
     handleExportFile: () => void;
@@ -15,6 +18,8 @@ interface Props {
 }
 
 const Toolbox = (props: Props): ReactElement => {
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const isTranslation = editingTrack?.type === "TRANSLATION";
     return (
         <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
             <Card>
@@ -30,6 +35,7 @@ const Toolbox = (props: Props): ReactElement => {
                             <CaptionOverlapToggle />
                             <ExportTrackCuesButton handleExport={props.handleExportFile} />
                             <ImportTrackCuesButton handleImport={props.handleImportFile} />
+                            { isTranslation ? <SyncCuesButton /> : null }
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>

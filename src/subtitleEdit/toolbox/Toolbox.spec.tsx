@@ -16,6 +16,9 @@ import testingStore from "../../testUtils/testingStore";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
+import { Language, Track } from "../model";
+import { updateEditingTrack } from "../trackSlices";
+import SyncCuesButton from "./SyncCuesButton";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -57,6 +60,53 @@ describe("Toolbox", () => {
         // THEN
         expect(actualNode.html())
             .toEqual(expectedNode.html());
+    });
+
+    it("renders for translation track", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "TRANSLATION",
+            language: { id: "it-IT", name: "Italian" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
+                            Toolbox
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body>
+                                <ButtonToolbar className="sbte-button-toolbar">
+                                    <KeyboardShortcuts />
+                                    <SubtitleSpecificationsButton />
+                                    <ShiftTimeButton />
+                                    <CaptionOverlapToggle />
+                                    <ExportTrackCuesButton handleExport={jest.fn()} />
+                                    <ImportTrackCuesButton handleImport={jest.fn()} />
+                                    <SyncCuesButton />
+                                </ButtonToolbar>
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <Toolbox handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("passes exportFile function to export file button", () => {

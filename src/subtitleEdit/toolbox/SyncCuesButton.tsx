@@ -4,7 +4,7 @@ const SyncCuesButton = (): ReactElement => {
     return (
         <button
             type="button"
-            className="sbte-export-button btn btn-secondary"
+            className="sbte-sync-cues-button btn btn-secondary"
         >
             <i className="fas fa-sync" /> Sync Cues
         </button>

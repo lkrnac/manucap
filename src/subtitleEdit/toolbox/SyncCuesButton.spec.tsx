@@ -14,7 +14,7 @@ describe("SyncCuesButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button type="button" className="sbte-export-button btn btn-secondary">
+            <button type="button" className="sbte-sync-cues-button btn btn-secondary">
                 <i className="fas fa-sync" /> Sync Cues
             </button>
         );
