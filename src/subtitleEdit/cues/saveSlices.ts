@@ -72,6 +72,10 @@ export const setSaveTrack = (saveTrack: Function): AppThunk =>
 
 export const setAutoSaveSuccess = (success: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean | SaveAction>>, getState): void => {
+        if (!getState().saveTrack) {
+            // To handle case where unmounted before callback from host app
+            return;
+        }
         dispatch(autoSaveSuccessSlice.actions.setAutoSaveSuccess(success));
         const pendingSave = getState().pendingSave;
         if (pendingSave) {

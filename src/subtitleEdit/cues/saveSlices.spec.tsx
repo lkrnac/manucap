@@ -7,7 +7,7 @@ import {
     setAutoSaveSuccess,
     setSaveTrack
 } from "./saveSlices";
-import { updateEditingTrack } from "../trackSlices";
+import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
 import { Track } from "../model";
 import { Constants } from "../constants";
 
@@ -15,23 +15,22 @@ let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
 describe("saveSlices", () => {
+    beforeEach(() => testingStore = createTestingStore());
+
+    const saveTrack = jest.fn();
+
+    beforeAll(() => {
+        // @ts-ignore
+        jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
+    });
+
+    beforeEach(() => {
+        // GIVEN
+        saveTrack.mockReset();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+    });
     describe("saveTrack", () => {
-        beforeEach(() => testingStore = createTestingStore());
-
-        const saveTrack = jest.fn();
-
-        beforeAll(() => {
-            // @ts-ignore
-            jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
-        });
-
-        beforeEach(() => {
-            // GIVEN
-            saveTrack.mockReset();
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
-        });
-
         it("calls saveTrack", () => {
             // WHEN
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
@@ -102,6 +101,16 @@ describe("saveSlices", () => {
 
             // THEN
             expect(testingStore.getState().autoSaveSuccess).toEqual(true);
+        });
+        it("does not set the autoSave success flag to true if saveTrack is unmounted", () => {
+            // GIVEN
+            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().autoSaveSuccess).toEqual(false);
         });
     });
 
