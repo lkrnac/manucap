@@ -4,7 +4,7 @@ import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, Track } from "../model";
 import { Constants } from "../constants";
-import {editingTrackSlice} from "../trackSlices";
+import { editingTrackSlice } from "../trackSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
 interface SaveAction extends SubtitleEditAction {
