@@ -4,6 +4,7 @@ import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, Track } from "../model";
 import { Constants } from "../constants";
+import {editingTrackSlice} from "../trackSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
 interface SaveAction extends SubtitleEditAction {
@@ -16,6 +17,9 @@ export const autoSaveSuccessSlice = createSlice({
     initialState: false,
     reducers: {
         setAutoSaveSuccess: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
     }
 });
 
@@ -33,7 +37,8 @@ export const saveTrackSlice = createSlice({
             if (!action.payload && state) {
                 state();
             }
-        }
+        },
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): null => null
     }
 });
 
@@ -44,7 +49,8 @@ export const saveStatusSlice = createSlice({
     extraReducers: {
         [saveTrackSlice.actions.call.type]: (): string => Constants.AUTO_SAVE_SAVING_CHANGES_MSG,
         [autoSaveSuccessSlice.actions.setAutoSaveSuccess.type]: (_state, action: PayloadAction<boolean>): string =>
-            action.payload ? Constants.AUTO_SAVE_SUCCESS_CHANGES_SAVED_MSG : Constants.AUTO_SAVE_ERROR_SAVING_MSG
+            action.payload ? Constants.AUTO_SAVE_SUCCESS_CHANGES_SAVED_MSG : Constants.AUTO_SAVE_ERROR_SAVING_MSG,
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): string => ""
     }
 });
 
@@ -53,6 +59,9 @@ export const pendingSaveSlice = createSlice({
     initialState: false,
     reducers: {
         setPendingSave: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
     }
 });
 
