@@ -34,7 +34,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>2 minutes 5 seconds</i></div>
                 </div>
@@ -76,7 +76,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span> <i /></div>
                 </div>
@@ -116,7 +116,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Direct Translation <span> to <b>Italian</b></span> <i /></div>
                 </div>
@@ -156,7 +156,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Review of <b>English (US)</b> Caption <i /></div>
                 </div>
@@ -197,7 +197,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Review of <span><b>English (US)</b> to <b>Italian</b></span> Translation <i /></div>
                 </div>
@@ -226,7 +226,7 @@ describe("SubtitleEditHeader", () => {
         // GIVEN
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b /> <i /></div>
                     <div />
                 </div>
@@ -259,7 +259,7 @@ describe("SubtitleEditHeader", () => {
         } as Track;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i /></div>
                     <div />
                 </div>
@@ -304,7 +304,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>2 minutes</i></div>
                 </div>
@@ -351,7 +351,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i /></div>
                 </div>
@@ -394,7 +394,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>2 minutes</i></div>
                 </div>
@@ -437,7 +437,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>1 hour 2 minutes 10 seconds</i></div>
                 </div>
@@ -480,7 +480,7 @@ describe("SubtitleEditHeader", () => {
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
-                <div style={{ display: "flex", flexFlow: "column" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Caption in: <b>English (US)</b> <i>2 minutes 3 seconds</i></div>
                 </div>

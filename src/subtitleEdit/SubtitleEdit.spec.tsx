@@ -73,7 +73,7 @@ describe("SubtitleEdit", () => {
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
@@ -200,7 +200,7 @@ describe("SubtitleEdit", () => {
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
@@ -318,7 +318,7 @@ describe("SubtitleEdit", () => {
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
@@ -373,7 +373,7 @@ describe("SubtitleEdit", () => {
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>
                                 Translation from <span>
