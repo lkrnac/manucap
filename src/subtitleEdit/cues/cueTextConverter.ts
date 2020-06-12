@@ -1,6 +1,9 @@
 import { Options, stateToHTML } from "draft-js-export-html";
 import { ContentState } from "draft-js";
 
+
+const spaceHtml = "&nbsp;";
+
 const orderedVttToHtmlConversions = [
     { from: "\n", to: "<br>" }
 ];
@@ -21,10 +24,12 @@ export const convertVttToHtml = (vtt: string): string => {
  * Notice we are applying these replacement rules sequentially so if we would have "<br>\n<br>\n<br>",
  * which would probably represent "\n\n\n", applying both ("\n<br> -> \n" and "<br>\n -> \n") would end up in "\n\n".
  * Therefore I would rather avoid reducing number of line breaks type of rules (e.g. "\n<br> -> \n")
+ * Update: there was some spaces returned as html ASCII code so adding replacement to normal spaces for those too
  */
 const orderedHtmlToVttConversions = [
     { from: "<br>", to: "" },
-    { from: "<br/>", to: "" }
+    { from: "<br/>", to: "" },
+    { from: spaceHtml, to: " " }
 ];
 
 export const convertHtmlToVtt = (html: string): string => {
@@ -49,4 +54,8 @@ const convertToHtmlOptions = {
 export const getVttText = (currentContent: ContentState): string => {
     const htmlText = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
     return convertHtmlToVtt(htmlText);
+};
+
+export const convertSpaceToHtmlCode = (text: string): string => {
+    return text.replace(/ /g, spaceHtml);
 };

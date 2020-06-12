@@ -1,4 +1,4 @@
-import { convertHtmlToVtt, convertVttToHtml } from "./cueTextConverter";
+import { convertHtmlToVtt, convertSpaceToHtmlCode, convertVttToHtml } from "./cueTextConverter";
 import each from "jest-each";
 
 describe("cueTextConverter", () => {
@@ -42,12 +42,27 @@ describe("cueTextConverter", () => {
             ["<i><b>te<br></b>xt</i>", "<i><b>te</b>xt</i>"],
             ["<i>te<br>\nxt</i>", "<i>te\nxt</i>"],
             ["<i><b>te\n<br></b>xt</i>", "<i><b>te\n</b>xt</i>"],
+            ["<i><b>&nbsp;&nbsp;&nbsp;&nbsp;te\n<br></b>&nbsp;&nbsp;xt</i>", "<i><b>    te\n</b>  xt</i>"],
         ]).it("converts html '%s' to vtt", (vtt: string, expectedHtml: string) => {
             // WHEN
             const actualHtml = convertHtmlToVtt(vtt);
 
             // THEN
             expect(actualHtml).toEqual(expectedHtml);
+        });
+    });
+
+    describe("convertSpaceToHtmlCode", () => {
+        each([
+            ["text  ", "text&nbsp;&nbsp;"],
+            ["<i> text </i>", "<i>&nbsp;text&nbsp;</i>"],
+            ["<i><b>  te</b>\n</i><i>  xt</i>", "<i><b>&nbsp;&nbsp;te</b>\n</i><i>&nbsp;&nbsp;xt</i>"]
+        ]).it("converts html '%s' to vtt", (text: string, expectedText: string) => {
+            // WHEN
+            const actualHtml = convertSpaceToHtmlCode(text);
+
+            // THEN
+            expect(actualHtml).toEqual(expectedText);
         });
     });
 });
