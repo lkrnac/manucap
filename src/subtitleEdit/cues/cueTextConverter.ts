@@ -55,7 +55,3 @@ export const getVttText = (currentContent: ContentState): string => {
     const htmlText = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
     return convertHtmlToVtt(htmlText);
 };
-
-export const convertSpaceToHtmlCode = (text: string): string => {
-    return text.replace(/ /g, spaceHtml);
-};

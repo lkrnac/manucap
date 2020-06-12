@@ -8,7 +8,6 @@ import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
-import { convertSpaceToHtmlCode } from "../cues/cueTextConverter";
 
 const SECOND = 1000;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -59,7 +58,7 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
 
 const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void => {
     if (lastCueChange.changeType === "EDIT" && vttCue) {
-        vttCue.text = convertSpaceToHtmlCode(lastCueChange.vttCue.text);
+        vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
         copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
