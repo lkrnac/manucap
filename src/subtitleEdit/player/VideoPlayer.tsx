@@ -39,17 +39,13 @@ export interface Props {
     lastCueChange: CueChange | null;
 }
 
-const cloneVttCue = (newCue: VTTCue, oldCue: VTTCue): void => {
-    // Avoid showing 2 captions lines at the same time
-    newCue.endTime  -= ONE_MILLISECOND;
-    copyNonConstructorProperties(newCue, oldCue);
-};
-
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
     videoJsTrack.addCue(vttCue);
     if (videoJsTrack.cues) {
         const addedCue = videoJsTrack.cues[index] as VTTCue;
-        cloneVttCue(addedCue, vttCue);
+        // avoid showing 2 captions lines at the same time
+        addedCue.endTime = addedCue.endTime - ONE_MILLISECOND;
+        copyNonConstructorProperties(addedCue, vttCue);
     }
 };
 
@@ -67,8 +63,9 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void =
     if (lastCueChange.changeType === "EDIT" && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
-        vttCue.endTime = lastCueChange.vttCue.endTime;
-        cloneVttCue(vttCue, lastCueChange.vttCue);
+        // avoid showing 2 captions lines at the same time
+        vttCue.endTime = lastCueChange.vttCue.endTime - ONE_MILLISECOND;
+        copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
     }
 };
 
@@ -157,7 +154,7 @@ export default class VideoPlayer extends React.Component<Props> {
                 const waitTime = ((endTime - startTime) * 1000) + 100;
                 setTimeout(() => {
                     this.player.pause();
-                    // Avoid showing 2 captions lines at the same time
+                    // avoid showing 2 captions lines at the same time
                     this.player.currentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
             }
