@@ -8,7 +8,8 @@ import {
     addCue,
     applyShiftTime,
     deleteCue,
-    setValidationError, syncCues,
+    setValidationError,
+    syncCues,
     updateCueCategory,
     updateCues,
     updateEditingCueIndex,
@@ -1265,6 +1266,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
         });
+
         it("syncs timecodes between sourceCues and cues", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
