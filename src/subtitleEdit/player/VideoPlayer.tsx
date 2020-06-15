@@ -39,12 +39,17 @@ export interface Props {
     lastCueChange: CueChange | null;
 }
 
+const cloneVttCue = (newCue: VTTCue, oldCue: VTTCue): void => {
+    // Avoid showing 2 captions lines at the same time
+    newCue.endTime  -= ONE_MILLISECOND;
+    copyNonConstructorProperties(newCue, oldCue);
+};
+
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
     videoJsTrack.addCue(vttCue);
     if (videoJsTrack.cues) {
         const addedCue = videoJsTrack.cues[index] as VTTCue;
-        copyNonConstructorProperties(addedCue, vttCue);
-        addedCue.endTime -= ONE_MILLISECOND;
+        cloneVttCue(addedCue, vttCue);
     }
 };
 
@@ -63,7 +68,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void =
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
-        copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
+        cloneVttCue(vttCue, lastCueChange.vttCue);
     }
 };
 
@@ -145,13 +150,14 @@ export default class VideoPlayer extends React.Component<Props> {
             && prevProps.playSection !== this.props.playSection) {
             const startTime = this.props.playSection.startTime;
             const endTime = this.props.playSection.endTime;
-            this.player.currentTime(startTime );
+            this.player.currentTime(startTime);
             this.player.play();
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
                 setTimeout(() => {
                     this.player.pause();
+                    // Avoid showing 2 captions lines at the same time
                     this.player.currentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
             }

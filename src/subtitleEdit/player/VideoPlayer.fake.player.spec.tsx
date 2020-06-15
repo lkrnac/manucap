@@ -257,7 +257,7 @@ describe("VideoPlayer tested with fake player", () => {
 
         // THEN
         expect(currentTime).toBeCalledWith(1);
-        expect(currentTime).toBeCalledWith(1.2);
+        expect(currentTime).toBeCalledWith(1.199);
         expect(play).toBeCalled();
         expect(pause).toBeCalled();
         expect(resetPlayerTimeChange).toBeCalled();
