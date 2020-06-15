@@ -4,6 +4,11 @@ import { mount, shallow } from "enzyme";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import SyncCuesButton from "./SyncCuesButton";
+import { setSaveTrack } from "../cues/saveSlices";
+import { AnyAction } from "redux";
+import { updateEditingTrack } from "../trackSlices";
+import { Track } from "../model";
+import _ from "lodash";
 
 let testingStore = createTestingStore();
 
@@ -28,6 +33,26 @@ describe("SyncCuesButton", () => {
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+    it("saves track on button click", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        // @ts-ignore
+        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SyncCuesButton />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-sync-cues-button").simulate("click");
+
+        // THEN
+        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
 });
