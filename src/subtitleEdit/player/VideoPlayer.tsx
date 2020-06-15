@@ -10,6 +10,7 @@ import { getTimeString } from "../cues/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
 
 const SECOND = 1000;
+const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
@@ -43,6 +44,7 @@ const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, ind
     if (videoJsTrack.cues) {
         const addedCue = videoJsTrack.cues[index] as VTTCue;
         copyNonConstructorProperties(addedCue, vttCue);
+        addedCue.endTime -= ONE_MILLISECOND;
     }
 };
 
@@ -143,14 +145,14 @@ export default class VideoPlayer extends React.Component<Props> {
             && prevProps.playSection !== this.props.playSection) {
             const startTime = this.props.playSection.startTime;
             const endTime = this.props.playSection.endTime;
-            this.player.currentTime(startTime);
+            this.player.currentTime(startTime );
             this.player.play();
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
                 setTimeout(() => {
                     this.player.pause();
-                    this.player.currentTime(endTime);
+                    this.player.currentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
             }
             this.props.resetPlayerTimeChange();
