@@ -7,13 +7,24 @@ import { Provider } from "react-redux";
 import { updateEditingTrack } from "../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Track } from "../model";
-import { callSaveTrack, setAutoSaveSuccess } from "../cues/saveSlices";
+import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "../cues/saveSlices";
+import _ from "lodash";
 
 let testingStore = createTestingStore();
 
 describe("CaptionOverlapToggle", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+    });
+    const saveTrack = jest.fn();
+    beforeAll(() => {
+        // @ts-ignore
+        jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
+    });
+    beforeEach(() => {
+        // GIVEN
+        saveTrack.mockReset();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
     });
    it("renders", () => {
        // GIVEN
