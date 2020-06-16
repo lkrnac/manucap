@@ -54,5 +54,20 @@ describe("SyncCuesButton", () => {
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
     });
+    it("unsets the track id on button click", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack({ id: "123456" } as Track) as {} as AnyAction);
 
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SyncCuesButton />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-sync-cues-button").simulate("click");
+
+        // THEN
+        expect(testingStore.getState().editingTrack.id).not.toBeDefined();
+    });
 });
