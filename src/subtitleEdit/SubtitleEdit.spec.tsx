@@ -731,7 +731,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         testingStore.dispatch(lastCueChangeSlice.actions
             .recordCueChange({ changeType: "EDIT", index: 0,
-                vttCue: new VTTCue(0, 3, "") }));
+                vttCue: new VTTCue(0, 3, "blabla") }));
 
         const { container } = render(
             <Provider store={testingStore}>
@@ -756,6 +756,10 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().editingTrack).toBeNull();
         expect(testingStore.getState().cues).toEqual([]);
         expect(testingStore.getState().sourceCues).toEqual([]);
+        expect(testingStore.getState().saveTrack).toBeNull();
+        expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
+        expect(testingStore.getState().saveStatus).toEqual("");
+        expect(testingStore.getState().pendingSave).toBeFalsy();
         expect(testingStore.getState().lastCueChange).toEqual(null);
     });
 
