@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateCues, updateSourceCues } from "./cues/cueSlices";
+import { lastCueChangeSlice, updateCues, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -17,7 +17,7 @@ import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice"
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import _ from "lodash";
-import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "./cues/saveSlices";
+import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
 import { render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
@@ -729,14 +729,9 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
-        const saveTrack = jest.fn();
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-        // to set pending save changes, call save track again
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        testingStore.dispatch(lastCueChangeSlice.actions
+            .recordCueChange({ changeType: "EDIT", index: 0,
+                vttCue: new VTTCue(0, 3, "blabla") }));
 
         const { container } = render(
             <Provider store={testingStore}>
@@ -765,6 +760,7 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
         expect(testingStore.getState().saveStatus).toEqual("");
         expect(testingStore.getState().pendingSave).toBeFalsy();
+        expect(testingStore.getState().lastCueChange).toEqual(null);
     });
 
     it("sets saveTrack when mounted", () => {
