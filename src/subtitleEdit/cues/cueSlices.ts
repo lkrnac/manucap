@@ -47,8 +47,10 @@ interface CheckOptions extends SubtitleSpecificationAction {
     index?: number;
 }
 
-const areCuesEqual = (x: VTTCue, y: VTTCue): boolean => {
-    return JSON.stringify(constructCueValuesArray(x)) === JSON.stringify(constructCueValuesArray(y));
+const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
+    return textOnly ?
+        x.text !== y.text :
+        JSON.stringify(constructCueValuesArray(x)) !== JSON.stringify(constructCueValuesArray(y));
 };
 
 const createAndAddCue = (previousCue: CueDto,
@@ -223,7 +225,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }
             applyCharacterLimitation(newVttCue, originalCue, subtitleSpecifications);
 
-            if (!areCuesEqual(vttCue, newVttCue)) {
+            if (shouldBlink(vttCue, newVttCue, textOnly)) {
                 dispatch(validationErrorSlice.actions.setValidationError(true));
             }
 
