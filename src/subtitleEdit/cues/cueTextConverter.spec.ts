@@ -42,6 +42,7 @@ describe("cueTextConverter", () => {
             ["<i><b>te<br></b>xt</i>", "<i><b>te</b>xt</i>"],
             ["<i>te<br>\nxt</i>", "<i>te\nxt</i>"],
             ["<i><b>te\n<br></b>xt</i>", "<i><b>te\n</b>xt</i>"],
+            ["<i><b>&nbsp;&nbsp;&nbsp;&nbsp;te\n<br></b>&nbsp;&nbsp;xt</i>", "<i><b>    te\n</b>  xt</i>"],
         ]).it("converts html '%s' to vtt", (vtt: string, expectedHtml: string) => {
             // WHEN
             const actualHtml = convertHtmlToVtt(vtt);

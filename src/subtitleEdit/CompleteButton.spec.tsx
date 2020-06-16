@@ -8,7 +8,8 @@ import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Language, Task, Track } from "./model";
 import { updateCues } from "./cues/cueSlices";
-import { callSaveTrack, setAutoSaveSuccess } from "./cues/saveSlices";
+import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "./cues/saveSlices";
+import _ from "lodash";
 
 const testingTrack = {
     type: "CAPTION",
@@ -26,6 +27,16 @@ let testingStore = createTestingStore();
 describe("CompleteButton", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+    });
+    const saveTrack = jest.fn();
+    beforeAll(() => {
+        // @ts-ignore
+        jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
+    });
+    beforeEach(() => {
+        // GIVEN
+        saveTrack.mockReset();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
     });
     it("renders", () => {
         // GIVEN

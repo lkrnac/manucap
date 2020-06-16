@@ -13,6 +13,11 @@ const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
+    const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
+    if (vttCue.line !== "auto" && trackFontSizePercent) {
+        vttCue.line = vttCue.line / trackFontSizePercent;
+    }
+};
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
         videoPlayer.playPause();
@@ -37,6 +42,7 @@ export interface Props {
     playSection?: PlayVideoAction;
     resetPlayerTimeChange?: () => void;
     lastCueChange: CueChange | null;
+    trackFontSizePercent?: number;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
@@ -59,17 +65,19 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void 
         });
 };
 
-const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue): void => {
+const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
     if (lastCueChange.changeType === "EDIT" && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         // avoid showing 2 captions lines at the same time
         vttCue.endTime = lastCueChange.vttCue.endTime - ONE_MILLISECOND;
         copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
+        customizeLinePosition(vttCue, trackFontSizePercent);
     }
 };
 
-const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
+const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
+                              trackFontSizePercent?: number): void => {
     if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
@@ -78,6 +86,7 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack)
         }
         videoJsTrack.addCue(lastCueChange.vttCue);
         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
+        customizeLinePosition(lastCueChange.vttCue, trackFontSizePercent);
     }
 };
 
@@ -133,8 +142,10 @@ export default class VideoPlayer extends React.Component<Props> {
         const lastCueChange = this.props.lastCueChange;
         const videoJsTrack = (this.player.textTracks())[0];
         if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
-            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue);
-            handleCueAddIfNeeded(lastCueChange, videoJsTrack);
+            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
+                prevProps.trackFontSizePercent);
+            handleCueAddIfNeeded(lastCueChange, videoJsTrack,
+                prevProps.trackFontSizePercent);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }

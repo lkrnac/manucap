@@ -185,7 +185,13 @@ $background-error-lighter: rgb(255, 245, 245);
 }
 
 .vjs-text-track-display div {
+    //TODO Make font size paramterized to make it work dynamically
+    // with VideoPlayer:trackFontSizePercent property change
     font-size: 1.25em;
+}
+
+.vjs-texttrack-settings {
+    display: none;
 }
 
 // ------ Alert --------
