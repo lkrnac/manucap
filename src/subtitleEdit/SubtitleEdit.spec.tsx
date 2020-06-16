@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { updateCues, updateSourceCues } from "./cues/cueSlices";
+import { lastCueChangeSlice, updateCues, updateSourceCues } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -73,7 +73,7 @@ describe("SubtitleEdit", () => {
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
@@ -200,7 +200,7 @@ describe("SubtitleEdit", () => {
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
@@ -318,7 +318,7 @@ describe("SubtitleEdit", () => {
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
                         </div>
@@ -373,7 +373,7 @@ describe("SubtitleEdit", () => {
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>
                                 Translation from <span>
@@ -729,6 +729,9 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        testingStore.dispatch(lastCueChangeSlice.actions
+            .recordCueChange({ changeType: "EDIT", index: 0,
+                vttCue: new VTTCue(0, 3, "blabla") }));
 
         const { container } = render(
             <Provider store={testingStore}>
@@ -753,6 +756,11 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().editingTrack).toBeNull();
         expect(testingStore.getState().cues).toEqual([]);
         expect(testingStore.getState().sourceCues).toEqual([]);
+        expect(testingStore.getState().saveTrack).toBeNull();
+        expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
+        expect(testingStore.getState().saveStatus).toEqual("");
+        expect(testingStore.getState().pendingSave).toBeFalsy();
+        expect(testingStore.getState().lastCueChange).toEqual(null);
     });
 
     it("sets saveTrack when mounted", () => {

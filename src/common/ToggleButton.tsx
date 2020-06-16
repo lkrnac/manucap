@@ -10,6 +10,7 @@ interface Props {
     className?: string;
     onClick?: () => void;
     toggled?: boolean;
+    disabled?: boolean;
     render: (toggle: boolean) => ReactElement;
 }
 
@@ -26,6 +27,7 @@ const ToggleButton: FunctionComponent<Props> = (props: PropsWithChildren<Props>)
                 setToggle(!toggle);
                 props.onClick && props.onClick();
             }}
+            disabled={props.disabled}
         >
             { props.render(toggle) }
         </button>
