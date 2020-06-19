@@ -256,7 +256,7 @@ describe("VideoPlayer tested with fake player", () => {
         jest.runAllTimers();
 
         // THEN
-        expect(currentTime).toBeCalledWith(1);
+        expect(currentTime).toBeCalledWith(1.001);
         expect(currentTime).toBeCalledWith(1.199);
         expect(play).toBeCalled();
         expect(pause).toBeCalled();

@@ -8,7 +8,6 @@ import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
-
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -49,8 +48,6 @@ const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, ind
     videoJsTrack.addCue(vttCue);
     if (videoJsTrack.cues) {
         const addedCue = videoJsTrack.cues[index] as VTTCue;
-        // avoid showing 2 captions lines at the same time
-        addedCue.endTime = addedCue.endTime - ONE_MILLISECOND;
         copyNonConstructorProperties(addedCue, vttCue);
     }
 };
@@ -69,8 +66,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFo
     if (lastCueChange.changeType === "EDIT" && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
-        // avoid showing 2 captions lines at the same time
-        vttCue.endTime = lastCueChange.vttCue.endTime - ONE_MILLISECOND;
+        vttCue.endTime = lastCueChange.vttCue.endTime;
         copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
         customizeLinePosition(vttCue, trackFontSizePercent);
     }
@@ -156,7 +152,8 @@ export default class VideoPlayer extends React.Component<Props> {
             && this.props.resetPlayerTimeChange
             && this.props.playSection.startTime >= 0
             && prevProps.playSection !== this.props.playSection) {
-            const startTime = this.props.playSection.startTime;
+            // avoid showing 2 captions lines at the same time
+            const startTime = this.props.playSection.startTime + ONE_MILLISECOND;
             const endTime = this.props.playSection.endTime;
             this.player.currentTime(startTime);
             this.player.play();

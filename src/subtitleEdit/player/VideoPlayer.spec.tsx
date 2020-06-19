@@ -187,12 +187,7 @@ describe("VideoPlayer", () => {
         dispatchEventForTrack(component.player, textTracks[0]);
 
         // THEN
-        expect(copyNonConstructorProperties).toBeCalledWith(
-            expect.objectContaining({
-                startTime: 0,
-                endTime: 0.999,
-                text: "Caption Line 1"
-            }), vttCue);
+        expect(copyNonConstructorProperties).toBeCalledWith(new VTTCue(0, 1, "Caption Line 1"), vttCue);
     });
 
     it("should toggle play/pause with key shortcut", () => {
