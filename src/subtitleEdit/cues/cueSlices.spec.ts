@@ -9,6 +9,7 @@ import {
     applyShiftTime,
     deleteCue,
     setValidationError,
+    syncCues,
     updateCueCategory,
     updateCues,
     updateEditingCueIndex,
@@ -1279,6 +1280,41 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().validationError).toEqual(true);
+        });
+    });
+
+    describe("syncCues", () => {
+        it("doesn't sync timecodes if there are no sourceCues", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(syncCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+        });
+
+        it("syncs timecodes between sourceCues and cues", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const sourceTestingCues = [
+                { vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceTestingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(syncCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
         });
     });
 

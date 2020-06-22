@@ -139,6 +139,17 @@ export const cuesSlice = createSlice({
                     );
                 }
             }
+        },
+        syncCues: (state, action: PayloadAction<CuesAction>): CueDto[] => {
+            const sourceCues = action.payload.cues;
+            return state.map((cue: CueDto, index: number) => {
+                const vttCue = cue.vttCue;
+                const startTime = sourceCues[index].vttCue.startTime;
+                const endTime = sourceCues[index].vttCue.endTime;
+                const newCue = new VTTCue(startTime, endTime, vttCue.text);
+                copyNonConstructorProperties(newCue, vttCue);
+                return ({ ...cue, vttCue: newCue } as CueDto);
+            });
         }
     },
     extraReducers: {
@@ -310,4 +321,12 @@ export const applyShiftTime = (shiftTime: number): AppThunk =>
 export const setValidationError = (error: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean>>): void => {
         dispatch(validationErrorSlice.actions.setValidationError(error));
+    };
+
+export const syncCues = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CuesAction>>, getState): void => {
+        const cues = getState().sourceCues;
+        if (cues && cues.length > 0) {
+            dispatch(cuesSlice.actions.syncCues({ cues }));
+        }
     };

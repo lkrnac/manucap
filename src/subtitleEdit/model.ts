@@ -31,6 +31,7 @@ export interface Track {
     readonly sourceLanguage?: Language;
     readonly progress: number;
     overlapEnabled?: boolean;
+    id?: string;
 }
 
 export interface Task {
