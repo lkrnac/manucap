@@ -8,8 +8,8 @@ import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
-
 const SECOND = 1000;
+const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
     const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
@@ -152,7 +152,8 @@ export default class VideoPlayer extends React.Component<Props> {
             && this.props.resetPlayerTimeChange
             && this.props.playSection.startTime >= 0
             && prevProps.playSection !== this.props.playSection) {
-            const startTime = this.props.playSection.startTime;
+            // avoid showing 2 captions lines at the same time
+            const startTime = this.props.playSection.startTime + ONE_MILLISECOND;
             const endTime = this.props.playSection.endTime;
             this.player.currentTime(startTime);
             this.player.play();
@@ -161,7 +162,8 @@ export default class VideoPlayer extends React.Component<Props> {
                 const waitTime = ((endTime - startTime) * 1000) + 100;
                 setTimeout(() => {
                     this.player.pause();
-                    this.player.currentTime(endTime);
+                    // avoid showing 2 captions lines at the same time
+                    this.player.currentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
             }
             this.props.resetPlayerTimeChange();
