@@ -82,7 +82,7 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
         }
         videoJsTrack.addCue(lastCueChange.vttCue);
         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
-        customizeLinePosition(lastCueChange.vttCue, trackFontSizePercent);
+        customizeLinePosition(videoJsTrack.cues[videoJsTrack.cues.length - 1] as VTTCue, trackFontSizePercent);
     }
 };
 
