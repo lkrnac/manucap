@@ -1,5 +1,11 @@
 import Immutable from "immutable";
 
+// https://github.com/mozilla/vtt.js/issues/364
+const isSafari = (): boolean => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    return userAgent.indexOf("safari") !== -1;
+};
+
 export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): void => {
     newCue.position = oldCue.position;
     newCue.align = oldCue.align;
@@ -14,10 +20,11 @@ export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): vo
     newCue.lineAlign = oldCue.lineAlign ? oldCue.lineAlign : "center";
     newCue.positionAlign = oldCue.positionAlign ? oldCue.positionAlign : "auto";
 
+    newCue.line = (isSafari() && oldCue.line === "auto") ? -1 : oldCue.line;
+
     newCue.region = oldCue.region;
     newCue.snapToLines = oldCue.snapToLines === undefined ? true : oldCue.snapToLines;
     newCue.size = oldCue.size ? oldCue.size : 100;
-    newCue.line = oldCue.line;
     newCue.vertical = oldCue.vertical ? oldCue.vertical : "";
     newCue.id = oldCue.id ? oldCue.id : "";
     newCue.pauseOnExit = oldCue.pauseOnExit;
@@ -114,7 +121,8 @@ const positionStylesArray = [
     [Position.Row4Column5, { line: 12, align: "end", positionAlign: "center", position: 49 }],
     [Position.Row5Column1, { line: 15, align: "start", positionAlign: "center", position: 51 }],
     [Position.Row5Column2, { line: 15, align: "start", positionAlign: "center", position: 65 }],
-    [Position.Row5Column3, { line: "auto", align: "center", positionAlign: "auto", position: "auto" }],
+    [Position.Row5Column3, { line: isSafari() ? "-1" : "auto", align: "center", positionAlign: "auto",
+        position: "auto" }],
     [Position.Row5Column4, { line: 15, align: "end", positionAlign: "center", position: 35 }],
     [Position.Row5Column5, { line: 15, align: "end", positionAlign: "center", position: 49 }],
 ];
