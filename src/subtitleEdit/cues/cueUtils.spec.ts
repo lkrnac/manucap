@@ -202,6 +202,10 @@ describe("cueUtils", () => {
     });
 
     describe("findPositionIcon", () => {
+        beforeEach(() => {
+            userAgentGetter = jest.spyOn(window.navigator, "userAgent", "get");
+        });
+
         it("finds icon for Row2Column2 position", () => {
             // GIVEN
             const vttCue = new VTTCue(0, 1, "some text");
@@ -236,6 +240,24 @@ describe("cueUtils", () => {
             // GIVEN
             const vttCue = new VTTCue(0, 1, "some text");
             vttCue.line = "auto";
+            vttCue.align = "center";
+            vttCue.positionAlign = "auto";
+            vttCue.position = "auto";
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(vttCue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↓↓");
+        });
+
+        it("finds icon for default position (safari)", () => {
+            // GIVEN
+            // @ts-ignore
+            userAgentGetter.mockReturnValue("Safari 13.1.1");
+
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = -1;
             vttCue.align = "center";
             vttCue.positionAlign = "auto";
             vttCue.position = "auto";
