@@ -236,8 +236,11 @@ describe("cueUtils", () => {
             expect(actualPositionIcon.iconText).toEqual("↓");
         });
 
-        it("finds icon for default position", () => {
+        it("finds icon for default position (non-safari)", () => {
             // GIVEN
+            // @ts-ignore
+            userAgentGetter.mockReturnValue("Mozilla/5.0 (Macintosh; Intel) Chrome/83.0.4103.116 Safari/537.36");
+
             const vttCue = new VTTCue(0, 1, "some text");
             vttCue.line = "auto";
             vttCue.align = "center";

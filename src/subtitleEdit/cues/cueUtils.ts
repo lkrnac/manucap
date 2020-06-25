@@ -3,7 +3,7 @@ import Immutable from "immutable";
 // https://github.com/mozilla/vtt.js/issues/364
 const isSafari = (): boolean => {
     const userAgent = navigator.userAgent.toLowerCase();
-    return userAgent.indexOf("safari") !== -1;
+    return userAgent.indexOf("safari") !== -1 && userAgent.indexOf("chrome") === -1;
 };
 
 export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): void => {
