@@ -10,8 +10,15 @@ import
 } from "./cueUtils";
 import each from "jest-each";
 
+// @ts-ignore
+let userAgentGetter;
+
 describe("cueUtils", () => {
     describe("copyNonConstructorProperties", () => {
+        beforeEach(() => {
+            userAgentGetter = jest.spyOn(window.navigator, "userAgent", "get");
+        });
+
         it("copies non-constructor properties from old cue to new one", () => {
             // GIVEN
             const newVttCue = new VTTCue(0, 1, "new text");
@@ -80,6 +87,22 @@ describe("cueUtils", () => {
             expect(newVttCue.pauseOnExit).toEqual(false);
             expect(newVttCue.positionAlign).toEqual("auto");
             expect(newVttCue.lineAlign).toEqual("start");
+        });
+
+        it("copies non-constructor properties from old cue to new one (safari)", () => {
+            // GIVEN
+            // @ts-ignore
+            userAgentGetter.mockReturnValue("Safari 13.1.1");
+
+            const newVttCue = new VTTCue(0, 1, "new text");
+            const oldVttCue = new VTTCue(1, 2, "old text");
+            oldVttCue.line = "auto";
+
+            // WHEN
+            copyNonConstructorProperties(newVttCue, oldVttCue);
+
+            // THEN
+            expect(newVttCue.line).toEqual(-1);
         });
     });
 
