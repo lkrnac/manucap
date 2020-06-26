@@ -151,7 +151,7 @@ describe("AddCueLineButton", () => {
         // GIVEN
         const testingCues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
-            { vttCue: new VTTCue(1.4, 2, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
+            { vttCue: new VTTCue(1.09, 2, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
         ] as CueDto[];
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
