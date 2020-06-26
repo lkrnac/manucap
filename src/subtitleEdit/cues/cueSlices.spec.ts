@@ -101,7 +101,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
-                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.9);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.999);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().validationError).toEqual(true);
@@ -117,7 +117,7 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.1);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.001);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().validationError).toEqual(true);
             });
