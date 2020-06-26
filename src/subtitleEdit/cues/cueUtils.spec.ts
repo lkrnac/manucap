@@ -10,8 +10,15 @@ import
 } from "./cueUtils";
 import each from "jest-each";
 
+// @ts-ignore
+let userAgentGetter;
+
 describe("cueUtils", () => {
     describe("copyNonConstructorProperties", () => {
+        beforeEach(() => {
+            userAgentGetter = jest.spyOn(window.navigator, "userAgent", "get");
+        });
+
         it("copies non-constructor properties from old cue to new one", () => {
             // GIVEN
             const newVttCue = new VTTCue(0, 1, "new text");
@@ -80,6 +87,22 @@ describe("cueUtils", () => {
             expect(newVttCue.pauseOnExit).toEqual(false);
             expect(newVttCue.positionAlign).toEqual("auto");
             expect(newVttCue.lineAlign).toEqual("start");
+        });
+
+        it("copies non-constructor properties from old cue to new one (safari)", () => {
+            // GIVEN
+            // @ts-ignore
+            userAgentGetter.mockReturnValue("Safari 13.1.1");
+
+            const newVttCue = new VTTCue(0, 1, "new text");
+            const oldVttCue = new VTTCue(1, 2, "old text");
+            oldVttCue.line = "auto";
+
+            // WHEN
+            copyNonConstructorProperties(newVttCue, oldVttCue);
+
+            // THEN
+            expect(newVttCue.line).toEqual(-1);
         });
     });
 
@@ -179,6 +202,10 @@ describe("cueUtils", () => {
     });
 
     describe("findPositionIcon", () => {
+        beforeEach(() => {
+            userAgentGetter = jest.spyOn(window.navigator, "userAgent", "get");
+        });
+
         it("finds icon for Row2Column2 position", () => {
             // GIVEN
             const vttCue = new VTTCue(0, 1, "some text");
@@ -209,10 +236,31 @@ describe("cueUtils", () => {
             expect(actualPositionIcon.iconText).toEqual("↓");
         });
 
-        it("finds icon for default position", () => {
+        it("finds icon for default position (non-safari)", () => {
             // GIVEN
+            // @ts-ignore
+            userAgentGetter.mockReturnValue("Mozilla/5.0 (Macintosh; Intel) Chrome/83.0.4103.116 Safari/537.36");
+
             const vttCue = new VTTCue(0, 1, "some text");
             vttCue.line = "auto";
+            vttCue.align = "center";
+            vttCue.positionAlign = "auto";
+            vttCue.position = "auto";
+
+            // WHEN
+            const actualPositionIcon = findPositionIcon(vttCue);
+
+            // THEN
+            expect(actualPositionIcon.iconText).toEqual("↓↓");
+        });
+
+        it("finds icon for default position (safari)", () => {
+            // GIVEN
+            // @ts-ignore
+            userAgentGetter.mockReturnValue("Safari 13.1.1");
+
+            const vttCue = new VTTCue(0, 1, "some text");
+            vttCue.line = -1;
             vttCue.align = "center";
             vttCue.positionAlign = "auto";
             vttCue.position = "auto";
