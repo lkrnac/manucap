@@ -72,8 +72,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFo
     }
 };
 
-const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
-                              trackFontSizePercent?: number): void => {
+const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack): void => {
     if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
@@ -82,7 +81,6 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
         }
         videoJsTrack.addCue(lastCueChange.vttCue);
         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
-        customizeLinePosition(videoJsTrack.cues[videoJsTrack.cues.length - 1] as VTTCue, trackFontSizePercent);
     }
 };
 
@@ -140,8 +138,7 @@ export default class VideoPlayer extends React.Component<Props> {
         if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
             handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
                 prevProps.trackFontSizePercent);
-            handleCueAddIfNeeded(lastCueChange, videoJsTrack,
-                prevProps.trackFontSizePercent);
+            handleCueAddIfNeeded(lastCueChange, videoJsTrack);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
