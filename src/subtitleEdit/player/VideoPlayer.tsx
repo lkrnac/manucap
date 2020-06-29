@@ -106,6 +106,9 @@ export default class VideoPlayer extends React.Component<Props> {
             fluid: true,
             userActions: {
                 hotkeys: false
+            },
+            html5: {
+                nativeTextTracks: false
             }
         } as VideoJsPlayerOptions;
 
