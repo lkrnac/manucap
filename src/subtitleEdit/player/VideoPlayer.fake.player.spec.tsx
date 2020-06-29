@@ -781,7 +781,7 @@ describe("VideoPlayer tested with fake player", () => {
     it("customize track position depending on font percent value passed", () => {
         // GIVEN
         const fontPercent = 1.25;
-        const testingLine = 15;
+        const testingLine = 12;
         const vttCue = new VTTCue(0, 1, "Caption Line 1");
         const captionCues = [vttCue];
         const textTracks = [
@@ -821,7 +821,7 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // THEN
-        expect(textTracks[0].cues[0].line).toEqual((testingLine/fontPercent));
+        expect(textTracks[0].cues[0].line).toEqual(10);
     });
 
     it("does not update lastCueChange cue line value when customizing position", () => {
