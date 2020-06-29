@@ -8,7 +8,7 @@ describe("cueVerifications", () => {
             const timeGap = getTimeGapLimits(null);
 
             // THEN
-            expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.minGap).toEqual(0.001);
             expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
 
@@ -38,7 +38,7 @@ describe("cueVerifications", () => {
             const timeGap = getTimeGapLimits(testingSubtitleSpecification);
 
             // THEN
-            expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.minGap).toEqual(0.001);
             expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
 
@@ -53,7 +53,7 @@ describe("cueVerifications", () => {
             const timeGap = getTimeGapLimits(testingSubtitleSpecification);
 
             // THEN
-            expect(timeGap.minGap).toEqual(0.5);
+            expect(timeGap.minGap).toEqual(0.001);
             expect(timeGap.maxGap).toEqual(7.5);
         });
 

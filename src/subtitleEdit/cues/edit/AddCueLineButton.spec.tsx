@@ -147,29 +147,7 @@ describe("AddCueLineButton", () => {
         expect(testingStore.getState().cues.length).toEqual(2);
     });
 
-    it("Does not add cue if clicking button creates less than 0.5 gap", () => {
-        // GIVEN
-        const testingCues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
-            { vttCue: new VTTCue(1.4, 2, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
-        ] as CueDto[];
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
-
-
-        // THEN
-        expect(testingStore.getState().cues).toHaveLength(2);
-    });
-
-    it("Add cue if clicking button if there is greater or equal 0.5 gap", () => {
+    it("Add cue if clicking button if there is greater or equal 1 milli gap", () => {
         // GIVEN
         const testingCues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
