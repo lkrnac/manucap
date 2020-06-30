@@ -12,7 +12,7 @@ const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
-    const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
+const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
     if (vttCue.line !== "auto" && trackFontSizePercent) {
         vttCue.line = Math.round(vttCue.line / trackFontSizePercent);
     }
@@ -44,21 +44,25 @@ export interface Props {
     trackFontSizePercent?: number;
 }
 
-const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number): void => {
+const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
+                                                             trackFontSizePercent?: number): void => {
     videoJsTrack.addCue(vttCue);
     if (videoJsTrack.cues) {
         const addedCue = videoJsTrack.cues[index] as VTTCue;
         copyNonConstructorProperties(addedCue, vttCue);
+        customizeLinePosition(addedCue, trackFontSizePercent);
     }
 };
 
-const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void => {
+const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack, trackFontSizePercent?: number): void => {
     const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
     const vtmsTrack = props.tracks.filter(matchTracks)[0] as Track;
     props.languageCuesArray
         .filter((languageCues: LanguageCues) => languageCues.languageId === vtmsTrack.language.id)
         .forEach((languageCues: LanguageCues) => {
-            languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue).forEach(updateCueAndCopyStyles(videoJsTrack));
+            languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue)
+                .forEach((cue, index) =>
+                    updateCueAndCopyStyles(videoJsTrack)(cue, index, trackFontSizePercent));
         });
 };
 
@@ -110,7 +114,7 @@ export default class VideoPlayer extends React.Component<Props> {
         this.player = videojs(this.videoNode, options) as VideoJsPlayer;
         this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
-            updateCuesForVideoJsTrack(this.props, videoJsTrack);
+            updateCuesForVideoJsTrack(this.props, videoJsTrack, this.props.trackFontSizePercent);
         });
         this.player.on("timeupdate", (): void => {
             if (this.props.onTimeChange) {
