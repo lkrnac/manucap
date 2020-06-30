@@ -5,7 +5,7 @@ import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../shortcutConstants";
 import React, { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
-import { copyNonConstructorProperties } from "../cues/cueUtils";
+import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
 const SECOND = 1000;
@@ -108,7 +108,7 @@ export default class VideoPlayer extends React.Component<Props> {
                 hotkeys: false
             },
             html5: {
-                nativeTextTracks: false
+                nativeTextTracks: !isSafari()
             }
         } as VideoJsPlayerOptions;
 
