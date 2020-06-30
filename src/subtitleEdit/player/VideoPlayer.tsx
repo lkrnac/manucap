@@ -12,11 +12,12 @@ const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
-    const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
+const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
     if (vttCue.line !== "auto" && trackFontSizePercent) {
         vttCue.line = vttCue.line / trackFontSizePercent;
     }
 };
+
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
         videoPlayer.playPause();
