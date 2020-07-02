@@ -732,96 +732,148 @@ describe("VideoPlayer tested with fake player", () => {
         expect(triggerMouseTrapActionSpy).toBeCalledWith(handleKeyDownMock);
     });
 
-    it("does not customize track position if passed an auto position", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "Caption Line 1");
-        const testingLine = "auto";
-        const captionCues = [vttCue];
-        const textTracks = [
-            {
-                language: "en-US",
-                addCue: jest.fn(),
-                removeCue: jest.fn(),
-                length: 1,
-                cues: captionCues,
-                dispatchEvent: jest.fn()
-            },
-        ];
-        textTracks["addEventListener"] = jest.fn();
+    describe("customize track position", () => {
+        it("does not customize track position if passed an auto position", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "Caption Line 1");
+            const testingLine = "auto";
+            const captionCues = [vttCue];
+            const textTracks = [
+                {
+                    language: "en-US",
+                    addCue: jest.fn(),
+                    removeCue: jest.fn(),
+                    length: 1,
+                    cues: captionCues,
+                    dispatchEvent: jest.fn()
+                },
+            ];
+            textTracks["addEventListener"] = jest.fn();
 
-        const playerMock = {
-            textTracks: (): FakeTextTrack[] => textTracks,
-            on: jest.fn()
-        };
+            const playerMock = {
+                textTracks: (): FakeTextTrack[] => textTracks,
+                on: jest.fn()
+            };
 
-        // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => playerMock);
-        // @ts-ignore - we are mocking the module
-        const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-                trackFontSizePercent={0.5}
-            />
-        );
+            // @ts-ignore - we are mocking the module
+            videojs.mockImplementationOnce(() => playerMock);
+            // @ts-ignore - we are mocking the module
+            const actualNode = mount(
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                    trackFontSizePercent={0.5}
+                />
+            );
 
-        // WHEN
-        vttCue.line = testingLine;
-        actualNode.setProps(
-            { lastCueChange: { changeType: "EDIT", index: 0, vttCue: vttCue }}
-        );
+            // WHEN
+            vttCue.line = testingLine;
+            actualNode.setProps(
+                { lastCueChange: { changeType: "EDIT", index: 0, vttCue: vttCue }}
+            );
 
-        // THEN
-        expect(textTracks[0].cues[0].line).toEqual("auto");
-    });
+            // THEN
+            expect(textTracks[0].cues[0].line).toEqual("auto");
+        });
 
-    it("customize track position depending on font percent value passed", () => {
-        // GIVEN
-        const fontPercent = 1.25;
-        const testingLine = 15;
-        const vttCue = new VTTCue(0, 1, "Caption Line 1");
-        const captionCues = [vttCue];
-        const textTracks = [
-            {
-                language: "en-US",
-                addCue: jest.fn(),
-                removeCue: jest.fn(),
-                length: 1,
-                cues: captionCues,
-                dispatchEvent: jest.fn()
-            },
-        ];
-        textTracks["addEventListener"] = jest.fn();
+        it("customize track position depending on font percent value passed when editing cue", () => {
+            // GIVEN
+            const fontPercent = 1.25;
+            const vttCue = new VTTCue(0, 1, "Caption Line 1");
+            const captionCues = [vttCue];
+            const textTracks = [
+                {
+                    language: "en-US",
+                    addCue: jest.fn(),
+                    removeCue: jest.fn(),
+                    length: 1,
+                    cues: captionCues,
+                    dispatchEvent: jest.fn()
+                },
+            ];
+            textTracks["addEventListener"] = jest.fn();
 
-        const playerMock = {
-            textTracks: (): FakeTextTrack[] => textTracks,
-            on: jest.fn()
-        };
+            const playerMock = {
+                textTracks: (): FakeTextTrack[] => textTracks,
+                on: jest.fn()
+            };
 
-        // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-                trackFontSizePercent={fontPercent}
-            />
-        );
+            // @ts-ignore - we are mocking the module
+            videojs.mockImplementationOnce(() => playerMock);
+            const actualNode = mount(
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                    trackFontSizePercent={fontPercent}
+                />
+            );
 
-        // WHEN
-        vttCue.line = testingLine;
-        actualNode.setProps(
-            { lastCueChange: { changeType: "EDIT", index: 0, vttCue: vttCue }}
-        );
+            // WHEN
+            const editingCue = new VTTCue(1, 2, "");
+            editingCue.line = 12;
+            const lastCueChange = { changeType: "EDIT", index: 0, vttCue: editingCue };
+            actualNode.setProps({ lastCueChange: lastCueChange });
 
-        // THEN
-        expect(textTracks[0].cues[0].line).toEqual((testingLine/fontPercent));
+            // THEN
+            expect(textTracks[0].cues[0].line).toEqual(10);
+            expect(lastCueChange.vttCue.line).toEqual(12);
+        });
+
+        it("customize track position depending on font percent value passed when add cue", () => {
+            // GIVEN
+            const fontPercent = 1.25;
+            const vttCue = new VTTCue(0, 1, "Caption Line 1");
+            vttCue.line = 4;
+            const captionCues = [vttCue];
+            const textTracks = [
+                {
+                    language: "en-US",
+                    addCue: jest.fn(),
+                    removeCue: jest.fn(),
+                    length: 1,
+                    cues: captionCues,
+                    dispatchEvent: jest.fn()
+                },
+            ];
+            textTracks["addEventListener"] = jest.fn();
+
+            const playerMock = {
+                textTracks: (): FakeTextTrack[] => textTracks,
+                on: jest.fn()
+            };
+
+            // @ts-ignore - we are mocking the module
+            videojs.mockImplementationOnce(() => playerMock);
+            const actualNode = mount(
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                    trackFontSizePercent={fontPercent}
+                />
+            );
+
+            // WHEN
+            const addedCue = new VTTCue(1, 2, "");
+            const lastCueChange = { changeType: "ADD", index: 0, vttCue: addedCue };
+            addedCue.line = 12;
+            actualNode.setProps(
+                { lastCueChange: { changeType: "ADD", index: 0, vttCue: lastCueChange }}
+            );
+
+            // THEN
+            expect(textTracks[0].cues[0].line).toEqual(3);
+            expect(lastCueChange.vttCue.line).toEqual(12);
+        });
+
     });
 
 });
