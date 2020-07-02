@@ -303,4 +303,39 @@ describe("VideoPlayer", () => {
         // THEN
         sinon.assert.calledOnce(playPauseSpy);
     });
+
+    it("customizes cues positions on track load", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "Caption Line 1");
+        vttCue.line = 12;
+        const captionCues = [
+            { vttCue: vttCue, cueCategory: "DIALOGUE" },
+        ];
+        const languageCuesArray = [
+            { languageId: "en-CA", cues: captionCues },
+        ] as LanguageCues[];
+        const initialTestingTracks = [
+            { type: "CAPTION", language: { id: "en-CA" }, default: true },
+        ] as Track[];
+        const textTracks = [
+            { language: "en-CA", addCue: jest.fn(), cues: [vttCue]},
+        ];
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={initialTestingTracks}
+                languageCuesArray={languageCuesArray}
+                lastCueChange={null}
+                trackFontSizePercent={1.25}
+            />
+        );
+        const component = actualNode.instance() as VideoPlayer;
+
+        // WHEN
+        dispatchEventForTrack(component.player, textTracks[0]);
+
+        // THEN
+        expect(textTracks[0].cues[0].line).toEqual(10);
+    });
 });
