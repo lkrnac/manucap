@@ -111,11 +111,14 @@ export default class VideoPlayer extends React.Component<Props> {
             fluid: true,
             userActions: {
                 hotkeys: false
-            },
-            html5: {
-                nativeTextTracks: !isSafari()
             }
         } as VideoJsPlayerOptions;
+
+        if(isSafari()){
+            options.html5 = {
+                nativeTextTracks: false
+            };
+        }
 
         this.player = videojs(this.videoNode, options) as VideoJsPlayer;
         this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {

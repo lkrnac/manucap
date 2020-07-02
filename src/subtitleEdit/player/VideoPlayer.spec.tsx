@@ -85,7 +85,7 @@ describe("VideoPlayer", () => {
         const actualComponent = actualNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
-        expect(actualComponent.player.options_.html5.nativeTextTracks).toBeTruthy();
+        expect(actualComponent.player.options_.html5.nativeTextTracks).toBeUndefined();
         expect(actualComponent.player.options_.tracks).toEqual(expectedTextTrackOptions);
     });
 
