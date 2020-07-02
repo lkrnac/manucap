@@ -1,7 +1,7 @@
 import Immutable from "immutable";
 
 // https://github.com/mozilla/vtt.js/issues/364
-const isSafari = (): boolean => {
+export const isSafari = (): boolean => {
     const userAgent = navigator.userAgent.toLowerCase();
     return userAgent.indexOf("safari") !== -1 && userAgent.indexOf("chrome") === -1;
 };

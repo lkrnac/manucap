@@ -7,7 +7,7 @@ import videojs, { VideoJsPlayer } from "video.js";
 import { Character } from "../shortcutConstants";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
-import { copyNonConstructorProperties } from "../cues/cueUtils";
+import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import sinon from "sinon";
@@ -59,7 +59,7 @@ describe("VideoPlayer", () => {
             .toEqual(removeVideoPlayerDynamicValue(expectedVideoView.html()));
     });
 
-    it("initializes videoJs with correct options", () => {
+    it("initializes videoJs with correct options (non safari)", () => {
         // GIVEN
         const tracks = [
             { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
@@ -85,6 +85,40 @@ describe("VideoPlayer", () => {
         const actualComponent = actualNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
+        expect(actualComponent.player.options_.html5.nativeTextTracks).toBeTruthy();
+        expect(actualComponent.player.options_.tracks).toEqual(expectedTextTrackOptions);
+    });
+
+    it("initializes videoJs with correct options (safari)", () => {
+        // GIVEN
+        // @ts-ignore
+        isSafari.mockImplementationOnce(() => true);
+
+        const tracks = [
+            { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
+            { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
+        ];
+        const expectedTextTrackOptions = [
+            { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
+            { kind: "subtitles", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
+        ];
+
+        // WHEN
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={tracks}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+
+        // THEN
+        const actualComponent = actualNode.instance() as VideoPlayer;
+        expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
+        expect(actualComponent.player.options_.fluid).toBeTruthy();
+        expect(actualComponent.player.options_.html5.nativeTextTracks).toBeFalsy();
         expect(actualComponent.player.options_.tracks).toEqual(expectedTextTrackOptions);
     });
 

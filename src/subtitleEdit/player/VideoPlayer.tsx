@@ -5,7 +5,7 @@ import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../shortcutConstants";
 import React, { ReactElement } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
-import { copyNonConstructorProperties } from "../cues/cueUtils";
+import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
 const SECOND = 1000;
@@ -17,6 +17,7 @@ const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): v
         vttCue.line = Math.round(vttCue.line / trackFontSizePercent);
     }
 };
+
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
         videoPlayer.playPause();
@@ -110,6 +111,9 @@ export default class VideoPlayer extends React.Component<Props> {
             fluid: true,
             userActions: {
                 hotkeys: false
+            },
+            html5: {
+                nativeTextTracks: !isSafari()
             }
         } as VideoJsPlayerOptions;
 
