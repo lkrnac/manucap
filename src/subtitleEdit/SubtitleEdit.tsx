@@ -29,6 +29,7 @@ export interface SubtitleEditProps {
     onComplete: () => void;
     onExportFile: () => void;
     onImportFile: () => void;
+    spellCheckerDomain?: string;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -95,6 +96,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             <CuesList
                                 editingTrack={editingTrack}
                                 currentPlayerTime={currentPlayerTime}
+                                spellCheckerDomain={props.spellCheckerDomain}
                             />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button

@@ -16,6 +16,7 @@ import { changeScrollPosition } from "./cuesListScrollSlice";
 interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
+    spellCheckerDomain?: string;
 }
 
 const getScrollCueIndex = (
@@ -86,7 +87,11 @@ const CuesList = (props: Props): ReactElement => {
                 className="sbte-smart-scroll"
                 data={cuesWithSource}
                 row={CueLine}
-                rowProps={{ playerTime: props.currentPlayerTime, cuesLength: cues.length }}
+                rowProps={{
+                    playerTime: props.currentPlayerTime,
+                    cuesLength: cues.length,
+                    spellCheckerDomain: props.spellCheckerDomain
+                }}
                 rowHeight={rowHeight}
                 startAt={startAt}
                 onClick={(idx: number): void => {

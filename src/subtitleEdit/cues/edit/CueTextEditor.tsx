@@ -42,6 +42,7 @@ export interface CueTextEditorProps {
     index: number;
     vttCue: VTTCue;
     editUuid?: string;
+    spellCheckerDomain?: string;
 }
 
 const changeVttCueInRedux = (

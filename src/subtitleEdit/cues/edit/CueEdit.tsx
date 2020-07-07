@@ -23,6 +23,7 @@ interface Props {
     index: number;
     cue: CueDto;
     playerTime: number;
+    spellCheckerDomain?: string;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
@@ -143,6 +144,7 @@ const CueEdit = (props: Props): ReactElement => {
                     index={props.index}
                     vttCue={props.cue.vttCue}
                     editUuid={props.cue.editUuid}
+                    spellCheckerDomain={props.spellCheckerDomain}
                 />
             </div>
         </div>

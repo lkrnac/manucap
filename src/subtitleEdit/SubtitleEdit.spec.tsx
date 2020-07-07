@@ -21,6 +21,7 @@ import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
 import { render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
+import CueTextEditor from "./cues/edit/CueTextEditor";
 
 let testingStore = createTestingStore();
 
@@ -782,5 +783,34 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(testingStore.getState().saveTrack).toBeDefined();
+    });
+
+    it("passes down spell checker domain parameter", () => {
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                    spellCheckerDomain="some-domain"
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.setProps({}); // update+re-render component
+        actualNode.find("CueLine").at(0).simulate("click");
+
+        // THEN
+        expect(actualNode.find(CueTextEditor).props().spellCheckerDomain).toEqual("some-domain");
     });
 });
