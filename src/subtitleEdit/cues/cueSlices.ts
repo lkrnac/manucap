@@ -20,6 +20,7 @@ import {
     verifyCueDuration
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
+import { SpellCheck } from "./spellCheck/model";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -45,6 +46,10 @@ interface CuesAction extends SubtitleEditAction {
 interface CheckOptions extends SubtitleSpecificationAction {
     overlapEnabled?: boolean;
     index?: number;
+}
+
+export interface SpellCheckAction extends CueIndexAction {
+    spellCheck: SpellCheck;
 }
 
 const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
@@ -150,6 +155,12 @@ export const cuesSlice = createSlice({
                 copyNonConstructorProperties(newCue, vttCue);
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
+        },
+        addSpellCheck: (state, action: PayloadAction<SpellCheckAction>): void => {
+            state[action.payload.idx] = {
+                ...state[action.payload.idx],
+                spellCheck: action.payload.spellCheck
+            };
         }
     },
     extraReducers: {
