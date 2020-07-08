@@ -62,7 +62,7 @@ const changeVttCueInRedux = (
     }
 };
 
-const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 50);
+const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 200);
 
 const getCharacterCountPerLine = (text: string): number[] => {
     const lines = text.match(/[^\r\n]+/g) || [text];
