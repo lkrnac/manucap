@@ -31,10 +31,10 @@ const testingTrack = {
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
     {
-        vttCue: new VTTCue(2, 4, "Caption Line 2"),
+        vttCue: new VTTCue(4, 6, "Caption Line 3"),
         cueCategory: "ONSCREEN_TEXT",
-        corrupted: false,
         spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
     },
 ] as CueDto[];
@@ -74,16 +74,27 @@ describe("cueSlices", () => {
         it("preserves all other existing cue parameters", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const editUuid = testingStore.getState().cues[1].editUuid;
+            const editUuid = testingStore.getState().cues[2].editUuid;
 
             // WHEN
-            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
-            expect(testingStore.getState().cues[1].spellCheck)
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
+        });
+
+        it("marks cue as corrupted if there are spell check problems", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[2].editUuid;
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
         });
 
         it("doesn't update top level cue when editUuid is different", () => {
@@ -798,15 +809,15 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT") as {} as AnyAction);
+            testingStore.dispatch(updateCueCategory(2, "ONSCREEN_TEXT") as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
-            expect(testingStore.getState().cues[1].spellCheck)
+            expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6);
+            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
         });
 
@@ -853,15 +864,15 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue(2) as {} as AnyAction
+                addCue(3) as {} as AnyAction
             );
 
             // THEN
-            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
-            expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
-            expect(testingStore.getState().editingCueIndex).toEqual(2);
+            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(4, 6, "Caption Line 3"));
+            expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(6);
+            expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(9);
+            expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().editingCueIndex).toEqual(3);
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
@@ -929,7 +940,7 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue(2) as {} as AnyAction
+                addCue(3) as {} as AnyAction
             );
 
             // THEN
@@ -1055,7 +1066,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
-            expect(testingStore.getState().cues.length).toEqual(1);
+            expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(0);
@@ -1086,14 +1097,15 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(deleteCue(1) as {} as AnyAction);
+            testingStore.dispatch(deleteCue(2) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 2, "Caption Line 1"));
-            expect(testingStore.getState().cues.length).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
+            expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
-            expect(testingStore.getState().lastCueChange.index).toEqual(1);
+            expect(testingStore.getState().lastCueChange.index).toEqual(2);
         });
 
         it("removes editor states for certain index from Redux", () => {
@@ -1115,6 +1127,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
+            testingStore.dispatch(deleteCue(2) as {} as AnyAction);
             testingStore.dispatch(deleteCue(1) as {} as AnyAction);
             testingStore.dispatch(deleteCue(0) as {} as AnyAction);
 
@@ -1342,6 +1355,7 @@ describe("cueSlices", () => {
             const sourceTestingCues = [
                 { vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                { vttCue: new VTTCue(5, 7, "Caption Line 3"), cueCategory: "ONSCREEN_TEXT" },
             ] as CueDto[];
             testingStore.dispatch(updateSourceCues(sourceTestingCues) as {} as AnyAction);
 
