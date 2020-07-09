@@ -146,14 +146,14 @@ describe("SubtitleEdit", () => {
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                                 >
-                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin" /></span>
                                     <span hidden className="text-success">
                                         All changes saved to server
-                                        &nbsp;<i className="fa fa-check-circle"></i>
+                                        &nbsp;<i className="fa fa-check-circle" />
                                     </span>
                                     <span hidden className="text-danger">
                                         Error saving latest changes
-                                        &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                                        &nbsp;<i className="fa fa-exclamation-triangle" />
                                     </span>
                                 </div>
                                 <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
@@ -263,14 +263,14 @@ describe("SubtitleEdit", () => {
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                                 >
-                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
+                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin" /></span>
                                     <span hidden className="text-success">
                                         All changes saved to server
-                                        &nbsp;<i className="fa fa-check-circle"></i>
+                                        &nbsp;<i className="fa fa-check-circle" />
                                     </span>
                                     <span hidden className="text-danger">
                                         Error saving latest changes
-                                        &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                                        &nbsp;<i className="fa fa-exclamation-triangle" />
                                     </span>
                                 </div>
 
@@ -785,7 +785,7 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().saveTrack).toBeDefined();
     });
 
-    it("passes down spell checker domain parameter", () => {
+    it("passes down spell checker domain and language parameter to editor", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore} >
@@ -812,5 +812,6 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(actualNode.find(CueTextEditor).props().spellCheckerDomain).toEqual("some-domain");
+        expect(actualNode.find(CueTextEditor).props().language).toEqual("en-US");
     });
 });

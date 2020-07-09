@@ -1,13 +1,7 @@
 import { CueCategory, CueDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import {
-    addCue,
-    setValidationError,
-    updateCueCategory,
-    updateEditingCueIndex,
-    updateVttCue
-} from "../cueSlices";
+import { addCue, setValidationError, updateCueCategory, updateEditingCueIndex, updateVttCue } from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
@@ -24,6 +18,7 @@ interface Props {
     cue: CueDto;
     playerTime: number;
     spellCheckerDomain?: string;
+    language?: string;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
@@ -145,6 +140,7 @@ const CueEdit = (props: Props): ReactElement => {
                     vttCue={props.cue.vttCue}
                     editUuid={props.cue.editUuid}
                     spellCheckerDomain={props.spellCheckerDomain}
+                    language={props.language}
                 />
             </div>
         </div>

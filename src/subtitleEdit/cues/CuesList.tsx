@@ -17,6 +17,7 @@ interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
     spellCheckerDomain?: string;
+    language?: string;
 }
 
 const getScrollCueIndex = (
@@ -90,7 +91,8 @@ const CuesList = (props: Props): ReactElement => {
                 rowProps={{
                     playerTime: props.currentPlayerTime,
                     cuesLength: cues.length,
-                    spellCheckerDomain: props.spellCheckerDomain
+                    spellCheckerDomain: props.spellCheckerDomain,
+                    language: props.language
                 }}
                 rowHeight={rowHeight}
                 startAt={startAt}

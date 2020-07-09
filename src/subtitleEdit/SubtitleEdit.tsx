@@ -97,6 +97,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 editingTrack={editingTrack}
                                 currentPlayerTime={currentPlayerTime}
                                 spellCheckerDomain={props.spellCheckerDomain}
+                                language={editingTrack?.language.id}
                             />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
