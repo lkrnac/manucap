@@ -13,6 +13,7 @@ import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
 import { callSaveTrack } from "../saveSlices";
+import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
@@ -43,6 +44,7 @@ export interface CueTextEditorProps {
     vttCue: VTTCue;
     editUuid?: string;
     spellCheckerDomain?: string;
+    language?: string;
 }
 
 const changeVttCueInRedux = (
@@ -53,11 +55,13 @@ const changeVttCueInRedux = (
     setTextChanged: (textChanged: boolean) => void
 ): void => {
     const vttText = getVttText(currentContent);
+    const plainText = !currentContent.hasText() ? "" : currentContent.getPlainText();
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
     dispatch(updateVttCue(props.index, vttCue, props.editUuid, true));
     // this if is so we don't trigger a save on first render
     if (textChanged) {
+        fetchSpellCheck(dispatch, props.index, plainText, props.language, props.spellCheckerDomain);
         dispatch(callSaveTrack());
         setTextChanged(false);
     }

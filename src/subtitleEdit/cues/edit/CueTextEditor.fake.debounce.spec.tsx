@@ -21,10 +21,14 @@ import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "../cueTextConverter";
+import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
 }));
+jest.mock("../spellCheck/spellCheckFetch");
+// @ts-ignore we are mocking this function
+fetchSpellCheck.mockImplementation(() => jest.fn());
 
 let testingStore = createTestingStore();
 
@@ -105,7 +109,13 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     const editUuid = testingStore.getState().cues[0].editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+            <CueTextEditor
+                index={0}
+                vttCue={vttCue}
+                editUuid={editUuid}
+                spellCheckerDomain="testing-domain"
+                language="testing-language"
+            />
         </Provider>
     );
     return actualNode.find(".public-DraftEditor-content");
@@ -177,6 +187,8 @@ describe("CueTextEditor", () => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        // @ts-ignore we are mocking this function
+        fetchSpellCheck.mockReset();
     });
 
     it("renders empty", () => {
@@ -233,7 +245,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
-    it("calls saveTrack in redux store when changed", () => {
+    it("triggers autosave and spell check when changed", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -251,9 +263,13 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
+        expect(fetchSpellCheck).toBeCalledTimes(1);
+        expect(fetchSpellCheck).toBeCalledWith(
+            testingStore.dispatch, 0, "testing-language", "someText Paste text to end", "testing-domain"
+        );
     });
 
-    it("doesn't trigger autosave when user selects text", () => {
+    it("doesn't trigger autosave and spell check when user selects text", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -262,7 +278,12 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} />
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    spellCheckerDomain="testing-domain"
+                    language="testing-language"
+                />
             </Provider>
         );
 
@@ -284,6 +305,10 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
+        expect(fetchSpellCheck).toBeCalledTimes(1);
+        expect(fetchSpellCheck).toBeCalledWith(
+            testingStore.dispatch, 0, "testing-language", "some text Paste text to end", "testing-domain"
+        );
     });
 
     /**

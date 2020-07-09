@@ -55,8 +55,8 @@ describe("fetchSpellCheck", () => {
             fetchSpellCheck(
                 testingStore.dispatch as Dispatch<AppThunk>,
                 1,
-                "en-US",
                 "txt to chck",
+                "en-US",
                 "dev-spell-checker.videotms.com"
             );
         });

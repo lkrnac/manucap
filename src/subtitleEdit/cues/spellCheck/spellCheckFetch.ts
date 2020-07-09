@@ -12,8 +12,8 @@ const addSpellCheck = (idx: number, spellCheck: SpellCheck): AppThunk =>
 export const fetchSpellCheck = (
     dispatch: Dispatch<AppThunk>,
     cueIndex: number,
-    language: string,
     text: string,
+    language?: string,
     spellCheckDomain?: string
 ): void => {
     if (spellCheckDomain) {
