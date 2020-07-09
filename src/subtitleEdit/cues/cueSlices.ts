@@ -77,20 +77,25 @@ export const cuesSlice = createSlice({
     initialState: [] as CueDto[],
     reducers: {
         updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
-            const cueCategory = state[action.payload.idx].cueCategory;
             state[action.payload.idx] = {
+                ...state[action.payload.idx],
                 vttCue: action.payload.vttCue,
-                cueCategory,
                 editUuid: action.payload.editUuid
             };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
                 state[action.payload.idx] = {
-                    vttCue: state[action.payload.idx].vttCue,
+                    ...state[action.payload.idx],
                     cueCategory: action.payload.cueCategory
                 };
             }
+        },
+        addSpellCheck: (state, action: PayloadAction<SpellCheckAction>): void => {
+            state[action.payload.idx] = {
+                ...state[action.payload.idx],
+                spellCheck: action.payload.spellCheck
+            };
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {
             state.splice(action.payload.idx, 0, action.payload.cue);
@@ -155,12 +160,6 @@ export const cuesSlice = createSlice({
                 copyNonConstructorProperties(newCue, vttCue);
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
-        },
-        addSpellCheck: (state, action: PayloadAction<SpellCheckAction>): void => {
-            state[action.payload.idx] = {
-                ...state[action.payload.idx],
-                spellCheck: action.payload.spellCheck
-            };
         }
     },
     extraReducers: {

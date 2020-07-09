@@ -31,7 +31,12 @@ const testingTrack = {
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    {
+        vttCue: new VTTCue(2, 4, "Caption Line 2"),
+        cueCategory: "ONSCREEN_TEXT",
+        corrupted: false,
+        spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+    },
 ] as CueDto[];
 
 const testingCuesWithGaps = [
@@ -64,6 +69,21 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
+        });
+
+        it("preserves all other existing cue parameters", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[1].editUuid;
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().cues[1].spellCheck)
+                .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
         });
 
         it("doesn't update top level cue when editUuid is different", () => {
@@ -767,11 +787,29 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
+            testingStore.dispatch(updateCueCategory(1, "AUDIO_DESCRIPTION") as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
+        });
+
+        it("preserves all other existing cue parameters", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
             testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT") as {} as AnyAction);
 
             // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().cues[1].spellCheck)
+                .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
         });
+
     });
 
     describe("addCue", () => {
