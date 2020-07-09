@@ -73,4 +73,62 @@ describe("fetchSpellCheck", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
         expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
     });
+
+    it("does not trigger spell check if domain is undefined", async () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "AUDIO_DESCRIPTION" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        // WHEN
+        await act(async () => {
+            fetchSpellCheck(
+                testingStore.dispatch as Dispatch<AppThunk>,
+                1,
+                "txt to chck",
+                "en-US",
+                undefined
+            );
+        });
+        // @ts-ignore modern browsers does have it
+        global.fetch = jest.fn()
+            .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+
+        // THEN
+        // @ts-ignore modern browsers does have it
+        expect(global.fetch).not.toBeCalled();
+        expect(testingStore.getState().cues[1].spellCheck).toBeUndefined();
+    });
+
+    it("does not trigger spell check if domain is undefined", async () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "AUDIO_DESCRIPTION" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        // WHEN
+        await act(async () => {
+            fetchSpellCheck(
+                testingStore.dispatch as Dispatch<AppThunk>,
+                1,
+                "txt to chck",
+                undefined,
+                "dev-spell-checker.videotms.com"
+            );
+        });
+        // @ts-ignore modern browsers does have it
+        global.fetch = jest.fn()
+            .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+
+        // THEN
+        // @ts-ignore modern browsers does have it
+        expect(global.fetch).not.toBeCalled();
+        expect(testingStore.getState().cues[1].spellCheck).toBeUndefined();
+    });
 });

@@ -16,7 +16,7 @@ export const fetchSpellCheck = (
     language?: string,
     spellCheckDomain?: string
 ): void => {
-    if (spellCheckDomain) {
+    if (spellCheckDomain && language) {
         fetch(
             `https://${spellCheckDomain}/v2/check`,
             { method: "POST", body: `language=${language}&text=${text}` })
