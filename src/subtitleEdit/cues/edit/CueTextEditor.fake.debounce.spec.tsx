@@ -265,7 +265,7 @@ describe("CueTextEditor", () => {
         expect(saveTrack).toHaveBeenCalledTimes(1);
         expect(fetchSpellCheck).toBeCalledTimes(1);
         expect(fetchSpellCheck).toBeCalledWith(
-            testingStore.dispatch, 0, "testing-language", "someText Paste text to end", "testing-domain"
+            testingStore.dispatch, 0, "someText Paste text to end", "testing-language", "testing-domain"
         );
     });
 
@@ -307,7 +307,7 @@ describe("CueTextEditor", () => {
         expect(saveTrack).toHaveBeenCalledTimes(1);
         expect(fetchSpellCheck).toBeCalledTimes(1);
         expect(fetchSpellCheck).toBeCalledWith(
-            testingStore.dispatch, 0, "testing-language", "some text Paste text to end", "testing-domain"
+            testingStore.dispatch, 0, "some text Paste text to end", "testing-language", "testing-domain"
         );
     });
 
