@@ -3,10 +3,10 @@ import "video.js"; // VTTCue definition
 import React, { ReactElement } from "react";
 import { AnyAction, Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import Draft, { ContentState, Editor, EditorState, SelectionState, convertFromHTML } from "draft-js";
+import Draft, { ContentState, convertFromHTML, Editor, EditorState, SelectionState } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
 
-import { ReactWrapper, mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import each from "jest-each";
 
 import { Character, KeyCombination } from "../../shortcutConstants";
@@ -22,6 +22,7 @@ import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "../cueTextConverter";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
+import { SpellCheck } from "../spellCheck/model";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -227,6 +228,36 @@ describe("CueTextEditor", () => {
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
         testForContentState(contentState, vttCue, "some <i>HTML</i><br>\n <b>Text</b> sample", 1, [9,12], [2,2]);
+    });
+
+    it("renders with html and spell check errors", () => {
+        // GIVEN
+        const spellCheck = {
+            matches: [
+                { offset: 5, length: 4 },
+                { offset: 15, length: 6 }
+            ]
+        } as SpellCheck;
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
+            "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\" style=\"font-style: italic;\">" +
+            "<span data-text=\"true\">HTML</span></span></span>" +
+            "<span data-offset-key=\"\"><span data-text=\"true\"> </span></span>" +
+            "<span data-offset-key=\"\" style=\"font-weight: bold;\"><span data-text=\"true\">Text</span></span>" +
+            "<span data-offset-key=\"\"><span data-text=\"true\"> </span></span>" +
+            "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\">" +
+            "<span data-text=\"true\">sample</span></span>";
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
     });
 
     it("updates cue in redux store when changed", () => {

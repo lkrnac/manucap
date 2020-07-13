@@ -141,6 +141,7 @@ const CueEdit = (props: Props): ReactElement => {
                     editUuid={props.cue.editUuid}
                     spellCheckerDomain={props.spellCheckerDomain}
                     language={props.language}
+                    spellCheck={props.cue.spellCheck}
                 />
             </div>
         </div>

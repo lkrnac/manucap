@@ -17,6 +17,7 @@ $input-border-color: rgb(108, 117, 125);
 $green: rgb(0,87,0);
 $background-error-darker: rgb(255, 235, 235);
 $background-error-lighter: rgb(255, 245, 245);
+$background-error-text: rgba(255, 0, 0, 0.2);
 
 // ##############################
 // Subtitle Edit visuals
@@ -63,6 +64,10 @@ $background-error-lighter: rgb(255, 245, 245);
 
 .sbte-background-error-lighter {
   background-color: $background-error-lighter;
+}
+
+.sbte-text-with-error {
+  background-color: $background-error-text;
 }
 
 @keyframes fade {

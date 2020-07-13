@@ -13,17 +13,13 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import {
-    setValidationError,
-    updateCues,
-    updateEditingCueIndex,
-    updateSourceCues
-} from "../cueSlices";
+import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues } from "../cueSlices";
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
+import { SpellCheck } from "../spellCheck/model";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -780,5 +776,22 @@ describe("CueEdit", () => {
         // THEN
         expect(testingStore.getState().validationError).toEqual(true);
         expect(actualNode.find("div").at(0).hasClass("blink-error-bg")).toBeTruthy();
+    });
+
+    it("passes down spell check into editor component", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const testingSpellCheck = { matches: [{ message: "test-spell-check" }]} as SpellCheck;
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", spellCheck: testingSpellCheck } as CueDto;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cue} playerTime={0} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueTextEditor).props().spellCheck).toEqual(testingSpellCheck);
     });
 });

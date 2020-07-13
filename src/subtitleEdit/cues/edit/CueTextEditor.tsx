@@ -1,10 +1,19 @@
-import React, { ReactElement, useEffect, Dispatch, useState, useRef } from "react";
-import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
+import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
+import {
+    CompositeDecorator,
+    ContentBlock,
+    ContentState,
+    convertFromHTML,
+    DraftHandleValue,
+    Editor,
+    EditorState,
+    getDefaultKeyBinding
+} from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
 import _ from "lodash";
 
-import { SubtitleEditState, AppThunk } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
@@ -14,6 +23,8 @@ import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
 import { callSaveTrack } from "../saveSlices";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
+import { SpellCheck } from "../spellCheck/model";
+import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
@@ -45,6 +56,7 @@ export interface CueTextEditorProps {
     editUuid?: string;
     spellCheckerDomain?: string;
     language?: string;
+    spellCheck?: SpellCheck;
 }
 
 const changeVttCueInRedux = (
@@ -86,11 +98,23 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
     );
+
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
         editorState = EditorState.moveFocusToEnd(editorState);
     }
+
+    const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
+        if (props.spellCheck && props.spellCheck.matches) {
+            props.spellCheck.matches.forEach(match => callback(match.offset, match.offset + match.length));
+        }
+    };
+    const newSpellCheckDecorator = new CompositeDecorator([
+        { strategy: findSpellCheckIssues, component: SpellCheckIssue, props: { spellCheck: props.spellCheck }}
+    ]);
+    editorState = EditorState.set(editorState, { decorator: newSpellCheckDecorator });
+
     const currentContent = editorState.getCurrentContent();
     const unmountContentRef = useRef(currentContent);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
