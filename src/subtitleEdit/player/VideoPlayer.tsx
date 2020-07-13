@@ -109,6 +109,7 @@ export default class VideoPlayer extends React.Component<Props> {
             poster: this.props.poster,
             tracks: textTrackOptions,
             fluid: true,
+            aspectRatio: "16:9",
             userActions: {
                 hotkeys: false
             }
