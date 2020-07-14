@@ -1,10 +1,10 @@
-import React, { ReactElement, useEffect, Dispatch, useState, useRef } from "react";
+import React, { Dispatch, ReactElement, useEffect, useRef } from "react";
 import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
 import _ from "lodash";
 
-import { SubtitleEditState, AppThunk } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
@@ -48,18 +48,11 @@ const changeVttCueInRedux = (
     currentContent: ContentState,
     props: CueTextEditorProps,
     dispatch: Dispatch<AppThunk>,
-    textChanged: boolean,
-    setTextChanged: (textChanged: boolean) => void
 ): void => {
     const vttText = getVttText(currentContent);
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
     dispatch(updateVttCue(props.index, vttCue, props.editUuid, true));
-    // this if is so we don't trigger a save on first render
-    if (textChanged) {
-        dispatch(callSaveTrack());
-        setTextChanged(false);
-    }
 };
 
 const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 200);
@@ -89,7 +82,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const currentContent = editorState.getCurrentContent();
     const unmountContentRef = useRef(currentContent);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
-    const [textChanged, setTextChanged] = useState(false);
     const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
     const wordCountPerLine = getWordCountPerLine(currentContent.getPlainText());
     useEffect(
@@ -107,7 +99,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => {
             unmountContentRef.current = currentContent;
-            changeVttCueInReduxDebounced(currentContent, props, dispatch, textChanged, setTextChanged);
+            changeVttCueInReduxDebounced(currentContent, props, dispatch);
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
@@ -121,7 +113,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => (): void => {
             changeVttCueInReduxDebounced.cancel();
-            changeVttCueInRedux(unmountContentRef.current, props, dispatch, textChanged, setTextChanged);
+            changeVttCueInRedux(unmountContentRef.current, props, dispatch);
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
@@ -158,7 +150,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         onChange={(newEditorState: EditorState): void => {
                             dispatch(updateEditorState(props.index, newEditorState));
                             if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                                setTextChanged(true);
+                                dispatch(callSaveTrack());
                             }
                         }}
                         spellCheck
