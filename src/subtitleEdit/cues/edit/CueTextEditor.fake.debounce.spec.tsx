@@ -21,7 +21,7 @@ import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "../cueTextConverter";
-import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
+import { fetchSpellCheckDebounced } from "../spellCheck/spellCheckFetch";
 import { SpellCheck } from "../spellCheck/model";
 
 jest.mock("lodash", () => ({
@@ -29,7 +29,7 @@ jest.mock("lodash", () => ({
 }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
-fetchSpellCheck.mockImplementation(() => jest.fn());
+fetchSpellCheckDebounced.mockImplementation(() => jest.fn());
 
 let testingStore = createTestingStore();
 
@@ -189,7 +189,7 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         // @ts-ignore we are mocking this function
-        fetchSpellCheck.mockReset();
+        fetchSpellCheckDebounced.mockReset();
     });
 
     it("renders empty", () => {
@@ -294,8 +294,8 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
-        expect(fetchSpellCheck).toBeCalledTimes(1);
-        expect(fetchSpellCheck).toBeCalledWith(
+        expect(fetchSpellCheckDebounced).toBeCalledTimes(1);
+        expect(fetchSpellCheckDebounced).toBeCalledWith(
             testingStore.dispatch, 0, "someText Paste text to end", "testing-language", "testing-domain"
         );
     });
@@ -336,8 +336,8 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
-        expect(fetchSpellCheck).toBeCalledTimes(1);
-        expect(fetchSpellCheck).toBeCalledWith(
+        expect(fetchSpellCheckDebounced).toBeCalledTimes(1);
+        expect(fetchSpellCheckDebounced).toBeCalledWith(
             testingStore.dispatch, 0, "some text Paste text to end", "testing-language", "testing-domain"
         );
     });

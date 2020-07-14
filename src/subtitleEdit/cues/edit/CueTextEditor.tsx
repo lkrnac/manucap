@@ -22,7 +22,7 @@ import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
 import { callSaveTrack } from "../saveSlices";
-import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
+import { fetchSpellCheckDebounced } from "../spellCheck/spellCheckFetch";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
@@ -180,7 +180,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                                 const plainText = !currentContent.hasText()
                                     ? ""
                                     : newEditorState.getCurrentContent().getPlainText();
-                                fetchSpellCheck(
+                                fetchSpellCheckDebounced(
                                     dispatch,
                                     props.index,
                                     plainText,
