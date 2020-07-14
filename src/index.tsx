@@ -90,7 +90,7 @@ const TestApp = (): ReactElement => {
                 minCaptionDurationInMillis: 500,
                 maxCaptionDurationInMillis: 4000,
                 comments: "Note",
-                mediaNotes: "Media notes"
+                mediaNotes: "Media notes, please click [here](https://dotsub.com)"
             })),
             500
         );

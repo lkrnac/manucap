@@ -57,7 +57,7 @@ describe("CueTextEditor", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
                 done();
             },
-            100
+            250
         );
     });
 
@@ -101,19 +101,14 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
-    it("cancel save debounce when unmounted", (done) => {
+    it("triggers autosave immediately after text change", (done) => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
-        const vttCue = new VTTCue(0, 1, "someText");
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
+        const editor = createEditorNode();
+
+        // WHEN
         editor.simulate("paste", {
             clipboardData: {
                 types: ["text/plain"],
@@ -121,8 +116,24 @@ describe("CueTextEditor", () => {
             }
         });
 
+        // THEN
+        setTimeout(
+            () => {
+                expect(saveTrack).toBeCalled();
+                done();
+            },
+            2600
+        );
+    });
+
+    it("doesn't trigger autosave when cue editor is rendered", (done) => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+
         // WHEN
-        actualNode.unmount();
+        createEditorNode();
 
         // THEN
         setTimeout(
@@ -130,7 +141,7 @@ describe("CueTextEditor", () => {
                 expect(saveTrack).not.toBeCalled();
                 done();
             },
-            3000
+            2600
         );
     });
 });

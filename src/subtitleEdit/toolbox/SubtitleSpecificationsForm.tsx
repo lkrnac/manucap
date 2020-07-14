@@ -22,6 +22,11 @@ const dialogueStyleValues = {
 
 const millisToSeconds = (millis: number | null): string => millis ? "" + (millis / 1000) : "n/a";
 
+// Disable following rule because if returned HtmlAnchorElement it requires to initialize all element props
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const LinkNewTabRenderer = (props: HTMLLinkElement): any =>
+    <a href={props.href} rel="noopener noreferrer" target="_blank">{props.children}</a>;
+
 const SubtitleSpecificationsForm = (props: Props): ReactElement => (
     <>
         <label><strong>Enabled:&nbsp;</strong></label>
@@ -96,7 +101,9 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 <div className="sbte-subspec-freeform-text">{props.subTitleSpecifications.comments}</div>
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
+
                 <ReactMarkdown
+                    renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
                     source={props.subTitleSpecifications.mediaNotes}
                     disallowedTypes={["html", "virtualHtml"]}
                     className="sbte-subspec-freeform-text"

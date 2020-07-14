@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
+import React, { Dispatch, ReactElement, useEffect, useRef } from "react";
 import {
     CompositeDecorator,
     ContentBlock,
@@ -63,23 +63,14 @@ const changeVttCueInRedux = (
     currentContent: ContentState,
     props: CueTextEditorProps,
     dispatch: Dispatch<AppThunk>,
-    textChanged: boolean,
-    setTextChanged: (textChanged: boolean) => void
 ): void => {
     const vttText = getVttText(currentContent);
-    const plainText = !currentContent.hasText() ? "" : currentContent.getPlainText();
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
     dispatch(updateVttCue(props.index, vttCue, props.editUuid, true));
-    // this if is so we don't trigger a save on first render
-    if (textChanged) {
-        fetchSpellCheck(dispatch, props.index, plainText, props.language, props.spellCheckerDomain);
-        dispatch(callSaveTrack());
-        setTextChanged(false);
-    }
 };
 
-const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 50);
+const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 200);
 
 const getCharacterCountPerLine = (text: string): number[] => {
     const lines = text.match(/[^\r\n]+/g) || [text];
@@ -118,7 +109,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const currentContent = editorState.getCurrentContent();
     const unmountContentRef = useRef(currentContent);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
-    const [textChanged, setTextChanged] = useState(false);
     const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
     const wordCountPerLine = getWordCountPerLine(currentContent.getPlainText());
     useEffect(
@@ -136,7 +126,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => {
             unmountContentRef.current = currentContent;
-            changeVttCueInReduxDebounced(currentContent, props, dispatch, textChanged, setTextChanged);
+            changeVttCueInReduxDebounced(currentContent, props, dispatch);
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
@@ -150,7 +140,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => (): void => {
             changeVttCueInReduxDebounced.cancel();
-            changeVttCueInRedux(unmountContentRef.current, props, dispatch, textChanged, setTextChanged);
+            changeVttCueInRedux(unmountContentRef.current, props, dispatch);
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
@@ -187,7 +177,17 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         onChange={(newEditorState: EditorState): void => {
                             dispatch(updateEditorState(props.index, newEditorState));
                             if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                                setTextChanged(true);
+                                const plainText = !currentContent.hasText()
+                                    ? ""
+                                    : newEditorState.getCurrentContent().getPlainText();
+                                fetchSpellCheck(
+                                    dispatch,
+                                    props.index,
+                                    plainText,
+                                    props.language,
+                                    props.spellCheckerDomain
+                                );
+                                dispatch(callSaveTrack());
                             }
                         }}
                         spellCheck
