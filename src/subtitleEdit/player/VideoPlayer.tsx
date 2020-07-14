@@ -25,13 +25,11 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
         return false;
     });
     Mousetrap.bind([KeyCombination.MOD_SHIFT_LEFT, KeyCombination.ALT_SHIFT_LEFT], () => {
-        // @ts-ignore
         clearTimeout(videoPlayer.playSegmentPauseTimeout);
         videoPlayer.shiftTime(-SECOND);
         return false;
     });
     Mousetrap.bind([KeyCombination.MOD_SHIFT_RIGHT, KeyCombination.ALT_SHIFT_RIGHT], () => {
-        // @ts-ignore
         clearTimeout(videoPlayer.playSegmentPauseTimeout);
         videoPlayer.shiftTime(SECOND);
         return false;
