@@ -69,14 +69,14 @@ export const conformToRules = (
     subtitleSpecification: SubtitleSpecification | null,
     previousCue?: CueDto,
     followingCue?: CueDto,
-    overlapCaptions?: boolean,
-    skipSpellCheck = true
+    overlapCaptions?: boolean
 ): boolean =>
     checkCharacterLimitation(cue.vttCue.text, subtitleSpecification)
-    && rangeOk(cue.vttCue, subtitleSpecification)
-    && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
-    && (isSpelledCorrectly(cue) || skipSpellCheck)
+        && rangeOk(cue.vttCue, subtitleSpecification)
+        && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
+        && isSpelledCorrectly(cue)
 ;
+
 
 export const markCues = (
     cues: CueDto[],
@@ -94,8 +94,7 @@ export const markCues = (
                 subtitleSpecifications,
                 previousCue,
                 followingCue,
-                overlapCaptions || false,
-                false
+                overlapCaptions || false
             ),
             editUuid: uuidv4()
         };

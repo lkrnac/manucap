@@ -142,7 +142,7 @@ export const cuesSlice = createSlice({
                 }
                 currentCue.corrupted =
                     !conformToRules(
-                        currentCue, subtitleSpecification, previousCue, followingCue, overlapCaptions, false
+                        currentCue, subtitleSpecification, previousCue, followingCue, overlapCaptions
                     );
                 if (followingCue) {
                     followingCue.corrupted = !conformToRules(
