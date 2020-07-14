@@ -263,6 +263,134 @@ describe("VideoPlayer tested with fake player", () => {
         expect(resetPlayerTimeChange).toBeCalled();
     });
 
+    it("plays video section from cue start time and does not pause again if paused shortcut", () => {
+        // GIVEN
+        const play = jest.fn();
+        const pause = jest.fn();
+        const currentTime = jest.fn();
+        const resetPlayerTimeChange = jest.fn();
+        currentTime.mockReturnValueOnce(5);
+        const playerMock = {
+            paused: (): boolean => false,
+            play,
+            pause,
+            currentTime,
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+
+        // WHEN
+        actualNode.setProps({ playSection: { startTime: 1, endTime: 1.2 }, resetPlayerTimeChange });
+        simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
+        jest.runAllTimers();
+
+        // THEN
+        expect(play).toBeCalled();
+        expect(currentTime).toBeCalledWith(1.001);
+        expect(currentTime).not.toBeCalledWith(1.199);
+        expect(pause).toBeCalled();
+        expect(pause).toBeCalledTimes(1);
+        expect(resetPlayerTimeChange).toBeCalled();
+    });
+
+    it("plays video section from cue start time and does not pause again if shift forward shortcut", () => {
+        // GIVEN
+        const play = jest.fn();
+        const pause = jest.fn();
+        const currentTime = jest.fn();
+        const resetPlayerTimeChange = jest.fn();
+        currentTime.mockReturnValueOnce(5);
+        currentTime.mockReturnValueOnce(2);
+        const playerMock = {
+            paused: (): boolean => false,
+            play,
+            pause,
+            currentTime,
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+
+        // WHEN
+        actualNode.setProps({ playSection: { startTime: 1, endTime: 3.2 }, resetPlayerTimeChange });
+        simulant.fire(document.documentElement, "keydown", { keyCode: RIGHT, shiftKey: true, altKey: true });
+        jest.runAllTimers();
+
+        // THEN
+        expect(play).toBeCalled();
+        expect(currentTime).toBeCalledWith(1.001);
+        expect(currentTime).toBeCalledWith(3);
+        expect(currentTime).not.toBeCalledWith(3.199);
+        expect(pause).not.toBeCalled();
+        expect(resetPlayerTimeChange).toBeCalled();
+    });
+
+    it("plays video section from cue start time and does not pause again if shift backward shortcut", () => {
+        // GIVEN
+        const play = jest.fn();
+        const pause = jest.fn();
+        const currentTime = jest.fn();
+        const resetPlayerTimeChange = jest.fn();
+        currentTime.mockReturnValueOnce(5);
+        currentTime.mockReturnValueOnce(2);
+        const playerMock = {
+            paused: (): boolean => false,
+            play,
+            pause,
+            currentTime,
+            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                tracks={[]}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+
+        // WHEN
+        actualNode.setProps({ playSection: { startTime: 1, endTime: 3.2 }, resetPlayerTimeChange });
+        simulant.fire(document.documentElement, "keydown", { keyCode: LEFT, shiftKey: true, altKey: true });
+        jest.runAllTimers();
+
+        // THEN
+        expect(play).toBeCalled();
+        expect(currentTime).toBeCalledWith(1.001);
+        expect(currentTime).toBeCalledWith(1);
+        expect(currentTime).not.toBeCalledWith(3.199);
+        expect(pause).not.toBeCalled();
+        expect(resetPlayerTimeChange).toBeCalled();
+    });
+
     it("doesn't play video section if start time is less than 0", () => {
         // GIVEN
         const play = jest.fn();

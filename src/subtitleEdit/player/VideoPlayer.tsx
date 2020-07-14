@@ -20,14 +20,19 @@ const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): v
 
 const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
+        clearTimeout(videoPlayer.playSegmentCleanup);
         videoPlayer.playPause();
         return false;
     });
     Mousetrap.bind([KeyCombination.MOD_SHIFT_LEFT, KeyCombination.ALT_SHIFT_LEFT], () => {
+        // @ts-ignore
+        clearTimeout(videoPlayer.playSegmentCleanup);
         videoPlayer.shiftTime(-SECOND);
         return false;
     });
     Mousetrap.bind([KeyCombination.MOD_SHIFT_RIGHT, KeyCombination.ALT_SHIFT_RIGHT], () => {
+        // @ts-ignore
+        clearTimeout(videoPlayer.playSegmentCleanup);
         videoPlayer.shiftTime(SECOND);
         return false;
     });
@@ -91,9 +96,10 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
     }
 };
 
-export default class VideoPlayer extends React.Component<Props> {
+class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
     private videoNode?: Node;
+    playSegmentCleanup?: number;
 
     constructor(props: Props) {
         super(props);
@@ -171,7 +177,7 @@ export default class VideoPlayer extends React.Component<Props> {
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
-                setTimeout(() => {
+                this.playSegmentCleanup = window.setTimeout(() => {
                     this.player.pause();
                     // avoid showing 2 captions lines at the same time
                     this.player.currentTime(endTime - ONE_MILLISECOND);
@@ -213,3 +219,5 @@ export default class VideoPlayer extends React.Component<Props> {
         );
     }
 }
+
+export default VideoPlayer;
