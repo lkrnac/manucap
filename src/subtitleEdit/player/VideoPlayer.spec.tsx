@@ -87,6 +87,7 @@ describe("VideoPlayer", () => {
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.html5.nativeTextTracks).toBeUndefined();
         expect(actualComponent.player.options_.tracks).toEqual(expectedTextTrackOptions);
+        expect(actualComponent.player.options_.aspectRatio).toEqual("16:9");
     });
 
     it("initializes videoJs with correct options (safari)", () => {
@@ -120,6 +121,7 @@ describe("VideoPlayer", () => {
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.html5.nativeTextTracks).toBeFalsy();
         expect(actualComponent.player.options_.tracks).toEqual(expectedTextTrackOptions);
+        expect(actualComponent.player.options_.aspectRatio).toEqual("16:9");
     });
 
     it("initializes videoJs with mp4 and poster URLs", () => {
