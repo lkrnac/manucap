@@ -1,3 +1,4 @@
+import json from "@rollup/plugin-json";
 import svgr from "@svgr/rollup";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
@@ -6,7 +7,6 @@ import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
 import typescript from "rollup-plugin-typescript3";
 import url from "rollup-plugin-url";
-import json from '@rollup/plugin-json';
 
 import pkg from "./package.json";
 
@@ -36,7 +36,7 @@ export default {
             'node_modules//platform/platform.js': ['os'],
             'node_modules/react-is/index.js': ['isValidElementType', 'isContextConsumer'],
             'node_modules/draft-js/lib/Draft.js': ['SelectionState', 'EditorState', 'RichUtils', 'convertFromHTML',
-                'ContentState', 'Editor', 'getDefaultKeyBinding'],
+                'ContentState', 'Editor', 'getDefaultKeyBinding', 'CompositeDecorator'],
             'node_modules/lodash/lodash.js': ['lodash', 'debounce']
         }
     })
