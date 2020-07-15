@@ -11,10 +11,11 @@ import { hasDataLoaded } from "./subtitleEditUtils";
 import CuesList from "./cues/CuesList";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
-import { resetEditingTrack } from "./trackSlices";
+import { resetEditingTrack, updateEditingTrack } from "./trackSlices";
 import { changeScrollPosition } from "./cues/cuesListScrollSlice";
-import { ScrollPosition } from "./model";
+import { CueDto, Language, ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
+import { updateCues } from "./cues/cueSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -65,6 +66,32 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             className="sbte-subtitle-edit"
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
+            <button
+                className="btn btn-danger"
+                onClick={(): void => {
+                    dispatch(updateEditingTrack({
+                        type: "TRANSLATION",
+                        // type: "CAPTION", // ** Change track type to CAPTION
+                        language: { id: "en-US", name: "English (US)" } as Language,
+                        default: true,
+                        mediaTitle: "This is the video title",
+                        mediaLength: 4250,
+                        progress: 50,
+                        id: ""+Math.random()
+                    }));
+                    const cues = [] as CueDto[];
+                    for(let idx = 0; idx < 3; idx++) {
+                        cues.push({
+                            vttCue: new VTTCue(idx * 3, (idx + 1) * 3,
+                                `<i>XXXXXXX/i> ${idx + 1}`),
+                            cueCategory: "DIALOGUE"
+                        });
+                    }
+                    dispatch(updateCues(cues));
+                }}
+            >
+                Change Track x1
+            </button>
             <SubtitleEditHeader />
             {
                 !hasDataLoaded(editingTrack, loadingIndicator) ?

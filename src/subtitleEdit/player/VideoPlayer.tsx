@@ -8,6 +8,7 @@ import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { getTimeString } from "../cues/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
+
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -55,7 +56,7 @@ const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, ind
     }
 };
 
-const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack, trackFontSizePercent?: number): void => {
+const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack): void => {
     const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
     const vtmsTrack = props.tracks.filter(matchTracks)[0] as Track;
     props.languageCuesArray
@@ -63,12 +64,12 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack, trackF
         .forEach((languageCues: LanguageCues) => {
             languageCues.cues.map((cue: CueDto): VTTCue => cue.vttCue)
                 .forEach((cue, index) =>
-                    updateCueAndCopyStyles(videoJsTrack)(cue, index, trackFontSizePercent));
+                    updateCueAndCopyStyles(videoJsTrack)(cue, index, props.trackFontSizePercent));
         });
 };
 
 const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
-    if (lastCueChange.changeType === "EDIT" && vttCue) {
+    if (lastCueChange.changeType === "EDIT" && lastCueChange.vttCue && lastCueChange.index && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
@@ -79,7 +80,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFo
 
 const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
                               trackFontSizePercent?: number): void => {
-    if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
+    if (lastCueChange.changeType === "ADD" && lastCueChange.vttCue && lastCueChange.index && videoJsTrack.cues) {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
             cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
@@ -90,6 +91,14 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
         customizeLinePosition(videoJsTrack.cues[lastCueChange.index] as VTTCue, trackFontSizePercent);
     }
 };
+// const handleTrackUpdate = (props: Props, videoJsTrack: TextTrack): void => {
+//     for (let idx = videoJsTrack.cues.length - 1; idx >= 0; idx--) {
+//         videoJsTrack.removeCue(videoJsTrack.cues[idx]);
+//     }
+//     updateCuesForVideoJsTrack(props, videoJsTrack);
+//     videoJsTrack.dispatchEvent(new Event("cuechange"));
+// };
+
 
 export default class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
@@ -123,7 +132,7 @@ export default class VideoPlayer extends React.Component<Props> {
         this.player = videojs(this.videoNode, options) as VideoJsPlayer;
         this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
-            updateCuesForVideoJsTrack(this.props, videoJsTrack, this.props.trackFontSizePercent);
+            updateCuesForVideoJsTrack(this.props, videoJsTrack);
         });
         this.player.on("timeupdate", (): void => {
             if (this.props.onTimeChange) {
@@ -148,7 +157,10 @@ export default class VideoPlayer extends React.Component<Props> {
     componentDidUpdate(prevProps: Props): void {
         const lastCueChange = this.props.lastCueChange;
         const videoJsTrack = (this.player.textTracks())[0];
-        if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
+        if(this.props.tracks[0]?.id !== prevProps.tracks[0]?.id) {
+            // handleTrackUpdate(this.props, videoJsTrack);
+        }
+        if (lastCueChange && lastCueChange.index && videoJsTrack && videoJsTrack.cues) {
             handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
                 prevProps.trackFontSizePercent);
             handleCueAddIfNeeded(lastCueChange, videoJsTrack, prevProps.trackFontSizePercent);
