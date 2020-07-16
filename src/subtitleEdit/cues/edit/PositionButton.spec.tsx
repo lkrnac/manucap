@@ -48,8 +48,6 @@ describe("PositionButton", () => {
                 </button>
                 <div
                     style={{
-                        minWidth: "210px",
-                        width: "210px",
                         position: "absolute",
                         top: "0px",
                         left: "0px",
