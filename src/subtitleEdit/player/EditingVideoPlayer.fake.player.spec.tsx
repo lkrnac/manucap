@@ -67,8 +67,8 @@ describe("EditingVideoPlayer", () => {
         const lastCueChange = actualNode.find(VideoPlayer).props().lastCueChange as CueChange;
         expect(lastCueChange.changeType).toEqual("EDIT");
         expect(lastCueChange.index).toEqual(0);
-        expect(lastCueChange.vttCue.text).toEqual("Cue");
-        expect(lastCueChange.vttCue.startTime).toEqual(0);
-        expect(lastCueChange.vttCue.endTime).toEqual(1);
+        expect(lastCueChange.vttCue?.text).toEqual("Cue");
+        expect(lastCueChange.vttCue?.startTime).toEqual(0);
+        expect(lastCueChange.vttCue?.endTime).toEqual(1);
     });
 });

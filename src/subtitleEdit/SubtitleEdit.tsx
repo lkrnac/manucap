@@ -66,9 +66,12 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             className="sbte-subtitle-edit"
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
+            {/* TODO //FOR TESTING PURPOSE ONLY, GONNA REMOVE IT*/}
             <button
                 className="btn btn-danger"
                 onClick={(): void => {
+                    setTimeout( // this simulates latency caused by server roundtrip
+                        () =>
                     dispatch(updateEditingTrack({
                         type: "TRANSLATION",
                         // type: "CAPTION", // ** Change track type to CAPTION
@@ -78,19 +81,22 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         mediaLength: 4250,
                         progress: 50,
                         id: ""+Math.random()
-                    }));
+                    })) , 500);
                     const cues = [] as CueDto[];
-                    for(let idx = 0; idx < 3; idx++) {
+                    for(let idx = 0; idx < 50; idx++) {
                         cues.push({
                             vttCue: new VTTCue(idx * 3, (idx + 1) * 3,
                                 `<i>XXXXXXX/i> ${idx + 1}`),
                             cueCategory: "DIALOGUE"
                         });
                     }
-                    dispatch(updateCues(cues));
+                    setTimeout( // this simulates latency caused by server roundtrip
+                        () => dispatch(updateCues(cues)),
+                        500
+                    );
                 }}
             >
-                Change Track x1
+                Change Track x3
             </button>
             <SubtitleEditHeader />
             {

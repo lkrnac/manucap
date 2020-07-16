@@ -3,7 +3,6 @@ import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
-import { Track } from "../model";
 
 interface Props {
     mp4: string;
@@ -14,13 +13,10 @@ interface Props {
 const EditingVideoPlayer = (props: Props): ReactElement => {
     const dispatch = useDispatch();
 
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack,
-        (oldTrack: Track | null, newTrack: Track | null) => {
-            return oldTrack?.id === newTrack?.id;
-        });
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange);
+    const reloadCuesFromStore = !(lastCueChange && lastCueChange.changeType === "IMPORT");
 
-    const reloadCuesFromStore = !lastCueChange || lastCueChange.changeType != "IMPORT";
     /**
      * This expects that EditingVideoPlayer would be rendered with cues initialized in Redux.
      * It is not updated (hence () => true) when cues are updated,
@@ -29,7 +25,6 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
      */
     const editingCues = useSelector((state: SubtitleEditState) => state.cues,
         () => reloadCuesFromStore);
-
 
     const videoSectionToPlay = useSelector((state: SubtitleEditState) => state.videoSectionToPlay);
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];

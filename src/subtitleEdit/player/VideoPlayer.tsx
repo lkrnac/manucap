@@ -91,13 +91,14 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
         customizeLinePosition(videoJsTrack.cues[lastCueChange.index] as VTTCue, trackFontSizePercent);
     }
 };
-// const handleTrackUpdate = (props: Props, videoJsTrack: TextTrack): void => {
-//     for (let idx = videoJsTrack.cues.length - 1; idx >= 0; idx--) {
-//         videoJsTrack.removeCue(videoJsTrack.cues[idx]);
-//     }
-//     updateCuesForVideoJsTrack(props, videoJsTrack);
-//     videoJsTrack.dispatchEvent(new Event("cuechange"));
-// };
+const handleTrackUpdate = (lastCueChange: CueChange, props: Props, videoJsTrack: TextTrack): void => {
+    if (lastCueChange.changeType === "IMPORT") {
+        for (let idx = videoJsTrack.cues.length - 1; idx >= 0; idx--) {
+            videoJsTrack.removeCue(videoJsTrack.cues[idx]);
+        }
+        updateCuesForVideoJsTrack(props, videoJsTrack);
+    }
+};
 
 
 export default class VideoPlayer extends React.Component<Props> {
@@ -123,7 +124,7 @@ export default class VideoPlayer extends React.Component<Props> {
             }
         } as VideoJsPlayerOptions;
 
-        if(isSafari()){
+        if (isSafari()) {
             options.html5 = {
                 nativeTextTracks: false
             };
@@ -157,15 +158,15 @@ export default class VideoPlayer extends React.Component<Props> {
     componentDidUpdate(prevProps: Props): void {
         const lastCueChange = this.props.lastCueChange;
         const videoJsTrack = (this.player.textTracks())[0];
-        if(this.props.tracks[0]?.id !== prevProps.tracks[0]?.id) {
-            // handleTrackUpdate(this.props, videoJsTrack);
-        }
-        if (lastCueChange && lastCueChange.index && videoJsTrack && videoJsTrack.cues) {
-            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
-                prevProps.trackFontSizePercent);
-            handleCueAddIfNeeded(lastCueChange, videoJsTrack, prevProps.trackFontSizePercent);
-            if (lastCueChange.changeType === "REMOVE") {
-                videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
+        if (lastCueChange && videoJsTrack) {
+            handleTrackUpdate(lastCueChange, this.props, videoJsTrack);
+            if (videoJsTrack.cues  && lastCueChange.index) {
+                handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
+                    prevProps.trackFontSizePercent);
+                handleCueAddIfNeeded(lastCueChange, videoJsTrack, prevProps.trackFontSizePercent);
+                if (lastCueChange.changeType === "REMOVE") {
+                    videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
+                }
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
