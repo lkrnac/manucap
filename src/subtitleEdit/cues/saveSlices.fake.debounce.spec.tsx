@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
@@ -11,16 +10,14 @@ import { updateCues } from "./cueSlices";
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
+
 describe("saveSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
-
     const saveTrack = jest.fn();
     const testingTrack = { mediaTitle: "testingTrack" } as Track;
-
-    beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
-    });
 
     beforeEach(() => {
         // GIVEN
@@ -31,12 +28,14 @@ describe("saveSlices", () => {
 
     describe("saveTrack", () => {
         it("calls saveTrack", () => {
-            // WHEN
+            // GIVEN
             const testingCues = [
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", corrupted: false }
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
+
+            // WHEN
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             // THEN

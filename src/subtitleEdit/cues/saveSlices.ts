@@ -27,9 +27,7 @@ export const saveTrackSlice = createSlice({
     name: "saveTrack",
     initialState: null as Function | null,
     reducers: {
-        set: (_state, action: PayloadAction<Function>): Function =>
-            // @ts-ignore debounce expects any type
-            debounce(action.payload, DEBOUNCE_TIMEOUT, { leading: false, trailing: true }),
+        set: (_state, action: PayloadAction<Function>): Function => action.payload,
         call: (state, action: PayloadAction<SaveAction>): void => state ? state(action.payload) : null,
     },
     extraReducers: {
@@ -86,15 +84,21 @@ export const setAutoSaveSuccess = (success: boolean): AppThunk =>
         }
     };
 
+const saveTrackCurrent = (dispatch: Dispatch<PayloadAction<SaveAction | boolean>>, getState: Function): void => {
+    const cues = getState().cues;
+    const editingTrack = getState().editingTrack;
+    if (cues && editingTrack) {
+        dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
+    }
+};
+
+const saveTrackDebounced = debounce(saveTrackCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
+
 export const callSaveTrack = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SaveAction | boolean>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SaveAction | boolean>>, getState: Function): void => {
         const saveStatus = getState().saveStatus;
         if (saveStatus !== Constants.AUTO_SAVE_SAVING_CHANGES_MSG) {
-            const cues = getState().cues;
-            const editingTrack = getState().editingTrack;
-            if (cues && editingTrack) {
-                dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
-            }
+            saveTrackDebounced(dispatch, getState);
         } else {
             dispatch(pendingSaveSlice.actions.setPendingSave(true));
         }
