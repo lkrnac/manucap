@@ -59,7 +59,7 @@ describe("PositionButton", () => {
                     aria-labelledby="dropdown-basic"
                     className="dropdown-menu show"
                 >
-                    <div style={{ display: "flex", flexFlow: "row wrap" }}>
+                    <div style={{ minWidth: "210px", width: "210px", display: "flex", flexFlow: "row wrap" }}>
                         <a
                             style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
                             href="#"
