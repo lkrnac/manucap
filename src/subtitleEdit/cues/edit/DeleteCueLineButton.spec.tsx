@@ -8,17 +8,17 @@ import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateCues } from "../cueSlices";
-import _ from "lodash";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 
-describe("DeleteCueLineButton", () => {
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 
+describe("DeleteCueLineButton", () => {
     const saveTrack = jest.fn();
 
     beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });

@@ -8,7 +8,10 @@ import { setSaveTrack } from "../cues/saveSlices";
 import { AnyAction } from "redux";
 import { updateEditingTrack } from "../trackSlices";
 import { Track } from "../model";
-import _ from "lodash";
+
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 
 let testingStore = createTestingStore();
 
@@ -37,8 +40,6 @@ describe("SyncCuesButton", () => {
     it("saves track on button click", () => {
         // GIVEN
         const saveTrack = jest.fn();
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
