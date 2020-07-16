@@ -9,9 +9,12 @@ import ShiftTimesModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import sinon from "sinon";
 import testingStore from "../../../testUtils/testingStore";
-import _ from "lodash";
 import { setSaveTrack } from "../../cues/saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
+
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 
 const testCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -19,12 +22,9 @@ const testCues = [
 ] as CueDto[];
 
 describe("ShiftTimesModal", () => {
-
     const saveTrack = jest.fn();
 
     beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });

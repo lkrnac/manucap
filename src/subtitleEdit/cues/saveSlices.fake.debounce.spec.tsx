@@ -1,42 +1,46 @@
-import _ from "lodash";
 import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
-import {
-    callSaveTrack,
-    setAutoSaveSuccess,
-    setSaveTrack
-} from "./saveSlices";
+import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "./saveSlices";
 import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
-import { Track } from "../model";
+import { CueDto, Track } from "../model";
 import { Constants } from "../constants";
+import { updateCues } from "./cueSlices";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
+
 describe("saveSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
-
     const saveTrack = jest.fn();
-
-    beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
-    });
+    const testingTrack = { mediaTitle: "testingTrack" } as Track;
 
     beforeEach(() => {
         // GIVEN
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
     });
+
     describe("saveTrack", () => {
         it("calls saveTrack", () => {
+            // GIVEN
+            const testingCues = [
+                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", corrupted: false }
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
+
             // WHEN
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
         });
 
         it("debounces saveTrack call", () => {

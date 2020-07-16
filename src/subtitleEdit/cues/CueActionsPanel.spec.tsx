@@ -12,9 +12,12 @@ import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import testingStore from "../../testUtils/testingStore";
 import { updateCues } from "./cueSlices";
-import _ from "lodash";
 import { setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
+
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -24,12 +27,9 @@ const cues = [
 const sourceCue = { vttCue: new VTTCue(0, 0, "Source Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
 describe("CueActionsPanel", () => {
-
     const saveTrack = jest.fn();
 
     beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });

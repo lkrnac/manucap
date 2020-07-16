@@ -9,7 +9,10 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Language, Task, Track } from "./model";
 import { updateCues } from "./cues/cueSlices";
 import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "./cues/saveSlices";
-import _ from "lodash";
+
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 
 const testingTrack = {
     type: "CAPTION",
@@ -29,10 +32,6 @@ describe("CompleteButton", () => {
         testingStore = createTestingStore();
     });
     const saveTrack = jest.fn();
-    beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
-    });
     beforeEach(() => {
         // GIVEN
         saveTrack.mockReset();

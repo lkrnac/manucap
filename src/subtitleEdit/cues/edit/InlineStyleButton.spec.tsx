@@ -7,12 +7,14 @@ import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
-import _ from "lodash";
 import { TooltipWrapper } from "../../TooltipWrapper";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { Track } from "../../model";
 
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 /**
  * On click actions are covered by CueTextEditor tests
  */
@@ -133,8 +135,6 @@ describe("InlineStyleButton", () => {
         testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
 
         const saveTrack = jest.fn();
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
