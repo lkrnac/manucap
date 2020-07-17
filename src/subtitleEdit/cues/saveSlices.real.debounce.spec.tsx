@@ -54,8 +54,9 @@ describe("saveSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
             const expectedTestingCues = [
-                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "AUDIO_DESCRIPTION" }
+                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "AUDIO_DESCRIPTION", "corrupted": false }
             ] as CueDto[];
+            expectedTestingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
 
             // WHEN
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
