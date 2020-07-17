@@ -22,7 +22,7 @@ describe("saveSlices", () => {
     });
 
     describe("saveTrack", () => {
-        it("saves track after timeout after triggering it", (done) => {
+        it("saves track after timeout after various cues changes", (done) => {
             // GIVEN
             const testingCues = [
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", corrupted: false }
@@ -31,6 +31,8 @@ describe("saveSlices", () => {
             testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
 
             // WHEN
+            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
             testingStore.dispatch(callSaveTrack() as {} as AnyAction);
 
             // THEN
