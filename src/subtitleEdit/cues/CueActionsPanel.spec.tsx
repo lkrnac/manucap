@@ -266,6 +266,7 @@ describe("CueActionsPanel", () => {
                 <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
             </Provider>
         );
+        saveTrack.mockReset();
 
         // WHEN
         actualNode.find(".sbte-delete-cue-button").simulate("click");
