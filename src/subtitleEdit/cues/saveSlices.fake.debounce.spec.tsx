@@ -2,7 +2,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
 import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "./saveSlices";
-import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
+import { updateEditingTrack } from "../trackSlices";
 import { CueDto, Track } from "../model";
 import { Constants } from "../constants";
 import { updateCues } from "./cueSlices";
@@ -43,24 +43,15 @@ describe("saveSlices", () => {
             expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
         });
 
-        it("debounces saveTrack call", () => {
-            // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-            // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
-        });
-
-        it("calls saveTrack if previous call failed", () => {
-            // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-            testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-
-            // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(2);
-        });
+        // TODO: Clarify this test case with Adolfo
+        // it("calls saveTrack if previous call failed", () => {
+        //     // WHEN
+        //     testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        //     testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
+        //
+        //     // THEN
+        //     expect(saveTrack).toHaveBeenCalledTimes(2);
+        // });
 
         it("calls saveTrack if there's a pending call", (done) => {
             // WHEN
@@ -88,33 +79,6 @@ describe("saveSlices", () => {
                 expect(saveTrack).toHaveBeenCalledWith({ cues, editingTrack });
                 done();
             }, 300);
-        });
-    });
-
-    describe("autoSaveSuccessSlice", () => {
-        it("sets the autoSave success flag to false", () => {
-            // WHEN
-            testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().autoSaveSuccess).toEqual(false);
-        });
-        it("sets the autoSave success flag to true", () => {
-            // WHEN
-            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().autoSaveSuccess).toEqual(true);
-        });
-        it("does not set the autoSave success flag to true if saveTrack is unmounted", () => {
-            // GIVEN
-            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().autoSaveSuccess).toEqual(false);
         });
     });
 
