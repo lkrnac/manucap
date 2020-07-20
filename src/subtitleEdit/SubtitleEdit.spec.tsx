@@ -67,10 +67,10 @@ describe("SubtitleEdit", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
@@ -84,13 +84,15 @@ describe("SubtitleEdit", () => {
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
-                            <VideoPlayer
-                                mp4="dummyMp4"
-                                poster="dummyPoster"
-                                tracks={[testingTrack]}
-                                languageCuesArray={[]}
-                                lastCueChange={null}
-                            />
+                            <div>
+                                <VideoPlayer
+                                    mp4="dummyMp4"
+                                    poster="dummyPoster"
+                                    tracks={[testingTrack]}
+                                    languageCuesArray={[]}
+                                    lastCueChange={null}
+                                />
+                            </div>
                             <Toolbox handleImportFile={jest.fn()} handleExportFile={jest.fn()} />
                         </div>
                         <div
@@ -167,7 +169,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -194,10 +196,10 @@ describe("SubtitleEdit", () => {
     it("renders with no cues and add cue button for CAPTION track", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
@@ -211,13 +213,15 @@ describe("SubtitleEdit", () => {
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
-                            <VideoPlayer
-                                mp4="dummyMp4"
-                                poster="dummyPoster"
-                                tracks={[testingTrack]}
-                                languageCuesArray={[]}
-                                lastCueChange={null}
-                            />
+                            <div>
+                                <VideoPlayer
+                                    mp4="dummyMp4"
+                                    poster="dummyPoster"
+                                    tracks={[testingTrack]}
+                                    languageCuesArray={[]}
+                                    lastCueChange={null}
+                                />
+                            </div>
                             <Toolbox handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
                         </div>
                         <div
@@ -285,7 +289,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -312,10 +316,10 @@ describe("SubtitleEdit", () => {
     it("renders loading data when data is pending load for CAPTION", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
@@ -327,8 +331,10 @@ describe("SubtitleEdit", () => {
                             <div />
                         </div>
                     </header>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white" }}
+                    <div style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white"
+                    }}
                     >
                         <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
                             <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
@@ -341,7 +347,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -367,10 +373,10 @@ describe("SubtitleEdit", () => {
     it("renders loading data when data is pending load for TRANSLATION source cues", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
                 >
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
@@ -386,8 +392,10 @@ describe("SubtitleEdit", () => {
                             <div />
                         </div>
                     </header>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white" }}
+                    <div style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
+                        backgroundColor: "white"
+                    }}
                     >
                         <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
                             <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
@@ -400,7 +408,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -428,7 +436,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnViewAllTracks = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -459,7 +467,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnComplete = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -491,7 +499,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnExportFile = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -522,7 +530,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnImportFile = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -561,7 +569,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -602,7 +610,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -636,7 +644,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -674,7 +682,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -699,12 +707,14 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const saveTrack = jest.fn();
         // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+        jest.spyOn(_, "debounce").mockReturnValue(() => {
+            saveTrack();
+        });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -730,8 +740,10 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         testingStore.dispatch(lastCueChangeSlice.actions
-            .recordCueChange({ changeType: "EDIT", index: 0,
-                vttCue: new VTTCue(0, 3, "blabla") }));
+            .recordCueChange({
+                changeType: "EDIT", index: 0,
+                vttCue: new VTTCue(0, 3, "blabla")
+            }));
 
         const { container } = render(
             <Provider store={testingStore}>
@@ -782,5 +794,30 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(testingStore.getState().saveTrack).toBeDefined();
+    });
+
+    it("remount EditingVideoPlayer when cues are loaded", () => {
+        // GIVEN
+        const actualComponent = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        // THEN
+        // expect(actualComponent.find(EditingVideoPlayer).props()).toBeDefined();
     });
 });

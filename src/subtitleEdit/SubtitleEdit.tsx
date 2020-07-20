@@ -37,7 +37,17 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
-
+    const [editingVideoPlayerKey, setEditingVideoPlayerKey] = useState(0);
+    const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange);
+    useEffect(
+        (): void => {
+            if (lastCueChange?.changeType === "LOAD") {
+                setEditingVideoPlayerKey((editingVideoPlayerKey + 1));
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [lastCueChange] // only run when lastCueChange changes
+    );
     useEffect(
         () => (): void => { // nested arrow function is needed, because React will call it as callback when unmounted
             dispatch(resetEditingTrack());
@@ -49,7 +59,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         () => {
             dispatch(setSaveTrack(props.onSave));
-        }, [ dispatch, props.onSave ]
+        }, [dispatch, props.onSave]
     );
 
     useEffect(
@@ -79,7 +89,13 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     :
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
-                            <EditingVideoPlayer mp4={props.mp4} poster={props.poster} onTimeChange={handleTimeChange} />
+                            <div className="video-player-wrapper" key={editingVideoPlayerKey}>
+                                <EditingVideoPlayer
+                                    mp4={props.mp4}
+                                    poster={props.poster}
+                                    onTimeChange={handleTimeChange}
+                                />
+                            </div>
                             <Toolbox handleExportFile={props.onExportFile} handleImportFile={props.onImportFile} />
                         </div>
                         <div
