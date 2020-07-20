@@ -1,10 +1,10 @@
-import React, { ReactElement, useEffect, Dispatch, useState, useRef } from "react";
+import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
 import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
 import _ from "lodash";
 
-import { SubtitleEditState, AppThunk } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";

@@ -1,5 +1,5 @@
 import { CueIndexAction, cuesSlice, validationErrorSlice } from "../cueSlices";
-import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
