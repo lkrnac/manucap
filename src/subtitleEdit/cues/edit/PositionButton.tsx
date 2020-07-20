@@ -19,8 +19,8 @@ const PositionButton = (props: Props): ReactElement => (
                 {findPositionIcon(props.vttCue).iconText} <span className="caret" />
             </Dropdown.Toggle>
         </TooltipWrapper>
-        <Dropdown.Menu style={{ minWidth: "210px", width: "210px" }}>
-            <div style={{ display: "flex", flexFlow: "row wrap" }}>
+        <Dropdown.Menu>
+            <div style={{ minWidth: "210px", width: "210px", display: "flex", flexFlow: "row wrap" }}>
                 {
                     positionIcons.map((positionIcon: PositionIcon, index: number): ReactElement =>
                         (
