@@ -16,7 +16,7 @@ import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
-import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
+import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
 import { render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
@@ -148,15 +148,7 @@ describe("SubtitleEdit", () => {
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                                 >
-                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
-                                    <span hidden className="text-success">
-                                        All changes saved to server
-                                        &nbsp;<i className="fa fa-check-circle"></i>
-                                    </span>
-                                    <span hidden className="text-danger">
-                                        Error saving latest changes
-                                        &nbsp;<i className="fa fa-exclamation-triangle"></i>
-                                    </span>
+                                    <span hidden className=""> &nbsp;<i className="" /></span>
                                 </div>
                                 <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                                     Complete
@@ -265,17 +257,8 @@ describe("SubtitleEdit", () => {
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                                 >
-                                    <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
-                                    <span hidden className="text-success">
-                                        All changes saved to server
-                                        &nbsp;<i className="fa fa-check-circle"></i>
-                                    </span>
-                                    <span hidden className="text-danger">
-                                        Error saving latest changes
-                                        &nbsp;<i className="fa fa-exclamation-triangle"></i>
-                                    </span>
+                                    <span hidden className=""> &nbsp;<i className="" /></span>
                                 </div>
-
                                 <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                                     Complete
                                 </button>
@@ -759,7 +742,7 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().sourceCues).toEqual([]);
         expect(testingStore.getState().saveTrack).toBeNull();
         expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
-        expect(testingStore.getState().saveStatus).toEqual("");
+        expect(testingStore.getState().saveState).toEqual(SaveState.NONE);
         expect(testingStore.getState().pendingSave).toBeFalsy();
         expect(testingStore.getState().lastCueChange).toEqual(null);
     });

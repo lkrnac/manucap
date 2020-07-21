@@ -5,19 +5,18 @@ import ToggleButton from "../../common/ToggleButton";
 import { updateEditingTrack } from "../trackSlices";
 import { Track } from "../model";
 import { updateCues } from "../cues/cueSlices";
-import { Constants } from "../constants";
+import { isPendingSaveState } from "../cues/saveSlices";
 
 export const CaptionOverlapToggle = (): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const overlapEnabled = editingTrack?.overlapEnabled;
-    const saveStatus = useSelector((state: SubtitleEditState) => state.saveStatus);
-    const isPending = saveStatus === Constants.AUTO_SAVE_SAVING_CHANGES_MSG;
+    const saveState = useSelector((state: SubtitleEditState) => state.saveState);
     return (
         <ToggleButton
             className="btn btn-secondary"
-            disabled={isPending}
+            disabled={isPendingSaveState(saveState)}
             toggled={overlapEnabled}
             onClick={(): void => {
                 const track = {

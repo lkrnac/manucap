@@ -4,15 +4,12 @@ import { mount } from "enzyme";
 import CompleteButton from "./CompleteButton";
 import { createTestingStore } from "../testUtils/testingStore";
 import { Provider } from "react-redux";
-import { updateEditingTrack, updateTask } from "./trackSlices";
+import { updateEditingTrack } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
-import { CueDto, Language, Task, Track } from "./model";
+import { CueDto, Track } from "./model";
 import { updateCues } from "./cues/cueSlices";
-import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "./cues/saveSlices";
-
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
-}));
+import { SaveState, saveStateSlice, setSaveTrack } from "./cues/saveSlices";
+import each from "jest-each";
 
 const testingTrack = {
     type: "CAPTION",
@@ -37,25 +34,111 @@ describe("CompleteButton", () => {
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
     });
-    it("renders", () => {
+
+    it("renders for save state NONE", () => {
         // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <>
+                    <div style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}>
+                        <span hidden className=""> &nbsp;<i className="" /></span>
+                    </div>
+                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                        Complete
+                    </button>
+                </>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CompleteButton onComplete={jest.fn()} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    each([
+        [ SaveState.TRIGGERED ],
+        [ SaveState.REQUEST_SENT ],
+        [ SaveState.RETRY ],
+    ])
+        .it("renders save pending for save state '%s'", (testingState: SaveState) => {
+            // GIVEN
+            testingStore.dispatch(saveStateSlice.actions.setState(testingState) as {} as AnyAction);
+            const expectedNode = mount(
+                <Provider store={testingStore}>
+                    <>
+                        <div
+                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
+                        >
+                            <span className="">Saving changes &nbsp;<i className="fas fa-sync fa-spin" /></span>
+                        </div>
+                        <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
+                            Complete
+                        </button>
+                    </>
+                </Provider>
+            );
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CompleteButton onComplete={jest.fn()} />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.html()).toEqual(expectedNode.html());
+        });
+
+    it("renders save succeeded for save state SAVED", () => {
+        // GIVEN
+        testingStore.dispatch(saveStateSlice.actions.setState(SaveState.SAVED) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
                     <div
                         style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
                     >
-                        <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
-                        <span hidden className="text-success">
-                            All changes saved to server
-                            &nbsp;<i className="fa fa-check-circle"></i>
-                        </span>
-                        <span hidden className="text-danger">
-                            Error saving latest changes
-                            &nbsp;<i className="fa fa-exclamation-triangle"></i>
+                        <span className="text-success">
+                            All changes saved to server &nbsp;<i className="fa fa-check-circle" />
                         </span>
                     </div>
+                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                        Complete
+                    </button>
+                </>
+            </Provider>
+        );
 
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CompleteButton onComplete={jest.fn()} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    it("renders save succeeded for save state ERROR", () => {
+        // GIVEN
+        testingStore.dispatch(saveStateSlice.actions.setState(SaveState.ERROR) as {} as AnyAction);
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <>
+                    <div
+                        style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
+                    >
+                        <span className="text-danger">
+                            Error saving latest changes &nbsp;<i className="fa fa-exclamation-triangle" />
+                        </span>
+                    </div>
                     <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
@@ -92,152 +175,4 @@ describe("CompleteButton", () => {
         expect(mockOnComplete).toHaveBeenCalledWith(
             { editingTrack: testingStore.getState().editingTrack, cues: testingStore.getState().cues });
     });
-
-    describe("Shows Save Status", () => {
-        const testingTrack = {
-            type: "CAPTION",
-            language: { id: "en-US", name: "English (US)" } as Language,
-            default: true,
-            mediaTitle: "This is the video title",
-            mediaLength: 123456,
-            progress: 0
-        } as Track;
-        const testingTask = {
-            type: "TASK_CAPTION",
-            projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM"
-        } as Task;
-        const mockOnComplete = jest.fn();
-        it("renders save status label when save is called", () => {
-            // GIVEN
-            const expectedNode = mount(
-                <Provider store={testingStore}>
-                    <>
-                        <div
-                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                        >
-                            <span>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
-                            <span hidden className="text-success">
-                                All changes saved to server
-                                &nbsp;<i className="fa fa-check-circle"></i>
-                            </span>
-                            <span hidden className="text-danger">
-                                Error saving latest changes
-                                &nbsp;<i className="fa fa-exclamation-triangle"></i>
-                            </span>
-                        </div>
-                        <button
-                            type="button"
-                            className="btn btn-primary sbte-complete-subtitle-btn"
-                            disabled
-                        >
-                            Complete
-                        </button>
-                    </>
-                </Provider>
-            );
-
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CompleteButton onComplete={mockOnComplete} />
-                </Provider>
-            );
-            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-            testingStore.dispatch(updateCues([]) as {} as AnyAction);
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-
-            // THEN
-            expect(actualNode.html()).toEqual(expectedNode.html());
-        });
-
-        it("renders save status label when save is successful", () => {
-            // GIVEN
-            const expectedNode = mount(
-                <Provider store={testingStore}>
-                    <>
-                        <div
-                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                        >
-                            <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
-                            <span className="text-success">
-                                All changes saved to server
-                                &nbsp;<i className="fa fa-check-circle"></i>
-                            </span>
-                            <span hidden className="text-danger">
-                                Error saving latest changes
-                                &nbsp;<i className="fa fa-exclamation-triangle"></i>
-                            </span>
-                        </div>
-                        <button
-                            type="button"
-                            className="btn btn-primary sbte-complete-subtitle-btn"
-                        >
-                            Complete
-                        </button>
-                    </>
-                </Provider>
-            );
-
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CompleteButton onComplete={mockOnComplete} />
-                </Provider>
-            );
-            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-            testingStore.dispatch(updateCues([]) as {} as AnyAction);
-            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-            // THEN
-            expect(actualNode.html()).toEqual(expectedNode.html());
-        });
-
-        it("renders save status label when save fails", () => {
-            // GIVEN
-            const expectedNode = mount(
-                <Provider store={testingStore}>
-                    <>
-                        <div
-                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                        >
-                            <span hidden>Saving changes &nbsp;<i className="fas fa-sync fa-spin"></i></span>
-                            <span hidden className="text-success">
-                                All changes saved to server
-                                &nbsp;<i className="fa fa-check-circle"></i>
-                            </span>
-                            <span className="text-danger">
-                                Error saving latest changes
-                                &nbsp;<i className="fa fa-exclamation-triangle"></i>
-                            </span>
-                        </div>
-                        <button
-                            type="button"
-                            className="btn btn-primary sbte-complete-subtitle-btn"
-                        >
-                            Complete
-                        </button>
-                    </>
-                </Provider>
-            );
-
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CompleteButton onComplete={mockOnComplete} />
-                </Provider>
-            );
-            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-            testingStore.dispatch(updateCues([]) as {} as AnyAction);
-            testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-
-            // THEN
-            expect(actualNode.html()).toEqual(expectedNode.html());
-        });
-
-    });
-
 });
