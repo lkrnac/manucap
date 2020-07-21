@@ -10,10 +10,10 @@ import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
-import testingStore from "../../testUtils/testingStore";
 import { updateCues } from "./cueSlices";
 import { setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
+import { createTestingStore } from "../../testUtils/testingStore";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -25,11 +25,13 @@ const cues = [
 ];
 
 const sourceCue = { vttCue: new VTTCue(0, 0, "Source Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+let testingStore = createTestingStore();
 
 describe("CueActionsPanel", () => {
     const saveTrack = jest.fn();
 
-    beforeAll(() => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });

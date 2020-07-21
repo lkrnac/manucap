@@ -8,9 +8,9 @@ import React from "react";
 import ShiftTimesModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import sinon from "sinon";
-import testingStore from "../../../testUtils/testingStore";
 import { setSaveTrack } from "../../cues/saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
+import { createTestingStore } from "../../../testUtils/testingStore";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -21,10 +21,13 @@ const testCues = [
     { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
 
+let testingStore = createTestingStore();
+
 describe("ShiftTimesModal", () => {
     const saveTrack = jest.fn();
 
-    beforeAll(() => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });
