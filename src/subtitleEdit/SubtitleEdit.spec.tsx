@@ -84,7 +84,7 @@ describe("SubtitleEdit", () => {
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
-                            <div>
+                            <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
                                     poster="dummyPoster"
@@ -213,7 +213,7 @@ describe("SubtitleEdit", () => {
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
-                            <div>
+                            <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
                                     poster="dummyPoster"
