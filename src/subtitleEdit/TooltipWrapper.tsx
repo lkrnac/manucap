@@ -8,7 +8,7 @@ interface Props {
         | "top-end" | "right-start"| "right"| "right-end"| "bottom-end"
         | "bottom" | "bottom-start" | "left-end" | "left" | "left-start";
     tooltipId: string;
-    children: React.ReactNode;
+    children: React.ReactElement;
 
 }
 export const TooltipWrapper = (props: Props): ReactElement => {
