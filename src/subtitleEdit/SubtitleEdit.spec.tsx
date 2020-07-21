@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { lastCueChangeSlice, updateCues, updateSourceCues } from "./cues/cueSlices";
+import { lastCueChangeSlice, updateCues, updateSourceCues, updateVttCue } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -798,7 +798,7 @@ describe("SubtitleEdit", () => {
 
     it("remount EditingVideoPlayer when cues are loaded", () => {
         // GIVEN
-        const actualComponent = mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
@@ -816,8 +816,39 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
 
         // THEN
-        // expect(actualComponent.find(EditingVideoPlayer).props()).toBeDefined();
+        expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
+    });
+
+    it("does not remount EditingVideoPlayer when cues are updated", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        actualNode.update();
+
+        testingStore.dispatch(updateVttCue(0, new VTTCue(2, 5, "Dummy Cue"),
+            "editUuid") as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
     });
 });

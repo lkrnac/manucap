@@ -59,7 +59,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         () => {
             dispatch(setSaveTrack(props.onSave));
-        }, [dispatch, props.onSave]
+        }, [ dispatch, props.onSave ]
     );
 
     useEffect(

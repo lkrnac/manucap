@@ -120,7 +120,12 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().onTimeChange).toEqual(handleTimeChange);
     });
 
-    it("update of cues in redux force update cues passed to languageCuesArray ", () => {
+    /**
+     * This test cases expects that EditingVideoPlayer would be rendered with cues initialized in Redux.
+     * It is not updated when cues are updated, because replacing all the cues was not performant.
+     * We instead use lastCueUpdate property to change cues in already rendered player.
+     */
+    it("update of cues in redux doesn't initialize cues", () => {
         // GIVEN
         const handleTimeChange = jest.fn();
         const actualNode = mount(
@@ -135,8 +140,8 @@ describe("EditingVideoPlayer", () => {
         actualNode.setProps({}); // trigger update + re-render
 
         // THEN
-        expect(actualNode.find(VideoPlayer).props().languageCuesArray[0].cues.length).toEqual(2);
-        expect(actualNode.find(VideoPlayer).props().lastCueChange?.changeType).toEqual("IMPORT");
+        expect(actualNode.find(VideoPlayer).props().languageCuesArray)
+            .toEqual([{ "cues": [], "languageId": "en-US" }]);
     });
 
 

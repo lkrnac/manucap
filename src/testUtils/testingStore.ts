@@ -1,4 +1,4 @@
-import { configureStore, EnhancedStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { EnhancedStore, configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import subtitleEditReducers from "../subtitleEdit/subtitleEditReducers";
 
 // NOTE: You can use logger middleware to log Redux state changes/actions to the browser console.
