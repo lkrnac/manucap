@@ -9,7 +9,7 @@ import { CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { updateCues } from "../cues/cueSlices";
+import { updateCues, updateVttCue } from "../cues/cueSlices";
 import { updateEditingTrack } from "../trackSlices";
 
 let testingStore = createTestingStore();
@@ -134,14 +134,19 @@ describe("EditingVideoPlayer", () => {
             </Provider>
         );
 
-        // WHEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         actualNode.setProps({}); // trigger update + re-render
 
+        // WHEN
+        testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Dummy Cue"),
+            "editUuid") as {} as AnyAction);
+
         // THEN
-        expect(actualNode.find(VideoPlayer).props().languageCuesArray)
-            .toEqual([{ "cues": [], "languageId": "en-US" }]);
+        expect(actualNode.find(VideoPlayer).props().languageCuesArray[0].cues[0].vttCue)
+            .toEqual(testingCues[0].vttCue);
+        expect(actualNode.find(VideoPlayer).props().languageCuesArray[0].cues[1].vttCue)
+            .toEqual(testingCues[1].vttCue);
     });
 
 
