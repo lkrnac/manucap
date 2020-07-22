@@ -3,7 +3,6 @@ import { debounce } from "lodash";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, Track } from "../model";
-import { Constants } from "../constants";
 import { editingTrackSlice } from "../trackSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
@@ -11,6 +10,20 @@ interface SaveAction extends SubtitleEditAction {
     cues: CueDto[];
     editingTrack: Track | null;
 }
+
+export enum SaveState {
+    NONE,
+    TRIGGERED,
+    REQUEST_SENT,
+    RETRY,
+    SAVED,
+    ERROR,
+}
+
+export const isPendingSaveState = (saveState: SaveState): boolean =>
+    saveState === SaveState.TRIGGERED
+    || saveState === SaveState.REQUEST_SENT
+    || saveState === SaveState.RETRY;
 
 export const saveTrackSlice = createSlice({
     name: "saveTrack",
@@ -24,16 +37,14 @@ export const saveTrackSlice = createSlice({
     }
 });
 
-export const saveStatusSlice = createSlice({
-    name: "saveStatus",
-    initialState: "",
+export const saveStateSlice = createSlice({
+    name: "saveState",
+    initialState: SaveState.NONE,
     reducers: {
-        setPendingSave: (): string => Constants.AUTO_SAVE_SAVING_CHANGES_MSG,
-        setAutoSaveSuccess: (_state, action: PayloadAction<boolean>): string =>
-            action.payload ? Constants.AUTO_SAVE_SUCCESS_CHANGES_SAVED_MSG : Constants.AUTO_SAVE_ERROR_SAVING_MSG,
+        setState: (_state, action: PayloadAction<SaveState>): SaveState => action.payload,
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): string => ""
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): SaveState => SaveState.NONE
     }
 });
 
@@ -42,27 +53,40 @@ export const setSaveTrack = (saveTrack: Function): AppThunk =>
         dispatch(saveTrackSlice.actions.set(saveTrack));
     };
 
-export const setAutoSaveSuccess = (success: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean | SaveAction>>, getState): void => {
-        if (!getState().saveTrack) {
-            // To handle case where unmounted before callback from host app
-            return;
-        }
-        dispatch(saveStatusSlice.actions.setAutoSaveSuccess(success));
-    };
-
-const saveTrackCurrent = (dispatch: Dispatch<PayloadAction<SaveAction>>, getState: Function): void => {
+const saveTrackCurrent = (dispatch: Dispatch<PayloadAction<SaveAction | SaveState>>, getState: Function): void => {
     const cues = getState().cues;
     const editingTrack = getState().editingTrack;
     if (cues && editingTrack) {
-        dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
+        if (getState().saveState === SaveState.TRIGGERED) {
+            dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
+            dispatch(saveStateSlice.actions.setState(SaveState.REQUEST_SENT));
+        }
     }
 };
 
 const saveTrackDebounced = debounce(saveTrackCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
 export const callSaveTrack = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SaveAction | undefined>>, getState: Function): void => {
-        dispatch(saveStatusSlice.actions.setPendingSave());
-        saveTrackDebounced(dispatch, getState);
+    (dispatch: Dispatch<PayloadAction<SaveAction | undefined | SaveState>>, getState: Function): void => {
+        const saveState = getState().saveState;
+        if (saveState === SaveState.REQUEST_SENT || saveState === SaveState.RETRY) {
+            dispatch(saveStateSlice.actions.setState(SaveState.RETRY));
+        } else {
+            dispatch(saveStateSlice.actions.setState(SaveState.TRIGGERED));
+            saveTrackDebounced(dispatch, getState);
+        }
+    };
+
+export const setAutoSaveSuccess = (success: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean | SaveAction | SaveState>>, getState): void => {
+        if (getState().saveState === SaveState.RETRY) {
+            const cues = getState().cues;
+            const editingTrack = getState().editingTrack;
+            if (cues && editingTrack) {
+                dispatch(saveTrackSlice.actions.call({ cues, editingTrack }));
+                dispatch(saveStateSlice.actions.setState(SaveState.REQUEST_SENT));
+            }
+        } else {
+            dispatch(saveStateSlice.actions.setState(success ? SaveState.SAVED : SaveState.ERROR));
+        }
     };

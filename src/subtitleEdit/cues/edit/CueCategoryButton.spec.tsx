@@ -71,8 +71,6 @@ describe("CueCategoryButton", () => {
                     Dialogue
                 </button>
                 <div
-                    x-placement="bottom-start"
-                    aria-labelledby="cue-line-category"
                     style={{
                         position: "absolute",
                         top: "0px",
@@ -81,6 +79,8 @@ describe("CueCategoryButton", () => {
                         pointerEvents: "none",
                         margin: "0px"
                     }}
+                    x-placement="bottom-start"
+                    aria-labelledby="cue-line-category"
                     className="dropdown-menu show"
                 >
                     <a
