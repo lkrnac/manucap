@@ -13,7 +13,7 @@ import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition } from "./cues/cuesListScrollSlice";
-import { ScrollPosition } from "./model";
+import { CueChange, ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
@@ -33,12 +33,15 @@ export interface SubtitleEditProps {
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
+    // const trackRef = useRef<Track | null>();
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
     const [editingVideoPlayerKey, setEditingVideoPlayerKey] = useState(0);
-    const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange);
+    const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange,
+        (newChange: CueChange | null, oldChange: CueChange | null) =>
+            oldChange === newChange || newChange?.changeType !== "LOAD");
     useEffect(
         (): void => {
             if (lastCueChange?.changeType === "LOAD") {
@@ -59,7 +62,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         () => {
             dispatch(setSaveTrack(props.onSave));
-        }, [ dispatch, props.onSave ]
+        }, [dispatch, props.onSave]
     );
 
     useEffect(
@@ -69,7 +72,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once
     );
-
+    console.log("Rendering...");
     return (
         <div
             className="sbte-subtitle-edit"
