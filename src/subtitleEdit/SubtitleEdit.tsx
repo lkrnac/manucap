@@ -62,7 +62,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         () => {
             dispatch(setSaveTrack(props.onSave));
-        }, [dispatch, props.onSave]
+        }, [ dispatch, props.onSave ]
     );
 
     useEffect(
@@ -72,7 +72,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once
     );
-    console.log("Rendering...");
+
     return (
         <div
             className="sbte-subtitle-edit"
