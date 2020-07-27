@@ -12,12 +12,14 @@ const speakerIdentificationValues = {
     FULLNAME: "Full Name",
     NUMBERED: "Numbered",
     GENDER: "Gender",
-    GENRE: "Genre"
+    GENRE: "Genre",
+    SEE_COMMENTS: "See Comments"
 };
 const dialogueStyleValues = {
     LINE_BREAKS: "Line Breaks",
     DOUBLE_CHEVRON: "Double Chevron",
-    NO_DASHES: "No Dashes"
+    NO_DASHES: "No Dashes",
+    SEE_COMMENTS: "See Comments"
 };
 
 const millisToSeconds = (millis: number | null): string => millis ? "" + (millis / 1000) : "n/a";
