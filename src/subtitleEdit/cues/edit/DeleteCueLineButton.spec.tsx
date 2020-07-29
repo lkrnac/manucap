@@ -6,19 +6,22 @@ import DeleteCueLineButton from "./DeleteCueLineButton";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
-import testingStore from "../../../testUtils/testingStore";
 import { updateCues } from "../cueSlices";
-import _ from "lodash";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
+import { createTestingStore } from "../../../testUtils/testingStore";
+
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
+
+let testingStore = createTestingStore();
 
 describe("DeleteCueLineButton", () => {
-
     const saveTrack = jest.fn();
 
-    beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+    beforeEach(() => {
+        testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });
@@ -80,6 +83,7 @@ describe("DeleteCueLineButton", () => {
                 <DeleteCueLineButton cueIndex={0} />
             </Provider>
         );
+        saveTrack.mockReset();
 
         // WHEN
         actualNode.find(".sbte-delete-cue-button").simulate("click");
