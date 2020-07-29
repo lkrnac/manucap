@@ -22,7 +22,7 @@ import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "../cueTextConverter";
 import { fetchSpellCheckDebounced } from "../spellCheck/spellCheckFetch";
-import { SpellCheck } from "../spellCheck/model";
+import { Replacement, SpellCheck } from "../spellCheck/model";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -234,8 +234,8 @@ describe("CueTextEditor", () => {
         // GIVEN
         const spellCheck = {
             matches: [
-                { offset: 5, length: 4 },
-                { offset: 15, length: 6 }
+                { offset: 5, length: 4, replacements: [] as Replacement[] },
+                { offset: 15, length: 6, replacements: [] as Replacement[] }
             ]
         } as SpellCheck;
         const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
@@ -258,6 +258,47 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+    });
+
+    it("replaces incorrectly spelled text with replacement when user picks one", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        const spellCheck = {
+            matches: [
+                { offset: 5, length: 3, replacements: [{ value: "option1" }, { value: "HTML" }] as Replacement[] },
+                { offset: 15, length: 6, replacements: [] as Replacement[] }
+            ]
+        } as SpellCheck;
+        const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> sample");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    spellCheck={spellCheck}
+                    spellCheckerDomain="testing-domain"
+                    language="testing-language"
+                />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-text-with-error").at(0).simulate("click");
+        console.log(actualNode.html());
+        console.log(actualNode.find("#react-select-2-option-1").at(0).html());
+        actualNode.find("#react-select-2-option-1").at(0).simulate("click");
+
+        // THEN
+        expect(saveTrack).toHaveBeenCalledTimes(1);
+        expect(fetchSpellCheckDebounced).toBeCalledTimes(1);
+        expect(fetchSpellCheckDebounced).toBeCalledWith(
+            testingStore.dispatch, 0, "some HTML Text sample", "testing-language", "testing-domain"
+        );
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some HTML <b>Text</b> sample");
     });
 
     it("updates cue in redux store when changed", () => {

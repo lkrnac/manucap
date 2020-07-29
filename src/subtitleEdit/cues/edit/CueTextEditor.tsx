@@ -7,7 +7,9 @@ import {
     DraftHandleValue,
     Editor,
     EditorState,
-    getDefaultKeyBinding
+    getDefaultKeyBinding,
+    Modifier,
+    SelectionState
 } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
@@ -82,6 +84,32 @@ const getWordCountPerLine = (text: string): number[] => {
     return lines.map((line: string): number => line.match(/\S+/g)?.length || 0);
 };
 
+const triggerCueSaveAndSpellCheck = (
+    newEditorState: EditorState,
+    dispatch: Dispatch<AppThunk>,
+    props: CueTextEditorProps
+): void => {
+    const plainText = !newEditorState.getCurrentContent().hasText()
+        ? ""
+        : newEditorState.getCurrentContent().getPlainText();
+    fetchSpellCheckDebounced(dispatch, props.index, plainText, props.language, props.spellCheckerDomain);
+    dispatch(callSaveTrack());
+};
+
+const createCorrectSpellingHandler = (
+    editorState: EditorState,
+    dispatch: Dispatch<AppThunk>,
+    props: CueTextEditorProps
+) => (replacement: string, start: number, end: number): void => {
+    let contentState = editorState.getCurrentContent();
+    const selectionState = editorState.getSelection();
+    const typoSelectionState = selectionState.set("anchorOffset", start).set("focusOffset", end) as SelectionState;
+    contentState = Modifier.replaceText(contentState, typoSelectionState, replacement);
+    const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
+    dispatch(updateEditorState(props.index, newEditorState));
+    triggerCueSaveAndSpellCheck(newEditorState, dispatch, props);
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
@@ -102,7 +130,14 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         }
     };
     const newSpellCheckDecorator = new CompositeDecorator([
-        { strategy: findSpellCheckIssues, component: SpellCheckIssue, props: { spellCheck: props.spellCheck }}
+        {
+            strategy: findSpellCheckIssues,
+            component: SpellCheckIssue,
+            props: {
+                spellCheck: props.spellCheck,
+                correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props)
+            }
+        }
     ]);
     editorState = EditorState.set(editorState, { decorator: newSpellCheckDecorator });
 
@@ -177,17 +212,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         onChange={(newEditorState: EditorState): void => {
                             dispatch(updateEditorState(props.index, newEditorState));
                             if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                                const plainText = !currentContent.hasText()
-                                    ? ""
-                                    : newEditorState.getCurrentContent().getPlainText();
-                                fetchSpellCheckDebounced(
-                                    dispatch,
-                                    props.index,
-                                    plainText,
-                                    props.language,
-                                    props.spellCheckerDomain
-                                );
-                                dispatch(callSaveTrack());
+                                triggerCueSaveAndSpellCheck(newEditorState, dispatch, props);
                             }
                         }}
                         spellCheck
