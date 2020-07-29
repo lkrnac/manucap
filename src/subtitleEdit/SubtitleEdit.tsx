@@ -33,12 +33,16 @@ export interface SubtitleEditProps {
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
-    // const trackRef = useRef<Track | null>();
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
     const [editingVideoPlayerKey, setEditingVideoPlayerKey] = useState(0);
+
+    /**
+     * Detect a cue change of `LOAD` type, use to force reloading `EditingVideoPlayer` component
+     * when user imports a subtitle file.
+     */
     const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange,
         (newChange: CueChange | null, oldChange: CueChange | null) =>
             oldChange === newChange || newChange?.changeType !== "LOAD");
