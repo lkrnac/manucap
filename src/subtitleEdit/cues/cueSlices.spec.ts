@@ -809,15 +809,6 @@ describe("cueSlices", () => {
             expect(lastCueChange.vttCue.endTime).toEqual(3);
         });
 
-        it("record LOAD cue change when updateCues is called", () => {
-            // WHEN
-            testingStore.dispatch(updateCues([]) as {} as AnyAction);
-
-            // THEN
-            const lastCueChange = testingStore.getState().lastCueChange;
-            expect(lastCueChange.changeType).toEqual("LOAD");
-        });
-
         it("adds cue to the end of the cue array", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);

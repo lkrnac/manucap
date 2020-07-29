@@ -204,10 +204,7 @@ export const lastCueChangeSlice = createSlice({
         recordCueChange: (_state, action: PayloadAction<CueChange>): CueChange => action.payload
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueChange | null => null,
-        [cuesSlice.actions.updateCues.type]: (): CueChange | null => {
-            return { changeType: "LOAD" };
-        }
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueChange | null => null
     }
 });
 

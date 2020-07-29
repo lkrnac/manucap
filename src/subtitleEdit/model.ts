@@ -58,9 +58,9 @@ export interface LoadingIndicator {
 }
 
 export interface CueChange {
-    changeType: "ADD" | "EDIT" | "REMOVE" | "LOAD";
-    index?: number;
-    vttCue?: VTTCue;
+    changeType: "ADD" | "EDIT" | "REMOVE";
+    index: number;
+    vttCue: VTTCue;
 }
 
 export enum ScrollPosition {

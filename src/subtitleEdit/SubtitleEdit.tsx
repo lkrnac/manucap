@@ -13,7 +13,7 @@ import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition } from "./cues/cuesListScrollSlice";
-import { CueChange, ScrollPosition } from "./model";
+import { ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
@@ -37,24 +37,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
-    const [editingVideoPlayerKey, setEditingVideoPlayerKey] = useState(0);
+    const cuesLoadingCounter = useSelector((state: SubtitleEditState) => state.cuesLoadingCounter);
 
-    /**
-     * Detect a cue change of `LOAD` type, use to force reloading `EditingVideoPlayer` component
-     * when user imports a subtitle file.
-     */
-    const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange,
-        (newChange: CueChange | null, oldChange: CueChange | null) =>
-            oldChange === newChange || newChange?.changeType !== "LOAD");
-    useEffect(
-        (): void => {
-            if (lastCueChange?.changeType === "LOAD") {
-                setEditingVideoPlayerKey((editingVideoPlayerKey + 1));
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [lastCueChange] // only run when lastCueChange changes
-    );
     useEffect(
         () => (): void => { // nested arrow function is needed, because React will call it as callback when unmounted
             dispatch(resetEditingTrack());
@@ -96,7 +80,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     :
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
-                            <div className="video-player-wrapper" key={editingVideoPlayerKey}>
+                            <div className="video-player-wrapper" key={cuesLoadingCounter}>
                                 <EditingVideoPlayer
                                     mp4={props.mp4}
                                     poster={props.poster}

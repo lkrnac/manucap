@@ -791,11 +791,13 @@ describe("SubtitleEdit", () => {
         // WHEN
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
+        for (let i = 0; i < 5; i++) {
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            actualNode.update();
+        }
 
         // THEN
-        expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
+        expect(actualNode.find(".video-player-wrapper").key()).toEqual("5");
     });
 
     it("does not remount EditingVideoPlayer when cues are updated", () => {
@@ -813,13 +815,10 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
-
-        // WHEN
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
 
+        // WHEN
         testingStore.dispatch(updateVttCue(0, new VTTCue(2, 5, "Dummy Cue"),
             "editUuid") as {} as AnyAction);
         actualNode.update();
