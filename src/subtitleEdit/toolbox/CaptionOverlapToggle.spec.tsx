@@ -8,7 +8,10 @@ import { updateEditingTrack } from "../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Track } from "../model";
 import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "../cues/saveSlices";
-import _ from "lodash";
+
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 
 let testingStore = createTestingStore();
 
@@ -17,10 +20,7 @@ describe("CaptionOverlapToggle", () => {
         testingStore = createTestingStore();
     });
     const saveTrack = jest.fn();
-    beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue((cues) => { saveTrack(cues); });
-    });
+
     beforeEach(() => {
         // GIVEN
         saveTrack.mockReset();

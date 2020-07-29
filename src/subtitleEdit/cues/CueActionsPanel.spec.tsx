@@ -10,11 +10,14 @@ import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
-import testingStore from "../../testUtils/testingStore";
 import { updateCues } from "./cueSlices";
-import _ from "lodash";
 import { setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
+import { createTestingStore } from "../../testUtils/testingStore";
+
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback
+}));
 
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
@@ -22,14 +25,13 @@ const cues = [
 ];
 
 const sourceCue = { vttCue: new VTTCue(0, 0, "Source Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+let testingStore = createTestingStore();
 
 describe("CueActionsPanel", () => {
-
     const saveTrack = jest.fn();
 
-    beforeAll(() => {
-        // @ts-ignore
-        jest.spyOn(_, "debounce").mockReturnValue(() => { saveTrack(); });
+    beforeEach(() => {
+        testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
     });
@@ -266,6 +268,7 @@ describe("CueActionsPanel", () => {
                 <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
             </Provider>
         );
+        saveTrack.mockReset();
 
         // WHEN
         actualNode.find(".sbte-delete-cue-button").simulate("click");
