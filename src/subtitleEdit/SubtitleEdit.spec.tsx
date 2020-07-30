@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { lastCueChangeSlice, updateCues, updateSourceCues } from "./cues/cueSlices";
+import { lastCueChangeSlice, updateCues, updateSourceCues, updateVttCue } from "./cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -88,13 +88,15 @@ describe("SubtitleEdit", () => {
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
-                            <VideoPlayer
-                                mp4="dummyMp4"
-                                poster="dummyPoster"
-                                tracks={[testingTrack]}
-                                languageCuesArray={[]}
-                                lastCueChange={null}
-                            />
+                            <div className="video-player-wrapper">
+                                <VideoPlayer
+                                    mp4="dummyMp4"
+                                    poster="dummyPoster"
+                                    tracks={[testingTrack]}
+                                    languageCuesArray={[]}
+                                    lastCueChange={null}
+                                />
+                            </div>
                             <Toolbox handleImportFile={jest.fn()} handleExportFile={jest.fn()} />
                         </div>
                         <div
@@ -207,13 +209,15 @@ describe("SubtitleEdit", () => {
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
-                            <VideoPlayer
-                                mp4="dummyMp4"
-                                poster="dummyPoster"
-                                tracks={[testingTrack]}
-                                languageCuesArray={[]}
-                                lastCueChange={null}
-                            />
+                            <div className="video-player-wrapper">
+                                <VideoPlayer
+                                    mp4="dummyMp4"
+                                    poster="dummyPoster"
+                                    tracks={[testingTrack]}
+                                    languageCuesArray={[]}
+                                    lastCueChange={null}
+                                />
+                            </div>
                             <Toolbox handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
                         </div>
                         <div
@@ -767,6 +771,61 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(testingStore.getState().saveTrack).toBeDefined();
+    });
+
+    it("remount EditingVideoPlayer when cues are loaded", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        for (let i = 0; i < 5; i++) {
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            actualNode.update();
+        }
+
+        // THEN
+        expect(actualNode.find(".video-player-wrapper").key()).toEqual("5");
+    });
+
+    it("does not remount EditingVideoPlayer when cues are updated", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        // WHEN
+        testingStore.dispatch(updateVttCue(0, new VTTCue(2, 5, "Dummy Cue"),
+            "editUuid") as {} as AnyAction);
+        actualNode.update();
+
+        // THEN
+        expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
     });
 
     it("passes down spell checker domain and language parameter to editor", () => {

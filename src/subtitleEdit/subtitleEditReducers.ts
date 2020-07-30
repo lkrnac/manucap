@@ -14,6 +14,7 @@ import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 import { saveStateSlice, saveTrackSlice } from "./cues/saveSlices";
 import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
+import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -29,7 +30,8 @@ export const Reducers = {
     saveTrack: saveTrackSlice.reducer,
     saveState: saveStateSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
-    scrollPosition: scrollPositionSlice.reducer
+    scrollPosition: scrollPositionSlice.reducer,
+    cuesLoadingCounter: cuesLoadingCounterSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);
