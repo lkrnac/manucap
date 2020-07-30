@@ -104,7 +104,10 @@ const createCorrectSpellingHandler = (
     let contentState = editorState.getCurrentContent();
     const selectionState = editorState.getSelection();
     const typoSelectionState = selectionState.set("anchorOffset", start).set("focusOffset", end) as SelectionState;
-    contentState = Modifier.replaceText(contentState, typoSelectionState, replacement);
+    const startKey = typoSelectionState.getStartKey();
+    const typoBlock = contentState.getBlockForKey(startKey);
+    const inlineStyle = typoBlock.getInlineStyleAt(start);
+    contentState = Modifier.replaceText(contentState, typoSelectionState, replacement, inlineStyle);
     const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
     dispatch(updateEditorState(props.index, newEditorState));
     triggerCueSaveAndSpellCheck(newEditorState, dispatch, props);

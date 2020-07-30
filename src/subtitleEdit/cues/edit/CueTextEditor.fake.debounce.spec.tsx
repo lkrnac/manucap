@@ -272,7 +272,7 @@ describe("CueTextEditor", () => {
                 { offset: 14, length: 6, replacements: [] as Replacement[] }
             ]
         } as SpellCheck;
-        const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> sample");
+        const vttCue = new VTTCue(0, 1, "some <u><i>hTm</i></u> <b>Text</b> sample");
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -297,7 +297,7 @@ describe("CueTextEditor", () => {
         expect(fetchSpellCheckDebounced).toBeCalledWith(
             testingStore.dispatch, 0, "some HTML Text sample", "testing-language", "testing-domain"
         );
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some HTML <b>Text</b> sample");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some <u><i>HTML</i></u> <b>Text</b> sample");
         expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
     });
 
