@@ -1,7 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 import { v4 as uuidv4 } from "uuid";
 
-import { CueDto, TimeGapLimit } from "../model";
+import { CueDto, CueError, TimeGapLimit } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
 
@@ -10,7 +10,8 @@ const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTag
 export const checkCharacterLimitation = (
     text: string,
     subtitleSpecification: SubtitleSpecification | null
-): boolean => {
+): CueError[] => {
+    const cueErrors = [] as CueError[];
     const lines = text.split("\n");
     if (subtitleSpecification && subtitleSpecification.enabled) {
         const charactersPerLineLimitOk = lines
@@ -22,9 +23,15 @@ export const checkCharacterLimitation = (
 
         const linesCountLimitOk = subtitleSpecification.maxLinesPerCaption === null
             || lines.length <= subtitleSpecification.maxLinesPerCaption;
-        return charactersPerLineLimitOk && linesCountLimitOk;
+
+        if (!charactersPerLineLimitOk) {
+            cueErrors.push(CueError.CHARS_PER_LINE);
+        }
+        if (!linesCountLimitOk) {
+            cueErrors.push(CueError.LINE_COUNT);
+        }
     }
-    return true;
+    return cueErrors;
 };
 
 export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
@@ -47,9 +54,16 @@ const minRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
 const maxRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
 
-const rangeOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): boolean => {
+const rangeOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): CueError[] => {
+    const cueErrors = [] as CueError[];
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
-    return minRangeOk(vttCue, timeGapLimit) && maxRangeOk(vttCue, timeGapLimit);
+    if (!minRangeOk(vttCue, timeGapLimit)) {
+        cueErrors.push(CueError.MIN_RANGE);
+    }
+    if (!maxRangeOk(vttCue, timeGapLimit)) {
+        cueErrors.push(CueError.MAX_RANGE);
+    }
+    return cueErrors;
 };
 
 const startOverlapOk = (vttCue: VTTCue, previousCue?: CueDto): boolean =>
@@ -58,25 +72,33 @@ const startOverlapOk = (vttCue: VTTCue, previousCue?: CueDto): boolean =>
 const endOverlapOk = (vttCue: VTTCue, followingCue?: CueDto): boolean =>
     !followingCue || vttCue.endTime <= followingCue.vttCue.startTime;
 
-const overlapOk = (vttCue: VTTCue, previousCue?: CueDto, followingCue?: CueDto): boolean =>
-    startOverlapOk(vttCue, previousCue) && endOverlapOk(vttCue, followingCue);
+const overlapOk = (enabled: boolean, vttCue: VTTCue, previousCue?: CueDto, followingCue?: CueDto): CueError[] => {
+    const cueErrors = [] as CueError[];
+    if (!enabled) {
+        if (!startOverlapOk(vttCue, previousCue)) {
+            cueErrors.push(CueError.START_OVERLAP);
+        }
+        if (!endOverlapOk(vttCue, followingCue)) {
+            cueErrors.push(CueError.END_OVERLAP);
+        }
+    }
+    return cueErrors;
+};
 
 const isSpelledCorrectly = (cue: CueDto): boolean =>
     cue.spellCheck?.matches === undefined || cue.spellCheck.matches.length === 0;
 
-export const conformToRules = (
+export const validateCue = (
     cue: CueDto,
     subtitleSpecification: SubtitleSpecification | null,
     previousCue?: CueDto,
     followingCue?: CueDto,
-    overlapCaptions?: boolean
-): boolean =>
+    overlapCaptions?: boolean,
+): CueError[] =>
     checkCharacterLimitation(cue.vttCue.text, subtitleSpecification)
-        && rangeOk(cue.vttCue, subtitleSpecification)
-        && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
-        && isSpelledCorrectly(cue)
-;
-
+        .concat(rangeOk(cue.vttCue, subtitleSpecification))
+        .concat(overlapOk(overlapCaptions || false, cue.vttCue, previousCue, followingCue))
+        .concat(!isSpelledCorrectly(cue) ? CueError.SPELL_CHECK : []);
 
 export const markCues = (
     cues: CueDto[],
@@ -89,7 +111,7 @@ export const markCues = (
 
         return {
             ...cue,
-            corrupted: !conformToRules(
+            errors: validateCue(
                 cue,
                 subtitleSpecifications,
                 previousCue,
@@ -150,8 +172,8 @@ export const applyCharacterLimitation = (
     originalCue: CueDto,
     subtitleSpecifications: SubtitleSpecification | null
 ): VTTCue => {
-    if (!checkCharacterLimitation(vttCue.text, subtitleSpecifications)
-        && checkCharacterLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
+    if (checkCharacterLimitation(vttCue.text, subtitleSpecifications).length > 0
+        && checkCharacterLimitation(originalCue.vttCue.text, subtitleSpecifications).length === 0) {
         vttCue.text = originalCue.vttCue.text;
     }
     return vttCue;

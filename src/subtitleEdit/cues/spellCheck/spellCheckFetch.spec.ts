@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { CueDto } from "../../model";
+import { CueDto, CueError } from "../../model";
 import { updateCues } from "../cueSlices";
 import { fetchSpellCheckDebounced } from "./spellCheckFetch";
 import { AppThunk } from "../../subtitleEditReducers";
@@ -68,7 +68,7 @@ describe("fetchSpellCheck", () => {
                 );
                 expect(testingStore.getState().cues[1].spellCheck).toEqual(testingResponse);
                 expect(testingStore.getState().cues[1].editUuid).not.toBeUndefined();
-                expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
+                expect(testingStore.getState().cues[1].errors).toContain(CueError.SPELL_CHECK);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
                 expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
                 done();

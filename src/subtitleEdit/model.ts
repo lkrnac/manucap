@@ -10,7 +10,7 @@ export type CueCategory = "DIALOGUE" | "ONSCREEN_TEXT" | "AUDIO_DESCRIPTION" | "
 export interface CueDto {
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
-    corrupted?: boolean;
+    errors?: CueError[];
     editUuid?: string;
     spellCheck?: SpellCheck;
 }
@@ -71,4 +71,14 @@ export enum ScrollPosition {
     FIRST,
     LAST,
     CURRENT
+}
+
+export enum CueError {
+    SPELL_CHECK,
+    START_OVERLAP,
+    END_OVERLAP,
+    CHARS_PER_LINE,
+    LINE_COUNT,
+    MIN_RANGE,
+    MAX_RANGE
 }

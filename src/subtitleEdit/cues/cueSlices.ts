@@ -14,9 +14,9 @@ import {
     applyInvalidRangePreventionStart,
     applyOverlapPreventionEnd,
     applyOverlapPreventionStart,
-    conformToRules,
     getTimeGapLimits,
     markCues,
+    validateCue,
     verifyCueDuration
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
@@ -136,16 +136,15 @@ export const cuesSlice = createSlice({
                 const currentCue = state[index];
                 const followingCue = state[index + 1];
                 if (previousCue) {
-                    previousCue.corrupted = !conformToRules(
+                    previousCue.errors = validateCue(
                         previousCue, subtitleSpecification, undefined, currentCue, overlapCaptions
                     );
                 }
-                currentCue.corrupted =
-                    !conformToRules(
-                        currentCue, subtitleSpecification, previousCue, followingCue, overlapCaptions
-                    );
+                currentCue.errors = validateCue(
+                    currentCue, subtitleSpecification, previousCue, followingCue, overlapCaptions
+                );
                 if (followingCue) {
-                    followingCue.corrupted = !conformToRules(
+                    followingCue.errors = validateCue(
                         followingCue, subtitleSpecification, currentCue, undefined, overlapCaptions
                     );
                 }

@@ -29,7 +29,7 @@ describe("saveSlices", () => {
         it("calls saveTrack", () => {
             // GIVEN
             const testingCues = [
-                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", corrupted: false }
+                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
@@ -48,7 +48,7 @@ describe("saveSlices", () => {
         it("calls saveTrack", () => {
             // GIVEN
             const testingCues = [
-                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", corrupted: false }
+                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;

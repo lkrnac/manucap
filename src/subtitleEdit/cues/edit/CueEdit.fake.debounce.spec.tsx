@@ -3,7 +3,7 @@ import "video.js"; // VTTCue definition
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import { Character } from "../../shortcutConstants";
-import { CueDto, Track } from "../../model";
+import { CueDto, CueError, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
@@ -147,7 +147,7 @@ describe("CueEdit", () => {
         const corruptedCue = {
             vttCue: new VTTCue(0, 2, "Caption Line 1"),
             cueCategory: "DIALOGUE",
-            corrupted: true
+            errors: [CueError.CHARS_PER_LINE]
         } as CueDto;
 
         // WHEN

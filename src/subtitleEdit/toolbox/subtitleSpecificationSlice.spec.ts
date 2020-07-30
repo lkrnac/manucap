@@ -4,7 +4,7 @@ import { SubtitleSpecification } from "./model";
 import deepFreeze from "deep-freeze";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../testUtils/testingStore";
-import { CueDto } from "../model";
+import { CueDto, CueError } from "../model";
 import { updateCues } from "../cues/cueSlices";
 
 deepFreeze(testingStore.getState());
@@ -35,7 +35,7 @@ describe("subtitleSpecificationSlices", () => {
             expect(testingStore.getState().subtitleSpecifications).toEqual(testingSubtitleSpecification);
         });
 
-        it("marks existing cues as corrupted", () => {
+        it("validates existing cues", () => {
             // GIVEN
             const cuesCorrupted = [
                 { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
@@ -54,10 +54,10 @@ describe("subtitleSpecificationSlices", () => {
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[3].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[0].errors).toEqual([CueError.CHARS_PER_LINE]);
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual([CueError.CHARS_PER_LINE, CueError.END_OVERLAP]);
+            expect(testingStore.getState().cues[3].errors).toEqual([CueError.START_OVERLAP]);
         });
     });
 });

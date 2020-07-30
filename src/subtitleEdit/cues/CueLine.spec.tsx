@@ -2,7 +2,7 @@ import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
-import { CueDto } from "../model";
+import { CueDto, CueError } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView from "./view/CueView";
@@ -127,7 +127,7 @@ describe("CueLine", () => {
         const corruptedCue = {
             vttCue: new VTTCue(0, 0, "Editing Line 1"),
             cueCategory: "DIALOGUE",
-            corrupted: true
+            errors: [CueError.MIN_RANGE]
         } as CueDto;
         const cueWithSource = { cue: corruptedCue };
         const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
@@ -316,7 +316,7 @@ describe("CueLine", () => {
         const corruptedCue = {
             vttCue: new VTTCue(0, 0, "Editing Line 1"),
             cueCategory: "DIALOGUE",
-            corrupted: true
+            errors: [CueError.MIN_RANGE]
         } as CueDto;
         const cueWithSource = { cue: corruptedCue, sourceCue };
         const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;

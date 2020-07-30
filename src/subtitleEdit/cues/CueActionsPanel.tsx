@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const CueActionsPanel = (props: Props): ReactElement => {
-    const backgroundClassName = props.cue && props.cue.corrupted
+    const backgroundClassName = props.cue && (props.cue.errors && props.cue.errors.length > 0)
         ? "sbte-background-error-darker"
         : "sbte-gray-100-background";
     return (

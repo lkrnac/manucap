@@ -128,8 +128,8 @@ describe("AddCueLineButton", () => {
     it("Does not add cue if clicking button creates overlap", () => {
         // GIVEN
         const testingCues = [
-            { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
-            { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE", corrupted: false },
+            { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+            { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
         ] as CueDto[];
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 

@@ -3,7 +3,7 @@ import "video.js"; // VTTCue definition
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
-import { CueDto, Track } from "../model";
+import { CueDto, CueError, Track } from "../model";
 import DeleteCueLineButton from "./edit/DeleteCueLineButton";
 import PlayCueButton from "./PlayCueButton";
 import { Provider } from "react-redux";
@@ -199,12 +199,12 @@ describe("CueActionsPanel", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
-    it("renders for corrupted cue", () => {
+    it("renders for cue with errors", () => {
         // GIVEN
         const corruptedCue = {
             vttCue: new VTTCue(0, 0, "Editing Line 1"),
             cueCategory: "DIALOGUE",
-            corrupted: true
+            errors: [CueError.CHARS_PER_LINE]
         } as CueDto;
 
         // WHEN
