@@ -221,7 +221,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                                 triggerCueSaveAndSpellCheck(newEditorState, dispatch, props);
                             }
                         }}
-                        spellCheck
+                        spellCheck={false}
                         keyBindingFn={keyShortcutBindings}
                         handleKeyCommand={handleKeyShortcut}
                     />

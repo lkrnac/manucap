@@ -85,7 +85,7 @@ const createExpectedNode = (
             }}
         >
             <div style={{ flex: 1 }}>
-                <Editor editorState={editorState} onChange={jest.fn} spellCheck />
+                <Editor editorState={editorState} onChange={jest.fn} spellCheck={false} />
             </div>
             <div style={{ flex: 0 }}>
                 { chars.map((character: number, index: number) => (
