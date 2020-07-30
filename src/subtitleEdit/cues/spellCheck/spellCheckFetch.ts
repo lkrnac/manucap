@@ -2,13 +2,22 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { SpellCheck } from "./model";
-import { cuesSlice, SpellCheckAction } from "../cueSlices";
+import { cuesSlice } from "../cueSlices";
 import _ from "lodash";
+import { SubtitleEditAction } from "../../model";
 
 const addSpellCheck = (idx: number, spellCheck: SpellCheck): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SpellCheckAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         dispatch(cuesSlice.actions.addSpellCheck({ idx, spellCheck }));
-    };
+        const subtitleSpecifications = getState().subtitleSpecifications;
+        const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
+
+        dispatch(cuesSlice.actions.checkErrors({
+            subtitleSpecification: subtitleSpecifications,
+            overlapEnabled: overlapCaptionsAllowed,
+            index: idx
+        }));
+};
 
 
 const fetchSpellCheck = (

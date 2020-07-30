@@ -68,7 +68,7 @@ describe("fetchSpellCheck", () => {
                 );
                 expect(testingStore.getState().cues[1].spellCheck).toEqual(testingResponse);
                 expect(testingStore.getState().cues[1].editUuid).not.toBeUndefined();
-                expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+                expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
                 expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
                 done();
