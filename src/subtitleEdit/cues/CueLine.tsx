@@ -5,6 +5,7 @@ import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
+import CueLineFlap from "./CueLineFlap";
 
 export interface CueLineRowProps {
     playerTime: number;
@@ -35,19 +36,7 @@ const CueLine = (props: Props): ReactElement => {
             onClick={(): void => props.onClick(props.rowIndex)}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <div
-                className="sbte-cue-line-flap"
-                style={{
-                    paddingTop: "10px",
-                    width: "30px",
-                    color: "white",
-                    fontSize: "11px",
-                    fontWeight: "bold",
-                    textAlign: "center"
-                }}
-            >
-                {props.rowIndex + 1}
-            </div>
+            <CueLineFlap rowIndex={props.rowIndex} />
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {
                     props.data.sourceCue
