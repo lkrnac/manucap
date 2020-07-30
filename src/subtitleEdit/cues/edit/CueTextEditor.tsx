@@ -89,9 +89,7 @@ const triggerCueSaveAndSpellCheck = (
     dispatch: Dispatch<AppThunk>,
     props: CueTextEditorProps
 ): void => {
-    const plainText = !newEditorState.getCurrentContent().hasText()
-        ? ""
-        : newEditorState.getCurrentContent().getPlainText();
+    const plainText = newEditorState.getCurrentContent().getPlainText();
     fetchSpellCheckDebounced(dispatch, props.index, plainText, props.language, props.spellCheckerDomain);
     dispatch(callSaveTrack());
 };
