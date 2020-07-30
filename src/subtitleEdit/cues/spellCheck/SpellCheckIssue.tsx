@@ -1,7 +1,9 @@
 import React, { MutableRefObject, ReactElement, useRef, useState } from "react";
-import { SpellCheck } from "./model";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
+import { v4 as uuidv4 } from "uuid";
+
+import { SpellCheck } from "./model";
 
 interface Props {
     children: ReactElement;
@@ -9,6 +11,8 @@ interface Props {
     start: number;
     end: number;
     correctSpelling: (replacement: string, start: number, end: number) => void;
+    openSpellCheckPopupId: string | null;
+    setOpenSpellCheckPopupId: (id: string | null) => void;
 }
 
 const popupPlacement = (target: MutableRefObject<null>): boolean => {
@@ -26,7 +30,7 @@ interface Option {
 }
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
-    const [show, setShow] = useState(false);
+    const [spellCheckPopupId] = useState(uuidv4());
     const target = useRef(null);
     const showAtBottom = popupPlacement(target);
 
@@ -50,9 +54,21 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     } as Styles;
 
     return (
-        <span ref={target} className="sbte-text-with-error" onClick={(): void => setShow(!show)}>
+        <span
+            ref={target}
+            className="sbte-text-with-error"
+            onClick={
+                (): void => props.setOpenSpellCheckPopupId(
+                    props.openSpellCheckPopupId === spellCheckPopupId ? null : spellCheckPopupId
+                )
+            }
+        >
             {props.children}
-            <Overlay target={target.current} show={show} placement={showAtBottom ? "bottom" : "top"}>
+            <Overlay
+                target={target.current}
+                show={props.openSpellCheckPopupId === spellCheckPopupId}
+                placement={showAtBottom ? "bottom" : "top"}
+            >
                 <Popover id="sbte-spell-check-popover">
                     <Popover.Title>{spellCheckMatch.message}</Popover.Title>
                     <Popover.Content hidden={selectOptions.length === 0} style={{ padding: 0 }}>

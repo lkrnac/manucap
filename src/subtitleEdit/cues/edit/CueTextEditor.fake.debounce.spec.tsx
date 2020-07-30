@@ -11,7 +11,7 @@ import each from "jest-each";
 
 import { Character, KeyCombination } from "../../shortcutConstants";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
+import { removeDraftJsDynamicValues, spellCheckOptionPredicate } from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
@@ -23,6 +23,7 @@ import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "../cueTextConverter";
 import { fetchSpellCheckDebounced } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
+import { Overlay } from "react-bootstrap";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -268,7 +269,7 @@ describe("CueTextEditor", () => {
         const spellCheck = {
             matches: [
                 { offset: 5, length: 3, replacements: [{ value: "option1" }, { value: "HTML" }] as Replacement[] },
-                { offset: 15, length: 6, replacements: [] as Replacement[] }
+                { offset: 14, length: 6, replacements: [] as Replacement[] }
             ]
         } as SpellCheck;
         const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> sample");
@@ -288,9 +289,7 @@ describe("CueTextEditor", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").at(0).simulate("click");
-        console.log(actualNode.html());
-        console.log(actualNode.find("#react-select-2-option-1").at(0).html());
-        actualNode.find("#react-select-2-option-1").at(0).simulate("click");
+        actualNode.findWhere(spellCheckOptionPredicate(1)).at(0).simulate("click");
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -299,6 +298,78 @@ describe("CueTextEditor", () => {
             testingStore.dispatch, 0, "some HTML Text sample", "testing-language", "testing-domain"
         );
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("some HTML <b>Text</b> sample");
+        expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+    });
+
+    it("closes other spell check popups when user opens new one", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        const spellCheck = {
+            matches: [
+                { offset: 5, length: 3, replacements: [] as Replacement[] },
+                { offset: 14, length: 5, replacements: [] as Replacement[] }
+            ]
+        } as SpellCheck;
+        const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> smple");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    spellCheck={spellCheck}
+                    spellCheckerDomain="testing-domain"
+                    language="testing-language"
+                />
+            </Provider>
+        );
+        actualNode.find(".sbte-text-with-error").at(0).simulate("click");
+        actualNode.setProps({});
+
+        // WHEN
+        actualNode.find(".sbte-text-with-error").at(1).simulate("click");
+
+        // THEN
+        expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+        expect(actualNode.find(Overlay).at(1).props().show).toBeTruthy();
+    });
+
+    it("closes spell check popup when user clicks on issue area again", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        const spellCheck = {
+            matches: [
+                { offset: 5, length: 3, replacements: [] as Replacement[] },
+                { offset: 14, length: 5, replacements: [] as Replacement[] }
+            ]
+        } as SpellCheck;
+        const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> smple");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    spellCheck={spellCheck}
+                    spellCheckerDomain="testing-domain"
+                    language="testing-language"
+                />
+            </Provider>
+        );
+        actualNode.find(".sbte-text-with-error").at(0).simulate("click");
+        actualNode.setProps({});
+
+        // WHEN
+        actualNode.find(".sbte-text-with-error").at(0).simulate("click");
+
+        // THEN
+        expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
     });
 
     it("updates cue in redux store when changed", () => {

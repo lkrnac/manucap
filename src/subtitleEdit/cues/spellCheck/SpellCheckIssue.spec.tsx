@@ -1,16 +1,12 @@
 import "../../../testUtils/initBrowserEnvironment";
 import React from "react";
-import { mount, ReactWrapper } from "enzyme";
+import { mount } from "enzyme";
 import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";
 import { Overlay } from "react-bootstrap";
+import { spellCheckOptionPredicate } from "../../../testUtils/testUtils";
 
-const optionPredicate = (optionIndex: number) => (wrapper: ReactWrapper): boolean =>
-    wrapper.hasClass(/css-[\s\S]*?-option/)
-        // @ts-ignore Couldn't figure this out, there would need to be a lot of additional null checks
-        && wrapper.getDOMNode().getAttribute("id").endsWith("-option-" + optionIndex);
-
-export const removeSelectCssClass = (htmlString: string): string =>
+const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "");
 
 describe("SpellCheckerIssue", () => {
@@ -25,7 +21,14 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         const actualNode = mount(
-            <SpellCheckIssue spellCheck={spellCheck} start={15} end={18} correctSpelling={jest.fn()}>
+            <SpellCheckIssue
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setOpenSpellCheckPopupId={jest.fn()}
+                openSpellCheckPopupId={null}
+            >
                 <div className="text" />
             </SpellCheckIssue>
         );
@@ -41,7 +44,14 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         const actualNode = mount(
-            <SpellCheckIssue spellCheck={spellCheck} start={15} end={18} correctSpelling={jest.fn()}>
+            <SpellCheckIssue
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setOpenSpellCheckPopupId={jest.fn()}
+                openSpellCheckPopupId={null}
+            >
                 <div className="text" />
             </SpellCheckIssue>
         );
@@ -57,7 +67,14 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         const actualNode = mount(
-            <SpellCheckIssue spellCheck={spellCheck} start={15} end={17} correctSpelling={jest.fn()}>
+            <SpellCheckIssue
+                spellCheck={spellCheck}
+                start={15}
+                end={17}
+                correctSpelling={jest.fn()}
+                setOpenSpellCheckPopupId={jest.fn()}
+                openSpellCheckPopupId={null}
+            >
                 <div className="text" />
             </SpellCheckIssue>
         );
@@ -173,6 +190,11 @@ describe("SpellCheckerIssue", () => {
                 </div >
             </div>
         );
+        let spellCheckPopupId = null;
+        const setOpenSpellCheckPopupId = (id: string | null): void => {
+            spellCheckPopupId = id;
+        };
+
         const spellCheck = { matches: [
             {
                 message: "There is error",
@@ -182,13 +204,21 @@ describe("SpellCheckerIssue", () => {
             }
         ]} as SpellCheck;
         const actualNode = mount(
-            <SpellCheckIssue spellCheck={spellCheck} start={15} end={18} correctSpelling={jest.fn()}>
+            <SpellCheckIssue
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
+                openSpellCheckPopupId={null}
+            >
                 <div className="text" />
             </SpellCheckIssue>
         );
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
+        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
 
         // THEN
         expect(actualNode.find("#sbte-spell-check-popover").at(0).html()).toEqual(expectedNode.html());
@@ -292,6 +322,11 @@ describe("SpellCheckerIssue", () => {
                 </div >
             </div>
         );
+        let spellCheckPopupId = null;
+        const setOpenSpellCheckPopupId = (id: string | null): void => {
+            spellCheckPopupId = id;
+        };
+
         const spellCheck = { matches: [
                 {
                     message: "There is error",
@@ -301,13 +336,21 @@ describe("SpellCheckerIssue", () => {
                 }
             ]} as SpellCheck;
         const actualNode = mount(
-            <SpellCheckIssue spellCheck={spellCheck} start={15} end={18} correctSpelling={jest.fn()}>
+            <SpellCheckIssue
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
+                openSpellCheckPopupId={null}
+            >
                 <div className="text" />
             </SpellCheckIssue>
         );
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
+        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
 
         // THEN
         expect(removeSelectCssClass(actualNode.find("#sbte-spell-check-popover").at(0).html()))
@@ -325,15 +368,27 @@ describe("SpellCheckerIssue", () => {
                 length: 3
             }
         ]} as SpellCheck;
+        let spellCheckPopupId = null;
+        const setOpenSpellCheckPopupId = (id: string | null): void => {
+            spellCheckPopupId = id;
+        };
         const actualNode = mount(
-            <SpellCheckIssue spellCheck={spellCheck} start={15} end={18} correctSpelling={handler}>
+            <SpellCheckIssue
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={handler}
+                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
+                openSpellCheckPopupId={null}
+            >
                 <div className="text" />
             </SpellCheckIssue>
         );
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.findWhere(optionPredicate(1)).simulate("click");
+        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.findWhere(spellCheckOptionPredicate(1)).simulate("click");
 
         // THEN
         expect(handler).toBeCalledWith("repl2", 15, 18);
@@ -352,14 +407,26 @@ describe("SpellCheckerIssue", () => {
                     length: 3
                 }
             ]} as SpellCheck;
+        let spellCheckPopupId = null;
+        const setOpenSpellCheckPopupId = (id: string | null): void => {
+            spellCheckPopupId = id;
+        };
         const actualNode = mount(
-            <SpellCheckIssue spellCheck={spellCheck} start={15} end={18} correctSpelling={jest.fn()}>
+            <SpellCheckIssue
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
+                openSpellCheckPopupId={null}
+            >
                 <div className="text" />
             </SpellCheckIssue>
         );
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
+        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
 
         // THEN
         expect(actualNode.find(Overlay).at(0).props().placement).toEqual("top");
@@ -379,7 +446,14 @@ describe("SpellCheckerIssue", () => {
                 }
             ]} as SpellCheck;
         const actualNode = mount(
-            <SpellCheckIssue spellCheck={spellCheck} start={15} end={18} correctSpelling={jest.fn()}>
+            <SpellCheckIssue
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setOpenSpellCheckPopupId={jest.fn()}
+                openSpellCheckPopupId={null}
+            >
                 <div className="text" />
             </SpellCheckIssue>
         );

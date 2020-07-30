@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement, useEffect, useRef } from "react";
+import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
 import {
     CompositeDecorator,
     ContentBlock,
@@ -111,6 +111,7 @@ const createCorrectSpellingHandler = (
 };
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
+    const [openSpellCheckPopupId, setOpenSpellCheckPopupId] = useState(null);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
@@ -135,7 +136,9 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             component: SpellCheckIssue,
             props: {
                 spellCheck: props.spellCheck,
-                correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props)
+                correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
+                openSpellCheckPopupId,
+                setOpenSpellCheckPopupId
             }
         }
     ]);
