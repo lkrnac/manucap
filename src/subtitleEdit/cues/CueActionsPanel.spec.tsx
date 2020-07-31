@@ -199,26 +199,6 @@ describe("CueActionsPanel", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
-    it("renders for corrupted cue", () => {
-        // GIVEN
-        const corruptedCue = {
-            vttCue: new VTTCue(0, 0, "Editing Line 1"),
-            cueCategory: "DIALOGUE",
-            corrupted: true
-        } as CueDto;
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={corruptedCue} editingCueIndex={-1} />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.find("div").at(0).props().className).toEqual("sbte-background-error-darker sbte-left-border");
-    });
-
-
     it("opens next cue line for editing when add button is clicked", () => {
         // GIVEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);

@@ -22,9 +22,7 @@ interface Props {
 
 const CueLine = (props: Props): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const captionClassName =  props.data.cue && props.data.cue.corrupted
-        ? "sbte-background-error-darker"
-        : "sbte-gray-100-background";
+    const captionClassName = "sbte-gray-100-background";
     const translationCueClassName = props.data.cue ? captionClassName : "sbte-gray-200-background";
     const lastCue = props.rowIndex === props.rowProps.cuesLength - 1;
 

@@ -13,13 +13,10 @@ interface Props {
 }
 
 export const CueActionsPanel = (props: Props): ReactElement => {
-    const backgroundClassName = props.cue && props.cue.corrupted
-        ? "sbte-background-error-darker"
-        : "sbte-gray-100-background";
     return (
         <div
             style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-            className={backgroundClassName + " sbte-left-border"}
+            className={"sbte-gray-100-background sbte-left-border"}
             onClick={(event: React.MouseEvent<HTMLElement>): void => event.stopPropagation()}
         >
             {
