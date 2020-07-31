@@ -12,6 +12,7 @@ import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateCues, updateEditingCueIndex } from "./cueSlices";
+import CueLineFlap from "./CueLineFlap";
 
 let testingStore = createTestingStore();
 
@@ -31,19 +32,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
                         <CueEdit index={1} cue={cues[1]} playerTime={0} />
@@ -79,19 +68,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
                         <CueView index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
@@ -156,19 +133,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
                             index={1}
@@ -210,19 +175,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
                             index={1}
@@ -263,19 +216,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
                             index={1}
@@ -347,19 +288,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
                             index={1}
