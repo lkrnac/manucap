@@ -1,13 +1,18 @@
 import React, { ReactElement } from "react";
+import { CueDto } from "../model";
 
 interface Props {
     rowIndex: number;
+    cue?: CueDto;
 }
 
 const CueLineFlap = (props: Props): ReactElement => {
+    const flapClassName = props.cue && (props.cue.errors && props.cue.errors.length > 0)
+        ? `sbte-cue-line-flap-error-${props.cue.errors.length}`
+        : "sbte-cue-line-flap";
     return (
         <div
-            className="sbte-cue-line-flap"
+            className={flapClassName}
             style={{
                 paddingTop: "10px",
                 width: "30px",

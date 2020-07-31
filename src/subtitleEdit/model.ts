@@ -73,6 +73,7 @@ export enum ScrollPosition {
     CURRENT
 }
 
+/* If you add another error, please add another error class in styles.scss "sbte-cue-line-flap-error-X" */
 export enum CueError {
     SPELL_CHECK,
     START_OVERLAP,

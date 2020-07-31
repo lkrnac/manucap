@@ -15,9 +15,14 @@ $sbte-main-text-color: $secondary;
 $border-color: rgb(241,244,245);
 $input-border-color: rgb(108, 117, 125);
 $green: rgb(0,87,0);
-$background-error-darker: rgb(255, 235, 235);
-$background-error-lighter: rgb(255, 245, 245);
+//$background-error-darker: rgb(255, 235, 235);
+//$background-error-lighter: rgb(255, 245, 245);
 $background-error-text: rgba(255, 0, 0, 0.2);
+$flap-error-darkest: #9a0007;
+$flap-error-darker: #c62828;
+$flap-error-dark: #e53935;
+$flap-error-lighter: #e57373;
+$flap-error-lightest: #ef9a9a;
 
 // ##############################
 // Subtitle Edit visuals
@@ -59,11 +64,11 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 .sbte-background-error-darker {
-  background-color: $background-error-darker;
+  //background-color: $background-error-darker;
 }
 
 .sbte-background-error-lighter {
-  background-color: $background-error-lighter;
+  //background-color: $background-error-lighter;
 }
 
 .sbte-text-with-error {
@@ -72,13 +77,13 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 
 @keyframes fade {
     from { background-color: $white }
-    50% { background-color: $background-error-lighter }
+    //50% { background-color: $background-error-lighter }
     to { background-color: $white }
 }
 
 @-webkit-keyframes fade {
     from { background-color: $white }
-    50% { background-color: $background-error-lighter }
+    //50% { background-color: $background-error-lighter }
     to { background-color: $white }
 }
 
@@ -117,10 +122,39 @@ $background-error-text: rgba(255, 0, 0, 0.2);
   background-color: inherit;
 }
 
+%sbte-cue-line-flap {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
 .sbte-cue-line-flap {
-  background-color: $secondary;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+    @extend %sbte-cue-line-flap;
+    background-color: $secondary;
+}
+
+.sbte-cue-line-flap-error-1 {
+    @extend %sbte-cue-line-flap;
+    background-color: $flap-error-lightest;
+}
+
+.sbte-cue-line-flap-error-2 {
+    @extend %sbte-cue-line-flap;
+    background-color: $flap-error-lighter;
+}
+
+.sbte-cue-line-flap-error-3 {
+    @extend %sbte-cue-line-flap;
+    background-color: $flap-error-dark;
+}
+
+.sbte-cue-line-flap-error-4 {
+    @extend %sbte-cue-line-flap;
+    background-color: $flap-error-darker;
+}
+
+.sbte-cue-line-flap-error-5, sbte-cue-line-flap-error-6 {
+    @extend %sbte-cue-line-flap;
+    background-color: $flap-error-darkest;
 }
 
 #sbte-spell-check-popover {

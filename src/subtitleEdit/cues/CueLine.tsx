@@ -24,9 +24,7 @@ interface Props {
 
 const CueLine = (props: Props): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const captionClassName = props.data.cue && (props.data.cue.errors && props.data.cue.errors.length > 0)
-        ? "sbte-background-error-darker"
-        : "sbte-gray-100-background";
+    const captionClassName = "sbte-gray-100-background";
     const translationCueClassName = props.data.cue ? captionClassName : "sbte-gray-200-background";
     const lastCue = props.rowIndex === props.rowProps.cuesLength - 1;
 
@@ -36,7 +34,7 @@ const CueLine = (props: Props): ReactElement => {
             onClick={(): void => props.onClick(props.rowIndex)}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <CueLineFlap rowIndex={props.rowIndex} />
+            <CueLineFlap rowIndex={props.rowIndex} cue={props.data.cue} />
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {
                     props.data.sourceCue
