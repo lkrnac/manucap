@@ -753,7 +753,6 @@ describe("SubtitleEdit", () => {
     });
 
     it("sets saveTrack when mounted", () => {
-        // GIVEN
         // WHEN
         mount(
             <Provider store={testingStore}>
@@ -771,6 +770,27 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(testingStore.getState().saveTrack).toBeDefined();
+    });
+
+    it("sets spell checker domain when mounted", () => {
+        // WHEN
+        mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                    spellCheckerDomain="testing-domain"
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(testingStore.getState().spellCheckerDomain).toEqual("testing-domain");
     });
 
     it("remount EditingVideoPlayer when cues are loaded", () => {
