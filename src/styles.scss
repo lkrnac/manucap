@@ -57,10 +57,6 @@ $background-error: rgb(255, 245, 245);
   background-color: $gray-200;
 }
 
-.sbte-background-error {
-  background-color: $background-error;
-}
-
 @keyframes fade {
     from { background-color: $white }
     50% { background-color: $background-error }

@@ -146,29 +146,6 @@ describe("CueEdit", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
-    it("renders for corrupted cue", () => {
-        // GIVEN
-        const corruptedCue = {
-            vttCue: new VTTCue(0, 2, "Caption Line 1"),
-            cueCategory: "DIALOGUE",
-            corrupted: true
-        } as CueDto;
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueEdit
-                    index={0}
-                    cue={corruptedCue}
-                    playerTime={0}
-                />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.find("div").at(0).hasClass("sbte-background-error-lighter")).toBeTruthy();
-    });
-
     it("updates cue in redux store when start time minutes changed", () => {
         // GIVEN
         const cue = testingStore.getState().cues[1];
