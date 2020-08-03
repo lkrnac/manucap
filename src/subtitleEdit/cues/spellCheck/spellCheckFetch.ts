@@ -8,18 +8,14 @@ import { SubtitleEditAction } from "../../model";
 const addSpellCheck = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function,
-    idx: number,
+    index: number,
     spellCheck: SpellCheck,
 ): void => {
-    dispatch(cuesSlice.actions.addSpellCheck({ idx, spellCheck }));
+    dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
 
-    const subtitleSpecifications = getState().subtitleSpecifications;
-    const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
-    dispatch(cuesSlice.actions.checkErrors({
-        subtitleSpecification: subtitleSpecifications,
-        overlapEnabled: overlapCaptionsAllowed,
-        index: idx
-    }));
+    const subtitleSpecification = getState().subtitleSpecifications;
+    const overlapEnabled = getState().editingTrack?.overlapEnabled;
+    dispatch(cuesSlice.actions.checkErrors({ subtitleSpecification, overlapEnabled, index }));
 };
 
 export const fetchSpellCheck = (
