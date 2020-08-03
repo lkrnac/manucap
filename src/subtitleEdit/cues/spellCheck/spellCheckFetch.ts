@@ -11,15 +11,15 @@ const addSpellCheck = (
     idx: number,
     spellCheck: SpellCheck,
 ): void => {
-        dispatch(cuesSlice.actions.addSpellCheck({ idx, spellCheck }));
+    dispatch(cuesSlice.actions.addSpellCheck({ idx, spellCheck }));
 
-        const subtitleSpecifications = getState().subtitleSpecifications;
-        const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
-        dispatch(cuesSlice.actions.checkErrors({
-            subtitleSpecification: subtitleSpecifications,
-            overlapEnabled: overlapCaptionsAllowed,
-            index: idx
-        }));
+    const subtitleSpecifications = getState().subtitleSpecifications;
+    const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
+    dispatch(cuesSlice.actions.checkErrors({
+        subtitleSpecification: subtitleSpecifications,
+        overlapEnabled: overlapCaptionsAllowed,
+        index: idx
+    }));
 };
 
 export const fetchSpellCheck = (
@@ -31,12 +31,9 @@ export const fetchSpellCheck = (
     spellCheckDomain?: string,
 ): void => {
     if (spellCheckDomain && language) {
-        // console.log(text);
         const plainText = sanitizeHtml(text);
-        // console.log(plainText);
-        fetch(
-            `https://${spellCheckDomain}/v2/check`,
-            { method: "POST", body: `language=${language}&text=${plainText}` })
+        const requestBody = { method: "POST", body: `language=${language}&text=${plainText}` };
+        fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
             .then(response => response.json())
             .then(data => addSpellCheck(dispatch, getState, cueIndex, data as SpellCheck));
     }
