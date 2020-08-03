@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// @ts-ignore
+// @ts-ignore It doesn't have TS type module
 import ReactSmartScroll from "@dotsub/react-smart-scroll";
 
 import { isDirectTranslationTrack } from "../subtitleEditUtils";
@@ -16,8 +16,6 @@ import { changeScrollPosition } from "./cuesListScrollSlice";
 interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
-    spellCheckerDomain?: string;
-    language?: string;
 }
 
 const getScrollCueIndex = (
@@ -88,12 +86,7 @@ const CuesList = (props: Props): ReactElement => {
                 className="sbte-smart-scroll"
                 data={cuesWithSource}
                 row={CueLine}
-                rowProps={{
-                    playerTime: props.currentPlayerTime,
-                    cuesLength: cues.length,
-                    spellCheckerDomain: props.spellCheckerDomain,
-                    language: props.language
-                }}
+                rowProps={{ playerTime: props.currentPlayerTime, cuesLength: cues.length }}
                 rowHeight={rowHeight}
                 startAt={startAt}
                 onClick={(idx: number): void => {

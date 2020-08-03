@@ -1,17 +1,20 @@
-import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { PayloadAction } from "@reduxjs/toolkit";
+import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
 import { cuesSlice } from "../cueSlices";
-import _ from "lodash";
 import { SubtitleEditAction } from "../../model";
 
-const addSpellCheck = (idx: number, spellCheck: SpellCheck): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+const addSpellCheck = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    getState: Function,
+    idx: number,
+    spellCheck: SpellCheck,
+): void => {
         dispatch(cuesSlice.actions.addSpellCheck({ idx, spellCheck }));
+
         const subtitleSpecifications = getState().subtitleSpecifications;
         const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
-
         dispatch(cuesSlice.actions.checkErrors({
             subtitleSpecification: subtitleSpecifications,
             overlapEnabled: overlapCaptionsAllowed,
@@ -19,21 +22,23 @@ const addSpellCheck = (idx: number, spellCheck: SpellCheck): AppThunk =>
         }));
 };
 
-
-const fetchSpellCheck = (
-    dispatch: Dispatch<AppThunk>,
+export const fetchSpellCheck = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    getState: Function,
     cueIndex: number,
     text: string,
     language?: string,
-    spellCheckDomain?: string
+    spellCheckDomain?: string,
 ): void => {
     if (spellCheckDomain && language) {
+        // console.log(text);
+        const plainText = sanitizeHtml(text);
+        // console.log(plainText);
         fetch(
             `https://${spellCheckDomain}/v2/check`,
-            { method: "POST", body: `language=${language}&text=${text}` })
+            { method: "POST", body: `language=${language}&text=${plainText}` })
             .then(response => response.json())
-            .then(data => dispatch(addSpellCheck(cueIndex, data as SpellCheck)));
+            .then(data => addSpellCheck(dispatch, getState, cueIndex, data as SpellCheck));
     }
 };
 
-export const fetchSpellCheckDebounced = _.debounce(fetchSpellCheck, 200);

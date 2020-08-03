@@ -107,12 +107,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <CuesList
-                                editingTrack={editingTrack}
-                                currentPlayerTime={currentPlayerTime}
-                                spellCheckerDomain={props.spellCheckerDomain}
-                                language={editingTrack?.language.id}
-                            />
+                            <CuesList editingTrack={editingTrack} currentPlayerTime={currentPlayerTime} />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
                                     className="btn btn-primary sbte-view-all-tracks-btn"

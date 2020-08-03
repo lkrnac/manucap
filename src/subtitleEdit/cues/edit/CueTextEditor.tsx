@@ -23,10 +23,9 @@ import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
-import { callSaveTrack } from "../saveSlices";
-import { fetchSpellCheckDebounced } from "../spellCheck/spellCheckFetch";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
+import { callSaveTrack } from "../saveSlices";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
@@ -56,8 +55,6 @@ export interface CueTextEditorProps {
     index: number;
     vttCue: VTTCue;
     editUuid?: string;
-    spellCheckerDomain?: string;
-    language?: string;
     spellCheck?: SpellCheck;
 }
 
@@ -84,16 +81,6 @@ const getWordCountPerLine = (text: string): number[] => {
     return lines.map((line: string): number => line.match(/\S+/g)?.length || 0);
 };
 
-const triggerCueSaveAndSpellCheck = (
-    newEditorState: EditorState,
-    dispatch: Dispatch<AppThunk>,
-    props: CueTextEditorProps
-): void => {
-    const plainText = newEditorState.getCurrentContent().getPlainText();
-    fetchSpellCheckDebounced(dispatch, props.index, plainText, props.language, props.spellCheckerDomain);
-    dispatch(callSaveTrack());
-};
-
 const createCorrectSpellingHandler = (
     editorState: EditorState,
     dispatch: Dispatch<AppThunk>,
@@ -108,7 +95,7 @@ const createCorrectSpellingHandler = (
     contentState = Modifier.replaceText(contentState, typoSelectionState, replacement, inlineStyle);
     const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
     dispatch(updateEditorState(props.index, newEditorState));
-    triggerCueSaveAndSpellCheck(newEditorState, dispatch, props);
+    dispatch(callSaveTrack());
 };
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
@@ -216,7 +203,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         onChange={(newEditorState: EditorState): void => {
                             dispatch(updateEditorState(props.index, newEditorState));
                             if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                                triggerCueSaveAndSpellCheck(newEditorState, dispatch, props);
+                                dispatch(callSaveTrack());
                             }
                         }}
                         spellCheck={false}

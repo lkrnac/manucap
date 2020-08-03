@@ -21,16 +21,17 @@ import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "../cueTextConverter";
-import { fetchSpellCheckDebounced } from "../spellCheck/spellCheckFetch";
+import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
+import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
 }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
-fetchSpellCheckDebounced.mockImplementation(() => jest.fn());
+fetchSpellCheck.mockImplementation(() => jest.fn());
 
 let testingStore = createTestingStore();
 
@@ -111,13 +112,7 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     const editUuid = testingStore.getState().cues[0].editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor
-                index={0}
-                vttCue={vttCue}
-                editUuid={editUuid}
-                spellCheckerDomain="testing-domain"
-                language="testing-language"
-            />
+            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
         </Provider>
     );
     return actualNode.find(".public-DraftEditor-content");
@@ -190,7 +185,7 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         // @ts-ignore we are mocking this function
-        fetchSpellCheckDebounced.mockReset();
+        fetchSpellCheck.mockReset();
     });
 
     it("renders empty", () => {
@@ -265,7 +260,8 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "testing-language" }} as Track) as {} as AnyAction);
+        testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         const spellCheck = {
             matches: [
                 { offset: 5, length: 3, replacements: [{ value: "option1" }, { value: "HTML" }] as Replacement[] },
@@ -276,14 +272,7 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={editUuid}
-                    spellCheck={spellCheck}
-                    spellCheckerDomain="testing-domain"
-                    language="testing-language"
-                />
+                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
             </Provider>
         );
 
@@ -293,10 +282,6 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
-        expect(fetchSpellCheckDebounced).toBeCalledTimes(1);
-        expect(fetchSpellCheckDebounced).toBeCalledWith(
-            testingStore.dispatch, 0, "some HTML Text sample", "testing-language", "testing-domain"
-        );
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("some <u><i>HTML</i></u> <b>Text</b> sample");
         expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
     });
@@ -316,14 +301,7 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={editUuid}
-                    spellCheck={spellCheck}
-                    spellCheckerDomain="testing-domain"
-                    language="testing-language"
-                />
+                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
             </Provider>
         );
         actualNode.find(".sbte-text-with-error").at(0).simulate("click");
@@ -352,14 +330,7 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={editUuid}
-                    spellCheck={spellCheck}
-                    spellCheckerDomain="testing-domain"
-                    language="testing-language"
-                />
+                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
             </Provider>
         );
         actualNode.find(".sbte-text-with-error").at(0).simulate("click");
@@ -388,11 +359,11 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
-    it("triggers autosave and spell check when changed", () => {
+    it("triggers autosave and when changed", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "testing-language" }} as Track) as {} as AnyAction);
 
         const editor = createEditorNode();
 
@@ -406,38 +377,20 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
-        expect(fetchSpellCheckDebounced).toBeCalledTimes(1);
-        expect(fetchSpellCheckDebounced).toBeCalledWith(
-            testingStore.dispatch, 0, "someText Paste text to end", "testing-language", "testing-domain"
-        );
     });
 
-    it("doesn't trigger autosave and spell check when user selects text", () => {
+    it("doesn't trigger autosave when user selects text", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "testing-language" }} as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor
-                    index={0}
-                    vttCue={vttCue}
-                    spellCheckerDomain="testing-domain"
-                    language="testing-language"
-                />
+                <CueTextEditor index={0} vttCue={vttCue} />
             </Provider>
         );
-
-        // simulate edit change
-        actualNode.find(".public-DraftEditor-content").simulate("paste", {
-            clipboardData: {
-                types: ["text/plain"],
-                getData: (): string => " Paste text to end",
-            }
-        });
-
         const editorState = actualNode.find(Editor).props().editorState;
         const selectionState = editorState.getSelection();
 
@@ -447,11 +400,7 @@ describe("CueTextEditor", () => {
         actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
         // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(1);
-        expect(fetchSpellCheckDebounced).toBeCalledTimes(1);
-        expect(fetchSpellCheckDebounced).toBeCalledWith(
-            testingStore.dispatch, 0, "some text Paste text to end", "testing-language", "testing-domain"
-        );
+        expect(saveTrack).toHaveBeenCalledTimes(0);
     });
 
     /**

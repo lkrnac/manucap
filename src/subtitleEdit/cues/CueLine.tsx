@@ -9,8 +9,6 @@ import { useSelector } from "react-redux";
 export interface CueLineRowProps {
     playerTime: number;
     cuesLength: number;
-    spellCheckerDomain?: string;
-    language?: string;
 }
 
 interface Props {
@@ -66,8 +64,6 @@ const CueLine = (props: Props): ReactElement => {
                                 index={props.rowIndex}
                                 cue={props.data.cue}
                                 playerTime={props.rowProps.playerTime}
-                                spellCheckerDomain={props.rowProps.spellCheckerDomain}
-                                language={props.rowProps.language}
                               />
                             : <CueView
                                 index={props.rowIndex}

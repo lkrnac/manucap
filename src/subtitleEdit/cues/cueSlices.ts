@@ -21,6 +21,7 @@ import {
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
+import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -253,6 +254,12 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
 
             dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue, editUuid }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
+
+            const language = getState().editingTrack?.language?.id;
+            const spellCheckerDomain = getState().spellCheckerDomain;
+            if (language && spellCheckerDomain) {
+                fetchSpellCheck(dispatch, getState, idx, newVttCue.text, language, spellCheckerDomain);
+            }
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
                 overlapEnabled: overlapCaptionsAllowed,

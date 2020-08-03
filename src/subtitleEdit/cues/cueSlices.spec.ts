@@ -22,6 +22,7 @@ import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
+import { setSpellCheckDomain } from "./spellCheck/spellCheckSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -85,18 +86,6 @@ describe("cueSlices", () => {
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
         });
 
-        it("marks cue as corrupted if there are spell check problems", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const editUuid = testingStore.getState().cues[2].editUuid;
-
-            // WHEN
-            testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
-        });
-
         it("doesn't update top level cue when editUuid is different", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -120,6 +109,151 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues.length).toEqual(0);
             expect(testingStore.getState().validationError).toEqual(false);
             expect(testingStore.getState().lastCueChange).toBeUndefined;
+        });
+
+        describe("spell checking", () => {
+            it("updates cues in redux with spell checking state", () => {
+                // GIVEN
+                const testingResponse = {
+                    matches: [
+                        {
+                            message: "This sentence does not start with an uppercase letter",
+                            replacements: [{ "value": "Txt" }],
+                            "offset": 0,
+                            "length": 3,
+                        },
+                        {
+                            "message": "Possible spelling mistake found.",
+                            "replacements": [
+                                { value: "check" },
+                                { value: "Chuck" },
+                                { value: "chick" },
+                                { value: "chuck" },
+                                { value: "chock" },
+                                { value: "CCK" },
+                                { value: "CHC" },
+                                { value: "CHK" },
+                                { value: "cock" },
+                                { value: "ch ck" }
+                            ],
+                            "offset": 7,
+                            "length": 4,
+                        }
+                    ]
+                };
+
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "testing-language" }} as Track
+                ) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
+
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                setTimeout(
+                    () => {
+                        // @ts-ignore modern browsers does have it
+                        expect(global.fetch).toBeCalledWith(
+                            "https://testing-domain/v2/check",
+                            { method: "POST", body: "language=testing-language&text=Dummy Cue" }
+                        );
+                        expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
+                        expect(testingStore.getState().cues[2].editUuid).toEqual(editUuid);
+                        expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+                        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 2");
+                        expect(testingStore.getState().cues[2].cueCategory).toEqual("AUDIO_DESCRIPTION");
+                    },
+                    50
+                );
+            });
+
+            it("marks cue as corrupted if there are spell check problems", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "testing-language" }} as Track
+                ) as {} as AnyAction);
+
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+            });
+
+            it("triggers autosave content is changed", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "testing-language" }} as Track
+                ) as {} as AnyAction);
+
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledWith(
+                    "https://testing-domain/v2/check",
+                    { body: "language=testing-language&text=Dummy Cue", method: "POST" }
+                );
+            });
+
+            it("does not trigger spell check if domain is undefined", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "testing-language" }} as Track
+                ) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).not.toBeCalled();
+            });
+
+            it("does not trigger spell check if language is undefined", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).not.toBeCalled();
+            });
         });
 
         describe("range prevention", () => {
