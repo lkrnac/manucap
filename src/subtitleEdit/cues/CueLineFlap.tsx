@@ -43,11 +43,11 @@ const CueLineFlap = (props: Props): ReactElement => {
                 }}
             >
                 {
-                    cueIsCorrupted ? (
-                        <i className="fas fa-exclamation-triangle" />
-                    ) : cueHasText ? (
-                        <i className="fa fa-check" />
-                    ) : null
+                    cueIsCorrupted
+                        ? <i className="fas fa-exclamation-triangle" />
+                        : cueHasText
+                        ? <i className="fa fa-check" />
+                        : null
                 }
             </div>
         </div>
