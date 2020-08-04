@@ -9,7 +9,8 @@ import {
     EditorState,
     getDefaultKeyBinding,
     Modifier,
-    SelectionState
+    RichUtils,
+    SelectionState,
 } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
@@ -38,14 +39,34 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
         } else if (e.keyCode === Character.ENTER) {
             return "editNext";
         }
+    } else if (e.keyCode === Character.ENTER) {
+        return "newLine";
     }
     return getDefaultKeyBinding(e);
 };
 
-const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
+const handleKeyShortcut = (
+    editorState: EditorState,
+    dispatch: Dispatch<AppThunk>,
+    props: CueTextEditorProps
+) => (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
     if (keyCombination) {
         Mousetrap.trigger(keyCombination);
+        return "handled";
+    }
+    if (shortcut === "newLine") {
+        const newEditorState = RichUtils.insertSoftNewline(editorState);
+
+        // let contentState = editorState.getCurrentContent();
+        // const selectionState = editorState.getSelection();
+        // const startKey = selectionState.getStartKey();
+        // const typoBlock = contentState.getBlockForKey(startKey);
+        // const inlineStyle = typoBlock.getInlineStyleAt(0);
+        // contentState = Modifier.insertText(contentState, selectionState, "\n", inlineStyle);
+        // const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
+
+        dispatch(updateEditorState(props.index, newEditorState));
         return "handled";
     }
     return "not-handled";
@@ -172,6 +193,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         []
     );
 
+    // console.log(currentContent.getPlainText());
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div
@@ -208,7 +230,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         }}
                         spellCheck={false}
                         keyBindingFn={keyShortcutBindings}
-                        handleKeyCommand={handleKeyShortcut}
+                        handleKeyCommand={handleKeyShortcut(editorState, dispatch, props)}
                     />
                 </div>
                 <div style={{ flex: 0 }}>

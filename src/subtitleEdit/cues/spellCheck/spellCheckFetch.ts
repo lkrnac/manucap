@@ -27,7 +27,7 @@ export const fetchSpellCheck = (
     spellCheckDomain?: string,
 ): void => {
     if (spellCheckDomain && language) {
-        const plainText = sanitizeHtml(text);
+        const plainText = sanitizeHtml(text, { allowedTags: []});
         const requestBody = { method: "POST", body: `language=${language}&text=${plainText}` };
         fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
             .then(response => response.json())
