@@ -140,7 +140,7 @@ export const cuesSlice = createSlice({
                 const followingFollowingCue = state[index + 2];
                 if (previousCue) {
                     previousCue.corrupted = !conformToRules(
-                        previousCue.vttCue, subtitleSpecification, previousPreviousCue, currentCue, overlapCaptions
+                        previousCue, subtitleSpecification, previousPreviousCue, currentCue, overlapCaptions
                     );
                 }
                 currentCue.corrupted =
@@ -149,7 +149,7 @@ export const cuesSlice = createSlice({
                     );
                 if (followingCue) {
                     followingCue.corrupted = !conformToRules(
-                        followingCue.vttCue, subtitleSpecification, currentCue, followingFollowingCue, overlapCaptions
+                        followingCue, subtitleSpecification, currentCue, followingFollowingCue, overlapCaptions
                     );
                 }
             }
