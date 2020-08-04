@@ -12,6 +12,7 @@ import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateCues, updateEditingCueIndex } from "./cueSlices";
+import CueLineFlap from "./CueLineFlap";
 
 let testingStore = createTestingStore();
 
@@ -31,19 +32,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
                         <CueEdit index={1} cue={cues[1]} playerTime={0} />
@@ -79,19 +68,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
                         <CueView index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
@@ -122,53 +99,13 @@ describe("CueLine", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
-    it("renders corrupted view line in captioning mode", () => {
-        // GIVEN
-        const corruptedCue = {
-            vttCue: new VTTCue(0, 0, "Editing Line 1"),
-            cueCategory: "DIALOGUE",
-            corrupted: true
-        } as CueDto;
-        const cueWithSource = { cue: corruptedCue };
-        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
-
-        // WHEN
-        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueLine
-                    rowIndex={1}
-                    data={cueWithSource}
-                    rowProps={cueLineRowProps}
-                    rowRef={React.createRef()}
-                    onClick={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.find(CueView).props().className).toEqual("sbte-background-error-darker");
-    });
-
     it("renders middle edit line in translation mode", () => {
         // GIVEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
                             index={1}
@@ -210,19 +147,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
                             index={1}
@@ -263,19 +188,7 @@ describe("CueLine", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
                             index={1}
@@ -311,55 +224,12 @@ describe("CueLine", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     });
 
-    it("renders corrupted view line in translation mode", () => {
-        // GIVEN
-        const corruptedCue = {
-            vttCue: new VTTCue(0, 0, "Editing Line 1"),
-            cueCategory: "DIALOGUE",
-            corrupted: true
-        } as CueDto;
-        const cueWithSource = { cue: corruptedCue, sourceCue };
-        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
-
-        // WHEN
-        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueLine
-                    rowIndex={1}
-                    data={cueWithSource}
-                    rowProps={cueLineRowProps}
-                    rowRef={React.createRef()}
-                    onClick={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.find(CueView).at(0).props().className)
-            .toEqual("sbte-bottom-border sbte-background-error-darker");
-        expect(actualNode.find(CueView).at(0).props().className)
-            .toEqual("sbte-bottom-border sbte-background-error-darker");
-    });
-
     it("renders empty line in translation mode", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                    <div
-                        className="sbte-cue-line-flap"
-                        style={{
-                            paddingTop: "10px",
-                            width: "30px",
-                            color: "white",
-                            fontSize: "11px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }}
-                    >
-                        2
-                    </div>
+                    <CueLineFlap rowIndex={1} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueView
                             index={1}

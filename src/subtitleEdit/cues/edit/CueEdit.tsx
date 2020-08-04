@@ -75,8 +75,7 @@ const CueEdit = (props: Props): ReactElement => {
         });
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
-    const staticBackground = props.cue.corrupted ? "sbte-background-error-lighter" : "bg-white";
-    const className = validationError ? "blink-error-bg" : staticBackground;
+    const className = validationError ? "blink-error-bg" : "bg-white";
 
     return (
         <div style={{ display: "flex" }} className={className}>

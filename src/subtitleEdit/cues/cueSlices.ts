@@ -133,12 +133,14 @@ export const cuesSlice = createSlice({
                 const subtitleSpecification = action.payload.subtitleSpecification;
                 const overlapCaptions = action.payload.overlapEnabled;
 
+                const previousPreviousCue = state[index - 2];
                 const previousCue = state[index - 1];
                 const currentCue = state[index];
                 const followingCue = state[index + 1];
+                const followingFollowingCue = state[index + 2];
                 if (previousCue) {
                     previousCue.corrupted = !conformToRules(
-                        previousCue, subtitleSpecification, undefined, currentCue, overlapCaptions
+                        previousCue.vttCue, subtitleSpecification, previousPreviousCue, currentCue, overlapCaptions
                     );
                 }
                 currentCue.corrupted =
@@ -147,7 +149,7 @@ export const cuesSlice = createSlice({
                     );
                 if (followingCue) {
                     followingCue.corrupted = !conformToRules(
-                        followingCue, subtitleSpecification, currentCue, undefined, overlapCaptions
+                        followingCue.vttCue, subtitleSpecification, currentCue, followingFollowingCue, overlapCaptions
                     );
                 }
             }

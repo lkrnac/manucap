@@ -15,8 +15,8 @@ $sbte-main-text-color: $secondary;
 $border-color: rgb(241,244,245);
 $input-border-color: rgb(108, 117, 125);
 $green: rgb(0,87,0);
-$background-error-darker: rgb(255, 235, 235);
-$background-error-lighter: rgb(255, 245, 245);
+$red: rgb(198,40,40);
+$background-error: rgb(255, 245, 245);
 $background-error-text: rgba(255, 0, 0, 0.2);
 
 // ##############################
@@ -58,27 +58,19 @@ $background-error-text: rgba(255, 0, 0, 0.2);
   background-color: $gray-200;
 }
 
-.sbte-background-error-darker {
-  background-color: $background-error-darker;
-}
-
-.sbte-background-error-lighter {
-  background-color: $background-error-lighter;
-}
-
 .sbte-text-with-error {
   background-color: $background-error-text;
 }
 
 @keyframes fade {
     from { background-color: $white }
-    50% { background-color: $background-error-lighter }
+    50% { background-color: $background-error }
     to { background-color: $white }
 }
 
 @-webkit-keyframes fade {
     from { background-color: $white }
-    50% { background-color: $background-error-lighter }
+    50% { background-color: $background-error }
     to { background-color: $white }
 }
 
@@ -117,10 +109,24 @@ $background-error-text: rgba(255, 0, 0, 0.2);
   background-color: inherit;
 }
 
+%sbte-cue-line-flap {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
 .sbte-cue-line-flap {
-  background-color: $secondary;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+    @extend %sbte-cue-line-flap;
+    background-color: $secondary;
+}
+
+.sbte-cue-line-flap-error {
+    @extend %sbte-cue-line-flap;
+    background-color: $red;
+}
+
+.sbte-cue-line-flap-good {
+    @extend %sbte-cue-line-flap;
+    background-color: $green;
 }
 
 #sbte-spell-check-popover {
