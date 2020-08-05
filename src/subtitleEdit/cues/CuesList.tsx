@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// @ts-ignore
+// @ts-ignore It doesn't have TS type module
 import ReactSmartScroll from "@dotsub/react-smart-scroll";
 
 import { isDirectTranslationTrack } from "../subtitleEditUtils";

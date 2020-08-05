@@ -1,3 +1,5 @@
+import { SpellCheck } from "./cues/spellCheck/model";
+
 export interface Language {
     readonly id: string;
     readonly name: string;
@@ -10,6 +12,7 @@ export interface CueDto {
     readonly cueCategory: CueCategory;
     corrupted?: boolean;
     editUuid?: string;
+    spellCheck?: SpellCheck;
 }
 
 export interface CueWithSource {

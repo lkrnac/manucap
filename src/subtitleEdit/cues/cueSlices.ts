@@ -20,6 +20,8 @@ import {
     verifyCueDuration
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
+import { SpellCheck } from "./spellCheck/model";
+import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -47,6 +49,10 @@ interface CheckOptions extends SubtitleSpecificationAction {
     index?: number;
 }
 
+export interface SpellCheckAction extends CueIndexAction {
+    spellCheck: SpellCheck;
+}
+
 const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
     return textOnly ?
         x.text !== y.text :
@@ -72,20 +78,25 @@ export const cuesSlice = createSlice({
     initialState: [] as CueDto[],
     reducers: {
         updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
-            const cueCategory = state[action.payload.idx].cueCategory;
             state[action.payload.idx] = {
+                ...state[action.payload.idx],
                 vttCue: action.payload.vttCue,
-                cueCategory,
                 editUuid: action.payload.editUuid
             };
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
                 state[action.payload.idx] = {
-                    vttCue: state[action.payload.idx].vttCue,
+                    ...state[action.payload.idx],
                     cueCategory: action.payload.cueCategory
                 };
             }
+        },
+        addSpellCheck: (state, action: PayloadAction<SpellCheckAction>): void => {
+            state[action.payload.idx] = {
+                ...state[action.payload.idx],
+                spellCheck: action.payload.spellCheck
+            };
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {
             state.splice(action.payload.idx, 0, action.payload.cue);
@@ -129,15 +140,16 @@ export const cuesSlice = createSlice({
                 const followingFollowingCue = state[index + 2];
                 if (previousCue) {
                     previousCue.corrupted = !conformToRules(
-                        previousCue.vttCue, subtitleSpecification, previousPreviousCue, currentCue, overlapCaptions
+                        previousCue, subtitleSpecification, previousPreviousCue, currentCue, overlapCaptions
                     );
                 }
-                currentCue.corrupted = !conformToRules(
-                    currentCue.vttCue, subtitleSpecification, previousCue, followingCue, overlapCaptions
-                );
+                currentCue.corrupted =
+                    !conformToRules(
+                        currentCue, subtitleSpecification, previousCue, followingCue, overlapCaptions
+                    );
                 if (followingCue) {
                     followingCue.corrupted = !conformToRules(
-                        followingCue.vttCue, subtitleSpecification, currentCue, followingFollowingCue, overlapCaptions
+                        followingCue, subtitleSpecification, currentCue, followingFollowingCue, overlapCaptions
                     );
                 }
             }
@@ -244,6 +256,12 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
 
             dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue, editUuid }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
+
+            const language = getState().editingTrack?.language?.id;
+            const spellCheckerDomain = getState().spellCheckerDomain;
+            if (language && spellCheckerDomain) {
+                fetchSpellCheck(dispatch, getState, idx, newVttCue.text, language, spellCheckerDomain);
+            }
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
                 overlapEnabled: overlapCaptionsAllowed,

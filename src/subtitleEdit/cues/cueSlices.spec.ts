@@ -22,6 +22,7 @@ import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
+import { setSpellCheckDomain } from "./spellCheck/spellCheckSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -32,6 +33,11 @@ const testingTrack = {
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    {
+        vttCue: new VTTCue(4, 6, "Caption Line 3"),
+        cueCategory: "ONSCREEN_TEXT",
+        spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+    },
 ] as CueDto[];
 
 const testingCuesWithGaps = [
@@ -66,6 +72,20 @@ describe("cueSlices", () => {
                 .toBeTruthy();
         });
 
+        it("preserves all other existing cue parameters", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[2].editUuid;
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().cues[2].spellCheck)
+                .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
+        });
+
         it("doesn't update top level cue when editUuid is different", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -89,6 +109,151 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues.length).toEqual(0);
             expect(testingStore.getState().validationError).toEqual(false);
             expect(testingStore.getState().lastCueChange).toBeUndefined;
+        });
+
+        describe("spell checking", () => {
+            it("updates cues in redux with spell checking state", () => {
+                // GIVEN
+                const testingResponse = {
+                    matches: [
+                        {
+                            message: "This sentence does not start with an uppercase letter",
+                            replacements: [{ "value": "Txt" }],
+                            "offset": 0,
+                            "length": 3,
+                        },
+                        {
+                            "message": "Possible spelling mistake found.",
+                            "replacements": [
+                                { value: "check" },
+                                { value: "Chuck" },
+                                { value: "chick" },
+                                { value: "chuck" },
+                                { value: "chock" },
+                                { value: "CCK" },
+                                { value: "CHC" },
+                                { value: "CHK" },
+                                { value: "cock" },
+                                { value: "ch ck" }
+                            ],
+                            "offset": 7,
+                            "length": 4,
+                        }
+                    ]
+                };
+
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "testing-language" }} as Track
+                ) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
+
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                setTimeout(
+                    () => {
+                        // @ts-ignore modern browsers does have it
+                        expect(global.fetch).toBeCalledWith(
+                            "https://testing-domain/v2/check",
+                            { method: "POST", body: "language=testing-language&text=Dummy Cue" }
+                        );
+                        expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
+                        expect(testingStore.getState().cues[2].editUuid).toEqual(editUuid);
+                        expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+                        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 2");
+                        expect(testingStore.getState().cues[2].cueCategory).toEqual("AUDIO_DESCRIPTION");
+                    },
+                    50
+                );
+            });
+
+            it("marks cue as corrupted if there are spell check problems", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "testing-language" }} as Track
+                ) as {} as AnyAction);
+
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+            });
+
+            it("triggers autosave content is changed", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "testing-language" }} as Track
+                ) as {} as AnyAction);
+
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledWith(
+                    "https://testing-domain/v2/check",
+                    { body: "language=testing-language&text=Dummy Cue", method: "POST" }
+                );
+            });
+
+            it("does not trigger spell check if domain is undefined", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "testing-language" }} as Track
+                ) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).not.toBeCalled();
+            });
+
+            it("does not trigger spell check if language is undefined", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).not.toBeCalled();
+            });
         });
 
         describe("range prevention", () => {
@@ -767,11 +932,29 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateCueCategory(1, "ONSCREEN_TEXT") as {} as AnyAction);
+            testingStore.dispatch(updateCueCategory(1, "AUDIO_DESCRIPTION") as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
         });
+
+        it("preserves all other existing cue parameters", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateCueCategory(2, "ONSCREEN_TEXT") as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6);
+            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().cues[2].spellCheck)
+                .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
+        });
+
     });
 
     describe("addCue", () => {
@@ -815,15 +998,15 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue(2) as {} as AnyAction
+                addCue(3) as {} as AnyAction
             );
 
             // THEN
-            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
-            expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
-            expect(testingStore.getState().editingCueIndex).toEqual(2);
+            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(4, 6, "Caption Line 3"));
+            expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(6);
+            expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(9);
+            expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
+            expect(testingStore.getState().editingCueIndex).toEqual(3);
             expect(testingStore.getState().validationError).toEqual(false);
         });
 
@@ -891,7 +1074,7 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue(2) as {} as AnyAction
+                addCue(3) as {} as AnyAction
             );
 
             // THEN
@@ -1017,7 +1200,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
-            expect(testingStore.getState().cues.length).toEqual(1);
+            expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(0);
@@ -1048,14 +1231,15 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(deleteCue(1) as {} as AnyAction);
+            testingStore.dispatch(deleteCue(2) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 2, "Caption Line 1"));
-            expect(testingStore.getState().cues.length).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(2, 4, "Caption Line 2"));
+            expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
-            expect(testingStore.getState().lastCueChange.index).toEqual(1);
+            expect(testingStore.getState().lastCueChange.index).toEqual(2);
         });
 
         it("removes editor states for certain index from Redux", () => {
@@ -1077,6 +1261,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
+            testingStore.dispatch(deleteCue(2) as {} as AnyAction);
             testingStore.dispatch(deleteCue(1) as {} as AnyAction);
             testingStore.dispatch(deleteCue(0) as {} as AnyAction);
 
@@ -1304,6 +1489,7 @@ describe("cueSlices", () => {
             const sourceTestingCues = [
                 { vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                { vttCue: new VTTCue(5, 7, "Caption Line 3"), cueCategory: "ONSCREEN_TEXT" },
             ] as CueDto[];
             testingStore.dispatch(updateSourceCues(sourceTestingCues) as {} as AnyAction);
 

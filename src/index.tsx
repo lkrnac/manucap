@@ -112,6 +112,7 @@ const TestApp = (): ReactElement => {
             onComplete={(): void => undefined}
             onExportFile={(): void => undefined}
             onImportFile={(): void => undefined}
+            spellCheckerDomain="dev-spell-checker.videotms.com"
         />
     );
 };

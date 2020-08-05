@@ -61,16 +61,22 @@ const endOverlapOk = (vttCue: VTTCue, followingCue?: CueDto): boolean =>
 const overlapOk = (vttCue: VTTCue, previousCue?: CueDto, followingCue?: CueDto): boolean =>
     startOverlapOk(vttCue, previousCue) && endOverlapOk(vttCue, followingCue);
 
+const isSpelledCorrectly = (cue: CueDto): boolean =>
+    cue.spellCheck?.matches === undefined || cue.spellCheck.matches.length === 0;
+
 export const conformToRules = (
-    vttCue: VTTCue,
+    cue: CueDto,
     subtitleSpecification: SubtitleSpecification | null,
     previousCue?: CueDto,
     followingCue?: CueDto,
-    overlapCaptions?: boolean,
+    overlapCaptions?: boolean
 ): boolean =>
-    checkCharacterLimitation(vttCue.text, subtitleSpecification)
-    && rangeOk(vttCue, subtitleSpecification)
-    && (overlapCaptions || overlapOk(vttCue, previousCue, followingCue));
+    checkCharacterLimitation(cue.vttCue.text, subtitleSpecification)
+        && rangeOk(cue.vttCue, subtitleSpecification)
+        && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
+        && isSpelledCorrectly(cue)
+;
+
 
 export const markCues = (
     cues: CueDto[],
@@ -80,10 +86,11 @@ export const markCues = (
     cues.map((cue, index) => {
         const previousCue = cues[index - 1];
         const followingCue = cues[index + 1];
+
         return {
             ...cue,
             corrupted: !conformToRules(
-                cue.vttCue,
+                cue,
                 subtitleSpecifications,
                 previousCue,
                 followingCue,

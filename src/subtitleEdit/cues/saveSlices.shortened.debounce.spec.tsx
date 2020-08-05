@@ -62,11 +62,12 @@ describe("saveSlices", () => {
         it("sends latest version of track from Redux to server", (done) => {
             // GIVEN
             const expectedTestingCues = [
-                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "AUDIO_DESCRIPTION" }
+                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "AUDIO_DESCRIPTION", corrupted: false }
             ] as CueDto[];
+            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            expectedTestingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
 
             // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
             setTimeout(
                 () => {
                     testingStore.dispatch(

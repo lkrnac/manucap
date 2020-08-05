@@ -1,5 +1,17 @@
-import React, { Dispatch, ReactElement, useEffect, useRef } from "react";
-import { ContentState, convertFromHTML, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
+import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
+import {
+    CompositeDecorator,
+    ContentBlock,
+    ContentState,
+    convertFromHTML,
+    DraftHandleValue,
+    Editor,
+    EditorState,
+    getDefaultKeyBinding,
+    Modifier,
+    RichUtils,
+    SelectionState,
+} from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
 import _ from "lodash";
@@ -12,6 +24,8 @@ import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cueSlices";
+import { SpellCheck } from "../spellCheck/model";
+import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
@@ -25,14 +39,25 @@ const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
         } else if (e.keyCode === Character.ENTER) {
             return "editNext";
         }
+    } else if (e.keyCode === Character.ENTER) {
+        return "newLine";
     }
     return getDefaultKeyBinding(e);
 };
 
-const handleKeyShortcut = (shortcut: string): DraftHandleValue => {
+const handleKeyShortcut = (
+    editorState: EditorState,
+    dispatch: Dispatch<AppThunk>,
+    props: CueTextEditorProps
+) => (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
     if (keyCombination) {
         Mousetrap.trigger(keyCombination);
+        return "handled";
+    }
+    if (shortcut === "newLine") {
+        const newEditorState = RichUtils.insertSoftNewline(editorState);
+        dispatch(updateEditorState(props.index, newEditorState));
         return "handled";
     }
     return "not-handled";
@@ -42,6 +67,7 @@ export interface CueTextEditorProps {
     index: number;
     vttCue: VTTCue;
     editUuid?: string;
+    spellCheck?: SpellCheck;
 }
 
 const changeVttCueInRedux = (
@@ -67,18 +93,57 @@ const getWordCountPerLine = (text: string): number[] => {
     return lines.map((line: string): number => line.match(/\S+/g)?.length || 0);
 };
 
+const createCorrectSpellingHandler = (
+    editorState: EditorState,
+    dispatch: Dispatch<AppThunk>,
+    props: CueTextEditorProps
+) => (replacement: string, start: number, end: number): void => {
+    let contentState = editorState.getCurrentContent();
+    const selectionState = editorState.getSelection();
+    const typoSelectionState = selectionState.set("anchorOffset", start).set("focusOffset", end) as SelectionState;
+    const startKey = typoSelectionState.getStartKey();
+    const typoBlock = contentState.getBlockForKey(startKey);
+    const inlineStyle = typoBlock.getInlineStyleAt(start);
+    contentState = Modifier.replaceText(contentState, typoSelectionState, replacement, inlineStyle);
+    const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
+    dispatch(updateEditorState(props.index, newEditorState));
+    dispatch(callSaveTrack());
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
+    const [openSpellCheckPopupId, setOpenSpellCheckPopupId] = useState(null);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
     );
+
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         editorState = EditorState.createWithContent(initialContentState);
         editorState = EditorState.moveFocusToEnd(editorState);
     }
+
+    const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
+        if (props.spellCheck && props.spellCheck.matches) {
+            props.spellCheck.matches.forEach(match => callback(match.offset, match.offset + match.length));
+        }
+    };
+    const newSpellCheckDecorator = new CompositeDecorator([
+        {
+            strategy: findSpellCheckIssues,
+            component: SpellCheckIssue,
+            props: {
+                spellCheck: props.spellCheck,
+                correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
+                openSpellCheckPopupId,
+                setOpenSpellCheckPopupId
+            }
+        }
+    ]);
+    editorState = EditorState.set(editorState, { decorator: newSpellCheckDecorator });
+
     const currentContent = editorState.getCurrentContent();
     const unmountContentRef = useRef(currentContent);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
@@ -153,9 +218,9 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                                 dispatch(callSaveTrack());
                             }
                         }}
-                        spellCheck
+                        spellCheck={false}
                         keyBindingFn={keyShortcutBindings}
-                        handleKeyCommand={handleKeyShortcut}
+                        handleKeyCommand={handleKeyShortcut(editorState, dispatch, props)}
                     />
                 </div>
                 <div style={{ flex: 0 }}>
