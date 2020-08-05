@@ -57,15 +57,6 @@ const handleKeyShortcut = (
     }
     if (shortcut === "newLine") {
         const newEditorState = RichUtils.insertSoftNewline(editorState);
-
-        // let contentState = editorState.getCurrentContent();
-        // const selectionState = editorState.getSelection();
-        // const startKey = selectionState.getStartKey();
-        // const typoBlock = contentState.getBlockForKey(startKey);
-        // const inlineStyle = typoBlock.getInlineStyleAt(0);
-        // contentState = Modifier.insertText(contentState, selectionState, "\n", inlineStyle);
-        // const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
-
         dispatch(updateEditorState(props.index, newEditorState));
         return "handled";
     }
@@ -193,7 +184,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         []
     );
 
-    // console.log(currentContent.getPlainText());
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div
