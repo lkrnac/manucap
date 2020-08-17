@@ -15,7 +15,7 @@ interface Props {
     setOpenSpellCheckPopupId: (id: number | null) => void;
     editorRef: any;
 }
-
+//@ts-ignore
 const popupPlacement = (target: MutableRefObject<null>): boolean => {
     if (target !== null && target.current !== null) {
         // @ts-ignore false positive -> we do null check
@@ -34,21 +34,28 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const [spellCheckPopupId] = useState(props.start);
     const target = useRef(null);
     const container = useRef(null);
+    //@ts-ignore
     let selectRef: any;
+    //@ts-ignore
     const showAtBottom = popupPlacement(target);
 
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
         .pop();
+
+
+
     if (!spellCheckMatch) {
         return props.children;
     }
 
+    //@ts-ignore
     const selectOptions = spellCheckMatch.replacements
         .filter((replacement) => replacement.value.trim() !== "")
         .map((replacement) => ({ value: replacement.value, label: replacement.value } as Option)
         );
 
+    //@ts-ignore
     const customStyles = {
         control: () => ({ visibility: "hidden", height: "0px" }),
         container: (provided) => ({ ...provided, height: "100%" }),
@@ -57,31 +64,25 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     } as Styles;
 
 
-    const handleTest= (e: React.KeyboardEvent<{}>): void => {
-        if (e.keyCode === Character.ARROW_DOWN) {
-            console.log("Arrow down >> ");
+    const handlePopoverShortcut= (e: React.KeyboardEvent<{}>): void => {
+        if (e.keyCode === Character.ESCAPE) {
+            props.setOpenSpellCheckPopupId(null);
         }
 
     };
     //@ts-ignore
+    const onExitPopover = (e: any): void => {
+        props.editorRef?.current?.focus();
+    };
+
+    //@ts-ignore
     const onEnterPopover = (e: any): void => {
         console.log("onEnterPopover >> ");
-        console.log("bluring editor before");
-        console.log(document.activeElement);
-        props.editorRef?.current?.blur();
-        //@ts-ignore
-        document.activeElement?.blur();
-        //@ts-ignore
-        const overlay = container?.current?.firstChild;
-        console.log("after");
-        console.log(document.activeElement);
-        overlay.tabIndex=0;
-        console.log("Focusing on ");
-        //@ts-ignore
-        console.log(selectRef?.select.inputRef);
-        selectRef?.select.inputRef.focus();
-        console.log("Now");
-        console.log(document.activeElement);
+        console.log("spellCheckMatch:0  " + spellCheckMatch.offset);
+        console.log("props.start:1  " + props.start);
+        console.log(props);
+
+       selectRef?.select.inputRef.focus();
     };
     return (
         <span
@@ -101,9 +102,10 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 <Overlay
                     container={container}
                     onEntered={onEnterPopover}
+                    onExited={onExitPopover}
                     target={target.current}
                     show={props.openSpellCheckPopupId === spellCheckPopupId}
-                    placement={showAtBottom ? "bottom" : "top"}
+                    placement={"bottom"}
                 >
                     <Popover id="sbte-spell-check-popover">
                         <Popover.Title>{spellCheckMatch.message}</Popover.Title>
@@ -113,7 +115,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                                     selectRef = ref;
                                 }}
 
-                                onKeyDown={handleTest}
+                                onKeyDown={handlePopoverShortcut}
                                 menuIsOpen
                                 options={selectOptions}
                                 styles={customStyles}

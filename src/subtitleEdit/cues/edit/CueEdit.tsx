@@ -1,6 +1,7 @@
 import { CueCategory, CueDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
+// @ts-ignore
 import { addCue, setValidationError, updateCueCategory, updateEditingCueIndex, updateVttCue } from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
@@ -40,9 +41,9 @@ const CueEdit = (props: Props): ReactElement => {
     useEffect(
         () => {
             if (validationError) {
-                setTimeout(() => {
-                    dispatch(setValidationError(false));
-                }, 1000);
+                // setTimeout(() => {
+                //     dispatch(setValidationError(false));
+                // }, 1000);
             }
         }, [ dispatch, validationError ]
     );

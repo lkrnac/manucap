@@ -30,13 +30,12 @@ import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
 
 
-
 //@ts-ignore
 const handleKeyShortcut = (
     editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
     openSpellCheckPopupId: number | null,
     setOpenSpellCheckPopupId: Function,
-    ) => (shortcut: string): DraftHandleValue => {
+) => (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
     if (shortcut === "openSpellChecker") {
         const selection = editorState.getSelection();
@@ -44,6 +43,7 @@ const handleKeyShortcut = (
         const match = props.spellCheck?.matches.find(match => match.offset <= startOffset &&
             startOffset <= (match.offset + match.length));
         if (match != null) {
+            console.log("Found a match! offset: " + match.offset);
             setOpenSpellCheckPopupId(openSpellCheckPopupId ? null : match.offset);
         }
 
@@ -126,13 +126,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     }
 
 
-
     const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
         const action = getActionByKeyboardEvent(e);
         if (action) {
             return action;
         }
-        if ((!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)) {
+        if ((!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey && !openSpellCheckPopupId)) {
             if (e.keyCode === Character.ESCAPE) {
                 return "closeEditor";
             } else if (e.keyCode === Character.ENTER) {
@@ -145,13 +144,9 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         }
         return getDefaultKeyBinding(e);
     };
-//
-//     const keyShortcutBindingsCustom = (e: React.KeyboardEvent<{}>): string | null => {
-//
-//         return keyShortcutBindings(e);
-//     }
 
-    const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
+    const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function,
+                                  _contentState: ContentState): void => {
         if (props.spellCheck && props.spellCheck.matches) {
             props.spellCheck.matches.forEach(match => callback(match.offset, match.offset + match.length));
         }
@@ -223,7 +218,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     padding: "5px 10px 5px 10px"
                 }}
             >
-                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
+                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue}/>
             </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
@@ -250,25 +245,25 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         spellCheck={false}
                         keyBindingFn={keyShortcutBindings}
                         handleKeyCommand={handleKeyShortcut(editorState, dispatch, props,
-                             openSpellCheckPopupId,
-                             setOpenSpellCheckPopupId)}
+                            openSpellCheckPopupId,
+                            setOpenSpellCheckPopupId)}
                     />
                 </div>
                 <div style={{ flex: 0 }}>
                     {charCountPerLine.map((count: number, index: number) => (
-                        <div key={index}><span className="sbte-count-tag">{count} ch</span><br /></div>
+                        <div key={index}><span className="sbte-count-tag">{count} ch</span><br/></div>
                     ))}
                 </div>
                 <div style={{ flex: 0, paddingRight: "5px" }}>
                     {wordCountPerLine.map((count: number, index: number) => (
-                        <div key={index}><span className="sbte-count-tag">{count} w</span><br /></div>
+                        <div key={index}><span className="sbte-count-tag">{count} w</span><br/></div>
                     ))}
                 </div>
             </div>
             <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
-                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
-                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>}/>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>}/>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>}/>
             </div>
         </div>
     );
