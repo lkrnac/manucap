@@ -33,6 +33,7 @@ export enum KeyCombination {
     ENTER = "enter",
     MOD_SHIFT_ESCAPE = "mod+shift+escape",
     ALT_SHIFT_ESCAPE = "alt+shift+escape",
+    ALT_ARROW_DOWN = "alt+down",
 }
 
 
@@ -47,6 +48,7 @@ mousetrapBindings.set("toggleShortcutPopup", KeyCombination.MOD_SHIFT_SLASH);
 mousetrapBindings.set("closeEditor", KeyCombination.ESCAPE);
 mousetrapBindings.set("editNext", KeyCombination.ENTER);
 mousetrapBindings.set("editPrevious", KeyCombination.MOD_SHIFT_ESCAPE);
+mousetrapBindings.set("openSpellChecker", KeyCombination.ALT_ARROW_DOWN);
 
 export const characterBindings = new Map<Character, string>();
 characterBindings.set(Character.O_CHAR, "togglePlayPause");
