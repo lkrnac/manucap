@@ -1,7 +1,6 @@
 import React, { MutableRefObject, ReactElement, useRef, useState } from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
-import ReactDOM from "react-dom";
 
 import { SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
@@ -62,57 +61,27 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         if (e.keyCode === Character.ARROW_DOWN) {
             console.log("Arrow down >> ");
         }
+
     };
+    //@ts-ignore
     const onEnterPopover = (e: any): void => {
-
-
         console.log("onEnterPopover >> ");
-        console.log(container);
-
-
-        console.log("Editor ref");
-        console.log(props.editorRef);
-        console.log(selectRef);
-        console.log(e);
-        console.log(props?.editorRef?.current);
+        console.log("bluring editor before");
+        console.log(document.activeElement);
         props.editorRef?.current?.blur();
-
         //@ts-ignore
         document.activeElement?.blur();
-
-
-
         //@ts-ignore
         const overlay = container?.current?.firstChild;
-
+        console.log("after");
+        console.log(document.activeElement);
         overlay.tabIndex=0;
-        //@ts-ignore
-        // eslint-disable-next-line react/no-find-dom-node
-        ReactDOM.findDOMNode(container?.current?.firstChild).focus();
-        overlay.focus();
         console.log("Focusing on ");
         //@ts-ignore
-        console.log(container?.current?.firstChild);
-        console.log("Found dom?");
-        //@ts-ignore
-        // eslint-disable-next-line react/no-find-dom-node
-        console.log(ReactDOM.findDOMNode(container?.current?.firstChild));
-        // e.scrollIntoView();
-        // e.focus();
-        // e.firstChild.focus();
-        // selectRef?.select.controlRef.focus();
-        // selectRef?.focus();
-        // console.log("Focus>>>>>>");
-        // console.log(selectRef?.select.controlRef);
-        //
-        // selectRef?.select.controlRef.focus();
-        // console.log(e);
-        // console.log("selectRef");
-        // console.log(selectRef);
-        //@ts-ignore
-        // console.log(container?.current?.firstChild);
-        //@ts-ignore
-        // container?.current?.firstChild?.focus({ preventScroll: false });
+        console.log(selectRef?.select.inputRef);
+        selectRef?.select.inputRef.focus();
+        console.log("Now");
+        console.log(document.activeElement);
     };
     return (
         <span
@@ -121,11 +90,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
             onClick={
                 (): void => {
                     props.setOpenSpellCheckPopupId(
-                        props.openSpellCheckPopupId === spellCheckPopupId ? spellCheckPopupId : spellCheckPopupId
+                        props.openSpellCheckPopupId === spellCheckPopupId ? null : spellCheckPopupId
                     );
-                    console.log("Target");
-                    console.log(container.current);
-                    console.log(container.current);
                 }
 
             }
