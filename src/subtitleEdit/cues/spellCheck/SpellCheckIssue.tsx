@@ -15,6 +15,7 @@ interface Props {
     setOpenSpellCheckPopupId: (id: number | null) => void;
     editorRef: any;
 }
+
 //@ts-ignore
 const popupPlacement = (target: MutableRefObject<null>): boolean => {
     if (target !== null && target.current !== null) {
@@ -33,6 +34,7 @@ interface Option {
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const [spellCheckPopupId] = useState(props.start);
     const target = useRef(null);
+    //@ts-ignore
     const container = useRef(null);
     //@ts-ignore
     let selectRef: any;
@@ -42,7 +44,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
         .pop();
-
 
 
     if (!spellCheckMatch) {
@@ -64,7 +65,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     } as Styles;
 
 
-    const handlePopoverShortcut= (e: React.KeyboardEvent<{}>): void => {
+    const handlePopoverShortcut = (e: React.KeyboardEvent<{}>): void => {
         if (e.keyCode === Character.ESCAPE) {
             props.setOpenSpellCheckPopupId(null);
         }
@@ -81,8 +82,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         console.log("spellCheckMatch:0  " + spellCheckMatch.offset);
         console.log("props.start:1  " + props.start);
         console.log(props);
-
-       selectRef?.select.inputRef.focus();
+        selectRef?.select.inputRef.focus();
     };
     return (
         <span
@@ -98,7 +98,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
             }
         >
             {props.children}
-            <div ref={container}>
+            <div style={{ display: "inline-block" }} ref={container}>
                 <Overlay
                     container={container}
                     onEntered={onEnterPopover}
