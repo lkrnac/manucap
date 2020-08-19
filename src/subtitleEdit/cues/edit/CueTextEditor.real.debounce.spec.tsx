@@ -13,7 +13,7 @@ import { updateCues } from "../cueSlices";
 import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
-import {setSpellCheckDomain} from "../spellCheck/spellCheckSlices";
+import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 
 let testingStore = createTestingStore();
 
@@ -207,7 +207,7 @@ describe("CueTextEditor", () => {
                 expect(global.fetch).toBeCalledTimes(1);
                 done();
             },
-            5000
+            6000
         );
     });
 
