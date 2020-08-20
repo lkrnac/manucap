@@ -2,7 +2,8 @@ import React, { MutableRefObject, ReactElement, RefObject, useRef, useState } fr
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { SpellCheck } from "./model";
-import { Character } from "../../shortcutConstants";
+import { Character, KeyCombination } from "../../shortcutConstants";
+import Mousetrap from "mousetrap";
 
 interface Props {
     children: ReactElement;
@@ -13,6 +14,7 @@ interface Props {
     openSpellCheckPopupId: number | null;
     setOpenSpellCheckPopupId: (id: number | null) => void;
     editorRef: RefObject<HTMLInputElement>;
+    bindEnterAndEscKeys: () => void;
 }
 
 const popupPlacement = (target: MutableRefObject<null>): boolean => {
@@ -54,24 +56,27 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     } as Styles;
 
 
-    const handlePopoverShortcut = (e: React.KeyboardEvent<{}>): void => {
-        if (e.keyCode === Character.ESCAPE) {
-            props.setOpenSpellCheckPopupId(null);
-        } else if (e.keyCode === Character.ENTER) {
-            e.preventDefault();
-            console.log("Enter Clicked");
-        }
-    };
-
+    //@ts-ignore
     const onExitPopover = (): void => {
         props.editorRef?.current?.focus();
+        props.bindEnterAndEscKeys();
     };
 
     const onEnterPopover = (): void => {
+        Mousetrap.bind(KeyCombination.ESCAPE, () => props.setOpenSpellCheckPopupId(null));
+        Mousetrap.unbind(KeyCombination.ENTER);
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };
-
+    const onOptionSelected = (option: ValueType<Option>): void => {
+        props.correctSpelling((option as Option).value, props.start, props.end);
+        props.setOpenSpellCheckPopupId(null);
+    };
+    const onkeydown = (e: React.KeyboardEvent<{}>): void => {
+        if (e.ctrlKey && e.keyCode == Character.SPACE) {
+            e.preventDefault();
+        }
+    };
     return (
         <span
             ref={target}
@@ -97,13 +102,12 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                     <Popover.Title>{spellCheckMatch.message}</Popover.Title>
                     <Popover.Content hidden={selectOptions.length === 0} style={{ padding: 0 }}>
                         <Select
+                            onKeyDown={onkeydown}
                             ref={selectRef}
-                            onKeyDown={handlePopoverShortcut}
                             menuIsOpen
                             options={selectOptions}
                             styles={customStyles}
-                            onChange={(option: ValueType<Option>): void =>
-                                    props.correctSpelling((option as Option).value, props.start, props.end)}
+                            onChange={onOptionSelected}
                         />
                     </Popover.Content>
                 </Popover>

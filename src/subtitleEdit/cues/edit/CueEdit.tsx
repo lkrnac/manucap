@@ -38,18 +38,29 @@ const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const validationError = useSelector((state: SubtitleEditState) => state.validationError);
 
+
     useEffect(
         () => {
             if (validationError) {
-                // setTimeout(() => {
-                //     dispatch(setValidationError(false));
-                // }, 1000);
+                setTimeout(() => {
+                    dispatch(setValidationError(false));
+                }, 1000);
             }
         }, [ dispatch, validationError ]
     );
 
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
+
+    const bindEnterAndEscKeys =(): void => {
+        Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
+        Mousetrap.bind([KeyCombination.ENTER], () => {
+            return props.index === cuesCount - 1
+                ? dispatch(handleEnterForLastCue(sourceCues, props.index))
+                : dispatch(updateEditingCueIndex(props.index + 1));
+        });
+    };
+
     useEffect(() => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
             updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime, props.cue.editUuid);
@@ -59,22 +70,21 @@ const CueEdit = (props: Props): ReactElement => {
                 dispatch, props, props.cue.vttCue.startTime, props.playerTime, props.cue.editUuid
             );
         });
-        Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
-        Mousetrap.bind([KeyCombination.ENTER], () => {
-            return props.index === cuesCount - 1
-                ? dispatch(handleEnterForLastCue(sourceCues, props.index))
-                : dispatch(updateEditingCueIndex(props.index + 1));
-        });
+        bindEnterAndEscKeys();
         Mousetrap.bind([KeyCombination.MOD_SHIFT_ESCAPE, KeyCombination.ALT_SHIFT_ESCAPE],
             () => dispatch(updateEditingCueIndex(props.index - 1))
         );
-    }, [ dispatch, props, cuesCount, sourceCues ]);
+        // no need for bindEnterAndEscKeys nor dispatch
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ props, cuesCount, sourceCues ]);
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {
             dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime));
         });
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
+
+
 
     const className = validationError ? "blink-error-bg" : "bg-white";
 
@@ -138,6 +148,7 @@ const CueEdit = (props: Props): ReactElement => {
                     vttCue={props.cue.vttCue}
                     editUuid={props.cue.editUuid}
                     spellCheck={props.cue.spellCheck}
+                    bindEnterAndEscKeys={bindEnterAndEscKeys}
                 />
             </div>
         </div>

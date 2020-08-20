@@ -29,8 +29,6 @@ import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
 
-
-//@ts-ignore
 const handleKeyShortcut = (
     editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
     openSpellCheckPopupId: number | null,
@@ -43,9 +41,15 @@ const handleKeyShortcut = (
         const match = props.spellCheck?.matches.find(match => match.offset <= startOffset &&
             startOffset <= (match.offset + match.length));
         if (match != null) {
-            setOpenSpellCheckPopupId(openSpellCheckPopupId ? null : match.offset);
+            setOpenSpellCheckPopupId(openSpellCheckPopupId != null ? null : match.offset);
         }
-
+        return "handled";
+    }
+    if (shortcut === "popoverSelect") {
+        return "handled";
+    }
+    if (shortcut === "popoverClose") {
+        setOpenSpellCheckPopupId(null);
         return "handled";
     }
     if (keyCombination) {
@@ -65,6 +69,7 @@ export interface CueTextEditorProps {
     vttCue: VTTCue;
     editUuid?: string;
     spellCheck?: SpellCheck;
+    bindEnterAndEscKeys: () => void;
 }
 
 const changeVttCueInRedux = (
@@ -95,6 +100,7 @@ const createCorrectSpellingHandler = (
     dispatch: Dispatch<AppThunk>,
     props: CueTextEditorProps
 ) => (replacement: string, start: number, end: number): void => {
+    console.log("Select a replacment " + replacement);
     let contentState = editorState.getCurrentContent();
     const selectionState = editorState.getSelection();
     const typoSelectionState = selectionState.set("anchorOffset", start).set("focusOffset", end) as SelectionState;
@@ -124,27 +130,34 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     }
 
     const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
+        console.log(e);
         const action = getActionByKeyboardEvent(e);
+        console.log(action);
         if (action) {
             return action;
         }
-        console.log("openSpellCheckPopupId > "+openSpellCheckPopupId);
-        if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey && !openSpellCheckPopupId) {
+        if(openSpellCheckPopupId && (e.keyCode === Character.ENTER || e.keyCode === Character.ENTER)) {
+            console.log("popoverHandled " + openSpellCheckPopupId);
+            return "popoverHandled";
+        } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
             if (e.keyCode === Character.ESCAPE) {
+                console.log("closeEditor");
                 return "closeEditor";
             } else if (e.keyCode === Character.ENTER) {
+                console.log("editNext");
                 return "editNext";
             }
-        } else if (e.keyCode === Character.ENTER) {
+        } else if (e.keyCode === Character.ENTER && !openSpellCheckPopupId) {
+            console.log("newLine");
             return "newLine";
-        } else if (e.altKey && e.keyCode === Character.ARROW_DOWN) {
+        } else if ((e.ctrlKey || e.metaKey ) && e.keyCode === Character.SPACE) {
+        // } else if (e.altKey && e.keyCode === Character.ARROW_DOWN) {
             return "openSpellChecker";
         }
         return getDefaultKeyBinding(e);
     };
 
-    const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function,
-                                  _contentState: ContentState): void => {
+    const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
         if (props.spellCheck && props.spellCheck.matches) {
             props.spellCheck.matches.forEach(match => callback(match.offset, match.offset + match.length));
         }
@@ -158,8 +171,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
                 editorRef,
                 openSpellCheckPopupId,
-                setOpenSpellCheckPopupId
-
+                setOpenSpellCheckPopupId,
+                bindEnterAndEscKeys: props.bindEnterAndEscKeys
             }
         }
     ]);
@@ -216,7 +229,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     padding: "5px 10px 5px 10px"
                 }}
             >
-                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue}/>
+                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
             </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
@@ -249,19 +262,19 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 </div>
                 <div style={{ flex: 0 }}>
                     {charCountPerLine.map((count: number, index: number) => (
-                        <div key={index}><span className="sbte-count-tag">{count} ch</span><br/></div>
+                        <div key={index}><span className="sbte-count-tag">{count} ch</span><br /></div>
                     ))}
                 </div>
                 <div style={{ flex: 0, paddingRight: "5px" }}>
                     {wordCountPerLine.map((count: number, index: number) => (
-                        <div key={index}><span className="sbte-count-tag">{count} w</span><br/></div>
+                        <div key={index}><span className="sbte-count-tag">{count} w</span><br /></div>
                     ))}
                 </div>
             </div>
             <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>}/>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>}/>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>}/>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
             </div>
         </div>
     );
