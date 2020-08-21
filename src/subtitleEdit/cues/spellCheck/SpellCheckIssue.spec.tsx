@@ -1,5 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
-import React from "react";
+import React, { RefObject } from "react";
 import { mount } from "enzyme";
 import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";
@@ -10,6 +10,9 @@ const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "");
 
 describe("SpellCheckerIssue", () => {
+    const emptyEditorRef = {} as RefObject<HTMLInputElement>;
+    const bindEnterAndEscKeysSpy = jest.fn();
+
     it("renders without popup", () => {
         // GIVEN
         const expectedNode = mount(
@@ -26,8 +29,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={jest.fn()}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -49,8 +54,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={jest.fn()}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -72,8 +79,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={17}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={jest.fn()}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -83,7 +92,7 @@ describe("SpellCheckerIssue", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("renders popup with options when clicked", () => {
+    it( "renders popup with options when clicked", () => {
         // GIVEN
         const expectedNode = mount(
             <div
@@ -191,7 +200,7 @@ describe("SpellCheckerIssue", () => {
             </div>
         );
         let spellCheckPopupId = null;
-        const setOpenSpellCheckPopupId = (id: string | null): void => {
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
             spellCheckPopupId = id;
         };
 
@@ -209,8 +218,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -218,7 +229,7 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
 
         // THEN
         expect(actualNode.find("#sbte-spell-check-popover").at(0).html()).toEqual(expectedNode.html());
@@ -323,7 +334,7 @@ describe("SpellCheckerIssue", () => {
             </div>
         );
         let spellCheckPopupId = null;
-        const setOpenSpellCheckPopupId = (id: string | null): void => {
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
             spellCheckPopupId = id;
         };
 
@@ -341,8 +352,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -350,7 +363,7 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
 
         // THEN
         expect(removeSelectCssClass(actualNode.find("#sbte-spell-check-popover").at(0).html()))
@@ -369,7 +382,7 @@ describe("SpellCheckerIssue", () => {
             }
         ]} as SpellCheck;
         let spellCheckPopupId = null;
-        const setOpenSpellCheckPopupId = (id: string | null): void => {
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
             spellCheckPopupId = id;
         };
         const actualNode = mount(
@@ -378,8 +391,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={handler}
-                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -387,7 +402,7 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
         actualNode.findWhere(spellCheckOptionPredicate(1)).simulate("click");
 
         // THEN
@@ -408,7 +423,7 @@ describe("SpellCheckerIssue", () => {
                 }
             ]} as SpellCheck;
         let spellCheckPopupId = null;
-        const setOpenSpellCheckPopupId = (id: string | null): void => {
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
             spellCheckPopupId = id;
         };
         const actualNode = mount(
@@ -417,8 +432,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -426,7 +443,7 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
 
         // THEN
         expect(actualNode.find(Overlay).at(0).props().placement).toEqual("top");
@@ -451,8 +468,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={jest.fn()}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>

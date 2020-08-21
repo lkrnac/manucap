@@ -20,13 +20,19 @@ const cues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
     { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
+const bindEnterAndEscKeysSpy = jest.fn() as () => void;
 
 const createEditorNode = (text = "someText"): ReactWrapper => {
     const vttCue = new VTTCue(0, 1, text);
     const editUuid = testingStore.getState().cues[0].editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+            <CueTextEditor
+                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                index={0}
+                vttCue={vttCue}
+                editUuid={editUuid}
+            />
         </Provider>
     );
     return actualNode.find(".public-DraftEditor-content");
@@ -83,7 +89,12 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+                <CueTextEditor
+                    bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");

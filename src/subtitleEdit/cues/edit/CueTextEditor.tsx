@@ -134,7 +134,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         if (action) {
             return action;
         }
-        if(spellCheckerMatchingOffset && (e.keyCode === Character.ENTER || e.keyCode === Character.ENTER)) {
+        if(spellCheckerMatchingOffset && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
             return "popoverHandled";
         } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
             if (e.keyCode === Character.ESCAPE) {
@@ -142,7 +142,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             } else if (e.keyCode === Character.ENTER) {
                 return "editNext";
             }
-        } else if (e.keyCode === Character.ENTER && !spellCheckerMatchingOffset) {
+        } else if (e.keyCode === Character.ENTER) {
             return "newLine";
         } else if ((e.ctrlKey || e.metaKey ) && e.keyCode === Character.SPACE) {
             return "openSpellChecker";
