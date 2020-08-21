@@ -1,4 +1,4 @@
-import React, { MutableRefObject, ReactElement, RefObject, useRef, useState } from "react";
+import React, { MutableRefObject, ReactElement, RefObject, useRef } from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { SpellCheck } from "./model";
@@ -11,8 +11,8 @@ interface Props {
     start: number;
     end: number;
     correctSpelling: (replacement: string, start: number, end: number) => void;
-    openSpellCheckPopupId: number | null;
-    setOpenSpellCheckPopupId: (id: number | null) => void;
+    spellCheckerMatchingOffset: number | null;
+    setSpellCheckerMatchingOffset: (id: number | null) => void;
     editorRef: RefObject<HTMLInputElement>;
     bindEnterAndEscKeys: () => void;
 }
@@ -32,7 +32,6 @@ interface Option {
 }
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
-    const [spellCheckPopupId] = useState(props.start);
     const target = useRef(null);
     const selectRef = useRef<Select>(null);
     const showAtBottom = popupPlacement(target);
@@ -56,21 +55,23 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     } as Styles;
 
 
-    //@ts-ignore
     const onExitPopover = (): void => {
-        props.editorRef?.current?.focus();
         props.bindEnterAndEscKeys();
+        props.editorRef?.current?.focus();
     };
 
     const onEnterPopover = (): void => {
-        Mousetrap.bind(KeyCombination.ESCAPE, () => props.setOpenSpellCheckPopupId(null));
+        console.log("onEnterPopover");
+        Mousetrap.bind(KeyCombination.ESCAPE, () => props.setSpellCheckerMatchingOffset(null));
         Mousetrap.unbind(KeyCombination.ENTER);
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };
     const onOptionSelected = (option: ValueType<Option>): void => {
+        console.log("onOptionSelected");
         props.correctSpelling((option as Option).value, props.start, props.end);
-        props.setOpenSpellCheckPopupId(null);
+        props.setSpellCheckerMatchingOffset(null);
+
     };
     const onkeydown = (e: React.KeyboardEvent<{}>): void => {
         if (e.ctrlKey && e.keyCode == Character.SPACE) {
@@ -83,8 +84,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
             className="sbte-text-with-error"
             onClick={
                 (): void => {
-                    props.setOpenSpellCheckPopupId(
-                        props.openSpellCheckPopupId === spellCheckPopupId ? null : spellCheckPopupId
+                    props.setSpellCheckerMatchingOffset(
+                        props.spellCheckerMatchingOffset === props.start ? null : props.start
                     );
                 }
 
@@ -95,7 +96,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 onEntered={onEnterPopover}
                 onExited={onExitPopover}
                 target={target.current}
-                show={props.openSpellCheckPopupId === spellCheckPopupId}
+                show={props.spellCheckerMatchingOffset === props.start}
                 placement={showAtBottom ? "bottom" : "top"}
             >
                 <Popover id="sbte-spell-check-popover">
