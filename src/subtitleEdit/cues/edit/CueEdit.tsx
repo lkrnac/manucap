@@ -53,7 +53,6 @@ const CueEdit = (props: Props): ReactElement => {
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
 
     const bindEnterAndEscKeys =(): void => {
-        // console.log("bindEnterAndEscKeys");
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
             return props.index === cuesCount - 1

@@ -224,7 +224,6 @@ export const lastCueChangeSlice = createSlice({
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
-        console.log("Updating cue .....");
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list

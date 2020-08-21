@@ -61,14 +61,12 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     };
 
     const onEnterPopover = (): void => {
-        console.log("onEnterPopover");
         Mousetrap.bind(KeyCombination.ESCAPE, () => props.setSpellCheckerMatchingOffset(null));
         Mousetrap.unbind(KeyCombination.ENTER);
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };
     const onOptionSelected = (option: ValueType<Option>): void => {
-        console.log("onOptionSelected");
         props.correctSpelling((option as Option).value, props.start, props.end);
         props.setSpellCheckerMatchingOffset(null);
 
