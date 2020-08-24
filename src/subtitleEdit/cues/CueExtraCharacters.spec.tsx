@@ -1,0 +1,24 @@
+import "../../testUtils/initBrowserEnvironment";
+import React from "react";
+import { mount } from "enzyme";
+import { CueExtraCharacters } from "./CueExtraCharacters";
+
+describe("CueExtraCharacters", () => {
+    it("renders", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <span className="sbte-extra-text">
+                <div className="text" />
+            </span>
+        );
+        // WHEN
+        const actualNode = mount(
+            <CueExtraCharacters>
+                <div className="text" />
+            </CueExtraCharacters>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+});
