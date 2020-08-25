@@ -4,7 +4,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
 import { getVttText } from "../cueTextConverter";
-import { checkCharacterAndLineLimitation, checkCharacterLimitation, checkLineLimitation } from "../cueVerifications";
+import { checkCharacterAndLineLimitation, checkLineLimitation } from "../cueVerifications";
 
 interface EditorStateAction {
     editorId: number;
@@ -59,7 +59,7 @@ export const updateEditorState = (editorId: number, newEditorState: EditorState)
             && checkCharacterAndLineLimitation(currentVttText, subtitleSpecifications)
         ) {
             dispatch(validationErrorSlice.actions.setValidationError(true));
-            if (!checkLineLimitation(vttText, subtitleSpecifications?.maxLinesPerCaption)) {
+            if (!checkLineLimitation(vttText, subtitleSpecifications)) {
                 // Force creation of different EditorState instance, so that CueTextEditor re-renders with old content
                 editorState = RichUtils.toggleCode(RichUtils.toggleCode(currentEditorState));
             }

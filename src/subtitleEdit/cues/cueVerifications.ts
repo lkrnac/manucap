@@ -9,36 +9,39 @@ const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTag
 
 export const checkLineLimitation = (
     text: string,
-    maxLinesPerCaption: number | null | undefined
+    subtitleSpecification: SubtitleSpecification | null
 ): boolean => {
-    const lines = text.split("\n");
-    return maxLinesPerCaption === undefined || maxLinesPerCaption === null
-            || lines.length <= maxLinesPerCaption;
+    if (subtitleSpecification && subtitleSpecification.enabled) {
+        const lines = text.split("\n");
+        return subtitleSpecification.maxLinesPerCaption === null
+            || lines.length <= subtitleSpecification.maxLinesPerCaption;
+    }
+    return true;
 };
 
 export const checkCharacterLimitation = (
     text: string,
-    maxCharactersPerLine: number | null | undefined
+    subtitleSpecification: SubtitleSpecification | null
 ): boolean => {
-    const lines = text.split("\n");
-    return lines
-        .map(
-            line => maxCharactersPerLine === undefined || maxCharactersPerLine === null
-                || removeHtmlTags(line).length <= maxCharactersPerLine
-        )
-        .reduce((accumulator, lineOk) => accumulator && lineOk);
+    if (subtitleSpecification && subtitleSpecification.enabled) {
+        const lines = text.split("\n");
+        return lines
+            .map(
+                line => subtitleSpecification.maxCharactersPerLine === null
+                    || removeHtmlTags(line).length <= subtitleSpecification.maxCharactersPerLine
+            )
+            .reduce((accumulator, lineOk) => accumulator && lineOk);
+    }
+    return true;
 };
 
 export const checkCharacterAndLineLimitation = (
     text: string,
     subtitleSpecification: SubtitleSpecification | null
 ): boolean => {
-    if (subtitleSpecification && subtitleSpecification.enabled) {
-        const charactersPerLineLimitOk = checkCharacterLimitation(text, subtitleSpecification.maxCharactersPerLine);
-        const linesCountLimitOk = checkLineLimitation(text, subtitleSpecification.maxLinesPerCaption);
-        return charactersPerLineLimitOk && linesCountLimitOk;
-    }
-    return true;
+    const charactersPerLineLimitOk = checkCharacterLimitation(text, subtitleSpecification);
+    const linesCountLimitOk = checkLineLimitation(text, subtitleSpecification);
+    return charactersPerLineLimitOk && linesCountLimitOk;
 };
 
 export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
@@ -159,13 +162,13 @@ export const verifyCueDuration = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): b
     return cueDuration >= timeGapLimit.minGap;
 };
 
-export const applyCharacterLimitation = (
+export const applyLineLimitation = (
     vttCue: VTTCue,
     originalCue: CueDto,
     subtitleSpecifications: SubtitleSpecification | null
 ): VTTCue => {
-    if (!checkCharacterAndLineLimitation(vttCue.text, subtitleSpecifications)
-        && checkCharacterAndLineLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
+    if (!checkLineLimitation(vttCue.text, subtitleSpecifications)
+        && checkLineLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
         vttCue.text = originalCue.vttCue.text;
     }
     return vttCue;
