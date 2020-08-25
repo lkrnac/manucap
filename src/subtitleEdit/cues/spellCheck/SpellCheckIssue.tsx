@@ -3,7 +3,7 @@ import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { SpellCheck } from "./model";
 import { Character, KeyCombination } from "../../shortcutConstants";
-import Mousetrap from "mousetrap";
+
 
 interface Props {
     children: ReactElement;
@@ -36,6 +36,18 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const selectRef = useRef<Select>(null);
     const showAtBottom = popupPlacement(target);
 
+
+    // useEffect(
+    //     () => {
+    //         if (props.spellCheckerMatchingOffset) {
+    //             Mousetrap.bind(KeyCombination.ESCAPE, () => props.setSpellCheckerMatchingOffset(null));
+    //             Mousetrap.unbind(KeyCombination.ENTER);
+    //             // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
+    //             selectRef.current?.select.menuListRef?.firstElementChild?.focus();
+    //         }
+    //     }, [ props.spellCheckerMatchingOffset ]
+    // );
+
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
         .pop();
@@ -66,16 +78,21 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };
+
     const onOptionSelected = (option: ValueType<Option>): void => {
         props.correctSpelling((option as Option).value, props.start, props.end);
         props.setSpellCheckerMatchingOffset(null);
-
     };
+
     const onkeydown = (e: React.KeyboardEvent<{}>): void => {
-        if (e.ctrlKey && e.keyCode == Character.SPACE) {
+        console.log("Onkeydown event fired");
+        console.log(e.keyCode);
+        console.log(props.spellCheck.matches);
+        if ((e.ctrlKey || e.metaKey) && e.keyCode == Character.SPACE) {
             e.preventDefault();
         }
     };
+
     return (
         <span
             ref={target}
@@ -91,7 +108,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         >
             {props.children}
             <Overlay
-                onEntered={onEnterPopover}
+                onEntering={onEnterPopover}
                 onExited={onExitPopover}
                 target={target.current}
                 show={props.spellCheckerMatchingOffset === props.start}
@@ -107,6 +124,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                             options={selectOptions}
                             styles={customStyles}
                             onChange={onOptionSelected}
+                            classNamePrefix="spellcheck"
                         />
                     </Popover.Content>
                 </Popover>

@@ -45,13 +45,6 @@ const handleKeyShortcut = (
         }
         return "handled";
     }
-    if (shortcut === "popoverSelect") {
-        return "handled";
-    }
-    if (shortcut === "popoverClose") {
-        setSpellCheckerMatchingOffset(null);
-        return "handled";
-    }
     if (keyCombination) {
         Mousetrap.trigger(keyCombination);
         return "handled";
