@@ -8,13 +8,13 @@ describe("CueExtraCharacters", () => {
         // GIVEN
         const expectedNode = mount(
             <span className="sbte-extra-text">
-                <div className="text" />
+                <div className="text">sample text</div>
             </span>
         );
         // WHEN
         const actualNode = mount(
             <CueExtraCharacters>
-                <div className="text" />
+                <div className="text">sample text</div>
             </CueExtraCharacters>
         );
 

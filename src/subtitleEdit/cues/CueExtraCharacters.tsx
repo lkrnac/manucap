@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef } from "react";
+import React, { ReactElement } from "react";
 
 interface Props {
     children: ReactElement;
@@ -6,10 +6,8 @@ interface Props {
 }
 
 export const CueExtraCharacters = (props: Props): ReactElement | null => {
-    const target = useRef(null);
     return (
         <span
-            ref={target}
             className="sbte-extra-text"
             data-offset-key={props.offsetKey}
         >
