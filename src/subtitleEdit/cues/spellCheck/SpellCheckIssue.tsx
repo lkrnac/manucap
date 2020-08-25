@@ -7,7 +7,6 @@ import { SpellCheck } from "./model";
 
 interface Props {
     children: ReactElement;
-    offsetKey?: number;
     spellCheck: SpellCheck;
     start: number;
     end: number;
@@ -58,7 +57,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         <span
             ref={target}
             className="sbte-text-with-error"
-            data-offset-key={props.offsetKey}
             onClick={
                 (): void => props.setOpenSpellCheckPopupId(
                     props.openSpellCheckPopupId === spellCheckPopupId ? null : spellCheckPopupId
