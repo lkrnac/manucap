@@ -66,6 +66,12 @@ export interface CueChange {
     vttCue: VTTCue;
 }
 
+export interface SearchReplace {
+    find: string;
+    replacement?: string;
+    lastCueTextMatchIndex?: number;
+}
+
 export enum ScrollPosition {
     NONE,
     FIRST,
