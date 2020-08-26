@@ -27,6 +27,7 @@ import { updateVttCue } from "../cueSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
+import { SearchReplaceMatch } from "./SearchReplaceMatch";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
@@ -114,6 +115,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const [openSpellCheckPopupId, setOpenSpellCheckPopupId] = useState(null);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
+    const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
     let editorState = useSelector(
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
@@ -130,7 +132,18 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             props.spellCheck.matches.forEach(match => callback(match.offset, match.offset + match.length));
         }
     };
+
+    const findSearchReplaceMatch = (_contentBlock: ContentBlock, callback: Function): void => {
+        if (searchReplace && searchReplace.find && searchReplace.lastCueTextMatchIndex) {
+            callback(searchReplace.lastCueTextMatchIndex, searchReplace.lastCueTextMatchIndex + searchReplace.find.length);
+        }
+    };
+
     const newSpellCheckDecorator = new CompositeDecorator([
+        {
+            strategy: findSearchReplaceMatch,
+            component: SearchReplaceMatch
+        },
         {
             strategy: findSpellCheckIssues,
             component: SpellCheckIssue,

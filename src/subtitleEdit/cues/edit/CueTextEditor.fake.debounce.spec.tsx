@@ -25,6 +25,7 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
+import { setSearchReplace } from "./searchReplaceSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -856,6 +857,29 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+        });
+    });
+
+    describe("search and replace", () => {
+        it("renders with html and search and replace results", () => {
+            // GIVEN
+            testingStore.dispatch(setSearchReplace("Text", 10) as {} as AnyAction);
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent =
+                "<span style=\"border: 1px solid rgb(75,0,130); background-color: rgb(230, 230, 250);\">" +
+                "<span data-offset-key=\"\" style=\"font-weight: bold;\"><span data-text=\"true\">Text</span>" +
+                "</span></span>";
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
     });
 });
