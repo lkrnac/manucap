@@ -36,18 +36,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const selectRef = useRef<Select>(null);
     const showAtBottom = popupPlacement(target);
 
-
-    // useEffect(
-    //     () => {
-    //         if (props.spellCheckerMatchingOffset) {
-    //             Mousetrap.bind(KeyCombination.ESCAPE, () => props.setSpellCheckerMatchingOffset(null));
-    //             Mousetrap.unbind(KeyCombination.ENTER);
-    //             // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
-    //             selectRef.current?.select.menuListRef?.firstElementChild?.focus();
-    //         }
-    //     }, [ props.spellCheckerMatchingOffset ]
-    // );
-
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
         .pop();
@@ -87,7 +75,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const onkeydown = (e: React.KeyboardEvent<{}>): void => {
         console.log("Onkeydown event fired");
         console.log(e.keyCode);
-        console.log(props.spellCheck.matches);
         if ((e.ctrlKey || e.metaKey) && e.keyCode == Character.SPACE) {
             e.preventDefault();
         }
