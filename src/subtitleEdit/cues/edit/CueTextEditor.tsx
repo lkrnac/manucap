@@ -1,5 +1,4 @@
 import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
-
 import {
     CompositeDecorator,
     ContentBlock,
@@ -103,7 +102,6 @@ const createCorrectSpellingHandler = (
     const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
     dispatch(updateEditorState(props.index, newEditorState));
     dispatch(callSaveTrack());
-
 };
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
@@ -178,7 +176,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         // into redux when changed.
         // (Also some tests would fail if you include editorState object itself, but behavior is still OK)
         // eslint-disable-next-line
-        [currentContent, currentInlineStyle, dispatch, props.index]
+        [ currentContent, currentInlineStyle, dispatch, props.index ]
     );
 
     useEffect(
@@ -190,7 +188,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         //  - props.vttCue is not included, because it causes endless FLUX loop.
         //  - spread operator for cue values is used so that all the VTTCue properties code can be in single file.
         // eslint-disable-next-line
-        [currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue)]
+        [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
     );
 
     // Fire update VTTCue action when component is unmounted.
@@ -247,14 +245,14 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     />
                 </div>
                 <div style={{ flex: 0 }}>
-                    {charCountPerLine.map((count: number, index: number) => (
+                    { charCountPerLine.map((count: number, index: number) => (
                         <div key={index}><span className="sbte-count-tag">{count} ch</span><br /></div>
-                    ))}
+                    )) }
                 </div>
                 <div style={{ flex: 0, paddingRight: "5px" }}>
-                    {wordCountPerLine.map((count: number, index: number) => (
+                    { wordCountPerLine.map((count: number, index: number) => (
                         <div key={index}><span className="sbte-count-tag">{count} w</span><br /></div>
-                    ))}
+                    )) }
                 </div>
             </div>
             <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>

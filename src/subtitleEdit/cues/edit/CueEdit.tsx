@@ -1,7 +1,6 @@
 import { CueCategory, CueDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-// @ts-ignore
 import { addCue, setValidationError, updateCueCategory, updateEditingCueIndex, updateVttCue } from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
@@ -37,7 +36,6 @@ const handleEnterForLastCue = (sourceCues: CueDto[], index: number): AppThunk =>
 const CueEdit = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const validationError = useSelector((state: SubtitleEditState) => state.validationError);
-
 
     useEffect(
         () => {
@@ -83,8 +81,6 @@ const CueEdit = (props: Props): ReactElement => {
             dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime));
         });
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
-
-
 
     const className = validationError ? "blink-error-bg" : "bg-white";
 

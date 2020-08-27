@@ -92,7 +92,7 @@ describe("SpellCheckerIssue", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it( "renders popup with options when clicked", () => {
+    it("renders popup with options when clicked", () => {
         // GIVEN
         const expectedNode = mount(
             <div

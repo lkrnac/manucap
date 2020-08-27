@@ -80,7 +80,6 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
             </Provider>);
     };
 
-    // If clicked ctrl + space assert that popover is shown on error
     it("shows popover when popover show keyboard shortcut is entered", () => {
         const actualNode = mount(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -92,7 +91,6 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(actualNode.find(Overlay).at(0).props().show).toBeTruthy();
     });
 
-    // if clicked ctrl + space and popover is shown, popover should hide
     it("hides popover when enter popover show shortcut again while popover is shown already", () => {
         const actualNode = mount(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -105,7 +103,6 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
     });
 
-    // if clicked esc and popover is shown, popover should hide
     it("hides popover when enter popover close shortcut", async () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
