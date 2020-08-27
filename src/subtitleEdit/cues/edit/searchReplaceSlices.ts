@@ -3,27 +3,27 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { findIndex, findLastIndex } from "lodash";
 
 import { CueDto, ScrollPosition, SearchReplace, SubtitleEditAction } from "../../model";
-import {AppThunk} from "../../subtitleEditReducers";
+import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { scrollPositionSlice } from "../cuesListScrollSlice";
 import sanitizeHtml from "sanitize-html";
-import {cuesSlice, editingCueIndexSlice} from "../cueSlices";
-import {ContentState, convertFromHTML, EditorState} from "draft-js";
-import {convertVttToHtml, getVttText} from "../cueTextConverter";
-import {replaceContent} from "./editUtils";
+import { cuesSlice, editingCueIndexSlice } from "../cueSlices";
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
+import { convertVttToHtml, getVttText } from "../cueTextConverter";
+import { replaceContent } from "./editUtils";
 
 const matchCueText = (cue: CueDto, find: string): Array<number> => {
     const plainText = sanitizeHtml(cue.vttCue.text, { allowedTags: []});
     if (plainText === "") {
         return [];
     }
-    const re = new RegExp(find,'g');
+    const re = new RegExp(find,"g");
     const results = [];
     while (re.exec(plainText)){
         results.push(re.lastIndex - find.length);
     }
     return results;
-}
+};
 
 const setSearchReplaceForCueIndex = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -33,7 +33,7 @@ const setSearchReplaceForCueIndex = (
     dispatch(searchReplaceSlice.actions.setSearchReplace({ find, lastCueTextMatchIndex }));
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: cueIndex }));
     dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
-}
+};
 
 const setNextMatchInCue = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -48,7 +48,7 @@ const setNextMatchInCue = (
         return true;
     }
     return false;
-}
+};
 
 const setPrevMatchInCue = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -64,7 +64,7 @@ const setPrevMatchInCue = (
         return true;
     }
     return false;
-}
+};
 
 export const searchReplaceSlice = createSlice({
     name: "searchReplace",
@@ -164,7 +164,7 @@ export const searchReplaceAll = (find: string, replacement: string): AppThunk =>
                     cue.vttCue.text = vttText;
                 });
             }
-        })
+        });
         dispatch(cuesSlice.actions.updateCues({ cues: newCues }));
         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: -1 }));
     };

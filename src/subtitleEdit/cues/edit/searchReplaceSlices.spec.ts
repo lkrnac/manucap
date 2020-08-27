@@ -1,8 +1,8 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import testingStore from "../../../testUtils/testingStore";
-import {searchNextCues, searchPreviousCues, setSearchReplace, showSearchReplace} from "./searchReplaceSlices";
-import {updateCues} from "../cueSlices";
-import {CueDto, ScrollPosition} from "../../model";
+import { searchNextCues, searchPreviousCues, setSearchReplace, showSearchReplace } from "./searchReplaceSlices";
+import { updateCues } from "../cueSlices";
+import { CueDto, ScrollPosition } from "../../model";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },

@@ -1,4 +1,4 @@
-import {EditorState, Modifier, SelectionState} from "draft-js";
+import { EditorState, Modifier, SelectionState } from "draft-js";
 
 export const replaceContent = (
     editorState: EditorState,

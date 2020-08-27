@@ -1,5 +1,5 @@
-import React, {Dispatch, ReactElement, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, { Dispatch, ReactElement, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
     searchNextCues,
     searchPreviousCues,
@@ -7,11 +7,11 @@ import {
     setSearchReplace,
     showSearchReplace
 } from "./searchReplaceSlices";
-import {EditorState} from "draft-js";
-import {AppThunk, SubtitleEditState} from "../../subtitleEditReducers";
-import {updateEditorState} from "./editorStatesSlice";
-import {callSaveTrack} from "../saveSlices";
-import {replaceContent} from "./editUtils";
+import { EditorState } from "draft-js";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { updateEditorState } from "./editorStatesSlice";
+import { callSaveTrack } from "../saveSlices";
+import { replaceContent } from "./editUtils";
 
 const replacementHandler = (
     editorState: EditorState,
@@ -42,7 +42,7 @@ const SearchReplace = (): ReactElement | null => {
     const searchReplaceVisible = useSelector((state: SubtitleEditState) => state.searchReplaceVisible);
 
     return searchReplaceVisible ? (
-        <div style={{display: "flex", flexFlow: "row", marginBottom: "5px"}}>
+        <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
             <input
                 name="findTerm"
                 type="text"
@@ -58,9 +58,9 @@ const SearchReplace = (): ReactElement | null => {
             <button
                 className="btn btn-secondary"
                 type="button"
-                style={{marginLeft: "5px"}}
+                style={{ marginLeft: "5px" }}
                 onClick={(): void => {
-                    dispatch(searchNextCues(findTerm))
+                    dispatch(searchNextCues(findTerm));
                 }}
             >
                 <i className="fa fa-arrow-down" />
@@ -68,9 +68,9 @@ const SearchReplace = (): ReactElement | null => {
             <button
                 className="btn btn-secondary"
                 type="button"
-                style={{marginLeft: "5px"}}
+                style={{ marginLeft: "5px" }}
                 onClick={(): void => {
-                    dispatch(searchPreviousCues(findTerm))
+                    dispatch(searchPreviousCues(findTerm));
                 }}
             >
                 <i className="fa fa-arrow-up" />
@@ -78,7 +78,7 @@ const SearchReplace = (): ReactElement | null => {
             <button
                 className="btn btn-secondary"
                 type="button"
-                style={{marginLeft: "5px"}}
+                style={{ marginLeft: "5px" }}
                 onClick={(): void => {
                     replacementHandler(
                         editorState,
@@ -95,18 +95,18 @@ const SearchReplace = (): ReactElement | null => {
             <button
                 className="btn btn-secondary"
                 type="button"
-                style={{marginLeft: "5px"}}
+                style={{ marginLeft: "5px" }}
                 onClick={(): void => {
                     dispatch(searchReplaceAll(findTerm, replacementTerm));
                 }}
             >
                 Replace All
             </button>
-            <span style={{flex: 1}} />
+            <span style={{ flex: 1 }} />
             <button
                 className="btn btn-secondary"
                 type="button"
-                style={{marginLeft: "5px"}}
+                style={{ marginLeft: "5px" }}
                 onClick={(): void => {
                     dispatch(showSearchReplace(false));
                 }}
