@@ -135,7 +135,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             }
         } else if (e.keyCode === Character.ENTER) {
             return "newLine";
-        } else if ((e.ctrlKey || e.metaKey ) && e.key === " ") {
+        } else if ((e.ctrlKey || e.metaKey ) && e.keyCode === Character.SPACE) {
             return "openSpellChecker";
         }
         return getDefaultKeyBinding(e);
