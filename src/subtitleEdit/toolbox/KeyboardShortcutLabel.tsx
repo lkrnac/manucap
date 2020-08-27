@@ -4,6 +4,7 @@ import { os } from "platform";
 export interface Props {
     character: string;
     name: string;
+
 }
 
 const KeyboardShortcutLabel = (props: Props): ReactElement => {
