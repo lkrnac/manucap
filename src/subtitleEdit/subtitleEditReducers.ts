@@ -16,7 +16,7 @@ import { saveStateSlice, saveTrackSlice } from "./cues/saveSlices";
 import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { spellCheckerDomainSlice } from "./cues/spellCheck/spellCheckSlices";
-import { searchReplaceSlice } from "./cues/edit/searchReplaceSlices";
+import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/edit/searchReplaceSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -35,7 +35,8 @@ export const Reducers = {
     scrollPosition: scrollPositionSlice.reducer,
     cuesLoadingCounter: cuesLoadingCounterSlice.reducer,
     spellCheckerDomain: spellCheckerDomainSlice.reducer,
-    searchReplace: searchReplaceSlice.reducer
+    searchReplace: searchReplaceSlice.reducer,
+    searchReplaceVisible: searchReplaceVisibleSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

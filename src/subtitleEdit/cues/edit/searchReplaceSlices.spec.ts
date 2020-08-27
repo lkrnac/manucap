@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import testingStore from "../../../testUtils/testingStore";
-import {searchNextCues, searchPreviousCues, setSearchReplace} from "./searchReplaceSlices";
+import {searchNextCues, searchPreviousCues, setSearchReplace, showSearchReplace} from "./searchReplaceSlices";
 import {updateCues} from "../cueSlices";
 import {CueDto, ScrollPosition} from "../../model";
 
@@ -55,6 +55,16 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().searchReplace.lastCueTextMatchIndex).toEqual(8);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+    });
+
+    describe("showSearchReplace", () => {
+        it("sets search replace visible", () => {
+            // WHEN
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplaceVisible).toBeTruthy();
         });
     });
 });

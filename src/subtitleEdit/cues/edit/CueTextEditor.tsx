@@ -8,9 +8,7 @@ import {
     Editor,
     EditorState,
     getDefaultKeyBinding,
-    Modifier,
-    RichUtils,
-    SelectionState,
+    RichUtils
 } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
@@ -28,6 +26,7 @@ import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
 import { SearchReplaceMatch } from "./SearchReplaceMatch";
+import {replaceContent} from "./editUtils";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
@@ -99,14 +98,7 @@ const createCorrectSpellingHandler = (
     dispatch: Dispatch<AppThunk>,
     props: CueTextEditorProps
 ) => (replacement: string, start: number, end: number): void => {
-    let contentState = editorState.getCurrentContent();
-    const selectionState = editorState.getSelection();
-    const typoSelectionState = selectionState.set("anchorOffset", start).set("focusOffset", end) as SelectionState;
-    const startKey = typoSelectionState.getStartKey();
-    const typoBlock = contentState.getBlockForKey(startKey);
-    const inlineStyle = typoBlock.getInlineStyleAt(start);
-    contentState = Modifier.replaceText(contentState, typoSelectionState, replacement, inlineStyle);
-    const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
+    const newEditorState = replaceContent(editorState, replacement, start, end);
     dispatch(updateEditorState(props.index, newEditorState));
     dispatch(callSaveTrack());
 };
@@ -135,7 +127,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     const findSearchReplaceMatch = (_contentBlock: ContentBlock, callback: Function): void => {
         if (searchReplace && searchReplace.find && searchReplace.lastCueTextMatchIndex) {
-            callback(searchReplace.lastCueTextMatchIndex, searchReplace.lastCueTextMatchIndex + searchReplace.find.length);
+            callback(searchReplace.lastCueTextMatchIndex,
+                searchReplace.lastCueTextMatchIndex + searchReplace.find.length);
         }
     };
 
