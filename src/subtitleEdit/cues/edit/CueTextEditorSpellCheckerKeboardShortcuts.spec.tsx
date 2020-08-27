@@ -13,7 +13,6 @@ import { SpellCheck } from "../spellCheck/model";
 import { Character } from "../../shortcutConstants";
 import { fireEvent, render } from "@testing-library/react";
 import { setSaveTrack } from "../saveSlices";
-import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { act } from "react-dom/test-utils";
 
 
@@ -109,6 +108,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         await act(async () => {
             fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
         });
+
         //WHEN
         fireEvent.keyDown(document.querySelector("div.popover") as Element,
             { keyCode: Character.ESCAPE });
@@ -117,7 +117,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(document.querySelector("div.popover.show")).toBeNull();
     });
 
-    it("moves between options using the arrow up/down shortcut", async () => {
+    it("moves between options using the arrow up/down shortcut", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
@@ -141,11 +141,10 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML).toEqual("Sometime");
     });
 
-    it("moves between options using enter shortcut", async () => {
+    it("moves between options using enter shortcut", () => {
         //GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
 
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
@@ -170,16 +169,16 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(bindEnterAndEscKeysSpy).toBeCalled;
     });
 
-    it("calls bindEnterAndEscKeys when closing the popover", async () => {
+    it("calls bindEnterAndEscKeys when closing the popover", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
 
-
         //WHEN
         fireEvent.keyDown(document.querySelector("div.popover") as Element,
             { keyCode: Character.ESCAPE });
+
 
         // THEN
         expect(bindEnterAndEscKeysSpy).toBeCalled;
