@@ -52,7 +52,7 @@ const CueEdit = (props: Props): ReactElement => {
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
 
-    const bindEnterAndEscKeys =(): void => {
+    const bindCueViewModeKeyboardShortcut =(): void => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
             return props.index === cuesCount - 1
@@ -70,11 +70,11 @@ const CueEdit = (props: Props): ReactElement => {
                 dispatch, props, props.cue.vttCue.startTime, props.playerTime, props.cue.editUuid
             );
         });
-        bindEnterAndEscKeys();
+        bindCueViewModeKeyboardShortcut();
         Mousetrap.bind([KeyCombination.MOD_SHIFT_ESCAPE, KeyCombination.ALT_SHIFT_ESCAPE],
             () => dispatch(updateEditingCueIndex(props.index - 1))
         );
-        // no need for bindEnterAndEscKeys nor dispatch
+        // no need for bindCueViewModeKeyboardShortcut nor dispatch
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ props, cuesCount, sourceCues ]);
 
@@ -148,7 +148,7 @@ const CueEdit = (props: Props): ReactElement => {
                     vttCue={props.cue.vttCue}
                     editUuid={props.cue.editUuid}
                     spellCheck={props.cue.spellCheck}
-                    bindEnterAndEscKeys={bindEnterAndEscKeys}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcut}
                 />
             </div>
         </div>

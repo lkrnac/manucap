@@ -1,10 +1,11 @@
+/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
-import { mount, ReactWrapper, shallow } from "enzyme";
+import { mount } from "enzyme";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { CueDto, Track } from "../../model";
 import CueTextEditor from "./CueTextEditor";
@@ -13,26 +14,27 @@ import { updateCues } from "../cueSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { Character } from "../../shortcutConstants";
 import { Overlay } from "react-bootstrap";
+import { fireEvent, render } from "@testing-library/react";
 import { setSaveTrack } from "../saveSlices";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
-import Select from "react-select/base";
+import { act } from "react-dom/test-utils";
 
 
-jest.mock("lodash", () => ({
+const debounceMock = jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
 }));
+//@ts-ignore since we are mocking the debounce function
+jest.mock(debounceMock.cancel);
+
 const spellCheckFakeMatches = {
     "matches": [
         {
             message: "Possible spelling mistake found.",
             replacements: [
-                { value: "Context" }, { value: "Somewhat" },
-                { value: "Sometime" }, { value: "Competent" },
-                { value: "Pretext" }, { value: "Subtext" },
-                { value: "Teletext" }, { value: "Sweetest" },
-                { value: "Softest" }, { value: "Semtex" },
-                { value: "Omelet" }, { value: "Somerset" },
-                { value: "Soberest" }
+                { value: "Context" },
+                { value: "Somewhat" },
+                { value: "Sometime" },
+                { value: "Competent" },
             ],
             offset: 0,
             length: 8
@@ -52,39 +54,35 @@ const testingCues = [
 ] as CueDto[];
 
 let testingStore = createTestingStore();
+let bindEnterAndEscKeysSpy = jest.fn();
 
-const bindEnterAndEscKeysSpy = jest.fn() as () => void;
-
-
-describe("CueTextEditor", () => {
-
-    const createEditorNode = (text = "someText", spellCheckFakeMatches: SpellCheck): ReactWrapper => {
-        const vttCue = new VTTCue(0, 1, text);
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        return mount(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    spellCheck={spellCheckFakeMatches}
-                    bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={editUuid}
-                />
-            </Provider>
-        );
-    };
-
+describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
+        bindEnterAndEscKeysSpy = jest.fn();
         testingStore = createTestingStore();
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
     });
 
+    const createEditorNode = (text = "someText", spellCheckFakeMatches: SpellCheck): React.ReactElement => {
+        const vttCue = new VTTCue(0, 1, text);
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        return (
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    spellCheck={spellCheckFakeMatches}
+                    bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                />
+            </Provider>);
+    };
 
     // If clicked ctrl + space assert that popover is shown on error
     it("shows popover when popover show keyboard shortcut is entered", () => {
-        const actualNode = createEditorNode("SomeText", spellCheckFakeMatches);
+        const actualNode = mount(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = actualNode.find(".public-DraftEditor-content");
 
         // WHEN
@@ -96,7 +94,7 @@ describe("CueTextEditor", () => {
 
     // if clicked ctrl + space and popover is shown, popover should hide
     it("hides popover when enter popover show shortcut again while popover is shown already", () => {
-        const actualNode = createEditorNode("SomeText", spellCheckFakeMatches);
+        const actualNode = mount(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = actualNode.find(".public-DraftEditor-content");
         editor.simulate("keyDown", { keyCode: Character.SPACE, metaKey: true, ctrlKey: true });
 
@@ -108,82 +106,86 @@ describe("CueTextEditor", () => {
     });
 
     // if clicked esc and popover is shown, popover should hide
-    it("hides popover when enter popover close shortcut", () => {
+    it("hides popover when enter popover close shortcut", async () => {
         //GIVEN
-        const actualNode = createEditorNode("SomeText", spellCheckFakeMatches);
-        const editor = actualNode.find(".public-DraftEditor-content");
-        editor.simulate("keyDown", { keyCode: Character.SPACE, ctrlKey: true });
-
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        await act(async () => {
+            fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        });
         //WHEN
-        actualNode.find(Overlay).at(0).simulate("keyDown",
+        fireEvent.keyDown(document.querySelector("div.popover") as Element,
             { keyCode: Character.ESCAPE });
 
         // THEN
-        expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+        expect(document.querySelector("div.popover.show")).toBeNull();
     });
 
-    // if clicked arrow down twice, 3rd option should be focused
-    it("moves between options using the arrow down shortcut", () => {
+    it("moves between options using the arrow up/down shortcut", async () => {
         //GIVEN
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+
+        //WHEN
+        for (let i = 0; i < 5; i++) {
+            fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element, {
+                keyCode: 40,
+                key: "ArrowDown",
+            });
+        }
+        for (let i = 0; i < 2; i++) {
+            fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element, {
+                keyCode: 38,
+                key: "ArrowUp",
+            });
+        }
+
+        //THEN
+        expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML).toEqual("Sometime");
+    });
+
+    it("moves between options using enter shortcut", async () => {
+        //GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const actualNode = createEditorNode("SomeText", spellCheckFakeMatches);
-        const editor = actualNode.find(".public-DraftEditor-content");
 
-        editor.simulate("keyDown", { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, {
+            keyCode: Character.SPACE, ctrlKey: true, metaKey: true
+        });
 
         //WHEN
-        // Try using keydown on select
-        actualNode.find(Overlay).at(0).find(Select).at(0)
-            .simulate("keyDown",{ keyCode: Character.ARROW_DOWN });
-        actualNode.find(Overlay).at(0).find(Select).at(0)
-            .simulate("keyDown",{ keyCode: Character.ARROW_DOWN });
-
-
-        actualNode.find(Overlay).at(1).find(Select).at(0)
-            .simulate("keyDown",{ keyCode: Character.ARROW_DOWN });
-
-        actualNode.find(Overlay).at(2).find(Select).at(0)
-            .simulate("keyDown",{ keyCode: Character.ARROW_DOWN });
-
-
-        // Try using keydown on overlay
-        actualNode.find(Overlay).at(0).simulate("keyDown",{ keyCode: Character.ARROW_DOWN });
-
-        // Try with document active element
-        const event = new KeyboardEvent("keydown", { code: "ArrowDown" });
-        document?.activeElement?.dispatchEvent(event);
-
-        // try with menulist
-        actualNode.find(Overlay).at(0).find(Select).at(0)
-            .find(".spellcheck__menu-list").at(0).simulate("keyDown",{ keyCode: Character.ARROW_DOWN });
-
-        // using spellcheck__control from document
-        document.getElementsByClassName("spellcheck__control").item(0)?.dispatchEvent(event);
-        document.getElementsByClassName("spellcheck__option").item(0)?.dispatchEvent(event);
+        for (let i = 0; i < 2; i++) {
+            fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element, {
+                keyCode: Character.ARROW_DOWN,
+                key: "ArrowDown",
+            });
+        }
+        fireEvent.keyDown(document.querySelector(".spellcheck__option--is-focused") as Element, {
+            keyCode: Character.ENTER,
+            key: "Enter",
+        });
 
         //THEN
-        expect(document.getElementsByClassName("spellcheck__option--is-focused").length).toEqual(1);
-        expect(actualNode.find(".spellcheck__option--is-focused").length).toEqual(1);
-
-
+        expect(saveTrack).toBeCalled;
+        expect(bindEnterAndEscKeysSpy).toBeCalled;
     });
 
-    // if clicked arrow down twice, 3rd option should be focused
-    it("moves between options using the arrow down shortcut2", () => {
+    it("calls bindEnterAndEscKeys when closing the popover", async () => {
         //GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const actualNode = createEditorNode("SomeText", spellCheckFakeMatches);
-        const editor = actualNode.find(".public-DraftEditor-content");
-        editor.simulate("keyDown", { keyCode: Character.SPACE, ctrlKey: true });
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+
 
         //WHEN
-        // Try using keydown on select
-        actualNode.find(Overlay).at(0).simulate("keyDown",{ keyCode: Character.ENTER });
+        fireEvent.keyDown(document.querySelector("div.popover") as Element,
+            { keyCode: Character.ESCAPE });
 
-        //THEN
-        expect(saveTrack).toBeCalled();
+        // THEN
+        expect(bindEnterAndEscKeysSpy).toBeCalled;
     });
 });

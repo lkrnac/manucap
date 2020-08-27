@@ -32,7 +32,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={jest.fn()}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -57,7 +57,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={jest.fn()}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -82,7 +82,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={jest.fn()}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -221,7 +221,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -355,7 +355,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -394,7 +394,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -435,7 +435,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -471,7 +471,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={jest.fn()}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>

@@ -14,7 +14,7 @@ interface Props {
     spellCheckerMatchingOffset: number | null;
     setSpellCheckerMatchingOffset: (id: number | null) => void;
     editorRef: RefObject<HTMLInputElement>;
-    bindEnterAndEscKeys: () => void;
+    bindCueViewModeKeyboardShortcut: () => void;
 }
 
 const popupPlacement = (target: MutableRefObject<null>): boolean => {
@@ -56,7 +56,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
 
 
     const onExitPopover = (): void => {
-        props.bindEnterAndEscKeys();
+        props.bindCueViewModeKeyboardShortcut();
         props.editorRef?.current?.focus();
     };
 
@@ -73,8 +73,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     };
 
     const onkeydown = (e: React.KeyboardEvent<{}>): void => {
-        console.log("Onkeydown event fired");
-        console.log(e.keyCode);
         if ((e.ctrlKey || e.metaKey) && e.keyCode == Character.SPACE) {
             e.preventDefault();
         }
@@ -95,7 +93,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         >
             {props.children}
             <Overlay
-                onEntering={onEnterPopover}
+                onEntered={onEnterPopover}
                 onExited={onExitPopover}
                 target={target.current}
                 show={props.spellCheckerMatchingOffset === props.start}

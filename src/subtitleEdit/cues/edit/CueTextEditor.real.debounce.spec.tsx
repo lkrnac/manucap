@@ -28,7 +28,7 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     const actualNode = mount(
         <Provider store={testingStore}>
             <CueTextEditor
-                bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -90,7 +90,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueTextEditor
-                    bindEnterAndEscKeys={bindEnterAndEscKeysSpy}
+                    bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}

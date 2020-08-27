@@ -120,7 +120,12 @@ describe("CueEdit", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <CueTextEditor key={1} index={0} vttCue={cues[0].vttCue} />
+                        <CueTextEditor
+                            key={1}
+                            index={0}
+                            vttCue={cues[0].vttCue}
+                            bindCueViewModeKeyboardShortcut={jest.fn()}
+                        />
                     </div>
                 </div>
             </Provider>

@@ -62,7 +62,7 @@ export interface CueTextEditorProps {
     vttCue: VTTCue;
     editUuid?: string;
     spellCheck?: SpellCheck;
-    bindEnterAndEscKeys: () => void;
+    bindCueViewModeKeyboardShortcut: () => void;
 }
 
 const changeVttCueInRedux = (
@@ -158,7 +158,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 editorRef,
                 spellCheckerMatchingOffset,
                 setSpellCheckerMatchingOffset,
-                bindEnterAndEscKeys: props.bindEnterAndEscKeys
+                bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut
             }
         }
     ]);
