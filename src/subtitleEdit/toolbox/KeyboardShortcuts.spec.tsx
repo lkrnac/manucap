@@ -23,7 +23,7 @@ describe("KeyboardShortcuts", () => {
                     role="dialog"
                     aria-modal="true"
                     className="fade modal show"
-                    tabIndex="-1"
+                    tabIndex={-1}
                     style={{ display: "block" }}
                 >
                     <div role="document" className="modal-dialog sbte-medium-modal modal-dialog-centered">
