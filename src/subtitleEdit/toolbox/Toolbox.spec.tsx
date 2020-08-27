@@ -19,6 +19,7 @@ import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { Language, Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import SyncCuesButton from "./SyncCuesButton";
+import SearchReplaceButton from "./SearchReplaceButton";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -39,6 +40,7 @@ describe("Toolbox", () => {
                                     <CaptionOverlapToggle />
                                     <ExportTrackCuesButton handleExport={jest.fn()} />
                                     <ImportTrackCuesButton handleImport={jest.fn()} />
+                                    <SearchReplaceButton />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>
@@ -89,6 +91,7 @@ describe("Toolbox", () => {
                                     <CaptionOverlapToggle />
                                     <ExportTrackCuesButton handleExport={jest.fn()} />
                                     <ImportTrackCuesButton handleImport={jest.fn()} />
+                                    <SearchReplaceButton />
                                     <SyncCuesButton />
                                 </ButtonToolbar>
                             </Card.Body>
