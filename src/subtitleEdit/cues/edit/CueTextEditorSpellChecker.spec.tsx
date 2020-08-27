@@ -4,8 +4,6 @@ import "video.js"; // VTTCue definition
 import React from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-
-import { mount } from "enzyme";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { CueDto, Track } from "../../model";
 import CueTextEditor from "./CueTextEditor";
@@ -13,7 +11,6 @@ import { updateEditingTrack } from "../../trackSlices";
 import { updateCues } from "../cueSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { Character } from "../../shortcutConstants";
-import { Overlay } from "react-bootstrap";
 import { fireEvent, render } from "@testing-library/react";
 import { setSaveTrack } from "../saveSlices";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
@@ -81,26 +78,28 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
     };
 
     it("shows popover when popover show keyboard shortcut is entered", () => {
-        const actualNode = mount(createEditorNode("SomeText", spellCheckFakeMatches));
-        const editor = actualNode.find(".public-DraftEditor-content");
+        //GIVEN
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
 
-        // WHEN
-        editor.simulate("keyDown", { keyCode: Character.SPACE, metaKey: true, ctrlKey: true });
+        //WHEN
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
 
         // THEN
-        expect(actualNode.find(Overlay).at(0).props().show).toBeTruthy();
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
 
     it("hides popover when enter popover show shortcut again while popover is shown already", () => {
-        const actualNode = mount(createEditorNode("SomeText", spellCheckFakeMatches));
-        const editor = actualNode.find(".public-DraftEditor-content");
-        editor.simulate("keyDown", { keyCode: Character.SPACE, metaKey: true, ctrlKey: true });
+        //GIVEN
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
 
-        // WHEN
-        editor.simulate("keyDown", { keyCode: Character.SPACE, metaKey: true, ctrlKey: true });
+        //WHEN
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
 
         // THEN
-        expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+        expect(document.querySelector("div.popover.show")).toBeNull();
     });
 
     it("hides popover when enter popover close shortcut", async () => {
