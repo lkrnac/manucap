@@ -99,7 +99,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     if (!searchReplace.replacement) {
                         return;
                     }
-                    dispatch(searchReplaceAll(searchReplace.find, searchReplace.replacement));
+                    dispatch(searchReplaceAll());
                 }}
             >
                 Replace All

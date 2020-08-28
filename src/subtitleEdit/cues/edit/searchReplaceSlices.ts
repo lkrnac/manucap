@@ -160,10 +160,11 @@ export const searchPreviousCues = (): AppThunk =>
         }
     };
 
-export const searchReplaceAll = (find: string, replacement: string): AppThunk =>
+export const searchReplaceAll = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const find = getState().searchReplace.find;
-        if (find === "") {
+        const replacement = getState().searchReplace.replacement;
+        if (find === "" || !replacement) {
             return;
         }
         const editorState = EditorState.createEmpty();
