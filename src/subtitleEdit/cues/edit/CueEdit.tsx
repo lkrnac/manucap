@@ -72,9 +72,9 @@ const CueEdit = (props: Props): ReactElement => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_ESCAPE, KeyCombination.ALT_SHIFT_ESCAPE],
             () => dispatch(updateEditingCueIndex(props.index - 1))
         );
-        // no need for bindCueViewModeKeyboardShortcut nor dispatch
+        // no need for dependencies here since binding kb shortcuts should be done once
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ props, cuesCount, sourceCues ]);
+    }, []);
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {

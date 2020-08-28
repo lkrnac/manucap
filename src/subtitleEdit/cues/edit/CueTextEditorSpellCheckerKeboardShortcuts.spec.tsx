@@ -174,18 +174,39 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(bindEnterAndEscKeysSpy).toBeCalled;
     });
 
-    it("calls bindEnterAndEscKeys when closing the popover", () => {
+    it("calls bindEnterAndEscKeys when closing the popover", async() => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        await fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
 
         //WHEN
-        fireEvent.keyDown(document.querySelector("div.popover") as Element,
+        fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element,
             { keyCode: Character.ESCAPE });
-
 
         // THEN
         expect(bindEnterAndEscKeysSpy).toBeCalled;
     });
+
+
+    it("do nothing when type enter and escape on editor while popover is shown", () => {
+        //GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, {
+            keyCode: Character.SPACE, ctrlKey: true, metaKey: true
+        });
+
+        //WHEN
+        fireEvent.keyDown(editor, {
+            keyCode: Character.ENTER
+        });
+
+        //THEN
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
+    });
+
 });

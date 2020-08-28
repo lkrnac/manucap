@@ -54,8 +54,9 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         menuList: (provided) => ({ ...provided, height: "200px" })
     } as Styles;
 
-
+    //@ts-ignore
     const onExitPopover = (): void => {
+        console.log("onExitPopover");
         props.bindCueViewModeKeyboardShortcut();
         props.editorRef?.current?.focus();
     };
@@ -75,6 +76,9 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const onkeydown = (e: React.KeyboardEvent<{}>): void => {
         if ((e.ctrlKey || e.metaKey) && e.keyCode === Character.SPACE) {
             e.preventDefault();
+        }
+        if(e.keyCode === Character.ESCAPE) {
+            props.setSpellCheckerMatchingOffset(null);
         }
     };
 

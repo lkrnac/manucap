@@ -44,12 +44,12 @@ interface ReduxTestWrapperProps {
     store: Store;
     props: CueTextEditorProps;
 }
-const bindEnterAndEscKeysSpy = jest.fn() as () => void;
+const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 
 const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     <Provider store={props.store}>
         <CueTextEditor
-            bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             index={props.props.index}
             vttCue={props.props.vttCue}
             editUuid={props.props.editUuid}
@@ -119,7 +119,7 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     const actualNode = mount(
         <Provider store={testingStore}>
             <CueTextEditor
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -148,7 +148,7 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     const actualNode = mount(
         <Provider store={testingStore}>
             <CueTextEditor
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -187,7 +187,7 @@ const testForContentState = (
     const actualNode = mount(
         <Provider store={testingStore}>
             <CueTextEditor
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -295,7 +295,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                 />
@@ -354,7 +354,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <Provider store={testingStore} >
                 <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
@@ -502,7 +502,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -523,7 +523,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -544,7 +544,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -565,7 +565,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -586,7 +586,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -606,7 +606,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -626,7 +626,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -646,7 +646,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -666,7 +666,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -686,7 +686,7 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindEnterAndEscKeysSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
             />);
 
         // WHEN
@@ -705,7 +705,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                 />
@@ -724,7 +724,7 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                 />
@@ -782,7 +782,7 @@ describe("CueTextEditor", () => {
             const actualNode = mount(
                 <Provider store={testingStore}>
                     <CueTextEditor
-                        bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
@@ -820,7 +820,7 @@ describe("CueTextEditor", () => {
                 const actualNode = mount(
                     <Provider store={testingStore}>
                         <CueTextEditor
-                            bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                             index={0}
                             vttCue={vttCue}
                             editUuid={editUuid}
@@ -870,7 +870,7 @@ describe("CueTextEditor", () => {
                 const actualNode = mount(
                     <Provider store={testingStore}>
                         <CueTextEditor
-                            bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                             index={0}
                             vttCue={vttCue}
                             editUuid={editUuid}
@@ -913,7 +913,7 @@ describe("CueTextEditor", () => {
             const actualNode = mount(
                 <Provider store={testingStore}>
                     <CueTextEditor
-                        bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
@@ -948,7 +948,7 @@ describe("CueTextEditor", () => {
             const actualNode = mount(
                 <Provider store={testingStore}>
                     <CueTextEditor
-                        bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
@@ -983,7 +983,7 @@ describe("CueTextEditor", () => {
             const actualNode = mount(
                 <Provider store={testingStore}>
                     <CueTextEditor
-                        bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
