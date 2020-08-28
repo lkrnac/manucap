@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import testingStore from "../../../testUtils/testingStore";
-import { searchNextCues, searchPreviousCues, setSearchReplace, showSearchReplace } from "./searchReplaceSlices";
+import {searchNextCues, searchPreviousCues, setFind, setReplacement, showSearchReplace} from "./searchReplaceSlices";
 import { updateCues } from "../cueSlices";
 import { CueDto, ScrollPosition } from "../../model";
 
@@ -15,24 +15,34 @@ const testingCues = [
 ] as CueDto[];
 
 describe("searchReplaceSlices", () => {
-    describe("setSearchReplace", () => {
-        it("sets search replace state", () => {
+    describe("setFind", () => {
+        it("sets search replace find state", () => {
             // WHEN
-            testingStore.dispatch(setSearchReplace("testing", 22) as {} as AnyAction);
+            testingStore.dispatch(setFind("testing") as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("testing");
-            expect(testingStore.getState().searchReplace.lastCueTextMatchIndex).toEqual(22);
+        });
+    });
+
+    describe("setReplacement", () => {
+        it("sets search replace replacement state", () => {
+            // WHEN
+            testingStore.dispatch(setReplacement("testing-repl") as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.replacement).toEqual("testing-repl");
         });
     });
 
     describe("searchNextCues", () => {
-        it("searches for find term in cues", () => {
+        it("searches for find term in next cue", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues("Line 2") as {} as AnyAction);
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
@@ -43,12 +53,13 @@ describe("searchReplaceSlices", () => {
     });
 
     describe("searchPreviousCues", () => {
-        it("sets search replace state", () => {
+        it("searches for find term in previous cue", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchPreviousCues("Line 2") as {} as AnyAction);
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");

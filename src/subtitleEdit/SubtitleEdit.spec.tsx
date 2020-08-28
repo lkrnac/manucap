@@ -21,7 +21,7 @@ import { render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/edit/searchReplaceSlices";
-import SearchReplace from "./cues/edit/SearchReplace";
+import SearchReplaceEditor from "./cues/edit/SearchReplaceEditor";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -457,7 +457,7 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <SearchReplace />
+                            <SearchReplaceEditor />
                             <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                                     <CueLine

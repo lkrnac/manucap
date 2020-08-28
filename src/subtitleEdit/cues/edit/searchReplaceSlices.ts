@@ -7,7 +7,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { scrollPositionSlice } from "../cuesListScrollSlice";
 import sanitizeHtml from "sanitize-html";
-import { cuesSlice, editingCueIndexSlice } from "../cueSlices";
+import {CueIndexAction, editingCueIndexSlice} from "../cueSlices";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { convertVttToHtml, getVttText } from "../cueTextConverter";
 import { replaceContent } from "./editUtils";
@@ -26,33 +26,30 @@ const matchCueText = (cue: CueDto, find: string): Array<number> => {
 };
 
 const setSearchReplaceForCueIndex = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    find: string,
+    dispatch: Dispatch<PayloadAction<CueIndexAction | number | undefined>>,
     lastCueTextMatchIndex: number,
     cueIndex: number): void => {
-    dispatch(searchReplaceSlice.actions.setSearchReplace({ find, lastCueTextMatchIndex }));
+    dispatch(searchReplaceSlice.actions.setLastCueTextMatchIndex(lastCueTextMatchIndex));
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: cueIndex }));
     dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
 };
 
 const setNextMatchInCue = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    find: string,
+    dispatch: Dispatch<PayloadAction<CueIndexAction | number | undefined>>,
     lastCueTextMatchIndex: number | undefined,
     cueIndex: number,
     matchedCueTextIndexes: Array<number>
 ): boolean => {
     const currentIndex = !lastCueTextMatchIndex ? -1 : matchedCueTextIndexes.indexOf(lastCueTextMatchIndex);
     if (currentIndex < matchedCueTextIndexes.length - 1) {
-        setSearchReplaceForCueIndex(dispatch, find, matchedCueTextIndexes[currentIndex + 1], cueIndex);
+        setSearchReplaceForCueIndex(dispatch, matchedCueTextIndexes[currentIndex + 1], cueIndex);
         return true;
     }
     return false;
 };
 
 const setPrevMatchInCue = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    find: string,
+    dispatch: Dispatch<PayloadAction<CueIndexAction | number | undefined>>,
     lastCueTextMatchIndex: number | undefined,
     cueIndex: number,
     matchedCueTextIndexes: Array<number>
@@ -60,22 +57,11 @@ const setPrevMatchInCue = (
     const currentIndex = !lastCueTextMatchIndex ? matchedCueTextIndexes.length - 1
         : matchedCueTextIndexes.indexOf(lastCueTextMatchIndex);
     if (currentIndex > 0) {
-        setSearchReplaceForCueIndex(dispatch, find, matchedCueTextIndexes[currentIndex - 1], cueIndex);
+        setSearchReplaceForCueIndex(dispatch, matchedCueTextIndexes[currentIndex - 1], cueIndex);
         return true;
     }
     return false;
 };
-
-export const searchReplaceSlice = createSlice({
-    name: "searchReplace",
-    initialState: null as SearchReplace | null,
-    reducers: {
-        setSearchReplace: (_state, action: PayloadAction<SearchReplace>): SearchReplace => action.payload
-    },
-    extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): SearchReplace | null => null
-    }
-});
 
 export const searchReplaceVisibleSlice = createSlice({
     name: "searchReplaceVisible",
@@ -88,18 +74,48 @@ export const searchReplaceVisibleSlice = createSlice({
     }
 });
 
-export const setSearchReplace = (find: string, lastCueTextMatchIndex: number | undefined): AppThunk =>
+const initialSearchReplace = { find: "" } as SearchReplace;
+
+export const searchReplaceSlice = createSlice({
+    name: "searchReplace",
+    initialState: initialSearchReplace,
+    reducers: {
+        setFind: (_state, action: PayloadAction<string>): void => {
+            _state.find = action.payload;
+        },
+        setReplacement: (_state, action: PayloadAction<string>): void => {
+            _state.replacement = action.payload;
+        },
+        setLastCueTextMatchIndex: (_state, action: PayloadAction<number | undefined>): void => {
+            _state.lastCueTextMatchIndex = action.payload;
+        }
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): SearchReplace => initialSearchReplace,
+        [searchReplaceVisibleSlice.actions.setSearchReplaceVisible.type]:
+            (_state, action: PayloadAction<boolean>): SearchReplace =>
+                action.payload ? _state : initialSearchReplace
+    }
+});
+
+export const setFind = (find: string): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
-        dispatch(searchReplaceSlice.actions.setSearchReplace({ find, lastCueTextMatchIndex }));
+        dispatch(searchReplaceSlice.actions.setFind(find));
+    };
+
+export const setReplacement = (replacement: string): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+        dispatch(searchReplaceSlice.actions.setReplacement(replacement));
     };
 
 export const showSearchReplace = (visible: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
         dispatch(searchReplaceVisibleSlice.actions.setSearchReplaceVisible(visible));
     };
 
-export const searchNextCues = (find: string): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+export const searchNextCues = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CueIndexAction | number | undefined>>, getState): void => {
+        const find = getState().searchReplace.find;
         if (find === "") {
             return;
         }
@@ -108,20 +124,21 @@ export const searchNextCues = (find: string): AppThunk =>
         const matchedCueTextIndexes = matchCueText(cues[fromIndex], find);
         const lastCueTextMatchIndex = getState().searchReplace?.lastCueTextMatchIndex;
         if (matchedCueTextIndexes.length > 0
-            && setNextMatchInCue(dispatch, find, lastCueTextMatchIndex, fromIndex, matchedCueTextIndexes)) {
+            && setNextMatchInCue(dispatch, lastCueTextMatchIndex, fromIndex, matchedCueTextIndexes)) {
                 return;
         }
-        dispatch(searchReplaceSlice.actions.setSearchReplace({ find, lastCueTextMatchIndex: undefined }));
+        dispatch(searchReplaceSlice.actions.setLastCueTextMatchIndex(undefined));
         fromIndex += 1;
         const matchedIndex = findIndex(cues, cue => matchCueText(cue, find).length > 0, fromIndex);
         if (matchedIndex !== -1) {
             const matchedCueTextIndexes = matchCueText(cues[matchedIndex], find);
-            setSearchReplaceForCueIndex(dispatch, find, matchedCueTextIndexes[0], matchedIndex);
+            setSearchReplaceForCueIndex(dispatch, matchedCueTextIndexes[0], matchedIndex);
         }
     };
 
-export const searchPreviousCues = (find: string): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+export const searchPreviousCues = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CueIndexAction | number | undefined>>, getState): void => {
+        const find = getState().searchReplace.find;
         if (find === "") {
             return;
         }
@@ -130,21 +147,22 @@ export const searchPreviousCues = (find: string): AppThunk =>
         const matchedCueTextIndexes = matchCueText(cues[fromIndex], find);
         const lastCueTextMatchIndex = getState().searchReplace?.lastCueTextMatchIndex;
         if (matchedCueTextIndexes.length > 0
-            && setPrevMatchInCue(dispatch, find, lastCueTextMatchIndex, fromIndex, matchedCueTextIndexes)) {
+            && setPrevMatchInCue(dispatch, lastCueTextMatchIndex, fromIndex, matchedCueTextIndexes)) {
             return;
         }
-        dispatch(searchReplaceSlice.actions.setSearchReplace({ find, lastCueTextMatchIndex: undefined }));
+        dispatch(searchReplaceSlice.actions.setLastCueTextMatchIndex(undefined));
         fromIndex -= 1;
         const matchedIndex = findLastIndex(cues, cue => matchCueText(cue, find).length > 0, fromIndex);
         if (matchedIndex !== -1) {
             const matchedCueTextIndexes = matchCueText(cues[matchedIndex], find);
             const cueTextIndex = matchedCueTextIndexes.length - 1;
-            setSearchReplaceForCueIndex(dispatch, find, matchedCueTextIndexes[cueTextIndex], matchedIndex);
+            setSearchReplaceForCueIndex(dispatch, matchedCueTextIndexes[cueTextIndex], matchedIndex);
         }
     };
 
 export const searchReplaceAll = (find: string, replacement: string): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+        const find = getState().searchReplace.find;
         if (find === "") {
             return;
         }
@@ -165,6 +183,6 @@ export const searchReplaceAll = (find: string, replacement: string): AppThunk =>
                 });
             }
         });
-        dispatch(cuesSlice.actions.updateCues({ cues: newCues }));
+        //dispatch(updateCues(newCues));
         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: -1 }));
     };

@@ -1,10 +1,9 @@
-import React, { Dispatch, ReactElement, useState } from "react";
+import React, { Dispatch, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     searchNextCues,
     searchPreviousCues,
-    searchReplaceAll,
-    setSearchReplace,
+    searchReplaceAll, setFind, setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
 import { EditorState } from "draft-js";
@@ -12,28 +11,25 @@ import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { updateEditorState } from "./editorStatesSlice";
 import { callSaveTrack } from "../saveSlices";
 import { replaceContent } from "./editUtils";
+import { SearchReplace } from "../../model";
 
 const replacementHandler = (
     editorState: EditorState,
     dispatch: Dispatch<AppThunk>,
     editorCueIndex: number,
-    matchIndex: number | undefined,
-    find: string,
-    replacement: string): void => {
-    if (!matchIndex) {
+    searchReplace: SearchReplace): void => {
+    if (!searchReplace.lastCueTextMatchIndex || !searchReplace.replacement) {
         return;
     }
-    const start = matchIndex;
-    const end = start + find.length;
-    const newEditorState = replaceContent(editorState, replacement, start, end);
+    const start = searchReplace.lastCueTextMatchIndex;
+    const end = start + searchReplace.find.length;
+    const newEditorState = replaceContent(editorState, searchReplace.replacement, start, end);
     dispatch(updateEditorState(editorCueIndex, newEditorState));
-    dispatch(setSearchReplace(find, undefined));
     dispatch(callSaveTrack());
+    dispatch(searchNextCues());
 };
 
-const SearchReplace = (): ReactElement | null => {
-    const [findTerm, setFindTerm] = useState("");
-    const [replacementTerm, setReplacementTerm] = useState("");
+const SearchReplaceEditor = (): ReactElement | null => {
     const dispatch = useDispatch();
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const editorState = useSelector((state: SubtitleEditState) =>
@@ -43,40 +39,45 @@ const SearchReplace = (): ReactElement | null => {
 
     return searchReplaceVisible ? (
         <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
-            <input
-                name="findTerm"
-                type="text"
-                value={findTerm}
-                onChange={e => setFindTerm(e.target.value)}
-            />
-            <input
-                name="replacementTerm"
-                type="text"
-                value={replacementTerm}
-                onChange={e => setReplacementTerm(e.target.value)}
-            />
+            <div style={{display: "flex", flexFlow: "row", width: "50%"}}>
+                <input
+                    type="text"
+                    value={searchReplace?.find}
+                    placeholder="Find"
+                    className="form-control"
+                    onChange={e => dispatch(setFind(e.target.value))}
+                />
+                <input
+                    type="text"
+                    value={searchReplace?.replacement}
+                    placeholder="Replace"
+                    className="form-control"
+                    style={{marginLeft: "5px"}}
+                    onChange={e => dispatch(setReplacement(e.target.value))}
+                />
+            </div>
             <button
-                className="btn btn-secondary"
+                className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
-                    dispatch(searchNextCues(findTerm));
+                    dispatch(searchNextCues());
                 }}
             >
                 <i className="fa fa-arrow-down" />
             </button>
             <button
-                className="btn btn-secondary"
+                className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
-                    dispatch(searchPreviousCues(findTerm));
+                    dispatch(searchPreviousCues());
                 }}
             >
                 <i className="fa fa-arrow-up" />
             </button>
             <button
-                className="btn btn-secondary"
+                className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
@@ -84,37 +85,38 @@ const SearchReplace = (): ReactElement | null => {
                         editorState,
                         dispatch,
                         editingCueIndex,
-                        searchReplace?.lastCueTextMatchIndex,
-                        findTerm,
-                        replacementTerm
+                        searchReplace
                     );
                 }}
             >
                 Replace
             </button>
             <button
-                className="btn btn-secondary"
+                className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
-                    dispatch(searchReplaceAll(findTerm, replacementTerm));
+                    if (!searchReplace.replacement) {
+                        return;
+                    }
+                    dispatch(searchReplaceAll(searchReplace.find, searchReplace.replacement));
                 }}
             >
                 Replace All
             </button>
             <span style={{ flex: 1 }} />
             <button
-                className="btn btn-secondary"
+                className="btn btn-secondary btn-sm sbte-close-search-replace-btn"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
                     dispatch(showSearchReplace(false));
                 }}
             >
-                Done
+                <i className="fa fa-window-close" />
             </button>
         </div>
     ) : null;
 };
 
-export default SearchReplace;
+export default SearchReplaceEditor;
