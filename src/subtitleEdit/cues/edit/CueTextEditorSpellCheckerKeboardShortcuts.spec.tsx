@@ -18,14 +18,23 @@ import { SpellCheck } from "../spellCheck/model";
 import { Character } from "../../shortcutConstants";
 import { fireEvent, render } from "@testing-library/react";
 import { setSaveTrack } from "../saveSlices";
-import { act } from "react-dom/test-utils";
+//@ts-ignore
+import { LodashDebounce } from "lodash/ts3.1/fp";
 
-
-const debounceMock = jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => {
+        return callback;
+    }
 }));
-//@ts-ignore since we are mocking the debounce function
-jest.mock(debounceMock.cancel);
+
+// mock deounce.cancel
+jest.mock("lodash", () => (
+    {
+        debounce: (fn: LodashDebounce): Function => {
+            fn.cancel = jest.fn();
+            return fn;
+        }
+    }));
 
 const spellCheckFakeMatches = {
     "matches": [
@@ -110,12 +119,10 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        await act(async () => {
-            fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
-        });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true });
 
         //WHEN
-        fireEvent.keyDown(document.querySelector("div.popover") as Element,
+        fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element,
             { keyCode: Character.ESCAPE });
 
         // THEN
@@ -146,7 +153,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML).toEqual("Sometime");
     });
 
-    it("moves between options using enter shortcut", () => {
+    it("select an option using enter shortcut", () => {
         //GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -164,28 +171,29 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
                 key: "ArrowDown",
             });
         }
+
         fireEvent.keyDown(document.querySelector(".spellcheck__option--is-focused") as Element, {
-            keyCode: Character.ENTER,
-            key: "Enter",
+            keyCode: Character.ENTER
         });
 
         //THEN
-        expect(saveTrack).toBeCalled;
-        expect(bindEnterAndEscKeysSpy).toBeCalled;
+        expect(saveTrack).toBeCalled();
+        expect(bindEnterAndEscKeysSpy).toBeCalled();
     });
 
-    it("calls bindEnterAndEscKeys when closing the popover", async() => {
+    it("calls bindEnterAndEscKeys when closing the popover", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        await fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+
 
         //WHEN
         fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element,
             { keyCode: Character.ESCAPE });
 
-        // THEN
-        expect(bindEnterAndEscKeysSpy).toBeCalled;
+        //THEN
+        expect(bindEnterAndEscKeysSpy).toBeCalled();
     });
 
 

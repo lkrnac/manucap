@@ -54,15 +54,13 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         menuList: (provided) => ({ ...provided, height: "200px" })
     } as Styles;
 
-    //@ts-ignore
     const onExitPopover = (): void => {
-        console.log("onExitPopover");
         props.bindCueViewModeKeyboardShortcut();
         props.editorRef?.current?.focus();
     };
 
     const onEnterPopover = (): void => {
-        Mousetrap.bind(KeyCombination.ESCAPE, () => props.setSpellCheckerMatchingOffset(null));
+        Mousetrap.unbind(KeyCombination.ESCAPE);
         Mousetrap.unbind(KeyCombination.ENTER);
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
@@ -98,7 +96,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
             {props.children}
             <Overlay
                 onEntered={onEnterPopover}
-                onExited={onExitPopover}
+                onExiting={onExitPopover}
                 target={target.current}
                 show={props.spellCheckerMatchingOffset === props.start}
                 placement={showAtBottom ? "bottom" : "top"}
