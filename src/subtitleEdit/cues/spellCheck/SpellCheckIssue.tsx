@@ -1,4 +1,4 @@
-import React, { MutableRefObject, ReactElement, RefObject, useRef } from "react";
+import React, { MutableRefObject, ReactElement, RefObject, useEffect, useRef } from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { SpellCheck } from "./model";
@@ -35,6 +35,20 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const target = useRef(null);
     const selectRef = useRef<Select>(null);
     const showAtBottom = popupPlacement(target);
+    const onExitPopover = (): void => {
+        props.bindCueViewModeKeyboardShortcut();
+        props.editorRef?.current?.focus();
+    };
+
+
+    useEffect(
+        () => (): void => {
+            onExitPopover(); // Sometimes Overlay got unmounted before onExit event got executed so this to ensure
+            // action is done
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [] // Run only once -> unmount
+    );
 
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
@@ -53,11 +67,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         menu: (provided) => ({ ...provided, position: "static", height: "100%", margin: 0 }),
         menuList: (provided) => ({ ...provided, height: "200px" })
     } as Styles;
-
-    const onExitPopover = (): void => {
-        props.bindCueViewModeKeyboardShortcut();
-        props.editorRef?.current?.focus();
-    };
 
     const onEnterPopover = (): void => {
         Mousetrap.unbind(KeyCombination.ESCAPE);

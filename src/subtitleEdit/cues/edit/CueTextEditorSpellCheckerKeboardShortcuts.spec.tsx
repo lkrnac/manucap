@@ -160,7 +160,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
             keyCode: Character.SPACE, ctrlKey: true, metaKey: true
@@ -173,10 +173,10 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
                 key: "ArrowDown",
             });
         }
-
         fireEvent.keyDown(document.querySelector(".spellcheck__option--is-focused") as Element, {
             keyCode: Character.ENTER
         });
+        unmount();
 
         //THEN
         expect(saveTrack).toBeCalled();
@@ -185,7 +185,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
     it("calls bindEnterAndEscKeys when closing the popover", () => {
         //GIVEN
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
 
@@ -193,6 +193,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //WHEN
         fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element,
             { keyCode: Character.ESCAPE });
+        unmount();
 
         //THEN
         expect(bindEnterAndEscKeysSpy).toBeCalled();
