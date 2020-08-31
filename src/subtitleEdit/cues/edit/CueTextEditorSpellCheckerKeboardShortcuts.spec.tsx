@@ -243,4 +243,17 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(document.querySelector("div.popover.show")).toBeNull();
     });
 
+    it("handle popover keyboard shortcut if it was passed to editor", () => {
+        //GIVEN
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+
+        //WHEN
+        fireEvent.keyDown(editor as Element, { keyCode: Character.ESCAPE });
+
+        // THEN
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
+    });
+
 });
