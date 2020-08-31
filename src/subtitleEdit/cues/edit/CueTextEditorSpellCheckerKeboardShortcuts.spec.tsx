@@ -98,6 +98,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //WHEN
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
 
+
         // THEN
         expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
@@ -119,7 +120,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
 
         //WHEN
         fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element,
@@ -150,7 +151,8 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         }
 
         //THEN
-        expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML).toEqual("Sometime");
+        expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML)
+            .toEqual("Sometime");
     });
 
     it("select an option using enter shortcut", () => {
@@ -201,7 +203,6 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
@@ -214,7 +215,32 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         });
 
         //THEN
+        expect(saveTrack).not.toBeCalled();
         expect(document.querySelector("div.popover.show")).not.toBeNull();
+    });
+
+    it("does not select an option if clicked ctrl space on the dropdown", () => {
+        //GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, {
+            keyCode: Character.SPACE, ctrlKey: true, metaKey: true
+        });
+        fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element, {
+            keyCode: Character.ARROW_DOWN,
+            key: "ArrowDown",
+        });
+
+        //WHEN
+        fireEvent.keyDown(document.querySelector(".spellcheck__option--is-focused") as Element, {
+            keyCode: Character.SPACE, ctrlKey: true, metaKey: true
+        });
+
+        //THEN
+        expect(saveTrack).not.toBeCalled();
+        expect(document.querySelector("div.popover.show")).toBeNull();
     });
 
 });

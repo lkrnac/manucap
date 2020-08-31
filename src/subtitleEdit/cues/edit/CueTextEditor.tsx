@@ -125,9 +125,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         if (action) {
             return action;
         }
-        if(spellCheckerMatchingOffset && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
-            return "popoverHandled";
-        } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
             if (e.keyCode === Character.ESCAPE) {
                 return "closeEditor";
             } else if (e.keyCode === Character.ENTER) {

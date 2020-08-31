@@ -95,7 +95,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         >
             {props.children}
             <Overlay
-                onEntered={onEnterPopover}
+                onEntering={onEnterPopover}
                 onExiting={onExitPopover}
                 target={target.current}
                 show={props.spellCheckerMatchingOffset === props.start}
