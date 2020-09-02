@@ -241,7 +241,7 @@ describe("KeyboardShortcuts", () => {
                                         <h4><span className="badge badge-secondary">Ctrl</span></h4>
                                         <span>&nbsp;+&nbsp;</span>
                                     </div>
-                                    <div className="d-none align-items-center justify-content-center">
+                                    <div className="d-flex align-items-center justify-content-center">
                                         <h4><span className="badge badge-secondary">Shift</span></h4>
                                         <span>&nbsp;+&nbsp;</span>
                                     </div>
@@ -254,7 +254,7 @@ describe("KeyboardShortcuts", () => {
                                             <h4><span className="badge badge-secondary">Alt</span></h4>
                                             <span>&nbsp;+&nbsp;</span>
                                         </div>
-                                        <div className="d-none align-items-center justify-content-center">
+                                        <div className="d-flex align-items-center justify-content-center">
                                             <h4><span className="badge badge-secondary">Shift</span></h4>
                                             <span>&nbsp;+&nbsp;</span>
                                         </div>
