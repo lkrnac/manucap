@@ -151,7 +151,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     editorState = EditorState.set(editorState, { decorator: newSpellCheckDecorator });
 
     const currentContent = editorState.getCurrentContent();
-    const unmountContentRef = useRef(currentContent);
+    const unmountContentRef = useRef<ContentState | null>(null);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
     const wordCountPerLine = getWordCountPerLine(currentContent.getPlainText());
@@ -169,8 +169,13 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
+            // Only need to update vttCue if ContentState is changing
+            const shouldUpdateVttCue = unmountContentRef.current === null
+                || unmountContentRef.current !== currentContent;
             unmountContentRef.current = currentContent;
-            changeVttCueInReduxDebounced(currentContent, props, dispatch);
+            if (shouldUpdateVttCue) {
+                changeVttCueInReduxDebounced(currentContent, props, dispatch);
+            }
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
@@ -184,7 +189,9 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => (): void => {
             changeVttCueInReduxDebounced.cancel();
-            changeVttCueInRedux(unmountContentRef.current, props, dispatch);
+            if (unmountContentRef.current !== null) {
+                changeVttCueInRedux(unmountContentRef.current, props, dispatch);
+            }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
