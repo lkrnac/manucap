@@ -53,6 +53,15 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         menuList: (provided) => ({ ...provided, height: "200px" })
     } as Styles;
 
+    const ignoreKeyword = (): void => {
+        console.log(props.start);
+        //@ts-ignore
+        console.log(props.decoratedText);
+
+
+
+    };
+
     return (
         <span
             ref={target}
@@ -72,6 +81,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 <Popover id="sbte-spell-check-popover">
                     <Popover.Title>{spellCheckMatch.message}</Popover.Title>
                     <Popover.Content hidden={selectOptions.length === 0} style={{ padding: 0 }}>
+                        <button onClick={ignoreKeyword} className="btn btn-primary col-md-12">Ignore</button>
                         <Select
                             menuIsOpen
                             options={selectOptions}
