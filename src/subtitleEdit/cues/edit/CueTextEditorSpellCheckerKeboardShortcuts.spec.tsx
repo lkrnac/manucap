@@ -96,7 +96,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
 
         //WHEN
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
 
         // THEN
@@ -107,10 +107,10 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         //WHEN
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         // THEN
         expect(document.querySelector("div.popover.show")).toBeNull();
@@ -120,7 +120,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         //WHEN
         fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element,
@@ -134,7 +134,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         //WHEN
         for (let i = 0; i < 5; i++) {
@@ -163,7 +163,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
-            keyCode: Character.SPACE, ctrlKey: true, metaKey: true
+            keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
         });
 
         //WHEN
@@ -187,7 +187,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
 
         //WHEN
@@ -207,7 +207,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
-            keyCode: Character.SPACE, ctrlKey: true, metaKey: true
+            keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
         });
 
         //WHEN
@@ -227,7 +227,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
-            keyCode: Character.SPACE, ctrlKey: true, metaKey: true
+            keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
         });
         fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element, {
             keyCode: Character.ARROW_DOWN,
@@ -236,7 +236,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //WHEN
         fireEvent.keyDown(document.querySelector(".spellcheck__option--is-focused") as Element, {
-            keyCode: Character.SPACE, ctrlKey: true, metaKey: true
+            keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
         });
 
         //THEN
@@ -248,7 +248,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
-        fireEvent.keyDown(editor, { keyCode: Character.SPACE, ctrlKey: true, metaKey: true });
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         //WHEN
         fireEvent.keyDown(editor as Element, { keyCode: Character.ESCAPE });
