@@ -64,12 +64,12 @@ const testingCues = [
 ] as CueDto[];
 
 let testingStore = createTestingStore();
-let bindEnterAndEscKeysSpy = jest.fn();
+let bindCueViewModeKeyboardShortcutSpy = jest.fn();
 
 describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
-        bindEnterAndEscKeysSpy = jest.fn();
+        bindCueViewModeKeyboardShortcutSpy = jest.fn();
         testingStore = createTestingStore();
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -82,7 +82,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
             <Provider store={testingStore}>
                 <CueTextEditor
                     spellCheck={spellCheckFakeMatches}
-                    bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
@@ -180,7 +180,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(saveTrack).toBeCalled();
-        expect(bindEnterAndEscKeysSpy).toBeCalled();
+        expect(bindCueViewModeKeyboardShortcutSpy).toBeCalled();
     });
 
     it("calls bindEnterAndEscKeys when closing the popover", () => {
@@ -196,7 +196,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         unmount();
 
         //THEN
-        expect(bindEnterAndEscKeysSpy).toBeCalled();
+        expect(bindCueViewModeKeyboardShortcutSpy).toBeCalled();
     });
 
 
