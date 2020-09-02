@@ -1,4 +1,4 @@
-import "./testUtils/initBrowserEnvironment";
+// import "./testUtils/initBrowserEnvironment";
 import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
 import {

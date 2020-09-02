@@ -81,7 +81,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     };
 
     const onkeydown = (e: React.KeyboardEvent<{}>): void => {
-        if ((e.ctrlKey || e.metaKey) && e.keyCode === Character.SPACE) {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode === Character.SPACE) {
             e.preventDefault();
         }
         if(e.keyCode === Character.ESCAPE) {

@@ -40,7 +40,6 @@ const KeyboardShortcuts = (): ReactElement => {
                     <KeyboardShortcutLabel
                         hideAlternativeKey
                         hideAltKey
-                        hideShiftKey
                         character="Space"
                         name="Show a spelling error [You must be stepping on an spelling error word]"
                     />
