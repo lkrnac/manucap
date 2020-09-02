@@ -1,3 +1,4 @@
+/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React from "react";
@@ -14,7 +15,7 @@ import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
-import { Editor, EditorState } from "draft-js";
+import { fireEvent, render } from "@testing-library/react";
 
 let testingStore = createTestingStore();
 
@@ -249,19 +250,19 @@ describe("CueTextEditor", () => {
 
         // @ts-ignore modern browsers does have it
         global.fetch = jest.fn()
-            .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
+            .mockImplementation(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
 
         const vttCue = new VTTCue(0, 1, "test to clear");
         const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
+        const { container } = render(
             <Provider store={testingStore}>
                 <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
             </Provider>
         );
-        const emptyEditorState = EditorState.createEmpty();
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
 
         // WHEN
-        actualNode.find(Editor).props().onChange(emptyEditorState);
+        fireEvent.keyDown(editor, { keyCode: 8 });
 
         // THEN
         setTimeout(
@@ -269,7 +270,7 @@ describe("CueTextEditor", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { method: "POST", body: "language=testing-language&text=" }
+                    { method: "POST", body: "language=testing-language&text=test to clea" }
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(1);
