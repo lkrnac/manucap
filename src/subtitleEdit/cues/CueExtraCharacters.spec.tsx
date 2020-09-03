@@ -11,6 +11,7 @@ describe("CueExtraCharacters", () => {
                 <div className="text">sample text</div>
             </span>
         );
+        
         // WHEN
         const actualNode = mount(
             <CueExtraCharacters>
