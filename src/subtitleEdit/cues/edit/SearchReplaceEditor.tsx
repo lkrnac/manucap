@@ -1,39 +1,34 @@
-import React, { Dispatch, ReactElement } from "react";
+import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    searchNextCues,
-    searchPreviousCues,
-    searchReplaceAll, setFind, setReplacement,
+    replaceCurrentMatch,
+    searchNextCues, searchPreviousCues,
+    setFind, setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
-import { EditorState } from "draft-js";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { updateEditorState } from "./editorStatesSlice";
-import { callSaveTrack } from "../saveSlices";
-import { replaceContent } from "./editUtils";
-import { SearchReplace } from "../../model";
+import { SubtitleEditState } from "../../subtitleEditReducers";
 
-const replacementHandler = (
-    editorState: EditorState,
-    dispatch: Dispatch<AppThunk>,
-    editorCueIndex: number,
-    searchReplace: SearchReplace): void => {
-    if (!searchReplace.lastCueTextMatchIndex || !searchReplace.replacement) {
-        return;
-    }
-    const start = searchReplace.lastCueTextMatchIndex;
-    const end = start + searchReplace.find.length;
-    const newEditorState = replaceContent(editorState, searchReplace.replacement, start, end);
-    dispatch(updateEditorState(editorCueIndex, newEditorState));
-    dispatch(callSaveTrack());
-    dispatch(searchNextCues());
-};
+// export const searchReplaceAll = (): void => {
+//         const find = getState().searchReplace.find;
+//         const replacement = getState().searchReplace.replacement;
+//         if (find === "" || !replacement) {
+//             return;
+//         }
+//         const newCues = getState().cues.slice(0);
+//         newCues.forEach((cue, cueIndex: number) => {
+//             const matches = matchCueText(cue, find);
+//             if (matches.length > 0) {
+//                 matches.forEach(matchIndex => {
+//                     dispatch(searchReplaceSlice.actions.setLastCueTextMatchIndex(matchIndex));
+//                     searchReplaceCue(cueIndex)(dispatch, getState, undefined);
+//                 });
+//             }
+//         });
+//         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: -1 }));
+//     };
 
 const SearchReplaceEditor = (): ReactElement | null => {
     const dispatch = useDispatch();
-    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const editorState = useSelector((state: SubtitleEditState) =>
-        state.editorStates.get(editingCueIndex)) as EditorState;
     const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
     const searchReplaceVisible = useSelector((state: SubtitleEditState) => state.searchReplaceVisible);
 
@@ -81,12 +76,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 type="button"
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
-                    replacementHandler(
-                        editorState,
-                        dispatch,
-                        editingCueIndex,
-                        searchReplace
-                    );
+                    dispatch(replaceCurrentMatch());
                 }}
             >
                 Replace
@@ -99,7 +89,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     if (!searchReplace.replacement) {
                         return;
                     }
-                    dispatch(searchReplaceAll());
+                    //dispatch(searchReplaceAll());
                 }}
             >
                 Replace All

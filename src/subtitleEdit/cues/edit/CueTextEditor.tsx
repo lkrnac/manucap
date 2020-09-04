@@ -27,6 +27,8 @@ import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
 import { SearchReplaceMatch } from "./SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
+import { SearchReplaceMatches } from "../../model";
+import { searchNextCues } from "./searchReplaceSlices";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
@@ -68,6 +70,7 @@ export interface CueTextEditorProps {
     vttCue: VTTCue;
     editUuid?: string;
     spellCheck?: SpellCheck;
+    searchReplaceMatches?: SearchReplaceMatches;
 }
 
 const changeVttCueInRedux = (
@@ -103,15 +106,36 @@ const createCorrectSpellingHandler = (
     dispatch(callSaveTrack());
 };
 
+const isLastSearchMatch = (
+    searchReplaceMatches: SearchReplaceMatches
+): boolean => searchReplaceMatches && searchReplaceMatches.offsetIndex === searchReplaceMatches.offsets.length - 1;
+
+const createReplaceMatchHandler = (
+    editorState: EditorState,
+    dispatch: Dispatch<AppThunk>,
+    props: CueTextEditorProps,
+    unmountContentRef:  React.MutableRefObject<ContentState | null>
+) => (replacement: string, start: number, end: number): void => {
+    const newEditorState = replaceContent(editorState, replacement, start, end);
+    dispatch(updateEditorState(props.index, newEditorState));
+    dispatch(callSaveTrack());
+    if (props.searchReplaceMatches && isLastSearchMatch(props.searchReplaceMatches)) {
+        // Need to ensure ref is set for unmount because searchNextCues will close editor
+        // since this is the last search match
+        unmountContentRef.current = newEditorState.getCurrentContent();
+    }
+    dispatch(searchNextCues());
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const [openSpellCheckPopupId, setOpenSpellCheckPopupId] = useState(null);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
-    const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
     let editorState = useSelector(
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
     );
+    const unmountContentRef = useRef<ContentState | null>(null);
 
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -126,16 +150,19 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     };
 
     const findSearchReplaceMatch = (_contentBlock: ContentBlock, callback: Function): void => {
-        if (searchReplace && searchReplace.find && searchReplace.lastCueTextMatchIndex) {
-            callback(searchReplace.lastCueTextMatchIndex,
-                searchReplace.lastCueTextMatchIndex + searchReplace.find.length);
+        if (props.searchReplaceMatches && props.searchReplaceMatches.offsets.length > 0) {
+            const offset = props.searchReplaceMatches.offsets[props.searchReplaceMatches.offsetIndex];
+            callback(offset, offset + props.searchReplaceMatches.matchLength);
         }
     };
 
     const newSpellCheckDecorator = new CompositeDecorator([
         {
             strategy: findSearchReplaceMatch,
-            component: SearchReplaceMatch
+            component: SearchReplaceMatch,
+            props: {
+                replaceMatch: createReplaceMatchHandler(editorState, dispatch, props, unmountContentRef)
+            }
         },
         {
             strategy: findSpellCheckIssues,
@@ -151,10 +178,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     editorState = EditorState.set(editorState, { decorator: newSpellCheckDecorator });
 
     const currentContent = editorState.getCurrentContent();
-    const unmountContentRef = useRef<ContentState | null>(null);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
     const wordCountPerLine = getWordCountPerLine(currentContent.getPlainText());
+
     useEffect(
         () => {
             dispatch(updateEditorState(props.index, editorState));

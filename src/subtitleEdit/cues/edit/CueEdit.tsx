@@ -137,6 +137,7 @@ const CueEdit = (props: Props): ReactElement => {
                     vttCue={props.cue.vttCue}
                     editUuid={props.cue.editUuid}
                     spellCheck={props.cue.spellCheck}
+                    searchReplaceMatches={props.cue.searchReplaceMatches}
                 />
             </div>
         </div>
