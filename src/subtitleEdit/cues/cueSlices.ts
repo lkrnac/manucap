@@ -2,7 +2,14 @@ import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
-import { CueCategory, CueChange, CueDto, ScrollPosition, SubtitleEditAction } from "../model";
+import {
+    CueCategory,
+    CueChange,
+    CueDto,
+    ScrollPosition,
+    SearchReplaceMatches,
+    SubtitleEditAction
+} from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties, } from "./cueUtils";
 import { Constants } from "../constants";
@@ -22,6 +29,7 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
+import { getOffsetIndex, searchCueText } from "./edit/searchReplaceSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -51,6 +59,10 @@ interface CheckOptions extends SubtitleSpecificationAction {
 
 export interface SpellCheckAction extends CueIndexAction {
     spellCheck: SpellCheck;
+}
+
+export interface SearchReplaceAction extends CueIndexAction {
+    searchMatches: SearchReplaceMatches;
 }
 
 const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
@@ -96,6 +108,12 @@ export const cuesSlice = createSlice({
             state[action.payload.idx] = {
                 ...state[action.payload.idx],
                 spellCheck: action.payload.spellCheck
+            };
+        },
+        addSearchMatches: (state, action: PayloadAction<SearchReplaceAction>): void => {
+            state[action.payload.idx] = {
+                ...state[action.payload.idx],
+                searchReplaceMatches: action.payload.searchMatches
             };
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {
@@ -261,6 +279,15 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const spellCheckerDomain = getState().spellCheckerDomain;
             if (language && spellCheckerDomain) {
                 fetchSpellCheck(dispatch, getState, idx, newVttCue.text, language, spellCheckerDomain);
+            }
+            const searchReplace = getState().searchReplace;
+            if (searchReplace.find) {
+                const offsets = searchCueText(newVttCue.text, searchReplace.find);
+                let offsetIndex = getOffsetIndex(originalCue, offsets);
+                dispatch(cuesSlice.actions.addSearchMatches(
+                    { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex } }
+                    )
+                );
             }
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,

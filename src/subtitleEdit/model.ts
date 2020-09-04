@@ -1,5 +1,17 @@
 import { SpellCheck } from "./cues/spellCheck/model";
 
+export interface SearchReplace {
+    find: string;
+    replacement?: string;
+    replaceMatchCounter: number;
+}
+
+export interface SearchReplaceMatches {
+    offsets: number[];
+    matchLength: number;
+    offsetIndex: number;
+}
+
 export interface Language {
     readonly id: string;
     readonly name: string;
@@ -13,6 +25,7 @@ export interface CueDto {
     corrupted?: boolean;
     editUuid?: string;
     spellCheck?: SpellCheck;
+    searchReplaceMatches?: SearchReplaceMatches
 }
 
 export interface CueWithSource {
@@ -64,12 +77,6 @@ export interface CueChange {
     changeType: "ADD" | "EDIT" | "REMOVE";
     index: number;
     vttCue: VTTCue;
-}
-
-export interface SearchReplace {
-    find: string;
-    replacement?: string;
-    lastCueTextMatchIndex?: number;
 }
 
 export enum ScrollPosition {
