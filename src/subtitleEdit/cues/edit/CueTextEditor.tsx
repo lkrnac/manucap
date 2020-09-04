@@ -134,8 +134,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     };
     const findExtraCharacters = (contentBlock: ContentBlock, callback: Function): void => {
         if (subtitleSpecifications && subtitleSpecifications.maxCharactersPerLine) {
-            const text = contentBlock.getText();
-            callback(subtitleSpecifications.maxCharactersPerLine, text.length);
+            const lines = contentBlock.getText().split("\n");
+            return lines.forEach(line => callback(subtitleSpecifications.maxCharactersPerLine, line.length));
         }
     };
     const newCompositeDecorator = new CompositeDecorator([
