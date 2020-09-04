@@ -133,9 +133,17 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         }
     };
     const findExtraCharacters = (contentBlock: ContentBlock, callback: Function): void => {
-        if (subtitleSpecifications && subtitleSpecifications.maxCharactersPerLine) {
-            const lines = contentBlock.getText().split("\n");
-            return lines.forEach(line => callback(subtitleSpecifications.maxCharactersPerLine, line.length));
+        if (subtitleSpecifications) {
+            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine || 0;
+            const text = contentBlock.getText();
+            const lines = text.split("\n");
+            return lines.forEach(line => {
+                const lineStartOffset = text.indexOf(line);
+                const lineEndOffset = lineStartOffset + line.length;
+                if (line.length > maxCharactersPerLine) {
+                    callback(lineStartOffset + maxCharactersPerLine, lineEndOffset);
+                }
+            });
         }
     };
     const newCompositeDecorator = new CompositeDecorator([
