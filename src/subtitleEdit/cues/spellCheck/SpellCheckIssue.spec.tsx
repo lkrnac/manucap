@@ -11,7 +11,7 @@ const removeSelectCssClass = (htmlString: string): string =>
 
 describe("SpellCheckerIssue", () => {
     const emptyEditorRef = {} as RefObject<HTMLInputElement>;
-    const bindEnterAndEscKeysSpy = jest.fn();
+    const bindCueViewModeKeyboardShortcutSpy = jest.fn();
 
     it("renders without popup", () => {
         // GIVEN
@@ -32,7 +32,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={jest.fn()}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -57,7 +57,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={jest.fn()}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -82,7 +82,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={jest.fn()}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -237,7 +237,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -377,7 +377,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -416,7 +416,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -457,7 +457,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -493,7 +493,7 @@ describe("SpellCheckerIssue", () => {
                 setSpellCheckerMatchingOffset={jest.fn()}
                 spellCheckerMatchingOffset={null}
                 editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindEnterAndEscKeysSpy}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
