@@ -4,6 +4,9 @@ import Select, { Styles, ValueType } from "react-select";
 import { v4 as uuidv4 } from "uuid";
 
 import { SpellCheck } from "./model";
+import { addIgnoredKeyword } from "./spellCheckerUtils";
+import { useSelector } from "react-redux";
+import { SubtitleEditState } from "../../subtitleEditReducers";
 
 interface Props {
     children: ReactElement;
@@ -13,7 +16,10 @@ interface Props {
     correctSpelling: (replacement: string, start: number, end: number) => void;
     openSpellCheckPopupId: string | null;
     setOpenSpellCheckPopupId: (id: string | null) => void;
+    cueId: string;
 }
+
+
 
 const popupPlacement = (target: MutableRefObject<null>): boolean => {
     if (target !== null && target.current !== null) {
@@ -30,6 +36,7 @@ interface Option {
 }
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [spellCheckPopupId] = useState(uuidv4());
     const target = useRef(null);
     const showAtBottom = popupPlacement(target);
@@ -54,12 +61,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     } as Styles;
 
     const ignoreKeyword = (): void => {
-        console.log(props.start);
         //@ts-ignore
-        console.log(props.decoratedText);
-
-
-
+        addIgnoredKeyword(editingTrack?.id, props.cueId, props.decoratedText);
     };
 
     return (

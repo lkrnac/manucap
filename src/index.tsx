@@ -1,10 +1,7 @@
-import "./testUtils/initBrowserEnvironment";
+// import "./testUtils/initBrowserEnvironment";
 import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
-import {
-    updateCues,
-    updateSourceCues
-} from "./subtitleEdit/cues/cueSlices";
+import { updateCues } from "./subtitleEdit/cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { CueDto, Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
@@ -21,32 +18,33 @@ const TestApp = (): ReactElement => {
     // #############################################################################################
     // #################### Comment this out if you need to test Captioning mode ###################
     // #############################################################################################
-    useEffect(() => {
-        const cues = [] as CueDto[];
-        for(let idx = 0; idx < 9999; idx++) {
-            cues.push({
-                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text`),
-                cueCategory: "DIALOGUE"
-            });
-        }
-        setTimeout( // this simulates latency caused by server roundtrip
-
-            () => dispatch(updateSourceCues(cues)),
-            500
-        );
-    });
+    // useEffect(() => {
+    //     const cues = [] as CueDto[];
+    //     for(let idx = 0; idx < 9999; idx++) {
+    //         cues.push({
+    //             vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text`),
+    //             cueCategory: "DIALOGUE"
+    //         });
+    //     }
+    //     setTimeout( // this simulates latency caused by server roundtrip
+    //
+    //         () => dispatch(updateSourceCues(cues)),
+    //         500
+    //     );
+    // });
     // #############################################################################################
 
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateEditingTrack({
-                type: "TRANSLATION",
-                // type: "CAPTION", // ** Change track type to CAPTION
+                // type: "TRANSLATION",
+                type: "CAPTION", // ** Change track type to CAPTION
                 language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
                 mediaLength: 4250,
-                progress: 50
+                progress: 50,
+                id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d"
             })),
             500
         );

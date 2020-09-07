@@ -138,7 +138,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 spellCheck: props.spellCheck,
                 correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
                 openSpellCheckPopupId,
-                setOpenSpellCheckPopupId
+                setOpenSpellCheckPopupId,
+                cueId: props.editUuid
             }
         }
     ]);
