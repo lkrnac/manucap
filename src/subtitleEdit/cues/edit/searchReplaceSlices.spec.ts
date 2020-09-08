@@ -1,7 +1,14 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import testingStore from "../../../testUtils/testingStore";
-import {searchNextCues, searchPreviousCues, setFind, setReplacement, showSearchReplace} from "./searchReplaceSlices";
-import { updateCues } from "../cueSlices";
+import {
+    replaceCurrentMatch,
+    searchNextCues,
+    searchPreviousCues,
+    setFind,
+    setReplacement,
+    showSearchReplace
+} from "./searchReplaceSlices";
+import {updateCues, updateEditingCueIndex} from "../cueSlices";
 import { CueDto, ScrollPosition } from "../../model";
 
 const testingCues = [
@@ -22,6 +29,22 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("testing");
+        });
+
+        it("updates search matches on editing cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8]);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.matchLength).toEqual(6);
+            expect(testingStore.getState().cues[0].searchReplaceMatches).toBeUndefined();
         });
     });
 
@@ -46,7 +69,6 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-            expect(testingStore.getState().searchReplace.lastCueTextMatchIndex).toEqual(8);
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
@@ -63,7 +85,6 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-            expect(testingStore.getState().searchReplace.lastCueTextMatchIndex).toEqual(8);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
@@ -76,6 +97,16 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplaceVisible).toBeTruthy();
+        });
+    });
+
+    describe("replaceCurrentMatch", () => {
+        it("sets replace match signal", () => {
+            // WHEN
+            testingStore.dispatch(replaceCurrentMatch() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.replaceMatchCounter).toEqual(1);
         });
     });
 });

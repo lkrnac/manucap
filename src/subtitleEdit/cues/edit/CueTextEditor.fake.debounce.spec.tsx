@@ -15,7 +15,7 @@ import { removeDraftJsDynamicValues, spellCheckOptionPredicate } from "../../../
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { CueDto, Track } from "../../model";
+import {CueDto, SearchReplaceMatches, Track} from "../../model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
@@ -25,7 +25,6 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
-import { setSearchReplace } from "./searchReplaceSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -863,7 +862,11 @@ describe("CueTextEditor", () => {
     describe("search and replace", () => {
         it("renders with html and search and replace results", () => {
             // GIVEN
-            testingStore.dispatch(setSearchReplace("Text", 10) as {} as AnyAction);
+            const searchReplaceMatches = {
+                offsets: [10],
+                offsetIndex: 0,
+                matchLength: 4
+            } as SearchReplaceMatches;
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent =
@@ -874,7 +877,36 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid}
+                        searchReplaceMatches={searchReplaceMatches}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        });
+
+        it("renders with html and search and replace results only one with many offsets", () => {
+            // GIVEN
+            const searchReplaceMatches = {
+                offsets: [10, 22],
+                offsetIndex: 1,
+                matchLength: 4
+            } as SearchReplaceMatches;
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent =
+                "<span style=\"border: 1px solid rgb(75,0,130); background-color: rgb(230, 230, 250);\">" +
+                "<span data-offset-key=\"\"><span data-text=\"true\">Text</span>" +
+                "</span></span>";
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid}
+                                   searchReplaceMatches={searchReplaceMatches}
+                    />
                 </Provider>
             );
 

@@ -135,8 +135,8 @@ export const searchPreviousCues = (): AppThunk =>
         if (find === "") {
             return;
         }
-        let fromIndex = getState().editingCueIndex >= 0 ? getState().editingCueIndex : 0;
         const cues = getState().cues;
+        let fromIndex = getState().editingCueIndex >= 0 ? getState().editingCueIndex : cues.length - 1;
         const currentCue = cues[fromIndex];
         const cueMatches = currentCue.searchReplaceMatches;
         if (cueMatches) {
