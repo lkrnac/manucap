@@ -3,11 +3,11 @@ import React from "react";
 import SearchReplaceEditor from "./SearchReplaceEditor";
 import testingStore from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
-import {setFind, setReplacement, showSearchReplace} from "./searchReplaceSlices";
-import {AnyAction} from "@reduxjs/toolkit";
-import { fireEvent, render} from "@testing-library/react";
-import {CueDto, ScrollPosition} from "../../model";
-import {updateCues, updateEditingCueIndex} from "../cueSlices";
+import { setFind, setReplacement, showSearchReplace } from "./searchReplaceSlices";
+import { AnyAction } from "@reduxjs/toolkit";
+import { fireEvent, render } from "@testing-library/react";
+import { CueDto, ScrollPosition } from "../../model";
+import { updateCues, updateEditingCueIndex } from "../cueSlices";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -29,10 +29,14 @@ describe("SearchReplace", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         const expectedNode = render(
             <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
-                <div style={{display: "flex", flexFlow: "row", width: "50%"}}>
+                <div style={{ display: "flex", flexFlow: "row", width: "50%" }}>
                     <input type="text" value="" placeholder="Find" className="form-control" />
                     <input
-                        type="text" value="" placeholder="Replace" className="form-control" style={{marginLeft: "5px"}}
+                        type="text"
+                        value=""
+                        placeholder="Replace"
+                        className="form-control"
+                        style={{ marginLeft: "5px" }}
                     />
                 </div>
                 <button
@@ -102,11 +106,11 @@ describe("SearchReplace", () => {
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        )
+        );
         const findInput = getByPlaceholderText("Find");
 
         // WHEN
-        fireEvent.change(findInput, { target: { value: "testing"} });
+        fireEvent.change(findInput, { target: { value: "testing" }});
 
         // THEN
         expect(testingStore.getState().searchReplace.find).toEqual("testing");
@@ -119,11 +123,11 @@ describe("SearchReplace", () => {
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        )
+        );
         const replaceInput = getByPlaceholderText("Replace");
 
         // WHEN
-        fireEvent.change(replaceInput, { target: { value: "testing-repl"} });
+        fireEvent.change(replaceInput, { target: { value: "testing-repl" }});
 
         // THEN
         expect(testingStore.getState().searchReplace.replacement).toEqual("testing-repl");
@@ -136,11 +140,11 @@ describe("SearchReplace", () => {
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        )
+        );
         const closeButton = getByTestId("sbte-close-search-replace-btn");
 
         // WHEN
-        fireEvent.click(closeButton)
+        fireEvent.click(closeButton);
 
         // THEN
         expect(testingStore.getState().searchReplaceVisible).toBeFalsy();
@@ -155,7 +159,7 @@ describe("SearchReplace", () => {
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        )
+        );
         const nextButton = getByTestId("sbte-search-next");
 
         // WHEN
@@ -177,7 +181,7 @@ describe("SearchReplace", () => {
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        )
+        );
         const prevButton = getByTestId("sbte-search-prev");
 
         // WHEN
@@ -200,7 +204,7 @@ describe("SearchReplace", () => {
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        )
+        );
         const replaceButton = getByText("Replace");
 
         // WHEN
@@ -224,7 +228,7 @@ describe("SearchReplace", () => {
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        )
+        );
         const replaceAllButton = getByText("Replace All");
 
         // WHEN
@@ -251,7 +255,7 @@ describe("SearchReplace", () => {
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        )
+        );
         const replaceAllButton = getByText("Replace All");
 
         // WHEN

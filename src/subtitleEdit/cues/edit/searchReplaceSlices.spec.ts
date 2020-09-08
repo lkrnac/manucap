@@ -8,7 +8,7 @@ import {
     setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
-import {updateCues, updateEditingCueIndex} from "../cueSlices";
+import { updateCues, updateEditingCueIndex } from "../cueSlices";
 import { CueDto, ScrollPosition } from "../../model";
 
 const testingCues = [

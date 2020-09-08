@@ -9,15 +9,15 @@ import { mount, ReactWrapper } from "enzyme";
 
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "./editorStatesSlice";
-import {CueDto, SearchReplaceMatches, Track} from "../../model";
+import { CueDto, SearchReplaceMatches, Track } from "../../model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { fireEvent, render } from "@testing-library/react";
-import {replaceCurrentMatch, setReplacement} from "./searchReplaceSlices";
-import {act} from "react-dom/test-utils";
+import { replaceCurrentMatch, setReplacement } from "./searchReplaceSlices";
+import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();
 
@@ -123,8 +123,11 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid}
-                               searchReplaceMatches={searchReplaceMatches}
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    searchReplaceMatches={searchReplaceMatches}
                 />
             </Provider>
         );

@@ -25,7 +25,7 @@ export interface CueDto {
     corrupted?: boolean;
     editUuid?: string;
     spellCheck?: SpellCheck;
-    searchReplaceMatches?: SearchReplaceMatches
+    searchReplaceMatches?: SearchReplaceMatches;
 }
 
 export interface CueWithSource {

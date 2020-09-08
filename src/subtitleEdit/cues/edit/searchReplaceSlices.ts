@@ -75,7 +75,7 @@ export const setFind = (find: string): AppThunk =>
             const currentCue = getState().cues[cueIndex];
             const offsets = searchCueText(currentCue.vttCue.text, find);
             dispatch(cuesSlice.actions.addSearchMatches(
-                { idx: cueIndex, searchMatches: { offsets, matchLength: find.length, offsetIndex: 0 } }
+                { idx: cueIndex, searchMatches: { offsets, matchLength: find.length, offsetIndex: 0 }}
                 )
             );
         }
@@ -104,7 +104,7 @@ export const searchNextCues = (): AppThunk =>
         if (cueMatches) {
             if (cueMatches.offsetIndex < cueMatches.offsets.length - 1) {
                 dispatch(cuesSlice.actions.addSearchMatches(
-                    { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex + 1 } }
+                    { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex + 1 }}
                     )
                 );
                 return;
@@ -131,7 +131,7 @@ export const searchPreviousCues = (): AppThunk =>
         if (cueMatches) {
             if (cueMatches.offsetIndex > 0) {
                 dispatch(cuesSlice.actions.addSearchMatches(
-                    { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex - 1 } }
+                    { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex - 1 }}
                     )
                 );
                 return;

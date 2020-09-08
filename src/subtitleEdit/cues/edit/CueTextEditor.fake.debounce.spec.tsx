@@ -15,7 +15,7 @@ import { removeDraftJsDynamicValues, spellCheckOptionPredicate } from "../../../
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import {CueDto, SearchReplaceMatches, Track} from "../../model";
+import { CueDto, SearchReplaceMatches, Track } from "../../model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
@@ -25,8 +25,8 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
-import {replaceCurrentMatch, setReplacement} from "./searchReplaceSlices";
-import {act} from "react-dom/test-utils";
+import { replaceCurrentMatch, setReplacement } from "./searchReplaceSlices";
+import { act } from "react-dom/test-utils";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -879,7 +879,10 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid}
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -906,7 +909,10 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid}
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -931,8 +937,11 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid}
-                                   searchReplaceMatches={searchReplaceMatches}
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
             );

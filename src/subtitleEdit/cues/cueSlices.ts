@@ -293,9 +293,9 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }
             const searchReplace = getState().searchReplace;
             const offsets = searchCueText(newVttCue.text, searchReplace.find);
-            let offsetIndex = getOffsetIndex(originalCue, offsets);
+            const offsetIndex = getOffsetIndex(originalCue, offsets);
             dispatch(cuesSlice.actions.addSearchMatches(
-                { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex } }
+                { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }}
                 )
             );
             dispatch(cuesSlice.actions.checkErrors({

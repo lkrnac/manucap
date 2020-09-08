@@ -1,4 +1,4 @@
-import React, {Dispatch, ReactElement} from "react";
+import React, { Dispatch, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     replaceCurrentMatch, searchCueText,
@@ -45,21 +45,22 @@ const SearchReplaceEditor = (): ReactElement | null => {
 
     return searchReplaceVisible ? (
         <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
-            <div style={{display: "flex", flexFlow: "row", width: "50%"}}>
+            <div style={{ display: "flex", flexFlow: "row", width: "50%" }}>
                 <input
                     type="text"
                     value={searchReplace?.find}
                     placeholder="Find"
                     className="form-control"
-                    onChange={e => dispatch(setFind(e.target.value))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>): AppThunk => dispatch(setFind(e.target.value))}
                 />
                 <input
                     type="text"
                     value={searchReplace?.replacement}
                     placeholder="Replace"
                     className="form-control"
-                    style={{marginLeft: "5px"}}
-                    onChange={e => dispatch(setReplacement(e.target.value))}
+                    style={{ marginLeft: "5px" }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>): AppThunk =>
+                        dispatch(setReplacement(e.target.value))}
                 />
             </div>
             <button
