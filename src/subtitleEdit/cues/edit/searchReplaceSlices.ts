@@ -10,6 +10,9 @@ import sanitizeHtml from "sanitize-html";
 import { CueIndexAction, cuesSlice, editingCueIndexSlice } from "../cueSlices";
 
 export const searchCueText = (text: string, find: string): Array<number> => {
+    if (find === "") {
+        return [];
+    }
     const plainText = sanitizeHtml(text, { allowedTags: []});
     if (plainText === "") {
         return [];
@@ -51,7 +54,7 @@ export const searchReplaceVisibleSlice = createSlice({
     }
 });
 
-const initialSearchReplace = { find: "", replaceMatchCounter: 0 } as SearchReplace;
+const initialSearchReplace = { find: "", replacement: "", replaceMatchCounter: 0 } as SearchReplace;
 
 export const searchReplaceSlice = createSlice({
     name: "searchReplace",
@@ -76,8 +79,17 @@ export const searchReplaceSlice = createSlice({
 });
 
 export const setFind = (find: string): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         dispatch(searchReplaceSlice.actions.setFind(find));
+        const cueIndex = getState().editingCueIndex;
+        if (cueIndex !== -1) {
+            const currentCue = getState().cues[cueIndex];
+            const offsets = searchCueText(currentCue.vttCue.text, find);
+            dispatch(cuesSlice.actions.addSearchMatches(
+                { idx: cueIndex, searchMatches: { offsets, matchLength: find.length, offsetIndex: 0 } }
+                )
+            );
+        }
     };
 
 export const setReplacement = (replacement: string): AppThunk =>
