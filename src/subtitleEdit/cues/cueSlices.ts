@@ -281,14 +281,12 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                 fetchSpellCheck(dispatch, getState, idx, newVttCue.text, language, spellCheckerDomain);
             }
             const searchReplace = getState().searchReplace;
-            if (searchReplace.find) {
-                const offsets = searchCueText(newVttCue.text, searchReplace.find);
-                let offsetIndex = getOffsetIndex(originalCue, offsets);
-                dispatch(cuesSlice.actions.addSearchMatches(
-                    { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex } }
-                    )
-                );
-            }
+            const offsets = searchCueText(newVttCue.text, searchReplace.find);
+            let offsetIndex = getOffsetIndex(originalCue, offsets);
+            dispatch(cuesSlice.actions.addSearchMatches(
+                { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex } }
+                )
+            );
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
                 overlapEnabled: overlapCaptionsAllowed,
