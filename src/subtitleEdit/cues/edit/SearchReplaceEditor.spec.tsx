@@ -95,6 +95,40 @@ describe("SearchReplace", () => {
         expect(container.innerHTML).toEqual("");
     });
 
+    it("sets find in redux when changed", () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        const { getByPlaceholderText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        )
+        const findInput = getByPlaceholderText("Find");
+
+        // WHEN
+        fireEvent.change(findInput, { target: { value: "testing"} });
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("testing");
+    });
+
+    it("sets replacement in redux when changed", () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        const { getByPlaceholderText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        )
+        const replaceInput = getByPlaceholderText("Replace");
+
+        // WHEN
+        fireEvent.change(replaceInput, { target: { value: "testing-repl"} });
+
+        // THEN
+        expect(testingStore.getState().searchReplace.replacement).toEqual("testing-repl");
+    });
+
     it("sets show search replace to false when close button is clicked", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
