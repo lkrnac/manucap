@@ -29,7 +29,7 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
-import { getOffsetIndex, searchCueText } from "./edit/searchReplaceSlices";
+import { searchCueText } from "./edit/searchReplaceSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -83,6 +83,17 @@ const createAndAddCue = (previousCue: CueDto,
     const newCue = new VTTCue(startTime, endTime, "");
     copyNonConstructorProperties(newCue, previousCue.vttCue);
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
+};
+
+const getOffsetIndex = (
+    cue: CueDto,
+    offsets: Array<number>
+): number => {
+    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex > 0) {
+        return cue.searchReplaceMatches.offsetIndex < offsets.length - 1 ?
+            cue.searchReplaceMatches.offsetIndex : offsets.length - 1;
+    }
+    return 0;
 };
 
 export const cuesSlice = createSlice({

@@ -1,6 +1,6 @@
-import {ContentState, convertFromHTML, EditorState, Modifier, SelectionState} from "draft-js";
-import {convertVttToHtml, getVttText} from "../cueTextConverter";
-import {copyNonConstructorProperties} from "../cueUtils";
+import { ContentState, convertFromHTML, EditorState, Modifier, SelectionState } from "draft-js";
+import { convertVttToHtml, getVttText } from "../cueTextConverter";
+import { copyNonConstructorProperties } from "../cueUtils";
 
 export const replaceContent = (
     editorState: EditorState,

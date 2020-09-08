@@ -25,6 +25,8 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
+import {replaceCurrentMatch, setReplacement} from "./searchReplaceSlices";
+import {act} from "react-dom/test-utils";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -905,13 +907,45 @@ describe("CueTextEditor", () => {
             const actualNode = mount(
                 <Provider store={testingStore}>
                     <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid}
-                                   searchReplaceMatches={searchReplaceMatches}
+                        searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
             );
 
             // THEN
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        });
+
+        it("replaces matched text with replacement when replaceCurrentMatch is called - multiple", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+            testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
+            const searchReplaceMatches = {
+                offsets: [10, 22],
+                offsetIndex: 0,
+                matchLength: 4
+            } as SearchReplaceMatches;
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid}
+                                   searchReplaceMatches={searchReplaceMatches}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            act(() => {
+                testingStore.dispatch(replaceCurrentMatch() as {} as AnyAction);
+            });
+
+            // THEN
+            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(testingStore.getState().cues[0].vttCue.text)
+                .toEqual("some <i>HTML</i> <b>abcd efg</b> sample Text");
         });
     });
 });

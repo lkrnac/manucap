@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { findIndex, findLastIndex } from "lodash";
 
-import { CueDto, ScrollPosition, SearchReplace, SubtitleEditAction } from "../../model";
+import { ScrollPosition, SearchReplace, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { scrollPositionSlice } from "../cuesListScrollSlice";
@@ -23,17 +23,6 @@ export const searchCueText = (text: string, find: string): Array<number> => {
         results.push(re.lastIndex - find.length);
     }
     return results;
-};
-
-export const getOffsetIndex = (
-    cue: CueDto,
-    offsets: Array<number>
-): number => {
-    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex > 0) {
-        return cue.searchReplaceMatches.offsetIndex < offsets.length - 1 ?
-            cue.searchReplaceMatches.offsetIndex : offsets.length - 1;
-    }
-    return 0;
 };
 
 const setSearchReplaceForCueIndex = (
