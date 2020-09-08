@@ -21,7 +21,7 @@ export const SearchReplaceMatch = (props: Props): ReactElement => {
                 previousReplaceMatchCounter.current = replaceMatchCounter;
             }
          },
-        [ props, replacement ]
+        [ props, replacement, replaceMatchCounter ]
     );
 
     return (
