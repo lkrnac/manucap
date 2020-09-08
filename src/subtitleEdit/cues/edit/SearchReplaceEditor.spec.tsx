@@ -1,17 +1,33 @@
 import "../../../testUtils/initBrowserEnvironment";
 import React from "react";
-import { mount } from "enzyme";
 import SearchReplaceEditor from "./SearchReplaceEditor";
 import testingStore from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
-import { showSearchReplace } from "./searchReplaceSlices";
+import {setFind, setReplacement, showSearchReplace} from "./searchReplaceSlices";
 import {AnyAction} from "@reduxjs/toolkit";
+import { fireEvent, render} from "@testing-library/react";
+import {CueDto, ScrollPosition} from "../../model";
+import {updateCues, updateEditingCueIndex} from "../cueSlices";
+
+const testingCues = [
+    { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    {
+        vttCue: new VTTCue(4, 6, "Caption Line 3"),
+        cueCategory: "ONSCREEN_TEXT",
+        spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+    },
+    {
+        vttCue: new VTTCue(6, 8, "Caption Line 2"),
+        cueCategory: "ONSCREEN_TEXT"
+    },
+] as CueDto[];
 
 describe("SearchReplace", () => {
     it("renders", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        const expectedNode = mount(
+        const expectedNode = render(
             <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
                 <div style={{display: "flex", flexFlow: "row", width: "50%"}}>
                     <input type="text" value="" placeholder="Find" className="form-control" />
@@ -19,10 +35,20 @@ describe("SearchReplace", () => {
                         type="text" value="" placeholder="Replace" className="form-control" style={{marginLeft: "5px"}}
                     />
                 </div>
-                <button className="btn btn-secondary btn-sm" type="button" style={{ marginLeft: "5px" }}>
+                <button
+                    className="btn btn-secondary btn-sm"
+                    type="button"
+                    style={{ marginLeft: "5px" }}
+                    data-testid="sbte-search-next"
+                >
                     <i className="fa fa-arrow-down" />
                 </button>
-                <button className="btn btn-secondary btn-sm" type="button" style={{ marginLeft: "5px" }}>
+                <button
+                    className="btn btn-secondary btn-sm"
+                    type="button"
+                    style={{ marginLeft: "5px" }}
+                    data-testid="sbte-search-prev"
+                >
                     <i className="fa fa-arrow-up" />
                 </button>
                 <button className="btn btn-secondary btn-sm" type="button" style={{ marginLeft: "5px" }}>
@@ -33,9 +59,10 @@ describe("SearchReplace", () => {
                 </button>
                 <span style={{ flex: 1 }} />
                 <button
-                    className="btn btn-secondary btn-sm sbte-close-search-replace-btn"
+                    className="btn btn-secondary btn-sm"
                     type="button"
                     style={{ marginLeft: "5px" }}
+                    data-testid="sbte-close-search-replace-btn"
                 >
                     <i className="fa fa-window-close" />
                 </button>
@@ -43,14 +70,14 @@ describe("SearchReplace", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.innerHTML).toEqual(expectedNode.container.innerHTML);
     });
 
     it("does not render of show is false", () => {
@@ -58,29 +85,152 @@ describe("SearchReplace", () => {
         testingStore.dispatch(showSearchReplace(false) as {} as AnyAction);
 
         // WHEN
-        const actualNode = mount(
+        const { container } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual("");
+        expect(container.innerHTML).toEqual("");
     });
 
-    it("set show search replace to false when close button is clicked", () => {
+    it("sets show search replace to false when close button is clicked", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        const actualNode = mount(
+        const { getByTestId } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
-        );
+        )
+        const closeButton = getByTestId("sbte-close-search-replace-btn");
 
         // WHEN
-        actualNode.find(".sbte-close-search-replace-btn").simulate("click");
+        fireEvent.click(closeButton)
 
         // THEN
         expect(testingStore.getState().searchReplaceVisible).toBeFalsy();
+    });
+
+    it("searches for next match when Next button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+        const { getByTestId } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        )
+        const nextButton = getByTestId("sbte-search-next");
+
+        // WHEN
+        fireEvent.click(nextButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+    });
+
+    it("searches for previous match when Previous button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(3) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+        const { getByTestId } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        )
+        const prevButton = getByTestId("sbte-search-prev");
+
+        // WHEN
+        fireEvent.click(prevButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+    });
+
+    it("invokes replace current match when Replace button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+        testingStore.dispatch(setReplacement("New Line 2") as {} as AnyAction);
+        const { getByText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        )
+        const replaceButton = getByText("Replace");
+
+        // WHEN
+        fireEvent.click(replaceButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 2");
+        expect(testingStore.getState().searchReplace.replaceMatchCounter).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+    });
+
+    it("replaces all matches when Replace All button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+        testingStore.dispatch(setReplacement("New Line 5") as {} as AnyAction);
+        const { getByText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        )
+        const replaceAllButton = getByText("Replace All");
+
+        // WHEN
+        fireEvent.click(replaceAllButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 5");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption New Line 5");
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption New Line 5");
+        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
+        expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 5");
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+    });
+
+    it("does not replace all match when Replace All button is clicked and find is empty", () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(setFind("") as {} as AnyAction);
+        testingStore.dispatch(setReplacement("New Line 5") as {} as AnyAction);
+        const { getByText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        )
+        const replaceAllButton = getByText("Replace All");
+
+        // WHEN
+        fireEvent.click(replaceAllButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 5");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 2");
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
+        expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption Line 2");
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 });

@@ -29,7 +29,7 @@ export const searchReplaceAll = (
             let newVTTCue = cue.vttCue;
             while (matches.length > 0) {
                 const matchIndex = matches[0];
-                newVTTCue = replaceVttCueContent(newVTTCue, replacement, matchIndex, matchIndex + find.length)
+                newVTTCue = replaceVttCueContent(newVTTCue, replacement, matchIndex, matchIndex + find.length);
                 matches = searchCueText(newVTTCue.text, find);
             }
             dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
@@ -66,6 +66,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
+                data-testid="sbte-search-next"
                 onClick={(): void => {
                     dispatch(searchNextCues());
                 }}
@@ -76,6 +77,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
+                data-testid="sbte-search-prev"
                 onClick={(): void => {
                     dispatch(searchPreviousCues());
                 }}
@@ -104,9 +106,10 @@ const SearchReplaceEditor = (): ReactElement | null => {
             </button>
             <span style={{ flex: 1 }} />
             <button
-                className="btn btn-secondary btn-sm sbte-close-search-replace-btn"
+                className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
+                data-testid="sbte-close-search-replace-btn"
                 onClick={(): void => {
                     dispatch(showSearchReplace(false));
                 }}
