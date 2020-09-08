@@ -29,7 +29,7 @@ export const getOffsetIndex = (
     cue: CueDto,
     offsets: Array<number>
 ): number => {
-    if (cue.searchReplaceMatches) {
+    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex > 0) {
         return cue.searchReplaceMatches.offsetIndex < offsets.length - 1 ?
             cue.searchReplaceMatches.offsetIndex : offsets.length - 1;
     }

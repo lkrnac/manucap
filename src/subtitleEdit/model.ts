@@ -2,7 +2,7 @@ import { SpellCheck } from "./cues/spellCheck/model";
 
 export interface SearchReplace {
     find: string;
-    replacement?: string;
+    replacement: string;
     replaceMatchCounter: number;
 }
 
