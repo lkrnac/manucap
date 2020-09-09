@@ -211,6 +211,18 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().searchReplace.find).toEqual("");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
+
+        it("does not search if there are no cues", () => {
+            // GIVEN
+            testingStore.dispatch(setFind("test") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("test");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        });
     });
 
     describe("searchPreviousCues", () => {
@@ -376,6 +388,18 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        });
+
+        it("does not search if there are no cues", () => {
+            // GIVEN
+            testingStore.dispatch(setFind("test") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("test");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
     });
