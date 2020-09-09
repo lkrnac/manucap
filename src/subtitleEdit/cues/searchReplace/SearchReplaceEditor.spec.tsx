@@ -1,5 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
-import React from "react";
+import React, { ReactElement } from "react";
 import SearchReplaceEditor from "./SearchReplaceEditor";
 import testingStore from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
@@ -10,6 +10,7 @@ import { CueDto, ScrollPosition, Track } from "../../model";
 import { updateCues, updateEditingCueIndex } from "../cueSlices";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
+import ToggleButton from "../../../common/ToggleButton";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -60,9 +61,20 @@ describe("SearchReplaceEditor", () => {
                 <button className="btn btn-secondary btn-sm" type="button" style={{ marginLeft: "5px" }}>
                     Replace
                 </button>
-                <button className="btn btn-secondary btn-sm" type="button" style={{ marginLeft: "5px" }}>
+                <button
+                    className="btn btn-secondary btn-sm"
+                    type="button"
+                    style={{ marginLeft: "5px", marginRight: "5px" }}
+                >
                     Replace All
                 </button>
+                <ToggleButton
+                    className="btn btn-secondary"
+                    toggled={false}
+                    onClick={jest.fn()}
+                    render={(): ReactElement => (<span>Aa</span>)}
+                    title="Case insensitive"
+                />
                 <span style={{ flex: 1 }} />
                 <button
                     className="btn btn-secondary btn-sm"
@@ -150,6 +162,23 @@ describe("SearchReplaceEditor", () => {
 
         // THEN
         expect(testingStore.getState().searchReplaceVisible).toBeFalsy();
+    });
+
+    it("sets matchCase to true when match case button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        const { getByText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        );
+        const matchCaseButton = getByText("Aa");
+
+        // WHEN
+        fireEvent.click(matchCaseButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.matchCase).toBeTruthy();
     });
 
     it("searches for next match when Next button is clicked", () => {

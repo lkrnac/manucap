@@ -292,7 +292,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                 fetchSpellCheck(dispatch, getState, idx, newVttCue.text, language, spellCheckerDomain);
             }
             const searchReplace = getState().searchReplace;
-            const offsets = searchCueText(newVttCue.text, searchReplace.find);
+            const offsets = searchCueText(newVttCue.text, searchReplace.find, searchReplace.matchCase);
             const offsetIndex = getOffsetIndex(originalCue, offsets);
             dispatch(cuesSlice.actions.addSearchMatches(
                 { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }}

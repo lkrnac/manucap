@@ -4,7 +4,7 @@ import {
     replaceCurrentMatch,
     searchNextCues,
     searchPreviousCues,
-    setFind,
+    setFind, setMatchCase,
     setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
@@ -62,6 +62,36 @@ describe("searchReplaceSlices", () => {
         it("searches for find term in next cue", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(setFind("line 2") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("line 2");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("searches for find term in next cue match case - no match", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(setMatchCase(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("line 2") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("line 2");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("searches for find term in next cue match case - with match", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(setMatchCase(true) as {} as AnyAction);
             testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
 
             // WHEN

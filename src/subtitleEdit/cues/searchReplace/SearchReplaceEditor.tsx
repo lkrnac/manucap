@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     replaceCurrentMatch, searchCueText,
     searchNextCues, searchPreviousCues,
-    setFind, setReplacement,
+    setFind, setMatchCase, setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
@@ -12,20 +12,23 @@ import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import { reset } from "../edit/editorStatesSlice";
 import { callSaveTrack } from "../saveSlices";
+import ToggleButton from "../../../common/ToggleButton";
+import { SearchReplace } from "./model";
 
 export const searchReplaceAll = (
     dispatch: Dispatch<AppThunk>,
     cues: Array<CueDto>,
-    find: string,
-    replacement: string
+    searchReplace: SearchReplace
 ): void => {
+    const find = searchReplace.find;
     if (find === "") {
         return;
     }
     const newCues = cues.slice(0);
     dispatch(reset());
+    const replacement = searchReplace.replacement;
     newCues.forEach((cue, cueIndex: number) => {
-        const matches = searchCueText(cue.vttCue.text, find);
+        const matches = searchCueText(cue.vttCue.text, find, searchReplace.matchCase);
         if (matches.length > 0) {
             const replaceOffset = replacement.length - find.length;
             let newVTTCue = cue.vttCue;
@@ -99,14 +102,24 @@ const SearchReplaceEditor = (): ReactElement | null => {
             <button
                 className="btn btn-secondary btn-sm"
                 type="button"
-                style={{ marginLeft: "5px" }}
+                style={{ marginLeft: "5px", marginRight: "5px" }}
                 onClick={(): void => {
-                    searchReplaceAll(dispatch, cues, searchReplace.find, searchReplace.replacement);
+                    searchReplaceAll(dispatch, cues, searchReplace);
                     dispatch(callSaveTrack());
                 }}
             >
                 Replace All
             </button>
+            <ToggleButton
+                className="btn btn-secondary"
+                toggled={searchReplace.matchCase}
+                onClick={(): void => {
+                    dispatch(setMatchCase(!searchReplace.matchCase));
+                    dispatch(reset());
+                }}
+                render={(): ReactElement => (<span>Aa</span>)}
+                title={searchReplace.matchCase ? "Case sensitive" : "Case insensitive"}
+            />
             <span style={{ flex: 1 }} />
             <button
                 className="btn btn-secondary btn-sm"
