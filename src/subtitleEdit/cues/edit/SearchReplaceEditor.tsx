@@ -24,7 +24,7 @@ export const searchReplaceAll = (
     const newCues = cues.slice(0);
     dispatch(reset());
     newCues.forEach((cue, cueIndex: number) => {
-        let matches = searchCueText(cue.vttCue.text, find);
+        const matches = searchCueText(cue.vttCue.text, find);
         if (matches.length > 0) {
             const replaceOffset = replacement.length - find.length;
             let newVTTCue = cue.vttCue;
