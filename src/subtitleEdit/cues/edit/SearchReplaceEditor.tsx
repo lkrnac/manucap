@@ -26,12 +26,12 @@ export const searchReplaceAll = (
     newCues.forEach((cue, cueIndex: number) => {
         let matches = searchCueText(cue.vttCue.text, find);
         if (matches.length > 0) {
+            const replaceOffset = replacement.length - find.length;
             let newVTTCue = cue.vttCue;
-            while (matches.length > 0) {
-                const matchIndex = matches[0];
-                newVTTCue = replaceVttCueContent(newVTTCue, replacement, matchIndex, matchIndex + find.length);
-                matches = searchCueText(newVTTCue.text, find);
-            }
+            matches.forEach((matchIndex, index) => {
+                const start = matchIndex + (replaceOffset * index);
+                newVTTCue = replaceVttCueContent(newVTTCue, replacement, start, start + find.length);
+            });
             dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
         }
     });

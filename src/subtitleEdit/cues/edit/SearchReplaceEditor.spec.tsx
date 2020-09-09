@@ -245,6 +245,92 @@ describe("SearchReplace", () => {
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 
+    it("replaces all matches replace contains find", () => {
+        // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 2, "Caption <b>Line 2</b> and <i>Line 2</i>"),
+                cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 4, "Caption <b>Line 2</b> and Line 2"),
+                cueCategory: "ONSCREEN_TEXT" },
+            {
+                vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                cueCategory: "ONSCREEN_TEXT",
+                spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+            },
+            {
+                vttCue: new VTTCue(6, 8, "Caption Line 2"),
+                cueCategory: "ONSCREEN_TEXT"
+            },
+        ] as CueDto[];
+
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+        testingStore.dispatch(setReplacement("New Line 2") as {} as AnyAction);
+        const { getByText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        );
+        const replaceAllButton = getByText("Replace All");
+
+        // WHEN
+        fireEvent.click(replaceAllButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 2");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>New Line 2</b> and <i>New Line 2</i>");
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>New Line 2</b> and New Line 2");
+        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
+        expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 2");
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+    });
+
+    it("replaces all matches replace shorter than find", () => {
+        // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 2, "Caption <b>Line 2</b> and <i>Line 2</i>"),
+                cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 4, "Caption <b>Line 2</b> and Line 2"),
+                cueCategory: "ONSCREEN_TEXT" },
+            {
+                vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                cueCategory: "ONSCREEN_TEXT",
+                spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+            },
+            {
+                vttCue: new VTTCue(6, 8, "Caption Line 2"),
+                cueCategory: "ONSCREEN_TEXT"
+            },
+        ] as CueDto[];
+
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+        testingStore.dispatch(setReplacement("test") as {} as AnyAction);
+        const { getByText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        );
+        const replaceAllButton = getByText("Replace All");
+
+        // WHEN
+        fireEvent.click(replaceAllButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("test");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>test</b> and <i>test</i>");
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>test</b> and test");
+        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
+        expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption test");
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+    });
+
     it("does not replace all match when Replace All button is clicked and find is empty", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
