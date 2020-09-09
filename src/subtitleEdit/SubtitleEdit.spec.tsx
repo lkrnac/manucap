@@ -20,8 +20,8 @@ import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
 import { render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
-import { showSearchReplace } from "./cues/edit/searchReplaceSlices";
-import SearchReplaceEditor from "./cues/edit/SearchReplaceEditor";
+import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
+import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback

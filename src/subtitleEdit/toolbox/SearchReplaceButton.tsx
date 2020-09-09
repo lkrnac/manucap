@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useDispatch } from "react-redux";
-import { showSearchReplace } from "../cues/edit/searchReplaceSlices";
+import { showSearchReplace } from "../cues/searchReplace/searchReplaceSlices";
 
 const SearchReplaceButton = (): ReactElement => {
     const dispatch = useDispatch();

@@ -29,7 +29,7 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
-import { searchCueText } from "./edit/searchReplaceSlices";
+import { searchCueText } from "./searchReplace/searchReplaceSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;

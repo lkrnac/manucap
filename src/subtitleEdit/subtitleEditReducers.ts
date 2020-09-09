@@ -16,7 +16,7 @@ import { saveStateSlice, saveTrackSlice } from "./cues/saveSlices";
 import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { spellCheckerDomainSlice } from "./cues/spellCheck/spellCheckSlices";
-import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/edit/searchReplaceSlices";
+import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,

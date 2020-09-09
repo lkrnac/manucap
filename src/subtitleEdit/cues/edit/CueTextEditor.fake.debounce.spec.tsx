@@ -30,7 +30,7 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
-import { replaceCurrentMatch, setReplacement } from "./searchReplaceSlices";
+import { replaceCurrentMatch, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { render } from "@testing-library/react";
 

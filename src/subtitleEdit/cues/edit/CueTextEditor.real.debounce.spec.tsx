@@ -16,7 +16,7 @@ import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { fireEvent, render } from "@testing-library/react";
-import { replaceCurrentMatch, setReplacement } from "./searchReplaceSlices";
+import { replaceCurrentMatch, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();

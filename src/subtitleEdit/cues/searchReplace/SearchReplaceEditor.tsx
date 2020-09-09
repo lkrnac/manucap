@@ -9,8 +9,8 @@ import {
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { updateVttCue } from "../cueSlices";
 import { CueDto } from "../../model";
-import { replaceVttCueContent } from "./editUtils";
-import { reset } from "./editorStatesSlice";
+import { replaceVttCueContent } from "../edit/editUtils";
+import { reset } from "../edit/editorStatesSlice";
 import { callSaveTrack } from "../saveSlices";
 
 export const searchReplaceAll = (

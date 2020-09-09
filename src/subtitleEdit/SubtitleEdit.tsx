@@ -16,7 +16,7 @@ import { changeScrollPosition } from "./cues/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
 import { setSpellCheckDomain } from "./cues/spellCheck/spellCheckSlices";
-import SearchReplaceEditor from "./cues/edit/SearchReplaceEditor";
+import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426

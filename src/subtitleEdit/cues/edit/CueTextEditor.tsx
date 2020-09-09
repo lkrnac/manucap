@@ -25,10 +25,10 @@ import { updateVttCue } from "../cueSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
-import { SearchReplaceMatch } from "./SearchReplaceMatch";
+import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
 import { SearchReplaceMatches } from "../../model";
-import { searchNextCues } from "./searchReplaceSlices";
+import { searchNextCues } from "../searchReplace/searchReplaceSlices";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
