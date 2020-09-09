@@ -69,6 +69,7 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("line 2");
+            expect(testingStore.getState().searchReplace.direction).toEqual("NEXT");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
@@ -267,6 +268,7 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+            expect(testingStore.getState().searchReplace.direction).toEqual("PREVIOUS");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
