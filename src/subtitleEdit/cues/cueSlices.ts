@@ -29,7 +29,7 @@ import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { searchCueText } from "./searchReplace/searchReplaceSlices";
-import { SearchReplaceMatches } from "./searchReplace/model";
+import { SearchDirection, SearchReplaceMatches } from "./searchReplace/model";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -87,13 +87,15 @@ const createAndAddCue = (previousCue: CueDto,
 
 const getOffsetIndex = (
     cue: CueDto,
-    offsets: Array<number>
+    offsets: Array<number>,
+    direction: SearchDirection
 ): number => {
-    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex > 0) {
-        return cue.searchReplaceMatches.offsetIndex < offsets.length - 1 ?
-            cue.searchReplaceMatches.offsetIndex : offsets.length - 1;
+    const lastIndex = offsets.length - 1;
+    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex >= 0) {
+        return cue.searchReplaceMatches.offsetIndex < lastIndex ?
+            cue.searchReplaceMatches.offsetIndex : lastIndex;
     }
-    return 0;
+    return direction === "NEXT" ? 0 : lastIndex;
 };
 
 export const cuesSlice = createSlice({
@@ -293,7 +295,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }
             const searchReplace = getState().searchReplace;
             const offsets = searchCueText(newVttCue.text, searchReplace.find, searchReplace.matchCase);
-            const offsetIndex = getOffsetIndex(originalCue, offsets);
+            const offsetIndex = getOffsetIndex(originalCue, offsets, searchReplace.direction);
             dispatch(cuesSlice.actions.addSearchMatches(
                 { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }}
                 )

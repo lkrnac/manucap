@@ -128,6 +128,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 data-testid="sbte-close-search-replace-btn"
                 onClick={(): void => {
                     dispatch(showSearchReplace(false));
+                    dispatch(reset());
                 }}
             >
                 <i className="far fa-times-circle" />

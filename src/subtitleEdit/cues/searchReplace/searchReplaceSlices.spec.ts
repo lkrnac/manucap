@@ -244,6 +244,7 @@ describe("searchReplaceSlices", () => {
 
         it("does not search if there are no cues", () => {
             // GIVEN
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
             testingStore.dispatch(setFind("test") as {} as AnyAction);
 
             // WHEN
@@ -377,11 +378,11 @@ describe("searchReplaceSlices", () => {
             // GIVEN
             const cues = [
                 {
-                    vttCue: new VTTCue(0, 2, "Caption foo and foo"),
+                    vttCue: new VTTCue(0, 2, "Caption foo"),
                     cueCategory: "DIALOGUE"
                 },
                 {
-                    vttCue: new VTTCue(2, 4, "Caption foo"),
+                    vttCue: new VTTCue(2, 4, "Caption foo and foo"),
                     cueCategory: "ONSCREEN_TEXT",
                     searchReplaceMatches: {
                         offsets: [8, 16],
@@ -408,6 +409,50 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
 
+        it("sets editing cue index to previous and last offsetIndex for cue", () => {
+            // GIVEN
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "Caption foo and foo"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches: {
+                        offsets: [8, 16],
+                        offsetIndex: 0,
+                        matchLength: 3
+                    }
+                },
+                {
+                    vttCue: new VTTCue(2, 4, "Caption foo"),
+                    cueCategory: "ONSCREEN_TEXT",
+                    searchReplaceMatches: {
+                        offsets: [8],
+                        offsetIndex: 0,
+                        matchLength: 3
+                    }
+                },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                    cueCategory: "ONSCREEN_TEXT",
+                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(setFind("foo") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("foo");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8]);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
         it("does not search if find is empty string", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -423,6 +468,7 @@ describe("searchReplaceSlices", () => {
 
         it("does not search if there are no cues", () => {
             // GIVEN
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
             testingStore.dispatch(setFind("test") as {} as AnyAction);
 
             // WHEN
