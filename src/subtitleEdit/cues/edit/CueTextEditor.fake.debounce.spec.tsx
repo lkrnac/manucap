@@ -20,7 +20,8 @@ import {
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { CueDto, SearchReplaceMatches, Track } from "../../model";
+import { CueDto, Track } from "../../model";
+import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";

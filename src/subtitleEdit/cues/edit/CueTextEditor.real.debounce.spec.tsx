@@ -9,7 +9,8 @@ import { mount, ReactWrapper } from "enzyme";
 
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "./editorStatesSlice";
-import { CueDto, SearchReplaceMatches, Track } from "../../model";
+import { CueDto, Track } from "../../model";
+import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";

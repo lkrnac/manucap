@@ -1,16 +1,5 @@
 import { SpellCheck } from "./cues/spellCheck/model";
-
-export interface SearchReplace {
-    find: string;
-    replacement: string;
-    replaceMatchCounter: number;
-}
-
-export interface SearchReplaceMatches {
-    offsets: number[];
-    matchLength: number;
-    offsetIndex: number;
-}
+import { SearchReplaceMatches } from "./cues/searchReplace/model";
 
 export interface Language {
     readonly id: string;

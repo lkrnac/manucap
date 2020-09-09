@@ -27,7 +27,7 @@ import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
 import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
-import { SearchReplaceMatches } from "../../model";
+import { SearchReplaceMatches } from "../searchReplace/model";
 import { searchNextCues } from "../searchReplace/searchReplaceSlices";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {

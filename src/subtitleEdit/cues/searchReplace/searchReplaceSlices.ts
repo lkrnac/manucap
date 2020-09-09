@@ -2,12 +2,13 @@ import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { findIndex, findLastIndex } from "lodash";
 
-import { ScrollPosition, SearchReplace, SubtitleEditAction } from "../../model";
+import { ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { scrollPositionSlice } from "../cuesListScrollSlice";
 import sanitizeHtml from "sanitize-html";
 import { CueIndexAction, cuesSlice, editingCueIndexSlice } from "../cueSlices";
+import { SearchReplace } from "./model";
 
 export const searchCueText = (text: string, find: string): Array<number> => {
     if (find === "") {

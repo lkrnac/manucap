@@ -7,7 +7,6 @@ import {
     CueChange,
     CueDto,
     ScrollPosition,
-    SearchReplaceMatches,
     SubtitleEditAction
 } from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
@@ -30,6 +29,7 @@ import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { searchCueText } from "./searchReplace/searchReplaceSlices";
+import { SearchReplaceMatches } from "./searchReplace/model";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
