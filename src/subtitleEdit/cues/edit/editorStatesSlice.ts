@@ -56,7 +56,7 @@ export const updateEditorState = (editorId: number, newEditorState: EditorState)
         if (!checkCharacterAndLineLimitation(vttText, subtitleSpecifications)
             && currentEditorState
             && currentVttText
-            && checkCharacterAndLineLimitation(currentVttText, subtitleSpecifications)
+            && checkLineLimitation(currentVttText, subtitleSpecifications)
         ) {
             dispatch(validationErrorSlice.actions.setValidationError(true));
             if (!checkLineLimitation(vttText, subtitleSpecifications)) {
