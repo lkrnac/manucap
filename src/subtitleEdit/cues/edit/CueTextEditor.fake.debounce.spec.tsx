@@ -1,3 +1,4 @@
+/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React, { ReactElement } from "react";
@@ -11,7 +12,11 @@ import each from "jest-each";
 
 import { Character, KeyCombination } from "../../shortcutConstants";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { removeDraftJsDynamicValues, spellCheckOptionPredicate } from "../../../testUtils/testUtils";
+import {
+    MockedDebouncedFunction,
+    removeDraftJsDynamicValues,
+    spellCheckOptionPredicate
+} from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
@@ -29,9 +34,13 @@ import { replaceCurrentMatch, setReplacement } from "./searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { render } from "@testing-library/react";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
-}));
+jest.mock("lodash", () => (
+    {
+        debounce: (fn: MockedDebouncedFunction): Function => {
+            fn.cancel = jest.fn();
+            return fn;
+        }
+    }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
 fetchSpellCheck.mockImplementation(() => jest.fn());

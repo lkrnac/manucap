@@ -121,7 +121,7 @@ describe("CueTextEditor", () => {
         } as SearchReplaceMatches;
         const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
         const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueTextEditor
                     index={0}
