@@ -1,4 +1,4 @@
-import React, { MutableRefObject, ReactElement, useRef, useState } from "react";
+import React, { MutableRefObject, ReactElement, RefObject, useRef, useState } from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { v4 as uuidv4 } from "uuid";
@@ -16,6 +16,7 @@ interface Props {
     correctSpelling: (replacement: string, start: number, end: number) => void;
     openSpellCheckPopupId: string | null;
     setOpenSpellCheckPopupId: (id: string | null) => void;
+    editorRef: RefObject<HTMLInputElement>;
     cueId: string;
 }
 
@@ -63,6 +64,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const ignoreKeyword = (): void => {
         //@ts-ignore
         addIgnoredKeyword(editingTrack?.id, props.cueId, props.decoratedText);
+        props.editorRef?.current?.focus();
     };
 
     return (
@@ -79,7 +81,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
             <Overlay
                 target={target.current}
                 show={props.openSpellCheckPopupId === spellCheckPopupId}
-                placement={showAtBottom ? "bottom" : "top"}
+                placement={showAtBottom ? "bottom" : "bottom"}
             >
                 <Popover id="sbte-spell-check-popover">
                     <Popover.Title>{spellCheckMatch.message}</Popover.Title>
