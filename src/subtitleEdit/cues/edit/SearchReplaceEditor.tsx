@@ -11,6 +11,7 @@ import { updateVttCue } from "../cueSlices";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "./editUtils";
 import { reset } from "./editorStatesSlice";
+import {callSaveTrack} from "../saveSlices";
 
 export const searchReplaceAll = (
     dispatch: Dispatch<AppThunk>,
@@ -101,6 +102,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
                     searchReplaceAll(dispatch, cues, searchReplace.find, searchReplace.replacement);
+                    dispatch(callSaveTrack());
                 }}
             >
                 Replace All

@@ -6,8 +6,10 @@ import { Provider } from "react-redux";
 import { setFind, setReplacement, showSearchReplace } from "./searchReplaceSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
-import { CueDto, ScrollPosition } from "../../model";
+import {CueDto, ScrollPosition, Track} from "../../model";
 import { updateCues, updateEditingCueIndex } from "../cueSlices";
+import {setSaveTrack} from "../saveSlices";
+import {updateEditingTrack} from "../../trackSlices";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -218,9 +220,12 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 
-    it("replaces all matches when Replace All button is clicked", () => {
+    it("replaces all matches and save when Replace All button is clicked", (done) => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
         testingStore.dispatch(setReplacement("New Line 5") as {} as AnyAction);
@@ -243,6 +248,13 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        setTimeout(
+            () => {
+                expect(saveTrack).toHaveBeenCalledTimes(1);
+                done();
+            },
+            3000
+        );
     });
 
     it("replaces all matches replace contains find", () => {
