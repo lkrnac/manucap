@@ -130,7 +130,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(showSearchReplace(false));
                 }}
             >
-                <i className="fa fa-window-close" />
+                <i className="far fa-times-circle" />
             </button>
         </div>
     ) : null;

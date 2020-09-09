@@ -82,7 +82,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-close-search-replace-btn"
                 >
-                    <i className="fa fa-window-close" />
+                    <i className="far fa-times-circle" />
                 </button>
             </div>
         );
