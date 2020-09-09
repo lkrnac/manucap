@@ -23,7 +23,7 @@ const testingCues = [
     },
 ] as CueDto[];
 
-describe("SearchReplace", () => {
+describe("SearchReplaceEditor", () => {
     it("renders", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);

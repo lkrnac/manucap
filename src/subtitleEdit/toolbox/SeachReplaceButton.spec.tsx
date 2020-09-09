@@ -1,9 +1,9 @@
 import "../../testUtils/initBrowserEnvironment";
 import React from "react";
-import { mount, shallow } from "enzyme";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import SearchReplaceButton from "./SearchReplaceButton";
+import { fireEvent, render } from "@testing-library/react";
 
 let testingStore = createTestingStore();
 
@@ -14,33 +14,34 @@ describe("SeachReplaceButton", () => {
 
     it("renders", () => {
         // GIVEN
-        const expectedNode = shallow(
+        const expectedNode = render(
             <button type="button" className="sbte-search-replace-button btn btn-secondary">
                 <i className="fas fa-search-plus" /> Search/Replace
             </button>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SearchReplaceButton />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.innerHTML).toEqual(expectedNode.container.innerHTML);
     });
 
     it("sets search replace visible on button click", () => {
         // GIVEN
-        const actualNode = mount(
+        const { getByText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceButton />
             </Provider>
         );
+        const searchButton = getByText("Search/Replace");
 
         // WHEN
-        actualNode.find(".sbte-search-replace-button").simulate("click");
+        fireEvent.click(searchButton);
 
         // THEN
         expect(testingStore.getState().searchReplaceVisible).toBeTruthy();
