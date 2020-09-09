@@ -20,7 +20,7 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSl
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { SpellCheck } from "../spellCheck/model";
-import {SearchReplaceMatches} from "../searchReplace/model";
+import { SearchReplaceMatches } from "../searchReplace/model";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
