@@ -27,6 +27,7 @@ import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { replaceCurrentMatch, setReplacement } from "./searchReplaceSlices";
 import { act } from "react-dom/test-utils";
+import { render } from "@testing-library/react";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -877,7 +878,7 @@ describe("CueTextEditor", () => {
                 "</span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -889,7 +890,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.innerHTML)).toContain(expectedContent);
         });
 
         it("renders with html and search and replace results only one with many offsets", () => {
@@ -907,7 +908,7 @@ describe("CueTextEditor", () => {
                 "</span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -919,7 +920,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.innerHTML)).toContain(expectedContent);
         });
 
         it("replaces matched text with replacement when replaceCurrentMatch is called - multiple", () => {
@@ -935,7 +936,7 @@ describe("CueTextEditor", () => {
             } as SearchReplaceMatches;
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
             const editUuid = testingStore.getState().cues[0].editUuid;
-            mount(
+            render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}

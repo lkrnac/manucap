@@ -418,7 +418,7 @@ describe("SubtitleEdit", () => {
 
     it("renders with search and replace pane", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
@@ -513,7 +513,7 @@ describe("SubtitleEdit", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore} >
                 <SubtitleEdit
                     mp4="dummyMp4"
@@ -535,8 +535,8 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.innerHTML)))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.innerHTML)));
     });
 
     it("calls onViewAllTrack callback when button is clicked", () => {
