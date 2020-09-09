@@ -11,7 +11,7 @@ import { updateVttCue } from "../cueSlices";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "./editUtils";
 import { reset } from "./editorStatesSlice";
-import {callSaveTrack} from "../saveSlices";
+import { callSaveTrack } from "../saveSlices";
 
 export const searchReplaceAll = (
     dispatch: Dispatch<AppThunk>,

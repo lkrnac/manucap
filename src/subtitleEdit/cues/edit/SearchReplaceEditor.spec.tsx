@@ -6,10 +6,10 @@ import { Provider } from "react-redux";
 import { setFind, setReplacement, showSearchReplace } from "./searchReplaceSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
-import {CueDto, ScrollPosition, Track} from "../../model";
+import { CueDto, ScrollPosition, Track } from "../../model";
 import { updateCues, updateEditingCueIndex } from "../cueSlices";
-import {setSaveTrack} from "../saveSlices";
-import {updateEditingTrack} from "../../trackSlices";
+import { setSaveTrack } from "../saveSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
