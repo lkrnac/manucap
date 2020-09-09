@@ -145,6 +145,9 @@ export const searchPreviousCues = (): AppThunk =>
         const matchedIndex = findLastIndex(cues, cue => searchCueText(cue.vttCue.text, find).length > 0, fromIndex);
         if (matchedIndex !== -1) {
             setSearchReplaceForCueIndex(dispatch, matchedIndex);
+        } else if (fromIndex >= 0) {
+            const wrappedIndex = findLastIndex(cues, cue => searchCueText(cue.vttCue.text, find).length > 0);
+            setSearchReplaceForCueIndex(dispatch, wrappedIndex);
         }
     };
 

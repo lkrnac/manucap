@@ -296,6 +296,41 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
 
+        it("wraps search to last cue when current cue is last on top", () => {
+            // GIVEN
+            const testingCues = [
+                {
+                    vttCue: new VTTCue(0, 2, "Caption testing"),
+                    cueCategory: "DIALOGUE"
+                },
+                {
+                    vttCue: new VTTCue(2, 4, "Caption foo"),
+                    cueCategory: "ONSCREEN_TEXT",
+                    searchReplaceMatches: {
+                        offsets: [8],
+                        offsetIndex: 0,
+                        matchLength: 3
+                    }
+                },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption foo"),
+                    cueCategory: "ONSCREEN_TEXT",
+                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(setFind("foo") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("foo");
+            expect(testingStore.getState().editingCueIndex).toEqual(2);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
         it("sets editing cue index to previous when current cue is end of matches", () => {
             // GIVEN
             const cues = [
