@@ -1109,8 +1109,33 @@ describe("CueTextEditor", () => {
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
 
-        it("renders with not too long lines", () => {
+        it("renders with too long lines and no subtitle specs", () => {
             // GIVEN
+            const spellCheck = { matches: []} as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">some very long text sample very long text sample</span></span>";
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        });
+
+        it("renders with too long lines and subtitle specs disabled", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                enabled: false,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
