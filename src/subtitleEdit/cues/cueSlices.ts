@@ -22,6 +22,7 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
+import { getCueIgnoredKeywords } from "./spellCheck/spellCheckerUtils";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -51,6 +52,9 @@ interface CheckOptions extends SubtitleSpecificationAction {
 
 export interface SpellCheckAction extends CueIndexAction {
     spellCheck: SpellCheck;
+}
+export interface SpellCheckRemovalAction extends CueIndexAction {
+    offset: number;
 }
 
 const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
@@ -97,6 +101,25 @@ export const cuesSlice = createSlice({
                 ...state[action.payload.idx],
                 spellCheck: action.payload.spellCheck
             };
+        },
+        removeSpellCheckMatch: (state, action: PayloadAction<SpellCheckRemovalAction>): void => {
+            const cue = state[action.payload.idx];
+            if (cue.spellCheck) {
+                const deletedIndex = cue.spellCheck.matches.findIndex(match => match.offset === action.payload.offset);
+
+                cue.spellCheck.matches.splice(deletedIndex, 1);
+
+                // cue.spellCheck.matches[]
+
+                // console.log("index");
+                // console.log(cue.spellCheck.matches.findIndex(match => match.offset === action.payload.offset));
+                // cue.spellCheck.matches = [];
+                console.log("cue after match removal");
+                console.log(cue.spellCheck.matches);
+            }
+
+
+
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {
             state.splice(action.payload.idx, 0, action.payload.cue);
@@ -227,6 +250,8 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
+            const track = getState().editingTrack;
+
             let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
             if (textOnly) {
                 newVttCue = new VTTCue(originalCue.vttCue.startTime, originalCue.vttCue.endTime, vttCue.text);
@@ -238,7 +263,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const previousCue = cues[idx - 1];
             const followingCue = cues[idx + 1];
             const subtitleSpecifications = getState().subtitleSpecifications;
-            const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
+            const overlapCaptionsAllowed = track?.overlapEnabled;
 
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 overlapCaptionsAllowed || applyOverlapPreventionStart(newVttCue, previousCue);
@@ -257,10 +282,23 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue, editUuid }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
 
-            const language = getState().editingTrack?.language?.id;
+            const language = track?.language?.id;
             const spellCheckerDomain = getState().spellCheckerDomain;
             if (language && spellCheckerDomain) {
-                fetchSpellCheck(dispatch, getState, idx, newVttCue.text, language, spellCheckerDomain);
+                console.log(localStorage);
+                let text = newVttCue.text.replace(/<[^>]*>*/g, "");
+                const trackId = track?.id;
+                const ignores = getCueIgnoredKeywords(trackId, editUuid);
+                console.log("text before to spellchecker " + text);
+                console.log("ignores ");
+                console.log(ignores);
+                text = text.replace(new RegExp("<[^>]*>*", "g"), "");
+
+                ignores?.forEach(item => {
+                    text = text.replace(new RegExp(`${item}`, "g"),"");
+                });
+                console.log("text sent to spellchecker " + text);
+                fetchSpellCheck(dispatch, getState, idx, text, language, spellCheckerDomain);
             }
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
@@ -269,6 +307,29 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }));
         }
     };
+
+
+export const removeSpellcheckMatch = (cueIdx: number, offset: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+     dispatch(cuesSlice.actions.removeSpellCheckMatch({ idx: cueIdx, offset: offset }));
+    };
+export const validateCue = (idx: number, editUuid?: string): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+        const cues = getState().cues;
+        const originalCue = cues[idx];
+        if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
+            const track = getState().editingTrack;
+            const subtitleSpecifications = getState().subtitleSpecifications;
+            const overlapCaptionsAllowed = track?.overlapEnabled;
+
+            dispatch(cuesSlice.actions.checkErrors({
+                subtitleSpecification: subtitleSpecifications,
+                overlapEnabled: overlapCaptionsAllowed,
+                index: idx
+            }));
+        }
+    };
+
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueCategoryAction>>): void => {

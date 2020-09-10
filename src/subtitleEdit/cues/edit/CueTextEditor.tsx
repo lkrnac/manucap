@@ -72,18 +72,21 @@ export interface CueTextEditorProps {
 }
 
 const changeVttCueInRedux = (
+    //@ts-ignore
     editorState: EditorState,
     currentContent: ContentState,
     props: CueTextEditorProps,
     dispatch: Dispatch<AppThunk>,
 ): void => {
-    console.log(editorState);
-    console.log(currentContent);
+    // console.log(editorState);
+    // console.log(currentContent);
     const vttText = getVttText(currentContent);
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
     dispatch(updateVttCue(props.index, vttCue, props.editUuid, true));
 };
+
+
 
 const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 200);
 
@@ -132,15 +135,17 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         editorState = EditorState.moveFocusToEnd(editorState);
     }
 
+
+
     const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
         if (props.spellCheck && props.spellCheck.matches) {
-            console.log(_contentBlock.getText());
-            console.log(_contentBlock);
+            // console.log(_contentBlock.getText());
+            // console.log(_contentBlock);
             props.spellCheck.matches.forEach(match => {
                     const endOffset = match.offset + match.length;
                     const word = _contentBlock.getText().slice(match.offset, endOffset);
                     if (editingTrack?.id && props.editUuid) {
-                        console.log(hasIgnoredKeyword(editingTrack.id, props.editUuid, word));
+                        // console.log(hasIgnoredKeyword(editingTrack.id, props.editUuid, word));
                         if (!hasIgnoredKeyword(editingTrack.id, props.editUuid, word)) {
                             callback(match.offset, endOffset);
                         }
@@ -159,6 +164,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 openSpellCheckPopupId,
                 setOpenSpellCheckPopupId,
                 cueId: props.editUuid,
+                cueIdx: props.index,
                 editorRef
             }
         }

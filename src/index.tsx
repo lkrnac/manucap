@@ -83,7 +83,7 @@ const TestApp = (): ReactElement => {
                 spokenAudio: false,
                 speakerIdentification: "NUMBERED",
                 dialogueStyle: "DOUBLE_CHEVRON",
-                maxLinesPerCaption: 2,
+                maxLinesPerCaption: 5,
                 maxCharactersPerLine: 30,
                 minCaptionDurationInMillis: 500,
                 maxCaptionDurationInMillis: 4000,

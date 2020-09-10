@@ -5,8 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 
 import { SpellCheck } from "./model";
 import { addIgnoredKeyword } from "./spellCheckerUtils";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
+import { removeSpellcheckMatch, validateCue } from "../cueSlices";
 
 interface Props {
     children: ReactElement;
@@ -18,6 +19,7 @@ interface Props {
     setOpenSpellCheckPopupId: (id: string | null) => void;
     editorRef: RefObject<HTMLInputElement>;
     cueId: string;
+    cueIdx: number;
 }
 
 
@@ -37,10 +39,15 @@ interface Option {
 }
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
+    const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const [spellCheckPopupId] = useState(uuidv4());
     const target = useRef(null);
     const showAtBottom = popupPlacement(target);
+
+    const reValidateCue = (): void => {
+        dispatch(validateCue(props.cueIdx, props.cueId));
+    };
 
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
@@ -63,8 +70,11 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
 
     const ignoreKeyword = (): void => {
         //@ts-ignore
-        addIgnoredKeyword(editingTrack?.id, props.cueId, props.decoratedText);
+        addIgnoredKeyword(editingTrack?.id, props.cueId, props.decoratedText, props.start, props.spellCheck);
+        dispatch(removeSpellcheckMatch(props.cueIdx, props.start));
+        reValidateCue();
         props.editorRef?.current?.focus();
+
     };
 
     return (
