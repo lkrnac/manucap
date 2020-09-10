@@ -15,9 +15,9 @@ import { Constants } from "../constants";
 import { editingTrackSlice } from "../trackSlices";
 import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
 import {
-    applyCharacterLimitation,
     applyInvalidRangePreventionEnd,
     applyInvalidRangePreventionStart,
+    applyLineLimitation,
     applyOverlapPreventionEnd,
     applyOverlapPreventionStart,
     conformToRules,
@@ -279,7 +279,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                 overlapCaptionsAllowed || applyOverlapPreventionEnd(newVttCue, followingCue);
                 applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications);
             }
-            applyCharacterLimitation(newVttCue, originalCue, subtitleSpecifications);
+            applyLineLimitation(newVttCue, originalCue, subtitleSpecifications);
 
             if (shouldBlink(vttCue, newVttCue, textOnly)) {
                 dispatch(validationErrorSlice.actions.setValidationError(true));

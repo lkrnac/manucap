@@ -62,6 +62,10 @@ $background-error-text: rgba(255, 0, 0, 0.2);
   background-color: $background-error-text;
 }
 
+.sbte-extra-text {
+    color: $red;
+}
+
 @keyframes fade {
     from { background-color: $white }
     50% { background-color: $background-error }

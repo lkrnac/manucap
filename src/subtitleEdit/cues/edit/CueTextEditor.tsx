@@ -29,6 +29,7 @@ import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { searchNextCues } from "../searchReplace/searchReplaceSlices";
+import { CueExtraCharacters } from "../CueExtraCharacters";
 
 const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
     const action = getActionByKeyboardEvent(e);
@@ -128,6 +129,7 @@ const createReplaceMatchHandler = (
 };
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
+    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const [openSpellCheckPopupId, setOpenSpellCheckPopupId] = useState(null);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
@@ -156,13 +158,33 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         }
     };
 
-    const newSpellCheckDecorator = new CompositeDecorator([
+    const findExtraCharacters = (contentBlock: ContentBlock, callback: Function): void => {
+        if (subtitleSpecifications) {
+            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine || 0;
+            const text = contentBlock.getText();
+            const lines = text.split("\n");
+            return lines.forEach(line => {
+                const lineStartOffset = text.indexOf(line);
+                const lineEndOffset = lineStartOffset + line.length;
+                if (line.length > maxCharactersPerLine) {
+                    callback(lineStartOffset + maxCharactersPerLine, lineEndOffset);
+                }
+            });
+        }
+    };
+
+    const newCompositeDecorator = new CompositeDecorator([
         {
             strategy: findSearchReplaceMatch,
             component: SearchReplaceMatch,
             props: {
                 replaceMatch: createReplaceMatchHandler(editorState, dispatch, props, unmountContentRef)
             }
+        },
+        {
+            strategy: findExtraCharacters,
+            component: CueExtraCharacters,
+            props: {}
         },
         {
             strategy: findSpellCheckIssues,
@@ -175,7 +197,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             }
         }
     ]);
-    editorState = EditorState.set(editorState, { decorator: newSpellCheckDecorator });
+    editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
 
     const currentContent = editorState.getCurrentContent();
     const currentInlineStyle = editorState.getCurrentInlineStyle();
