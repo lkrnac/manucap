@@ -7,24 +7,41 @@ import { Constants } from "../constants";
 
 const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTags: []});
 
+export const checkLineLimitation = (
+    text: string,
+    subtitleSpecification: SubtitleSpecification | null
+): boolean => {
+    if (subtitleSpecification && subtitleSpecification.enabled) {
+        const lines = text.split("\n");
+        return subtitleSpecification.maxLinesPerCaption === null
+            || lines.length <= subtitleSpecification.maxLinesPerCaption;
+    }
+    return true;
+};
+
 export const checkCharacterLimitation = (
     text: string,
     subtitleSpecification: SubtitleSpecification | null
 ): boolean => {
-    const lines = text.split("\n");
     if (subtitleSpecification && subtitleSpecification.enabled) {
-        const charactersPerLineLimitOk = lines
+        const lines = text.split("\n");
+        return lines
             .map(
                 line => subtitleSpecification.maxCharactersPerLine === null
                     || removeHtmlTags(line).length <= subtitleSpecification.maxCharactersPerLine
             )
             .reduce((accumulator, lineOk) => accumulator && lineOk);
-
-        const linesCountLimitOk = subtitleSpecification.maxLinesPerCaption === null
-            || lines.length <= subtitleSpecification.maxLinesPerCaption;
-        return charactersPerLineLimitOk && linesCountLimitOk;
     }
     return true;
+};
+
+export const checkCharacterAndLineLimitation = (
+    text: string,
+    subtitleSpecification: SubtitleSpecification | null
+): boolean => {
+    const charactersPerLineLimitOk = checkCharacterLimitation(text, subtitleSpecification);
+    const linesCountLimitOk = checkLineLimitation(text, subtitleSpecification);
+    return charactersPerLineLimitOk && linesCountLimitOk;
 };
 
 export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
@@ -71,7 +88,7 @@ export const conformToRules = (
     followingCue?: CueDto,
     overlapCaptions?: boolean
 ): boolean =>
-    checkCharacterLimitation(cue.vttCue.text, subtitleSpecification)
+    checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification)
         && rangeOk(cue.vttCue, subtitleSpecification)
         && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
         && isSpelledCorrectly(cue)
@@ -145,13 +162,13 @@ export const verifyCueDuration = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): b
     return cueDuration >= timeGapLimit.minGap;
 };
 
-export const applyCharacterLimitation = (
+export const applyLineLimitation = (
     vttCue: VTTCue,
     originalCue: CueDto,
     subtitleSpecifications: SubtitleSpecification | null
 ): VTTCue => {
-    if (!checkCharacterLimitation(vttCue.text, subtitleSpecifications)
-        && checkCharacterLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
+    if (!checkLineLimitation(vttCue.text, subtitleSpecifications)
+        && checkLineLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
         vttCue.text = originalCue.vttCue.text;
     }
     return vttCue;
