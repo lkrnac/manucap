@@ -27,6 +27,7 @@ import { updateVttCue } from "../cueSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
+import { CueExtraCharacters } from "../CueExtraCharacters";
 
 const handleKeyShortcut = (
     editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
@@ -105,6 +106,7 @@ const createCorrectSpellingHandler = (
 };
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
+    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);
     const dispatch = useDispatch();
@@ -146,7 +148,27 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             props.spellCheck.matches.forEach(match => callback(match.offset, match.offset + match.length));
         }
     };
-    const newSpellCheckDecorator = new CompositeDecorator([
+    const findExtraCharacters = (contentBlock: ContentBlock, callback: Function): void => {
+        if (subtitleSpecifications) {
+            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine || 0;
+            const text = contentBlock.getText();
+            const lines = text.split("\n");
+            return lines.forEach(line => {
+                const lineStartOffset = text.indexOf(line);
+                const lineEndOffset = lineStartOffset + line.length;
+                if (line.length > maxCharactersPerLine) {
+                    callback(lineStartOffset + maxCharactersPerLine, lineEndOffset);
+                }
+            });
+        }
+    };
+
+    const newCompositeDecorator = new CompositeDecorator([
+        {
+            strategy: findExtraCharacters,
+            component: CueExtraCharacters,
+            props: {}
+        },
         {
             strategy: findSpellCheckIssues,
             component: SpellCheckIssue,
@@ -160,7 +182,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             }
         }
     ]);
-    editorState = EditorState.set(editorState, { decorator: newSpellCheckDecorator });
+    editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
 
     const currentContent = editorState.getCurrentContent();
     const unmountContentRef = useRef<ContentState | null>(null);
