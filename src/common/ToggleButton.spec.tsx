@@ -90,7 +90,7 @@ describe("ToggleButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.innerHTML).toEqual(expectedNode.container.innerHTML);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders disabled", () => {

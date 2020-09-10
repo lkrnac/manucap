@@ -900,7 +900,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.innerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
         });
 
         it("renders with html and search and replace results only first one with many offsets", () => {
@@ -934,8 +934,8 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.innerHTML)).toContain(expectedContent);
-            expect(removeDraftJsDynamicValues(actualNode.container.innerHTML)).not.toContain(notExpectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).not.toContain(notExpectedContent);
         });
 
         it("renders with html and search and replace results only second one with many offsets", () => {
@@ -969,8 +969,8 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.innerHTML)).toContain(expectedContent);
-            expect(removeDraftJsDynamicValues(actualNode.container.innerHTML)).not.toContain(notExpectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).not.toContain(notExpectedContent);
         });
 
         it("replaces matched text with replacement when replaceCurrentMatch is called - multiple", () => {

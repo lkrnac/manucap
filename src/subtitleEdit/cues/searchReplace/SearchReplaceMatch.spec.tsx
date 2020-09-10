@@ -31,7 +31,7 @@ describe("SearchReplaceMatch", () => {
         );
 
         // THEN
-        expect(actualNode.container.innerHTML).toEqual(expectedNode.container.innerHTML);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("calls replaceMatch when replaceMatchCounter changes", () => {

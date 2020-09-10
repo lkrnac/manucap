@@ -95,7 +95,7 @@ describe("SearchReplaceEditor", () => {
         );
 
         // THEN
-        expect(actualNode.container.innerHTML).toEqual(expectedNode.container.innerHTML);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("does not render of show is false", () => {
@@ -110,7 +110,7 @@ describe("SearchReplaceEditor", () => {
         );
 
         // THEN
-        expect(container.innerHTML).toEqual("");
+        expect(container.outerHTML).toEqual("<div></div>");
     });
 
     it("sets find in redux when changed", () => {

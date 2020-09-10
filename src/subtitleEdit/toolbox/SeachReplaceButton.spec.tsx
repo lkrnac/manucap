@@ -28,7 +28,7 @@ describe("SeachReplaceButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.innerHTML).toEqual(expectedNode.container.innerHTML);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("sets search replace visible on button click", () => {

@@ -535,8 +535,8 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.innerHTML)))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.innerHTML)));
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
     });
 
     it("calls onViewAllTrack callback when button is clicked", () => {
