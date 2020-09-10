@@ -39,6 +39,9 @@ const setSearchReplaceForPreviousCueIndex = (
     cueIndex: number,
     cues: Array<CueDto>): void => {
     setSearchReplaceForCueIndex(dispatch, cueIndex);
+    if (cueIndex === -1) {
+        return;
+    }
     const cue = cues[cueIndex];
     if (cue.searchReplaceMatches) {
         const lastIndex = cue.searchReplaceMatches.offsets.length - 1;
@@ -155,8 +158,9 @@ export const searchNextCues = (): AppThunk =>
         if (matchedIndex !== -1) {
             setSearchReplaceForCueIndex(dispatch, matchedIndex);
         } else if (fromIndex > 0) {
-            const wrappedIndex = findIndex(cues,
+            let wrappedIndex = findIndex(cues,
                     cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0);
+            wrappedIndex = wrappedIndex === (fromIndex - 1) ? -1 : wrappedIndex;
             setSearchReplaceForCueIndex(dispatch, wrappedIndex);
         }
     };
@@ -192,8 +196,9 @@ export const searchPreviousCues = (): AppThunk =>
         if (matchedIndex !== -1) {
             setSearchReplaceForPreviousCueIndex(dispatch, matchedIndex, getState().cues);
         } else if (fromIndex >= 0) {
-            const wrappedIndex = findLastIndex(cues,
+            let wrappedIndex = findLastIndex(cues,
                     cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0);
+            wrappedIndex = wrappedIndex === (fromIndex + 1) ? -1 : wrappedIndex;
             setSearchReplaceForPreviousCueIndex(dispatch, wrappedIndex, getState().cues);
         }
     };
