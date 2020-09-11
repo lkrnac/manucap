@@ -1,10 +1,6 @@
-import "./testUtils/initBrowserEnvironment";
 import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
-import {
-    updateCues,
-    updateSourceCues
-} from "./subtitleEdit/cues/cueSlices";
+import { updateCues, updateSourceCues } from "./subtitleEdit/cues/cueSlices";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { CueDto, Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
