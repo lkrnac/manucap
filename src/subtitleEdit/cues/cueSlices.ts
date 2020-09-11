@@ -105,20 +105,8 @@ export const cuesSlice = createSlice({
             const cue = state[action.payload.idx];
             if (cue.spellCheck) {
                 const deletedIndex = cue.spellCheck.matches.findIndex(match => match.offset === action.payload.offset);
-
                 cue.spellCheck.matches.splice(deletedIndex, 1);
-
-                // cue.spellCheck.matches[]
-
-                // console.log("index");
-                // console.log(cue.spellCheck.matches.findIndex(match => match.offset === action.payload.offset));
-                // cue.spellCheck.matches = [];
-                console.log("cue after match removal");
-                console.log(cue.spellCheck.matches);
             }
-
-
-
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {
             state.splice(action.payload.idx, 0, action.payload.cue);

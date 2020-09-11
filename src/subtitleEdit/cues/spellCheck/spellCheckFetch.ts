@@ -15,10 +15,10 @@ const addSpellCheck = (
     spellCheck: SpellCheck,
 ): void => {
     spellCheck = {
-        matches: spellCheck.matches.filter(match => !hasIgnoredKeyword(trackId, cueId, match.context.text.substring(match.offset, match.offset + match.length)))
+        matches: spellCheck.matches.filter(match =>
+            !hasIgnoredKeyword(trackId, cueId,
+                match.context.text.substring(match.offset, match.offset + match.length)))
     };
-    console.log(spellCheck);
-
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
 
     const subtitleSpecification = getState().subtitleSpecifications;

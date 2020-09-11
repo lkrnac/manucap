@@ -15,12 +15,9 @@ export const generateSpellcheckHash = (cueId: string, keyword: string): string =
 };
 
 export const addIgnoredKeyword = (trackId: string, cueId: string, keyword: string): void => {
-    console.log("addIgnoredKeyword " + trackId+ " ====== "+ cueId + " ======= "+ keyword);
-
     const spellcheckIgnores = getSpellcheckIgnores();
     const cue = _.get(spellcheckIgnores, `${trackId}.${cueId}`);
     const hash = generateSpellcheckHash(cueId, keyword);
-    console.log("hash " + hash);
 
     if (cue == null) {
         _.set(spellcheckIgnores, `${trackId}.${cueId}`, [hash]);
@@ -31,20 +28,12 @@ export const addIgnoredKeyword = (trackId: string, cueId: string, keyword: strin
 };
 
 export const hasIgnoredKeyword = (trackId: string, cueId: string, keyword: string): boolean => {
-    console.log("hasIgnoredKeyword " + trackId+ " ====== "+ cueId + " ======= "+ keyword);
     const cue = _.get(getSpellcheckIgnores(), `${trackId}.${cueId}`);
-
-    console.log("hash " + generateSpellcheckHash(cueId, keyword));
-    console.log(_.get(trackId,generateSpellcheckHash(cueId, keyword)));
     return cue != null && cue.includes(generateSpellcheckHash(cueId, keyword));
 };
 
 export const getCueIgnoredKeywords = (trackId?: string, cueId?: string): string[] => {
     if (trackId && cueId) {
-        console.log("trackId " + trackId);
-        console.log("cueId " + cueId);
-        console.log("json ");
-        console.log(getSpellcheckIgnores());
         return _.get(getSpellcheckIgnores(), `${trackId}.${cueId}`);
     }
     return [];
