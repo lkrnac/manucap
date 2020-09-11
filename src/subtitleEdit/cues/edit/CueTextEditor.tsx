@@ -105,6 +105,28 @@ const createCorrectSpellingHandler = (
     dispatch(callSaveTrack());
 };
 
+const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
+    (e: React.KeyboardEvent<{}>): string | null => {
+    const action = getActionByKeyboardEvent(e);
+    if (action) {
+        return action;
+    }
+    if(spellCheckerMatchingOffset != null && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
+        return "popoverHandled";
+    } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        if (e.keyCode === Character.ESCAPE) {
+            return "closeEditor";
+        } else if (e.keyCode === Character.ENTER) {
+            return "editNext";
+        }
+    } else if (e.keyCode === Character.ENTER) {
+        return "newLine";
+    } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.SPACE) {
+        return "openSpellChecker";
+    }
+    return getDefaultKeyBinding(e);
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
@@ -121,27 +143,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         editorState = EditorState.createWithContent(initialContentState);
         editorState = EditorState.moveFocusToEnd(editorState);
     }
-
-    const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
-        const action = getActionByKeyboardEvent(e);
-        if (action) {
-            return action;
-        }
-        if(spellCheckerMatchingOffset != null && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
-            return "popoverHandled";
-        } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
-            if (e.keyCode === Character.ESCAPE) {
-                return "closeEditor";
-            } else if (e.keyCode === Character.ENTER) {
-                return "editNext";
-            }
-        } else if (e.keyCode === Character.ENTER) {
-            return "newLine";
-        } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.SPACE) {
-            return "openSpellChecker";
-        }
-        return getDefaultKeyBinding(e);
-    };
 
     const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
         if (props.spellCheck && props.spellCheck.matches) {
@@ -267,7 +268,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         }}
                         ref={editorRef}
                         spellCheck={false}
-                        keyBindingFn={keyShortcutBindings}
+                        keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}
                         handleKeyCommand={handleKeyShortcut(editorState, dispatch, props,
                             spellCheckerMatchingOffset,
                             setSpellCheckerMatchingOffset)}
