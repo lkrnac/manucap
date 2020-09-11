@@ -148,7 +148,8 @@ export const searchNextCues = (): AppThunk =>
         if (find === "") {
             return;
         }
-        let fromIndex = getState().editingCueIndex >= 0 ? getState().editingCueIndex : 0;
+        const editingCueIndex = getState().editingCueIndex;
+        let fromIndex = editingCueIndex >= 0 ? editingCueIndex : 0;
         const cues = getState().cues;
         if (cues.length === 0) {
             return;
@@ -156,7 +157,7 @@ export const searchNextCues = (): AppThunk =>
         dispatch(searchReplaceSlice.actions.setDirection("NEXT"));
         const currentCue = cues[fromIndex];
         const cueMatches = currentCue.searchReplaceMatches;
-        if (cueMatches) {
+        if (cueMatches && editingCueIndex !== -1) {
             if (cueMatches.offsetIndex < cueMatches.offsets.length - 1) {
                 dispatch(cuesSlice.actions.addSearchMatches(
                     { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex + 1 }}
@@ -191,10 +192,11 @@ export const searchPreviousCues = (): AppThunk =>
             return;
         }
         dispatch(searchReplaceSlice.actions.setDirection("PREVIOUS"));
-        let fromIndex = getState().editingCueIndex >= 0 ? getState().editingCueIndex : cues.length - 1;
+        const editingCueIndex = getState().editingCueIndex;
+        let fromIndex = editingCueIndex >= 0 ? editingCueIndex : cues.length - 1;
         const currentCue = cues[fromIndex];
         const cueMatches = currentCue.searchReplaceMatches;
-        if (cueMatches) {
+        if (cueMatches && editingCueIndex !== -1) {
             if (cueMatches.offsetIndex > 0) {
                 dispatch(cuesSlice.actions.addSearchMatches(
                     { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex - 1 }}

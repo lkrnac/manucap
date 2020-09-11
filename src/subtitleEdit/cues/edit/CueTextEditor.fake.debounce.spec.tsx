@@ -22,7 +22,7 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues } from "../cueSlices";
+import {updateCues, updateEditingCueIndex} from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -1161,6 +1161,7 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10, 22],
                 offsetIndex: 1,
