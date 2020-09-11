@@ -5,6 +5,7 @@ export interface Replacement {
 export interface SpellCheckHash {
     cueId: string;
     keyword: string;
+    ruleId: string;
     //
     //
     // constructor(cueId: string, context: SpellCheckContext) {
@@ -14,18 +15,22 @@ export interface SpellCheckHash {
 }
 
 
-export interface SpellCheckContext {
+export interface SpellcheckRule {
+    id: string;
+}
+export interface SpellcheckContext {
     length: number;
     offset: number;
     text: string;
 }
 
 export interface Match {
-    context: SpellCheckContext;
+    context: SpellcheckContext;
     message: string;
     replacements: Replacement[];
     offset: number;
     length: number;
+    rule: SpellcheckRule
 }
 
 export interface SpellCheck {
