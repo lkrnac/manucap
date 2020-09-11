@@ -34,6 +34,21 @@ const setSearchReplaceForCueIndex = (
     dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
 };
 
+const setSearchReplaceForNextCueIndex = (
+    dispatch: Dispatch<PayloadAction<CueIndexAction | number | undefined>>,
+    cueIndex: number,
+    cues: Array<CueDto>): void => {
+    setSearchReplaceForCueIndex(dispatch, cueIndex);
+    if (cueIndex === -1) {
+        return;
+    }
+    const cue = cues[cueIndex];
+    if (cue.searchReplaceMatches) {
+        const searchMatches = { ...cue.searchReplaceMatches, offsetIndex: 0 };
+        dispatch(cuesSlice.actions.addSearchMatches({ idx: cueIndex, searchMatches }));
+    }
+};
+
 const setSearchReplaceForPreviousCueIndex = (
     dispatch: Dispatch<PayloadAction<CueIndexAction | number | undefined>>,
     cueIndex: number,
@@ -156,12 +171,12 @@ export const searchNextCues = (): AppThunk =>
         const matchedIndex = findIndex(cues,
                 cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0, fromIndex);
         if (matchedIndex !== -1) {
-            setSearchReplaceForCueIndex(dispatch, matchedIndex);
+            setSearchReplaceForNextCueIndex(dispatch, matchedIndex, getState().cues);
         } else if (fromIndex > 0) {
             let wrappedIndex = findIndex(cues,
                     cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0);
             wrappedIndex = wrappedIndex === (fromIndex - 1) ? -1 : wrappedIndex;
-            setSearchReplaceForCueIndex(dispatch, wrappedIndex);
+            setSearchReplaceForNextCueIndex(dispatch, wrappedIndex, getState().cues);
         }
     };
 

@@ -237,6 +237,50 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
 
+        it("sets editing cue index to next and first offsetIndex for cue", () => {
+            // GIVEN
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "Caption foo and foo"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches: {
+                        offsets: [8],
+                        offsetIndex: 0,
+                        matchLength: 3
+                    }
+                },
+                {
+                    vttCue: new VTTCue(2, 4, "Caption foo"),
+                    cueCategory: "ONSCREEN_TEXT",
+                    searchReplaceMatches: {
+                        offsets: [8, 16],
+                        offsetIndex: 1,
+                        matchLength: 3
+                    }
+                },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                    cueCategory: "ONSCREEN_TEXT",
+                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(setFind("foo") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("foo");
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8]);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8, 16]);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
         it("handles cues with empty cleansed vtt text", () => {
             // GIVEN
             const cues = [
