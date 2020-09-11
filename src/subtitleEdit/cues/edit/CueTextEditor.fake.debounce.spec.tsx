@@ -1036,6 +1036,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1070,6 +1071,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1105,6 +1107,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1134,6 +1137,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1170,6 +1174,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
