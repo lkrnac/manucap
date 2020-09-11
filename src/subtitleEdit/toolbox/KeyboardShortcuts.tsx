@@ -37,6 +37,12 @@ const KeyboardShortcuts = (): ReactElement => {
                     <KeyboardShortcutLabel character="↑" name="Set Cue Start Time" />
                     <KeyboardShortcutLabel character="↓" name="Set Cue End Time" />
                     <KeyboardShortcutLabel character="Esc" name="Edit Previous Cue" />
+                    <KeyboardShortcutLabel
+                        hideAlternativeKey
+                        hideAltKey
+                        character="Space"
+                        name="Show a spelling error [You must be stepping on an spelling error word]"
+                    />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>
