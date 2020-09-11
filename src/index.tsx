@@ -85,7 +85,7 @@ const TestApp = (): ReactElement => {
                 maxCharactersPerLine: 30,
                 minCaptionDurationInMillis: 500,
                 maxCaptionDurationInMillis: 4000,
-                comments: "Note",
+                comments: "Media comments, please click [here](https://dotsub.com)",
                 mediaNotes: "Media notes, please click [here](https://dotsub.com)"
             })),
             500
