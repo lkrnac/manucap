@@ -118,8 +118,8 @@ const createReplaceMatchHandler = (
         // Need to ensure ref is set for unmount because searchNextCues will close editor
         // since this is the last search match
         unmountContentRef.current = newEditorState.getCurrentContent();
+        dispatch(searchNextCues());
     }
-    dispatch(searchNextCues());
 };
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>

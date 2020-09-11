@@ -1123,7 +1123,9 @@ describe("CueTextEditor", () => {
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+            testingStore.dispatch(setFind("text") as {} as AnyAction);
             testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10, 22],
                 offsetIndex: 0,
@@ -1152,6 +1154,9 @@ describe("CueTextEditor", () => {
             expect(saveTrack).toHaveBeenCalledTimes(1);
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>abcd efg</b> sample Text");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([26]);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
         });
 
         it("replaces matched text with replacement - multiple second", () => {
