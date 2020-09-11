@@ -4,7 +4,7 @@ export interface Replacement {
 
 export interface SpellCheckHash {
     cueId: string;
-    context: SpellCheckContext;
+    keyword: string;
     //
     //
     // constructor(cueId: string, context: SpellCheckContext) {

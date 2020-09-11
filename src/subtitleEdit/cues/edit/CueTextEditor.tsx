@@ -143,9 +143,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             // console.log(_contentBlock);
             props.spellCheck.matches.forEach(match => {
                     if (editingTrack?.id && props.editUuid) {
-                        // console.log(hasIgnoredKeyword(editingTrack.id, props.editUuid, word));
-                        if (!hasIgnoredKeyword(editingTrack.id, props.editUuid, match.context)) {
-                            callback(match.offset, match.offset + match.length);
+                        const endOffset = match.offset + match.length;
+                        const keyword = _contentBlock.getText().slice(match.offset, endOffset);
+                        if (!hasIgnoredKeyword(editingTrack.id, props.editUuid, keyword)) {
+                            callback(match.offset, endOffset);
                         }
                     }
                 }

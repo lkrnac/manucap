@@ -72,8 +72,12 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const ignoreKeyword = (): void => {
         console.log("Match > ");
         console.log(spellCheckMatch);
-        //@ts-ignore
-        addIgnoredKeyword(editingTrack?.id, props.cueId, spellCheckMatch.context);
+        console.log(props);
+        if (editingTrack != null && editingTrack.id != null) {
+            //@ts-ignore
+            addIgnoredKeyword(editingTrack.id, props.cueId, props.decoratedText);
+        }
+
 
         dispatch(removeSpellcheckMatch(props.cueIdx, props.start));
         reValidateCue();
