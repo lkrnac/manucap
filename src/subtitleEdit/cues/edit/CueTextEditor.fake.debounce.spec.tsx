@@ -34,6 +34,7 @@ import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { replaceCurrentMatch, setFind, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { render } from "@testing-library/react";
+import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
 jest.mock("lodash", () => (
     {
@@ -57,10 +58,16 @@ interface ReduxTestWrapperProps {
     store: Store;
     props: CueTextEditorProps;
 }
+const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 
 const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     <Provider store={props.store}>
-        <CueTextEditor index={props.props.index} vttCue={props.props.vttCue} editUuid={props.props.editUuid} />
+        <CueTextEditor
+            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+            index={props.props.index}
+            vttCue={props.props.vttCue}
+            editUuid={props.props.editUuid}
+        />
     </Provider>
 );
 
@@ -125,7 +132,12 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     const editUuid = testingStore.getState().cues[0].editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+            <CueTextEditor
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                index={0}
+                vttCue={vttCue}
+                editUuid={editUuid}
+            />
         </Provider>
     );
     return actualNode.find(".public-DraftEditor-content");
@@ -147,7 +159,12 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     const editUuid = testingStore.getState().cues[0].editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+            <CueTextEditor
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                index={0}
+                vttCue={vttCue}
+                editUuid={editUuid}
+            />
         </Provider>
     );
     const editorState = actualNode.find(Editor).props().editorState;
@@ -181,7 +198,12 @@ const testForContentState = (
     // WHEN
     const actualNode = mount(
         <Provider store={testingStore}>
-            <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+            <CueTextEditor
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                index={0}
+                vttCue={vttCue}
+                editUuid={editUuid}
+            />
         </Provider>
     );
 
@@ -284,7 +306,11 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} />
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                />
             </Provider>
         );
         const editorState = actualNode.find(Editor).props().editorState;
@@ -339,7 +365,12 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} />
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                />
             </Provider>
         );
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -412,6 +443,24 @@ describe("CueTextEditor", () => {
             expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
         });
 
+
+    each([
+        [KeyCombination.ENTER, Character.ENTER],
+        [KeyCombination.ESCAPE, Character.ESCAPE],
+    ])
+        .it("should handle '%s' popover keyboard shortcut",
+            (expectedKeyCombination: KeyCombination, character: Character) => {
+            // GIVEN
+            const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+            const editor = createEditorNode();
+
+            // WHEN
+            editor.simulate("keyDown", { keyCode: character });
+
+            // THEN
+            expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
+        });
+
     each([
         [KeyCombination.ESCAPE, Character.ESCAPE, true, false, false, false],
         [KeyCombination.ESCAPE, Character.ESCAPE, false, true, false, false],
@@ -461,7 +510,12 @@ describe("CueTextEditor", () => {
         vttCue.position = 3;
         const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.position = 6;
@@ -477,7 +531,12 @@ describe("CueTextEditor", () => {
         vttCue.align = "left";
         const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.align = "right";
@@ -493,7 +552,12 @@ describe("CueTextEditor", () => {
         vttCue.lineAlign = "start";
         const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.lineAlign = "end";
@@ -509,7 +573,12 @@ describe("CueTextEditor", () => {
         vttCue.positionAlign = "line-left";
         const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.positionAlign = "line-right";
@@ -525,7 +594,12 @@ describe("CueTextEditor", () => {
         vttCue.snapToLines = false;
         const editUuid = testingStore.getState().cues[0].editUuid;
 
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.snapToLines = true;
@@ -540,7 +614,12 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.size = 80;
         const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.size = 30;
@@ -555,8 +634,12 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.line = 3;
         const editUuid = testingStore.getState().cues[0].editUuid;
-
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.line = 6;
@@ -571,7 +654,12 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.vertical = "rl";
         const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.vertical = "lr";
@@ -586,7 +674,12 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.id = "id";
         const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.id = "differentId";
@@ -601,7 +694,12 @@ describe("CueTextEditor", () => {
         const vttCue = new VTTCue(0, 1, "someText");
         vttCue.pauseOnExit = false;
         const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(<ReduxTestWrapper store={testingStore} props={{ index: 0, vttCue, editUuid }} />);
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+            />);
 
         // WHEN
         vttCue.pauseOnExit = true;
@@ -618,7 +716,11 @@ describe("CueTextEditor", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} />
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                />
             </Provider>
         );
 
@@ -633,7 +735,11 @@ describe("CueTextEditor", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueTextEditor index={0} vttCue={vttCue} />
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                />
             </Provider>
         );
 
@@ -687,7 +793,13 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
                 </Provider>
             );
 
@@ -719,7 +831,13 @@ describe("CueTextEditor", () => {
                     "<span data-text=\"true\">ffff</span></span></span>";
                 const actualNode = mount(
                     <Provider store={testingStore}>
-                        <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                        <CueTextEditor
+                            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                            index={0}
+                            vttCue={vttCue}
+                            editUuid={editUuid}
+                            spellCheck={spellCheck}
+                        />
                     </Provider>
                 );
                 const editor = actualNode.find(".public-DraftEditor-content");
@@ -763,7 +881,13 @@ describe("CueTextEditor", () => {
                     "<span data-text=\"true\">ffff</span></span></span>";
                 const actualNode = mount(
                     <Provider store={testingStore}>
-                        <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                        <CueTextEditor
+                            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                            index={0}
+                            vttCue={vttCue}
+                            editUuid={editUuid}
+                            spellCheck={spellCheck}
+                        />
                     </Provider>
                 );
                 const editor = actualNode.find(".public-DraftEditor-content");
@@ -800,7 +924,13 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
                 </Provider>
             );
 
@@ -829,7 +959,13 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
                 </Provider>
             );
             actualNode.find(".sbte-text-with-error").at(0).simulate("click");
@@ -858,7 +994,13 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
                 </Provider>
             );
             actualNode.find(".sbte-text-with-error").at(0).simulate("click");
@@ -1068,7 +1210,13 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    />
                 </Provider>
             );
 
@@ -1101,7 +1249,13 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    />
                 </Provider>
             );
 
@@ -1120,7 +1274,13 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    />
                 </Provider>
             );
 
@@ -1145,7 +1305,13 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    />
                 </Provider>
             );
 
@@ -1176,12 +1342,43 @@ describe("CueTextEditor", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueTextEditor index={0} vttCue={vttCue} editUuid={editUuid} spellCheck={spellCheck} />
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    />
                 </Provider>
             );
 
             // THEN
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        });
+
+        it("passes down bindCueViewModeKeyboardShortcut to spellcheck component", () => {
+            // GIVEN
+            const spellCheck = {
+                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[] }]
+            } as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.find(SpellCheckIssue).props().bindCueViewModeKeyboardShortcut).not.toBeNull();
         });
     });
 });

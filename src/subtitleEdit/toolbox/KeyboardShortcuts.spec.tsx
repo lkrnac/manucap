@@ -15,13 +15,10 @@ describe("KeyboardShortcuts", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <button
-                    type="button"
-                    className="dotsub-keyboard-shortcuts-button btn btn-secondary"
-                >
-                    <i className="far fa-keyboard" /> Keyboard Shortcuts
+                <button type="button" className="dotsub-keyboard-shortcuts-button btn btn-secondary">
+                    <i className="far fa-keyboard"></i> Keyboard Shortcuts
                 </button>
-                <div className="fade modal-backdrop show" />
+                <div className="fade modal-backdrop show"></div>
                 <div
                     role="dialog"
                     aria-modal="true"
@@ -33,116 +30,243 @@ describe("KeyboardShortcuts", () => {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <div className="modal-title h4">Keyboard Shortcuts</div>
-                                <button type="button" className="close">
-                                    <span aria-hidden="true">×</span>
-                                    <span className="sr-only">Close</span>
+                                <button type="button" className="close"><span aria-hidden="true">×</span>
+                                    <span className="sr-only">
+                                        Close
+                                    </span>
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">o</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Alt</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">o</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Toggle Play / Pause</span>
+                                <div style={{ "display": "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">o</span></h4>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">o</span></h4>
+                                        </div>
+                                    </div>
+                                    <span><span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>Toggle Play / Pause</span>
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">k</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Alt</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">k</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Toggle Play / Pause Current Cue</span>
+                                <div style={{ "display": "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">k</span></h4>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">k</span></h4>
+                                        </div>
+                                    </div>
+                                    <span>
+                                        <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
+                                        </span>Toggle Play / Pause Current Cue
+                                    </span>
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center" }}><h4>
-                                    <span className="badge badge-secondary">Ctrl</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">←</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Alt</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">←</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Seek Back 1 Second</span>
+                                <div style={{ "display": "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">←</span></h4>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">←</span></h4>
+                                        </div>
+                                    </div>
+                                    <span><span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>Seek Back 1 Second</span>
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">→</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Alt</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">→</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Seek Ahead 1 Second</span>
+                                <div style={{ "display":  "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">→</span></h4>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">→</span></h4>
+                                        </div>
+                                    </div>
+                                    <span><span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>Seek Ahead 1 Second</span>
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">↑</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Alt</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">↑</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Set Cue Start Time</span>
+                                <div style={{ "display":  "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">↑</span></h4>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">↑</span></h4>
+                                        </div>
+                                    </div>
+                                    <span><span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>Set Cue Start Time</span>
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">↓</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Alt</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">↓</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Set Cue End Time</span>
+                                <div style={{ "display":  "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">↓</span></h4>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">↓</span></h4>
+                                        </div>
+                                    </div>
+                                    <span><span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>Set Cue End Time</span>
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <h4><span className="badge badge-secondary">Ctrl</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Esc</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Alt</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Shift</span></h4>
-                                    <span>&nbsp;+&nbsp;</span>
-                                    <h4><span className="badge badge-secondary">Esc</span></h4>
-                                    <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>
-                                    <span>Edit Previous Cue</span>
+                                <div style={{ "display":  "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Esc</span></h4>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Esc</span></h4>
+                                        </div>
+                                    </div>
+                                    <span><span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</span>Edit Previous Cue</span>
+                                </div>
+                                <div style={{ "display":  "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Space</span></h4>
+                                    </div>
+                                    <div className="d-none align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-none align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Space</span></h4>
+                                        </div>
+                                    </div>
+                                    <span>
+                                        <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
+                                        </span>Show a spelling error [You must be stepping on
+                                        an spelling error word]
+                                    </span>
                                 </div>
                             </div>
                             <div className="modal-footer">
@@ -164,8 +288,7 @@ describe("KeyboardShortcuts", () => {
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
 
         // THEN
-        expect(actualNode.html())
-            .toEqual(expectedNode.html());
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("opens keyboard shortcuts modal when button is clicked", () => {

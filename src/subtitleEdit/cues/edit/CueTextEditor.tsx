@@ -31,29 +31,22 @@ import { SearchReplaceMatches } from "../searchReplace/model";
 import { searchNextCues } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "../CueExtraCharacters";
 
-const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
-    const action = getActionByKeyboardEvent(e);
-    if (action) {
-        return action;
-    }
-    if ((!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)) {
-        if (e.keyCode === Character.ESCAPE) {
-            return "closeEditor";
-        } else if (e.keyCode === Character.ENTER) {
-            return "editNext";
-        }
-    } else if (e.keyCode === Character.ENTER) {
-        return "newLine";
-    }
-    return getDefaultKeyBinding(e);
-};
-
 const handleKeyShortcut = (
-    editorState: EditorState,
-    dispatch: Dispatch<AppThunk>,
-    props: CueTextEditorProps
+    editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
+    spellCheckerMatchingOffset: number | null,
+    setSpellCheckerMatchingOffset: Function,
 ) => (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
+    if (shortcut === "openSpellChecker") {
+        const selection = editorState.getSelection();
+        const startOffset = selection.getStartOffset();
+        const match = props.spellCheck?.matches.find(match => match.offset <= startOffset &&
+            startOffset <= (match.offset + match.length));
+        if (match != null) {
+            setSpellCheckerMatchingOffset(spellCheckerMatchingOffset != null ? null : match.offset);
+        }
+        return "handled";
+    }
     if (keyCombination) {
         Mousetrap.trigger(keyCombination);
         return "handled";
@@ -72,6 +65,7 @@ export interface CueTextEditorProps {
     editUuid?: string;
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
+    bindCueViewModeKeyboardShortcut: () => void;
 }
 
 const changeVttCueInRedux = (
@@ -128,9 +122,32 @@ const createReplaceMatchHandler = (
     dispatch(searchNextCues());
 };
 
+const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
+    (e: React.KeyboardEvent<{}>): string | null => {
+    const action = getActionByKeyboardEvent(e);
+    if (action) {
+        return action;
+    }
+    if(spellCheckerMatchingOffset != null && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
+        return "popoverHandled";
+    } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        if (e.keyCode === Character.ESCAPE) {
+            return "closeEditor";
+        } else if (e.keyCode === Character.ENTER) {
+            return "editNext";
+        }
+    } else if (e.keyCode === Character.ENTER) {
+        return "newLine";
+    } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.SPACE) {
+        return "openSpellChecker";
+    }
+    return getDefaultKeyBinding(e);
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
-    const [openSpellCheckPopupId, setOpenSpellCheckPopupId] = useState(null);
+    const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
+    const editorRef = useRef(null);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
@@ -192,8 +209,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             props: {
                 spellCheck: props.spellCheck,
                 correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
-                openSpellCheckPopupId,
-                setOpenSpellCheckPopupId
+                editorRef,
+                spellCheckerMatchingOffset,
+                setSpellCheckerMatchingOffset,
+                bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut
             }
         }
     ]);
@@ -280,9 +299,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                                 dispatch(callSaveTrack());
                             }
                         }}
+                        ref={editorRef}
                         spellCheck={false}
-                        keyBindingFn={keyShortcutBindings}
-                        handleKeyCommand={handleKeyShortcut(editorState, dispatch, props)}
+                        keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}
+                        handleKeyCommand={handleKeyShortcut(editorState, dispatch, props,
+                            spellCheckerMatchingOffset,
+                            setSpellCheckerMatchingOffset)}
                     />
                 </div>
                 <div style={{ flex: 0 }}>

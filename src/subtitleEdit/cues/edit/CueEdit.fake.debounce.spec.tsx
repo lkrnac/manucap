@@ -121,7 +121,12 @@ describe("CueEdit", () => {
                         </div>
                     </div>
                     <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <CueTextEditor key={1} index={0} vttCue={cues[0].vttCue} />
+                        <CueTextEditor
+                            key={1}
+                            index={0}
+                            vttCue={cues[0].vttCue}
+                            bindCueViewModeKeyboardShortcut={jest.fn()}
+                        />
                     </div>
                 </div>
             </Provider>
@@ -788,5 +793,22 @@ describe("CueEdit", () => {
 
         // THEN
         expect(actualNode.find(CueTextEditor).props().searchReplaceMatches).toEqual(testingSearchReplace);
+    });
+
+    it("passes down bindCueViewModeKeyboardShortcut to editor component", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const testingSpellCheck = { matches: [{ message: "test-spell-check" }]} as SpellCheck;
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", spellCheck: testingSpellCheck } as CueDto;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cue} playerTime={0} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueTextEditor).props().bindCueViewModeKeyboardShortcut).not.toBeNull();
     });
 });
