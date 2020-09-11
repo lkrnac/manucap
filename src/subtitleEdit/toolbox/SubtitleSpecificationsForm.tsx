@@ -100,7 +100,12 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 </div>
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text">{props.subTitleSpecifications.comments}</div>
+                <ReactMarkdown
+                    renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
+                    source={props.subTitleSpecifications.comments}
+                    disallowedTypes={["html", "virtualHtml"]}
+                    className="sbte-subspec-freeform-text sbte-subspec-comments"
+                />
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
 
@@ -108,7 +113,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                     renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
                     source={props.subTitleSpecifications.mediaNotes}
                     disallowedTypes={["html", "virtualHtml"]}
-                    className="sbte-subspec-freeform-text"
+                    className="sbte-subspec-freeform-text sbte-media-notes"
                 />
             </>
         ) : null}
