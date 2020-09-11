@@ -22,7 +22,6 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
-import { getCueIgnoredKeywords } from "./spellCheck/spellCheckerUtils";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -285,20 +284,11 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const language = track?.language?.id;
             const spellCheckerDomain = getState().spellCheckerDomain;
             if (language && spellCheckerDomain) {
-                console.log(localStorage);
-                let text = newVttCue.text.replace(/<[^>]*>*/g, "");
                 const trackId = track?.id;
-                const ignores = getCueIgnoredKeywords(trackId, editUuid);
-                console.log("text before to spellchecker " + text);
-                console.log("ignores ");
-                console.log(ignores);
-                text = text.replace(new RegExp("<[^>]*>*", "g"), "");
-
-                ignores?.forEach(item => {
-                    text = text.replace(new RegExp(`${item}`, "g"),"");
-                });
-                console.log("text sent to spellchecker " + text);
-                fetchSpellCheck(dispatch, getState, idx, text, language, spellCheckerDomain);
+                if (trackId && editUuid) {
+                    fetchSpellCheck(dispatch, getState, trackId, idx, editUuid, newVttCue.text,
+                        language, spellCheckerDomain);
+                }
             }
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
