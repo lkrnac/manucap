@@ -85,7 +85,7 @@ const createAndAddCue = (previousCue: CueDto,
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
 };
 
-const getOffsetIndex = (
+const finNextOffsetIndexForSearch = (
     cue: CueDto,
     offsets: Array<number>,
     direction: SearchDirection
@@ -295,7 +295,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }
             const searchReplace = getState().searchReplace;
             const offsets = searchCueText(newVttCue.text, searchReplace.find, searchReplace.matchCase);
-            const offsetIndex = getOffsetIndex(originalCue, offsets, searchReplace.direction);
+            const offsetIndex = finNextOffsetIndexForSearch(originalCue, offsets, searchReplace.direction);
             dispatch(cuesSlice.actions.addSearchMatches(
                 { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }}
                 )
