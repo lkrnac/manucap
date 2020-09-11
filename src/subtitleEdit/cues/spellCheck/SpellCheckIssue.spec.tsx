@@ -1,5 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
-import React from "react";
+import React, { RefObject } from "react";
 import { mount } from "enzyme";
 import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";
@@ -10,6 +10,9 @@ const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "");
 
 describe("SpellCheckerIssue", () => {
+    const emptyEditorRef = {} as RefObject<HTMLInputElement>;
+    const bindCueViewModeKeyboardShortcutSpy = jest.fn();
+
     it("renders without popup", () => {
         // GIVEN
         const expectedNode = mount(
@@ -26,8 +29,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={jest.fn()}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -49,8 +54,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={jest.fn()}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -72,8 +79,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={17}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={jest.fn()}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -104,12 +113,12 @@ describe("SpellCheckerIssue", () => {
                 <div className="popover-header">There is error</div >
                 <div style={{ padding: "0px" }} className="popover-body">
                     <div className=" css-6iiga6-container">
-                        <div className=" css-1rdv9e-Control">
-                            <div className=" css-g1d714-ValueContainer">
-                                <div className=" css-1wa3eu0-placeholder">Select...</div >
+                        <div className="spellcheck__control spellcheck__control--menu-is-open css-1rdv9e-Control">
+                            <div className="spellcheck__value-container css-g1d714-ValueContainer">
+                                <div className="spellcheck__placeholder css-1wa3eu0-placeholder">Select...</div >
                                 <div className="css-b8ldur-Input">
                                     <div
-                                        className=""
+                                        className="spellcheck__input"
                                         style={{ display: "inline-block" }}
                                     >
                                         <input
@@ -151,9 +160,13 @@ describe("SpellCheckerIssue", () => {
                                     </div>
                                 </div >
                             </div >
-                            <div className=" css-1hb7zxy-IndicatorsContainer">
-                                <span className=" css-1okebmr-indicatorSeparator" />
-                                <div aria-hidden="true" className=" css-tlfecz-indicatorContainer">
+                            <div className="spellcheck__indicators css-1hb7zxy-IndicatorsContainer">
+                                <span className="spellcheck__indicator-separator css-1okebmr-indicatorSeparator" />
+                                <div
+                                    aria-hidden="true"
+                                    className="spellcheck__indicator
+                                 spellcheck__dropdown-indicator css-tlfecz-indicatorContainer"
+                                >
                                     <svg
                                         height="20"
                                         width="20"
@@ -173,15 +186,27 @@ describe("SpellCheckerIssue", () => {
                                 </div >
                             </div >
                         </div >
-                        <div className=" css-13tc85z-menu">
-                            <div className=" css-1n56l4k-MenuList">
-                                <div className=" css-yt9ioa-option" id="react-select-2-option-0" tabIndex={-1}>
+                        <div className="spellcheck__menu css-13tc85z-menu">
+                            <div className="spellcheck__menu-list css-1n56l4k-MenuList">
+                                <div
+                                    className="spellcheck__option css-yt9ioa-option"
+                                    id="react-select-2-option-0"
+                                    tabIndex={-1}
+                                >
                                     repl1
                                 </div>
-                                <div className=" css-yt9ioa-option" id="react-select-2-option-1" tabIndex={-1}>
+                                <div
+                                    className="spellcheck__option css-yt9ioa-option"
+                                    id="react-select-2-option-1"
+                                    tabIndex={-1}
+                                >
                                     repl2
                                 </div>
-                                <div className=" css-yt9ioa-option" id="react-select-2-option-2" tabIndex={-1}>
+                                <div
+                                    className="spellcheck__option css-yt9ioa-option"
+                                    id="react-select-2-option-2"
+                                    tabIndex={-1}
+                                >
                                     repl3
                                 </div>
                             </div >
@@ -191,7 +216,7 @@ describe("SpellCheckerIssue", () => {
             </div>
         );
         let spellCheckPopupId = null;
-        const setOpenSpellCheckPopupId = (id: string | null): void => {
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
             spellCheckPopupId = id;
         };
 
@@ -209,8 +234,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -218,7 +245,7 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
 
         // THEN
         expect(actualNode.find("#sbte-spell-check-popover").at(0).html()).toEqual(expectedNode.html());
@@ -245,11 +272,11 @@ describe("SpellCheckerIssue", () => {
                 <div className="popover-header">There is error</div >
                 <div hidden style={{ padding: "0px" }} className="popover-body">
                     <div className=" css-6iiga6-container">
-                        <div className=" css-1rdv9e-Control">
-                            <div className=" css-g1d714-ValueContainer">
-                                <div className=" css-1wa3eu0-placeholder">Select...</div >
+                        <div className="spellcheck__control spellcheck__control--menu-is-open css-1rdv9e-Control">
+                            <div className="spellcheck__value-container css-g1d714-ValueContainer">
+                                <div className="spellcheck__placeholder css-1wa3eu0-placeholder">Select...</div >
                                 <div className="css-b8ldur-Input">
-                                    <div className="" style={{ display: "inline-block" }}>
+                                    <div className="spellcheck__input" style={{ display: "inline-block" }}>
                                         <input
                                             autoCapitalize="none"
                                             autoComplete="off"
@@ -289,9 +316,13 @@ describe("SpellCheckerIssue", () => {
                                     </div>
                                 </div >
                             </div >
-                            <div className=" css-1hb7zxy-IndicatorsContainer">
-                                <span className=" css-1okebmr-indicatorSeparator" />
-                                <div aria-hidden="true" className=" css-tlfecz-indicatorContainer">
+                            <div className="spellcheck__indicators css-1hb7zxy-IndicatorsContainer">
+                                <span className="spellcheck__indicator-separator css-1okebmr-indicatorSeparator" />
+                                <div
+                                    aria-hidden="true"
+                                    className="spellcheck__indicator
+                                 spellcheck__dropdown-indicator css-tlfecz-indicatorContainer"
+                                >
                                     <svg
                                         height="20"
                                         width="20"
@@ -311,9 +342,11 @@ describe("SpellCheckerIssue", () => {
                                 </div >
                             </div >
                         </div >
-                        <div className=" css-13tc85z-menu">
-                            <div className=" css-1n56l4k-MenuList">
-                                <div className=" css-gg45go-NoOptionsMessage">
+                        <div className="spellcheck__menu css-13tc85z-menu">
+                            <div className="spellcheck__menu-list css-1n56l4k-MenuList">
+                                <div className="spellcheck__menu-notice spellcheck__menu-notice--no-options
+                                 css-gg45go-NoOptionsMessage"
+                                >
                                     No options
                                 </div>
                             </div>
@@ -323,7 +356,7 @@ describe("SpellCheckerIssue", () => {
             </div>
         );
         let spellCheckPopupId = null;
-        const setOpenSpellCheckPopupId = (id: string | null): void => {
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
             spellCheckPopupId = id;
         };
 
@@ -341,8 +374,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -350,7 +385,7 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
 
         // THEN
         expect(removeSelectCssClass(actualNode.find("#sbte-spell-check-popover").at(0).html()))
@@ -369,7 +404,7 @@ describe("SpellCheckerIssue", () => {
             }
         ]} as SpellCheck;
         let spellCheckPopupId = null;
-        const setOpenSpellCheckPopupId = (id: string | null): void => {
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
             spellCheckPopupId = id;
         };
         const actualNode = mount(
@@ -378,8 +413,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={handler}
-                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -387,7 +424,7 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
         actualNode.findWhere(spellCheckOptionPredicate(1)).simulate("click");
 
         // THEN
@@ -408,7 +445,7 @@ describe("SpellCheckerIssue", () => {
                 }
             ]} as SpellCheck;
         let spellCheckPopupId = null;
-        const setOpenSpellCheckPopupId = (id: string | null): void => {
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
             spellCheckPopupId = id;
         };
         const actualNode = mount(
@@ -417,8 +454,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={setOpenSpellCheckPopupId}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
@@ -426,7 +465,7 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ openSpellCheckPopupId: spellCheckPopupId });
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
 
         // THEN
         expect(actualNode.find(Overlay).at(0).props().placement).toEqual("top");
@@ -451,8 +490,10 @@ describe("SpellCheckerIssue", () => {
                 start={15}
                 end={18}
                 correctSpelling={jest.fn()}
-                setOpenSpellCheckPopupId={jest.fn()}
-                openSpellCheckPopupId={null}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
             >
                 <div className="text" />
             </SpellCheckIssue>
