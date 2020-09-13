@@ -58,6 +58,38 @@ describe("searchReplaceSlices", () => {
         });
     });
 
+    describe("setMatchCase", () => {
+        afterEach(() => {
+            testingStore.dispatch(setMatchCase(false) as {} as AnyAction);
+        });
+
+        it("sets match case state", () => {
+            // WHEN
+            testingStore.dispatch(setMatchCase(true) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.matchCase).toBeTruthy();
+        });
+
+        it("updates search matches on editing cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+            testingStore.dispatch(setFind("line 2") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(setMatchCase(true) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("line 2");
+            expect(testingStore.getState().searchReplace.matchCase).toBeTruthy();
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([]);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.matchLength).toEqual(6);
+            expect(testingStore.getState().cues[0].searchReplaceMatches).toBeUndefined();
+        });
+    });
+
     describe("searchNextCues", () => {
         it("searches for find term in next cue", () => {
             // GIVEN
@@ -600,6 +632,23 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplaceVisible).toBeTruthy();
+        });
+
+        it("updates search matches on editing cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+            testingStore.dispatch(setFind("line 2") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(showSearchReplace(false) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("");
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([]);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.matchLength).toEqual(0);
+            expect(testingStore.getState().cues[0].searchReplaceMatches).toBeUndefined();
         });
     });
 
