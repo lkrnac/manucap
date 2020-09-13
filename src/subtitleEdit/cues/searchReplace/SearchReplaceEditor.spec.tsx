@@ -1,16 +1,20 @@
+/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import React, { ReactElement } from "react";
 import SearchReplaceEditor from "./SearchReplaceEditor";
-import testingStore from "../../../testUtils/testingStore";
+import { createTestingStore } from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import { setFind, setReplacement, showSearchReplace } from "./searchReplaceSlices";
 import { AnyAction } from "@reduxjs/toolkit";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CueDto, ScrollPosition, Track } from "../../model";
 import { updateCues, updateEditingCueIndex } from "../cueSlices";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../../common/ToggleButton";
+import { reset } from "../edit/editorStatesSlice";
+
+let testingStore = createTestingStore();
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -27,6 +31,12 @@ const testingCues = [
 ] as CueDto[];
 
 describe("SearchReplaceEditor", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+        testingStore.dispatch(reset() as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+    });
+
     it("renders", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
@@ -184,7 +194,6 @@ describe("SearchReplaceEditor", () => {
     it("searches for next match when Next button is clicked", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
         const { getByTestId } = render(
             <Provider store={testingStore}>
@@ -205,7 +214,6 @@ describe("SearchReplaceEditor", () => {
     it("searches for previous match when Previous button is clicked", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(3) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
         const { getByTestId } = render(
@@ -227,7 +235,6 @@ describe("SearchReplaceEditor", () => {
     it("invokes replace current match when Replace button is clicked", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
         testingStore.dispatch(setReplacement("New Line 2") as {} as AnyAction);
@@ -249,13 +256,12 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 
-    it("replaces all matches and save when Replace All button is clicked", (done) => {
+    it("replaces all matches and save when Replace All button is clicked", async () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
         testingStore.dispatch(setReplacement("New Line 5") as {} as AnyAction);
         const { getByText } = render(
@@ -269,6 +275,7 @@ describe("SearchReplaceEditor", () => {
         fireEvent.click(replaceAllButton);
 
         // THEN
+        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
         expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 5");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption New Line 5");
@@ -276,17 +283,10 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
-        setTimeout(
-            () => {
-                expect(saveTrack).toHaveBeenCalledTimes(1);
-                done();
-            },
-            3000
-        );
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
     });
 
-    it("replaces all matches replace contains find", () => {
+    it("replaces all matches replace contains find", async () => {
         // GIVEN
         const testingCues = [
             { vttCue: new VTTCue(0, 2, "Caption <b>Line 2</b> and <i>Line 2</i>"),
@@ -304,6 +304,9 @@ describe("SearchReplaceEditor", () => {
             },
         ] as CueDto[];
 
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
@@ -319,6 +322,7 @@ describe("SearchReplaceEditor", () => {
         fireEvent.click(replaceAllButton);
 
         // THEN
+        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
         expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 2");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>New Line 2</b> and <i>New Line 2</i>");
@@ -326,10 +330,10 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 2");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
     });
 
-    it("replaces all matches replace shorter than find", () => {
+    it("replaces all matches replace shorter than find", async () => {
         // GIVEN
         const testingCues = [
             { vttCue: new VTTCue(0, 2, "Caption <b>Line 2</b> and <i>Line 2</i>"),
@@ -347,6 +351,9 @@ describe("SearchReplaceEditor", () => {
             },
         ] as CueDto[];
 
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
@@ -362,6 +369,7 @@ describe("SearchReplaceEditor", () => {
         fireEvent.click(replaceAllButton);
 
         // THEN
+        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
         expect(testingStore.getState().searchReplace.replacement).toEqual("test");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>test</b> and <i>test</i>");
@@ -369,13 +377,15 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption test");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
     });
 
-    it("does not replace all match when Replace All button is clicked and find is empty", () => {
+    it("does not replace all match when Replace All button is clicked and find is empty", async () => {
         // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("") as {} as AnyAction);
         testingStore.dispatch(setReplacement("New Line 5") as {} as AnyAction);
         const { getByText } = render(
@@ -389,6 +399,7 @@ describe("SearchReplaceEditor", () => {
         fireEvent.click(replaceAllButton);
 
         // THEN
+        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("");
         expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 5");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 2");
@@ -396,6 +407,6 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption Line 2");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
     });
 });

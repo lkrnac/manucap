@@ -7,27 +7,29 @@ import {
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { updateVttCue } from "../cueSlices";
+import { updateEditingCueIndex, updateVttCue } from "../cueSlices";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
-import { reset } from "../edit/editorStatesSlice";
 import { callSaveTrack } from "../saveSlices";
 import ToggleButton from "../../../common/ToggleButton";
 import { SearchReplace } from "./model";
+import { reset } from "../edit/editorStatesSlice";
 
-export const searchReplaceAll = (
+export const searchReplaceAll = async (
     dispatch: Dispatch<AppThunk>,
     cues: Array<CueDto>,
     searchReplace: SearchReplace
-): void => {
+): Promise<void> => {
     const find = searchReplace.find;
     if (find === "") {
         return;
     }
+    await dispatch(updateEditingCueIndex(-1));
+    await dispatch(reset());
     const newCues = cues.slice(0);
-    dispatch(reset());
     const replacement = searchReplace.replacement;
-    newCues.forEach((cue, cueIndex: number) => {
+    for (const cue of newCues) {
+        const cueIndex: number = newCues.indexOf(cue);
         const matches = searchCueText(cue.vttCue.text, find, searchReplace.matchCase);
         if (matches.length > 0) {
             const replaceOffset = replacement.length - find.length;
@@ -36,9 +38,9 @@ export const searchReplaceAll = (
                 const start = matchIndex + (replaceOffset * index);
                 newVTTCue = replaceVttCueContent(newVTTCue, replacement, start, start + find.length);
             });
-            dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
+            await dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
         }
-    });
+    }
 };
 
 const SearchReplaceEditor = (): ReactElement | null => {
@@ -103,10 +105,9 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
-                onClick={(): void => {
-                    searchReplaceAll(dispatch, cues, searchReplace);
-                    dispatch(callSaveTrack());
-                }}
+                onClick={(): Promise<AppThunk> =>
+                    searchReplaceAll(dispatch, cues, searchReplace)
+                        .then(() => dispatch(callSaveTrack()))}
             >
                 Replace All
             </button>
@@ -115,7 +116,6 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 toggled={searchReplace.matchCase}
                 onClick={(): void => {
                     dispatch(setMatchCase(!searchReplace.matchCase));
-                    dispatch(reset());
                 }}
                 render={(): ReactElement => (<span>Aa</span>)}
                 title={searchReplace.matchCase ? "Case sensitive" : "Case insensitive"}
@@ -128,7 +128,6 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 data-testid="sbte-close-search-replace-btn"
                 onClick={(): void => {
                     dispatch(showSearchReplace(false));
-                    dispatch(reset());
                 }}
             >
                 <i className="far fa-times-circle" />
