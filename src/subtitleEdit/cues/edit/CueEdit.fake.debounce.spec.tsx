@@ -20,6 +20,7 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSl
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { SpellCheck } from "../spellCheck/model";
+import { SearchReplaceMatches } from "../searchReplace/model";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -775,6 +776,23 @@ describe("CueEdit", () => {
 
         // THEN
         expect(actualNode.find(CueTextEditor).props().spellCheck).toEqual(testingSpellCheck);
+    });
+
+    it("passes down search replace matches into editor component", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "someText");
+        const testingSearchReplace = { offsets: [10, 20], offsetIndex: 0, matchLength: 5 } as SearchReplaceMatches;
+        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", searchReplaceMatches: testingSearchReplace } as CueDto;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueEdit index={0} cue={cue} playerTime={0} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueTextEditor).props().searchReplaceMatches).toEqual(testingSearchReplace);
     });
 
     it("passes down bindCueViewModeKeyboardShortcut to editor component", () => {

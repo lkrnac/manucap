@@ -10,12 +10,15 @@ import { mount, ReactWrapper } from "enzyme";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "./editorStatesSlice";
 import { CueDto, Track } from "../../model";
+import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { fireEvent, render } from "@testing-library/react";
+import { replaceCurrentMatch, setReplacement } from "../searchReplace/searchReplaceSlices";
+import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();
 
@@ -115,6 +118,49 @@ describe("CueTextEditor", () => {
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
+    });
+
+    it("updates cue in redux for single match/replace when unmounted for next match - single", (done) => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
+        const searchReplaceMatches = {
+            offsets: [10],
+            offsetIndex: 0,
+            matchLength: 4
+        } as SearchReplaceMatches;
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    searchReplaceMatches={searchReplaceMatches}
+                />
+            </Provider>
+        );
+        act(() => {
+            testingStore.dispatch(replaceCurrentMatch() as {} as AnyAction);
+        });
+
+        // WHEN
+        actualNode.unmount();
+
+        // THEN
+        setTimeout(
+            () => {
+                expect(saveTrack).toHaveBeenCalledTimes(1);
+                expect(testingStore.getState().cues[0].vttCue.text)
+                    .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
+                done();
+            },
+            3000
+        );
     });
 
     it("doesn't update cue in redux when unmounted if no change to text", () => {

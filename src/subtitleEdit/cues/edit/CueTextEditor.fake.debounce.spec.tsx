@@ -1,3 +1,4 @@
+/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React, { ReactElement } from "react";
@@ -11,12 +12,17 @@ import each from "jest-each";
 
 import { Character, KeyCombination } from "../../shortcutConstants";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { removeDraftJsDynamicValues, spellCheckOptionPredicate } from "../../../testUtils/testUtils";
+import {
+    MockedDebouncedFunction,
+    removeDraftJsDynamicValues,
+    spellCheckOptionPredicate
+} from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto, Track } from "../../model";
-import { updateCues } from "../cueSlices";
+import { SearchReplaceMatches } from "../searchReplace/model";
+import { updateCues, updateEditingCueIndex } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -25,11 +31,18 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
+import { replaceCurrentMatch, setFind, setReplacement } from "../searchReplace/searchReplaceSlices";
+import { act } from "react-dom/test-utils";
+import { render } from "@testing-library/react";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
-}));
+jest.mock("lodash", () => (
+    {
+        debounce: (fn: MockedDebouncedFunction): Function => {
+            fn.cancel = jest.fn();
+            return fn;
+        }
+    }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
 fetchSpellCheck.mockImplementation(() => jest.fn());
@@ -129,8 +142,6 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     );
     return actualNode.find(".public-DraftEditor-content");
 };
-
-
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
 // defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
@@ -1000,6 +1011,193 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+        });
+    });
+
+    describe("search and replace", () => {
+        it("renders with html and search and replace results", () => {
+            // GIVEN
+            const searchReplaceMatches = {
+                offsets: [10],
+                offsetIndex: 0,
+                matchLength: 4
+            } as SearchReplaceMatches;
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent =
+                "<span style=\"border: 1px solid rgb(75,0,130); background-color: rgb(230, 230, 250);\">" +
+                "<span data-offset-key=\"\" style=\"font-weight: bold;\"><span data-text=\"true\">Text</span>" +
+                "</span></span>";
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        searchReplaceMatches={searchReplaceMatches}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
+        });
+
+        it("renders with html and search and replace results only first one with many offsets", () => {
+            // GIVEN
+            const searchReplaceMatches = {
+                offsets: [10, 22],
+                offsetIndex: 0,
+                matchLength: 4
+            } as SearchReplaceMatches;
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent =
+                "<span style=\"border: 1px solid rgb(75,0,130); background-color: rgb(230, 230, 250);\">" +
+                "<span data-offset-key=\"\" style=\"font-weight: bold;\"><span data-text=\"true\">Text</span>" +
+                "</span></span>";
+            const notExpectedContent =
+                "<span style=\"border: 1px solid rgb(75,0,130); background-color: rgb(230, 230, 250);\">" +
+                "<span data-offset-key=\"\"><span data-text=\"true\">Text</span>" +
+                "</span></span>";
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        searchReplaceMatches={searchReplaceMatches}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).not.toContain(notExpectedContent);
+        });
+
+        it("renders with html and search and replace results only second one with many offsets", () => {
+            // GIVEN
+            const searchReplaceMatches = {
+                offsets: [10, 22],
+                offsetIndex: 1,
+                matchLength: 4
+            } as SearchReplaceMatches;
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent =
+                "<span style=\"border: 1px solid rgb(75,0,130); background-color: rgb(230, 230, 250);\">" +
+                "<span data-offset-key=\"\"><span data-text=\"true\">Text</span>" +
+                "</span></span>";
+            const notExpectedContent =
+                "<span style=\"border: 1px solid rgb(75,0,130); background-color: rgb(230, 230, 250);\">" +
+                "<span data-offset-key=\"\" style=\"font-weight: bold;\"><span data-text=\"true\">Text</span>" +
+                "</span></span>";
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        searchReplaceMatches={searchReplaceMatches}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).not.toContain(notExpectedContent);
+        });
+
+        it("replaces matched text with replacement when replaceCurrentMatch is called - multiple", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+            testingStore.dispatch(setFind("text") as {} as AnyAction);
+            testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const searchReplaceMatches = {
+                offsets: [10, 22],
+                offsetIndex: 0,
+                matchLength: 4
+            } as SearchReplaceMatches;
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        searchReplaceMatches={searchReplaceMatches}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            act(() => {
+                testingStore.dispatch(replaceCurrentMatch() as {} as AnyAction);
+            });
+
+            // THEN
+            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(testingStore.getState().cues[0].vttCue.text)
+                .toEqual("some <i>HTML</i> <b>abcd efg</b> sample Text");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([26]);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
+        });
+
+        it("replaces matched text with replacement - multiple second", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+            testingStore.dispatch(setFind("Text") as {} as AnyAction);
+            testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const searchReplaceMatches = {
+                offsets: [10, 22],
+                offsetIndex: 1,
+                matchLength: 4
+            } as SearchReplaceMatches;
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        searchReplaceMatches={searchReplaceMatches}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            act(() => {
+                testingStore.dispatch(replaceCurrentMatch() as {} as AnyAction);
+            });
+
+            // THEN
+            actualNode.unmount(); // would happen on next search because last match in cue
+            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(testingStore.getState().cues[0].vttCue.text)
+                .toEqual("some <i>HTML</i> <b>Text</b> sample abcd efg");
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([10]);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
         });
     });
 

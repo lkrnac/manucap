@@ -2,7 +2,13 @@ import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
-import { CueCategory, CueChange, CueDto, ScrollPosition, SubtitleEditAction } from "../model";
+import {
+    CueCategory,
+    CueChange,
+    CueDto,
+    ScrollPosition,
+    SubtitleEditAction
+} from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties, } from "./cueUtils";
 import { Constants } from "../constants";
@@ -22,6 +28,8 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
+import { searchCueText } from "./searchReplace/searchReplaceSlices";
+import { SearchDirection, SearchReplaceMatches } from "./searchReplace/model";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -53,6 +61,10 @@ export interface SpellCheckAction extends CueIndexAction {
     spellCheck: SpellCheck;
 }
 
+export interface SearchReplaceAction extends CueIndexAction {
+    searchMatches: SearchReplaceMatches;
+}
+
 const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
     return textOnly ?
         x.text !== y.text :
@@ -71,6 +83,19 @@ const createAndAddCue = (previousCue: CueDto,
     const newCue = new VTTCue(startTime, endTime, "");
     copyNonConstructorProperties(newCue, previousCue.vttCue);
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
+};
+
+const finNextOffsetIndexForSearch = (
+    cue: CueDto,
+    offsets: Array<number>,
+    direction: SearchDirection
+): number => {
+    const lastIndex = offsets.length - 1;
+    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex >= 0) {
+        return cue.searchReplaceMatches.offsetIndex < lastIndex ?
+            cue.searchReplaceMatches.offsetIndex : lastIndex;
+    }
+    return direction === "NEXT" ? 0 : lastIndex;
 };
 
 export const cuesSlice = createSlice({
@@ -96,6 +121,12 @@ export const cuesSlice = createSlice({
             state[action.payload.idx] = {
                 ...state[action.payload.idx],
                 spellCheck: action.payload.spellCheck
+            };
+        },
+        addSearchMatches: (state, action: PayloadAction<SearchReplaceAction>): void => {
+            state[action.payload.idx] = {
+                ...state[action.payload.idx],
+                searchReplaceMatches: action.payload.searchMatches
             };
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {
@@ -262,6 +293,13 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             if (language && spellCheckerDomain) {
                 fetchSpellCheck(dispatch, getState, idx, newVttCue.text, language, spellCheckerDomain);
             }
+            const searchReplace = getState().searchReplace;
+            const offsets = searchCueText(newVttCue.text, searchReplace.find, searchReplace.matchCase);
+            const offsetIndex = finNextOffsetIndexForSearch(originalCue, offsets, searchReplace.direction);
+            dispatch(cuesSlice.actions.addSearchMatches(
+                { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }}
+                )
+            );
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
                 overlapEnabled: overlapCaptionsAllowed,

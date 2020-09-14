@@ -16,6 +16,7 @@ import { changeScrollPosition } from "./cues/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
 import { setSpellCheckDomain } from "./cues/spellCheck/spellCheckSlices";
+import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -107,6 +108,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 justifyContent: "space-between"
                             }}
                         >
+                            <SearchReplaceEditor />
                             <CuesList editingTrack={editingTrack} currentPlayerTime={currentPlayerTime} />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button

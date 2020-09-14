@@ -13,3 +13,8 @@ export const spellCheckOptionPredicate = (optionIndex: number) => (wrapper: Reac
     wrapper.hasClass(/css-[\s\S]*?-option/)
     // @ts-ignore Couldn't figure this out, there would need to be a lot of additional null checks
     && wrapper.getDOMNode().getAttribute("id").endsWith("-option-" + optionIndex);
+
+export interface MockedDebouncedFunction extends Function {
+    cancel: Function;
+}
+

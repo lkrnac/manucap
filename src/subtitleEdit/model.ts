@@ -1,4 +1,5 @@
 import { SpellCheck } from "./cues/spellCheck/model";
+import { SearchReplaceMatches } from "./cues/searchReplace/model";
 
 export interface Language {
     readonly id: string;
@@ -13,6 +14,7 @@ export interface CueDto {
     corrupted?: boolean;
     editUuid?: string;
     spellCheck?: SpellCheck;
+    searchReplaceMatches?: SearchReplaceMatches;
 }
 
 export interface CueWithSource {
