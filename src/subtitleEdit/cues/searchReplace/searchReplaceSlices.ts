@@ -19,7 +19,7 @@ export const searchCueText = (text: string, find: string, matchCase: boolean): A
         return [];
     }
     const regExpFlag = matchCase ? "g" : "gi";
-    const re = new RegExp(find,regExpFlag);
+    const re = new RegExp(find, regExpFlag);
     const results = [];
     while (re.exec(plainText)){
         results.push(re.lastIndex - find.length);

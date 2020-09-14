@@ -15,6 +15,31 @@ import ToggleButton from "../../../common/ToggleButton";
 import { SearchReplace } from "./model";
 import { reset } from "../edit/editorStatesSlice";
 
+const replaceAllInVttCue = (
+    vttCue: VTTCue,
+    find: string,
+    replacement: string,
+    matchCase: boolean,
+    matches: Array<number>
+): VTTCue => {
+    let newVTTCue = vttCue;
+    if (replacement === "") {
+        while (matches.length > 0) {
+            const start = matches[0];
+            newVTTCue = replaceVttCueContent(newVTTCue, replacement, start, start + find.length);
+            const vttText = newVTTCue.text.trim();
+            matches = searchCueText(vttText, find, matchCase);
+        }
+    } else {
+        const replaceOffset = replacement.length - find.length;
+        matches.forEach((matchIndex, index) => {
+            const start = matchIndex + (replaceOffset * index);
+            newVTTCue = replaceVttCueContent(newVTTCue, replacement, start, start + find.length);
+        });
+    }
+    return newVTTCue;
+};
+
 export const searchReplaceAll = async (
     dispatch: Dispatch<AppThunk>,
     cues: Array<CueDto>,
@@ -30,14 +55,10 @@ export const searchReplaceAll = async (
     const replacement = searchReplace.replacement;
     for (const cue of newCues) {
         const cueIndex: number = newCues.indexOf(cue);
-        const matches = searchCueText(cue.vttCue.text, find, searchReplace.matchCase);
+        let vttText = cue.vttCue.text.trim();
+        let matches = searchCueText(vttText, find, searchReplace.matchCase);
         if (matches.length > 0) {
-            const replaceOffset = replacement.length - find.length;
-            let newVTTCue = cue.vttCue;
-            matches.forEach((matchIndex, index) => {
-                const start = matchIndex + (replaceOffset * index);
-                newVTTCue = replaceVttCueContent(newVTTCue, replacement, start, start + find.length);
-            });
+            const  newVTTCue = replaceAllInVttCue(cue.vttCue, find, replacement, searchReplace.matchCase, matches);
             await dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
         }
     }
