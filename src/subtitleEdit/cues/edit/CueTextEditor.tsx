@@ -27,31 +27,25 @@ import { updateVttCue } from "../cueSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
+import { CueExtraCharacters } from "../CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 
-const keyShortcutBindings = (e: React.KeyboardEvent<{}>): string | null => {
-    const action = getActionByKeyboardEvent(e);
-    if (action) {
-        return action;
-    }
-    if ((!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey)) {
-        if (e.keyCode === Character.ESCAPE) {
-            return "closeEditor";
-        } else if (e.keyCode === Character.ENTER) {
-            return "editNext";
-        }
-    } else if (e.keyCode === Character.ENTER) {
-        return "newLine";
-    }
-    return getDefaultKeyBinding(e);
-};
-
 const handleKeyShortcut = (
-    editorState: EditorState,
-    dispatch: Dispatch<AppThunk>,
-    props: CueTextEditorProps
+    editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
+    spellCheckerMatchingOffset: number | null,
+    setSpellCheckerMatchingOffset: Function,
 ) => (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
+    if (shortcut === "openSpellChecker") {
+        const selection = editorState.getSelection();
+        const startOffset = selection.getStartOffset();
+        const match = props.spellCheck?.matches.find(match => match.offset <= startOffset &&
+            startOffset <= (match.offset + match.length));
+        if (match != null) {
+            setSpellCheckerMatchingOffset(spellCheckerMatchingOffset != null ? null : match.offset);
+        }
+        return "handled";
+    }
     if (keyCombination) {
         Mousetrap.trigger(keyCombination);
         return "handled";
@@ -69,24 +63,20 @@ export interface CueTextEditorProps {
     vttCue: VTTCue;
     editUuid?: string;
     spellCheck?: SpellCheck;
+    bindCueViewModeKeyboardShortcut: () => void;
+    unbindCueViewModeKeyboardShortcut: () => void;
 }
 
 const changeVttCueInRedux = (
-    //@ts-ignore
-    editorState: EditorState,
     currentContent: ContentState,
     props: CueTextEditorProps,
     dispatch: Dispatch<AppThunk>,
 ): void => {
-    // console.log(editorState);
-    // console.log(currentContent);
     const vttText = getVttText(currentContent);
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
     dispatch(updateVttCue(props.index, vttCue, props.editUuid, true));
 };
-
-
 
 const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 200);
 
@@ -117,11 +107,33 @@ const createCorrectSpellingHandler = (
     dispatch(callSaveTrack());
 };
 
-const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
-    const [openSpellCheckPopupId, setOpenSpellCheckPopupId] = useState(null);
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const editorRef = useRef(null);
+const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
+    (e: React.KeyboardEvent<{}>): string | null => {
+    const action = getActionByKeyboardEvent(e);
+    if (action) {
+        return action;
+    }
+    if(spellCheckerMatchingOffset != null && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
+        return "popoverHandled";
+    } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        if (e.keyCode === Character.ESCAPE) {
+            return "closeEditor";
+        } else if (e.keyCode === Character.ENTER) {
+            return "editNext";
+        }
+    } else if (e.keyCode === Character.ENTER) {
+        return "newLine";
+    } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.SPACE) {
+        return "openSpellChecker";
+    }
+    return getDefaultKeyBinding(e);
+};
 
+const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
+    const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
+    const editorRef = useRef(null);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
     let editorState = useSelector(
@@ -135,11 +147,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         editorState = EditorState.moveFocusToEnd(editorState);
     }
 
-
-
     const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
         if (props.spellCheck && props.spellCheck.matches) {
-            console.log(props.spellCheck.matches);
+            // console.log(_contentBlock.getText());
+            // console.log(_contentBlock);
             props.spellCheck.matches.forEach(match => {
                     if (editingTrack?.id && props.editUuid) {
                         const endOffset = match.offset + match.length;
@@ -152,22 +163,45 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             );
         }
     };
-    const newSpellCheckDecorator = new CompositeDecorator([
+    const findExtraCharacters = (contentBlock: ContentBlock, callback: Function): void => {
+        if (subtitleSpecifications && subtitleSpecifications.enabled) {
+            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine || 0;
+            const text = contentBlock.getText();
+            const lines = text.split("\n");
+            return lines.forEach(line => {
+                const lineStartOffset = text.indexOf(line);
+                const lineEndOffset = lineStartOffset + line.length;
+                if (line.length > maxCharactersPerLine) {
+                    callback(lineStartOffset + maxCharactersPerLine, lineEndOffset);
+                }
+            });
+        }
+    };
+
+    const newCompositeDecorator = new CompositeDecorator([
+        {
+            strategy: findExtraCharacters,
+            component: CueExtraCharacters,
+            props: {}
+        },
         {
             strategy: findSpellCheckIssues,
             component: SpellCheckIssue,
             props: {
                 spellCheck: props.spellCheck,
                 correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
-                openSpellCheckPopupId,
-                setOpenSpellCheckPopupId,
+                editorRef,
+                spellCheckerMatchingOffset,
+                setSpellCheckerMatchingOffset,
+                bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut,
+                unbindCueViewModeKeyboardShortcut: props.unbindCueViewModeKeyboardShortcut,
                 cueId: props.editUuid,
                 cueIdx: props.index,
-                editorRef
+                trackId: editingTrack?.id
             }
         }
     ]);
-    editorState = EditorState.set(editorState, { decorator: newSpellCheckDecorator });
+    editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
 
     const currentContent = editorState.getCurrentContent();
     const unmountContentRef = useRef<ContentState | null>(null);
@@ -183,7 +217,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         // into redux when changed.
         // (Also some tests would fail if you include editorState object itself, but behavior is still OK)
         // eslint-disable-next-line
-        [currentContent, currentInlineStyle, dispatch, props.index]
+        [ currentContent, currentInlineStyle, dispatch, props.index ]
     );
 
     useEffect(
@@ -193,14 +227,14 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 || unmountContentRef.current !== currentContent;
             unmountContentRef.current = currentContent;
             if (shouldUpdateVttCue) {
-                changeVttCueInReduxDebounced(editorState, currentContent, props, dispatch);
+                changeVttCueInReduxDebounced(currentContent, props, dispatch);
             }
         },
         // Two bullet points in this suppression:
         //  - props.vttCue is not included, because it causes endless FLUX loop.
         //  - spread operator for cue values is used so that all the VTTCue properties code can be in single file.
         // eslint-disable-next-line
-        [currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue)]
+        [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
     );
 
     // Fire update VTTCue action when component is unmounted.
@@ -209,7 +243,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         () => (): void => {
             changeVttCueInReduxDebounced.cancel();
             if (unmountContentRef.current !== null) {
-                changeVttCueInRedux(editorState, unmountContentRef.current, props, dispatch);
+                changeVttCueInRedux(unmountContentRef.current, props, dispatch);
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -252,19 +286,21 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         }}
                         ref={editorRef}
                         spellCheck={false}
-                        keyBindingFn={keyShortcutBindings}
-                        handleKeyCommand={handleKeyShortcut(editorState, dispatch, props)}
+                        keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}
+                        handleKeyCommand={handleKeyShortcut(editorState, dispatch, props,
+                            spellCheckerMatchingOffset,
+                            setSpellCheckerMatchingOffset)}
                     />
                 </div>
                 <div style={{ flex: 0 }}>
-                    {charCountPerLine.map((count: number, index: number) => (
+                    { charCountPerLine.map((count: number, index: number) => (
                         <div key={index}><span className="sbte-count-tag">{count} ch</span><br /></div>
-                    ))}
+                    )) }
                 </div>
                 <div style={{ flex: 0, paddingRight: "5px" }}>
-                    {wordCountPerLine.map((count: number, index: number) => (
+                    { wordCountPerLine.map((count: number, index: number) => (
                         <div key={index}><span className="sbte-count-tag">{count} w</span><br /></div>
-                    ))}
+                    )) }
                 </div>
             </div>
             <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>

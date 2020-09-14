@@ -755,7 +755,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
-            it("apply character count limitation to first line", () => {
+            it("doesn't apply character count limitation to first line", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const testingSubtitleSpecification = {
@@ -772,11 +772,11 @@ describe("cueSlices", () => {
                 );
 
                 // THEN
-                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Long long line 1\nline 2");
                 expect(testingStore.getState().validationError).toEqual(true);
             });
 
-            it("apply character count limitation to second line", () => {
+            it("doesn't apply character count limitation to second line", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const testingSubtitleSpecification = {
@@ -793,7 +793,7 @@ describe("cueSlices", () => {
                 );
 
                 // THEN
-                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("line 1\nlong long line 2");
                 expect(testingStore.getState().validationError).toEqual(true);
             });
 

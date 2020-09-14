@@ -49,6 +49,21 @@ const CueEdit = (props: Props): ReactElement => {
 
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
+
+    const unbindCueViewModeKeyboardShortcut =(): void => {
+        Mousetrap.unbind([KeyCombination.ESCAPE]);
+        Mousetrap.unbind([KeyCombination.ENTER]);
+    };
+
+    const bindCueViewModeKeyboardShortcut =(): void => {
+        Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
+        Mousetrap.bind([KeyCombination.ENTER], () => {
+            return props.index === cuesCount - 1
+                ? dispatch(handleEnterForLastCue(sourceCues, props.index))
+                : dispatch(updateEditingCueIndex(props.index + 1));
+        });
+    };
+
     useEffect(() => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
             updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime, props.cue.editUuid);
@@ -58,16 +73,13 @@ const CueEdit = (props: Props): ReactElement => {
                 dispatch, props, props.cue.vttCue.startTime, props.playerTime, props.cue.editUuid
             );
         });
-        Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
-        Mousetrap.bind([KeyCombination.ENTER], () => {
-            return props.index === cuesCount - 1
-                ? dispatch(handleEnterForLastCue(sourceCues, props.index))
-                : dispatch(updateEditingCueIndex(props.index + 1));
-        });
+        bindCueViewModeKeyboardShortcut();
         Mousetrap.bind([KeyCombination.MOD_SHIFT_ESCAPE, KeyCombination.ALT_SHIFT_ESCAPE],
             () => dispatch(updateEditingCueIndex(props.index - 1))
         );
-    }, [ dispatch, props, cuesCount, sourceCues ]);
+        // no need for dependencies here since binding kb shortcuts should be done once
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {
@@ -137,6 +149,8 @@ const CueEdit = (props: Props): ReactElement => {
                     vttCue={props.cue.vttCue}
                     editUuid={props.cue.editUuid}
                     spellCheck={props.cue.spellCheck}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcut}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcut}
                 />
             </div>
         </div>
