@@ -2,7 +2,7 @@ import React, { MutableRefObject, ReactElement, RefObject, useEffect, useRef } f
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { SpellCheck } from "./model";
-import { Character, KeyCombination } from "../../shortcutConstants";
+import { Character } from "../../shortcutConstants";
 
 
 interface Props {
@@ -15,6 +15,7 @@ interface Props {
     setSpellCheckerMatchingOffset: (id: number | null) => void;
     editorRef: RefObject<HTMLInputElement>;
     bindCueViewModeKeyboardShortcut: () => void;
+    unbindCueViewModeKeyboardShortcut: () => void;
 }
 
 const popupPlacement = (target: MutableRefObject<null>): boolean => {
@@ -39,7 +40,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         props.bindCueViewModeKeyboardShortcut();
         props.editorRef?.current?.focus();
     };
-
 
     useEffect(
         () => (): void => {
@@ -69,8 +69,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     } as Styles;
 
     const onEnterPopover = (): void => {
-        Mousetrap.unbind(KeyCombination.ESCAPE);
-        Mousetrap.unbind(KeyCombination.ENTER);
+        props.unbindCueViewModeKeyboardShortcut();
+
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };

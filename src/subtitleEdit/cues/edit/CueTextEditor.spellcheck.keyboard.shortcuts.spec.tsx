@@ -65,11 +65,13 @@ const testingCues = [
 
 let testingStore = createTestingStore();
 let bindCueViewModeKeyboardShortcutSpy = jest.fn();
+let unbindCueViewModeKeyboardShortcutSpy = jest.fn();
 
 describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
         bindCueViewModeKeyboardShortcutSpy = jest.fn();
+        unbindCueViewModeKeyboardShortcutSpy = jest.fn();
         testingStore = createTestingStore();
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -83,6 +85,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
                 <CueTextEditor
                     spellCheck={spellCheckFakeMatches}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
@@ -256,5 +259,18 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         // THEN
         expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
+
+    it("calls unbindCueViewModeKeyboardShortcut when entering the popover", () => {
+        //GIVEN
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+
+        //WHEN
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
+
+        // THEN
+        expect(unbindCueViewModeKeyboardShortcutSpy).toBeCalled();
+    });
+
 
 });
