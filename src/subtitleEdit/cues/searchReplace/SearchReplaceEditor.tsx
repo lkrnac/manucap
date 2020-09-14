@@ -55,8 +55,8 @@ export const searchReplaceAll = async (
     const replacement = searchReplace.replacement;
     for (const cue of newCues) {
         const cueIndex: number = newCues.indexOf(cue);
-        let vttText = cue.vttCue.text.trim();
-        let matches = searchCueText(vttText, find, searchReplace.matchCase);
+        const vttText = cue.vttCue.text.trim();
+        const matches = searchCueText(vttText, find, searchReplace.matchCase);
         if (matches.length > 0) {
             const  newVTTCue = replaceAllInVttCue(cue.vttCue, find, replacement, searchReplace.matchCase, matches);
             await dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
