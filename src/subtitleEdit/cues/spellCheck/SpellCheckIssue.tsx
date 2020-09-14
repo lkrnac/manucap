@@ -37,7 +37,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const showAtBottom = popupPlacement(target);
     const onExitPopover = (): void => {
         props.bindCueViewModeKeyboardShortcut();
-        props.editorRef?.current?.focus();
     };
 
 
@@ -76,6 +75,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     };
 
     const onOptionSelected = (option: ValueType<Option>): void => {
+        props.editorRef?.current?.focus();
         props.correctSpelling((option as Option).value, props.start, props.end);
         props.setSpellCheckerMatchingOffset(null);
     };
