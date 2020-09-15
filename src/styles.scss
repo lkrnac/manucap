@@ -12,10 +12,10 @@ $font-size-small: 0.75rem; // 12px
 // ##############################
 
 $sbte-main-text-color: $secondary;
-$border-color: rgb(241,244,245);
+$border-color: rgb(241, 244, 245);
 $input-border-color: rgb(108, 117, 125);
-$green: rgb(0,87,0);
-$red: rgb(198,40,40);
+$green: rgb(0, 87, 0);
+$red: rgb(198, 40, 40);
 $background-error: rgb(255, 245, 245);
 $background-error-text: rgba(255, 0, 0, 0.2);
 
@@ -26,12 +26,12 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 // ------ Generic -------
 
 .sbte-subtitle-edit {
-  font-family: Roboto, sans-serif;
-  color: $sbte-main-text-color;
+    font-family: Roboto, sans-serif;
+    color: $sbte-main-text-color;
 }
 
 .sbte-left-border {
-  border-left: 2px solid $border-color;
+    border-left: 2px solid $border-color;
 }
 
 .sbte-bottom-border {
@@ -47,19 +47,19 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 .sbte-small-font {
-  font-size: $font-size-small;
+    font-size: $font-size-small;
 }
 
 .sbte-gray-100-background {
-  background-color: $gray-100;
+    background-color: $gray-100;
 }
 
 .sbte-gray-200-background {
-  background-color: $gray-200;
+    background-color: $gray-200;
 }
 
 .sbte-text-with-error {
-  background-color: $background-error-text;
+    background-color: $background-error-text;
 }
 
 .sbte-extra-text {
@@ -67,20 +67,32 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 @keyframes fade {
-    from { background-color: $white }
-    50% { background-color: $background-error }
-    to { background-color: $white }
+    from {
+        background-color: $white
+    }
+    50% {
+        background-color: $background-error
+    }
+    to {
+        background-color: $white
+    }
 }
 
 @-webkit-keyframes fade {
-    from { background-color: $white }
-    50% { background-color: $background-error }
-    to { background-color: $white }
+    from {
+        background-color: $white
+    }
+    50% {
+        background-color: $background-error
+    }
+    to {
+        background-color: $white
+    }
 }
 
 .blink-error-bg {
-    animation:fade 1000ms infinite;
-    -webkit-animation:fade 1000ms infinite;
+    animation: fade 1000ms infinite;
+    -webkit-animation: fade 1000ms infinite;
 }
 
 .sbte-toggled-btn {
@@ -134,7 +146,21 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 #sbte-spell-check-popover {
-  margin-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.spellcheck__menu-list {
+    padding-top: 0 !important;
+
+    .spellcheck__option:first-child {
+        border-bottom: 1px solid;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: $dark;
+        &:focus{
+            outline: none;
+        }
+    }
 }
 
 // ------ Cues List ------
@@ -171,22 +197,22 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 .sbte-form-control {
-  color: $sbte-main-text-color;
-  border-radius: 0;
+    color: $sbte-main-text-color;
+    border-radius: 0;
 }
 
 .sbte-toolbox .card-header {
-  color: white;
-  background-color: $secondary;
+    color: white;
+    background-color: $secondary;
 }
 
 .sbte-toolbox .card {
-  border-radius: 0;
-  border: 0;
+    border-radius: 0;
+    border: 0;
 }
 
 .sbte-toolbox .btn-toolbar .btn {
-  font-size: 15px;
+    font-size: 15px;
 }
 
 .sbte-subspec-freeform-text {
@@ -196,10 +222,11 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 
 // ------ Videojs --------
 .video-js .vjs-time-control {
-  display: block !important;
+    display: block !important;
 }
+
 .video-js .vjs-remaining-time {
-  display: none !important;
+    display: none !important;
 }
 
 .vjs-text-track-display div {

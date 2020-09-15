@@ -68,6 +68,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         .filter((replacement) => replacement.value.trim() !== "")
         .map((replacement) => ({ value: replacement.value, label: replacement.value } as Option)
         );
+    selectOptions.unshift({ value: props.decoratedText, label: "Ignore" });
 
     const customStyles = {
         control: () => ({ visibility: "hidden", height: "0px" }),
@@ -82,21 +83,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };
-
-    const onOptionSelected = (option: ValueType<Option>): void => {
-        props.correctSpelling((option as Option).value, props.start, props.end);
-        props.setSpellCheckerMatchingOffset(null);
-    };
-
-    const onkeydown = (e: React.KeyboardEvent<{}>): void => {
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode === Character.SPACE) {
-            e.preventDefault();
-        }
-        if(e.keyCode === Character.ESCAPE) {
-            props.setSpellCheckerMatchingOffset(null);
-        }
-    };
-
     const reValidateCue = (): void => {
         dispatch(validateCue(props.cueIdx, props.cueId));
     };
@@ -105,8 +91,25 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         addIgnoredKeyword(props.trackId, props.cueId, props.decoratedText, spellCheckMatch.rule.id);
         dispatch(removeSpellcheckMatch(props.cueIdx, props.start));
         reValidateCue();
-        props.editorRef?.current?.focus();
+    };
 
+    const onOptionSelected = (optionValueType: ValueType<Option>): void => {
+        const option = optionValueType as Option;
+        if(option.value === props.decoratedText) {
+            ignoreKeyword();
+        } else {
+            props.correctSpelling((option).value, props.start, props.end);
+        }
+        props.setSpellCheckerMatchingOffset(null);
+    };
+
+    const onkeydown = (e: React.KeyboardEvent<{}>): void => {
+        if (e.keyCode === Character.TAB || ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode === Character.SPACE)) {
+            e.preventDefault();
+        }
+        if(e.keyCode === Character.ESCAPE) {
+            props.setSpellCheckerMatchingOffset(null);
+        }
     };
 
     return (
@@ -133,7 +136,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 <Popover id="sbte-spell-check-popover">
                     <Popover.Title>{spellCheckMatch.message}</Popover.Title>
                     <Popover.Content hidden={selectOptions.length === 0} style={{ padding: 0 }}>
-                        <button onClick={ignoreKeyword} className="btn btn-primary col-md-12">Ignore</button>
                         <Select
                             onKeyDown={onkeydown}
                             ref={selectRef}
