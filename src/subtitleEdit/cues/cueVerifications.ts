@@ -80,11 +80,6 @@ const overlapOk = (vttCue: VTTCue, previousCue?: CueDto, followingCue?: CueDto):
 
 const isSpelledCorrectly = (cue: CueDto): boolean =>
     cue.spellCheck?.matches === undefined || cue.spellCheck.matches.length === 0;
-// const isSpelledCorrectly = (cue: CueDto): boolean =>
-// {
-//      return   cue.editUuid && getSpellchecksIgnoresCountByCueId(cue.editUuid)
-//       && cue.spellCheck?.matches === undefined || cue.spellCheck?.matches.length === 0;
-// };
 
 export const conformToRules = (
     cue: CueDto,
