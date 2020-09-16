@@ -15,7 +15,7 @@ import { removeDraftJsDynamicValues, spellCheckOptionPredicate } from "../../../
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { CueDto, Track } from "../../model";
+import { CueDto, Language, Track } from "../../model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
@@ -28,7 +28,8 @@ import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
 jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
+    debounce: (callback: Function): Function => callback,
+    get: (): [] => {return [];}
 }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
@@ -47,6 +48,7 @@ interface ReduxTestWrapperProps {
 }
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
+const ruleId = "MORFOLOGIK_RULE_EN_US";
 
 const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     <Provider store={props.store}>
@@ -792,12 +794,34 @@ describe("CueTextEditor", () => {
     });
 
     describe("spell checking", () => {
+
+        beforeEach(() => {
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        });
+
+
         it("renders with html and spell check errors", () => {
             // GIVEN
+
             const spellCheck = {
                 matches: [
-                    { offset: 5, length: 4, replacements: [] as Replacement[] },
-                    { offset: 15, length: 6, replacements: [] as Replacement[] }
+                    { offset: 5, length: 4, replacements: [] as Replacement[],
+                        context: { text: "asd1", length: 4, offset: 5 },
+                        rule: { id: ruleId }},
+                    { offset: 15, length: 6, replacements: [] as Replacement[],
+                        context: { text: "asd2", length: 4, offset: 5 },
+                        rule: { id: ruleId }}
                 ]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
@@ -843,7 +867,9 @@ describe("CueTextEditor", () => {
                 // GIVEN
                 const spellCheck = {
                     matches: [
-                        { offset: 2, length: 4, replacements: [] as Replacement[] },
+                        { offset: 2, length: 4, replacements: [] as Replacement[],
+                          context: { text: "any", length: 4, offset: 2 },
+                            rule: { id: ruleId }},
                     ]
                 } as SpellCheck;
                 const vttCue = new VTTCue(0, 1, "t");
@@ -893,7 +919,9 @@ describe("CueTextEditor", () => {
                 // GIVEN
                 const spellCheck = {
                     matches: [
-                        { offset: 2, length: 4, replacements: [] as Replacement[] },
+                        { offset: 2, length: 4, replacements: [] as Replacement[],
+                            context: { text: "any", length: 4, offset: 2 },
+                            rule: { id: ruleId }},
                     ]
                 } as SpellCheck;
                 const vttCue = new VTTCue(0, 1, "<i>t</i>");
@@ -934,14 +962,16 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(
-                updateEditingTrack({ language: { id: "testing-language" }} as Track) as {} as AnyAction
-            );
+
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             const spellCheck = {
                 matches: [
-                    { offset: 5, length: 3, replacements: [{ value: "option1" }, { value: "HTML" }] as Replacement[] },
-                    { offset: 14, length: 6, replacements: [] as Replacement[] }
+                    { offset: 5, length: 3, replacements: [{ value: "option1" }, { value: "HTML" }] as Replacement[],
+                        context: { text: "hTm", length: 3, offset: 5 },
+                        rule: { id: ruleId }},
+                    { offset: 14, length: 6, replacements: [] as Replacement[],
+                        context: { text: "word", length: 6, offset: 14 },
+                        rule: { id: ruleId }}
                 ]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some <u><i>hTm</i></u> <b>Text</b> sample");
@@ -961,7 +991,7 @@ describe("CueTextEditor", () => {
 
             // WHEN
             actualNode.find(".sbte-text-with-error").at(0).simulate("click");
-            actualNode.findWhere(spellCheckOptionPredicate(1)).at(0).simulate("click");
+            actualNode.findWhere(spellCheckOptionPredicate(2)).at(0).simulate("click");
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -973,11 +1003,14 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
             const spellCheck = {
                 matches: [
-                    { offset: 5, length: 3, replacements: [] as Replacement[] },
-                    { offset: 14, length: 5, replacements: [] as Replacement[] }
+                    { offset: 5, length: 3, replacements: [] as Replacement[],
+                        context: { text: "word", length: 3, offset: 5 },
+                        rule: { id: ruleId }},
+                    { offset: 14, length: 5, replacements: [] as Replacement[],
+                        context: { text: "word", length: 5, offset: 14 },
+                        rule: { id: ruleId }}
                 ]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> smple");
@@ -1009,11 +1042,14 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
             const spellCheck = {
                 matches: [
-                    { offset: 5, length: 3, replacements: [] as Replacement[] },
-                    { offset: 14, length: 5, replacements: [] as Replacement[] }
+                    { offset: 5, length: 3, replacements: [] as Replacement[],
+                        context: { text: "word", length: 3, offset: 5 },
+                        rule: { id: ruleId }},
+                    { offset: 14, length: 5, replacements: [] as Replacement[],
+                        context: { text: "word", length: 5, offset: 14 },
+                        rule: { id: ruleId }}
                 ]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> smple");
@@ -1042,6 +1078,21 @@ describe("CueTextEditor", () => {
     });
 
     describe("long lines", () => {
+        beforeEach(() => {
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        });
+
         it("renders with too long lines", () => {
             // GIVEN
             const testingSubtitleSpecification = {
@@ -1183,8 +1234,11 @@ describe("CueTextEditor", () => {
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
             const spellCheck = {
-                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[] }]
+                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
+                    context: { text: "word", length: 5, offset: 5 },
+                    rule: { id: ruleId }}]
             } as SpellCheck;
+
             const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
@@ -1215,7 +1269,9 @@ describe("CueTextEditor", () => {
         it("passes down bindCueViewModeKeyboardShortcut to spellcheck component", () => {
             // GIVEN
             const spellCheck = {
-                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[] }]
+                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
+                    context: { text: "word", length: 5, offset: 5 },
+                    rule: { id: ruleId }}]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -1241,7 +1297,9 @@ describe("CueTextEditor", () => {
         it("passes down bindCueViewModeKeyboardShortcut to spellcheck component", () => {
             // GIVEN
             const spellCheck = {
-                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[] }]
+                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
+                    context: { text: "word", length: 5, offset: 5 },
+                    rule: { id: ruleId }}]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;

@@ -12,4 +12,5 @@ describe("spellCheckSlices", () => {
             expect(testingStore.getState().spellCheckerDomain).toEqual("testing-domain");
         });
     });
+
 });

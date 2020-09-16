@@ -3,9 +3,9 @@ import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
-import { removeSpellcheckMatch, validateCue } from "../cueSlices";
 import { useDispatch } from "react-redux";
 import { addIgnoredKeyword } from "./spellCheckerUtils";
+import { removeSpellcheckMatch, validateCue } from "../cueSlices";
 
 
 interface Props {

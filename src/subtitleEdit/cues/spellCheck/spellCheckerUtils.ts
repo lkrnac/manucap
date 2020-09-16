@@ -1,5 +1,5 @@
 import { Constants } from "../../constants";
-import _ from "lodash";
+import * as _ from "lodash";
 import { SpellCheckHash } from "./model";
 import CryptoJS from "crypto-js";
 
