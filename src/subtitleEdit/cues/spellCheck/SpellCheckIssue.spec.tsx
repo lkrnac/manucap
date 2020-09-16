@@ -8,7 +8,6 @@ import { Overlay } from "react-bootstrap";
 import { spellCheckOptionPredicate } from "../../../testUtils/testUtils";
 import { Provider } from "react-redux";
 import testingStore from "../../../testUtils/testingStore";
-
 const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "");
 
@@ -485,6 +484,8 @@ describe("SpellCheckerIssue", () => {
 
     // it("renders popup on top when there is enough space for in the window", () => {
     //     // GIVEN
+    //     jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: {  } });
+    //
     //     // @ts-ignore
     //     // noinspection JSConstantReassignment
     //     window.innerHeight = 100;

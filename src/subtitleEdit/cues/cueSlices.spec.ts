@@ -199,7 +199,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }} as Track
+                    { language: { id: "testing-language" }, id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d" } as Track
                 ) as {} as AnyAction);
 
                 const editUuid = testingStore.getState().cues[2].editUuid;

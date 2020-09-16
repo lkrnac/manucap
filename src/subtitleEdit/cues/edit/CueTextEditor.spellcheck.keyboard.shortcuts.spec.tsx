@@ -21,21 +21,15 @@ import { setSaveTrack } from "../saveSlices";
 //@ts-ignore
 import { LodashDebounce } from "lodash/ts3.1/fp";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => {
-        return callback;
-    }
-}));
-
-// mock deounce.cancel
 jest.mock("lodash", () => (
     {
         debounce: (fn: LodashDebounce): Function => {
             fn.cancel = jest.fn();
             return fn;
-        }
+        },
+        get: (): [] => {return [];}
     }));
-
+const ruleId = "MORFOLOGIK_RULE_EN_US";
 const spellCheckFakeMatches = {
     "matches": [
         {
@@ -47,7 +41,9 @@ const spellCheckFakeMatches = {
                 { value: "Competent" },
             ],
             offset: 0,
-            length: 8
+            length: 8,
+            context: { text: "TestThis", length: 3, offset: 0 },
+            rule: { id: ruleId }
         }
     ]
 } as SpellCheck;
@@ -56,6 +52,7 @@ const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US" },
     default: true,
+    id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d"
 } as Track;
 
 const testingCues = [
@@ -155,7 +152,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML)
-            .toEqual("Sometime");
+            .toEqual("Somewhat");
     });
 
     it("select an option using enter shortcut", () => {
