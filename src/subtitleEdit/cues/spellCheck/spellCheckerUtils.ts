@@ -1,5 +1,5 @@
 import { Constants } from "../../constants";
-import * as _ from "lodash";
+import _ from "lodash";
 import { SpellCheckHash } from "./model";
 import CryptoJS from "crypto-js";
 
@@ -27,8 +27,8 @@ export const addIgnoredKeyword = (trackId: string, cueId: string, keyword: strin
 };
 
 export const hasIgnoredKeyword = (trackId: string, cueId: string, keyword: string, ruleId: string): boolean => {
-    const hashes = _.get(getSpellcheckIgnores(), `${trackId}.hashes`);
-    return hashes != null && hashes.includes(generateSpellcheckHash(cueId, keyword, ruleId));
+    const hashes = _.get(getSpellcheckIgnores(), `${trackId}.hashes`, []);
+    return hashes.includes(generateSpellcheckHash(cueId, keyword, ruleId));
 };
 
 
