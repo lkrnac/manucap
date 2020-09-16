@@ -147,14 +147,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         editorState = EditorState.moveFocusToEnd(editorState);
     }
 
-    const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
+    const findSpellCheckIssues = (contentBlock: ContentBlock, callback: Function): void => {
         if (props.spellCheck && props.spellCheck.matches) {
-            // console.log(_contentBlock.getText());
-            // console.log(_contentBlock);
             props.spellCheck.matches.forEach(match => {
                     if (editingTrack?.id && props.editUuid) {
                         const endOffset = match.offset + match.length;
-                        const keyword = _contentBlock.getText().slice(match.offset, endOffset);
+                        const keyword = contentBlock.getText().slice(match.offset, endOffset);
                         if (!hasIgnoredKeyword(editingTrack.id, props.editUuid, keyword, match.rule.id)) {
                             callback(match.offset, endOffset);
                         }

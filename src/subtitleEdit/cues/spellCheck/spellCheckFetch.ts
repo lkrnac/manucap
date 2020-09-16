@@ -14,11 +14,13 @@ const addSpellCheck = (
     cueId: string,
     spellCheck: SpellCheck,
 ): void => {
-    spellCheck = {
-        matches: spellCheck.matches.filter(match =>
-            !hasIgnoredKeyword(trackId, cueId,
-                match.context.text.substring(match.offset, match.offset + match.length), match.rule.id))
-    };
+    if (spellCheck.matches != null) {
+        spellCheck = {
+            matches: spellCheck.matches.filter(match =>
+                !hasIgnoredKeyword(trackId, cueId,
+                    match.context.text.substring(match.offset, match.offset + match.length), match.rule.id))
+        };
+    }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
 
     const subtitleSpecification = getState().subtitleSpecifications;
