@@ -2,7 +2,13 @@ import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
-import { CueCategory, CueChange, CueDto, ScrollPosition, SubtitleEditAction } from "../model";
+import {
+    CueCategory,
+    CueChange,
+    CueDto,
+    ScrollPosition,
+    SubtitleEditAction
+} from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties, } from "./cueUtils";
 import { Constants } from "../constants";
@@ -22,6 +28,8 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
+import { searchCueText } from "./searchReplace/searchReplaceSlices";
+import { SearchDirection, SearchReplaceMatches } from "./searchReplace/model";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -52,6 +60,11 @@ interface CheckOptions extends SubtitleSpecificationAction {
 export interface SpellCheckAction extends CueIndexAction {
     spellCheck: SpellCheck;
 }
+
+export interface SearchReplaceAction extends CueIndexAction {
+    searchMatches: SearchReplaceMatches;
+}
+
 export interface SpellCheckRemovalAction extends CueIndexAction {
     offset: number;
 }
@@ -74,6 +87,19 @@ const createAndAddCue = (previousCue: CueDto,
     const newCue = new VTTCue(startTime, endTime, "");
     copyNonConstructorProperties(newCue, previousCue.vttCue);
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
+};
+
+const finNextOffsetIndexForSearch = (
+    cue: CueDto,
+    offsets: Array<number>,
+    direction: SearchDirection
+): number => {
+    const lastIndex = offsets.length - 1;
+    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex >= 0) {
+        return cue.searchReplaceMatches.offsetIndex < lastIndex ?
+            cue.searchReplaceMatches.offsetIndex : lastIndex;
+    }
+    return direction === "NEXT" ? 0 : lastIndex;
 };
 
 export const cuesSlice = createSlice({
@@ -99,6 +125,12 @@ export const cuesSlice = createSlice({
             state[action.payload.idx] = {
                 ...state[action.payload.idx],
                 spellCheck: action.payload.spellCheck
+            };
+        },
+        addSearchMatches: (state, action: PayloadAction<SearchReplaceAction>): void => {
+            state[action.payload.idx] = {
+                ...state[action.payload.idx],
+                searchReplaceMatches: action.payload.searchMatches
             };
         },
         removeSpellCheckMatch: (state, action: PayloadAction<SpellCheckRemovalAction>): void => {
@@ -237,8 +269,6 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
-            const track = getState().editingTrack;
-
             let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
             if (textOnly) {
                 newVttCue = new VTTCue(originalCue.vttCue.startTime, originalCue.vttCue.endTime, vttCue.text);
@@ -250,6 +280,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const previousCue = cues[idx - 1];
             const followingCue = cues[idx + 1];
             const subtitleSpecifications = getState().subtitleSpecifications;
+            const track = getState().editingTrack;
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
@@ -278,6 +309,13 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                         language, spellCheckerDomain);
                 }
             }
+            const searchReplace = getState().searchReplace;
+            const offsets = searchCueText(newVttCue.text, searchReplace.find, searchReplace.matchCase);
+            const offsetIndex = finNextOffsetIndexForSearch(originalCue, offsets, searchReplace.direction);
+            dispatch(cuesSlice.actions.addSearchMatches(
+                { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }}
+                )
+            );
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
                 overlapEnabled: overlapCaptionsAllowed,
@@ -285,12 +323,11 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }));
         }
     };
-
-
 export const removeSpellcheckMatch = (cueIdx: number, offset: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
-     dispatch(cuesSlice.actions.removeSpellCheckMatch({ idx: cueIdx, offset: offset }));
+        dispatch(cuesSlice.actions.removeSpellCheckMatch({ idx: cueIdx, offset: offset }));
     };
+
 export const validateCue = (idx: number, editUuid?: string): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const cues = getState().cues;
@@ -307,8 +344,6 @@ export const validateCue = (idx: number, editUuid?: string): AppThunk =>
             }));
         }
     };
-
-
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueCategoryAction>>): void => {
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));

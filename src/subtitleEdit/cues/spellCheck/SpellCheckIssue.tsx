@@ -46,7 +46,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const showAtBottom = popupPlacement(target);
     const onExitPopover = (): void => {
         props.bindCueViewModeKeyboardShortcut();
-        props.editorRef?.current?.focus();
     };
 
     useEffect(
@@ -95,6 +94,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
 
     const onOptionSelected = (optionValueType: ValueType<Option>): void => {
         const option = optionValueType as Option;
+        props.editorRef?.current?.focus();
         if(option.value === props.decoratedText) {
             ignoreKeyword();
         } else {
