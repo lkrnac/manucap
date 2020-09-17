@@ -1,6 +1,7 @@
 import "../../../testUtils/initBrowserEnvironment";
 import { Constants } from "../../constants";
 import { addIgnoredKeyword, generateSpellcheckHash, hasIgnoredKeyword } from "./spellCheckerUtils";
+import { Match, Replacement } from "./model";
 
 describe("spellCheckerUtils", () => {
     const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
@@ -9,12 +10,16 @@ describe("spellCheckerUtils", () => {
     describe("containsIgnoredKeyword", () => {
         it("returns true if it contains keyword generated hash", () => {
             //GIVEN
+            const match = { offset: 8, length: 13, replacements: [] as Replacement[],
+                context: { text: "this is falsex", offset: 2, length: 13 },
+                rule: { id: ruleId }} as Match;
+
             localStorage.setItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY,
-                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"0dfa33734505a24a72c18909ace7cb96\"]," +
+                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"21db4a58c10774db9f1b4802f89c380c\"]," +
                 "\"creationDate\":\"2020-09-15T02:25:14.756Z\"}}");
 
             //WHEN
-            const containsIgnoredKeyword = hasIgnoredKeyword(trackId, "falsex", ruleId);
+            const containsIgnoredKeyword = hasIgnoredKeyword(trackId, match);
 
             //THEN
             expect(containsIgnoredKeyword).toBeTruthy();
@@ -22,12 +27,16 @@ describe("spellCheckerUtils", () => {
 
         it("returns false if it does not contain the keyword generated hash", () => {
             //GIVEN
+            const match = { offset: 8, length: 5, replacements: [] as Replacement[],
+                context: { text: "this is falsex", offset: 8, length: 5 },
+                rule: { id: ruleId }} as Match;
+
             localStorage.setItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY,
-                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"0dfa33734505a24a72c18909ace7cb96\"]," +
+                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"21db4a58c10774db9f1b4802f89c380c\"]," +
                 "\"creationDate\":\"2020-09-15T02:25:14.756Z\"}}");
 
             //WHEN
-            const containsIgnoredKeyword = hasIgnoredKeyword(trackId, "XXfalsex", ruleId);
+            const containsIgnoredKeyword = hasIgnoredKeyword(trackId, match);
 
             //THEN
             expect(containsIgnoredKeyword).toBeFalsy();
@@ -54,7 +63,7 @@ describe("spellCheckerUtils", () => {
             const expectedHash = generateSpellcheckHash(newKeyword,ruleId);
 
             localStorage.setItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY,
-                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"0dfa33734505a24a72c18909ace7cb96\"]," +
+                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"21db4a58c10774db9f1b4802f89c380c\"]," +
                 "\"creationDate\":\"2020-09-15T02:25:14.756Z\"}}");
 
             //WHEN
@@ -79,7 +88,7 @@ describe("spellCheckerUtils", () => {
             const expectedHash = generateSpellcheckHash(keyword,ruleId);
 
             //THEN
-            expect(expectedHash).toEqual("0dfa33734505a24a72c18909ace7cb96");
+            expect(expectedHash).toEqual("21db4a58c10774db9f1b4802f89c380c");
         });
 
         it("returns same hash if called different times with same parameters", () => {

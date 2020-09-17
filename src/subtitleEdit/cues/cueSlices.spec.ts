@@ -48,7 +48,7 @@ const testingCuesWithGaps = [
     { vttCue: new VTTCue(12, 18, "Caption Line 3"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
 const ruleId = "MORFOLOGIK_RULE_EN_US";
-const keyword = "falsex";
+const ignoredKeyword = "falsex";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -131,7 +131,7 @@ describe("cueSlices", () => {
                             replacements: [{ "value": "Txt" }],
                             "offset": 0,
                             "length": 3,
-                            context: { text: keyword, length: 3, offset: 0 },
+                            context: { text: "txt", length: 3, offset: 0 },
                             rule: { id: ruleId }
                         },
                         {
@@ -150,7 +150,7 @@ describe("cueSlices", () => {
                             ],
                             "offset": 7,
                             "length": 4,
-                            context: { text: keyword, length: 4, offset: 7 },
+                            context: { text: "text", length: 4, offset: 7 },
                             rule: { id: ruleId }
                         }
                     ]
@@ -270,19 +270,12 @@ describe("cueSlices", () => {
                 expect(global.fetch).not.toBeCalled();
             });
 
-            it("updates cues in redux with spell checking state excluding ignored ones", (done) => {
+            it("exclude spell check match that matches ignored hash in local storage ", (done) => {
                 // GIVEN
-                const cues = [{ vttCue: new VTTCue(0, 2, "falsex Line 1"),
-                    cueCategory: "DIALOGUE" }] as CueDto[];
+                const cues = [
+                    { vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
+                        corrupted: true }] as CueDto[];
                 testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[0].editUuid;
-                const hash = generateSpellcheckHash(keyword, ruleId);
-                const ignoredKeyWordMap = { "0fd7af04-6c87-4793-8d66-fdb19b5fd04d" : {
-                        hashes: [hash],
-                        creationDate: new Date()
-                    }};
-                localStorage.setItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY,
-                    JSON.stringify(ignoredKeyWordMap));
                 const testingResponse = {
                     matches: [
                         {
@@ -305,9 +298,18 @@ describe("cueSlices", () => {
                     .mockImplementationOnce(() => new Promise((resolve) =>
                         resolve({ json: () => testingResponse })));
 
-                // WHEN
+                const hash = generateSpellcheckHash(ignoredKeyword, ruleId);
+                const ignoredKeyWordMap = {};
+                ignoredKeyWordMap[trackId] = {
+                        hashes: [hash],
+                        creationDate: new Date()
+                };
+                localStorage.setItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY,
+                    JSON.stringify(ignoredKeyWordMap));
+
+                //WHEN
                 testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"),
-                    editUuid) as {} as AnyAction);
+                    testingStore.getState().cues[0].editUuid) as {} as AnyAction);
 
                 // THEN
                 setTimeout(
@@ -318,10 +320,7 @@ describe("cueSlices", () => {
                             { method: "POST", body: "language=testing-language&text=Dummy Cue" }
                         );
                         expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
-                        expect(testingStore.getState().cues[0].editUuid).toEqual(editUuid);
                         expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
-                        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
-                        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
                         done();
                     },
                     50

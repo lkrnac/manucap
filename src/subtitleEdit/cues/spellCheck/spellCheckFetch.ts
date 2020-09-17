@@ -15,9 +15,7 @@ const addSpellCheck = (
 ): void => {
     if (spellCheck.matches != null) {
         spellCheck = {
-            matches: spellCheck.matches.filter(match =>
-                !hasIgnoredKeyword(trackId,
-                    match.context.text.substring(match.offset, match.offset + match.length), match.rule.id))
+            matches: spellCheck.matches.filter(match => !hasIgnoredKeyword(trackId, match))
         };
     }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));

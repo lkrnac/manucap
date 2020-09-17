@@ -128,15 +128,15 @@ export const cuesSlice = createSlice({
                 searchReplaceMatches: action.payload.searchMatches
             };
         },
+        //@ts-ignore
         removeSpellcheckMatchFromAllCues: (state, action: PayloadAction<SpellCheckRemovalAction>): void => {
             const trackId = action.payload.trackId;
             state.filter((cue: CueDto) => cue.spellCheck != null && cue.spellCheck.matches != null)
                 .map(cue => cue.spellCheck)
                 //@ts-ignore spellcheck will always not null
                 .forEach((spellCheck: SpellCheck) => {
-                    spellCheck.matches = spellCheck
-                        .matches.filter(match => !hasIgnoredKeyword(trackId, match.context.text.substring(match.offset,
-                            match.offset + match.length), match.rule.id));
+                    spellCheck.matches.splice(spellCheck.matches.findIndex(match =>
+                        hasIgnoredKeyword(trackId, match)), 1);
                 });
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {
@@ -331,11 +331,11 @@ export const removeSpellcheckMatchFromAllCues = (): AppThunk =>
         }
     };
 
-export const validateAllSpellchecks = (): AppThunk =>
+export const validateAllCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const cues = getState().cues;
-        cues.filter((cue: CueDto) => cue.spellCheck != null && cue.spellCheck.matches != null)
-            .forEach((_cue: CueDto, index: number) => { // cue wasn't removed in the meantime from cues
+        console.log(cues[0].spellCheck);
+        cues.forEach((_cue: CueDto, index: number) => {
             // list
             const track = getState().editingTrack;
             const subtitleSpecifications = getState().subtitleSpecifications;

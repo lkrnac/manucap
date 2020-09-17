@@ -5,7 +5,7 @@ import { SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
 import { useDispatch } from "react-redux";
 import { addIgnoredKeyword } from "./spellCheckerUtils";
-import { removeSpellcheckMatchFromAllCues, validateAllSpellchecks } from "../cueSlices";
+import { removeSpellcheckMatchFromAllCues, validateAllCues } from "../cueSlices";
 
 
 interface Props {
@@ -85,14 +85,14 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };
-    const revalidateAllSpellchecks = (): void => {
-        dispatch(validateAllSpellchecks());
+    const revalidateAllCues = (): void => {
+        dispatch(validateAllCues());
     };
 
     const ignoreKeyword = (): void => {
         addIgnoredKeyword(props.trackId, props.decoratedText, spellCheckMatch.rule.id);
         dispatch(removeSpellcheckMatchFromAllCues());
-        revalidateAllSpellchecks();
+        revalidateAllCues();
     };
 
     const onOptionSelected = (optionValueType: ValueType<Option>): void => {
