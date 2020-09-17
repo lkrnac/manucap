@@ -27,7 +27,7 @@ export const checkCharacterLimitation = (
         const lines = text.split("\n");
         return lines
             .map(
-                line => subtitleSpecification.maxCharactersPerLine === null
+                line => !subtitleSpecification.maxCharactersPerLine
                     || removeHtmlTags(line).length <= subtitleSpecification.maxCharactersPerLine
             )
             .reduce((accumulator, lineOk) => accumulator && lineOk);
