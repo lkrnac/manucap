@@ -5,7 +5,7 @@ import { SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
 import { useDispatch } from "react-redux";
 import { addIgnoredKeyword } from "./spellCheckerUtils";
-import { removeSpellcheckMatch, validateCue } from "../cueSlices";
+import { removeSpellcheckMatchFromAllCues, validateAllSpellchecks } from "../cueSlices";
 
 
 interface Props {
@@ -37,6 +37,7 @@ const popupPlacement = (target: MutableRefObject<null>): boolean => {
 interface Option {
     value: string;
     label: string;
+    title?: string;
 }
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
@@ -45,12 +46,14 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const selectRef = useRef<Select>(null);
     const showAtBottom = popupPlacement(target);
     const onExitPopover = (): void => {
+        props.editorRef?.current?.focus();
         props.bindCueViewModeKeyboardShortcut();
     };
 
     useEffect(
         () => (): void => {
-            onExitPopover(); // Sometimes Overlay got unmounted before onExit event got executed so this to ensure
+            props.bindCueViewModeKeyboardShortcut();  // Sometimes Overlay got unmounted before onExit event got
+            // executed so this to ensure
             // action is done
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +70,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         .filter((replacement) => replacement.value.trim() !== "")
         .map((replacement) => ({ value: replacement.value, label: replacement.value } as Option)
         );
-    selectOptions.unshift({ value: props.decoratedText, label: "Ignore" });
+    selectOptions.unshift({ value: props.decoratedText,
+        label: "Ignore All", title: `Ignores ${props.decoratedText} in all cues.` });
 
     const customStyles = {
         control: () => ({ visibility: "hidden", height: "0px" }),
@@ -78,23 +82,21 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
 
     const onEnterPopover = (): void => {
         props.unbindCueViewModeKeyboardShortcut();
-
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };
-    const reValidateCue = (): void => {
-        dispatch(validateCue(props.cueIdx, props.cueId));
+    const revalidateAllSpellchecks = (): void => {
+        dispatch(validateAllSpellchecks());
     };
 
     const ignoreKeyword = (): void => {
-        addIgnoredKeyword(props.trackId, props.cueId, props.decoratedText, spellCheckMatch.rule.id);
-        dispatch(removeSpellcheckMatch(props.cueIdx, props.start));
-        reValidateCue();
+        addIgnoredKeyword(props.trackId, props.decoratedText, spellCheckMatch.rule.id);
+        dispatch(removeSpellcheckMatchFromAllCues());
+        revalidateAllSpellchecks();
     };
 
     const onOptionSelected = (optionValueType: ValueType<Option>): void => {
         const option = optionValueType as Option;
-        props.editorRef?.current?.focus();
         if(option.value === props.decoratedText) {
             ignoreKeyword();
         } else {

@@ -3,15 +3,8 @@ export interface Replacement {
 }
 
 export interface SpellCheckHash {
-    cueId: string;
     keyword: string;
     ruleId: string;
-    //
-    //
-    // constructor(cueId: string, context: SpellCheckContext) {
-    //     this.cueId= cueId;
-    //     this.context = context;
-    // }
 }
 
 
@@ -30,7 +23,7 @@ export interface Match {
     replacements: Replacement[];
     offset: number;
     length: number;
-    rule: SpellcheckRule
+    rule: SpellcheckRule;
 }
 
 export interface SpellCheck {

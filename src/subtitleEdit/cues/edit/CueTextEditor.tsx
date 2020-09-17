@@ -171,7 +171,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     if (editingTrack?.id && props.editUuid) {
                         const endOffset = match.offset + match.length;
                         const keyword = contentBlock.getText().slice(match.offset, endOffset);
-                        if (!hasIgnoredKeyword(editingTrack.id, props.editUuid, keyword, match.rule.id)) {
+                        if (!hasIgnoredKeyword(editingTrack.id, keyword, match.rule.id)) {
                             callback(match.offset, endOffset);
                         }
                     }

@@ -11,13 +11,12 @@ const addSpellCheck = (
     getState: Function,
     trackId: string,
     index: number,
-    cueId: string,
     spellCheck: SpellCheck,
 ): void => {
     if (spellCheck.matches != null) {
         spellCheck = {
             matches: spellCheck.matches.filter(match =>
-                !hasIgnoredKeyword(trackId, cueId,
+                !hasIgnoredKeyword(trackId,
                     match.context.text.substring(match.offset, match.offset + match.length), match.rule.id))
         };
     }
@@ -33,7 +32,6 @@ export const fetchSpellCheck = (
     getState: Function,
     trackId: string,
     cueIndex: number,
-    cueId: string,
     text: string,
     language?: string,
     spellCheckDomain?: string,
@@ -43,7 +41,7 @@ export const fetchSpellCheck = (
         const requestBody = { method: "POST", body: `language=${language}&text=${plainText}` };
         fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
             .then(response => response.json())
-            .then(data => addSpellCheck(dispatch, getState, trackId, cueIndex, cueId, data as SpellCheck));
+            .then(data => addSpellCheck(dispatch, getState, trackId, cueIndex, data as SpellCheck));
     }
 };
 

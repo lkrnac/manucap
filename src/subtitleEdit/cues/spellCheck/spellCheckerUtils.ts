@@ -8,15 +8,15 @@ const getSpellcheckIgnores = (): {} => {
     return localStorageIgnoredSpellchecks == null ? {} : JSON.parse(localStorageIgnoredSpellchecks);
 };
 
-export const generateSpellcheckHash = (cueId: string, keyword: string, ruleId: string): string => {
-    const hashObject: SpellCheckHash = { cueId, keyword: keyword, ruleId };
+export const generateSpellcheckHash = (keyword: string, ruleId: string): string => {
+    const hashObject: SpellCheckHash = { keyword: keyword, ruleId };
     return CryptoJS.MD5(JSON.stringify(hashObject)).toString();
 };
 
-export const addIgnoredKeyword = (trackId: string, cueId: string, keyword: string, ruleId: string): void => {
+export const addIgnoredKeyword = (trackId: string, keyword: string, ruleId: string): void => {
     const spellcheckIgnores = getSpellcheckIgnores();
     const hashes = _.get(spellcheckIgnores, `${trackId}.hashes`, []);
-    const hash = generateSpellcheckHash(cueId, keyword, ruleId);
+    const hash = generateSpellcheckHash(keyword, ruleId);
     if (hashes.length === 0) {
         spellcheckIgnores[trackId] = { hashes: [hash], creationDate: new Date() };
     } else {
@@ -25,9 +25,9 @@ export const addIgnoredKeyword = (trackId: string, cueId: string, keyword: strin
     localStorage.setItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY, JSON.stringify(spellcheckIgnores));
 };
 
-export const hasIgnoredKeyword = (trackId: string, cueId: string, keyword: string, ruleId: string): boolean => {
+export const hasIgnoredKeyword = (trackId: string, keyword: string, ruleId: string): boolean => {
     const hashes = _.get(getSpellcheckIgnores(), `${trackId}.hashes`, []);
-    return hashes.includes(generateSpellcheckHash(cueId, keyword, ruleId));
+    return hashes.includes(generateSpellcheckHash(keyword, ruleId));
 };
 
 

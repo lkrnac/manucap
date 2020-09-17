@@ -276,7 +276,7 @@ describe("cueSlices", () => {
                     cueCategory: "DIALOGUE" }] as CueDto[];
                 testingStore.dispatch(updateCues(cues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
-                const hash = generateSpellcheckHash(editUuid, keyword, ruleId);
+                const hash = generateSpellcheckHash(keyword, ruleId);
                 const ignoredKeyWordMap = { "0fd7af04-6c87-4793-8d66-fdb19b5fd04d" : {
                         hashes: [hash],
                         creationDate: new Date()
