@@ -33,8 +33,9 @@ import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { replaceCurrentMatch, setFind, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
+import { Constants } from "../../constants";
 
 jest.mock("lodash", () => (
     {
@@ -1087,6 +1088,64 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+        });
+
+        it("ignores a keyword when clicking ignore option", () => {
+            // GIVEN
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const spellCheck = {
+                matches: [
+                    { offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
+                        context: { text: "Line", length: 5, offset: 8 },
+                        rule: { id: ruleId }
+                    }
+                ]
+            } as SpellCheck;
+            const cue = { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                corrupted: true } as CueDto;
+            testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementationOnce(() => new Promise((resolve) =>
+                    resolve({ json: () => spellCheck })));
+
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={cue.vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
+                </Provider>
+            );
+
+            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            fireEvent(errorSpan,
+                            new MouseEvent("click", {
+                                bubbles: true,
+                                cancelable: true,
+                            })
+                        );
+            const ignoreOption = document.querySelectorAll(".spellcheck__option")[0] as Element;
+            fireEvent(ignoreOption,
+                new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true,
+                })
+            );
+
+            // WHEN
+            //@ts-ignore value should not be null
+            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY));
+            expect(ignores[trackId]).not.toBeNull();
+            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
         });
     });
 

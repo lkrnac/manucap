@@ -15,11 +15,10 @@ export const generateSpellcheckHash = (cueId: string, keyword: string, ruleId: s
 
 export const addIgnoredKeyword = (trackId: string, cueId: string, keyword: string, ruleId: string): void => {
     const spellcheckIgnores = getSpellcheckIgnores();
-    const hashes = _.get(spellcheckIgnores, `${trackId}.hashes`);
+    const hashes = _.get(spellcheckIgnores, `${trackId}.hashes`, []);
     const hash = generateSpellcheckHash(cueId, keyword, ruleId);
-
-    if (hashes == null) {
-        _.set(spellcheckIgnores, `${trackId}`, { hashes: [hash], creationDate: new Date() });
+    if (hashes.length === 0) {
+        spellcheckIgnores[trackId] = { hashes: [hash], creationDate: new Date() };
     } else {
         hashes.push(hash);
     }

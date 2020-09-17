@@ -269,6 +269,7 @@ describe("cueSlices", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).not.toBeCalled();
             });
+
             it("updates cues in redux with spell checking state excluding ignored ones", (done) => {
                 // GIVEN
                 const cues = [{ vttCue: new VTTCue(0, 2, "falsex Line 1"),
@@ -326,7 +327,6 @@ describe("cueSlices", () => {
                     50
                 );
             });
-
         });
 
         describe("range prevention", () => {
