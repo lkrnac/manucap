@@ -1090,7 +1090,7 @@ describe("CueTextEditor", () => {
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
         });
 
-        test.only("ignores all spell check matches and revalidate all cues when clicking ignore all option", () => {
+        it("ignores all spell check matches and revalidate all cues when clicking ignore all option", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const spellCheck = {

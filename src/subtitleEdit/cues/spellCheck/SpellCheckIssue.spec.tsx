@@ -8,6 +8,7 @@ import { Overlay } from "react-bootstrap";
 import { spellCheckOptionPredicate } from "../../../testUtils/testUtils";
 import { Provider } from "react-redux";
 import testingStore from "../../../testUtils/testingStore";
+
 const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "");
 
@@ -484,15 +485,50 @@ describe("SpellCheckerIssue", () => {
 
     // it("renders popup on top when there is enough space for in the window", () => {
     //     // GIVEN
-    //     jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: {  } });
+    //     // @ts-ignore
+    //     // noinspection JSConstantReassignment
+    //
+    //     window.innerHeight = 100;
+    //     const spellCheckPopupId = 15;
+    //     // const setSpellCheckerMatchingOffset = (id: number | null): void => {
+    //     //     spellCheckPopupId = id;
+    //     // };
+    //     const actualNode = mount(
+    //         <Provider store={testingStore}>
+    //             <SpellCheckIssue
+    //                 trackId={trackId}
+    //                 cueId={cueId}
+    //                 cueIdx={0}
+    //                 decoratedText="asd"
+    //                 spellCheck={spellCheck}
+    //                 start={15}
+    //                 end={18}
+    //                 correctSpelling={jest.fn()}
+    //                 setSpellCheckerMatchingOffset={jest.fn()}
+    //                 spellCheckerMatchingOffset={null}
+    //                 editorRef={emptyEditorRef}
+    //                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+    //                 unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+    //             >
+    //                 <div className="text" />
+    //             </SpellCheckIssue>
+    //         </Provider>
+    //     );
+    //
+    //     // WHEN
+    //     actualNode.find(".sbte-text-with-error").simulate("click");
+    //     actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
+    //
+    //     // THEN
+    //     expect(actualNode.find(Overlay).at(0).props().placement).toEqual("top");
+    // });
+    //
+    // it("renders xxxxxxxxxxxxxxxxxx", () => {
+    //     // GIVEN
     //
     //     // @ts-ignore
     //     // noinspection JSConstantReassignment
     //     window.innerHeight = 100;
-    //     let spellCheckerMatchingOffset = 15;
-    //     const setSpellCheckerMatchingOffset = (id: number | null): void => {
-    //         spellCheckerMatchingOffset = id;
-    //     };
     //     const { container } = render(
     //         <Provider store={testingStore}>
     //             <SpellCheckIssue
@@ -504,8 +540,8 @@ describe("SpellCheckerIssue", () => {
     //                 start={15}
     //                 end={18}
     //                 correctSpelling={jest.fn()}
-    //                 setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
-    //                 spellCheckerMatchingOffset={15}
+    //                 setSpellCheckerMatchingOffset={jest.fn()}
+    //                 spellCheckerMatchingOffset={null}
     //                 editorRef={emptyEditorRef}
     //                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
     //                 unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
@@ -528,7 +564,7 @@ describe("SpellCheckerIssue", () => {
     //
     //
     //     // THEN
-    //     expect(container.find(Overlay).at(0).props().placement).toEqual("top");
+    //     // expect(container.find(Overlay).at(0).props().placement).toEqual("top");
     // });
 
     it("renders popup on bottom when there is enough space for in the window", () => {
