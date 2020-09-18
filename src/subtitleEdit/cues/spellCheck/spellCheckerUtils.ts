@@ -4,7 +4,7 @@ import { Match, SpellCheckHash } from "./model";
 import CryptoJS from "crypto-js";
 
 const getSpellcheckIgnores = (): {} => {
-    const localStorageIgnoredSpellchecks = localStorage.getItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY);
+    const localStorageIgnoredSpellchecks = localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY);
     return localStorageIgnoredSpellchecks == null ? {} : JSON.parse(localStorageIgnoredSpellchecks);
 };
 
@@ -22,7 +22,7 @@ export const addIgnoredKeyword = (trackId: string, keyword: string, ruleId: stri
     } else {
         hashes.push(hash);
     }
-    localStorage.setItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY, JSON.stringify(spellcheckIgnores));
+    localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, JSON.stringify(spellcheckIgnores));
 };
 
 export const hasIgnoredKeyword = (trackId: string, match: Match): boolean => {

@@ -43,7 +43,7 @@ jest.mock("lodash", () => (
             fn.cancel = jest.fn();
             return fn;
         },
-        get: (): [] => {return [];}
+        get: jest.requireActual("lodash/get")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
@@ -981,10 +981,10 @@ describe("CueTextEditor", () => {
             const spellCheck = {
                 matches: [
                     { offset: 5, length: 3, replacements: [{ value: "option1" }, { value: "HTML" }] as Replacement[],
-                        context: { text: "hTm", length: 3, offset: 5 },
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 3, offset: 5 },
                         rule: { id: ruleId }},
                     { offset: 14, length: 6, replacements: [] as Replacement[],
-                        context: { text: "word", length: 6, offset: 14 },
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 6, offset: 14 },
                         rule: { id: ruleId }}
                 ]
             } as SpellCheck;
@@ -1020,10 +1020,10 @@ describe("CueTextEditor", () => {
             const spellCheck = {
                 matches: [
                     { offset: 5, length: 3, replacements: [] as Replacement[],
-                        context: { text: "word", length: 3, offset: 5 },
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 3, offset: 5 },
                         rule: { id: ruleId }},
                     { offset: 14, length: 5, replacements: [] as Replacement[],
-                        context: { text: "word", length: 5, offset: 14 },
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 5, offset: 14 },
                         rule: { id: ruleId }}
                 ]
             } as SpellCheck;
@@ -1059,10 +1059,10 @@ describe("CueTextEditor", () => {
             const spellCheck = {
                 matches: [
                     { offset: 5, length: 3, replacements: [] as Replacement[],
-                        context: { text: "word", length: 3, offset: 5 },
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 3, offset: 5 },
                         rule: { id: ruleId }},
                     { offset: 14, length: 5, replacements: [] as Replacement[],
-                        context: { text: "word", length: 5, offset: 14 },
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 5, offset: 14 },
                         rule: { id: ruleId }}
                 ]
             } as SpellCheck;
@@ -1090,20 +1090,17 @@ describe("CueTextEditor", () => {
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
         });
 
-        it("ignores all spell check matches and revalidate all cues when clicking ignore all option", () => {
+        test.only("ignores all spell check matches and revalidate all cues when clicking ignore all option", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const spellCheck = {
                 matches: [
                     { offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
-                        context: { text: "Line", length: 5, offset: 8 },
+                        context: { text: "Caption Linex 1", offset: 8, length: 5 },
                         rule: { id: ruleId }
                     }
                 ]
             } as SpellCheck;
-            const cue = { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
-                cueCategory: "DIALOGUE", spellCheck: spellCheck,
-                corrupted: true } as CueDto;
 
             const cues = [
                 { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
@@ -1126,7 +1123,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         index={0}
-                        vttCue={cue.vttCue}
+                        vttCue={cues[0].vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                     />
@@ -1151,7 +1148,7 @@ describe("CueTextEditor", () => {
 
             // THEN
             //@ts-ignore value should not be null
-            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY));
+            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
             expect(ignores[trackId]).not.toBeNull();
             expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
@@ -1508,7 +1505,7 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
             const spellCheck = {
                 matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
-                    context: { text: "word", length: 5, offset: 5 },
+                    context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },
                     rule: { id: ruleId }}]
             } as SpellCheck;
 
@@ -1543,7 +1540,7 @@ describe("CueTextEditor", () => {
             // GIVEN
             const spellCheck = {
                 matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
-                    context: { text: "word", length: 5, offset: 5 },
+                    context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },
                     rule: { id: ruleId }}]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
@@ -1571,7 +1568,7 @@ describe("CueTextEditor", () => {
             // GIVEN
             const spellCheck = {
                 matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
-                    context: { text: "word", length: 5, offset: 5 },
+                    context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },
                     rule: { id: ruleId }}]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");

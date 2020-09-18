@@ -334,7 +334,6 @@ export const removeSpellcheckMatchFromAllCues = (): AppThunk =>
 export const validateAllCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const cues = getState().cues;
-        console.log(cues[0].spellCheck);
         cues.forEach((_cue: CueDto, index: number) => {
             // list
             const track = getState().editingTrack;

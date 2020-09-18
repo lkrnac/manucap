@@ -304,7 +304,7 @@ describe("cueSlices", () => {
                         hashes: [hash],
                         creationDate: new Date()
                 };
-                localStorage.setItem(Constants.SPELLCHECKER_IGNORED_LOCAL_STORAGE_KEY,
+                localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY,
                     JSON.stringify(ignoredKeyWordMap));
 
                 //WHEN
