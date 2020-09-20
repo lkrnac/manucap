@@ -34,7 +34,6 @@ import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { replaceCurrentMatch, setFind, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
-import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { Constants } from "../../constants";
 
 jest.mock("lodash", () => (
@@ -226,6 +225,7 @@ const testForContentState = (
 
 describe("CueTextEditor", () => {
     beforeEach(() => {
+        document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -821,7 +821,6 @@ describe("CueTextEditor", () => {
                 id: trackId
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-
         });
 
 
@@ -1112,6 +1111,7 @@ describe("CueTextEditor", () => {
             ] as CueDto[];
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+
             // @ts-ignore modern browsers does have it
             global.fetch = jest.fn()
                 .mockImplementationOnce(() => new Promise((resolve) =>
@@ -1123,7 +1123,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         index={0}
-                        vttCue={cues[0].vttCue}
+                        vttCue={testingStore.getState().cues[0].vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                     />
@@ -1534,62 +1534,6 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
-        });
-
-        it("passes down bindCueViewModeKeyboardShortcut to spellcheck component", () => {
-            // GIVEN
-            const spellCheck = {
-                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
-                    context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },
-                    rule: { id: ruleId }}]
-            } as SpellCheck;
-            const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
-            const editUuid = testingStore.getState().cues[0].editUuid;
-
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueTextEditor
-                        index={0}
-                        vttCue={vttCue}
-                        editUuid={editUuid}
-                        spellCheck={spellCheck}
-                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    />
-                </Provider>
-            );
-
-            // THEN
-            expect(actualNode.find(SpellCheckIssue).props().bindCueViewModeKeyboardShortcut).not.toBeNull();
-        });
-
-        it("passes down bindCueViewModeKeyboardShortcut to spellcheck component", () => {
-            // GIVEN
-            const spellCheck = {
-                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
-                    context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },
-                    rule: { id: ruleId }}]
-            } as SpellCheck;
-            const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
-            const editUuid = testingStore.getState().cues[0].editUuid;
-
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueTextEditor
-                        index={0}
-                        vttCue={vttCue}
-                        editUuid={editUuid}
-                        spellCheck={spellCheck}
-                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    />
-                </Provider>
-            );
-
-            // THEN
-            expect(actualNode.find(SpellCheckIssue).props().bindCueViewModeKeyboardShortcut).not.toBeNull();
         });
     });
 });

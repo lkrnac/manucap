@@ -90,6 +90,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     };
 
     const ignoreKeyword = (): void => {
+        console.log(`ignoreKeyword  props.decoratedText >>> ${props.decoratedText}`);
+
         addIgnoredKeyword(props.trackId, props.decoratedText, spellCheckMatch.rule.id);
         dispatch(removeSpellcheckMatchFromAllCues());
         revalidateAllCues();
