@@ -51,8 +51,7 @@ const CueEdit = (props: Props): ReactElement => {
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
 
     const unbindCueViewModeKeyboardShortcut =(): void => {
-        Mousetrap.unbind([KeyCombination.ESCAPE]);
-        Mousetrap.unbind([KeyCombination.ENTER]);
+        Mousetrap.unbind([KeyCombination.ESCAPE, KeyCombination.ENTER]);
     };
 
     const bindCueViewModeKeyboardShortcut =(): void => {

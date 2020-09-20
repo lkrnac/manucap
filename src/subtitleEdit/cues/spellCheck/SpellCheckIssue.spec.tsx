@@ -12,10 +12,6 @@ const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "");
 
 describe("SpellCheckerIssue", () => {
-    beforeEach(() => {
-        document.getElementsByTagName("html")[0].innerHTML = "";
-
-    });
 
     const emptyEditorRef = {} as RefObject<HTMLInputElement>;
     const bindCueViewModeKeyboardShortcutSpy = jest.fn();
