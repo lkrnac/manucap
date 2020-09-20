@@ -3,9 +3,10 @@ import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addIgnoredKeyword } from "./spellCheckerUtils";
 import { removeSpellcheckMatchFromAllCues, validateAllCues } from "../cueSlices";
+import { SubtitleEditState } from "../../subtitleEditReducers";
 
 
 interface Props {
@@ -43,15 +44,15 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const target = useRef(null);
     const selectRef = useRef<Select>(null);
     const showAtBottom = popupPlacement(target);
-    const onExitPopover = (): void => {
-        props.editorRef?.current?.focus();
-        props.bindCueViewModeKeyboardShortcut();
-    };
+    const searchReplaceFind = useSelector((state: SubtitleEditState) => state.searchReplace.find);
 
     useEffect(
         () => (): void => {
-            props.bindCueViewModeKeyboardShortcut();  // Sometimes Overlay got unmounted before onExit event got
-            // executed so this to ensure
+            if(searchReplaceFind === "") {
+                props.editorRef?.current?.focus();
+            }
+            props.bindCueViewModeKeyboardShortcut(); // Sometimes Overlay got unmounted before
+            // onExit event got executed so this to ensure
             // action is done
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +84,12 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
         selectRef.current?.select.menuListRef?.firstElementChild?.focus();
     };
+
+    const onExitPopover = (): void => {
+        props.editorRef?.current?.focus();
+        props.bindCueViewModeKeyboardShortcut();
+    };
+
     const revalidateAllCues = (): void => {
         dispatch(validateAllCues());
     };
