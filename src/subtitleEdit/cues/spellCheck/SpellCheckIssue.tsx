@@ -20,8 +20,6 @@ interface Props {
     editorRef: RefObject<HTMLInputElement>;
     bindCueViewModeKeyboardShortcut: () => void;
     unbindCueViewModeKeyboardShortcut: () => void;
-    cueId: string;
-    cueIdx: number;
     trackId: string;
 }
 

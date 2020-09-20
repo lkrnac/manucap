@@ -823,7 +823,6 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         });
 
-
         it("renders with html and spell check errors", () => {
             // GIVEN
 
@@ -1092,6 +1091,18 @@ describe("CueTextEditor", () => {
         it("ignores all spell check matches and revalidate all cues when clicking ignore all option", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+
+            testingStore.dispatch(reset() as {} as AnyAction);
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             const spellCheck = {
                 matches: [
                     { offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
@@ -1111,6 +1122,7 @@ describe("CueTextEditor", () => {
             ] as CueDto[];
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
             // @ts-ignore modern browsers does have it
             global.fetch = jest.fn()

@@ -6,27 +6,30 @@ import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";
 import { Overlay } from "react-bootstrap";
 import { spellCheckOptionPredicate } from "../../../testUtils/testUtils";
-import { Provider } from "react-redux";
-import testingStore from "../../../testUtils/testingStore";
 
+jest.mock("react-redux");
 const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "");
 
 describe("SpellCheckerIssue", () => {
+    beforeEach(() => {
+        document.getElementsByTagName("html")[0].innerHTML = "";
+
+    });
+
     const emptyEditorRef = {} as RefObject<HTMLInputElement>;
     const bindCueViewModeKeyboardShortcutSpy = jest.fn();
     const unbindCueViewModeKeyboardShortcutSpy = jest.fn();
     const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
-    const cueId = "b3fd447e-513d-4328-ada9-c96a19d684e1";
     const ruleId = "MORFOLOGIK_RULE_EN_US";
     const spellCheck = {
         matches: [
             {
                 message: "There is error",
-                replacements: [],
+                replacements: [{ value: "error" }],
                 offset: 15,
                 length: 3,
-                context: { text: "asd", length: 3, offset: 15 },
+                context: { text: "some <i>HTML</i> <b>Text</b> sample", length: 3, offset: 15 },
                 rule: { id: ruleId }
             }
         ]
@@ -42,25 +45,21 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <SpellCheckIssue
-                    trackId={trackId}
-                    cueId={cueId}
-                    cueIdx={0}
-                    decoratedText="asd"
-                    spellCheck={spellCheck}
-                    start={15}
-                    end={18}
-                    correctSpelling={jest.fn()}
-                    setSpellCheckerMatchingOffset={jest.fn()}
-                    spellCheckerMatchingOffset={null}
-                    editorRef={emptyEditorRef}
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                >
-                    <div className="text" />
-                </SpellCheckIssue>
-            </Provider>
+            <SpellCheckIssue
+                trackId={trackId}
+                decoratedText="asd"
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            >
+                <div className="text" />
+            </SpellCheckIssue>
         );
 
         // THEN
@@ -73,25 +72,21 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <SpellCheckIssue
-                    trackId={trackId}
-                    cueId={cueId}
-                    cueIdx={0}
-                    decoratedText="asd"
-                    spellCheck={spellCheck}
-                    start={13}
-                    end={18}
-                    correctSpelling={jest.fn()}
-                    setSpellCheckerMatchingOffset={jest.fn()}
-                    spellCheckerMatchingOffset={null}
-                    editorRef={emptyEditorRef}
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                >
-                    <div className="text" />
-                </SpellCheckIssue>
-            </Provider>
+            <SpellCheckIssue
+                trackId={trackId}
+                decoratedText="asd"
+                spellCheck={spellCheck}
+                start={13}
+                end={18}
+                correctSpelling={jest.fn()}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            >
+                <div className="text" />
+            </SpellCheckIssue>
         );
 
         // THEN
@@ -104,25 +99,21 @@ describe("SpellCheckerIssue", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <SpellCheckIssue
-                    trackId={trackId}
-                    cueId={cueId}
-                    cueIdx={0}
-                    decoratedText="asd"
-                    spellCheck={spellCheck}
-                    start={15}
-                    end={17}
-                    correctSpelling={jest.fn()}
-                    setSpellCheckerMatchingOffset={jest.fn()}
-                    spellCheckerMatchingOffset={null}
-                    editorRef={emptyEditorRef}
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                >
-                    <div className="text" />
-                </SpellCheckIssue>
-            </Provider>
+            <SpellCheckIssue
+                trackId={trackId}
+                decoratedText="asd"
+                spellCheck={spellCheck}
+                start={15}
+                end={17}
+                correctSpelling={jest.fn()}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            >
+                <div className="text" />
+            </SpellCheckIssue>
         );
 
         // THEN
@@ -273,25 +264,21 @@ describe("SpellCheckerIssue", () => {
         } as SpellCheck;
 
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <SpellCheckIssue
-                    trackId={trackId}
-                    cueId={cueId}
-                    cueIdx={0}
-                    decoratedText="asd"
-                    spellCheck={spellCheck}
-                    start={15}
-                    end={18}
-                    correctSpelling={jest.fn()}
-                    setSpellCheckerMatchingOffset={jest.fn()}
-                    spellCheckerMatchingOffset={15}
-                    editorRef={emptyEditorRef}
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                >
-                    <div className="text" />
-                </SpellCheckIssue>
-            </Provider>
+            <SpellCheckIssue
+                trackId={trackId}
+                decoratedText="asd"
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={15}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            >
+                <div className="text" />
+            </SpellCheckIssue>
         );
 
         // WHEN
@@ -400,6 +387,12 @@ describe("SpellCheckerIssue", () => {
                                     tabIndex={-1}
                                 >Ignore All
                                 </div>
+                                <div
+                                    className="spellcheck__option css-yt9ioa-option"
+                                    id="react-select-2-option-1"
+                                    tabIndex={-1}
+                                >error
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -407,25 +400,21 @@ describe("SpellCheckerIssue", () => {
             </div>
         );
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <SpellCheckIssue
-                    trackId={trackId}
-                    cueId={cueId}
-                    cueIdx={0}
-                    decoratedText="asd"
-                    spellCheck={spellCheck}
-                    start={15}
-                    end={18}
-                    correctSpelling={jest.fn()}
-                    setSpellCheckerMatchingOffset={jest.fn()}
-                    spellCheckerMatchingOffset={15}
-                    editorRef={emptyEditorRef}
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                >
-                    <div className="text" />
-                </SpellCheckIssue>
-            </Provider>
+            <SpellCheckIssue
+                trackId={trackId}
+                decoratedText="asd"
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={15}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            >
+                <div className="text" />
+            </SpellCheckIssue>
         );
 
         // WHEN
@@ -454,25 +443,21 @@ describe("SpellCheckerIssue", () => {
         } as SpellCheck;
 
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <SpellCheckIssue
-                    trackId={trackId}
-                    cueId={cueId}
-                    cueIdx={0}
-                    decoratedText="asd"
-                    spellCheck={spellCheck}
-                    start={15}
-                    end={18}
-                    correctSpelling={handler}
-                    setSpellCheckerMatchingOffset={jest.fn()}
-                    spellCheckerMatchingOffset={15}
-                    editorRef={emptyEditorRef}
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                >
-                    <div className="text" />
-                </SpellCheckIssue>
-            </Provider>
+            <SpellCheckIssue
+                trackId={trackId}
+                decoratedText="asd"
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={handler}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={15}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            >
+                <div className="text" />
+            </SpellCheckIssue>
         );
 
         // WHEN
@@ -483,89 +468,40 @@ describe("SpellCheckerIssue", () => {
         expect(handler).toBeCalledWith("repl2", 15, 18);
     });
 
-    // it("renders popup on top when there is enough space for in the window", () => {
-    //     // GIVEN
-    //     // @ts-ignore
-    //     // noinspection JSConstantReassignment
-    //
-    //     window.innerHeight = 100;
-    //     const spellCheckPopupId = 15;
-    //     // const setSpellCheckerMatchingOffset = (id: number | null): void => {
-    //     //     spellCheckPopupId = id;
-    //     // };
-    //     const actualNode = mount(
-    //         <Provider store={testingStore}>
-    //             <SpellCheckIssue
-    //                 trackId={trackId}
-    //                 cueId={cueId}
-    //                 cueIdx={0}
-    //                 decoratedText="asd"
-    //                 spellCheck={spellCheck}
-    //                 start={15}
-    //                 end={18}
-    //                 correctSpelling={jest.fn()}
-    //                 setSpellCheckerMatchingOffset={jest.fn()}
-    //                 spellCheckerMatchingOffset={null}
-    //                 editorRef={emptyEditorRef}
-    //                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-    //                 unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-    //             >
-    //                 <div className="text" />
-    //             </SpellCheckIssue>
-    //         </Provider>
-    //     );
-    //
-    //     // WHEN
-    //     actualNode.find(".sbte-text-with-error").simulate("click");
-    //     actualNode.setProps({ spellCheckerMatchingOffset: spellCheckPopupId });
-    //
-    //     // THEN
-    //     expect(actualNode.find(Overlay).at(0).props().placement).toEqual("top");
-    // });
-    //
-    // it("renders xxxxxxxxxxxxxxxxxx", () => {
-    //     // GIVEN
-    //
-    //     // @ts-ignore
-    //     // noinspection JSConstantReassignment
-    //     window.innerHeight = 100;
-    //     const { container } = render(
-    //         <Provider store={testingStore}>
-    //             <SpellCheckIssue
-    //                 trackId={trackId}
-    //                 cueId={cueId}
-    //                 cueIdx={0}
-    //                 decoratedText="asd"
-    //                 spellCheck={spellCheck}
-    //                 start={15}
-    //                 end={18}
-    //                 correctSpelling={jest.fn()}
-    //                 setSpellCheckerMatchingOffset={jest.fn()}
-    //                 spellCheckerMatchingOffset={null}
-    //                 editorRef={emptyEditorRef}
-    //                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-    //                 unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-    //             >
-    //                 <div className="text" />
-    //             </SpellCheckIssue>
-    //         </Provider>
-    //     );
-    //
-    //     // WHEN
-    //     act(()=> {
-    //         fireEvent(
-    //             container.querySelector(".sbte-text-with-error") as Element,
-    //             new MouseEvent("click", {
-    //                 bubbles: true,
-    //                 cancelable: true,
-    //             })
-    //         );
-    //     });
-    //
-    //
-    //     // THEN
-    //     // expect(container.find(Overlay).at(0).props().placement).toEqual("top");
-    // });
+    it("renders popup on top when there is enough space for in the window", () => {
+        // GIVEN
+        // @ts-ignore
+        // noinspection JSConstantReassignment
+        window.innerHeight = 100;
+        let spellCheckerMatchingOffset = null;
+        const setSpellCheckerMatchingOffset = (id: number | null): void => {
+            spellCheckerMatchingOffset = id;
+        };
+        const actualNode = mount(
+            <SpellCheckIssue
+                trackId={trackId}
+                decoratedText="error"
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
+                spellCheckerMatchingOffset={spellCheckerMatchingOffset}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            >
+                <div className="text" />
+            </SpellCheckIssue>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-text-with-error").simulate("click");
+        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckerMatchingOffset });
+
+        // THEN
+        expect(actualNode.find(Overlay).at(0).props().placement).toEqual("top");
+    });
 
     it("renders popup on bottom when there is enough space for in the window", () => {
         // GIVEN
@@ -573,25 +509,21 @@ describe("SpellCheckerIssue", () => {
         // noinspection JSConstantReassignment
         window.innerHeight = 1000;
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <SpellCheckIssue
-                    trackId={trackId}
-                    cueId={cueId}
-                    cueIdx={0}
-                    decoratedText="asd"
-                    spellCheck={spellCheck}
-                    start={15}
-                    end={18}
-                    correctSpelling={jest.fn()}
-                    setSpellCheckerMatchingOffset={jest.fn()}
-                    spellCheckerMatchingOffset={null}
-                    editorRef={emptyEditorRef}
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                >
-                    <div className="text" />
-                </SpellCheckIssue>
-            </Provider>
+            <SpellCheckIssue
+                trackId={trackId}
+                decoratedText="asd"
+                spellCheck={spellCheck}
+                start={15}
+                end={18}
+                correctSpelling={jest.fn()}
+                setSpellCheckerMatchingOffset={jest.fn()}
+                spellCheckerMatchingOffset={null}
+                editorRef={emptyEditorRef}
+                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            >
+                <div className="text" />
+            </SpellCheckIssue>
         );
 
         // WHEN
