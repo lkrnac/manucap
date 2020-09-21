@@ -46,14 +46,17 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const showAtBottom = popupPlacement(target);
     const searchReplaceFind = useSelector((state: SubtitleEditState) => state.searchReplace.find);
 
+    /**
+     * Sometimes Overlay got unmounted before
+     * onExit event got executed so this to ensure
+     * onExit logic is done
+     */
     useEffect(
         () => (): void => {
             if(searchReplaceFind === "") {
                 props.editorRef?.current?.focus();
             }
-            props.bindCueViewModeKeyboardShortcut(); // Sometimes Overlay got unmounted before
-            // onExit event got executed so this to ensure
-            // action is done
+            props.bindCueViewModeKeyboardShortcut();
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once -> unmount
