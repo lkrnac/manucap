@@ -6,17 +6,23 @@ import { Match, Replacement } from "./model";
 describe("spellCheckerUtils", () => {
     const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
     const ruleId = "MORFOLOGIK_RULE_EN_US";
+    const ignoresHashMap = JSON.stringify({
+        "0fd7af04-6c87-4793-8d66-fdb19b5fd04d":{
+            "hashes":[
+                "21db4a58c10774db9f1b4802f89c380c"
+            ],
+            "creationDate":"2020-09-15T02:25:14.756Z"
+        }
+    });
 
     describe("hasIgnoredKeyword", () => {
         it("returns true if it contains keyword generated hash", () => {
             //GIVEN
             const match = { offset: 8, length: 13, replacements: [] as Replacement[],
-                context: { text: "this is falsex", offset: 2, length: 13 },
+                context: { text: "this is falsex", offset: 8, length: 13 },
                 rule: { id: ruleId }} as Match;
 
-            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY,
-                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"21db4a58c10774db9f1b4802f89c380c\"]," +
-                "\"creationDate\":\"2020-09-15T02:25:14.756Z\"}}");
+            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
 
             //WHEN
             const containsIgnoredKeyword = hasIgnoredKeyword(trackId, match);
@@ -31,9 +37,7 @@ describe("spellCheckerUtils", () => {
                 context: { text: "this is falsex", offset: 8, length: 5 },
                 rule: { id: ruleId }} as Match;
 
-            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY,
-                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"21db4a58c10774db9f1b4802f89c380c\"]," +
-                "\"creationDate\":\"2020-09-15T02:25:14.756Z\"}}");
+            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
 
             //WHEN
             const containsIgnoredKeyword = hasIgnoredKeyword(trackId, match);
@@ -47,14 +51,14 @@ describe("spellCheckerUtils", () => {
         it("creates track entry and add generated hash to it", () => {
             //WHEN
             const keyword = "falsex";
-            const expectedHash = generateSpellcheckHash(keyword,ruleId);
+            const expectedHash = generateSpellcheckHash(keyword, ruleId);
             addIgnoredKeyword(trackId, keyword, ruleId);
 
             //THEN
             //@ts-ignore there is always a value returned by get item
-            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
-            expect(ignores[trackId].hashes).toContain(expectedHash);
-            const creationDate = new Date(ignores[trackId].creationDate);
+            const actualIgnores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
+            expect(actualIgnores[trackId].hashes).toContain(expectedHash);
+            const creationDate = new Date(actualIgnores[trackId].creationDate);
             expect(creationDate.getTime()).toBeLessThan(new Date().getTime());
         });
 
@@ -62,19 +66,17 @@ describe("spellCheckerUtils", () => {
             const newKeyword = "bumbum";
             const expectedHash = generateSpellcheckHash(newKeyword,ruleId);
 
-            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY,
-                "{\"0fd7af04-6c87-4793-8d66-fdb19b5fd04d\":{\"hashes\":[\"21db4a58c10774db9f1b4802f89c380c\"]," +
-                "\"creationDate\":\"2020-09-15T02:25:14.756Z\"}}");
+            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
 
             //WHEN
             addIgnoredKeyword(trackId, newKeyword, ruleId);
 
             //THEN
             //@ts-ignore there is always a value returned by get item
-            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
-            expect(ignores[trackId].hashes.length).toEqual(2);
-            expect(ignores[trackId].hashes).toContain(expectedHash);
-            const creationDate = new Date(ignores[trackId].creationDate);
+            const actualIgnores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
+            expect(actualIgnores[trackId].hashes.length).toEqual(2);
+            expect(actualIgnores[trackId].hashes).toContain(expectedHash);
+            const creationDate = new Date(actualIgnores[trackId].creationDate);
             expect(creationDate.getTime()).toBeLessThan(new Date().getTime());
         });
     });
