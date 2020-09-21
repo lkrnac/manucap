@@ -220,6 +220,26 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
 
+    it("do nothing when type tab and escape on editor while popover is shown", () => {
+        //GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, {
+            keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
+        });
+
+        //WHEN
+        fireEvent.keyDown(editor, {
+            keyCode: Character.TAB
+        });
+
+        //THEN
+        expect(saveTrack).not.toBeCalled();
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
+    });
+
     it("does not select an option if clicked ctrl space on the dropdown", () => {
         //GIVEN
         const saveTrack = jest.fn();

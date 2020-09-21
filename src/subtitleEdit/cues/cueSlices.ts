@@ -20,7 +20,7 @@ import {
     verifyCueDuration
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
-import { SpellCheck } from "./spellCheck/model";
+import { Match, SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { searchCueText } from "./searchReplace/searchReplaceSlices";
 import { SearchDirection, SearchReplaceMatches } from "./searchReplace/model";
@@ -132,11 +132,10 @@ export const cuesSlice = createSlice({
         removeSpellcheckMatchFromAllCues: (state, action: PayloadAction<SpellCheckRemovalAction>): void => {
             const trackId = action.payload.trackId;
             state.filter((cue: CueDto) => cue.spellCheck != null && cue.spellCheck.matches != null)
-                .map(cue => cue.spellCheck)
-                //@ts-ignore spellcheck will always not null
-                .forEach((spellCheck: SpellCheck) => {
-                    spellCheck.matches.splice(spellCheck.matches.findIndex(match =>
-                        hasIgnoredKeyword(trackId, match)), 1);
+                .forEach(cue => {
+                    //@ts-ignore false positive spellcheck is never null here
+                    cue.spellCheck.matches = cue.spellCheck.matches.filter((match: Match) =>
+                        !hasIgnoredKeyword(trackId, match));
                 });
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {

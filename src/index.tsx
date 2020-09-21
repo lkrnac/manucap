@@ -19,7 +19,7 @@ const TestApp = (): ReactElement => {
     // #############################################################################################
     useEffect(() => {
         const cues = [] as CueDto[];
-        for(let idx = 0; idx < 300; idx++) {
+        for(let idx = 0; idx < 9999; idx++) {
             cues.push({
                 vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text`),
                 cueCategory: "DIALOGUE"
@@ -28,7 +28,7 @@ const TestApp = (): ReactElement => {
         setTimeout( // this simulates latency caused by server roundtrip
 
             () => dispatch(updateSourceCues(cues)),
-            20
+            500
         );
     });
     // #############################################################################################
@@ -42,23 +42,22 @@ const TestApp = (): ReactElement => {
                 default: true,
                 mediaTitle: "This is the video title",
                 mediaLength: 4250,
-                progress: 50,
-                id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d"
+                progress: 50
             })),
-            20
+            500
         );
     });
     useEffect(() => {
         const cues = [] as CueDto[];
-        for(let idx = 0; idx < 300; idx++) {
+        for(let idx = 0; idx < 9999; idx++) {
             cues.push({
-                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Editing <b>Line</b></i> ${idx + 1}\nWrappxed text`),
+                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Editing <b>Line</b></i> ${idx + 1}\nWrapped text`),
                 cueCategory: "DIALOGUE"
             });
         }
         setTimeout( // this simulates latency caused by server roundtrip
            () => dispatch(updateCues(cues)),
-           20
+           500
        );
     });
     useEffect(() => {
@@ -68,7 +67,7 @@ const TestApp = (): ReactElement => {
                projectName: "Project One",
                dueDate: "2019/12/30 10:00AM"
             })),
-            20
+            500
         );
     });
     useEffect(() => {
@@ -84,12 +83,12 @@ const TestApp = (): ReactElement => {
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-                minCaptionDurationInMillis: 20,
+                minCaptionDurationInMillis: 500,
                 maxCaptionDurationInMillis: 4000,
                 comments: "Note",
                 mediaNotes: "Media notes, please click [here](https://dotsub.com)"
             })),
-            20
+            500
         );
     });
 
@@ -102,7 +101,7 @@ const TestApp = (): ReactElement => {
                 setTimeout(
                     () => {
                         dispatch(setAutoSaveSuccess(true));
-                    }, 20
+                    }, 500
                 );
                 return;
             }}
