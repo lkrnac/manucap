@@ -5,7 +5,7 @@ import { SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { addIgnoredKeyword } from "./spellCheckerUtils";
-import { removeSpellcheckMatchFromAllCues, validateAllCues } from "../cueSlices";
+import { removeIgnoredSpellcheckedMatchesFromAllCues, validateAllCues } from "../cueSlices";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 
 
@@ -95,10 +95,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     };
 
     const ignoreKeyword = (): void => {
-        console.log(`ignoreKeyword  props.decoratedText >>> ${props.decoratedText}`);
-
         addIgnoredKeyword(props.trackId, props.decoratedText, spellCheckMatch.rule.id);
-        dispatch(removeSpellcheckMatchFromAllCues());
+        dispatch(removeIgnoredSpellcheckedMatchesFromAllCues());
         revalidateAllCues();
     };
 

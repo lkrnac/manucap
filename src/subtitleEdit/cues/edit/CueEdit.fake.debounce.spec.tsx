@@ -77,7 +77,7 @@ describe("CueEdit", () => {
                     >
                         <div style={{
                             display: "flex",
-                            flexDirection: "column",
+                            flexDirection:"column",
                             paddingBottom: "15px"
                         }}
                         >
@@ -108,7 +108,7 @@ describe("CueEdit", () => {
                                 onChange={(): void => undefined}
                             />
                         </div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between" }} >
                             <div className="dropdown">
                                 <button
                                     aria-haspopup="true"
@@ -415,7 +415,7 @@ describe("CueEdit", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={0.5} />
             </Provider>
         );
@@ -435,12 +435,12 @@ describe("CueEdit", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         const { container, rerender } = render(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={0.5} />
             </Provider>
         );
         rerender(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={0.867} />
             </Provider>
         );
@@ -460,7 +460,7 @@ describe("CueEdit", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -480,12 +480,12 @@ describe("CueEdit", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         const { container, rerender } = render(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1.0} />
             </Provider>
         );
         rerender(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1.781} />
             </Provider>
         );
@@ -507,7 +507,7 @@ describe("CueEdit", () => {
 
         // WHEN
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -525,7 +525,7 @@ describe("CueEdit", () => {
 
         // WHEN
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={1} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -542,7 +542,7 @@ describe("CueEdit", () => {
 
         // WHEN
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1.6} />
             </Provider>
         );
@@ -562,7 +562,7 @@ describe("CueEdit", () => {
 
         // WHEN
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={0.4} />
             </Provider>
         );
@@ -586,7 +586,7 @@ describe("CueEdit", () => {
 
         // WHEN
         actualNode.find("TimeField").at(0)
-            .simulate("change", { target: { value: "00:00:01.600", selectionEnd: 12 }});
+            .simulate("change", { target: { value: "00:00:01.600", selectionEnd: 12  }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.5);
@@ -603,7 +603,7 @@ describe("CueEdit", () => {
 
         // WHEN
         actualNode.find("TimeField").at(1)
-            .simulate("change", { target: { value: "00:00:00.400", selectionEnd: 12 }});
+            .simulate("change", { target: { value: "00:00:00.400", selectionEnd: 12  }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(0.5);
@@ -620,7 +620,7 @@ describe("CueEdit", () => {
 
         // WHEN
         actualNode.find("TimeField").at(1)
-            .simulate("change", { target: { value: "00:00:00.000", selectionEnd: 12 }});
+            .simulate("change", { target: { value: "00:00:00.000", selectionEnd: 12  }});
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(0.5);
@@ -632,7 +632,7 @@ describe("CueEdit", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -651,7 +651,7 @@ describe("CueEdit", () => {
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE", editUuid } as CueDto;
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -677,7 +677,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
 
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -702,7 +702,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
 
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -726,7 +726,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cues[0]} playerTime={1} />
             </Provider>
         );
@@ -747,7 +747,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -771,7 +771,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={2} cue={cues[2]} playerTime={2} />
             </Provider>
         );
@@ -794,7 +794,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={2} cue={cues[2]} playerTime={2} />
             </Provider>
         );
@@ -811,7 +811,7 @@ describe("CueEdit", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
-            <Provider store={testingStore}>
+            <Provider store={testingStore} >
                 <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
@@ -876,24 +876,7 @@ describe("CueEdit", () => {
         expect(actualNode.find(CueTextEditor).props().bindCueViewModeKeyboardShortcut).not.toBeNull();
     });
 
-    it("passes down unbindCueViewModeKeyboardShortcut to editor component", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        const testingSpellCheck = { matches: [{ message: "test-spell-check" }]} as SpellCheck;
-        const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", spellCheck: testingSpellCheck } as CueDto;
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.find(CueTextEditor).props().unbindCueViewModeKeyboardShortcut).not.toBeNull();
-    });
-
-    describe("CueEdit", () => {
+    describe("unbindCueViewModeKeyboardShortcut", () => {
         beforeEach(() => {
             const spellCheck = {
                 matches: [
@@ -932,6 +915,22 @@ describe("CueEdit", () => {
                     resolve({ json: () => spellCheck })));
         });
 
+        it("passes down unbindCueViewModeKeyboardShortcut to editor component", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            const testingSpellCheck = { matches: [{ message: "test-spell-check" }]} as SpellCheck;
+            const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", spellCheck: testingSpellCheck } as CueDto;
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueEdit index={0} cue={cue} playerTime={0} />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.find(CueTextEditor).props().unbindCueViewModeKeyboardShortcut).not.toBeNull();
+        });
 
         it("unbinds ENTER shortcut when spellchecker dropdown is on", () => {
             // GIVEN

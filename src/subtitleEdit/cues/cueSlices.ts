@@ -128,8 +128,8 @@ export const cuesSlice = createSlice({
                 searchReplaceMatches: action.payload.searchMatches
             };
         },
-        //@ts-ignore
-        removeSpellcheckMatchFromAllCues: (state, action: PayloadAction<SpellCheckRemovalAction>): void => {
+        removeIgnoredSpellcheckedMatchesFromAllCues: (state,
+                                                     action: PayloadAction<SpellCheckRemovalAction>): void => {
             const trackId = action.payload.trackId;
             state.filter((cue: CueDto) => cue.spellCheck != null && cue.spellCheck.matches != null)
                 .forEach(cue => {
@@ -321,12 +321,12 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }));
         }
     };
-export const removeSpellcheckMatchFromAllCues = (): AppThunk =>
+export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const trackId = getState().editingTrack?.id;
         if (trackId) {
             dispatch(cuesSlice.actions
-                .removeSpellcheckMatchFromAllCues({ trackId: trackId } as SpellCheckRemovalAction));
+                .removeIgnoredSpellcheckedMatchesFromAllCues({ trackId: trackId } as SpellCheckRemovalAction));
         }
     };
 
