@@ -1431,6 +1431,56 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
             expect(testingStore.getState().cues[3].corrupted).toBeTruthy();
         });
+
+        it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+        });
+
+        it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 0,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+        });
     });
 
     describe("updateEditingCueIndex", () => {

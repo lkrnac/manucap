@@ -186,8 +186,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     };
 
     const findExtraCharacters = (contentBlock: ContentBlock, callback: Function): void => {
-        if (subtitleSpecifications && subtitleSpecifications.enabled) {
-            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine || 0;
+        if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxCharactersPerLine) {
+            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine;
             const text = contentBlock.getText();
             const lines = text.split("\n");
             return lines.forEach(line => {

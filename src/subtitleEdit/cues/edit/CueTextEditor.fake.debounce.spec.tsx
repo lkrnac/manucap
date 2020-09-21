@@ -1475,7 +1475,7 @@ describe("CueTextEditor", () => {
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
 
-        it("renders with too long lines and subtitle specs disabled", () => {
+        it("does not render with too long lines decorator with subtitle specs disabled", () => {
             // GIVEN
             const testingSubtitleSpecification = {
                 enabled: false,
@@ -1490,7 +1490,7 @@ describe("CueTextEditor", () => {
                 "<span data-text=\"true\">some very long text sample very long text sample</span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const { container } = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -1504,7 +1504,77 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(container.outerHTML))
+                .not.toContain("<span class=\"sbte-extra-text\" data-offset-key=\"\">");
+        });
+
+        it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine null", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    enabled: true,
+                    maxLinesPerCaption: 2,
+                    maxCharactersPerLine: null,
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const spellCheck = { matches: []} as SpellCheck;
+                const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
+                const editUuid = testingStore.getState().cues[0].editUuid;
+                const expectedContent = "<span data-offset-key=\"\">" +
+                    "<span data-text=\"true\">some very long text sample very long text sample</span></span>";
+
+                // WHEN
+                const { container } = render(
+                    <Provider store={testingStore}>
+                        <CueTextEditor
+                            index={0}
+                            vttCue={vttCue}
+                            editUuid={editUuid}
+                            spellCheck={spellCheck}
+                            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                            unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        />
+                    </Provider>
+                );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(container.outerHTML))
+                .not.toContain("<span class=\"sbte-extra-text\" data-offset-key=\"\">");
+        });
+
+        it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine 0", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 0,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            const spellCheck = { matches: []} as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">some very long text sample very long text sample</span></span>";
+
+            // WHEN
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(container.outerHTML))
+                .not.toContain("<span class=\"sbte-extra-text\" data-offset-key=\"\">");
         });
 
         it("renders with too long lines and spell check errors", () => {
