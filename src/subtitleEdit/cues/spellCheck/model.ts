@@ -7,7 +7,6 @@ export interface SpellCheckHash {
     ruleId: string;
 }
 
-
 export interface SpellcheckRule {
     id: string;
 }

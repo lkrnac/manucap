@@ -27,8 +27,9 @@ export const addIgnoredKeyword = (trackId: string, keyword: string, ruleId: stri
 
 export const hasIgnoredKeyword = (trackId: string, match: Match): boolean => {
     const hashes = _.get(getSpellcheckIgnores(), `${trackId}.hashes`, []);
-    const endOffset = match.offset + match.length;
-    const keyword = match.context.text.slice(match.offset, endOffset);
+    const context = match.context;
+    const endOffset = context.offset + context.length;
+    const keyword = context.text.slice(context.offset, endOffset);
     return hashes.includes(generateSpellcheckHash(keyword, match.rule.id));
 };
 
