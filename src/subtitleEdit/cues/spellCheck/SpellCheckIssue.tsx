@@ -1,12 +1,12 @@
-import React, { MutableRefObject, ReactElement, RefObject, useEffect, useRef } from "react";
+import React, { Dispatch, MutableRefObject, ReactElement, RefObject, useEffect, useRef } from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
-import { SpellCheck } from "./model";
+import { Match, SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { addIgnoredKeyword } from "./spellCheckerUtils";
 import { removeIgnoredSpellcheckedMatchesFromAllCues, validateAllCues } from "../cueSlices";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 
 
 interface Props {
@@ -38,6 +38,48 @@ interface Option {
     label: string;
     title?: string;
 }
+
+const onEnterPopover = (props: Props, selectRef: RefObject<Select>): void => {
+    props.unbindCueViewModeKeyboardShortcut();
+    // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
+    selectRef?.current?.select.menuListRef?.firstElementChild?.focus();
+};
+
+const onExitPopover = (props: Props): void => {
+    props.editorRef?.current?.focus();
+    props.bindCueViewModeKeyboardShortcut();
+};
+
+const revalidateAllCues = (dispatch: Dispatch<AppThunk>): void => {
+    dispatch(validateAllCues());
+};
+
+const ignoreKeyword = (props: Props, spellCheckMatch: Match, dispatch: Dispatch<AppThunk>): void => {
+    addIgnoredKeyword(props.trackId, props.decoratedText, spellCheckMatch.rule.id);
+    dispatch(removeIgnoredSpellcheckedMatchesFromAllCues());
+    revalidateAllCues(dispatch);
+};
+
+const onOptionSelected = (props: Props, spellCheckMatch: Match , dispatch: Dispatch<AppThunk>) =>
+    (optionValueType: ValueType<Option>): void => {
+    const option = optionValueType as Option;
+    if(option.value === props.decoratedText) {
+        ignoreKeyword(props, spellCheckMatch, dispatch);
+    } else {
+        props.correctSpelling((option).value, props.start, props.end);
+    }
+    props.setSpellCheckerMatchingOffset(null);
+};
+
+const onkeydown = (setSpellCheckerMatchingOffset: Function) => (e: React.KeyboardEvent<{}>): void => {
+    console.log("e.keyCode  " + e.keyCode);
+    if (e.keyCode === Character.TAB || ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode === Character.SPACE)) {
+        e.preventDefault();
+    }
+    if(e.keyCode === Character.ESCAPE) {
+        setSpellCheckerMatchingOffset(null);
+    }
+};
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const dispatch = useDispatch();
@@ -82,46 +124,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         menuList: (provided) => ({ ...provided, height: "200px" })
     } as Styles;
 
-    const onEnterPopover = (): void => {
-        props.unbindCueViewModeKeyboardShortcut();
-        // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
-        selectRef.current?.select.menuListRef?.firstElementChild?.focus();
-    };
-
-    const onExitPopover = (): void => {
-        props.editorRef?.current?.focus();
-        props.bindCueViewModeKeyboardShortcut();
-    };
-
-    const revalidateAllCues = (): void => {
-        dispatch(validateAllCues());
-    };
-
-    const ignoreKeyword = (): void => {
-        addIgnoredKeyword(props.trackId, props.decoratedText, spellCheckMatch.rule.id);
-        dispatch(removeIgnoredSpellcheckedMatchesFromAllCues());
-        revalidateAllCues();
-    };
-
-    const onOptionSelected = (optionValueType: ValueType<Option>): void => {
-        const option = optionValueType as Option;
-        if(option.value === props.decoratedText) {
-            ignoreKeyword();
-        } else {
-            props.correctSpelling((option).value, props.start, props.end);
-        }
-        props.setSpellCheckerMatchingOffset(null);
-    };
-
-    const onkeydown = (e: React.KeyboardEvent<{}>): void => {
-        if (e.keyCode === Character.TAB || ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode === Character.SPACE)) {
-            e.preventDefault();
-        }
-        if(e.keyCode === Character.ESCAPE) {
-            props.setSpellCheckerMatchingOffset(null);
-        }
-    };
-
     return (
         <span
             ref={target}
@@ -137,8 +139,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         >
             {props.children}
             <Overlay
-                onEntering={onEnterPopover}
-                onExiting={onExitPopover}
+                onEntering={(): void => onEnterPopover(props, selectRef)}
+                onExiting={(): void => onExitPopover(props)}
                 target={target.current}
                 show={props.spellCheckerMatchingOffset === props.start}
                 placement={showAtBottom ? "bottom" : "top"}
@@ -147,12 +149,12 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                     <Popover.Title>{spellCheckMatch.message}</Popover.Title>
                     <Popover.Content hidden={selectOptions.length === 0} style={{ padding: 0 }}>
                         <Select
-                            onKeyDown={onkeydown}
+                            onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
                             ref={selectRef}
                             menuIsOpen
                             options={selectOptions}
                             styles={customStyles}
-                            onChange={onOptionSelected}
+                            onChange={onOptionSelected(props, spellCheckMatch, dispatch)}
                             classNamePrefix="spellcheck"
                         />
                     </Popover.Content>

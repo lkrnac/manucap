@@ -42,7 +42,8 @@ const TestApp = (): ReactElement => {
                 default: true,
                 mediaTitle: "This is the video title",
                 mediaLength: 4250,
-                progress: 50
+                progress: 50,
+                id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d"
             })),
             500
         );

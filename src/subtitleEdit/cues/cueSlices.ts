@@ -334,7 +334,6 @@ export const validateAllCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const cues = getState().cues;
         cues.forEach((_cue: CueDto, index: number) => {
-            // list
             const track = getState().editingTrack;
             const subtitleSpecifications = getState().subtitleSpecifications;
             const overlapCaptionsAllowed = track?.overlapEnabled;
