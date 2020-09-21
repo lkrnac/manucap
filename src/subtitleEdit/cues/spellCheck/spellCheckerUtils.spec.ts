@@ -7,7 +7,7 @@ describe("spellCheckerUtils", () => {
     const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
     const ruleId = "MORFOLOGIK_RULE_EN_US";
 
-    describe("containsIgnoredKeyword", () => {
+    describe("hasIgnoredKeyword", () => {
         it("returns true if it contains keyword generated hash", () => {
             //GIVEN
             const match = { offset: 8, length: 13, replacements: [] as Replacement[],
