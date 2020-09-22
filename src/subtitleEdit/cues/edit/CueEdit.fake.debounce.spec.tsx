@@ -9,7 +9,7 @@ import "video.js"; // VTTCue definition
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import { Character } from "../../shortcutConstants";
-import { CueDto, Track } from "../../model";
+import { CueDto, Language, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
@@ -25,7 +25,7 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
-import { SpellCheck } from "../spellCheck/model";
+import { Replacement, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { fireEvent, render } from "@testing-library/react";
 
@@ -34,7 +34,8 @@ jest.mock("lodash", () => (
         debounce: (fn: MockedDebouncedFunction): Function => {
             fn.cancel = jest.fn();
             return fn;
-        }
+        },
+        get: jest.requireActual("lodash/get")
     }));
 
 let testingStore = createTestingStore();
@@ -46,6 +47,7 @@ const cues = [
 
 describe("CueEdit", () => {
     beforeEach(() => {
+        document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
         const testingSubtitleSpecification = {
             minCaptionDurationInMillis: 500,
@@ -137,6 +139,7 @@ describe("CueEdit", () => {
                             index={0}
                             vttCue={cues[0].vttCue}
                             bindCueViewModeKeyboardShortcut={jest.fn()}
+                            unbindCueViewModeKeyboardShortcut={jest.fn()}
                         />
                     </div>
                 </div>
@@ -871,5 +874,111 @@ describe("CueEdit", () => {
 
         // THEN
         expect(actualNode.find(CueTextEditor).props().bindCueViewModeKeyboardShortcut).not.toBeNull();
+    });
+
+    describe("unbindCueViewModeKeyboardShortcut", () => {
+        beforeEach(() => {
+            const spellCheck = {
+                matches: [
+                    {
+                        offset: 0, length: 8, replacements: [{ "value": "Some Text" }] as Replacement[],
+                        context: { text: "someText", offset: 0, length: 8 },
+                        rule: { id: "MORFOLOGIK_RULE_EN_US" }
+                    }
+                ]
+            } as SpellCheck;
+            const cue = {
+                vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE",
+                spellCheck: spellCheck
+            } as CueDto;
+            testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+            const sourceCues = [{ vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementationOnce(() => new Promise((resolve) =>
+                    resolve({ json: () => spellCheck })));
+        });
+
+        it("passes down unbindCueViewModeKeyboardShortcut to editor component", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            const testingSpellCheck = { matches: [{ message: "test-spell-check" }]} as SpellCheck;
+            const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", spellCheck: testingSpellCheck } as CueDto;
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueEdit index={0} cue={cue} playerTime={0} />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.find(CueTextEditor).props().unbindCueViewModeKeyboardShortcut).not.toBeNull();
+        });
+
+        it("unbinds ENTER shortcut when spellchecker dropdown is on", () => {
+            // GIVEN
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueEdit index={0} cue={testingStore.getState().cues[0]} playerTime={1} />
+                </Provider>
+            );
+
+            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            fireEvent(errorSpan,
+                new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true,
+                })
+            );
+
+            // WHEN
+            fireEvent.keyDown(container, { keyCode: Character.ENTER });
+
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+        });
+
+        it("unbinds ESCAPE shortcut when spellchecker dropdown is on", () => {
+            // GIVEN
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueEdit index={0} cue={testingStore.getState().cues[0]} playerTime={1} />
+                </Provider>
+            );
+
+            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            fireEvent(errorSpan,
+                new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true,
+                })
+            );
+
+            // WHEN
+            fireEvent.keyDown(container, { keyCode: Character.ESCAPE });
+
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+        });
+
     });
 });

@@ -30,6 +30,7 @@ import { replaceContent } from "./editUtils";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { searchNextCues } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "../CueExtraCharacters";
+import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 
 const handleKeyShortcut = (
     editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
@@ -66,6 +67,7 @@ export interface CueTextEditorProps {
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
     bindCueViewModeKeyboardShortcut: () => void;
+    unbindCueViewModeKeyboardShortcut: () => void;
 }
 
 const changeVttCueInRedux = (
@@ -145,6 +147,7 @@ const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
 };
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);
@@ -164,7 +167,14 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
         if (props.spellCheck && props.spellCheck.matches) {
-            props.spellCheck.matches.forEach(match => callback(match.offset, match.offset + match.length));
+            props.spellCheck.matches.forEach(match => {
+                    if (editingTrack?.id && props.editUuid) {
+                        if (!hasIgnoredKeyword(editingTrack.id, match)) {
+                            callback(match.offset, match.offset + match.length);
+                        }
+                    }
+                }
+            );
         }
     };
 
@@ -212,7 +222,11 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 editorRef,
                 spellCheckerMatchingOffset,
                 setSpellCheckerMatchingOffset,
-                bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut
+                bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut,
+                unbindCueViewModeKeyboardShortcut: props.unbindCueViewModeKeyboardShortcut,
+                cueId: props.editUuid,
+                cueIdx: props.index,
+                trackId: editingTrack?.id
             }
         }
     ]);

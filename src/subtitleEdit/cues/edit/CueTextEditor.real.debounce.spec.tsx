@@ -27,6 +27,7 @@ const cues = [
     { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
+const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 
 const createEditorNode = (text = "someText"): ReactWrapper => {
     const vttCue = new VTTCue(0, 1, text);
@@ -35,6 +36,7 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -99,6 +101,7 @@ describe("CueTextEditor", () => {
             <Provider store={testingStore}>
                 <CueTextEditor
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
@@ -140,6 +143,7 @@ describe("CueTextEditor", () => {
                     vttCue={vttCue}
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     searchReplaceMatches={searchReplaceMatches}
                 />
             </Provider>
@@ -174,6 +178,7 @@ describe("CueTextEditor", () => {
                     vttCue={vttCue}
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 />
             </Provider>
         );
@@ -212,6 +217,8 @@ describe("CueTextEditor", () => {
 
     it("triggers spellcheck only once immediately after text change", (done) => {
         // GIVEN
+        const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+        const ruleId = "MORFOLOGIK_RULE_EN_US";
         const testingResponse = {
             matches: [
                 {
@@ -219,6 +226,8 @@ describe("CueTextEditor", () => {
                     replacements: [{ "value": "Txt" }],
                     "offset": 0,
                     "length": 3,
+                    context: { text: "txxt", length: 3, offset: 0 },
+                    rule: { id: ruleId }
                 },
                 {
                     "message": "Possible spelling mistake found.",
@@ -236,13 +245,15 @@ describe("CueTextEditor", () => {
                     ],
                     "offset": 7,
                     "length": 4,
+                    context: { text: "txxt", length: 4, offset: 7 },
+                    rule: { id: ruleId }
                 }
             ]
         };
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(
-            { language: { id: "testing-language" }} as Track
+            { language: { id: "testing-language" }, id: trackId } as Track
         ) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
@@ -277,6 +288,8 @@ describe("CueTextEditor", () => {
 
     it("triggers spellcheck only once immediately after clear text change", (done) => {
         // GIVEN
+        const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+        const ruleId = "MORFOLOGIK_RULE_EN_US";
         const testingResponse = {
             matches: [
                 {
@@ -284,6 +297,8 @@ describe("CueTextEditor", () => {
                     replacements: [{ "value": "Txt" }],
                     "offset": 0,
                     "length": 3,
+                    context: { text: "txxt", length: 3, offset: 0 },
+                    rule: { id: ruleId }
                 },
                 {
                     "message": "Possible spelling mistake found.",
@@ -301,13 +316,15 @@ describe("CueTextEditor", () => {
                     ],
                     "offset": 7,
                     "length": 4,
+                    context: { text: "txxt", length: 4, offset: 7 },
+                    rule: { id: ruleId }
                 }
             ]
         };
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(
-            { language: { id: "testing-language" }} as Track
+            { language: { id: "testing-language" }, id: trackId } as Track
         ) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
@@ -323,6 +340,7 @@ describe("CueTextEditor", () => {
                     vttCue={vttCue}
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 />
             </Provider>
         );

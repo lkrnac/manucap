@@ -50,6 +50,10 @@ const CueEdit = (props: Props): ReactElement => {
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
     const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
 
+    const unbindCueViewModeKeyboardShortcut =(): void => {
+        Mousetrap.unbind([KeyCombination.ESCAPE, KeyCombination.ENTER]);
+    };
+
     const bindCueViewModeKeyboardShortcut =(): void => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
@@ -149,6 +153,7 @@ const CueEdit = (props: Props): ReactElement => {
                     spellCheck={props.cue.spellCheck}
                     searchReplaceMatches={props.cue.searchReplaceMatches}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcut}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcut}
                 />
             </div>
         </div>

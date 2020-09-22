@@ -20,7 +20,7 @@ import {
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { CueDto, Track } from "../../model";
+import { CueDto, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues, updateEditingCueIndex } from "../cueSlices";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
@@ -33,15 +33,16 @@ import { Overlay } from "react-bootstrap";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { replaceCurrentMatch, setFind, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
-import { render } from "@testing-library/react";
-import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
+import { fireEvent, render } from "@testing-library/react";
+import { Constants } from "../../constants";
 
 jest.mock("lodash", () => (
     {
         debounce: (fn: MockedDebouncedFunction): Function => {
             fn.cancel = jest.fn();
             return fn;
-        }
+        },
+        get: jest.requireActual("lodash/get")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
@@ -59,11 +60,14 @@ interface ReduxTestWrapperProps {
     props: CueTextEditorProps;
 }
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
+const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
+const ruleId = "MORFOLOGIK_RULE_EN_US";
 
 const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     <Provider store={props.store}>
         <CueTextEditor
             bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+            unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
             index={props.props.index}
             vttCue={props.props.vttCue}
             editUuid={props.props.editUuid}
@@ -134,6 +138,7 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -142,6 +147,8 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
     );
     return actualNode.find(".public-DraftEditor-content");
 };
+
+
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
 // defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
@@ -161,6 +168,7 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -200,6 +208,7 @@ const testForContentState = (
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -216,6 +225,7 @@ const testForContentState = (
 
 describe("CueTextEditor", () => {
     beforeEach(() => {
+        document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -308,6 +318,7 @@ describe("CueTextEditor", () => {
             <Provider store={testingStore}>
                 <CueTextEditor
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                 />
@@ -367,6 +378,7 @@ describe("CueTextEditor", () => {
             <Provider store={testingStore} >
                 <CueTextEditor
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
@@ -513,8 +525,12 @@ describe("CueTextEditor", () => {
         const actualNode = mount(
             <ReduxTestWrapper
                 store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                props={
+                    { index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }
+                }
             />);
 
         // WHEN
@@ -535,7 +551,10 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+
+                }}
             />);
 
         // WHEN
@@ -556,7 +575,9 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                }}
             />);
 
         // WHEN
@@ -577,7 +598,9 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                }}
             />);
 
         // WHEN
@@ -598,7 +621,9 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                }}
             />);
 
         // WHEN
@@ -618,7 +643,9 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                }}
             />);
 
         // WHEN
@@ -638,7 +665,9 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                }}
             />);
 
         // WHEN
@@ -658,7 +687,9 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                }}
             />);
 
         // WHEN
@@ -678,7 +709,9 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                }}
             />);
 
         // WHEN
@@ -698,7 +731,9 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy }}
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                }}
             />);
 
         // WHEN
@@ -718,6 +753,7 @@ describe("CueTextEditor", () => {
             <Provider store={testingStore}>
                 <CueTextEditor
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                 />
@@ -737,6 +773,7 @@ describe("CueTextEditor", () => {
             <Provider store={testingStore}>
                 <CueTextEditor
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                 />
@@ -771,12 +808,32 @@ describe("CueTextEditor", () => {
     });
 
     describe("spell checking", () => {
+
+        beforeEach(() => {
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        });
+
         it("renders with html and spell check errors", () => {
             // GIVEN
+
             const spellCheck = {
                 matches: [
-                    { offset: 5, length: 4, replacements: [] as Replacement[] },
-                    { offset: 15, length: 6, replacements: [] as Replacement[] }
+                    { offset: 5, length: 4, replacements: [] as Replacement[],
+                        context: { text: "asd1", length: 4, offset: 5 },
+                        rule: { id: ruleId }},
+                    { offset: 15, length: 6, replacements: [] as Replacement[],
+                        context: { text: "asd2", length: 4, offset: 5 },
+                        rule: { id: ruleId }}
                 ]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
@@ -795,6 +852,7 @@ describe("CueTextEditor", () => {
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
@@ -821,7 +879,9 @@ describe("CueTextEditor", () => {
                 // GIVEN
                 const spellCheck = {
                     matches: [
-                        { offset: 2, length: 4, replacements: [] as Replacement[] },
+                        { offset: 2, length: 4, replacements: [] as Replacement[],
+                          context: { text: "any", length: 4, offset: 2 },
+                            rule: { id: ruleId }},
                     ]
                 } as SpellCheck;
                 const vttCue = new VTTCue(0, 1, "t");
@@ -833,6 +893,7 @@ describe("CueTextEditor", () => {
                     <Provider store={testingStore}>
                         <CueTextEditor
                             bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                            unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                             index={0}
                             vttCue={vttCue}
                             editUuid={editUuid}
@@ -870,7 +931,9 @@ describe("CueTextEditor", () => {
                 // GIVEN
                 const spellCheck = {
                     matches: [
-                        { offset: 2, length: 4, replacements: [] as Replacement[] },
+                        { offset: 2, length: 4, replacements: [] as Replacement[],
+                            context: { text: "any", length: 4, offset: 2 },
+                            rule: { id: ruleId }},
                     ]
                 } as SpellCheck;
                 const vttCue = new VTTCue(0, 1, "<i>t</i>");
@@ -883,6 +946,7 @@ describe("CueTextEditor", () => {
                     <Provider store={testingStore}>
                         <CueTextEditor
                             bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                            unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                             index={0}
                             vttCue={vttCue}
                             editUuid={editUuid}
@@ -910,14 +974,16 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(
-                updateEditingTrack({ language: { id: "testing-language" }} as Track) as {} as AnyAction
-            );
+
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             const spellCheck = {
                 matches: [
-                    { offset: 5, length: 3, replacements: [{ value: "option1" }, { value: "HTML" }] as Replacement[] },
-                    { offset: 14, length: 6, replacements: [] as Replacement[] }
+                    { offset: 5, length: 3, replacements: [{ value: "option1" }, { value: "HTML" }] as Replacement[],
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 3, offset: 5 },
+                        rule: { id: ruleId }},
+                    { offset: 14, length: 6, replacements: [] as Replacement[],
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 6, offset: 14 },
+                        rule: { id: ruleId }}
                 ]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some <u><i>hTm</i></u> <b>Text</b> sample");
@@ -926,6 +992,7 @@ describe("CueTextEditor", () => {
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
@@ -936,7 +1003,7 @@ describe("CueTextEditor", () => {
 
             // WHEN
             actualNode.find(".sbte-text-with-error").at(0).simulate("click");
-            actualNode.findWhere(spellCheckOptionPredicate(1)).at(0).simulate("click");
+            actualNode.findWhere(spellCheckOptionPredicate(2)).at(0).simulate("click");
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -948,11 +1015,14 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
             const spellCheck = {
                 matches: [
-                    { offset: 5, length: 3, replacements: [] as Replacement[] },
-                    { offset: 14, length: 5, replacements: [] as Replacement[] }
+                    { offset: 5, length: 3, replacements: [] as Replacement[],
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 3, offset: 5 },
+                        rule: { id: ruleId }},
+                    { offset: 14, length: 5, replacements: [] as Replacement[],
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 5, offset: 14 },
+                        rule: { id: ruleId }}
                 ]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> smple");
@@ -961,6 +1031,7 @@ describe("CueTextEditor", () => {
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
@@ -983,11 +1054,14 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
             const spellCheck = {
                 matches: [
-                    { offset: 5, length: 3, replacements: [] as Replacement[] },
-                    { offset: 14, length: 5, replacements: [] as Replacement[] }
+                    { offset: 5, length: 3, replacements: [] as Replacement[],
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 3, offset: 5 },
+                        rule: { id: ruleId }},
+                    { offset: 14, length: 5, replacements: [] as Replacement[],
+                        context: { text: "some <u><i>hTm</i></u> <b>Text</b> sample", length: 5, offset: 14 },
+                        rule: { id: ruleId }}
                 ]
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> smple");
@@ -996,6 +1070,7 @@ describe("CueTextEditor", () => {
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
@@ -1011,6 +1086,84 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+        });
+
+        it("ignores all spell check matches and revalidate all cues when clicking ignore all option", () => {
+            // GIVEN
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+
+            testingStore.dispatch(reset() as {} as AnyAction);
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const spellCheck = {
+                matches: [
+                    { offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
+                        context: { text: "Caption Linex 1", offset: 8, length: 5 },
+                        rule: { id: ruleId }
+                    }
+                ]
+            } as SpellCheck;
+
+            const cues = [
+                { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                    cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                    corrupted: true },
+                { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
+                    cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                    corrupted: true }
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementationOnce(() => new Promise((resolve) =>
+                    resolve({ json: () => spellCheck })));
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={testingStore.getState().cues[0].vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
+                </Provider>
+            );
+            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            fireEvent(errorSpan,
+                            new MouseEvent("click", {
+                                bubbles: true,
+                                cancelable: true,
+                            })
+                        );
+
+            //WHEN
+            const ignoreOption = document.querySelectorAll(".spellcheck__option")[0] as Element;
+            fireEvent(ignoreOption,
+                new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true,
+                })
+            );
+
+            // THEN
+            //@ts-ignore value should not be null
+            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
+            expect(ignores[trackId]).not.toBeNull();
+            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
         });
     });
 
@@ -1037,6 +1190,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1072,6 +1226,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1108,6 +1263,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1140,6 +1296,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1181,6 +1338,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                     />
                 </Provider>
@@ -1202,6 +1360,21 @@ describe("CueTextEditor", () => {
     });
 
     describe("long lines", () => {
+        beforeEach(() => {
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        });
+
         it("renders with too long lines", () => {
             // GIVEN
             const testingSubtitleSpecification = {
@@ -1227,6 +1400,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     />
                 </Provider>
             );
@@ -1266,6 +1440,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     />
                 </Provider>
             );
@@ -1291,6 +1466,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     />
                 </Provider>
             );
@@ -1322,6 +1498,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     />
                 </Provider>
             );
@@ -1355,6 +1532,7 @@ describe("CueTextEditor", () => {
                             editUuid={editUuid}
                             spellCheck={spellCheck}
                             bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                            unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         />
                     </Provider>
                 );
@@ -1388,6 +1566,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     />
                 </Provider>
             );
@@ -1407,8 +1586,11 @@ describe("CueTextEditor", () => {
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
             const spellCheck = {
-                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[] }]
+                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
+                    context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },
+                    rule: { id: ruleId }}]
             } as SpellCheck;
+
             const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
@@ -1427,37 +1609,13 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     />
                 </Provider>
             );
 
             // THEN
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
-        });
-
-        it("passes down bindCueViewModeKeyboardShortcut to spellcheck component", () => {
-            // GIVEN
-            const spellCheck = {
-                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[] }]
-            } as SpellCheck;
-            const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
-            const editUuid = testingStore.getState().cues[0].editUuid;
-
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueTextEditor
-                        index={0}
-                        vttCue={vttCue}
-                        editUuid={editUuid}
-                        spellCheck={spellCheck}
-                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    />
-                </Provider>
-            );
-
-            // THEN
-            expect(actualNode.find(SpellCheckIssue).props().bindCueViewModeKeyboardShortcut).not.toBeNull();
         });
     });
 });

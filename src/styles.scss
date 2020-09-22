@@ -137,6 +137,20 @@ $background-error-text: rgba(255, 0, 0, 0.2);
   margin-bottom: 8px;
 }
 
+.spellcheck__menu-list {
+    padding-top: 0 !important;
+
+    .spellcheck__option:first-child {
+        border-bottom: 1px solid;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: $dark;
+        &:focus{
+            outline: none;
+        }
+    }
+}
+
 // ------ Cues List ------
 
 .sbte-smart-scroll {

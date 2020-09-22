@@ -21,21 +21,15 @@ import { setSaveTrack } from "../saveSlices";
 //@ts-ignore
 import { LodashDebounce } from "lodash/ts3.1/fp";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => {
-        return callback;
-    }
-}));
-
-// mock deounce.cancel
 jest.mock("lodash", () => (
     {
         debounce: (fn: LodashDebounce): Function => {
             fn.cancel = jest.fn();
             return fn;
-        }
+        },
+        get: (): [] => {return [];}
     }));
-
+const ruleId = "MORFOLOGIK_RULE_EN_US";
 const spellCheckFakeMatches = {
     "matches": [
         {
@@ -47,7 +41,9 @@ const spellCheckFakeMatches = {
                 { value: "Competent" },
             ],
             offset: 0,
-            length: 8
+            length: 8,
+            context: { text: "TestThis", length: 3, offset: 0 },
+            rule: { id: ruleId }
         }
     ]
 } as SpellCheck;
@@ -56,6 +52,7 @@ const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US" },
     default: true,
+    id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d"
 } as Track;
 
 const testingCues = [
@@ -65,11 +62,13 @@ const testingCues = [
 
 let testingStore = createTestingStore();
 let bindCueViewModeKeyboardShortcutSpy = jest.fn();
+let unbindCueViewModeKeyboardShortcutSpy = jest.fn();
 
 describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
         bindCueViewModeKeyboardShortcutSpy = jest.fn();
+        unbindCueViewModeKeyboardShortcutSpy = jest.fn();
         testingStore = createTestingStore();
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -83,6 +82,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
                 <CueTextEditor
                     spellCheck={spellCheckFakeMatches}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
@@ -152,7 +152,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML)
-            .toEqual("Sometime");
+            .toEqual("Somewhat");
     });
 
     it("select an option using enter shortcut", () => {
@@ -220,6 +220,26 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
 
+    it("do nothing when type tab and escape on editor while popover is shown", () => {
+        //GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, {
+            keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
+        });
+
+        //WHEN
+        fireEvent.keyDown(editor, {
+            keyCode: Character.TAB
+        });
+
+        //THEN
+        expect(saveTrack).not.toBeCalled();
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
+    });
+
     it("does not select an option if clicked ctrl space on the dropdown", () => {
         //GIVEN
         const saveTrack = jest.fn();
@@ -256,5 +276,18 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         // THEN
         expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
+
+    it("calls unbindCueViewModeKeyboardShortcut when entering the popover", () => {
+        //GIVEN
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const editor = container.querySelector(".public-DraftEditor-content") as Element;
+
+        //WHEN
+        fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
+
+        // THEN
+        expect(unbindCueViewModeKeyboardShortcutSpy).toBeCalled();
+    });
+
 
 });
