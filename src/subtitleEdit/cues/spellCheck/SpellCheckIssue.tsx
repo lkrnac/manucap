@@ -72,7 +72,6 @@ const onOptionSelected = (props: Props, spellCheckMatch: Match , dispatch: Dispa
 };
 
 const onkeydown = (setSpellCheckerMatchingOffset: Function) => (e: React.KeyboardEvent<{}>): void => {
-    console.log("e.keyCode  " + e.keyCode);
     if (e.keyCode === Character.TAB || ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode === Character.SPACE)) {
         e.preventDefault();
     }
