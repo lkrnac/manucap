@@ -1,4 +1,3 @@
-import { sum } from "./MathUtils";
 import { myltiply } from "./MathXUtils";
 
 describe("MathXutils.multiply", () => {
