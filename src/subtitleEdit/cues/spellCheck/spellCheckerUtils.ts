@@ -81,6 +81,10 @@ languageToolLanguageMapping.set("ta-IN", "ta-IN");
 // non-supported in vtms
 languageToolLanguageMapping.set("be-BY", "be-BY");
 languageToolLanguageMapping.set("pt-MZ", "pt-MZ");
+languageToolLanguageMapping.set("br-FR", "br-FR");
+languageToolLanguageMapping.set("gl-ES", "gl-ES");
+languageToolLanguageMapping.set("de-AT", "de-AT");
+languageToolLanguageMapping.set("pt-AO", "pt-AO");
 
 
 

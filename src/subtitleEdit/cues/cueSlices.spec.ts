@@ -235,15 +235,15 @@ describe("cueSlices", () => {
 
             test.each([
                 ["ar-SA", "ar"], ["ca", "ca-ES"], ["nl-NL", "nl"],
-                ["en-IE", "en"], ["fr-FR", "fr"], ["fr-CA", "fr"], ["it-IT", "it"], ["no-NO", "no"],
-                ["fa-AF", "fa"], ["fa-IR", "fa"], ["fa-IR", "fa"], ["es-ES", "es"], ["es-MX", "es"],["sv-SE", "sv"],
-                ["ta-SG", "ta-IN"], ["zh-HK", "zh-CN"], ["zh-CN", "zh-CN"], ["zh-TW", "zh-CN"], ["zh-HK", "zh-CN"],
-                ["zh-TW", "zh-CN"], ["en-AU", "en-AU"], ["en-CA", "en-CA"], ["en-GB", "en-GB"], ["en-NZ", "en-NZ"],
-                ["en-ZA", "en"], ["en-US", "en-US"], ["de-DE", "de-DE"], ["de-CH", "de-CH"],
-                ["da-DK", "da-DK"], ["el-GR", "el-GR"], ["ga-IE", "ga-IE"], ["ja-JP", "ja-JP"],
-                ["km-KH", "km-KH"], ["pl-PL", "pl-PL"], ["pt-BR", "pt-BR"], ["pt-PT", "pt-PT"],
-                ["ro-RO", "ro-RO"], ["ru-RU", "ru-RU"], ["sk-SK", "sk-SK"], ["sl-SI", "sl-SI"],
-                ["tl-PH", "tl-PH"], ["ta-IN", "ta-IN"], ["be-BY", "be-BY"], ["pt-MZ", "pt-MZ"],
+                ["en-IE", "en"], ["fr-FR", "fr"], ["fr-CA", "fr"], ["it-IT", "it"], ["no-NO", "no"], ["fa-AF", "fa"],
+                ["fa-IR", "fa"], ["fa-IR", "fa"], ["es-ES", "es"], ["es-MX", "es"],["sv-SE", "sv"], ["ta-SG", "ta-IN"],
+                ["zh-HK", "zh-CN"], ["zh-CN", "zh-CN"], ["zh-TW", "zh-CN"],
+                ["en-AU", "en-AU"], ["en-CA", "en-CA"], ["en-GB", "en-GB"], ["en-NZ", "en-NZ"], ["en-ZA", "en"],
+                ["en-US", "en-US"], ["de-DE", "de-DE"], ["de-CH", "de-CH"], ["da-DK", "da-DK"], ["el-GR", "el-GR"],
+                ["ga-IE", "ga-IE"], ["ja-JP", "ja-JP"], ["km-KH", "km-KH"], ["pl-PL", "pl-PL"], ["pt-BR", "pt-BR"],
+                ["pt-PT", "pt-PT"], ["ro-RO", "ro-RO"], ["ru-RU", "ru-RU"], ["sk-SK", "sk-SK"], ["tl-PH", "tl-PH"],
+                ["ta-IN", "ta-IN"], ["be-BY", "be-BY"], ["pt-MZ", "pt-MZ"], ["br-FR", "br-FR"], ["sl-SI", "sl-SI"],
+                ["gl-ES", "gl-ES"], ["de-AT", "de-AT"], ["pt-AO", "pt-AO"]
             ])(
                 "calls spellchecker domain with correctly mapped language for %s",
                 (vtmsLanguageId: string, languageToolValue: string) => {
