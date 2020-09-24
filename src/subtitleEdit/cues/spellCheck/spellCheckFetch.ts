@@ -38,7 +38,8 @@ export const fetchSpellCheck = (
         const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
         if (languageToolMatchedLanguageCode != null) {
             const plainText = sanitizeHtml(text, { allowedTags: []});
-            const requestBody = { method: "POST", body: `language=${language}&text=${plainText}` };
+            const requestBody = { method: "POST", body: `language=${
+                languageToolMatchedLanguageCode}&text=${plainText}` };
             fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
                 .then(response => response.json())
                 .then(data => addSpellCheck(dispatch, getState, trackId, cueIndex, data as SpellCheck));
