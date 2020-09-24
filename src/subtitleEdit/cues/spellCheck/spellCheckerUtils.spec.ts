@@ -1,6 +1,11 @@
 import "../../../testUtils/initBrowserEnvironment";
 import { Constants } from "../../constants";
-import { addIgnoredKeyword, generateSpellcheckHash, hasIgnoredKeyword } from "./spellCheckerUtils";
+import {
+    addIgnoredKeyword,
+    generateSpellcheckHash,
+    hasIgnoredKeyword,
+    languageToolLanguageMapping
+} from "./spellCheckerUtils";
 import { Match, Replacement } from "./model";
 
 describe("spellCheckerUtils", () => {
@@ -108,4 +113,41 @@ describe("spellCheckerUtils", () => {
         });
 
     });
+
+    describe("vtms language tool language code mapper", () => {
+        test.each([
+            ["ar-SA", "ar"],
+            ["ca", "ca-ES"],
+            ["nl-NL", "nl"],
+            ["en-IE", "en"],
+            ["fr-FR", "fr"],
+            ["fr-CA", "fr"],
+            ["it-IT", "it"],
+            ["no-NO", "no"],
+            ["fa-AF", "fa"],
+            ["fa-IR", "fa"],
+            ["fa-IR", "fa"],
+            ["es-ES", "es"],
+            ["es-MX", "es"],
+            ["sv-SE", "sv"],
+            ["ta-SG", "ta-IN"],
+            ["zh-HK", "zh-CN"],
+            ["zh-CN", "zh-CN"],
+            ["zh-TW", "zh-CN"],
+            ["zh-HK", "zh-CN"],
+            ["zh-TW", "zh-CN"],
+        ])(
+            "returns equivalent language tool language code for %s",
+            (vtmsLanguageId: string, languageToolValue: string) => {
+                //THEN
+                expect(languageToolLanguageMapping.get(vtmsLanguageId)).toEqual(languageToolValue);
+            },
+        );
+
+        it("returns undefined if passed unmapped key", () => {
+            //WHEN, THEN
+            expect(languageToolLanguageMapping.get("ar-EG")).toEqual(undefined);
+        });
+    });
+
 });
