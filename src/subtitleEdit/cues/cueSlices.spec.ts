@@ -178,7 +178,8 @@ describe("cueSlices", () => {
                             "https://testing-domain/v2/check",
                             {
                               method: "POST",
-                              body: "language=testing-language&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START"
+                              body: "language=testing-language&text=Dummy Cue" +
+                                  "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                             }
                         );
                         expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
@@ -233,7 +234,8 @@ describe("cueSlices", () => {
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
                     {
-                      body: "language=testing-language&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START",
+                      body: "language=testing-language&text=Dummy Cue" +
+                          "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END",
                       method: "POST"
                     }
                 );
@@ -325,7 +327,8 @@ describe("cueSlices", () => {
                             "https://testing-domain/v2/check",
                             {
                               method: "POST",
-                              body: "language=testing-language&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START"
+                              body: "language=testing-language&text=Dummy Cue" +
+                                  "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                             }
                         );
                         expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});

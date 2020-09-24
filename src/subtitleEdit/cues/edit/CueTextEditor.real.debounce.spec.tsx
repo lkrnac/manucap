@@ -279,7 +279,7 @@ describe("CueTextEditor", () => {
                     {
                         method: "POST",
                         body: "language=testing-language&text=someText Paste text to end" +
-                            "&disabledRules=UPPERCASE_SENTENCE_START"
+                            "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                     }
                 );
                 // @ts-ignore modern browsers does have it
@@ -361,7 +361,8 @@ describe("CueTextEditor", () => {
                     "https://testing-domain/v2/check",
                     {
                       method: "POST",
-                      body: "language=testing-language&text=test to clea&disabledRules=UPPERCASE_SENTENCE_START"
+                      body: "language=testing-language&text=test to clea" +
+                          "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                     }
                 );
                 // @ts-ignore modern browsers does have it
