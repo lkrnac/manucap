@@ -276,7 +276,11 @@ describe("CueTextEditor", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { method: "POST", body: "language=testing-language&text=someText Paste text to end" }
+                    {
+                        method: "POST",
+                        body: "language=testing-language&text=someText Paste text to end" +
+                            "&disabledRules=UPPERCASE_SENTENCE_START"
+                    }
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(1);
@@ -355,7 +359,10 @@ describe("CueTextEditor", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { method: "POST", body: "language=testing-language&text=test to clea" }
+                    {
+                      method: "POST",
+                      body: "language=testing-language&text=test to clea&disabledRules=UPPERCASE_SENTENCE_START"
+                    }
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(1);

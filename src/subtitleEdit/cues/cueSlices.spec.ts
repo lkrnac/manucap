@@ -176,7 +176,10 @@ describe("cueSlices", () => {
                         // @ts-ignore modern browsers does have it
                         expect(global.fetch).toBeCalledWith(
                             "https://testing-domain/v2/check",
-                            { method: "POST", body: "language=testing-language&text=Dummy Cue" }
+                            {
+                              method: "POST",
+                              body: "language=testing-language&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START"
+                            }
                         );
                         expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
                         expect(testingStore.getState().cues[2].editUuid).toEqual(editUuid);
@@ -229,7 +232,10 @@ describe("cueSlices", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { body: "language=testing-language&text=Dummy Cue", method: "POST" }
+                    {
+                      body: "language=testing-language&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START",
+                      method: "POST"
+                    }
                 );
             });
 
@@ -317,7 +323,10 @@ describe("cueSlices", () => {
                         // @ts-ignore modern browsers does have it
                         expect(global.fetch).toBeCalledWith(
                             "https://testing-domain/v2/check",
-                            { method: "POST", body: "language=testing-language&text=Dummy Cue" }
+                            {
+                              method: "POST",
+                              body: "language=testing-language&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START"
+                            }
                         );
                         expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
                         expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
