@@ -291,7 +291,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({ language: { id: "testing-language" }} as Track) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
 
         const editor = createEditorNode();
 
@@ -311,7 +311,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({ language: { id: "testing-language" }} as Track) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
         const actualNode = mount(
