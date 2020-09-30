@@ -160,7 +160,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }, id: trackId } as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[2].editUuid;
 
@@ -179,7 +179,7 @@ describe("cueSlices", () => {
                             "https://testing-domain/v2/check",
                             {
                               method: "POST",
-                              body: "language=testing-language&text=Dummy Cue" +
+                              body: "language=en-US&text=Dummy Cue" +
                                   "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                             }
                         );
@@ -199,7 +199,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }, id: trackId } as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
 
                 const editUuid = testingStore.getState().cues[2].editUuid;
@@ -219,7 +219,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }, id: trackId } as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
 
                 const editUuid = testingStore.getState().cues[2].editUuid;
@@ -235,18 +235,87 @@ describe("cueSlices", () => {
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
                     {
-                      body: "language=testing-language&text=Dummy Cue" +
+                      body: "language=en-US&text=Dummy Cue" +
                           "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END",
                       method: "POST"
                     }
                 );
             });
 
+            test.each([
+                ["ar-SA", "ar"], ["ca", "ca-ES"], ["nl-NL", "nl"],
+                ["en-IE", "en"], ["fr-FR", "fr"], ["fr-CA", "fr"], ["it-IT", "it"], ["no-NO", "no"],
+                ["fa-AF", "fa"], ["fa-IR", "fa"], ["es-ES", "es"], ["es-MX", "es"],["sv-SE", "sv"]
+            ])(
+                "calls spellchecker domain with correctly mapped language for %s",
+                (vtmsLanguageId: string, languageToolValue: string) => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: vtmsLanguageId }, id: trackId } as Track
+                ) as {} as AnyAction);
+
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledWith(
+                    "https://testing-domain/v2/check",
+                    {
+                        body: `language=${languageToolValue
+                        }&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END`,
+                        method: "POST"
+                    }
+                );
+            });
+
+            test.each([
+                ["en-US", "en-US"], ["en-GB", "en-GB"], ["pt-BR", "pt-BR"],
+                ["pt-PT", "pt-PT"], ["sk-SK", "sk-SK"], ["ru-RU", "ru-RU"]
+            ])(
+                "calls spellchecker with VTMS languages codes if language is defined but" +
+                " not found in language tool mapper",
+                (vtmsLanguageId: string, languageToolValue: string) => {
+                    // GIVEN
+                    testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                    testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                    testingStore.dispatch(updateEditingTrack(
+                        { language: { id: vtmsLanguageId }, id: trackId } as Track
+                    ) as {} as AnyAction);
+
+                    const editUuid = testingStore.getState().cues[2].editUuid;
+                    // @ts-ignore modern browsers does have it
+                    global.fetch = jest.fn()
+                        .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                    // WHEN
+                    testingStore.dispatch(updateVttCue(2,
+                        new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                    // THEN
+                    // @ts-ignore modern browsers does have it
+                    expect(global.fetch).toBeCalledWith(
+                        "https://testing-domain/v2/check",
+                        {
+                            body: `language=${languageToolValue
+                            }&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END`,
+                            method: "POST"
+                        }
+                    );
+                });
+
             it("does not trigger spell check if domain is undefined", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }, id: trackId } as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
@@ -299,7 +368,7 @@ describe("cueSlices", () => {
                 };
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }, id: trackId } as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
 
                 // @ts-ignore modern browsers does have it
@@ -328,7 +397,7 @@ describe("cueSlices", () => {
                             "https://testing-domain/v2/check",
                             {
                               method: "POST",
-                              body: "language=testing-language&text=Dummy Cue" +
+                              body: "language=en-US&text=Dummy Cue" +
                                   "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                             }
                         );

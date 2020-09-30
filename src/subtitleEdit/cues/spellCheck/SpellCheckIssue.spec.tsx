@@ -216,7 +216,7 @@ describe("SpellCheckerIssue", () => {
                                     className="spellcheck__option css-yt9ioa-option"
                                     id="react-select-2-option-0"
                                     tabIndex={-1}
-                                >Ignore All
+                                >Ignore all in this track
                                 </div>
                                 <div
                                     className="spellcheck__option css-yt9ioa-option"
@@ -381,7 +381,7 @@ describe("SpellCheckerIssue", () => {
                                     className="spellcheck__option css-yt9ioa-option"
                                     id="react-select-2-option-0"
                                     tabIndex={-1}
-                                >Ignore All
+                                >Ignore all in this track
                                 </div>
                                 <div
                                     className="spellcheck__option css-yt9ioa-option"

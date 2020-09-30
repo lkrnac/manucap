@@ -113,8 +113,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         .filter((replacement) => replacement.value.trim() !== "")
         .map((replacement) => ({ value: replacement.value, label: replacement.value } as Option)
         );
-    selectOptions.unshift({ value: props.decoratedText,
-        label: "Ignore All", title: `Ignores ${props.decoratedText} in all cues.` });
+    selectOptions.unshift({ value: props.decoratedText, label: "Ignore all in this track" });
 
     const customStyles = {
         control: () => ({ visibility: "hidden", height: "0px" }),

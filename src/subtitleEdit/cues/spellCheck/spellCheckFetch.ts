@@ -4,7 +4,7 @@ import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
 import { cuesSlice } from "../cueSlices";
 import { SubtitleEditAction } from "../../model";
-import { hasIgnoredKeyword } from "./spellCheckerUtils";
+import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
 import { Constants } from "../../constants";
 
 const addSpellCheck = (
@@ -36,10 +36,13 @@ export const fetchSpellCheck = (
     spellCheckDomain?: string,
 ): void => {
     if (spellCheckDomain && language) {
+        const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
+        const submittedLanguageCode =  languageToolMatchedLanguageCode == null ? language :
+            languageToolMatchedLanguageCode;
         const plainText = sanitizeHtml(text, { allowedTags: []});
         const requestBody = {
             method: "POST",
-            body: `language=${language}&text=${plainText}&disabledRules=${
+            body: `language=${submittedLanguageCode}&text=${plainText}&disabledRules=${
                 Constants.SPELLCHECKER_EXCLUDED_RULES}`
         };
         fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
