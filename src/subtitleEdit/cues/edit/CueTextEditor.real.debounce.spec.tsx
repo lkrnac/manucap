@@ -253,7 +253,7 @@ describe("CueTextEditor", () => {
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(
-            { language: { id: "testing-language" }, id: trackId } as Track
+            { language: { id: "en-US" }, id: trackId } as Track
         ) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
@@ -276,7 +276,7 @@ describe("CueTextEditor", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { method: "POST", body: "language=testing-language&text=someText Paste text to end" }
+                    { method: "POST", body: "language=en-US&text=someText Paste text to end" }
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(1);
@@ -324,7 +324,7 @@ describe("CueTextEditor", () => {
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(
-            { language: { id: "testing-language" }, id: trackId } as Track
+            { language: { id: "en-US" }, id: trackId } as Track
         ) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
@@ -355,7 +355,7 @@ describe("CueTextEditor", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { method: "POST", body: "language=testing-language&text=test to clea" }
+                    { method: "POST", body: "language=en-US&text=test to clea" }
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(1);

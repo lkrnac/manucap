@@ -33,4 +33,28 @@ export const hasIgnoredKeyword = (trackId: string, match: Match): boolean => {
     return hashes.includes(generateSpellcheckHash(keyword, match.rule.id));
 };
 
+export const languageToolLanguageMapping = new Map<string, string>();
+languageToolLanguageMapping.set("ar-SA", "ar");
+languageToolLanguageMapping.set("ca", "ca-ES");
+languageToolLanguageMapping.set("nl-NL", "nl");
+languageToolLanguageMapping.set("en-IE", "en");
+languageToolLanguageMapping.set("fr-FR", "fr");
+languageToolLanguageMapping.set("fr-CA", "fr");
+languageToolLanguageMapping.set("it-IT", "it");
+languageToolLanguageMapping.set("no-NO", "no");
+languageToolLanguageMapping.set("fa-AF", "fa");
+languageToolLanguageMapping.set("fa-IR", "fa");
+languageToolLanguageMapping.set("es-ES", "es");
+languageToolLanguageMapping.set("es-MX", "es");
+languageToolLanguageMapping.set("sv-SE", "sv");
+
+
+
+
+
+
+
+
+
+
 
