@@ -5,7 +5,7 @@ import { Match, SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { addIgnoredKeyword } from "./spellCheckerUtils";
-import { removeIgnoredSpellcheckedMatchesFromAllCues, validateAllCues } from "../cueSlices";
+import { removeIgnoredSpellcheckedMatchesFromAllCues, validateCorruptedCues } from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 
 
@@ -51,7 +51,7 @@ const onExitPopover = (props: Props): void => {
 };
 
 const revalidateAllCues = (dispatch: Dispatch<AppThunk>): void => {
-    dispatch(validateAllCues());
+    dispatch(validateCorruptedCues());
 };
 
 const ignoreKeyword = (props: Props, spellCheckMatch: Match, dispatch: Dispatch<AppThunk>): void => {

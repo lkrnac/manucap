@@ -5,6 +5,7 @@ import { SpellCheck } from "./model";
 import { cuesSlice } from "../cueSlices";
 import { SubtitleEditAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
+import { Constants } from "../../constants";
 
 const addSpellCheck = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -40,7 +41,9 @@ export const fetchSpellCheck = (
             languageToolMatchedLanguageCode;
         const plainText = sanitizeHtml(text, { allowedTags: []});
         const requestBody = {
-            method: "POST", body: `language=${submittedLanguageCode}&text=${plainText}`
+            method: "POST",
+            body: `language=${submittedLanguageCode}&text=${plainText}&disabledRules=${
+                Constants.SPELLCHECKER_EXCLUDED_RULES}`
         };
         fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
             .then(response => response.json())

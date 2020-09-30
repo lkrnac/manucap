@@ -1088,7 +1088,7 @@ describe("CueTextEditor", () => {
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
         });
 
-        it("ignores all spell check matches and revalidate all cues when clicking ignore all option", () => {
+        it("ignores all spell check matches and revalidate corrupted when clicking ignore all option", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
 
@@ -1118,7 +1118,9 @@ describe("CueTextEditor", () => {
                     corrupted: true },
                 { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
-                    corrupted: true }
+                    corrupted: true },
+                { vttCue: new VTTCue(4, 6, "Caption Linex 2"),
+                    cueCategory: "DIALOGUE", corrupted: true }
             ] as CueDto[];
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
@@ -1164,6 +1166,7 @@ describe("CueTextEditor", () => {
             expect(ignores[trackId]).not.toBeNull();
             expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
         });
     });
 

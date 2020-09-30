@@ -330,18 +330,17 @@ export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
         }
     };
 
-export const validateAllCues = (): AppThunk =>
+export const validateCorruptedCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const cues = getState().cues;
-        cues.forEach((_cue: CueDto, index: number) => {
+        cues.filter(cue => cue.corrupted).forEach((cue: CueDto) => {
             const track = getState().editingTrack;
             const subtitleSpecifications = getState().subtitleSpecifications;
             const overlapCaptionsAllowed = track?.overlapEnabled;
-
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
                 overlapEnabled: overlapCaptionsAllowed,
-                index
+                index: cues.indexOf(cue)
             }));
         });
     };

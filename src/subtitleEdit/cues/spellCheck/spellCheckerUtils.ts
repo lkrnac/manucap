@@ -47,14 +47,3 @@ languageToolLanguageMapping.set("fa-IR", "fa");
 languageToolLanguageMapping.set("es-ES", "es");
 languageToolLanguageMapping.set("es-MX", "es");
 languageToolLanguageMapping.set("sv-SE", "sv");
-
-
-
-
-
-
-
-
-
-
-
