@@ -36,14 +36,15 @@ export const fetchSpellCheck = (
 ): void => {
     if (spellCheckDomain && language) {
         const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
-        if (languageToolMatchedLanguageCode != null) {
-            const plainText = sanitizeHtml(text, { allowedTags: []});
-            const requestBody = { method: "POST", body: `language=${
-                languageToolMatchedLanguageCode}&text=${plainText}` };
-            fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
-                .then(response => response.json())
-                .then(data => addSpellCheck(dispatch, getState, trackId, cueIndex, data as SpellCheck));
-        }
+        const submittedLanguageCode =  languageToolMatchedLanguageCode == null ? language :
+            languageToolMatchedLanguageCode;
+        const plainText = sanitizeHtml(text, { allowedTags: []});
+        const requestBody = {
+            method: "POST", body: `language=${submittedLanguageCode}&text=${plainText}`
+        };
+        fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
+            .then(response => response.json())
+            .then(data => addSpellCheck(dispatch, getState, trackId, cueIndex, data as SpellCheck));
     }
 };
 
