@@ -300,6 +300,31 @@ describe("cueSlices", () => {
                 expect(global.fetch).not.toBeCalled();
             });
 
+            it("triggers spell check if language is not in language tool mapper but already in VTMS", () => {
+                // GIVEN
+                const languageCode = "en-US";
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: languageCode }, id: trackId } as Track
+                ) as {} as AnyAction);
+
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledWith(
+                    "https://testing-domain/v2/check",
+                    { body: `language=${languageCode}&text=Dummy Cue`, method: "POST" }
+                );
+            });
+
             it("exclude spell check match that matches ignored hash in local storage ", (done) => {
                 // GIVEN
                 const cues = [
