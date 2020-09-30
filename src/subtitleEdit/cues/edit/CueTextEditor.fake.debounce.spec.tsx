@@ -1118,7 +1118,9 @@ describe("CueTextEditor", () => {
                     corrupted: true },
                 { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
-                    corrupted: true }
+                    corrupted: true },
+                { vttCue: new VTTCue(4, 6, "Caption Linex 2"),
+                    cueCategory: "DIALOGUE", corrupted: true }
             ] as CueDto[];
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
@@ -1164,6 +1166,7 @@ describe("CueTextEditor", () => {
             expect(ignores[trackId]).not.toBeNull();
             expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
         });
     });
 
