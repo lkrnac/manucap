@@ -14,7 +14,7 @@ import {
     updateCues,
     updateEditingCueIndex,
     updateSourceCues,
-    updateVttCue,
+    updateVttCue, validateCorruptedCues,
 } from "./cueSlices";
 import { CueDto, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
@@ -25,6 +25,7 @@ import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
 import { setSpellCheckDomain } from "./spellCheck/spellCheckSlices";
 import { Constants } from "../constants";
 import { generateSpellcheckHash } from "./spellCheck/spellCheckerUtils";
+import { Replacement, SpellCheck } from "./spellCheck/model";
 
 const testingTrack = {
     type: "CAPTION",
@@ -1636,6 +1637,52 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
         });
+    });
+
+    describe("validateCorruptedCues", () => {
+        it("validate only corrupted cues", () => {
+            // GIVEN
+            const spellCheck = {
+                matches: [
+                    {
+                        offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
+                        context: { text: "Caption Linex 1", offset: 8, length: 5 },
+                        rule: { id: ruleId }
+                    }
+                ]
+            } as SpellCheck;
+
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                    cueCategory: "DIALOGUE", corrupted: true, spellCheck: spellCheck
+                },
+                {
+                    vttCue: new VTTCue(2, 4, "Caption Linex 2"),
+                    cueCategory: "DIALOGUE", corrupted: true, spellCheck: spellCheck
+                },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                    cueCategory: "DIALOGUE", corrupted: false
+                },
+                {
+                    vttCue: new VTTCue(6, 0, "Caption Line 4"), // bad timing
+                    cueCategory: "DIALOGUE", corrupted: false
+                }
+            ] as CueDto[];
+
+            testingStore = createTestingStore({ cues });
+
+            // WHEN
+            testingStore.dispatch(validateCorruptedCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+        });
+
     });
 
 });
