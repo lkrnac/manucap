@@ -8,15 +8,18 @@ const getSpellcheckIgnores = (): {} => {
     return localStorageIgnoredSpellchecks == null ? {} : JSON.parse(localStorageIgnoredSpellchecks);
 };
 
-export const generateSpellcheckHash = (keyword: string, ruleId: string): string => {
-    const hashObject: SpellCheckHash = { keyword: keyword, ruleId };
+export const generateSpellcheckHash = (match: Match): string => {
+    const context = match.context;
+    const endOffset = context.offset + context.length;
+    const keyword = context.text.slice(context.offset, endOffset);
+    const hashObject: SpellCheckHash = { keyword: keyword, ruleId: match.rule.id };
     return CryptoJS.MD5(JSON.stringify(hashObject)).toString();
 };
 
-export const addIgnoredKeyword = (trackId: string, keyword: string, ruleId: string): void => {
+export const addIgnoredKeyword = (trackId: string, match: Match): void => {
     const spellcheckIgnores = getSpellcheckIgnores();
     const hashes = _.get(spellcheckIgnores, `${trackId}.hashes`, []);
-    const hash = generateSpellcheckHash(keyword, ruleId);
+    const hash = generateSpellcheckHash(match);
     if (hashes.length === 0) {
         spellcheckIgnores[trackId] = { hashes: [hash], creationDate: new Date() };
     } else {
@@ -27,10 +30,7 @@ export const addIgnoredKeyword = (trackId: string, keyword: string, ruleId: stri
 
 export const hasIgnoredKeyword = (trackId: string, match: Match): boolean => {
     const hashes = _.get(getSpellcheckIgnores(), `${trackId}.hashes`, []);
-    const context = match.context;
-    const endOffset = context.offset + context.length;
-    const keyword = context.text.slice(context.offset, endOffset);
-    return hashes.includes(generateSpellcheckHash(keyword, match.rule.id));
+    return hashes.includes(generateSpellcheckHash(match));
 };
 
 export const languageToolLanguageMapping = new Map<string, string>();

@@ -55,7 +55,7 @@ const revalidateAllCues = (dispatch: Dispatch<AppThunk>): void => {
 };
 
 const ignoreKeyword = (props: Props, spellCheckMatch: Match, dispatch: Dispatch<AppThunk>): void => {
-    addIgnoredKeyword(props.trackId, props.decoratedText, spellCheckMatch.rule.id);
+    addIgnoredKeyword(props.trackId, spellCheckMatch);
     dispatch(removeIgnoredSpellcheckedMatchesFromAllCues());
     revalidateAllCues(dispatch);
 };
