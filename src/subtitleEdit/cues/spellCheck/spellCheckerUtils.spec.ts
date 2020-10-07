@@ -2,7 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import { Constants } from "../../constants";
 import {
     addIgnoredKeyword,
-    generateSpellcheckHash,
+    generateSpellcheckHash, getMatchText,
     hasIgnoredKeyword,
     languageToolLanguageMapping
 } from "./spellCheckerUtils";
@@ -18,6 +18,21 @@ describe("spellCheckerUtils", () => {
             ],
             "creationDate":"2020-09-15T02:25:14.756Z"
         }
+    });
+
+    describe("getMatchText", () => {
+        it("matched text from spellcheck match", () => {
+            //GIVEN
+            const match = { offset: 8, length: 13, replacements: [] as Replacement[],
+                context: { text: "this is falsex", offset: 8, length: 13 },
+                rule: { id: ruleId }} as Match;
+
+            //WHEN
+            const matchText = getMatchText(match);
+
+            //THEN
+            expect(matchText).toEqual("falsex");
+        });
     });
 
     describe("hasIgnoredKeyword", () => {
