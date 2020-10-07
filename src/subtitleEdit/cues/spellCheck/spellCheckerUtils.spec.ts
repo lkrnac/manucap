@@ -21,7 +21,7 @@ describe("spellCheckerUtils", () => {
     });
 
     describe("getMatchText", () => {
-        it("matched text from spellcheck match", () => {
+        it("returns matched text from spellcheck match", () => {
             //GIVEN
             const match = { offset: 8, length: 13, replacements: [] as Replacement[],
                 context: { text: "this is falsex", offset: 8, length: 13 },
