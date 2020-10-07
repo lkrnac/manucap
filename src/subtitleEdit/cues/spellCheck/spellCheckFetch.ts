@@ -1,11 +1,12 @@
 import { Dispatch } from "react";
-import { PayloadAction } from "@reduxjs/toolkit";
+import { AnyAction, PayloadAction } from "@reduxjs/toolkit";
 import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
 import { cuesSlice } from "../cueSlices";
 import { SubtitleEditAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
 import { Constants } from "../../constants";
+import { disableSpellchecker } from "../../trackSlices";
 
 const addSpellCheck = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -37,7 +38,7 @@ export const fetchSpellCheck = (
 ): void => {
     if (spellCheckDomain && language) {
         const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
-        const submittedLanguageCode =  languageToolMatchedLanguageCode == null ? language :
+        const submittedLanguageCode = languageToolMatchedLanguageCode == null ? language :
             languageToolMatchedLanguageCode;
         const plainText = sanitizeHtml(text, { allowedTags: []});
         const requestBody = {
@@ -46,7 +47,13 @@ export const fetchSpellCheck = (
                 Constants.SPELLCHECKER_EXCLUDED_RULES}`
         };
         fetch(`https://${spellCheckDomain}/v2/check`, requestBody)
-            .then(response => response.json())
+            .then((response: void | any)  => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    dispatch(disableSpellchecker());
+                }
+            })
             .then(data => addSpellCheck(dispatch, getState, trackId, cueIndex, data as SpellCheck));
     }
 };
