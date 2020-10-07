@@ -12,7 +12,8 @@ export enum Character {
     SLASH_CHAR = 191,
     ENTER = 13,
     ESCAPE = 27,
-    SPACE = 32
+    SPACE = 32,
+    TAB = 9
 }
 
 export enum KeyCombination {

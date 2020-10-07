@@ -10,12 +10,15 @@ import { mount, ReactWrapper } from "enzyme";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "./editorStatesSlice";
 import { CueDto, Track } from "../../model";
+import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues } from "../cueSlices";
 import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { fireEvent, render } from "@testing-library/react";
+import { replaceCurrentMatch, setReplacement } from "../searchReplace/searchReplaceSlices";
+import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();
 
@@ -24,6 +27,7 @@ const cues = [
     { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
+const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 
 const createEditorNode = (text = "someText"): ReactWrapper => {
     const vttCue = new VTTCue(0, 1, text);
@@ -32,6 +36,7 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
@@ -96,6 +101,7 @@ describe("CueTextEditor", () => {
             <Provider store={testingStore}>
                 <CueTextEditor
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
@@ -117,6 +123,50 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
     });
 
+    it("updates cue in redux for single match/replace when unmounted for next match - single", (done) => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
+        const searchReplaceMatches = {
+            offsets: [10],
+            offsetIndex: 0,
+            matchLength: 4
+        } as SearchReplaceMatches;
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    searchReplaceMatches={searchReplaceMatches}
+                />
+            </Provider>
+        );
+        act(() => {
+            testingStore.dispatch(replaceCurrentMatch() as {} as AnyAction);
+        });
+
+        // WHEN
+        actualNode.unmount();
+
+        // THEN
+        setTimeout(
+            () => {
+                expect(saveTrack).toHaveBeenCalledTimes(1);
+                expect(testingStore.getState().cues[0].vttCue.text)
+                    .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
+                done();
+            },
+            3000
+        );
+    });
+
     it("doesn't update cue in redux when unmounted if no change to text", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "someText");
@@ -128,6 +178,7 @@ describe("CueTextEditor", () => {
                     vttCue={vttCue}
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 />
             </Provider>
         );
@@ -166,6 +217,8 @@ describe("CueTextEditor", () => {
 
     it("triggers spellcheck only once immediately after text change", (done) => {
         // GIVEN
+        const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+        const ruleId = "MORFOLOGIK_RULE_EN_US";
         const testingResponse = {
             matches: [
                 {
@@ -173,6 +226,8 @@ describe("CueTextEditor", () => {
                     replacements: [{ "value": "Txt" }],
                     "offset": 0,
                     "length": 3,
+                    context: { text: "txxt", length: 3, offset: 0 },
+                    rule: { id: ruleId }
                 },
                 {
                     "message": "Possible spelling mistake found.",
@@ -190,13 +245,15 @@ describe("CueTextEditor", () => {
                     ],
                     "offset": 7,
                     "length": 4,
+                    context: { text: "txxt", length: 4, offset: 7 },
+                    rule: { id: ruleId }
                 }
             ]
         };
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(
-            { language: { id: "testing-language" }} as Track
+            { language: { id: "testing-language" }, id: trackId } as Track
         ) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
@@ -219,7 +276,11 @@ describe("CueTextEditor", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { method: "POST", body: "language=testing-language&text=someText Paste text to end" }
+                    {
+                        method: "POST",
+                        body: "language=testing-language&text=someText Paste text to end" +
+                            "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                    }
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(1);
@@ -231,6 +292,8 @@ describe("CueTextEditor", () => {
 
     it("triggers spellcheck only once immediately after clear text change", (done) => {
         // GIVEN
+        const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+        const ruleId = "MORFOLOGIK_RULE_EN_US";
         const testingResponse = {
             matches: [
                 {
@@ -238,6 +301,8 @@ describe("CueTextEditor", () => {
                     replacements: [{ "value": "Txt" }],
                     "offset": 0,
                     "length": 3,
+                    context: { text: "txxt", length: 3, offset: 0 },
+                    rule: { id: ruleId }
                 },
                 {
                     "message": "Possible spelling mistake found.",
@@ -255,13 +320,15 @@ describe("CueTextEditor", () => {
                     ],
                     "offset": 7,
                     "length": 4,
+                    context: { text: "txxt", length: 4, offset: 7 },
+                    rule: { id: ruleId }
                 }
             ]
         };
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(
-            { language: { id: "testing-language" }} as Track
+            { language: { id: "testing-language" }, id: trackId } as Track
         ) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
@@ -277,6 +344,7 @@ describe("CueTextEditor", () => {
                     vttCue={vttCue}
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                 />
             </Provider>
         );
@@ -291,7 +359,11 @@ describe("CueTextEditor", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { method: "POST", body: "language=testing-language&text=test to clea" }
+                    {
+                      method: "POST",
+                      body: "language=testing-language&text=test to clea" +
+                          "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                    }
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(1);

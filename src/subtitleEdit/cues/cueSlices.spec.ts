@@ -14,7 +14,7 @@ import {
     updateCues,
     updateEditingCueIndex,
     updateSourceCues,
-    updateVttCue,
+    updateVttCue, validateCorruptedCues,
 } from "./cueSlices";
 import { CueDto, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
@@ -23,6 +23,9 @@ import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
 import { setSpellCheckDomain } from "./spellCheck/spellCheckSlices";
+import { Constants } from "../constants";
+import { generateSpellcheckHash } from "./spellCheck/spellCheckerUtils";
+import { Replacement, SpellCheck } from "./spellCheck/model";
 
 const testingTrack = {
     type: "CAPTION",
@@ -45,6 +48,8 @@ const testingCuesWithGaps = [
     { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(12, 18, "Caption Line 3"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
+const ruleId = "MORFOLOGIK_RULE_EN_US";
+const ignoredKeyword = "falsex";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -112,7 +117,13 @@ describe("cueSlices", () => {
         });
 
         describe("spell checking", () => {
-            it("updates cues in redux with spell checking state", () => {
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            beforeEach(() => {
+                localStorage.clear();
+                testingStore = createTestingStore();
+                jest.clearAllMocks();
+            });
+            it("updates cues in redux with spell checking state", (done) => {
                 // GIVEN
                 const testingResponse = {
                     matches: [
@@ -121,6 +132,8 @@ describe("cueSlices", () => {
                             replacements: [{ "value": "Txt" }],
                             "offset": 0,
                             "length": 3,
+                            context: { text: "txt", length: 3, offset: 0 },
+                            rule: { id: ruleId }
                         },
                         {
                             "message": "Possible spelling mistake found.",
@@ -138,6 +151,8 @@ describe("cueSlices", () => {
                             ],
                             "offset": 7,
                             "length": 4,
+                            context: { text: "text", length: 4, offset: 7 },
+                            rule: { id: ruleId }
                         }
                     ]
                 };
@@ -145,7 +160,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }} as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[2].editUuid;
 
@@ -162,13 +177,18 @@ describe("cueSlices", () => {
                         // @ts-ignore modern browsers does have it
                         expect(global.fetch).toBeCalledWith(
                             "https://testing-domain/v2/check",
-                            { method: "POST", body: "language=testing-language&text=Dummy Cue" }
+                            {
+                              method: "POST",
+                              body: "language=en-US&text=Dummy Cue" +
+                                  "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                            }
                         );
                         expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
                         expect(testingStore.getState().cues[2].editUuid).toEqual(editUuid);
                         expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
-                        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 2");
-                        expect(testingStore.getState().cues[2].cueCategory).toEqual("AUDIO_DESCRIPTION");
+                        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
+                        expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
+                        done();
                     },
                     50
                 );
@@ -179,7 +199,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }} as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
 
                 const editUuid = testingStore.getState().cues[2].editUuid;
@@ -199,7 +219,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }} as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
 
                 const editUuid = testingStore.getState().cues[2].editUuid;
@@ -214,15 +234,88 @@ describe("cueSlices", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
                     "https://testing-domain/v2/check",
-                    { body: "language=testing-language&text=Dummy Cue", method: "POST" }
+                    {
+                      body: "language=en-US&text=Dummy Cue" +
+                          "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END",
+                      method: "POST"
+                    }
                 );
             });
+
+            test.each([
+                ["ar-SA", "ar"], ["ca", "ca-ES"], ["nl-NL", "nl"],
+                ["en-IE", "en"], ["fr-FR", "fr"], ["fr-CA", "fr"], ["it-IT", "it"], ["no-NO", "no"],
+                ["fa-AF", "fa"], ["fa-IR", "fa"], ["es-ES", "es"], ["es-MX", "es"],["sv-SE", "sv"]
+            ])(
+                "calls spellchecker domain with correctly mapped language for %s",
+                (vtmsLanguageId: string, languageToolValue: string) => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: vtmsLanguageId }, id: trackId } as Track
+                ) as {} as AnyAction);
+
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledWith(
+                    "https://testing-domain/v2/check",
+                    {
+                        body: `language=${languageToolValue
+                        }&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END`,
+                        method: "POST"
+                    }
+                );
+            });
+
+            test.each([
+                ["en-US", "en-US"], ["en-GB", "en-GB"], ["pt-BR", "pt-BR"],
+                ["pt-PT", "pt-PT"], ["sk-SK", "sk-SK"], ["ru-RU", "ru-RU"]
+            ])(
+                "calls spellchecker with VTMS languages codes if language is defined but" +
+                " not found in language tool mapper",
+                (vtmsLanguageId: string, languageToolValue: string) => {
+                    // GIVEN
+                    testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                    testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                    testingStore.dispatch(updateEditingTrack(
+                        { language: { id: vtmsLanguageId }, id: trackId } as Track
+                    ) as {} as AnyAction);
+
+                    const editUuid = testingStore.getState().cues[2].editUuid;
+                    // @ts-ignore modern browsers does have it
+                    global.fetch = jest.fn()
+                        .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}) })));
+
+                    // WHEN
+                    testingStore.dispatch(updateVttCue(2,
+                        new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                    // THEN
+                    // @ts-ignore modern browsers does have it
+                    expect(global.fetch).toBeCalledWith(
+                        "https://testing-domain/v2/check",
+                        {
+                            body: `language=${languageToolValue
+                            }&text=Dummy Cue&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END`,
+                            method: "POST"
+                        }
+                    );
+                });
 
             it("does not trigger spell check if domain is undefined", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "testing-language" }} as Track
+                    { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
@@ -253,6 +346,67 @@ describe("cueSlices", () => {
                 // THEN
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).not.toBeCalled();
+            });
+
+            it("exclude spell check match that matches ignored hash in local storage ", (done) => {
+                // GIVEN
+                const cues = [
+                    { vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
+                        corrupted: true }] as CueDto[];
+                testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+                const testingResponse = {
+                    matches: [
+                        {
+                            message: "there are spelling errors",
+                            replacements: [{ "value": "false" }],
+                            offset: 0,
+                            length: 6,
+                            context: { text: "falsex is not a word", length: 6, offset: 0 },
+                            rule: { id: ruleId }
+                        }
+                    ]
+                };
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: trackId } as Track
+                ) as {} as AnyAction);
+
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) =>
+                        resolve({ json: () => testingResponse })));
+
+                const hash = generateSpellcheckHash(ignoredKeyword, ruleId);
+                const ignoredKeyWordMap = {};
+                ignoredKeyWordMap[trackId] = {
+                        hashes: [hash],
+                        creationDate: new Date()
+                };
+                localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY,
+                    JSON.stringify(ignoredKeyWordMap));
+
+                //WHEN
+                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"),
+                    testingStore.getState().cues[0].editUuid) as {} as AnyAction);
+
+                // THEN
+                setTimeout(
+                    () => {
+                        // @ts-ignore modern browsers does have it
+                        expect(global.fetch).toBeCalledWith(
+                            "https://testing-domain/v2/check",
+                            {
+                              method: "POST",
+                              body: "language=en-US&text=Dummy Cue" +
+                                  "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                            }
+                        );
+                        expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
+                        expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
+                        done();
+                    },
+                    50
+                );
             });
         });
 
@@ -1359,6 +1513,56 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
             expect(testingStore.getState().cues[3].corrupted).toBeTruthy();
         });
+
+        it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+        });
+
+        it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 0,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+        });
     });
 
     describe("updateEditingCueIndex", () => {
@@ -1502,6 +1706,52 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
         });
+    });
+
+    describe("validateCorruptedCues", () => {
+        it("validate only corrupted cues", () => {
+            // GIVEN
+            const spellCheck = {
+                matches: [
+                    {
+                        offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
+                        context: { text: "Caption Linex 1", offset: 8, length: 5 },
+                        rule: { id: ruleId }
+                    }
+                ]
+            } as SpellCheck;
+
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                    cueCategory: "DIALOGUE", corrupted: true, spellCheck: spellCheck
+                },
+                {
+                    vttCue: new VTTCue(2, 4, "Caption Linex 2"),
+                    cueCategory: "DIALOGUE", corrupted: true, spellCheck: spellCheck
+                },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                    cueCategory: "DIALOGUE", corrupted: false
+                },
+                {
+                    vttCue: new VTTCue(6, 0, "Caption Line 4"), // bad timing
+                    cueCategory: "DIALOGUE", corrupted: false
+                }
+            ] as CueDto[];
+
+            testingStore = createTestingStore({ cues });
+
+            // WHEN
+            testingStore.dispatch(validateCorruptedCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+        });
+
     });
 
 });

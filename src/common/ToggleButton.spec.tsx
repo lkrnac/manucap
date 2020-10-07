@@ -2,6 +2,7 @@ import "../testUtils/initBrowserEnvironment";
 import { mount, shallow } from "enzyme";
 import React, { ReactElement } from "react";
 import ToggleButton from "./ToggleButton";
+import { render } from "@testing-library/react";
 
 describe("ToggleButton", () => {
     it("renders", () => {
@@ -68,6 +69,28 @@ describe("ToggleButton", () => {
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    it("renders with title", () => {
+        // GIVEN
+        const expectedNode = render(
+            <button type="button" className="" title="Testing title">
+                Click me!
+            </button>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <ToggleButton
+                title="Testing title"
+                render={(): ReactElement => (
+                    <>Click me!</>
+                )}
+            />
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders disabled", () => {

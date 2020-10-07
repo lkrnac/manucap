@@ -8,9 +8,7 @@ import {
     Editor,
     EditorState,
     getDefaultKeyBinding,
-    Modifier,
-    RichUtils,
-    SelectionState,
+    RichUtils
 } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
@@ -27,7 +25,12 @@ import { updateVttCue } from "../cueSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
+import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
+import { replaceContent } from "./editUtils";
+import { SearchReplaceMatches } from "../searchReplace/model";
+import { searchNextCues } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "../CueExtraCharacters";
+import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 
 const handleKeyShortcut = (
     editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
@@ -62,7 +65,9 @@ export interface CueTextEditorProps {
     vttCue: VTTCue;
     editUuid?: string;
     spellCheck?: SpellCheck;
+    searchReplaceMatches?: SearchReplaceMatches;
     bindCueViewModeKeyboardShortcut: () => void;
+    unbindCueViewModeKeyboardShortcut: () => void;
 }
 
 const changeVttCueInRedux = (
@@ -93,16 +98,30 @@ const createCorrectSpellingHandler = (
     dispatch: Dispatch<AppThunk>,
     props: CueTextEditorProps
 ) => (replacement: string, start: number, end: number): void => {
-    let contentState = editorState.getCurrentContent();
-    const selectionState = editorState.getSelection();
-    const typoSelectionState = selectionState.set("anchorOffset", start).set("focusOffset", end) as SelectionState;
-    const startKey = typoSelectionState.getStartKey();
-    const typoBlock = contentState.getBlockForKey(startKey);
-    const inlineStyle = typoBlock.getInlineStyleAt(start);
-    contentState = Modifier.replaceText(contentState, typoSelectionState, replacement, inlineStyle);
-    const newEditorState = EditorState.push(editorState, contentState, "change-block-data");
+    const newEditorState = replaceContent(editorState, replacement, start, end);
     dispatch(updateEditorState(props.index, newEditorState));
     dispatch(callSaveTrack());
+};
+
+const isLastSearchMatch = (
+    searchReplaceMatches: SearchReplaceMatches
+): boolean => searchReplaceMatches && searchReplaceMatches.offsetIndex === searchReplaceMatches.offsets.length - 1;
+
+const createReplaceMatchHandler = (
+    editorState: EditorState,
+    dispatch: Dispatch<AppThunk>,
+    props: CueTextEditorProps,
+    unmountContentRef:  React.MutableRefObject<ContentState | null>
+) => (replacement: string, start: number, end: number): void => {
+    const newEditorState = replaceContent(editorState, replacement, start, end);
+    dispatch(updateEditorState(props.index, newEditorState));
+    dispatch(callSaveTrack());
+    if (props.searchReplaceMatches && isLastSearchMatch(props.searchReplaceMatches)) {
+        // Need to ensure ref is set for unmount because searchNextCues will close editor
+        // since this is the last search match
+        unmountContentRef.current = newEditorState.getCurrentContent();
+        dispatch(searchNextCues());
+    }
 };
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
@@ -128,6 +147,7 @@ const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
 };
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);
@@ -137,6 +157,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
     );
+    const unmountContentRef = useRef<ContentState | null>(null);
 
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -146,12 +167,27 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
         if (props.spellCheck && props.spellCheck.matches) {
-            props.spellCheck.matches.forEach(match => callback(match.offset, match.offset + match.length));
+            props.spellCheck.matches.forEach(match => {
+                    if (editingTrack?.id && props.editUuid) {
+                        if (!hasIgnoredKeyword(editingTrack.id, match)) {
+                            callback(match.offset, match.offset + match.length);
+                        }
+                    }
+                }
+            );
         }
     };
+
+    const findSearchReplaceMatch = (_contentBlock: ContentBlock, callback: Function): void => {
+        if (props.searchReplaceMatches && props.searchReplaceMatches.offsets.length > 0) {
+            const offset = props.searchReplaceMatches.offsets[props.searchReplaceMatches.offsetIndex];
+            callback(offset, offset + props.searchReplaceMatches.matchLength);
+        }
+    };
+
     const findExtraCharacters = (contentBlock: ContentBlock, callback: Function): void => {
-        if (subtitleSpecifications && subtitleSpecifications.enabled) {
-            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine || 0;
+        if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxCharactersPerLine) {
+            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine;
             const text = contentBlock.getText();
             const lines = text.split("\n");
             return lines.forEach(line => {
@@ -166,6 +202,13 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     const newCompositeDecorator = new CompositeDecorator([
         {
+            strategy: findSearchReplaceMatch,
+            component: SearchReplaceMatch,
+            props: {
+                replaceMatch: createReplaceMatchHandler(editorState, dispatch, props, unmountContentRef)
+            }
+        },
+        {
             strategy: findExtraCharacters,
             component: CueExtraCharacters,
             props: {}
@@ -179,17 +222,21 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 editorRef,
                 spellCheckerMatchingOffset,
                 setSpellCheckerMatchingOffset,
-                bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut
+                bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut,
+                unbindCueViewModeKeyboardShortcut: props.unbindCueViewModeKeyboardShortcut,
+                cueId: props.editUuid,
+                cueIdx: props.index,
+                trackId: editingTrack?.id
             }
         }
     ]);
     editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
 
     const currentContent = editorState.getCurrentContent();
-    const unmountContentRef = useRef<ContentState | null>(null);
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
     const wordCountPerLine = getWordCountPerLine(currentContent.getPlainText());
+
     useEffect(
         () => {
             dispatch(updateEditorState(props.index, editorState));

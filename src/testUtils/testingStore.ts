@@ -12,5 +12,6 @@ const middleware = [...getDefaultMiddleware({ serializableCheck: false, immutabl
 
 // const middleware = [...getDefaultMiddleware({ serializableCheck: false })];
 
-export const createTestingStore = (): EnhancedStore => configureStore({ reducer: subtitleEditReducers, middleware });
+export const createTestingStore = (initialState?: {} ): EnhancedStore =>
+    configureStore({ reducer: subtitleEditReducers, preloadedState: initialState, middleware });
 export default createTestingStore();

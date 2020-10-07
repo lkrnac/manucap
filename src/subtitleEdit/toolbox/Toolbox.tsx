@@ -11,6 +11,7 @@ import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import SyncCuesButton from "./SyncCuesButton";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
+import SearchReplaceButton from "./SearchReplaceButton";
 
 interface Props {
     handleExportFile: () => void;
@@ -35,6 +36,7 @@ const Toolbox = (props: Props): ReactElement => {
                             <CaptionOverlapToggle />
                             <ExportTrackCuesButton handleExport={props.handleExportFile} />
                             <ImportTrackCuesButton handleImport={props.handleImportFile} />
+                            <SearchReplaceButton />
                             { isTranslation ? <SyncCuesButton /> : null }
                         </ButtonToolbar>
                     </Card.Body>
