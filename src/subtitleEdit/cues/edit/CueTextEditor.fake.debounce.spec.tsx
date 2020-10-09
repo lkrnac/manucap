@@ -44,9 +44,9 @@ jest.mock("lodash", () => (
         },
         get: jest.requireActual("lodash/get")
     }));
-jest.mock("../spellCheck/spellCheckFetch");
+// jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
-fetchSpellCheck.mockImplementation(() => jest.fn());
+// fetchSpellCheck.mockImplementation(() => jest.fn());
 
 let testingStore = createTestingStore();
 
@@ -229,8 +229,7 @@ describe("CueTextEditor", () => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        // @ts-ignore we are mocking this function
-        fetchSpellCheck.mockReset();
+
     });
 
     it("renders empty", () => {
@@ -1011,6 +1010,7 @@ describe("CueTextEditor", () => {
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
         });
 
+
         it("closes other spell check popups when user opens new one", () => {
             // GIVEN
             const saveTrack = jest.fn();
@@ -1167,6 +1167,60 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+        });
+
+        it("disable calls to spellchecker when if it responds with 400 is not supported", () => {
+            // GIVEN
+            // fetchSpellCheck.mockImplementation(() => jest.requireActual());;
+            // jest.unmock("../spellCheck/spellCheckFetch");
+            // jest.requireActual("../spellCheck/spellCheckFetch");
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+
+            testingStore.dispatch(reset() as {} as AnyAction);
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+            const cues = [
+                { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                    cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementationOnce(() => new Promise((resolve) =>
+                    resolve({ status: 400, ok: false })));
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={testingStore.getState().cues[0].vttCue}
+                        editUuid={editUuid}
+                    />
+                </Provider>
+            );
+
+            //WHEN
+            const editor = container.querySelector(".public-DraftEditor-content") as Element;
+            fireEvent.keyDown(editor, { keyCode: Character.K_CHAR });
+            fireEvent.paste(editor, { target: { value: "Paste text to end" }});
+
+
+            // THEN
+            //@ts-ignore
+            expect(global.fetch).toBeCalledTimes(1);
         });
     });
 

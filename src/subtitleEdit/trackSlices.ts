@@ -18,7 +18,7 @@ export const editingTrackSlice = createSlice({
         updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack,
         disableSpellchecker: (trackState): void => {
             if (trackState) {
-                trackState.spellcheckerEnabled = false;
+                trackState.spellcheckerDisabled = true;
             }
         },
         resetEditingTrack: (): Track | null => null
@@ -36,11 +36,6 @@ export const taskSlice = createSlice({
 export const updateEditingTrack = (track: Track): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(editingTrackSlice.actions.updateEditingTrack({ editingTrack: track }));
-    };
-
-export const disableSpellchecker = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
-        dispatch(editingTrackSlice.actions.disableSpellchecker());
     };
 
 export const resetEditingTrack = (): AppThunk =>

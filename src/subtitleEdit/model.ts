@@ -36,7 +36,7 @@ export interface Track {
     readonly sourceLanguage?: Language;
     readonly progress: number;
     overlapEnabled?: boolean;
-    spellcheckerEnabled?: boolean;
+    spellcheckerDisabled?: boolean;
     id?: string;
 }
 

@@ -263,7 +263,7 @@ export const lastCueChangeSlice = createSlice({
 });
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
@@ -301,9 +301,8 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const language = track?.language?.id;
             const spellCheckerDomain = getState().spellCheckerDomain;
             if (language && spellCheckerDomain) {
-                const trackId = track?.id;
-                if (trackId && editUuid) {
-                    fetchSpellCheck(dispatch, getState, trackId, idx, newVttCue.text,
+                if (editUuid) {
+                    fetchSpellCheck(dispatch, getState, track, idx, newVttCue.text,
                         language, spellCheckerDomain);
                 }
             }

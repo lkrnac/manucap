@@ -1,5 +1,5 @@
 import { Task, Track } from "./model";
-import { resetEditingTrack, updateEditingTrack, updateTask } from "./trackSlices";
+import { editingTrackSlice, resetEditingTrack, updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
@@ -51,6 +51,19 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().cuesTask).toEqual(testingTask);
+        });
+    });
+
+    describe("disableSpellchecker", () => {
+        it("sets spellcheckerDisabled to true when calling", () => {
+            //GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(editingTrackSlice.actions.disableSpellchecker() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingTrack.spellcheckerDisabled).toEqual(true);
         });
     });
 });

@@ -166,7 +166,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     }
 
     const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
-        if (props.spellCheck && props.spellCheck.matches) {
+        if (props.spellCheck && props.spellCheck.matches && !editingTrack?.spellcheckerDisabled) {
             props.spellCheck.matches.forEach(match => {
                     if (editingTrack?.id && props.editUuid) {
                         if (!hasIgnoredKeyword(editingTrack.id, match)) {
