@@ -11,7 +11,6 @@ interface CompleteAction {
 
 interface Props {
     onComplete: (completeAction: CompleteAction) => void;
-    disabled?: boolean;
 }
 
 const AUTO_SAVE_SAVING_CHANGES_MSG = "Saving changes";
@@ -60,7 +59,7 @@ const CompleteButton = (props: Props): ReactElement => {
 
             <button
                 type="button"
-                disabled={props.disabled || isPendingSaveState(saveState)}
+                disabled={isPendingSaveState(saveState)}
                 className="btn btn-primary sbte-complete-subtitle-btn"
                 onClick={(): void => props.onComplete({ editingTrack, cues })}
             >

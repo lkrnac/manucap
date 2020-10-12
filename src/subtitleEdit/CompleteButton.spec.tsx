@@ -61,32 +61,6 @@ describe("CompleteButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("renders disabled for save state NONE", () => {
-        // GIVEN
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <>
-                    <div style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}>
-                        <span hidden className=""> &nbsp;<i className="" /></span>
-                    </div>
-                    <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
-                        Complete
-                    </button>
-                </>
-            </Provider>
-        );
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CompleteButton onComplete={jest.fn()} disabled />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
-    });
-
     each([
         [ SaveState.TRIGGERED ],
         [ SaveState.REQUEST_SENT ],
