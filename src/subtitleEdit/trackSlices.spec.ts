@@ -14,7 +14,8 @@ const testingTrack = {
 const testingTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM"
+    dueDate: "2019/12/30 10:00AM",
+    completed: false
 } as Task;
 
 const testingStore = createTestingStore();

@@ -152,10 +152,11 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     </button>
                                 </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
-                                <CompleteButton
-                                    onComplete={props.onComplete}
-                                    disabled={editingTask?.completed}
-                                />
+                                {
+                                    editingTask?.completed ?
+                                        <span><i>Task Complete</i></span> :
+                                        <CompleteButton onComplete={props.onComplete} />
+                                }
                             </div>
                         </div>
                     </div>
