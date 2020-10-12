@@ -6,8 +6,8 @@ import { mount, ReactWrapper } from "enzyme";
 // @ts-ignore ReactSmartScroll doesn't have TS signatures
 import ReactSmartScroll from "@dotsub/react-smart-scroll";
 
-import { CueDto, CueWithSource, Language, ScrollPosition, Track } from "../model";
-import { updateEditingTrack } from "../trackSlices";
+import { CueDto, CueWithSource, Language, ScrollPosition, Task, Track } from "../model";
+import { updateEditingTrack, updateTask } from "../trackSlices";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import { updateCues, updateEditingCueIndex, updateSourceCues } from "./cueSlices";
 import CuesList from "./CuesList";
@@ -48,6 +48,20 @@ const testingDirectTranslationTrack = {
     mediaTitle: "This is the video title",
     mediaLength: 4000,
 } as Track;
+
+const testingTask = {
+    type: "TASK_CAPTION",
+    projectName: "Project One",
+    dueDate: "2019/12/30 10:00AM",
+    completed: false
+} as Task;
+
+const testingCompletedTask = {
+    type: "TASK_CAPTION",
+    projectName: "Project One",
+    dueDate: "2019/12/30 10:00AM",
+    completed: true
+} as Task;
 
 const simulateEnoughSpaceForCues = (actualNode: ReactWrapper, viewPortSize = 500): void => act(() => {
     // @ts-ignore Simulate enough space in viewport
@@ -102,6 +116,7 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
@@ -376,6 +391,7 @@ describe("CuesList", () => {
                 />
             </Provider >
         );
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
@@ -385,6 +401,40 @@ describe("CuesList", () => {
 
         // THEN
         expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
+    it("opens completed cue for editing", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CuesList
+                    editingTrack={testingTranslationTrack}
+                    currentPlayerTime={0}
+                />
+            </Provider >
+        );
+        testingStore.dispatch(updateTask(testingCompletedTask) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+        simulateEnoughSpaceForCues(actualNode);
+        actualNode.setProps({}); // re-render component
+        actualNode.find(CueLine).at(1).simulate("click");
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 
     it("adds new cue if empty cue is clicked in translation mode", () => {
