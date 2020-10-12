@@ -4,8 +4,8 @@ import { Provider } from "react-redux";
 import React from "react";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
-import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
+import { render } from "@testing-library/react";
 
 describe("SubtitleSpecificationsForm", () => {
     it("renders disabled", () => {
@@ -27,7 +27,7 @@ describe("SubtitleSpecificationsForm", () => {
             mediaNotes: ""
         };
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>No</label>
@@ -35,15 +35,14 @@ describe("SubtitleSpecificationsForm", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html())
-            .toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders enabled", () => {
@@ -61,11 +60,11 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: 40,
             minCaptionDurationInMillis: 1000,
             maxCaptionDurationInMillis: 3000,
-            comments: "This is a sample comment",
+            comments: "sample **comment** ~~test~~",
             mediaNotes: "media **notes** ~~test~~"
         };
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
@@ -114,25 +113,27 @@ describe("SubtitleSpecificationsForm", () => {
                 </div>
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text">This is a sample comment</div>
+                <div className="sbte-subspec-freeform-text sbte-subspec-comments">
+                    <p>sample <strong>comment</strong> <del>test</del></p>
+                </div>
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text">
+                <div className="sbte-subspec-freeform-text sbte-media-notes">
                     <p>media <strong>notes</strong> <del>test</del></p>
                 </div>
             </Provider>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html())
-            .toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML)
+            .toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders null character and length limitation values", () => {
@@ -150,11 +151,11 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: null,
             minCaptionDurationInMillis: null,
             maxCaptionDurationInMillis: null,
-            comments: "This is a sample comment",
+            comments: "sample **comment** ~~test~~",
             mediaNotes: "media **notes** ~~test~~"
         };
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
@@ -203,29 +204,30 @@ describe("SubtitleSpecificationsForm", () => {
                 </div>
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text">This is a sample comment</div>
+                <div className="sbte-subspec-freeform-text sbte-subspec-comments">
+                    <p>sample <strong>comment</strong> <del>test</del></p>
+                </div>
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text">
+                <div className="sbte-subspec-freeform-text sbte-media-notes">
                     <p>media <strong>notes</strong> <del>test</del></p>
                 </div>
             </Provider>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html())
-            .toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML)
+            .toEqual(expectedNode.container.outerHTML);
     });
 
     describe("renders media notes markdown links", () => {
-
         const subTitleSpecifications: SubtitleSpecification = {
             subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
@@ -251,7 +253,7 @@ describe("SubtitleSpecificationsForm", () => {
 
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
@@ -259,8 +261,7 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.find(".sbte-subspec-freeform-text").last().find("a").html())
-                .toEqual(expectedMediaNotes);
+            expect(actualNode.container.querySelector(".sbte-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
         });
 
         it("enforce link references to open in a new tab", () => {
@@ -272,7 +273,7 @@ describe("SubtitleSpecificationsForm", () => {
                     "[1]: <https://dotsub.com> \"Dotsub\"";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
@@ -280,8 +281,7 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.find(".sbte-subspec-freeform-text").last().find("a").html())
-                .toEqual(expectedMediaNotes);
+            expect(actualNode.container.querySelector(".sbte-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
         });
 
         it("enforce img links to open in a new tab", () => {
@@ -294,7 +294,7 @@ describe("SubtitleSpecificationsForm", () => {
 
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
@@ -302,10 +302,89 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.find(".sbte-subspec-freeform-text").last().find("a").html())
-                .toEqual(expectedMediaNotes);
+            expect(actualNode.container.querySelector(".sbte-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
         });
     });
 
+    describe("renders subtitle specs comments markdown links", () => {
+        const subTitleSpecifications: SubtitleSpecification = {
+            subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
+            projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
+            enabled: true,
+            audioDescription: true,
+            onScreenText: false,
+            spokenAudio: false,
+            speakerIdentification: "GENDER",
+            dialogueStyle: "LINE_BREAKS",
+            maxLinesPerCaption: 1,
+            maxCharactersPerLine: 40,
+            minCaptionDurationInMillis: 1000,
+            maxCaptionDurationInMillis: 3000,
+            comments: "This is a sample media node"
+        };
 
+        it("enforce links to open in a new tab", () => {
+            // GIVEN
+            const expectedMediaNotes = "<a href=\"https://google.com\" rel=\"noopener noreferrer\"" +
+                " target=\"_blank\">here</a>";
+
+            subTitleSpecifications.comments = "Please click [here](https://google.com)";
+
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                </Provider>
+            );
+
+            // THEN
+
+            expect(actualNode.container.querySelector(".sbte-subspec-comments a")?.outerHTML)
+                .toEqual(expectedMediaNotes);
+        });
+
+        it("enforce link references to open in a new tab", () => {
+            // GIVEN
+            const expectedMediaNotes = "<a href=\"https://dotsub.com\" rel=\"noopener noreferrer\"" +
+                " target=\"_blank\">dotsub</a>";
+            subTitleSpecifications.comments = "This is [dotsub][1], and that means subtitles.\n" +
+                    "\n" +
+                    "[1]: <https://dotsub.com> \"Dotsub\"";
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                </Provider>
+            );
+
+            // THEN
+
+            expect(actualNode.container.querySelector(".sbte-subspec-comments a")?.outerHTML)
+                .toEqual(expectedMediaNotes);
+        });
+
+        it("enforce img links to open in a new tab", () => {
+            // GIVEN
+            const expectedMediaNotes = "<a href=\"https://dotsub.com/images/bootstrap/logo.png\"" +
+                " rel=\"noopener noreferrer\" target=\"_blank\">" +
+                "<img alt=\"test\" src=\"https://dotsub.com/images/bootstrap/logo.png\"></a>";
+            subTitleSpecifications.comments = "[![test](https://dotsub.com/images/bootstrap/logo.png)]" +
+                    "(https://dotsub.com/images/bootstrap/logo.png)";
+
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                </Provider>
+            );
+
+            // THEN
+
+            expect(actualNode.container.querySelector(".sbte-subspec-comments a")?.outerHTML)
+                .toEqual(expectedMediaNotes);
+        });
+    });
 });
