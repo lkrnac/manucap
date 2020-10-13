@@ -4,14 +4,13 @@ import Select, { Styles, ValueType } from "react-select";
 import { Match, SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
-import { addIgnoredKeyword } from "./spellCheckerUtils";
+import { addIgnoredKeyword, getMatchText } from "./spellCheckerUtils";
 import { removeIgnoredSpellcheckedMatchesFromAllCues, validateCorruptedCues } from "../cueSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 
 
 interface Props {
     children: ReactElement;
-    decoratedText: string;
     spellCheck: SpellCheck;
     start: number;
     end: number;
@@ -36,7 +35,6 @@ const popupPlacement = (target: MutableRefObject<null>): boolean => {
 interface Option {
     value: string;
     label: string;
-    title?: string;
 }
 
 const onEnterPopover = (props: Props, selectRef: RefObject<Select>): void => {
@@ -54,17 +52,17 @@ const revalidateAllCues = (dispatch: Dispatch<AppThunk>): void => {
     dispatch(validateCorruptedCues());
 };
 
-const ignoreKeyword = (props: Props, spellCheckMatch: Match, dispatch: Dispatch<AppThunk>): void => {
-    addIgnoredKeyword(props.trackId, props.decoratedText, spellCheckMatch.rule.id);
+const ignoreKeyword = (props: Props, matchText: string, spellCheckMatch: Match, dispatch: Dispatch<AppThunk>): void => {
+    addIgnoredKeyword(props.trackId, matchText, spellCheckMatch.rule.id);
     dispatch(removeIgnoredSpellcheckedMatchesFromAllCues());
     revalidateAllCues(dispatch);
 };
 
-const onOptionSelected = (props: Props, spellCheckMatch: Match , dispatch: Dispatch<AppThunk>) =>
+const onOptionSelected = (props: Props, spellCheckMatch: Match, matchText: string , dispatch: Dispatch<AppThunk>) =>
     (optionValueType: ValueType<Option>): void => {
     const option = optionValueType as Option;
-    if(option.value === props.decoratedText) {
-        ignoreKeyword(props, spellCheckMatch, dispatch);
+    if(option.value === matchText) {
+        ignoreKeyword(props, matchText, spellCheckMatch, dispatch);
     } else {
         props.correctSpelling((option).value, props.start, props.end);
     }
@@ -102,18 +100,18 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once -> unmount
     );
-
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
         .pop();
     if (!spellCheckMatch) {
         return props.children;
     }
+    const matchText = getMatchText(spellCheckMatch);
     const selectOptions = spellCheckMatch.replacements
         .filter((replacement) => replacement.value.trim() !== "")
         .map((replacement) => ({ value: replacement.value, label: replacement.value } as Option)
         );
-    selectOptions.unshift({ value: props.decoratedText, label: "Ignore all in this track" });
+    selectOptions.unshift({ value: matchText, label: "Ignore all in this track" });
 
     const customStyles = {
         control: () => ({ visibility: "hidden", height: "0px" }),
@@ -152,7 +150,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                             menuIsOpen
                             options={selectOptions}
                             styles={customStyles}
-                            onChange={onOptionSelected(props, spellCheckMatch, dispatch)}
+                            onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
                             classNamePrefix="spellcheck"
                         />
                     </Popover.Content>
