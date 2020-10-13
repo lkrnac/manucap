@@ -657,7 +657,14 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <span><i>Task Complete</i></span>
+                                <div
+                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
+                                >
+                                    <span className="text-success">Edits are disabled, task is already completed</span>
+                                </div>
+                                <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
+                                    Complete
+                                </button>
                             </div>
                         </div>
                     </div>
