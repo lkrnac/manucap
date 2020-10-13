@@ -1168,6 +1168,85 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
         });
+
+        it("ignores all spell check matches and revalidate corrupted when clicking ignore all option with all cue" +
+            " text ignored", () => {
+            // GIVEN
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const cueText = "skupiając się na śledzeniu \n konwersji offline.";
+            testingStore.dispatch(reset() as {} as AnyAction);
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "pl-PL", name: "Polish" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const spellCheck = {
+                matches: [
+                    { offset: 0, length: 46, replacements: [] as Replacement[],
+                        context: { text: cueText,offset: 0, length: 46 },
+                        rule: { id: ruleId }
+                    }
+                ]
+            } as SpellCheck;
+
+            const cues = [
+                { vttCue: new VTTCue(0, 2, cueText),
+                    cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                    corrupted: true },
+                { vttCue: new VTTCue(2, 4, cueText),
+                    cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                    corrupted: true }
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementationOnce(() => new Promise((resolve) =>
+                    resolve({ json: () => spellCheck })));
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={testingStore.getState().cues[0].vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
+                </Provider>
+            );
+            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            fireEvent(errorSpan,
+                new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true,
+                })
+            );
+
+            //WHEN
+            const ignoreOption = document.querySelectorAll(".spellcheck__option")[0] as Element;
+            fireEvent(ignoreOption,
+                new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true,
+                })
+            );
+
+            // THEN
+            //@ts-ignore value should not be null
+            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
+            expect(ignores[trackId]).not.toBeNull();
+            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+        });
     });
 
     describe("search and replace", () => {

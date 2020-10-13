@@ -43,7 +43,6 @@ describe("SpellCheckerIssue", () => {
         const actualNode = mount(
             <SpellCheckIssue
                 trackId={trackId}
-                decoratedText="asd"
                 spellCheck={spellCheck}
                 start={15}
                 end={18}
@@ -70,7 +69,6 @@ describe("SpellCheckerIssue", () => {
         const actualNode = mount(
             <SpellCheckIssue
                 trackId={trackId}
-                decoratedText="asd"
                 spellCheck={spellCheck}
                 start={13}
                 end={18}
@@ -97,7 +95,6 @@ describe("SpellCheckerIssue", () => {
         const actualNode = mount(
             <SpellCheckIssue
                 trackId={trackId}
-                decoratedText="asd"
                 spellCheck={spellCheck}
                 start={15}
                 end={17}
@@ -262,7 +259,6 @@ describe("SpellCheckerIssue", () => {
         const actualNode = mount(
             <SpellCheckIssue
                 trackId={trackId}
-                decoratedText="asd"
                 spellCheck={spellCheck}
                 start={15}
                 end={18}
@@ -398,7 +394,6 @@ describe("SpellCheckerIssue", () => {
         const actualNode = mount(
             <SpellCheckIssue
                 trackId={trackId}
-                decoratedText="asd"
                 spellCheck={spellCheck}
                 start={15}
                 end={18}
@@ -441,7 +436,6 @@ describe("SpellCheckerIssue", () => {
         const actualNode = mount(
             <SpellCheckIssue
                 trackId={trackId}
-                decoratedText="asd"
                 spellCheck={spellCheck}
                 start={15}
                 end={18}
@@ -476,7 +470,6 @@ describe("SpellCheckerIssue", () => {
         const actualNode = mount(
             <SpellCheckIssue
                 trackId={trackId}
-                decoratedText="error"
                 spellCheck={spellCheck}
                 start={15}
                 end={18}
@@ -507,7 +500,6 @@ describe("SpellCheckerIssue", () => {
         const actualNode = mount(
             <SpellCheckIssue
                 trackId={trackId}
-                decoratedText="asd"
                 spellCheck={spellCheck}
                 start={15}
                 end={18}
