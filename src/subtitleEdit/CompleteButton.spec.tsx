@@ -61,7 +61,7 @@ describe("CompleteButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("renders disabled for save state NONE", () => {
+    it("renders with disabled property and save state NONE", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
