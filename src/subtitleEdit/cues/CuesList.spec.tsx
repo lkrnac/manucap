@@ -403,7 +403,7 @@ describe("CuesList", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
 
-    it("opens completed cue for editing", () => {
+    it("does not open completed cue for editing", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
