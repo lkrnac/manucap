@@ -58,7 +58,7 @@ export const fetchSpellCheck = (
                 addSpellCheck(dispatch, getState, track.id, cueIndex, data as SpellCheck)
             )
             .catch(error => {
-                if (error.status == 400) {
+                if (error.status === 400) {
                     dispatch(editingTrackSlice.actions.disableSpellchecker());
                 } else {
                     throw error;
