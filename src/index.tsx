@@ -38,7 +38,7 @@ const TestApp = (): ReactElement => {
             () => dispatch(updateEditingTrack({
                 type: "TRANSLATION",
                 // type: "CAPTION", // ** Change track type to CAPTION
-                language: { id: "kr-KO", name: "English (US)" } as Language,
+                language: { id: "en-US", name: "English (US)" } as Language,
                 default: true,
                 mediaTitle: "This is the video title",
                 mediaLength: 4250,
