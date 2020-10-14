@@ -44,9 +44,9 @@ jest.mock("lodash", () => (
         },
         get: jest.requireActual("lodash/get")
     }));
-// jest.mock("../spellCheck/spellCheckFetch");
+jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
-// fetchSpellCheck.mockImplementation(() => jest.fn());
+fetchSpellCheck.mockImplementation(() => jest.fn());
 
 let testingStore = createTestingStore();
 
@@ -229,7 +229,8 @@ describe("CueTextEditor", () => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-
+        // @ts-ignore we are mocking this function
+        fetchSpellCheck.mockReset();
     });
 
     it("renders empty", () => {
@@ -1169,11 +1170,15 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
         });
 
-        it("disable calls to spellchecker when if it responds with 400 is not supported", () => {
+        it("disable calls to spellchecker when if it responds with 400 is not supported",
+            async(done) => {
             // GIVEN
-            // fetchSpellCheck.mockImplementation(() => jest.requireActual());;
-            // jest.unmock("../spellCheck/spellCheckFetch");
-            // jest.requireActual("../spellCheck/spellCheckFetch");
+            jest.resetModules();
+            // jest.mock('MyModule', () => …);
+            // @ts-ignore we are mocking this function
+            fetchSpellCheck.mockImplementationOnce(() =>
+                jest.requireActual("../spellCheck/spellCheckFetch"));
+
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
 
             testingStore.dispatch(reset() as {} as AnyAction);
@@ -1215,12 +1220,16 @@ describe("CueTextEditor", () => {
             //WHEN
             const editor = container.querySelector(".public-DraftEditor-content") as Element;
             fireEvent.keyDown(editor, { keyCode: Character.K_CHAR });
-            fireEvent.paste(editor, { target: { value: "Paste text to end" }});
+            await setTimeout( () => {
+                    fireEvent.keyDown(editor, { keyCode: Character.K_CHAR });
 
+                    // THEN
+                    //@ts-ignore
+                    expect(global.fetch).toBeCalledTimes(1);
+                    done();
 
-            // THEN
-            //@ts-ignore
-            expect(global.fetch).toBeCalledTimes(1);
+                },
+                300);
         });
     });
 
