@@ -36,7 +36,6 @@ export const fetchSpellCheck = (
     language?: string,
     spellCheckDomain?: string,
 ): void => {
-
     if (spellCheckDomain && language && track && !track.spellcheckerDisabled) {
         const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
         const submittedLanguageCode = languageToolMatchedLanguageCode == null ? language :
