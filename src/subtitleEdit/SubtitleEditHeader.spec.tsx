@@ -30,7 +30,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -72,7 +72,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_TRANSLATE",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -112,7 +112,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_DIRECT_TRANSLATE",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -152,7 +152,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_REVIEW",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -193,7 +193,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_REVIEW",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -300,7 +300,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -347,7 +347,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -390,7 +390,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -433,7 +433,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -476,7 +476,7 @@ describe("SubtitleEditHeader", () => {
         const testingTask = {
             type: "TASK_CAPTION",
             projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
+            dueDate: "2019/12/30 10:00AM"
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
