@@ -167,7 +167,8 @@ describe("cueSlices", () => {
 
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
+                    .mockImplementationOnce(() =>
+                        new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
                 // WHEN
                 testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
@@ -374,8 +375,8 @@ describe("cueSlices", () => {
 
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() => new Promise((resolve) =>
-                        resolve({ json: () => testingResponse })));
+                    .mockImplementationOnce(() =>
+                        new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
                 const hash = generateSpellcheckHash(ignoredKeyword, ruleId);
                 const ignoredKeyWordMap = {};
@@ -424,7 +425,7 @@ describe("cueSlices", () => {
                             resolve({ status: 400, ok: false })));
 
                     //WHEN
-                    for (let i = 0; i < 1000; i++) {
+                    for (let i = 0; i < 10; i++) {
                       await testingStore.dispatch(
                             await updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
                                 editUuid) as {} as AnyAction);
@@ -432,7 +433,7 @@ describe("cueSlices", () => {
 
                     //THEN
                     // @ts-ignore modern browsers does have it
-                    expect(global.fetch).toBeLessThanOrEqual(2);
+                    expect(global.fetch).toBeCalledTimes(2);
                 });
         });
 

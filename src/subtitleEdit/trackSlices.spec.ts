@@ -17,7 +17,7 @@ const testingTask = {
     dueDate: "2019/12/30 10:00AM"
 } as Task;
 
-const testingStore = createTestingStore();
+let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
 describe("trackSlices", () => {
@@ -28,6 +28,24 @@ describe("trackSlices", () => {
 
             // THEN
             expect(testingStore.getState().editingTrack).toEqual(testingTrack);
+        });
+
+        it("does not overwrite editingTrack spellcheckerDisabled value when updating editing track", () => {
+            //GIVEN
+            const trackWithSpellcheckDisabledAsTrue =  {
+                type: "CAPTION",
+                language: { id: "en-US" },
+                default: true,
+                mediaTitle: "This is the video title",
+                spellcheckerDisabled: true
+            } as Track;
+            testingStore = createTestingStore({ editingTrack: trackWithSpellcheckDisabledAsTrue });
+
+            // WHEN
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingTrack.spellcheckerDisabled).toEqual(true);
         });
     });
 
