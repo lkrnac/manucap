@@ -3,6 +3,13 @@ import _ from "lodash";
 import { Match, SpellCheckHash } from "./model";
 import CryptoJS from "crypto-js";
 
+
+export const getMatchText = (match: Match): string => {
+    const context = match.context;
+    const endOffset = context.offset + context.length;
+    return context.text.slice(context.offset, endOffset);
+};
+
 const getSpellcheckIgnores = (): {} => {
     const localStorageIgnoredSpellchecks = localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY);
     return localStorageIgnoredSpellchecks == null ? {} : JSON.parse(localStorageIgnoredSpellchecks);
@@ -27,10 +34,7 @@ export const addIgnoredKeyword = (trackId: string, keyword: string, ruleId: stri
 
 export const hasIgnoredKeyword = (trackId: string, match: Match): boolean => {
     const hashes = _.get(getSpellcheckIgnores(), `${trackId}.hashes`, []);
-    const context = match.context;
-    const endOffset = context.offset + context.length;
-    const keyword = context.text.slice(context.offset, endOffset);
-    return hashes.includes(generateSpellcheckHash(keyword, match.rule.id));
+    return hashes.includes(generateSpellcheckHash(getMatchText(match), match.rule.id));
 };
 
 export const languageToolLanguageMapping = new Map<string, string>();
