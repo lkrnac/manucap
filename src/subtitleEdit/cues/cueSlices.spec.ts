@@ -410,7 +410,7 @@ describe("cueSlices", () => {
                 );
             });
 
-            it("disable calls to spellchecker when if it responds with 400 is not supported", async() => {
+            it("disable calls to spellchecker when if language tool responds with 400 error", async() => {
                     testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                     testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                     testingStore.dispatch(updateEditingTrack(
@@ -429,7 +429,6 @@ describe("cueSlices", () => {
                             await updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
                                 editUuid) as {} as AnyAction);
                     }
-
 
                     //THEN
                     // @ts-ignore modern browsers does have it
