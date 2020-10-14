@@ -43,6 +43,7 @@ export interface Task {
     readonly type: "TASK_CAPTION" | "TASK_TRANSLATE" | "TASK_DIRECT_TRANSLATE" | "TASK_REVIEW";
     readonly projectName: string;
     readonly dueDate: string;
+    readonly editDisabled: boolean;
 }
 
 /**
