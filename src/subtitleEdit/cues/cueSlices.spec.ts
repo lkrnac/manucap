@@ -14,7 +14,8 @@ import {
     updateCues,
     updateEditingCueIndex,
     updateSourceCues,
-    updateVttCue, validateCorruptedCues,
+    updateVttCue,
+    validateCorruptedCues,
 } from "./cueSlices";
 import { CueDto, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
@@ -408,6 +409,32 @@ describe("cueSlices", () => {
                     50
                 );
             });
+
+            it("disable calls to spellchecker when if it responds with 400 is not supported", async() => {
+                    testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                    testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                    testingStore.dispatch(updateEditingTrack(
+                        { language: { id: "en-US" }, id: trackId } as Track
+                    ) as {} as AnyAction);
+                    const editUuid = testingStore.getState().cues[2].editUuid;
+
+                    // @ts-ignore modern browsers does have it
+                    global.fetch = jest.fn()
+                        .mockImplementation(() => new Promise((resolve) =>
+                            resolve({ status: 400, ok: false })));
+
+                    //WHEN
+                    for (let i = 0; i < 1000; i++) {
+                      await testingStore.dispatch(
+                            await updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
+                                editUuid) as {} as AnyAction);
+                    }
+
+
+                    //THEN
+                    // @ts-ignore modern browsers does have it
+                    expect(global.fetch).toBeLessThanOrEqual(2);
+                });
         });
 
         describe("range prevention", () => {

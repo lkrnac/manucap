@@ -1176,8 +1176,11 @@ describe("CueTextEditor", () => {
             jest.resetModules();
             // jest.mock('MyModule', () => …);
             // @ts-ignore we are mocking this function
-            fetchSpellCheck.mockImplementationOnce(() =>
-                jest.requireActual("../spellCheck/spellCheckFetch"));
+            // fetchSpellCheck.mockImplementation(() => jest.requireActual("../spellCheck/spellCheckFetch"));
+            fetchSpellCheck.mockImplementationOnce(
+                jest.requireActual("../spellCheck/spellCheckFetch").default
+            );
+            jest.unmock("../spellCheck/spellCheckFetch");
 
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
 
