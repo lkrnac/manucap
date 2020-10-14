@@ -66,21 +66,20 @@ const testingTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM",
-    completed: false
 } as Task;
 
 const testingTranslationTask = {
     type: "TASK_TRANSLATE",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM",
-    completed: false
+    editDisabled: false
 } as Task;
 
 const testingCompletedTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM",
-    completed: true
+    editDisabled: true
 } as Task;
 
 describe("SubtitleEdit", () => {
@@ -558,7 +557,7 @@ describe("SubtitleEdit", () => {
             .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
     });
 
-    it("renders for completed task", () => {
+    it("renders for task with edit disabled", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore} >

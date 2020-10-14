@@ -67,7 +67,7 @@ const TestApp = (): ReactElement => {
                type: "TASK_CAPTION",
                projectName: "Project One",
                dueDate: "2019/12/30 10:00AM",
-               completed: false
+               editDisabled: false
             })),
             500
         );

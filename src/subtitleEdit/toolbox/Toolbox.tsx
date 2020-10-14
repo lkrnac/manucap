@@ -40,7 +40,7 @@ const Toolbox = (props: Props): ReactElement => {
                             />
                             <ImportTrackCuesButton
                                 handleImport={props.handleImportFile}
-                                disabled={editingTask?.completed}
+                                disabled={editingTask?.editDisabled}
                             />
                             <SearchReplaceButton />
                             { isTranslation ? <SyncCuesButton /> : null }

@@ -31,7 +31,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -74,7 +73,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_TRANSLATE",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -115,7 +113,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_DIRECT_TRANSLATE",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -156,7 +153,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_REVIEW",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -198,7 +194,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_REVIEW",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -306,7 +301,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -354,7 +348,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -398,7 +391,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -442,7 +434,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -486,7 +477,6 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
-            completed: false
         } as Task;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>

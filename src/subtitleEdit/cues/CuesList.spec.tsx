@@ -53,14 +53,14 @@ const testingTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM",
-    completed: false
+    editDisabled: false
 } as Task;
 
 const testingCompletedTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM",
-    completed: true
+    editDisabled: true
 } as Task;
 
 const simulateEnoughSpaceForCues = (actualNode: ReactWrapper, viewPortSize = 500): void => act(() => {
@@ -403,7 +403,7 @@ describe("CuesList", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
 
-    it("does not open completed cue for editing", () => {
+    it("does not open cue for editing on task with edit disabled", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },

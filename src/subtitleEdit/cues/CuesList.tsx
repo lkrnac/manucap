@@ -93,7 +93,7 @@ const CuesList = (props: Props): ReactElement => {
                 onClick={(idx: number): void => {
                     if (idx >= cues.length) {
                         dispatch(addCue(cues.length));
-                    } else if (editingTask && !editingTask.completed) {
+                    } else if (editingTask && !editingTask.editDisabled) {
                         dispatch(updateEditingCueIndex(idx));
                     }
                 }}
