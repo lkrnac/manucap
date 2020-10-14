@@ -258,7 +258,8 @@ describe("CueTextEditor", () => {
 
         // @ts-ignore modern browsers does have it
         global.fetch = jest.fn()
-            .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
+            .mockImplementationOnce(() =>
+                new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
         const editor = createEditorNode();
 
@@ -333,7 +334,8 @@ describe("CueTextEditor", () => {
 
         // @ts-ignore modern browsers does have it
         global.fetch = jest.fn()
-            .mockImplementation(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
+            .mockImplementation(() =>
+                new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
         const vttCue = new VTTCue(0, 1, "test to clear");
         const editUuid = testingStore.getState().cues[0].editUuid;
