@@ -249,7 +249,7 @@ describe("cueSlices", () => {
             test.each([
                 ["ar-SA", "ar"], ["ca", "ca-ES"], ["nl-NL", "nl"],
                 ["en-IE", "en"], ["fr-FR", "fr"], ["fr-CA", "fr"], ["it-IT", "it"], ["no-NO", "no"],
-                ["fa-AF", "fa"], ["fa-IR", "fa"], ["es-ES", "es"], ["es-MX", "es"],["sv-SE", "sv"]
+                ["fa-AF", "fa"], ["fa-IR", "fa"], ["es-ES", "es"], ["es-MX", "es"], ["sv-SE", "sv"]
             ])(
                 "calls spellchecker domain with correctly mapped language for %s",
                 (vtmsLanguageId: string, languageToolValue: string) => {
@@ -357,8 +357,10 @@ describe("cueSlices", () => {
             it("exclude spell check match that matches ignored hash in local storage ", (done) => {
                 // GIVEN
                 const cues = [
-                    { vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
-                        corrupted: true }] as CueDto[];
+                    {
+                        vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
+                        corrupted: true
+                    }] as CueDto[];
                 testingStore.dispatch(updateCues(cues) as {} as AnyAction);
                 const testingResponse = {
                     matches: [
@@ -385,8 +387,8 @@ describe("cueSlices", () => {
                 const hash = generateSpellcheckHash(ignoredKeyword, ruleId);
                 const ignoredKeyWordMap = {};
                 ignoredKeyWordMap[trackId] = {
-                        hashes: [hash],
-                        creationDate: new Date()
+                    hashes: [hash],
+                    creationDate: new Date()
                 };
                 localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY,
                     JSON.stringify(ignoredKeyWordMap));
@@ -402,9 +404,9 @@ describe("cueSlices", () => {
                         expect(global.fetch).toBeCalledWith(
                             "https://testing-domain/v2/check",
                             {
-                              method: "POST",
-                              body: "language=en-US&text=Dummy Cue" +
-                                  "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                                method: "POST",
+                                body: "language=en-US&text=Dummy Cue" +
+                                    "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                             }
                         );
                         expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
@@ -415,30 +417,52 @@ describe("cueSlices", () => {
                 );
             });
 
-            it("disable calls to spellchecker when if language tool responds with 400 error", async() => {
-                    testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                    testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-                    testingStore.dispatch(updateEditingTrack(
-                        { language: { id: "en-US" }, id: trackId } as Track
-                    ) as {} as AnyAction);
-                    const editUuid = testingStore.getState().cues[2].editUuid;
+            it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: trackId } as Track
+                ) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
 
-                    // @ts-ignore modern browsers does have it
-                    global.fetch = jest.fn()
-                        .mockImplementation(() => new Promise((resolve) =>
-                            resolve({ status: 400, ok: false })));
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() => new Promise((resolve) =>
+                        resolve({ status: 400, ok: false })));
 
-                    //WHEN
-                    for (let i = 0; i < 10; i++) {
-                      await testingStore.dispatch(
-                            await updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
-                                editUuid) as {} as AnyAction);
-                    }
+                //WHEN
+                for (let i = 0; i < 10; i++) {
+                    await testingStore.dispatch(
+                        await updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
+                            editUuid) as {} as AnyAction);
+                }
 
-                    //THEN
-                    // @ts-ignore modern browsers does have it
-                    expect(global.fetch).toBeCalledTimes(2);
-                });
+                //THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledTimes(2);
+            });
+
+            it("rethrows any error if it is not 400 code",  async(done) => {
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: trackId } as Track
+                ) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementationOnce(() => new Promise((resolve) =>
+                        resolve({ status: 401, ok: false })));
+
+                //WHEN
+                try {
+                    await testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
+                        editUuid) as {} as AnyAction);
+                } catch (e) {
+                    console.log(e);
+                    done();
+                }
+            });
         });
 
         describe("range prevention", () => {
@@ -1197,7 +1221,7 @@ describe("cueSlices", () => {
 
         it("add cue in middle of cue array cues", () => {
             // GIVEN
-            testingStore.dispatch(updateCues( [
+            testingStore.dispatch(updateCues([
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[]) as {} as AnyAction);
@@ -1215,7 +1239,7 @@ describe("cueSlices", () => {
 
         it("doesn't add cue in middle of cue array cues if there's overlap", () => {
             // GIVEN
-            testingStore.dispatch(updateCues( [
+            testingStore.dispatch(updateCues([
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[]) as {} as AnyAction);
@@ -1232,7 +1256,7 @@ describe("cueSlices", () => {
 
         it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
             // GIVEN
-            testingStore.dispatch(updateCues( [
+            testingStore.dispatch(updateCues([
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[]) as {} as AnyAction);
@@ -1284,7 +1308,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue( 1) as {} as AnyAction
+                    addCue(1) as {} as AnyAction
                 );
 
                 // THEN
@@ -1393,7 +1417,7 @@ describe("cueSlices", () => {
 
         it("deletes cue in the middle of the cue array", () => {
             // GIVEN
-            testingStore.dispatch(updateCues( [
+            testingStore.dispatch(updateCues([
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[]) as {} as AnyAction);
