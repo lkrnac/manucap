@@ -11,9 +11,11 @@ interface CompleteAction {
 
 interface Props {
     onComplete: (completeAction: CompleteAction) => void;
+    disabled?: boolean;
 }
 
 const AUTO_SAVE_SAVING_CHANGES_MSG = "Saving changes";
+const TASK_COMPLETE_MSG = "Edits are disabled, task is already completed";
 
 const stateMessages = new Map([
     [ SaveState.NONE, "" ],
@@ -51,15 +53,19 @@ const CompleteButton = (props: Props): ReactElement => {
             <div
                 style={{ textAlign: "center", margin: "8px 10px 0px 0px", fontWeight: "bold" }}
             >
-                <span hidden={saveState === SaveState.NONE} className={stateCssClasses.get(saveState)}>
-                    {stateMessages.get(saveState)} &nbsp;
-                    <i className={stateIconCssClasses.get(saveState)} />
-                </span>
+                {
+                    props.disabled ?
+                        <span className="text-success">{TASK_COMPLETE_MSG}</span> :
+                        <span hidden={saveState === SaveState.NONE} className={stateCssClasses.get(saveState)}>
+                            {stateMessages.get(saveState)} &nbsp;
+                            <i className={stateIconCssClasses.get(saveState)} />
+                        </span>
+                }
             </div>
 
             <button
                 type="button"
-                disabled={isPendingSaveState(saveState)}
+                disabled={props.disabled || isPendingSaveState(saveState)}
                 className="btn btn-primary sbte-complete-subtitle-btn"
                 onClick={(): void => props.onComplete({ editingTrack, cues })}
             >

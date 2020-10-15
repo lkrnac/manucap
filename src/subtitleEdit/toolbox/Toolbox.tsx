@@ -20,6 +20,7 @@ interface Props {
 
 const Toolbox = (props: Props): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
     return (
         <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
@@ -34,8 +35,13 @@ const Toolbox = (props: Props): ReactElement => {
                             <SubtitleSpecificationsButton />
                             <ShiftTimeButton />
                             <CaptionOverlapToggle />
-                            <ExportTrackCuesButton handleExport={props.handleExportFile} />
-                            <ImportTrackCuesButton handleImport={props.handleImportFile} />
+                            <ExportTrackCuesButton
+                                handleExport={props.handleExportFile}
+                            />
+                            <ImportTrackCuesButton
+                                handleImport={props.handleImportFile}
+                                disabled={editingTask?.editDisabled}
+                            />
                             <SearchReplaceButton />
                             { isTranslation ? <SyncCuesButton /> : null }
                         </ButtonToolbar>

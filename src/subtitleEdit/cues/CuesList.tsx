@@ -47,6 +47,7 @@ const CuesList = (props: Props): ReactElement => {
 
     const scrollPosition = useSelector((state: SubtitleEditState) => state.scrollPosition);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const startAt = getScrollCueIndex(cuesWithSource, editingCueIndex, scrollPosition);
     const rowHeight = sourceCues.length > 0
         ? 180 // This is bigger than real translation view cue, because if there is at least one
@@ -90,9 +91,11 @@ const CuesList = (props: Props): ReactElement => {
                 rowHeight={rowHeight}
                 startAt={startAt}
                 onClick={(idx: number): void => {
-                    idx >= cues.length
-                        ? dispatch(addCue(cues.length))
-                        : dispatch(updateEditingCueIndex(idx));
+                    if (idx >= cues.length) {
+                        dispatch(addCue(cues.length));
+                    } else if (editingTask && !editingTask.editDisabled) {
+                        dispatch(updateEditingCueIndex(idx));
+                    }
                 }}
             />
         </>
