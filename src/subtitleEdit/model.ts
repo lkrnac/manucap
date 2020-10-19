@@ -36,8 +36,12 @@ export interface Track {
     readonly sourceLanguage?: Language;
     readonly progress: number;
     overlapEnabled?: boolean;
-    spellcheckerDisabled?: boolean;
     id?: string;
+}
+
+export interface SpellcheckerSettings {
+    enabled: boolean;
+    domain: string | null | undefined;
 }
 
 export interface Task {

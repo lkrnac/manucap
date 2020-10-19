@@ -15,14 +15,7 @@ export const editingTrackSlice = createSlice({
     name: "editingTrack",
     initialState: null as Track | null,
     reducers: {
-        updateEditingTrack: (state, action: PayloadAction<EditingTrackAction>): Track => {
-            return { ...action.payload.editingTrack, spellcheckerDisabled: state?.spellcheckerDisabled };
-        },
-        disableSpellchecker: (trackState): void => {
-            if (trackState) {
-                trackState.spellcheckerDisabled = true;
-            }
-        },
+        updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack,
         resetEditingTrack: (): Track | null => null
     }
 });

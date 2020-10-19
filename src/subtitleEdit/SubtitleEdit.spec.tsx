@@ -1073,7 +1073,7 @@ describe("SubtitleEdit", () => {
         );
 
         // THEN
-        expect(testingStore.getState().spellCheckerDomain).toEqual("testing-domain");
+        expect(testingStore.getState().spellCheckerSettings.domain).toEqual("testing-domain");
     });
 
     it("remount EditingVideoPlayer when cues are loaded", () => {

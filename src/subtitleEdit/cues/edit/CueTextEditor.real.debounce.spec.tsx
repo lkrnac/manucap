@@ -15,10 +15,10 @@ import { updateCues } from "../cueSlices";
 import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
-import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { fireEvent, render } from "@testing-library/react";
 import { replaceCurrentMatch, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
+import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
 let testingStore = createTestingStore();
 

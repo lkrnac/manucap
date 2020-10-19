@@ -30,11 +30,11 @@ import { convertVttToHtml } from "../cueTextConverter";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
-import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { replaceCurrentMatch, setFind, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
 import { Constants } from "../../constants";
+import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
 jest.mock("lodash", () => (
     {

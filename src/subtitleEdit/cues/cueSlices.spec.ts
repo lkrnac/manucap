@@ -23,10 +23,10 @@ import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
 import { readSubtitleSpecification } from "../toolbox/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../trackSlices";
-import { setSpellCheckDomain } from "./spellCheck/spellCheckSlices";
 import { Constants } from "../constants";
 import { generateSpellcheckHash } from "./spellCheck/spellCheckerUtils";
 import { Replacement, SpellCheck } from "./spellCheck/model";
+import { setSpellCheckDomain } from "../spellcheckerSettingsSlice";
 
 const testingTrack = {
     type: "CAPTION",
