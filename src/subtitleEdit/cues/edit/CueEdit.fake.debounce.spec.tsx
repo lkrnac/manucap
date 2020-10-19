@@ -28,6 +28,8 @@ import { updateEditingTrack } from "../../trackSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { fireEvent, render } from "@testing-library/react";
+import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
+import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
 jest.mock("lodash", () => (
     {
@@ -37,6 +39,9 @@ jest.mock("lodash", () => (
         },
         get: jest.requireActual("lodash/get")
     }));
+jest.mock("../spellCheck/spellCheckFetch");
+// @ts-ignore we are mocking this function
+fetchSpellCheck.mockImplementation(() => jest.fn());
 
 let testingStore = createTestingStore();
 
@@ -59,6 +64,7 @@ describe("CueEdit", () => {
 
         testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
     });
     it("renders", () => {
         // GIVEN

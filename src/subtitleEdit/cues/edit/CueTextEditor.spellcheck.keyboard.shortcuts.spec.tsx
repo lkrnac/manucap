@@ -20,6 +20,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { setSaveTrack } from "../saveSlices";
 //@ts-ignore
 import { LodashDebounce } from "lodash/ts3.1/fp";
+import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
 jest.mock("lodash", () => (
     {
@@ -72,6 +73,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         testingStore = createTestingStore();
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
     });
 
     const createEditorNode = (text = "someText", spellCheckFakeMatches: SpellCheck): React.ReactElement => {
