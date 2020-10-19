@@ -24,6 +24,24 @@ describe("spellCheckSlices", () => {
             expect(testingStore.getState().spellCheckerSettings.domain).toEqual("testing-domain");
             expect(testingStore.getState().spellCheckerSettings.enabled).toEqual(true);
         });
+
+        it("sets enabled as false if passed null domain", () => {
+            // WHEN
+            testingStore.dispatch(setSpellCheckDomain(null) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().spellCheckerSettings.domain).toEqual(null);
+            expect(testingStore.getState().spellCheckerSettings.enabled).toEqual(false);
+        });
+
+        it("sets enabled as false if passed undefined domain", () => {
+            // WHEN
+            testingStore.dispatch(setSpellCheckDomain(undefined) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().spellCheckerSettings.domain).toEqual(undefined);
+            expect(testingStore.getState().spellCheckerSettings.enabled).toEqual(false);
+        });
     });
 
     describe("disableSpellchecker", () => {
