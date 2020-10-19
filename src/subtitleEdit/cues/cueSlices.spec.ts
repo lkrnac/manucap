@@ -441,27 +441,6 @@ describe("cueSlices", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(2);
             });
-
-            it("rethrows any error if it is not 400 code",  async() => {
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-                testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "en-US" }, id: trackId } as Track
-                ) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[2].editUuid;
-                // @ts-ignore modern browsers does have it
-                global.fetch = jest.fn()
-                    .mockImplementationOnce(() => Promise.reject({ status: 401, ok: false }));
-                jest.spyOn(Promise, "reject");
-
-                //WHEN
-                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
-                    editUuid) as {} as AnyAction);
-
-                //THEN
-                expect(Promise.reject).toBeCalledTimes(1);
-                expect(Promise.reject).toBeCalledWith({ status: 401, ok: false });
-            });
         });
 
         describe("range prevention", () => {
