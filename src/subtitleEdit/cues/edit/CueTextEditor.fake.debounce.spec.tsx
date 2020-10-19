@@ -821,11 +821,11 @@ describe("CueTextEditor", () => {
                 id: trackId
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         });
 
         it("renders with html and spell check errors", () => {
             // GIVEN
-
             const spellCheck = {
                 matches: [
                     { offset: 5, length: 4, replacements: [] as Replacement[],
@@ -1661,6 +1661,7 @@ describe("CueTextEditor", () => {
 
         it("renders with too long lines and spell check errors", () => {
             // GIVEN
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             const testingSubtitleSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
