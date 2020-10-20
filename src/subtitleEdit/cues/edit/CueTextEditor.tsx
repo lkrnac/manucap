@@ -148,6 +148,7 @@ const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);
@@ -166,7 +167,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     }
 
     const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
-        if (props.spellCheck && props.spellCheck.matches) {
+        if (props.spellCheck && props.spellCheck.matches && spellcheckerEnabled) {
             props.spellCheck.matches.forEach(match => {
                     if (editingTrack?.id && props.editUuid) {
                         if (!hasIgnoredKeyword(editingTrack.id, match)) {

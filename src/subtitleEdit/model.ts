@@ -39,6 +39,11 @@ export interface Track {
     id?: string;
 }
 
+export interface SpellcheckerSettings {
+    enabled: boolean;
+    domain: string | null | undefined;
+}
+
 export interface Task {
     readonly type: "TASK_CAPTION" | "TASK_TRANSLATE" | "TASK_DIRECT_TRANSLATE" | "TASK_REVIEW";
     readonly projectName: string;
