@@ -31,6 +31,45 @@ import { SearchReplaceMatches } from "../searchReplace/model";
 import { searchNextCues } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "../CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
+import { SubtitleSpecification } from "../../toolbox/model";
+import { Track } from "../../model";
+
+const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null) =>
+    (_contentBlock: ContentBlock, callback: Function): void => {
+        if (props.spellCheck && props.spellCheck.matches) {
+            props.spellCheck.matches.forEach(match => {
+                if (editingTrack?.id && props.editUuid) {
+                        if (!hasIgnoredKeyword(editingTrack.id, match)) {
+                            callback(match.offset, match.offset + match.length);
+                        }
+                }
+            });
+        }
+    };
+
+const findSearchReplaceMatch =
+    (props: CueTextEditorProps) => (_contentBlock: ContentBlock, callback: Function): void => {
+        if (props.searchReplaceMatches && props.searchReplaceMatches.offsets.length > 0) {
+            const offset = props.searchReplaceMatches.offsets[props.searchReplaceMatches.offsetIndex];
+            callback(offset, offset + props.searchReplaceMatches.matchLength);
+        }
+    };
+
+const findExtraCharacters = (subtitleSpecifications: SubtitleSpecification | null) =>
+    (contentBlock: ContentBlock, callback: Function): void => {
+        if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxCharactersPerLine) {
+            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine;
+            const text = contentBlock.getText();
+            const lines = text.split("\n");
+            return lines.forEach(line => {
+                const lineStartOffset = text.indexOf(line);
+                const lineEndOffset = lineStartOffset + line.length;
+                if (line.length > maxCharactersPerLine) {
+                    callback(lineStartOffset + maxCharactersPerLine, lineEndOffset);
+                }
+            });
+        }
+    };
 
 const handleKeyShortcut = (
     editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
@@ -59,16 +98,6 @@ const handleKeyShortcut = (
     }
     return "not-handled";
 };
-
-export interface CueTextEditorProps {
-    index: number;
-    vttCue: VTTCue;
-    editUuid?: string;
-    spellCheck?: SpellCheck;
-    searchReplaceMatches?: SearchReplaceMatches;
-    bindCueViewModeKeyboardShortcut: () => void;
-    unbindCueViewModeKeyboardShortcut: () => void;
-}
 
 const changeVttCueInRedux = (
     currentContent: ContentState,
@@ -146,6 +175,16 @@ const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
     return getDefaultKeyBinding(e);
 };
 
+export interface CueTextEditorProps {
+    index: number;
+    vttCue: VTTCue;
+    editUuid?: string;
+    spellCheck?: SpellCheck;
+    searchReplaceMatches?: SearchReplaceMatches;
+    bindCueViewModeKeyboardShortcut: () => void;
+    unbindCueViewModeKeyboardShortcut: () => void;
+}
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
@@ -165,56 +204,21 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         editorState = EditorState.moveFocusToEnd(editorState);
     }
 
-    const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
-        if (props.spellCheck && props.spellCheck.matches) {
-            props.spellCheck.matches.forEach(match => {
-                    if (editingTrack?.id && props.editUuid) {
-                        if (!hasIgnoredKeyword(editingTrack.id, match)) {
-                            callback(match.offset, match.offset + match.length);
-                        }
-                    }
-                }
-            );
-        }
-    };
-
-    const findSearchReplaceMatch = (_contentBlock: ContentBlock, callback: Function): void => {
-        if (props.searchReplaceMatches && props.searchReplaceMatches.offsets.length > 0) {
-            const offset = props.searchReplaceMatches.offsets[props.searchReplaceMatches.offsetIndex];
-            callback(offset, offset + props.searchReplaceMatches.matchLength);
-        }
-    };
-
-    const findExtraCharacters = (contentBlock: ContentBlock, callback: Function): void => {
-        if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxCharactersPerLine) {
-            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine;
-            const text = contentBlock.getText();
-            const lines = text.split("\n");
-            return lines.forEach(line => {
-                const lineStartOffset = text.indexOf(line);
-                const lineEndOffset = lineStartOffset + line.length;
-                if (line.length > maxCharactersPerLine) {
-                    callback(lineStartOffset + maxCharactersPerLine, lineEndOffset);
-                }
-            });
-        }
-    };
-
     const newCompositeDecorator = new CompositeDecorator([
         {
-            strategy: findSearchReplaceMatch,
+            strategy: findSearchReplaceMatch(props),
             component: SearchReplaceMatch,
             props: {
                 replaceMatch: createReplaceMatchHandler(editorState, dispatch, props, unmountContentRef)
             }
         },
         {
-            strategy: findExtraCharacters,
+            strategy: findExtraCharacters(subtitleSpecifications),
             component: CueExtraCharacters,
             props: {}
         },
         {
-            strategy: findSpellCheckIssues,
+            strategy: findSpellCheckIssues(props, editingTrack),
             component: SpellCheckIssue,
             props: {
                 spellCheck: props.spellCheck,
