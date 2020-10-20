@@ -15,10 +15,10 @@ import { updateCues } from "../cueSlices";
 import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
-import { setSpellCheckDomain } from "../spellCheck/spellCheckSlices";
 import { fireEvent, render } from "@testing-library/react";
 import { replaceCurrentMatch, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
+import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
 let testingStore = createTestingStore();
 
@@ -258,7 +258,8 @@ describe("CueTextEditor", () => {
 
         // @ts-ignore modern browsers does have it
         global.fetch = jest.fn()
-            .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
+            .mockImplementationOnce(() =>
+                new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
         const editor = createEditorNode();
 
@@ -333,7 +334,8 @@ describe("CueTextEditor", () => {
 
         // @ts-ignore modern browsers does have it
         global.fetch = jest.fn()
-            .mockImplementation(() => new Promise((resolve) => resolve({ json: () => testingResponse })));
+            .mockImplementation(() =>
+                new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
         const vttCue = new VTTCue(0, 1, "test to clear");
         const editUuid = testingStore.getState().cues[0].editUuid;

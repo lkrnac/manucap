@@ -15,8 +15,8 @@ import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition } from "./cues/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
-import { setSpellCheckDomain } from "./cues/spellCheck/spellCheckSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
+import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -59,7 +59,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
     useEffect(
         () => {
-            dispatch(setSpellCheckDomain(props.spellCheckerDomain ? props.spellCheckerDomain : null));
+            dispatch(setSpellCheckDomain(props.spellCheckerDomain));
         }, [ dispatch, props.spellCheckerDomain ]
     );
 
