@@ -1,5 +1,6 @@
-import { getTimeGapLimits } from "./cueVerifications";
+import { getTimeGapLimits, markCues } from "./cueVerifications";
 import { SubtitleSpecification } from "../toolbox/model";
+import { CueDto } from "../model";
 
 describe("cueVerifications", () => {
     describe("getTimeGapLimits", () => {
@@ -70,6 +71,23 @@ describe("cueVerifications", () => {
             // THEN
             expect(timeGap.minGap).toEqual(1.5);
             expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
+        });
+    });
+
+    describe("markCues", () => {
+        it("returns corrupted to true if cue.corrupted is true", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: true },
+                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            // WHEN
+            const markedCues = markCues(cues, null, false);
+
+            // THEN
+            expect(markedCues[0].corrupted).toEqual(true);
+            expect(markedCues[1].corrupted).toEqual(false);
         });
     });
 });
