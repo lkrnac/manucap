@@ -5,7 +5,7 @@ import { Match, SpellCheck } from "./model";
 import { Character } from "../../shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { addIgnoredKeyword, getMatchText } from "./spellCheckerUtils";
-import { removeIgnoredSpellcheckedMatchesFromAllCues, validateCorruptedCues } from "../cuesListSlices";
+import { removeIgnoredSpellcheckedMatchesFromAllCues, validateCorruptedCues } from "../cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 
 

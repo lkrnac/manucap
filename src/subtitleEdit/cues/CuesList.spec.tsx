@@ -9,7 +9,7 @@ import ReactSmartScroll from "@dotsub/react-smart-scroll";
 import { CueDto, CueWithSource, Language, ScrollPosition, Task, Track } from "../model";
 import { updateEditingTrack, updateTask } from "../trackSlices";
 import CueLine, { CueLineRowProps } from "./CueLine";
-import { updateCues, updateEditingCueIndex, updateSourceCues } from "./cuesListSlices";
+import { updateCues, updateEditingCueIndex, updateSourceCues } from "./cuesListActions";
 import CuesList from "./CuesList";
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { createTestingStore } from "../../testUtils/testingStore";

@@ -5,7 +5,7 @@ import deepFreeze from "deep-freeze";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../testUtils/testingStore";
 import { CueDto } from "../model";
-import { updateCues } from "../cues/cuesListSlices";
+import { updateCues } from "../cues/cuesListActions";
 
 deepFreeze(testingStore.getState());
 

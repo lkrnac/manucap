@@ -1,5 +1,5 @@
 import testingStore from "../../testUtils/testingStore";
-import { updateCues } from "./cuesListSlices";
+import { updateCues } from "./cuesListActions";
 import { AnyAction } from "@reduxjs/toolkit";
 
 describe("cuesLoadCounterSlice", () => {

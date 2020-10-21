@@ -10,7 +10,7 @@ import {
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { updateVttCue } from "../cuesListSlices";
+import { updateVttCue } from "../cuesListActions";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import { callSaveTrack } from "../saveSlices";

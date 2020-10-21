@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
-import { updateCues } from "../cuesListSlices";
+import { updateCues } from "../cuesListActions";
 
 describe("AddCueLineButton", () => {
     it("renders", () => {

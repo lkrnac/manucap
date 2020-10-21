@@ -19,7 +19,7 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { MockedDebouncedFunction, removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues } from "../cuesListSlices";
+import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues } from "../cuesListActions";
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";

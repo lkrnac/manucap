@@ -4,7 +4,7 @@ import deepFreeze from "deep-freeze";
 import { callSaveTrack, SaveState, saveStateSlice, setAutoSaveSuccess, setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
 import { CueDto, Track } from "../model";
-import { updateCueCategory, updateCues } from "./cuesListSlices";
+import { updateCueCategory, updateCues } from "./cuesListActions";
 import each from "jest-each";
 
 let testingStore = createTestingStore();

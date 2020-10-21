@@ -8,7 +8,7 @@ import {
     setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
-import { updateCues } from "../cuesListSlices";
+import { updateCues } from "../cuesListActions";
 import { CueDto, ScrollPosition } from "../../model";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 

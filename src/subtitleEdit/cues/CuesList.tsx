@@ -7,7 +7,7 @@ import { isDirectTranslationTrack } from "../subtitleEditUtils";
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { CueDto, CueWithSource, ScrollPosition, Track } from "../model";
 import CueLine from "./CueLine";
-import { addCue } from "./cuesListSlices";
+import { addCue } from "./cuesListActions";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../shortcutConstants";

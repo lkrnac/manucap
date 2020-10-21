@@ -1,4 +1,4 @@
-import { updateCues } from "./subtitleEdit/cues/cuesListSlices";
+import { updateCues } from "./subtitleEdit/cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { Reducers } from "./subtitleEdit/subtitleEditReducers";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";

@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
-import { updateCues } from "./cuesListSlices";
+import { updateCues } from "./cuesListActions";
 import { setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
 import { createTestingStore } from "../../testUtils/testingStore";

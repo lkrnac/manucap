@@ -22,7 +22,7 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues, updateEditingCueIndex } from "../cuesListSlices";
+import { updateCues, updateEditingCueIndex } from "../cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";

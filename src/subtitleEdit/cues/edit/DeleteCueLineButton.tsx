@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { deleteCue } from "../cuesListSlices";
+import { deleteCue } from "../cuesListActions";
 import { useDispatch } from "react-redux";
 import { TooltipWrapper } from "../../TooltipWrapper";
 import { callSaveTrack } from "../saveSlices";

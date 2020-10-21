@@ -24,7 +24,7 @@ import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { SearchDirection } from "./searchReplace/model";
 import { searchCueText } from "./searchReplace/searchUtils";
 import { validationErrorSlice } from "./edit/cueEditorSlices";
-import { cuesSlice, lastCueChangeSlice } from "./cuesListSlices";
+import { cuesSlice, lastCueChangeSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -128,6 +128,15 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                 overlapEnabled: overlapCaptionsAllowed,
                 index: idx
             }));
+        }
+    };
+
+export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+        const trackId = getState().editingTrack?.id;
+        if (trackId) {
+            dispatch(cuesSlice.actions
+                .removeIgnoredSpellcheckedMatchesFromAllCues({ trackId: trackId } as SpellCheckRemovalAction));
         }
     };
 
