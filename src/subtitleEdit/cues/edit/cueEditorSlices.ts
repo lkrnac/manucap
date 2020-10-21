@@ -1,10 +1,11 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { ScrollPosition, SubtitleEditAction } from "../../model";
+import { CueChange, ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { scrollPositionSlice } from "../cuesListScrollSlice";
 import { cuesSlice } from "../cuesListSlices";
+import { editingTrackSlice } from "../../trackSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -47,3 +48,16 @@ export const setValidationError = (error: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean>>): void => {
         dispatch(validationErrorSlice.actions.setValidationError(error));
     };
+
+export const lastCueChangeSlice = createSlice({
+    name: "lastCueChange",
+    initialState: null as CueChange | null,
+    reducers: {
+        recordCueChange: (_state, action: PayloadAction<CueChange>): CueChange => action.payload
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueChange | null => null
+    }
+});
+
+

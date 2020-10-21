@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueCategory, CueChange, CueDto, SubtitleEditAction } from "../model";
+import { CueCategory, CueDto, SubtitleEditAction } from "../model";
 import {
     copyNonConstructorProperties
 } from "./cueUtils";
@@ -166,16 +166,5 @@ export const cuesSlice = createSlice({
         [subtitleSpecificationSlice.actions.readSubtitleSpecification.type]:
             (state, action: PayloadAction<CheckOptions>): CueDto[] =>
                 markCues(state, action.payload.subtitleSpecification, action.payload.overlapEnabled),
-    }
-});
-
-export const lastCueChangeSlice = createSlice({
-    name: "lastCueChange",
-    initialState: null as CueChange | null,
-    reducers: {
-        recordCueChange: (_state, action: PayloadAction<CueChange>): CueChange => action.payload
-    },
-    extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueChange | null => null
     }
 });

@@ -23,8 +23,8 @@ import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { SearchDirection } from "./searchReplace/model";
 import { searchCueText } from "./searchReplace/searchUtils";
-import { validationErrorSlice } from "./edit/cueEditorSlices";
-import { cuesSlice, lastCueChangeSlice, SpellCheckRemovalAction } from "./cuesListSlices";
+import { lastCueChangeSlice, validationErrorSlice } from "./edit/cueEditorSlices";
+import { cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
