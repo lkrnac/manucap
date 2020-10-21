@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import { applyShiftTime } from "../../cues/cueSlices";
+import { applyShiftTime } from "../../cues/cuesListSlices";
 import { Field, Form } from "react-final-form";
 import { callSaveTrack } from "../../cues/saveSlices";
 

@@ -11,7 +11,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { updateCues, updateEditingCueIndex } from "./cueSlices";
+import { updateCues, updateEditingCueIndex } from "./cuesListSlices";
 import CueLineFlap from "./CueLineFlap";
 
 let testingStore = createTestingStore();

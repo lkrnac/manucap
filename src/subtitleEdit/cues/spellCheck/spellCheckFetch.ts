@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { PayloadAction } from "@reduxjs/toolkit";
 import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
-import { cuesSlice } from "../cueSlices";
+import { cuesSlice } from "../cuesListSlices";
 import { SpellcheckerSettings, SubtitleEditAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
 import { Constants } from "../../constants";

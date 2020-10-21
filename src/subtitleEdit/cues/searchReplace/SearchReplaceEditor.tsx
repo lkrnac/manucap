@@ -1,19 +1,24 @@
 import React, { Dispatch, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    replaceCurrentMatch, searchCueText,
-    searchNextCues, searchPreviousCues,
-    setFind, setMatchCase, setReplacement,
+    replaceCurrentMatch,
+    searchNextCues,
+    searchPreviousCues,
+    setFind,
+    setMatchCase,
+    setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { updateEditingCueIndex, updateVttCue } from "../cueSlices";
+import { updateVttCue } from "../cuesListSlices";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import { callSaveTrack } from "../saveSlices";
 import ToggleButton from "../../../common/ToggleButton";
 import { SearchReplace } from "./model";
 import { reset } from "../edit/editorStatesSlice";
+import { updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { searchCueText } from "./searchUtils";
 
 const replaceAllInVttCue = (
     vttCue: VTTCue,

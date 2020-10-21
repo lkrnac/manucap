@@ -13,7 +13,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { CueDto, Track } from "../../model";
 import CueTextEditor from "./CueTextEditor";
 import { updateEditingTrack } from "../../trackSlices";
-import { updateCues } from "../cueSlices";
+import { updateCues } from "../cuesListSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { Character } from "../../shortcutConstants";
 import { fireEvent, render } from "@testing-library/react";

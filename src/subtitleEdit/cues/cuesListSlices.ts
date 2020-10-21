@@ -4,7 +4,10 @@ import { v4 as uuidv4 } from "uuid";
 
 import { CueCategory, CueChange, CueDto, ScrollPosition, SubtitleEditAction } from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
-import { constructCueValuesArray, copyNonConstructorProperties, } from "./cueUtils";
+import {
+    // constructCueValuesArray,
+    copyNonConstructorProperties
+} from "./cueUtils";
 import { Constants } from "../constants";
 import { editingTrackSlice } from "../trackSlices";
 import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
@@ -22,9 +25,10 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { Match, SpellCheck } from "./spellCheck/model";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
-import { searchCueText } from "./searchReplace/searchReplaceSlices";
 import { SearchDirection, SearchReplaceMatches } from "./searchReplace/model";
 import { hasIgnoredKeyword } from "./spellCheck/spellCheckerUtils";
+import { searchCueText } from "./searchReplace/searchUtils";
+// import { validationErrorSlice } from "./edit/cueEditorSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -64,11 +68,11 @@ export interface SpellCheckRemovalAction extends CueIndexAction {
     trackId: string;
 }
 
-const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
-    return textOnly ?
-        x.text !== y.text :
-        JSON.stringify(constructCueValuesArray(x)) !== JSON.stringify(constructCueValuesArray(y));
-};
+// const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
+//     return textOnly ?
+//         x.text !== y.text :
+//         JSON.stringify(constructCueValuesArray(x)) !== JSON.stringify(constructCueValuesArray(y));
+// };
 
 const createAndAddCue = (previousCue: CueDto,
                          maxGapLimit: number,
@@ -214,43 +218,6 @@ export const cuesSlice = createSlice({
     }
 });
 
-export const editingCueIndexSlice = createSlice({
-    name: "editingCueIndex",
-    initialState: -1,
-    reducers: {
-        updateEditingCueIndex: (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
-    },
-    extraReducers: {
-        [cuesSlice.actions.addCue.type]:
-            (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
-        [cuesSlice.actions.deleteCue.type]: (): number => -1,
-        [cuesSlice.actions.updateCues.type]: (): number => -1,
-
-    }
-});
-
-export const sourceCuesSlice = createSlice({
-    name: "sourceCues",
-    initialState: [] as CueDto[],
-    reducers: {
-        updateSourceCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues
-    },
-    extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => []
-    }
-});
-
-export const validationErrorSlice = createSlice({
-    name: "validationError",
-    initialState: false,
-    reducers: {
-        setValidationError: (_state, action: PayloadAction<boolean>): boolean => action.payload
-    },
-    extraReducers: {
-        [editingCueIndexSlice.actions.updateEditingCueIndex.type]: (): boolean => false
-    }
-});
-
 export const lastCueChangeSlice = createSlice({
     name: "lastCueChange",
     initialState: null as CueChange | null,
@@ -291,9 +258,9 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }
             applyLineLimitation(newVttCue, originalCue, subtitleSpecifications);
 
-            if (shouldBlink(vttCue, newVttCue, textOnly)) {
-                dispatch(validationErrorSlice.actions.setValidationError(true));
-            }
+            // if (shouldBlink(vttCue, newVttCue, textOnly)) {
+            //     dispatch(validationErrorSlice.actions.setValidationError(true));
+            // }
 
             dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue, editUuid }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
@@ -321,6 +288,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             }));
         }
     };
+
 export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
         const trackId = getState().editingTrack?.id;
@@ -344,6 +312,7 @@ export const validateCorruptedCues = (): AppThunk =>
             }));
         });
     };
+
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueCategoryAction>>): void => {
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
@@ -372,9 +341,10 @@ export const addCue = (idx: number): AppThunk =>
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
             dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
-        } else {
-            dispatch(validationErrorSlice.actions.setValidationError(true));
         }
+        // else {
+        //     dispatch(validationErrorSlice.actions.setValidationError(true));
+        // }
     };
 
 export const deleteCue = (idx: number): AppThunk =>
@@ -394,27 +364,9 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
         dispatch(cuesSlice.actions.updateCues({ cues: checkedCues }));
     };
 
-export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
-        dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
-        if (idx >= 0) {
-            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
-        }
-    };
-
-export const updateSourceCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
-        dispatch(sourceCuesSlice.actions.updateSourceCues({ cues }));
-    };
-
 export const applyShiftTime = (shiftTime: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<number>>): void => {
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
-    };
-
-export const setValidationError = (error: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
-        dispatch(validationErrorSlice.actions.setValidationError(error));
     };
 
 export const syncCues = (): AppThunk =>

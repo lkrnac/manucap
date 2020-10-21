@@ -11,7 +11,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "./editorStatesSlice";
 import { CueDto, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues } from "../cueSlices";
+import { updateCues } from "../cuesListSlices";
 import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";

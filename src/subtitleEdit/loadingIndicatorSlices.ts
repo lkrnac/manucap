@@ -1,7 +1,8 @@
 import { LoadingIndicator } from "./model";
-import { cuesSlice, sourceCuesSlice } from "./cues/cueSlices";
+import { cuesSlice } from "./cues/cuesListSlices";
 import { createSlice } from "@reduxjs/toolkit";
 import { editingTrackSlice } from "./trackSlices";
+import { sourceCuesSlice } from "./cues/view/sourceCueSlices";
 
 export const loadingIndicatorSlices = createSlice({
     name: "loadingIndicator",

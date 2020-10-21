@@ -21,7 +21,7 @@ import { convertVttToHtml, getVttText } from "../cueTextConverter";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../cueSlices";
+import { updateVttCue } from "../cuesListSlices";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";

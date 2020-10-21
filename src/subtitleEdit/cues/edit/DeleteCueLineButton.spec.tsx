@@ -6,7 +6,7 @@ import DeleteCueLineButton from "./DeleteCueLineButton";
 import { Provider } from "react-redux";
 import React from "react";
 import { mount } from "enzyme";
-import { updateCues } from "../cueSlices";
+import { updateCues } from "../cuesListSlices";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";

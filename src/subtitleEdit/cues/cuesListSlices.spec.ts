@@ -8,15 +8,12 @@ import {
     addCue,
     applyShiftTime,
     deleteCue,
-    setValidationError,
     syncCues,
     updateCueCategory,
     updateCues,
-    updateEditingCueIndex,
-    updateSourceCues,
     updateVttCue,
     validateCorruptedCues,
-} from "./cueSlices";
+} from "./cuesListSlices";
 import { CueDto, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditorState } from "./edit/editorStatesSlice";
@@ -27,6 +24,7 @@ import { Constants } from "../constants";
 import { generateSpellcheckHash } from "./spellCheck/spellCheckerUtils";
 import { Replacement, SpellCheck } from "./spellCheck/model";
 import { setSpellCheckDomain } from "../spellcheckerSettingsSlice";
+import { updateSourceCues } from "./view/sourceCueSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -1598,65 +1596,6 @@ describe("cueSlices", () => {
         });
     });
 
-    describe("updateEditingCueIndex", () => {
-        it("updates editing cue index", () => {
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(5) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().editingCueIndex).toEqual(5);
-        });
-
-        it("update scroll position when zero", () => {
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
-        });
-
-        it("update scroll position when positive", () => {
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(5) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
-        });
-
-        it("doesn't update scroll position when less than zero", () => {
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().scrollPosition).toBeUndefined;
-        });
-    });
-
-    describe("updateSourceCues", () => {
-        it("initializes source cues", () => {
-            // WHEN
-            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().sourceCues).toEqual(testingCues);
-        });
-
-        it("replaces existing source cues", () => {
-            // GIVEN
-            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
-            const replacementCues = [
-                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-
-            // WHEN
-            testingStore.dispatch(updateSourceCues(replacementCues) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().sourceCues).toEqual(replacementCues);
-        });
-    });
-
-
     describe("applyShiftTime", () => {
         it("apply shift time", () => {
             //GIVEN
@@ -1691,18 +1630,6 @@ describe("cueSlices", () => {
 
         // THEN
         expect(testingStore.getState().sourceCues.length).toEqual(0);
-    });
-
-    describe("setValidationError", () => {
-        it("sets validation error", () => {
-            //GIVEN
-
-            // WHEN
-            testingStore.dispatch(setValidationError(true) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
     });
 
     describe("syncCues", () => {

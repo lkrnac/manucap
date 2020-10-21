@@ -1,11 +1,5 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
-import {
-    cuesSlice,
-    editingCueIndexSlice,
-    lastCueChangeSlice,
-    sourceCuesSlice,
-    validationErrorSlice
-} from "./cues/cueSlices";
+import { cuesSlice, lastCueChangeSlice } from "./cues/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
@@ -17,6 +11,8 @@ import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 import { spellcheckerSettingsSlice } from "./spellcheckerSettingsSlice";
+import { sourceCuesSlice } from "./cues/view/sourceCueSlices";
+import { editingCueIndexSlice, validationErrorSlice } from "./cues/edit/cueEditorSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,

@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
-import { setValidationError, updateCues } from "../cueSlices";
+import { setValidationError, updateCues } from "../cuesListSlices";
 import { AnyAction } from "redux";
 
 let testingStore = createTestingStore();

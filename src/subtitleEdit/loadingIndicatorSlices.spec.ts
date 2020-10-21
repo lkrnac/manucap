@@ -1,7 +1,7 @@
 import { createTestingStore } from "../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
 import { AnyAction } from "@reduxjs/toolkit";
-import { updateCues, updateSourceCues } from "./cues/cueSlices";
+import { updateCues, updateSourceCues } from "./cues/cuesListSlices";
 import { resetEditingTrack } from "./trackSlices";
 
 const testingStore = createTestingStore();
