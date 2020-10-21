@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { lastCueChangeSlice, updateCues, updateSourceCues, updateVttCue } from "./cues/cuesListActions";
+import { updateCues, updateVttCue } from "./cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -32,6 +32,8 @@ import CaptionOverlapToggle from "./toolbox/CaptionOverlapToggle";
 import ExportTrackCuesButton from "./toolbox/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
 import SearchReplaceButton from "./toolbox/SearchReplaceButton";
+import { updateSourceCues } from "./cues/view/sourceCueSlices";
+import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -1001,9 +1003,9 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
-        testingStore.dispatch(lastCueChangeSlice.actions
-            .recordCueChange({ changeType: "EDIT", index: 0,
-                vttCue: new VTTCue(0, 3, "blabla") }));
+        testingStore.dispatch(lastCueChangeSlice.actions.recordCueChange(
+            { changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 3, "blabla") }
+        ));
 
         const { container } = render(
             <Provider store={testingStore}>
