@@ -9,7 +9,7 @@ import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount, ReactWrapper } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { updateCues } from "../cues/cueSlices";
+import { updateCues } from "../cues/cuesListActions";
 import { CueDto } from "../model";
 import "video.js";
 import { act } from "react-dom/test-utils";

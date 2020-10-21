@@ -19,7 +19,7 @@ import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { mount } from "enzyme";
 import { MockedDebouncedFunction, removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { setValidationError, updateCues, updateEditingCueIndex, updateSourceCues } from "../cueSlices";
+import { updateCues } from "../cuesListActions";
 import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
@@ -28,6 +28,10 @@ import { updateEditingTrack } from "../../trackSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { fireEvent, render } from "@testing-library/react";
+import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
+import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
+import { updateSourceCues } from "../view/sourceCueSlices";
+import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
 
 jest.mock("lodash", () => (
     {
@@ -37,6 +41,9 @@ jest.mock("lodash", () => (
         },
         get: jest.requireActual("lodash/get")
     }));
+jest.mock("../spellCheck/spellCheckFetch");
+// @ts-ignore we are mocking this function
+fetchSpellCheck.mockImplementation(() => jest.fn());
 
 let testingStore = createTestingStore();
 
@@ -59,6 +66,7 @@ describe("CueEdit", () => {
 
         testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
     });
     it("renders", () => {
         // GIVEN

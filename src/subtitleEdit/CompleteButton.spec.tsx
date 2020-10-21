@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { updateEditingTrack } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Track } from "./model";
-import { updateCues } from "./cues/cueSlices";
+import { updateCues } from "./cues/cuesListActions";
 import { SaveState, saveStateSlice, setSaveTrack } from "./cues/saveSlices";
 import each from "jest-each";
 
@@ -54,6 +54,32 @@ describe("CompleteButton", () => {
         const actualNode = mount(
             <Provider store={testingStore}>
                 <CompleteButton onComplete={jest.fn()} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
+    it("renders with disabled property and save state NONE", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <>
+                    <div style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}>
+                        <span className="text-success">Edits are disabled, task is already completed</span>
+                    </div>
+                    <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
+                        Complete
+                    </button>
+                </>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CompleteButton onComplete={jest.fn()} disabled />
             </Provider>
         );
 

@@ -15,8 +15,8 @@ import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition } from "./cues/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
-import { setSpellCheckDomain } from "./cues/spellCheck/spellCheckSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
+import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -38,6 +38,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
     const cuesLoadingCounter = useSelector((state: SubtitleEditState) => state.cuesLoadingCounter);
@@ -58,7 +59,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
     useEffect(
         () => {
-            dispatch(setSpellCheckDomain(props.spellCheckerDomain ? props.spellCheckerDomain : null));
+            dispatch(setSpellCheckDomain(props.spellCheckerDomain));
         }, [ dispatch, props.spellCheckerDomain ]
     );
 
@@ -151,7 +152,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     </button>
                                 </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
-                                <CompleteButton onComplete={props.onComplete} />
+                                <CompleteButton onComplete={props.onComplete} disabled={editingTask?.editDisabled} />
                             </div>
                         </div>
                     </div>

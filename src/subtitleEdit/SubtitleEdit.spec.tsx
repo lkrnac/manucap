@@ -1,7 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
-import { lastCueChangeSlice, updateCues, updateSourceCues, updateVttCue } from "./cues/cueSlices";
+import { updateCues, updateVttCue } from "./cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
@@ -22,6 +22,18 @@ import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
+import Card from "react-bootstrap/Card";
+import Accordion from "react-bootstrap/Accordion";
+import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+import KeyboardShortcuts from "./toolbox/KeyboardShortcuts";
+import SubtitleSpecificationsButton from "./toolbox/SubtitleSpecificationsButton";
+import ShiftTimeButton from "./toolbox/shift/ShiftTimeButton";
+import CaptionOverlapToggle from "./toolbox/CaptionOverlapToggle";
+import ExportTrackCuesButton from "./toolbox/ExportTrackCuesButton";
+import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
+import SearchReplaceButton from "./toolbox/SearchReplaceButton";
+import { updateSourceCues } from "./cues/view/sourceCueSlices";
+import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -55,13 +67,22 @@ const testingTranslationTrack = {
 const testingTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM"
+    dueDate: "2019/12/30 10:00AM",
+    editDisabled: false
 } as Task;
 
 const testingTranslationTask = {
     type: "TASK_TRANSLATE",
     projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM"
+    dueDate: "2019/12/30 10:00AM",
+    editDisabled: false
+} as Task;
+
+const testingCompletedTask = {
+    type: "TASK_CAPTION",
+    projectName: "Project One",
+    dueDate: "2019/12/30 10:00AM",
+    editDisabled: true
 } as Task;
 
 describe("SubtitleEdit", () => {
@@ -539,6 +560,146 @@ describe("SubtitleEdit", () => {
             .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
     });
 
+    it("renders for task with edit disabled", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore} >
+                <div
+                    className="sbte-subtitle-edit"
+                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                >
+                    <header style={{ display: "flex", paddingBottom: "10px" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
+                            <div><b>This is the video title</b> <i>Project One</i></div>
+                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
+                        </div>
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Completed: <b>50%</b></div>
+                        </div>
+                    </header>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                            <div className="video-player-wrapper">
+                                <VideoPlayer
+                                    mp4="dummyMp4"
+                                    poster="dummyPoster"
+                                    tracks={[testingTrack]}
+                                    languageCuesArray={[]}
+                                    lastCueChange={null}
+                                />
+                            </div>
+                            <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
+                                <Card>
+                                    <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
+                                        Toolbox
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <Card.Body>
+                                            <ButtonToolbar className="sbte-button-toolbar">
+                                                <KeyboardShortcuts />
+                                                <SubtitleSpecificationsButton />
+                                                <ShiftTimeButton />
+                                                <CaptionOverlapToggle />
+                                                <ExportTrackCuesButton handleExport={jest.fn()} />
+                                                <ImportTrackCuesButton handleImport={jest.fn()} disabled />
+                                                <SearchReplaceButton />
+                                            </ButtonToolbar>
+                                        </Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
+                            </Accordion>
+                        </div>
+                        <div
+                            style={{
+                                flex: "1 1 60%",
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                                    <CueLine
+                                        rowIndex={0}
+                                        data={{ cue: cues[0] }}
+                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        rowRef={React.createRef()}
+                                        onClick={(): void => undefined}
+                                    />
+                                    <CueLine
+                                        rowIndex={1}
+                                        data={{ cue: cues[1] }}
+                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        rowRef={React.createRef()}
+                                        onClick={(): void => undefined}
+                                    />
+                                </div>
+                            </div>
+                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                    View All Tracks
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <span style={{ flexGrow: 2 }} />
+                                <div
+                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
+                                >
+                                    <span className="text-success">Edits are disabled, task is already completed</span>
+                                </div>
+                                <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
+                                    Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingCompletedTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        // THEN
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+    });
+
     it("calls onViewAllTrack callback when button is clicked", () => {
         // GIVEN
         const mockOnViewAllTracks = jest.fn();
@@ -842,9 +1003,9 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
-        testingStore.dispatch(lastCueChangeSlice.actions
-            .recordCueChange({ changeType: "EDIT", index: 0,
-                vttCue: new VTTCue(0, 3, "blabla") }));
+        testingStore.dispatch(lastCueChangeSlice.actions.recordCueChange(
+            { changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 3, "blabla") }
+        ));
 
         const { container } = render(
             <Provider store={testingStore}>
@@ -914,7 +1075,7 @@ describe("SubtitleEdit", () => {
         );
 
         // THEN
-        expect(testingStore.getState().spellCheckerDomain).toEqual("testing-domain");
+        expect(testingStore.getState().spellCheckerSettings.domain).toEqual("testing-domain");
     });
 
     it("remount EditingVideoPlayer when cues are loaded", () => {

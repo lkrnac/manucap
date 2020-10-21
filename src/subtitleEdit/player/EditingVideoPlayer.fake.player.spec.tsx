@@ -11,7 +11,7 @@ import { playVideoSection } from "./playbackSlices";
 import { mount } from "enzyme";
 import testingStore from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
-import { updateCues, updateVttCue, } from "../cues/cueSlices";
+import { updateCues, updateVttCue, } from "../cues/cuesListActions";
 
 jest.mock("./VideoPlayer");
 

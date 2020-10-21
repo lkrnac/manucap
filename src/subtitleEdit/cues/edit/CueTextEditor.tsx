@@ -21,7 +21,7 @@ import { convertVttToHtml, getVttText } from "../cueTextConverter";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../cueSlices";
+import { updateVttCue } from "../cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 import { callSaveTrack } from "../saveSlices";
@@ -34,9 +34,9 @@ import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { Track } from "../../model";
 
-const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null) =>
+const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
-        if (props.spellCheck && props.spellCheck.matches) {
+        if (props.spellCheck && props.spellCheck.matches  && spellcheckerEnabled) {
             props.spellCheck.matches.forEach(match => {
                 if (editingTrack?.id && props.editUuid) {
                         if (!hasIgnoredKeyword(editingTrack.id, match)) {
@@ -187,6 +187,7 @@ export interface CueTextEditorProps {
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);
@@ -218,7 +219,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             props: {}
         },
         {
-            strategy: findSpellCheckIssues(props, editingTrack),
+            strategy: findSpellCheckIssues(props, editingTrack, spellcheckerEnabled),
             component: SpellCheckIssue,
             props: {
                 spellCheck: props.spellCheck,

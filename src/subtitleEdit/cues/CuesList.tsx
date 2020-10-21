@@ -7,11 +7,12 @@ import { isDirectTranslationTrack } from "../subtitleEditUtils";
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { CueDto, CueWithSource, ScrollPosition, Track } from "../model";
 import CueLine from "./CueLine";
-import { addCue, updateEditingCueIndex } from "./cueSlices";
+import { addCue } from "./cuesListActions";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../shortcutConstants";
 import { changeScrollPosition } from "./cuesListScrollSlice";
+import { updateEditingCueIndex } from "./edit/cueEditorSlices";
 
 interface Props {
     editingTrack: Track | null;
@@ -47,6 +48,7 @@ const CuesList = (props: Props): ReactElement => {
 
     const scrollPosition = useSelector((state: SubtitleEditState) => state.scrollPosition);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const startAt = getScrollCueIndex(cuesWithSource, editingCueIndex, scrollPosition);
     const rowHeight = sourceCues.length > 0
         ? 180 // This is bigger than real translation view cue, because if there is at least one
@@ -90,9 +92,11 @@ const CuesList = (props: Props): ReactElement => {
                 rowHeight={rowHeight}
                 startAt={startAt}
                 onClick={(idx: number): void => {
-                    idx >= cues.length
-                        ? dispatch(addCue(cues.length))
-                        : dispatch(updateEditingCueIndex(idx));
+                    if (idx >= cues.length) {
+                        dispatch(addCue(cues.length));
+                    } else if (editingTask && !editingTask.editDisabled) {
+                        dispatch(updateEditingCueIndex(idx));
+                    }
                 }}
             />
         </>
