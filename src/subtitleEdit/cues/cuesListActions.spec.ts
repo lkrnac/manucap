@@ -13,7 +13,7 @@ import {
     updateCues,
     updateVttCue,
     validateCorruptedCues,
-} from "./cuesListSlices";
+} from "./cuesListActions";
 import { CueDto, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditorState } from "./edit/editorStatesSlice";
