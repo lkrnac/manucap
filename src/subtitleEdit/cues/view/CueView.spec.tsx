@@ -1,10 +1,11 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
+import React from "react";
+import { Provider } from "react-redux";
+import { render } from "@testing-library/react";
+
 import { CueDto } from "../../model";
 import CueView from "./CueView";
-import { Provider } from "react-redux";
-import React from "react";
-import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import testingStore from "../../../testUtils/testingStore";
 
@@ -13,7 +14,7 @@ describe("CueView", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div style={{ display: "flex" }}>
                     <div
@@ -57,22 +58,22 @@ describe("CueView", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
     });
 
     it("renders with class name parameter", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div style={{ display: "flex" }} className="testingClassName">
                     <div
@@ -116,21 +117,21 @@ describe("CueView", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueView index={1} cue={cue} playerTime={1} className="testingClassName" />
             </Provider>
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
     });
 
     it("converts VTT text to HTML", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "text\nwrapped"), cueCategory: "DIALOGUE" } as CueDto;
-        const expectedText = mount(
+        const expectedText = render(
             <div
                 className="sbte-cue-editor"
                 style={{
@@ -148,14 +149,15 @@ describe("CueView", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(".sbte-cue-editor").html()).toEqual(expectedText.html());
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+            .toEqual(expectedText.container.innerHTML);
     });
 
     it("sanitizes HTML for XSS attack", () => {
@@ -164,7 +166,7 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "some<script>alert(\"problem\")</script>text"),
             cueCategory: "DIALOGUE"
         } as CueDto;
-        const expectedText = mount(
+        const expectedText = render(
             <div
                 className="sbte-cue-editor"
                 style={{
@@ -182,14 +184,15 @@ describe("CueView", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(".sbte-cue-editor").html()).toEqual(expectedText.html());
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+            .toEqual(expectedText.container.innerHTML);
     });
 
     it("keeps selected styling (b,i,u) HTML tags", () => {
@@ -198,7 +201,7 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "<b>bold</b><i>italic</i><u>underline</u>"),
             cueCategory: "DIALOGUE"
         } as CueDto;
-        const expectedText = mount(
+        const expectedText = render(
             <div
                 className="sbte-cue-editor"
                 style={{
@@ -216,14 +219,15 @@ describe("CueView", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(".sbte-cue-editor").html()).toEqual(expectedText.html());
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+            .toEqual(expectedText.container.innerHTML);
     });
 
     it("removed HTML tags that are not allowed", () => {
@@ -232,7 +236,7 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "<v speaker><div>some text</div>"),
             cueCategory: "DIALOGUE"
         } as CueDto;
-        const expectedText = mount(
+        const expectedText = render(
             <div
                 className="sbte-cue-editor"
                 style={{
@@ -250,14 +254,15 @@ describe("CueView", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueView index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(".sbte-cue-editor").html()).toEqual(expectedText.html());
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+            .toEqual(expectedText.container.innerHTML);
     });
 
     it("hides cue text if required", () => {
@@ -266,7 +271,7 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "some text"),
             cueCategory: "DIALOGUE"
         } as CueDto;
-        const expectedText = mount(
+        const expectedText = render(
             <div
                 className="sbte-cue-editor"
                 style={{
@@ -282,13 +287,14 @@ describe("CueView", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueView index={1} cue={cue} playerTime={1} hideText />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(".sbte-cue-editor").html()).toEqual(expectedText.html());
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+            .toEqual(expectedText.container.innerHTML);
     });
 });
