@@ -1,13 +1,10 @@
 import "video.js"; // VTTCue
 import { AnyAction } from "@reduxjs/toolkit";
 import { SubtitleSpecification } from "./model";
-import deepFreeze from "deep-freeze";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
-import testingStore from "../../testUtils/testingStore";
+import { createTestingStore } from "../../testUtils/testingStore";
 import { CueDto } from "../model";
 import { updateCues } from "../cues/cuesListActions";
-
-deepFreeze(testingStore.getState());
 
 const testingSubtitleSpecification = {
     subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
@@ -25,7 +22,13 @@ const testingSubtitleSpecification = {
     comments: "Note"
 } as SubtitleSpecification;
 
+
+let testingStore = createTestingStore();
 describe("subtitleSpecificationSlices", () => {
+    beforeEach(()=> {
+        testingStore = createTestingStore();
+    });
+
     describe("readSubtitleSpecification", () => {
         it("reads a subtitle specification", () => {
             // WHEN

@@ -106,7 +106,7 @@ export const markCues = (
 
         return {
             ...cue,
-            corrupted: !conformToRules(
+            corrupted: cue.corrupted || !conformToRules(
                 cue,
                 subtitleSpecifications,
                 previousCue,
