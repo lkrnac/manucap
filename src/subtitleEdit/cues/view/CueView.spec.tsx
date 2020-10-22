@@ -2,7 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React from "react";
 import { Provider } from "react-redux";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 
 import { CueDto } from "../../model";
 import CueView from "./CueView";
@@ -296,5 +296,50 @@ describe("CueView", () => {
         // THEN
         expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
             .toEqual(expectedText.container.innerHTML);
+    });
+
+    it("renders source cue with glossary terms highlighted", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+            cueCategory: "DIALOGUE",
+            glossaryMatches: { text: ["text replacement1", "text replacement2"], Line: ["lineReplacement1"]}
+        } as CueDto;
+
+        const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
+            "style=\"background-color: #D9E9FF;\">Line</span></b></i> <br>Wrapped " +
+            "<span onclick=\"pickSetGlossaryTerm('text replacement1')\" " +
+            "style=\"background-color: #D9E9FF;\">text</span>";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={1} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
+    it("sends simple glossary term to redux when clicked", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+            cueCategory: "DIALOGUE",
+            glossaryMatches: { text: ["text replacement1", "text replacement2"], Line: ["lineReplacement1"]}
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={1} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(actualNode.container.querySelectorAll("span")[0]);
+
+        // THEN
+        expect(testingStore.getState().glossaryTerm).toEqual("lineReplacement1");
     });
 });

@@ -1,10 +1,13 @@
-import React, { ReactElement } from "react";
+import React, { Dispatch, ReactElement } from "react";
 import { CueDto } from "../../model";
 import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName } from "../cueUtils";
 import { findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../timeUtils";
 import sanitizeHtml from "sanitize-html";
+import { useDispatch } from "react-redux";
+import { AppThunk } from "../../subtitleEditReducers";
+import { setGlossaryTerm } from "../edit/cueEditorSlices";
 
 interface Props {
     index: number;
@@ -14,10 +17,32 @@ interface Props {
     hideText?: boolean;
 }
 
+const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
+    const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
+    const plainWords = plainText.replace("\n", " ").split(" ");
+    let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
+    // @ts-ignore We need to define function as global, because it will be used
+    // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
+    global.pickSetGlossaryTerm = (term: string): void => dispatch(setGlossaryTerm(term));
+
+    plainWords.forEach((value) => {
+        const glossaryMatches = props.cue.glossaryMatches;
+        if (glossaryMatches && glossaryMatches[value]) {
+            sanitizedHtml = sanitizedHtml.replace(
+                value,
+                `<span onClick="pickSetGlossaryTerm('${glossaryMatches[value][0]}')" ` +
+                `style=\"background-color: #D9E9FF;\">${value}</span>`
+            );
+        }
+    });
+    return sanitizedHtml;
+};
+
 const CueView = (props: Props): ReactElement => {
+    const dispatch = useDispatch();
     const html = props.hideText
         ? ""
-        : convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
+        : buildContent(dispatch, props);
     return (
         <div style={{ display: "flex" }} className={props.className}>
             <div
@@ -31,11 +56,7 @@ const CueView = (props: Props): ReactElement => {
                     justifyContent: "space-between"
                 }}
             >
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                }}
-                >
+                <div style={{ display: "flex", flexDirection: "column" }}>
                     <div>{getTimeString(props.cue.vttCue.startTime)}</div>
                     <div>{getTimeString(props.cue.vttCue.endTime)}</div>
                 </div>

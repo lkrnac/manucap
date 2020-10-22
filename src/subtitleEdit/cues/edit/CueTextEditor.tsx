@@ -8,6 +8,7 @@ import {
     Editor,
     EditorState,
     getDefaultKeyBinding,
+    Modifier,
     RichUtils
 } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,6 +34,7 @@ import { CueExtraCharacters } from "../CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { Track } from "../../model";
+import { setGlossaryTerm } from "./cueEditorSlices";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
@@ -72,7 +74,9 @@ const findExtraCharacters = (subtitleSpecifications: SubtitleSpecification | nul
     };
 
 const handleKeyShortcut = (
-    editorState: EditorState, dispatch: Dispatch<AppThunk>, props: CueTextEditorProps,
+    editorState: EditorState,
+    dispatch: Dispatch<AppThunk>,
+    props: CueTextEditorProps,
     spellCheckerMatchingOffset: number | null,
     setSpellCheckerMatchingOffset: Function,
 ) => (shortcut: string): DraftHandleValue => {
@@ -132,9 +136,8 @@ const createCorrectSpellingHandler = (
     dispatch(callSaveTrack());
 };
 
-const isLastSearchMatch = (
-    searchReplaceMatches: SearchReplaceMatches
-): boolean => searchReplaceMatches && searchReplaceMatches.offsetIndex === searchReplaceMatches.offsets.length - 1;
+const isLastSearchMatch = (searchReplaceMatches: SearchReplaceMatches): boolean =>
+    searchReplaceMatches && searchReplaceMatches.offsetIndex === searchReplaceMatches.offsets.length - 1;
 
 const createReplaceMatchHandler = (
     editorState: EditorState,
@@ -185,6 +188,16 @@ export interface CueTextEditorProps {
     unbindCueViewModeKeyboardShortcut: () => void;
 }
 
+const insertGlossaryTermIfNeeded = (editorState: EditorState, glossaryTerm: string | null): EditorState => {
+    if (glossaryTerm) {
+        const content = editorState.getCurrentContent();
+        const contentWithGlossaryTerm = Modifier.insertText(content, editorState.getSelection(), glossaryTerm);
+        editorState = EditorState.push(editorState, contentWithGlossaryTerm, "change-block-data");
+        editorState = EditorState.forceSelection(editorState, editorState.getSelection());
+    }
+    return editorState;
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
@@ -197,6 +210,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
         ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
     );
+    const glossaryTerm = useSelector((state: SubtitleEditState) => state.glossaryTerm);
+
     const unmountContentRef = useRef<ContentState | null>(null);
 
     if (!editorState) {
@@ -236,6 +251,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         }
     ]);
     editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
+    editorState = insertGlossaryTermIfNeeded(editorState, glossaryTerm);
 
     const currentContent = editorState.getCurrentContent();
     const currentInlineStyle = editorState.getCurrentInlineStyle();
@@ -244,6 +260,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
+            dispatch(setGlossaryTerm(null));
             dispatch(updateEditorState(props.index, editorState));
         },
         // It is enough to detect changes on pieces of editor state that indicate content change.
