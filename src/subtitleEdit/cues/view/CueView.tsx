@@ -13,18 +13,12 @@ interface Props {
     index: number;
     cue: CueDto;
     playerTime: number;
+    showGlossaryTerms: boolean;
     className?: string;
     hideText?: boolean;
 }
 
-const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
-    const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
-    const plainWords = plainText.replace("\n", " ").split(" ");
-    let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
-    // @ts-ignore We need to define function as global, because it will be used
-    // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
-    global.pickSetGlossaryTerm = (term: string): void => dispatch(setGlossaryTerm(term));
-
+const injectGlossaryTerms = (plainWords: string[], props: Props, sanitizedHtml: string): string => {
     plainWords.forEach((value) => {
         const glossaryMatches = props.cue.glossaryMatches;
         if (glossaryMatches && glossaryMatches[value]) {
@@ -36,6 +30,20 @@ const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
             );
         }
     });
+    return sanitizedHtml;
+};
+
+const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
+    const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
+    const plainWords = plainText.replace("\n", " ").split(" ");
+    let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
+
+    if (props.showGlossaryTerms) {
+        // @ts-ignore We need to define function as global, because it will be used
+        // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
+        global.pickSetGlossaryTerm = (term: string): void => dispatch(setGlossaryTerm(term));
+        sanitizedHtml = injectGlossaryTerms(plainWords, props, sanitizedHtml);
+    }
     return sanitizedHtml;
 };
 

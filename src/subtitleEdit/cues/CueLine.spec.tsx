@@ -72,7 +72,13 @@ describe("CueLine", () => {
                     <CueLineFlap rowIndex={1} cue={cues[1]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <div />
-                        <CueView index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
+                        <CueView
+                            index={1}
+                            cue={cues[1]}
+                            playerTime={0}
+                            className="sbte-gray-100-background"
+                            showGlossaryTerms={false}
+                        />
                     </div>
                     <CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} />
                 </div>
@@ -113,6 +119,7 @@ describe("CueLine", () => {
                             cue={sourceCue}
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
+                            showGlossaryTerms={false}
                         />
                         <CueEdit index={1} cue={cues[1]} playerTime={0} />
                     </div>
@@ -155,6 +162,7 @@ describe("CueLine", () => {
                             cue={sourceCue}
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
+                            showGlossaryTerms={false}
                         />
                         <CueEdit index={1} cue={cues[1]} playerTime={0} />
                     </div>
@@ -196,8 +204,15 @@ describe("CueLine", () => {
                             cue={sourceCue}
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
+                            showGlossaryTerms={false}
                         />
-                        <CueView index={1} cue={cues[1]} playerTime={0} className="sbte-gray-100-background" />
+                        <CueView
+                            index={1}
+                            cue={cues[1]}
+                            playerTime={0}
+                            className="sbte-gray-100-background"
+                            showGlossaryTerms={false}
+                        />
                     </div>
                     <CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} sourceCue={sourceCue} />
                 </div>
@@ -237,6 +252,7 @@ describe("CueLine", () => {
                             cue={sourceCue}
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
+                            showGlossaryTerms={false}
                         />
                         <CueView
                             index={1}
@@ -244,6 +260,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             hideText
                             className="sbte-gray-200-background"
+                            showGlossaryTerms={false}
                         />
                     </div>
                     <CueActionsPanel index={1} editingCueIndex={-1} sourceCue={sourceCue} />
@@ -369,5 +386,73 @@ describe("CueLine", () => {
 
         // THEN
         expect(rowRef.current).toEqual(actualNode.find("div").at(0).instance());
+    });
+
+    it("view line in captioning mode doesn't show glossaryTerms", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueView).props().showGlossaryTerms).toBeFalsy();
+    });
+
+    it("edit line in translation mode shows glossary terms in source cue", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const cueWithSource = { cue: cues[1], sourceCue };
+        const cueLineRowProps = { playerTime: 0, cuesLength: 1 } as CueLineRowProps;
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueView).props().showGlossaryTerms).toBeTruthy();
+    });
+
+    it("view line in translation mode doesn't show glossary terms in source cue", () => {
+        // GIVEN
+        const cueWithSource = { cue: cues[1], sourceCue };
+        const cueLineRowProps = { playerTime: 0 } as CueLineRowProps;
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueLine
+                    rowIndex={1}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(CueView).at(0).props().showGlossaryTerms).toBeFalsy();
     });
 });
