@@ -8,8 +8,9 @@ import {
     setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
-import { updateCues, updateEditingCueIndex } from "../cueSlices";
+import { updateCues } from "../cuesListActions";
 import { CueDto, ScrollPosition } from "../../model";
+import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -317,7 +318,7 @@ describe("searchReplaceSlices", () => {
             // GIVEN
             const cues = [
                 {
-                    vttCue: new VTTCue(0, 2, "<b></b>"),
+                    vttCue: new VTTCue(0, 2, "<b/>"),
                     cueCategory: "DIALOGUE"
                 },
                 { vttCue: new VTTCue(2, 4, "Caption foo"), cueCategory: "ONSCREEN_TEXT" },

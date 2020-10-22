@@ -1,6 +1,6 @@
 import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
-import { updateCues, updateSourceCues } from "./subtitleEdit/cues/cueSlices";
+import { updateCues } from "./subtitleEdit/cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { CueDto, Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
@@ -11,6 +11,7 @@ import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
+import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();

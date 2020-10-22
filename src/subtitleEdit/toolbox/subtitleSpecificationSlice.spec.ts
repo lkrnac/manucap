@@ -4,7 +4,7 @@ import { SubtitleSpecification } from "./model";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { CueDto } from "../model";
-import { updateCues } from "../cues/cueSlices";
+import { updateCues } from "../cues/cuesListActions";
 
 const testingSubtitleSpecification = {
     subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",

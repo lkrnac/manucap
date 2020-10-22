@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { updateEditingTrack } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Track } from "./model";
-import { updateCues } from "./cues/cueSlices";
+import { updateCues } from "./cues/cuesListActions";
 import { SaveState, saveStateSlice, setSaveTrack } from "./cues/saveSlices";
 import each from "jest-each";
 

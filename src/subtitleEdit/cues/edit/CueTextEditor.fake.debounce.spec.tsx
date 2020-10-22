@@ -22,7 +22,7 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues, updateEditingCueIndex } from "../cueSlices";
+import { updateCues } from "../cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -35,6 +35,7 @@ import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
 import { Constants } from "../../constants";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
+import { updateEditingCueIndex } from "./cueEditorSlices";
 
 jest.mock("lodash", () => (
     {
