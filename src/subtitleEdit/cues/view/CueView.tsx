@@ -28,10 +28,11 @@ const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
     plainWords.forEach((value) => {
         const glossaryMatches = props.cue.glossaryMatches;
         if (glossaryMatches && glossaryMatches[value]) {
+            const compositeValue = glossaryMatches[value].reduce((left, right) => `${left}/${right}`);
             sanitizedHtml = sanitizedHtml.replace(
                 value,
-                `<span onClick="pickSetGlossaryTerm('${glossaryMatches[value][0]}')" ` +
-                `style=\"background-color: #D9E9FF;\">${value}</span>`
+                `<span onClick="pickSetGlossaryTerm('${compositeValue}')" ` +
+                `style="background-color: #D9E9FF;">${value}</span>`
             );
         }
     });
