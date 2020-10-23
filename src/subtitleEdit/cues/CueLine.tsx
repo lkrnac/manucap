@@ -41,6 +41,7 @@ const CueLine = (props: Props): ReactElement => {
                             cue={props.data.sourceCue}
                             playerTime={props.rowProps.playerTime}
                             className={"sbte-bottom-border " + captionClassName}
+                            showGlossaryTerms={editingCueIndex === props.rowIndex}
                           />
                         : <div />
                 }
@@ -57,6 +58,7 @@ const CueLine = (props: Props): ReactElement => {
                                 cue={props.data.cue}
                                 playerTime={props.rowProps.playerTime}
                                 className={captionClassName}
+                                showGlossaryTerms={false}
                               />
                         : <CueView
                             index={props.rowIndex}
@@ -65,6 +67,7 @@ const CueLine = (props: Props): ReactElement => {
                             playerTime={props.rowProps.playerTime}
                             hideText
                             className={translationCueClassName}
+                            showGlossaryTerms={false}
                           />
 
                 }

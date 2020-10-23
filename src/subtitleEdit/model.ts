@@ -15,6 +15,7 @@ export interface CueDto {
     editUuid?: string;
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
+    glossaryMatches?: Record<string, string[]>;
 }
 
 export interface CueWithSource {

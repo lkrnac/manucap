@@ -12,7 +12,12 @@ import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 import { spellcheckerSettingsSlice } from "./spellcheckerSettingsSlice";
 import { sourceCuesSlice } from "./cues/view/sourceCueSlices";
-import { editingCueIndexSlice, lastCueChangeSlice, validationErrorSlice } from "./cues/edit/cueEditorSlices";
+import {
+    editingCueIndexSlice,
+    glossaryTermSlice,
+    lastCueChangeSlice,
+    validationErrorSlice
+} from "./cues/edit/cueEditorSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -34,6 +39,7 @@ export const Reducers = {
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
     validationError: validationErrorSlice.reducer,
+    glossaryTerm: glossaryTermSlice.reducer,
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

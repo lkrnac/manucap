@@ -35,7 +35,7 @@ import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
 import { Constants } from "../../constants";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
-import { updateEditingCueIndex } from "./cueEditorSlices";
+import { setGlossaryTerm, updateEditingCueIndex } from "./cueEditorSlices";
 
 jest.mock("lodash", () => (
     {
@@ -1701,5 +1701,69 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
+    });
+
+    it("appends glossary term at the end of content and resets it in redux to null", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
+        actualNode.setProps({});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some textreplacement");
+        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some textreplacement");
+        expect(testingStore.getState().glossaryTerm).toEqual(null);
+    });
+
+    it("inserts glossary term into the middle of content and resets it in redux to null", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+        const editorState = actualNode.find(Editor).props().editorState;
+        const selectionState = editorState.getSelection();
+
+        // WHEN
+        const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
+        actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
+        testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
+        actualNode.setProps({});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some replacementtext");
+        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some replacementtext");
+        expect(testingStore.getState().glossaryTerm).toEqual(null);
     });
 });
