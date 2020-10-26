@@ -41,7 +41,7 @@ const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | n
         if (props.spellCheck && props.spellCheck.matches  && spellcheckerEnabled) {
             props.spellCheck.matches.forEach(match => {
                 if (props.editUuid) {
-                    if (editingTrack?.id == null || !hasIgnoredKeyword(editingTrack.id, match)) {
+                    if (!hasIgnoredKeyword(match, editingTrack?.id)) {
                         callback(match.offset, match.offset + match.length);
                     }
                 }
