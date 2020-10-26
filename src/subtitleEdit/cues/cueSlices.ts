@@ -302,9 +302,9 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const spellCheckerSettings = getState().spellCheckerSettings;
             if (language && spellCheckerSettings.enabled) {
                 const trackId = track?.id;
-                if (trackId && editUuid) {
-                    fetchSpellCheck(dispatch, getState, trackId, idx, newVttCue.text,
-                        spellCheckerSettings, language);
+                if (editUuid) {
+                    fetchSpellCheck(dispatch, getState, idx, newVttCue.text,
+                        spellCheckerSettings, language, trackId);
                 }
             }
             const searchReplace = getState().searchReplace;

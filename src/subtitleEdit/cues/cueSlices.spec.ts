@@ -441,6 +441,30 @@ describe("cueSlices", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(2);
             });
+
+            it("triggers call to spellchecker even with trackId undefined", async () => {
+                const testingResponse = {};
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: undefined } as Track
+                ) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[2].editUuid;
+
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() =>
+                        new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
+
+                //WHEN
+                await testingStore.dispatch(
+                    await updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
+                        editUuid) as {} as AnyAction);
+
+                //THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledTimes(1);
+            });
         });
 
         describe("range prevention", () => {

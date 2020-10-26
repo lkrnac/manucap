@@ -169,8 +169,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const findSpellCheckIssues = (_contentBlock: ContentBlock, callback: Function): void => {
         if (props.spellCheck && props.spellCheck.matches && spellcheckerEnabled) {
             props.spellCheck.matches.forEach(match => {
-                    if (editingTrack?.id && props.editUuid) {
-                        if (!hasIgnoredKeyword(editingTrack.id, match)) {
+                    if (props.editUuid) {
+                        if (editingTrack?.id == null || !hasIgnoredKeyword(editingTrack.id, match)) {
                             callback(match.offset, match.offset + match.length);
                         }
                     }
