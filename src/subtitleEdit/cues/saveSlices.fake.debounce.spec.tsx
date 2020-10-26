@@ -4,7 +4,7 @@ import deepFreeze from "deep-freeze";
 import { callSaveTrack, SaveState, setAutoSaveSuccess, setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
 import { CueDto, Track } from "../model";
-import { updateCues } from "./cueSlices";
+import { updateCues } from "./cuesListActions";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());

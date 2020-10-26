@@ -1,11 +1,5 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
-import {
-    cuesSlice,
-    editingCueIndexSlice,
-    lastCueChangeSlice,
-    sourceCuesSlice,
-    validationErrorSlice
-} from "./cues/cueSlices";
+import { cuesSlice } from "./cues/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
@@ -17,26 +11,35 @@ import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 import { spellcheckerSettingsSlice } from "./spellcheckerSettingsSlice";
+import { sourceCuesSlice } from "./cues/view/sourceCueSlices";
+import {
+    editingCueIndexSlice,
+    glossaryTermSlice,
+    lastCueChangeSlice,
+    validationErrorSlice
+} from "./cues/edit/cueEditorSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
-    editingCueIndex: editingCueIndexSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
     cuesTask: taskSlice.reducer,
     subtitleSpecifications: subtitleSpecificationSlice.reducer,
     editorStates: editorStatesSlice.reducer,
     sourceCues: sourceCuesSlice.reducer,
     videoSectionToPlay: playVideoSectionSlice.reducer,
-    validationError: validationErrorSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
     saveState: saveStateSlice.reducer,
-    lastCueChange: lastCueChangeSlice.reducer,
     scrollPosition: scrollPositionSlice.reducer,
     cuesLoadingCounter: cuesLoadingCounterSlice.reducer,
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
-    searchReplaceVisible: searchReplaceVisibleSlice.reducer
+    searchReplaceVisible: searchReplaceVisibleSlice.reducer,
+
+    editingCueIndex: editingCueIndexSlice.reducer,
+    lastCueChange: lastCueChangeSlice.reducer,
+    validationError: validationErrorSlice.reducer,
+    glossaryTerm: glossaryTermSlice.reducer,
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

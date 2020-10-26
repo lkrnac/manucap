@@ -8,15 +8,12 @@ import {
     addCue,
     applyShiftTime,
     deleteCue,
-    setValidationError,
     syncCues,
     updateCueCategory,
     updateCues,
-    updateEditingCueIndex,
-    updateSourceCues,
     updateVttCue,
     validateCorruptedCues,
-} from "./cueSlices";
+} from "./cuesListActions";
 import { CueDto, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditorState } from "./edit/editorStatesSlice";
@@ -27,6 +24,7 @@ import { Constants } from "../constants";
 import { generateSpellcheckHash } from "./spellCheck/spellCheckerUtils";
 import { Replacement, SpellCheck } from "./spellCheck/model";
 import { setSpellCheckDomain } from "../spellcheckerSettingsSlice";
+import { updateSourceCues } from "./view/sourceCueSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -442,14 +440,30 @@ describe("cueSlices", () => {
                 expect(global.fetch).toBeCalledTimes(2);
             });
 
-            it("triggers call to spellchecker even with trackId undefined", async () => {
-                const testingResponse = {};
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            it("triggers call to spellchecker even with trackId undefined", async (done) => {
+                const cues = [
+                    {
+                        vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
+                        corrupted: true
+                    }] as CueDto[];
+                testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+                const testingResponse = {
+                    matches: [
+                        {
+                            message: "there are spelling errors",
+                            replacements: [{ "value": "false" }],
+                            offset: 0,
+                            length: 6,
+                            context: { text: "falsex is not a word", length: 6, offset: 0 },
+                            rule: { id: ruleId }
+                        }
+                    ]
+                };
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: undefined } as Track
                 ) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[2].editUuid;
+                const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
@@ -457,13 +471,17 @@ describe("cueSlices", () => {
                         new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
                 //WHEN
-                await testingStore.dispatch(
-                    await updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
+                await testingStore.dispatch(await updateVttCue(0, new VTTCue(2, 2.5, "Dummyx Cue"),
                         editUuid) as {} as AnyAction);
 
                 //THEN
-                // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(1);
+                setTimeout(
+                    () => {
+                        // @ts-ignore modern browsers does have it
+                        expect(global.fetch).toBeCalledTimes(1);
+                        expect(testingStore.getState().cues[0].spellCheck).toEqual(testingResponse);
+                        done();
+                    }, 50);
             });
         });
 
@@ -1622,65 +1640,6 @@ describe("cueSlices", () => {
         });
     });
 
-    describe("updateEditingCueIndex", () => {
-        it("updates editing cue index", () => {
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(5) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().editingCueIndex).toEqual(5);
-        });
-
-        it("update scroll position when zero", () => {
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
-        });
-
-        it("update scroll position when positive", () => {
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(5) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
-        });
-
-        it("doesn't update scroll position when less than zero", () => {
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().scrollPosition).toBeUndefined;
-        });
-    });
-
-    describe("updateSourceCues", () => {
-        it("initializes source cues", () => {
-            // WHEN
-            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().sourceCues).toEqual(testingCues);
-        });
-
-        it("replaces existing source cues", () => {
-            // GIVEN
-            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
-            const replacementCues = [
-                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-
-            // WHEN
-            testingStore.dispatch(updateSourceCues(replacementCues) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().sourceCues).toEqual(replacementCues);
-        });
-    });
-
-
     describe("applyShiftTime", () => {
         it("apply shift time", () => {
             //GIVEN
@@ -1715,18 +1674,6 @@ describe("cueSlices", () => {
 
         // THEN
         expect(testingStore.getState().sourceCues.length).toEqual(0);
-    });
-
-    describe("setValidationError", () => {
-        it("sets validation error", () => {
-            //GIVEN
-
-            // WHEN
-            testingStore.dispatch(setValidationError(true) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
     });
 
     describe("syncCues", () => {

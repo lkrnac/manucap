@@ -9,7 +9,7 @@ import ReactSmartScroll from "@dotsub/react-smart-scroll";
 import { CueDto, CueWithSource, Language, ScrollPosition, Task, Track } from "../model";
 import { updateEditingTrack, updateTask } from "../trackSlices";
 import CueLine, { CueLineRowProps } from "./CueLine";
-import { updateCues, updateEditingCueIndex, updateSourceCues } from "./cueSlices";
+import { updateCues } from "./cuesListActions";
 import CuesList from "./CuesList";
 import AddCueLineButton from "./edit/AddCueLineButton";
 import { createTestingStore } from "../../testUtils/testingStore";
@@ -20,6 +20,8 @@ import { changeScrollPosition } from "./cuesListScrollSlice";
 import { Character } from "../shortcutConstants";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
+import { updateSourceCues } from "./view/sourceCueSlices";
+import { updateEditingCueIndex } from "./edit/cueEditorSlices";
 
 let testingStore = createTestingStore();
 

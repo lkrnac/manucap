@@ -22,7 +22,7 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { CueDto, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues, updateEditingCueIndex } from "../cueSlices";
+import { updateCues } from "../cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -35,6 +35,7 @@ import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
 import { Constants } from "../../constants";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
+import { setGlossaryTerm, updateEditingCueIndex } from "./cueEditorSlices";
 
 jest.mock("lodash", () => (
     {
@@ -1088,6 +1089,63 @@ describe("CueTextEditor", () => {
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
         });
 
+        it("shows spellcheck error on text even if trackId is undefined", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: undefined
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const spellCheck = {
+                matches: [
+                    { offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
+                        context: { text: "Caption Linex 1", offset: 8, length: 5 },
+                        rule: { id: ruleId }
+                    }
+                ]
+            } as SpellCheck;
+
+            const cues = [
+                { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                    cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                    corrupted: true },
+                { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
+                    cueCategory: "DIALOGUE", spellCheck: spellCheck }
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementationOnce(() => new Promise((resolve) =>
+                    resolve({ json: () => spellCheck })));
+            const editUuid = testingStore.getState().cues[0].editUuid;
+
+            //WHEN
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={testingStore.getState().cues[0].vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
+                </Provider>
+            );
+
+            //THEN
+            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            expect(errorSpan).not.toBeNull();
+        });
+
         it("ignores all spell check matches and revalidate corrupted when clicking ignore all option", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
@@ -1700,5 +1758,69 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
+    });
+
+    it("appends glossary term at the end of content and resets it in redux to null", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
+        actualNode.setProps({});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some textreplacement");
+        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some textreplacement");
+        expect(testingStore.getState().glossaryTerm).toEqual(null);
+    });
+
+    it("inserts glossary term into the middle of content and resets it in redux to null", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+        const editorState = actualNode.find(Editor).props().editorState;
+        const selectionState = editorState.getSelection();
+
+        // WHEN
+        const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
+        actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
+        testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
+        actualNode.setProps({});
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some replacementtext");
+        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some replacementtext");
+        expect(testingStore.getState().glossaryTerm).toEqual(null);
     });
 });
