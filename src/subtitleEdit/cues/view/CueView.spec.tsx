@@ -303,7 +303,10 @@ describe("CueView", () => {
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
             cueCategory: "DIALOGUE",
-            glossaryMatches: { text: ["text replacement1", "text replacement2"], Line: ["lineReplacement1"]}
+            glossaryMatches: [
+                { source: "text", replacements: ["text replacement1", "text replacement2"]},
+                { source: "Line", replacements: ["lineReplacement1"]}
+            ]
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
@@ -328,7 +331,10 @@ describe("CueView", () => {
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
             cueCategory: "DIALOGUE",
-            glossaryMatches: { text: ["text replacement1", "text replacement2"], Line: ["lineReplacement1"]}
+            glossaryMatches: [
+                { source: "text", replacements: ["text replacement1", "text replacement2", "repl3"]},
+                { source: "Line", replacements: ["lineReplacement1"]}
+            ]
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b>Line</b></i> <br>Wrapped text";
@@ -350,7 +356,10 @@ describe("CueView", () => {
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
             cueCategory: "DIALOGUE",
-            glossaryMatches: { text: ["text replacement1", "text replacement2"], Line: ["lineReplacement1"]}
+            glossaryMatches: [
+                { source: "text", replacements: ["text replacement1", "text replacement2", "repl3"]},
+                { source: "Line", replacements: ["lineReplacement1"]}
+            ]
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
@@ -370,7 +379,10 @@ describe("CueView", () => {
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
             cueCategory: "DIALOGUE",
-            glossaryMatches: { text: ["text replacement1", "text replacement2", "repl3"], Line: ["lineReplacement1"]}
+            glossaryMatches: [
+                { source: "text", replacements: ["text replacement1", "text replacement2", "repl3"]},
+                { source: "Line", replacements: ["lineReplacement1"]}
+            ]
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
@@ -384,4 +396,58 @@ describe("CueView", () => {
         // THEN
         expect(testingStore.getState().glossaryTerm).toEqual("text replacement1/text replacement2/repl3");
     });
+
+    it("handles glossary case insensitively", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text LINE"),
+            cueCategory: "DIALOGUE",
+            glossaryMatches: [
+                { source: "line", replacements: ["replacement"]}
+            ]
+        } as CueDto;
+
+        const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('replacement')\" " +
+            "style=\"background-color: #D9E9FF;\">Line</span></b></i> <br>Wrapped text " +
+            "<span onclick=\"pickSetGlossaryTerm('replacement')\" " +
+            "style=\"background-color: #D9E9FF;\">LINE</span>";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
+    it("handles glossary for multi word phrases", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source Line</i> \nWrapped text"),
+            cueCategory: "DIALOGUE",
+            glossaryMatches: [
+                { source: "Wrapped text", replacements: ["text replacement1", "text replacement2"]},
+                { source: "Source Line", replacements: ["lineReplacement1"]}
+            ]
+        } as CueDto;
+
+        const expectedSourceCueContent = "<i><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
+            "style=\"background-color: #D9E9FF;\">Source Line</span></i> <br>" +
+            "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
+            "style=\"background-color: #D9E9FF;\">Wrapped text</span>";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);    });
 });

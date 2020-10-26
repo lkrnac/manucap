@@ -24,7 +24,10 @@ const TestApp = (): ReactElement => {
             cues.push({
                 vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text`),
                 cueCategory: "DIALOGUE",
-                glossaryMatches: { text: ["text replacement1", "text replacement2"], Line: ["lineReplacement1"]}
+                glossaryMatches: [
+                    { source: "text", replacements: ["text replacement1", "text replacement2"]},
+                    { source: "line", replacements: ["lineReplacement1"]}
+                ]
             });
         }
         setTimeout( // this simulates latency caused by server roundtrip
