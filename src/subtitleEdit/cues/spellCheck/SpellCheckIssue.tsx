@@ -79,6 +79,8 @@ const onkeydown = (setSpellCheckerMatchingOffset: Function) => (e: React.Keyboar
 };
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
+    console.log("SpellCheckIssue  <> ");
+    console.log(props);
     const dispatch = useDispatch();
     const target = useRef(null);
     const selectRef = useRef<Select>(null);

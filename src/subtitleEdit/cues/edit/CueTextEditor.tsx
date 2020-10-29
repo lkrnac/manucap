@@ -35,6 +35,8 @@ import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { Track } from "../../model";
 import { setGlossaryTerm } from "./cueEditorSlices";
+//@ts-ignore
+import { CompoundDecorator } from "./../../../common/DraftjsCompoundDecorator.js";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
@@ -158,25 +160,25 @@ const createReplaceMatchHandler = (
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
     (e: React.KeyboardEvent<{}>): string | null => {
-    const action = getActionByKeyboardEvent(e);
-    if (action) {
-        return action;
-    }
-    if(spellCheckerMatchingOffset != null && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
-        return "popoverHandled";
-    } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
-        if (e.keyCode === Character.ESCAPE) {
-            return "closeEditor";
-        } else if (e.keyCode === Character.ENTER) {
-            return "editNext";
+        const action = getActionByKeyboardEvent(e);
+        if (action) {
+            return action;
         }
-    } else if (e.keyCode === Character.ENTER) {
-        return "newLine";
-    } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.SPACE) {
-        return "openSpellChecker";
-    }
-    return getDefaultKeyBinding(e);
-};
+        if(spellCheckerMatchingOffset != null && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
+            return "popoverHandled";
+        } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+            if (e.keyCode === Character.ESCAPE) {
+                return "closeEditor";
+            } else if (e.keyCode === Character.ENTER) {
+                return "editNext";
+            }
+        } else if (e.keyCode === Character.ENTER) {
+            return "newLine";
+        } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.SPACE) {
+            return "openSpellChecker";
+        }
+        return getDefaultKeyBinding(e);
+    };
 
 export interface CueTextEditorProps {
     index: number;
@@ -220,14 +222,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         editorState = EditorState.moveFocusToEnd(editorState);
     }
 
-    const newCompositeDecorator = new CompositeDecorator([
-        {
-            strategy: findSearchReplaceMatch(props),
-            component: SearchReplaceMatch,
-            props: {
-                replaceMatch: createReplaceMatchHandler(editorState, dispatch, props, unmountContentRef)
-            }
-        },
+    const newCompositeDecorator = [
         {
             strategy: findExtraCharacters(subtitleSpecifications),
             component: CueExtraCharacters,
@@ -248,9 +243,17 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 cueIdx: props.index,
                 trackId: editingTrack?.id
             }
-        }
-    ]);
-    editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
+        },
+        new CompositeDecorator([{
+            strategy: findSearchReplaceMatch(props),
+            component: SearchReplaceMatch,
+            props: {
+                replaceMatch: createReplaceMatchHandler(editorState, dispatch, props, unmountContentRef)
+            }
+        }])
+
+    ];
+    editorState = EditorState.set(editorState, { decorator: new  CompoundDecorator(newCompositeDecorator) });
     editorState = insertGlossaryTermIfNeeded(editorState, glossaryTerm);
 
     const currentContent = editorState.getCurrentContent();
