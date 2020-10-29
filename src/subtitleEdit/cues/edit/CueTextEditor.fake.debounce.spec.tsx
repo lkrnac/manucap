@@ -220,7 +220,6 @@ const testForContentState = (
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
     const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-    expect(testingStore.getState().cues[0].vttCue.text).toEqual(vttCue.text);
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };
 
@@ -349,12 +348,12 @@ describe("CueTextEditor", () => {
         editor.simulate("paste", {
             clipboardData: {
                 types: ["text/plain"],
-                getData: (): string => "",
+                getData: (): string => " lala",
             }
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some\nwrapped\ntext");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some\nwrapped\ntext lala");
     });
 
     it("updated cue when bold inline style is used", () => {
@@ -804,7 +803,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
         expect(testingStore.getState().editorStates[0]).toBeUndefined();
     });
 
