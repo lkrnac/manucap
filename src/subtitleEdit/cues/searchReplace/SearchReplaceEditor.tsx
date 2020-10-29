@@ -13,7 +13,6 @@ import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { updateVttCue } from "../cuesListActions";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
-import { callSaveTrack } from "../saveSlices";
 import ToggleButton from "../../../common/ToggleButton";
 import { SearchReplace } from "./model";
 import { reset } from "../edit/editorStatesSlice";
@@ -45,17 +44,17 @@ const replaceAllInVttCue = (
     return newVTTCue;
 };
 
-export const searchReplaceAll = async (
+export const searchReplaceAll = (
     dispatch: Dispatch<AppThunk>,
     cues: Array<CueDto>,
     searchReplace: SearchReplace
-): Promise<void> => {
+): void => {
     const find = searchReplace.find;
     if (find === "") {
         return;
     }
-    await dispatch(updateEditingCueIndex(-1));
-    await dispatch(reset());
+    dispatch(updateEditingCueIndex(-1));
+    dispatch(reset());
     const newCues = cues.slice(0);
     const replacement = searchReplace.replacement;
     for (const cue of newCues) {
@@ -64,7 +63,7 @@ export const searchReplaceAll = async (
         const matches = searchCueText(vttText, find, searchReplace.matchCase);
         if (matches.length > 0) {
             const  newVTTCue = replaceAllInVttCue(cue.vttCue, find, replacement, searchReplace.matchCase, matches);
-            await dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
+            dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
         }
     }
 };
@@ -131,9 +130,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
-                onClick={(): Promise<AppThunk> =>
-                    searchReplaceAll(dispatch, cues, searchReplace)
-                        .then(() => dispatch(callSaveTrack()))}
+                onClick={(): void => searchReplaceAll(dispatch, cues, searchReplace)}
             >
                 Replace All
             </button>

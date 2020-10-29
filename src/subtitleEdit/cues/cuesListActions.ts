@@ -25,6 +25,7 @@ import { SearchDirection } from "./searchReplace/model";
 import { searchCueText } from "./searchReplace/searchUtils";
 import { lastCueChangeSlice, validationErrorSlice } from "./edit/cueEditorSlices";
 import { cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
+import { callSaveTrack } from "./saveSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -128,6 +129,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                 overlapEnabled: overlapCaptionsAllowed,
                 index: idx
             }));
+            callSaveTrack(dispatch, getState);
         }
     };
 
@@ -156,8 +158,9 @@ export const validateCorruptedCues = (): AppThunk =>
     };
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CueCategoryAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
+        callSaveTrack(dispatch, getState);
     };
 
 export const addCue = (idx: number): AppThunk =>
@@ -189,10 +192,11 @@ export const addCue = (idx: number): AppThunk =>
     };
 
 export const deleteCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
         dispatch(cuesSlice.actions.deleteCue({ idx }));
         dispatch(lastCueChangeSlice.actions
             .recordCueChange({ changeType: "REMOVE", index: idx, vttCue: new VTTCue(0, 0, "") }));
+        callSaveTrack(dispatch, getState);
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
@@ -206,14 +210,16 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
     };
 
 export const applyShiftTime = (shiftTime: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<number>>): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
+        callSaveTrack(dispatch, getState);
     };
 
 export const syncCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CuesAction>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
         const cues = getState().sourceCues;
         if (cues && cues.length > 0) {
             dispatch(cuesSlice.actions.syncCues({ cues }));
+            callSaveTrack(dispatch, getState);
         }
     };

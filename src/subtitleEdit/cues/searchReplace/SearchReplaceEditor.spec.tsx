@@ -447,7 +447,6 @@ describe("SearchReplaceEditor", () => {
         fireEvent.click(replaceAllButton);
 
         // THEN
-        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("");
         expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 5");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 2");

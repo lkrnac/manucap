@@ -25,7 +25,7 @@ import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
-import { callSaveTrack } from "../saveSlices";
+
 import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
 import { SearchReplaceMatches } from "../searchReplace/model";
@@ -133,7 +133,6 @@ const createCorrectSpellingHandler = (
 ) => (replacement: string, start: number, end: number): void => {
     const newEditorState = replaceContent(editorState, replacement, start, end);
     dispatch(updateEditorState(props.index, newEditorState));
-    dispatch(callSaveTrack());
 };
 
 const isLastSearchMatch = (searchReplaceMatches: SearchReplaceMatches): boolean =>
@@ -147,7 +146,6 @@ const createReplaceMatchHandler = (
 ) => (replacement: string, start: number, end: number): void => {
     const newEditorState = replaceContent(editorState, replacement, start, end);
     dispatch(updateEditorState(props.index, newEditorState));
-    dispatch(callSaveTrack());
     if (props.searchReplaceMatches && isLastSearchMatch(props.searchReplaceMatches)) {
         // Need to ensure ref is set for unmount because searchNextCues will close editor
         // since this is the last search match
@@ -274,8 +272,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => {
             // Only need to update vttCue if ContentState is changing
-            const shouldUpdateVttCue = unmountContentRef.current === null
-                || unmountContentRef.current !== currentContent;
+            const shouldUpdateVttCue = unmountContentRef.current !== null
+                && unmountContentRef.current !== currentContent;
             unmountContentRef.current = currentContent;
             if (shouldUpdateVttCue) {
                 changeVttCueInReduxDebounced(currentContent, props, dispatch);
@@ -293,7 +291,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => (): void => {
             changeVttCueInReduxDebounced.cancel();
-            if (unmountContentRef.current !== null) {
+            if (unmountContentRef.current !== null && unmountContentRef.current !== currentContent) {
                 changeVttCueInRedux(unmountContentRef.current, props, dispatch);
             }
         },
@@ -329,12 +327,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 <div style={{ flex: 1 }}>
                     <Editor
                         editorState={editorState}
-                        onChange={(newEditorState: EditorState): void => {
-                            dispatch(updateEditorState(props.index, newEditorState));
-                            if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                                dispatch(callSaveTrack());
-                            }
-                        }}
+                        onChange={(newEditorState: EditorState): AppThunk =>
+                            dispatch(updateEditorState(props.index, newEditorState))}
                         ref={editorRef}
                         spellCheck={false}
                         keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}

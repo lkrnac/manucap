@@ -7,7 +7,8 @@ import SyncCuesButton from "./SyncCuesButton";
 import { setSaveTrack } from "../cues/saveSlices";
 import { AnyAction } from "redux";
 import { updateEditingTrack } from "../trackSlices";
-import { Track } from "../model";
+import { CueDto, Track } from "../model";
+import { updateSourceCues } from "../cues/view/sourceCueSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -37,11 +38,14 @@ describe("SyncCuesButton", () => {
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
-    it("saves track on button click", () => {
+
+    it("syncs ues when button is clicked", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+        const testingCues = [{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
+        testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -55,6 +59,7 @@ describe("SyncCuesButton", () => {
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
     });
+
     it("unsets the track id on button click", () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack({ id: "123456" } as Track) as {} as AnyAction);

@@ -26,7 +26,7 @@ export const isPendingSaveState = (saveState: SaveState): boolean =>
     || saveState === SaveState.RETRY;
 
 export const saveTrackSlice = createSlice({
-    name: "saveTrack",
+    name: "callSaveTrack",
     initialState: null as Function | null,
     reducers: {
         set: (_state, action: PayloadAction<Function>): Function => action.payload,
@@ -66,8 +66,8 @@ const saveTrackCurrent = (dispatch: Dispatch<PayloadAction<SaveAction | SaveStat
 
 const saveTrackDebounced = debounce(saveTrackCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
-export const callSaveTrack = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SaveAction | undefined | SaveState>>, getState: Function): void => {
+export const callSaveTrack =
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState: Function): void => {
         const saveState = getState().saveState;
         if (saveState === SaveState.REQUEST_SENT || saveState === SaveState.RETRY) {
             dispatch(saveStateSlice.actions.setState(SaveState.RETRY));

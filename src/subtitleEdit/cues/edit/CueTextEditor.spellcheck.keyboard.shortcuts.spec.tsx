@@ -211,6 +211,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         fireEvent.keyDown(editor, {
             keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
         });
+        saveTrack.mockReset();
 
         //WHEN
         fireEvent.keyDown(editor, {
@@ -231,6 +232,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         fireEvent.keyDown(editor, {
             keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
         });
+        saveTrack.mockReset();
 
         //WHEN
         fireEvent.keyDown(editor, {
@@ -255,6 +257,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
             keyCode: Character.ARROW_DOWN,
             key: "ArrowDown",
         });
+        saveTrack.mockReset();
 
         //WHEN
         fireEvent.keyDown(document.querySelector(".spellcheck__option--is-focused") as Element, {
@@ -290,6 +293,4 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         // THEN
         expect(unbindCueViewModeKeyboardShortcutSpy).toBeCalled();
     });
-
-
 });

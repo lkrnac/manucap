@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { updateEditorState } from "./editorStatesSlice";
 import { TooltipWrapper } from "../../TooltipWrapper";
-import { callSaveTrack } from "../saveSlices";
 
 interface Props {
     editorIndex: number;
@@ -35,7 +34,6 @@ const InlineStyleButton = (props: Props): ReactElement => {
                 onClick={(): void => {
                     const newState = RichUtils.toggleInlineStyle(editorState, props.inlineStyle);
                     dispatch(updateEditorState(props.editorIndex, newState));
-                    dispatch(callSaveTrack());
                 }}
             >
                 {props.label}

@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { syncCues } from "../cues/cuesListActions";
-import { callSaveTrack } from "../cues/saveSlices";
 import { Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import { SubtitleEditState } from "../subtitleEditReducers";
@@ -21,7 +20,6 @@ const SyncCuesButton = (): ReactElement => {
                     id: undefined
                 } as Track;
                 dispatch(updateEditingTrack(track));
-                dispatch(callSaveTrack());
             }}
         >
             <i className="fas fa-sync" /> Sync Cues
