@@ -6,6 +6,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { scrollPositionSlice } from "../cuesListScrollSlice";
 import { cuesSlice } from "../cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
+import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -25,12 +26,21 @@ export const editingCueIndexSlice = createSlice({
     }
 });
 
+export const updateEditingCueIndexNoThunk = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
+    getState: Function,
+    idx: number
+): void => {
+    dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
+    if (idx >= 0) {
+        dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
+        updateSearchMatches(dispatch, getState, idx);
+    }
+};
+
 export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
-        dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
-        if (idx >= 0) {
-            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
-        }
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+        updateEditingCueIndexNoThunk(dispatch, getState, idx);
     };
 
 export const validationErrorSlice = createSlice({

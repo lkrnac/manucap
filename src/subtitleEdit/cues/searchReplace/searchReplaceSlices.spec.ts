@@ -306,10 +306,10 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8]);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(1);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8, 16]);
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
@@ -592,7 +592,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
             expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8]);

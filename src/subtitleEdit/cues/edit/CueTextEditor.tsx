@@ -274,6 +274,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             // Only need to update vttCue if ContentState is changing
             const shouldUpdateVttCue = unmountContentRef.current !== null
                 && unmountContentRef.current !== currentContent;
+            // const shouldUpdateVttCue = unmountContentRef.current === null
+            //      || unmountContentRef.current !== currentContent;
             unmountContentRef.current = currentContent;
             if (shouldUpdateVttCue) {
                 changeVttCueInReduxDebounced(currentContent, props, dispatch);

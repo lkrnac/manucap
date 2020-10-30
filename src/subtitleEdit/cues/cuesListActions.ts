@@ -21,19 +21,10 @@ import {
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
-import { SearchDirection } from "./searchReplace/model";
-import { searchCueText } from "./searchReplace/searchUtils";
 import { lastCueChangeSlice, validationErrorSlice } from "./edit/cueEditorSlices";
 import { cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
-
-export interface CueIndexAction extends SubtitleEditAction {
-    idx: number;
-}
-
-export interface CueCategoryAction extends CueIndexAction {
-    cueCategory: CueCategory;
-}
+import { updateSearchMatches } from "./searchReplace/searchReplaceSlices";
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
@@ -57,19 +48,6 @@ const createAndAddCue = (previousCue: CueDto,
     const newCue = new VTTCue(startTime, endTime, "");
     copyNonConstructorProperties(newCue, previousCue.vttCue);
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
-};
-
-const finNextOffsetIndexForSearch = (
-    cue: CueDto,
-    offsets: Array<number>,
-    direction: SearchDirection
-): number => {
-    const lastIndex = offsets.length - 1;
-    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex >= 0) {
-        return cue.searchReplaceMatches.offsetIndex < lastIndex ?
-            cue.searchReplaceMatches.offsetIndex : lastIndex;
-    }
-    return direction === "NEXT" ? 0 : lastIndex;
 };
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
@@ -105,7 +83,8 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                 dispatch(validationErrorSlice.actions.setValidationError(true));
             }
 
-            dispatch(cuesSlice.actions.updateVttCue({ idx, vttCue: newVttCue, editUuid }));
+            const newCue = { ...originalCue, idx, vttCue: newVttCue };
+            dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
 
             const language = track?.language?.id;
@@ -117,13 +96,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                         spellCheckerSettings, language);
                 }
             }
-            const searchReplace = getState().searchReplace;
-            const offsets = searchCueText(newVttCue.text, searchReplace.find, searchReplace.matchCase);
-            const offsetIndex = finNextOffsetIndexForSearch(originalCue, offsets, searchReplace.direction);
-            dispatch(cuesSlice.actions.addSearchMatches(
-                { idx, searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }}
-                )
-            );
+            updateSearchMatches(dispatch, getState, idx);
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
                 overlapEnabled: overlapCaptionsAllowed,
