@@ -187,7 +187,7 @@ describe("CueTextEditor", () => {
         actualNode.unmount();
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
     });
 
     it("triggers autosave only once immediately after text change", (done) => {
