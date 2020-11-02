@@ -90,7 +90,7 @@ export const cuesSlice = createSlice({
                 .forEach(cue => {
                     //@ts-ignore false positive spellcheck is never null here
                     cue.spellCheck.matches = cue.spellCheck.matches.filter((match: Match) =>
-                        !hasIgnoredKeyword(trackId, match));
+                        !hasIgnoredKeyword(match, trackId));
                 });
         },
         addCue: (state, action: PayloadAction<CueAction>): void => {

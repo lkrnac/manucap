@@ -32,7 +32,10 @@ export const addIgnoredKeyword = (trackId: string, keyword: string, ruleId: stri
     localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, JSON.stringify(spellcheckIgnores));
 };
 
-export const hasIgnoredKeyword = (trackId: string, match: Match): boolean => {
+export const hasIgnoredKeyword = (match: Match, trackId?: string): boolean => {
+    if (!trackId) {
+        return false;
+    }
     const hashes = _.get(getSpellcheckIgnores(), `${trackId}.hashes`, []);
     return hashes.includes(generateSpellcheckHash(getMatchText(match), match.rule.id));
 };
