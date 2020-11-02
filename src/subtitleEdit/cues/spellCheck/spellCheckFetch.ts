@@ -11,13 +11,13 @@ import { spellcheckerSettingsSlice } from "../../spellcheckerSettingsSlice";
 const addSpellCheck = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function,
-    trackId: string,
     index: number,
     spellCheck: SpellCheck,
+    trackId?: string
 ): void => {
     if (spellCheck.matches != null) {
         spellCheck = {
-            matches: spellCheck.matches.filter(match => !hasIgnoredKeyword(trackId, match))
+            matches: spellCheck.matches.filter(match => !hasIgnoredKeyword(match, trackId))
         };
     }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
@@ -30,11 +30,11 @@ const addSpellCheck = (
 export const fetchSpellCheck = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
     getState: Function,
-    trackId: string,
     cueIndex: number,
     text: string,
     spellCheckerSettings: SpellcheckerSettings,
     language: string,
+    trackId?: string
 ): void => {
     const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
     const submittedLanguageCode = languageToolMatchedLanguageCode == null ? language :
@@ -54,7 +54,7 @@ export const fetchSpellCheck = (
             }
         })
         .then(data =>
-            addSpellCheck(dispatch, getState, trackId, cueIndex, data as SpellCheck)
+            addSpellCheck(dispatch, getState, cueIndex, data as SpellCheck, trackId)
         )
         .catch(error => {
             if (error.status === 400) {

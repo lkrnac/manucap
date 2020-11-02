@@ -45,7 +45,7 @@ describe("spellCheckerUtils", () => {
             localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
 
             //WHEN
-            const containsIgnoredKeyword = hasIgnoredKeyword(trackId, match);
+            const containsIgnoredKeyword = hasIgnoredKeyword(match, trackId);
 
             //THEN
             expect(containsIgnoredKeyword).toBeTruthy();
@@ -60,7 +60,21 @@ describe("spellCheckerUtils", () => {
             localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
 
             //WHEN
-            const containsIgnoredKeyword = hasIgnoredKeyword(trackId, match);
+            const containsIgnoredKeyword = hasIgnoredKeyword(match, trackId);
+
+            //THEN
+            expect(containsIgnoredKeyword).toBeFalsy();
+        });
+
+        it("returns false if passed trackId undefined", () => {
+            //GIVEN
+            const match = { offset: 8, length: 5, replacements: [] as Replacement[],
+                context: { text: "this is falsex", offset: 8, length: 5 },
+                rule: { id: ruleId }} as Match;
+            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
+
+            //WHEN
+            const containsIgnoredKeyword = hasIgnoredKeyword(match, undefined);
 
             //THEN
             expect(containsIgnoredKeyword).toBeFalsy();

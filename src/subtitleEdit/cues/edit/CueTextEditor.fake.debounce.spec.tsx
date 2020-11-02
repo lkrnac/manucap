@@ -1089,6 +1089,63 @@ describe("CueTextEditor", () => {
             expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
         });
 
+        it("shows spellcheck error on text even if trackId is undefined", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: undefined
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const spellCheck = {
+                matches: [
+                    { offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
+                        context: { text: "Caption Linex 1", offset: 8, length: 5 },
+                        rule: { id: ruleId }
+                    }
+                ]
+            } as SpellCheck;
+
+            const cues = [
+                { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                    cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                    corrupted: true },
+                { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
+                    cueCategory: "DIALOGUE", spellCheck: spellCheck }
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementationOnce(() => new Promise((resolve) =>
+                    resolve({ json: () => spellCheck })));
+            const editUuid = testingStore.getState().cues[0].editUuid;
+
+            //WHEN
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={testingStore.getState().cues[0].vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                    />
+                </Provider>
+            );
+
+            //THEN
+            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            expect(errorSpan).not.toBeNull();
+        });
+
         it("ignores all spell check matches and revalidate corrupted when clicking ignore all option", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
