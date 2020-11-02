@@ -13,34 +13,43 @@ import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 import "./localTesting.scss";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 
+const language = { id: "en-US", name: "English (US)", direction: "ltr" } as Language;
+// const language = { id: "ar-SA", name: "Arabic", direction: "rtl" } as Language;
+
+const trackType = "TRANSLATION";
+// const trackType = "CAPTION";
+
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
     // #############################################################################################
     // #################### Comment this out if you need to test Captioning mode ###################
     // #############################################################################################
     useEffect(() => {
-        const cues = [] as CueDto[];
-        for(let idx = 0; idx < 9999; idx++) {
-            cues.push({
-                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text`),
-                cueCategory: "DIALOGUE",
-                glossaryMatches: { text: ["text replacement1", "text replacement2"], Line: ["lineReplacement1"]}
-            });
-        }
-        setTimeout( // this simulates latency caused by server roundtrip
+        // @ts-ignore since it can manually be updated
+        if (trackType === "TRANSLATION") {
+            const cues = [] as CueDto[];
+            for (let idx = 0; idx < 9999; idx++) {
+                cues.push({
+                    vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text`),
+                    cueCategory: "DIALOGUE",
+                    glossaryMatches: { text: ["text replacement1", "text replacement2"], Line: ["lineReplacement1"]}
+                });
+            }
+            setTimeout( // this simulates latency caused by server roundtrip
 
-            () => dispatch(updateSourceCues(cues)),
-            500
-        );
+                () => dispatch(updateSourceCues(cues)),
+                500
+            );
+        }
     });
+
     // #############################################################################################
 
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateEditingTrack({
-                type: "TRANSLATION",
-                // type: "CAPTION", // ** Change track type to CAPTION
-                language: { id: "en-US", name: "English (US)" } as Language,
+                type: trackType,
+                language: language as Language,
                 default: true,
                 mediaTitle: "This is the video title",
                 mediaLength: 4250,
@@ -52,24 +61,29 @@ const TestApp = (): ReactElement => {
     });
     useEffect(() => {
         const cues = [] as CueDto[];
-        for(let idx = 0; idx < 9999; idx++) {
+        for (let idx = 0; idx < 9999; idx++) {
+            let text = `<i>Editing <b>Line</b></i> ${idx + 1}\nWrapped text`;
+            // @ts-ignore since it can be updated manually
+            if (language.id === "ar-SA") {
+                text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
+            }
             cues.push({
-                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Editing <b>Line</b></i> ${idx + 1}\nWrapped text`),
+                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, text),
                 cueCategory: "DIALOGUE"
             });
         }
         setTimeout( // this simulates latency caused by server roundtrip
-           () => dispatch(updateCues(cues)),
-           500
-       );
+            () => dispatch(updateCues(cues)),
+            500
+        );
     });
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateTask({
-               type: "TASK_CAPTION",
-               projectName: "Project One",
-               dueDate: "2019/12/30 10:00AM",
-               editDisabled: false
+                type: "TASK_CAPTION",
+                projectName: "Project One",
+                dueDate: "2019/12/30 10:00AM",
+                editDisabled: false
             })),
             500
         );
