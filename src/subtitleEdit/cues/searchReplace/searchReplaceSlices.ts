@@ -46,7 +46,7 @@ export const updateSearchMatches = (
     idx: number
 ): void => {
     const searchReplace = getState().searchReplace;
-    const cue = getState().cues[0];
+    const cue = getState().cues[idx];
     if (cue) {
         const offsets = searchCueText(cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
         const offsetIndex = finNextOffsetIndexForSearch(cue, offsets, searchReplace.direction);

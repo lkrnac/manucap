@@ -56,8 +56,13 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         const cues = [] as CueDto[];
         for(let idx = 0; idx < 9999; idx++) {
+            const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
             cues.push({
-                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Editing <b>Line</b></i> ${idx + 1}\nWrapped text`),
+                vttCue: new VTTCue(
+                    idx * 3,
+                    (idx + 1) * 3,
+                    `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text`
+                ),
                 cueCategory: "DIALOGUE"
             });
         }
@@ -89,7 +94,7 @@ const TestApp = (): ReactElement => {
                 speakerIdentification: "NUMBERED",
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
+                maxCharactersPerLine: 40,
                 minCaptionDurationInMillis: 500,
                 maxCaptionDurationInMillis: 4000,
                 comments: "Media comments, please click [here](https://dotsub.com)",
