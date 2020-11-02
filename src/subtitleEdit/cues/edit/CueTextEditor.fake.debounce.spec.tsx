@@ -43,7 +43,8 @@ jest.mock("lodash", () => (
             fn.cancel = jest.fn();
             return fn;
         },
-        get: jest.requireActual("lodash/get")
+        get: jest.requireActual("lodash/get"),
+        findIndex: jest.requireActual("lodash/findIndex")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
@@ -1398,21 +1399,23 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
         });
 
-        // TODO: This test case is failing and I don't understand it at all.
-        it.skip("replaces matched text with replacement - multiple second", () => {
+        it("replaces matched text with replacement - multiple second", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10, 22],
                 offsetIndex: 1,
                 matchLength: 4
             } as SearchReplaceMatches;
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
+            cues[0].searchReplaceMatches = searchReplaceMatches;
+            cues[0].vttCue.text = "some <i>HTML</i> <b>Text</b> sample Text";
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
             const actualNode = render(
                 <Provider store={testingStore}>
