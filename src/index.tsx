@@ -26,7 +26,7 @@ const TestApp = (): ReactElement => {
     // #############################################################################################
     useEffect(() => {
         // @ts-ignore since it can manually be updated
-        if (trackType == "TRANSLATION") {
+        if (trackType === "TRANSLATION") {
             const cues = [] as CueDto[];
             for (let idx = 0; idx < 9999; idx++) {
                 cues.push({
@@ -64,7 +64,7 @@ const TestApp = (): ReactElement => {
         for (let idx = 0; idx < 9999; idx++) {
             let text = `<i>Editing <b>Line</b></i> ${idx + 1}\nWrapped text`;
             // @ts-ignore since it can be updated manually
-            if (language.id == "ar-SA") {
+            if (language.id === "ar-SA") {
                 text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
             }
             cues.push({
