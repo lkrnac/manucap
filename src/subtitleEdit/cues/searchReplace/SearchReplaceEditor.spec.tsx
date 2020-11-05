@@ -141,18 +141,20 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().searchReplace.find).toEqual("testing");
     });
 
-    it("sets replacement in redux when changed", () => {
+    it("sets replacement in redux when changed and replace button clicked", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        const { getByPlaceholderText } = render(
+        const { getByPlaceholderText, getByText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
         const replaceInput = getByPlaceholderText("Replace");
+        const replaceButton = getByText("Replace");
 
         // WHEN
         fireEvent.change(replaceInput, { target: { value: "testing-repl" }});
+        fireEvent.click(replaceButton);
 
         // THEN
         expect(testingStore.getState().searchReplace.replacement).toEqual("testing-repl");
@@ -239,20 +241,21 @@ describe("SearchReplaceEditor", () => {
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
         testingStore.dispatch(setReplacement("New Line 2") as {} as AnyAction);
-        const { getByText } = render(
+        const { getByText, getByPlaceholderText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
         const replaceButton = getByText("Replace");
+        const replaceInput = getByPlaceholderText("Replace");
 
         // WHEN
+        fireEvent.change(replaceInput, { target: { value: "New Line 2" }});
         fireEvent.click(replaceButton);
 
         // THEN
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
         expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 2");
-        expect(testingStore.getState().searchReplace.replaceMatchCounter).toEqual(1);
         expect(testingStore.getState().editingCueIndex).toEqual(0);
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });

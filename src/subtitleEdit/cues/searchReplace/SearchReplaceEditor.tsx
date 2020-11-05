@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement } from "react";
+import React, { Dispatch, ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     replaceCurrentMatch,
@@ -7,7 +7,6 @@ import {
     searchPreviousCues,
     setFind,
     setMatchCase,
-    setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
@@ -73,6 +72,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
     const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
     const searchReplaceVisible = useSelector((state: SubtitleEditState) => state.searchReplaceVisible);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const [replacement, setReplacement] = useState("");
 
     return searchReplaceVisible ? (
         <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
@@ -86,12 +86,11 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 />
                 <input
                     type="text"
-                    value={searchReplace?.replacement}
+                    value={replacement}
                     placeholder="Replace"
                     className="form-control"
                     style={{ marginLeft: "5px" }}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>): AppThunk =>
-                        dispatch(setReplacement(e.target.value))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setReplacement(e.target.value)}
                 />
             </div>
             <button
@@ -100,7 +99,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-next"
                 onClick={(): void => {
-                    dispatch(searchNextCues());
+                    dispatch(searchNextCues(false));
                 }}
             >
                 <i className="fa fa-arrow-down" />
@@ -121,7 +120,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 type="button"
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
-                    dispatch(replaceCurrentMatch());
+                    dispatch(replaceCurrentMatch(replacement));
                 }}
             >
                 Replace

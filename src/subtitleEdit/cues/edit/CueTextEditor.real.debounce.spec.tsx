@@ -16,7 +16,7 @@ import CueTextEditor from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { fireEvent, render } from "@testing-library/react";
-import { replaceCurrentMatch, setReplacement } from "../searchReplace/searchReplaceSlices";
+import { replaceCurrentMatch } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
@@ -128,7 +128,6 @@ describe("CueTextEditor", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
-        testingStore.dispatch(setReplacement("abcd efg") as {} as AnyAction);
         const searchReplaceMatches = {
             offsets: [10],
             offsetIndex: 0,
@@ -149,7 +148,7 @@ describe("CueTextEditor", () => {
             </Provider>
         );
         act(() => {
-            testingStore.dispatch(replaceCurrentMatch() as {} as AnyAction);
+            testingStore.dispatch(replaceCurrentMatch("abcd efg") as {} as AnyAction);
         });
 
         // WHEN
