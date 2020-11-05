@@ -439,6 +439,50 @@ describe("cueSlices", () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(2);
             });
+
+            it("triggers call to spellchecker even with trackId undefined", async (done) => {
+                const cues = [
+                    {
+                        vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
+                        corrupted: true
+                    }] as CueDto[];
+                testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+                const testingResponse = {
+                    matches: [
+                        {
+                            message: "there are spelling errors",
+                            replacements: [{ "value": "false" }],
+                            offset: 0,
+                            length: 6,
+                            context: { text: "falsex is not a word", length: 6, offset: 0 },
+                            rule: { id: ruleId }
+                        }
+                    ]
+                };
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: undefined } as Track
+                ) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
+
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() =>
+                        new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
+
+                //WHEN
+                await testingStore.dispatch(await updateVttCue(0, new VTTCue(2, 2.5, "Dummyx Cue"),
+                        editUuid) as {} as AnyAction);
+
+                //THEN
+                setTimeout(
+                    () => {
+                        // @ts-ignore modern browsers does have it
+                        expect(global.fetch).toBeCalledTimes(1);
+                        expect(testingStore.getState().cues[0].spellCheck).toEqual(testingResponse);
+                        done();
+                    }, 50);
+            });
         });
 
         describe("range prevention", () => {

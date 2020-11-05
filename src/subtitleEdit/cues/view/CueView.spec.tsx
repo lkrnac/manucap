@@ -2,14 +2,80 @@ import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React from "react";
 import { Provider } from "react-redux";
-import { render, fireEvent } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 
-import { CueDto } from "../../model";
+import { CueDto, Language, Track } from "../../model";
 import CueView from "./CueView";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import testingStore from "../../../testUtils/testingStore";
+import { createTestingStore } from "../../../testUtils/testingStore";
+import { updateEditingTrack } from "../../trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
+
+let testingStore = createTestingStore();
 
 describe("CueView", () => {
+    beforeEach(()=> {
+       testingStore = createTestingStore();
+    });
+    it("renders with class name parameter", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+        const expectedNode = render(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex" }} className="testingClassName">
+                    <div
+                        className="sbte-cue-line-left-section"
+                        style={{
+                            flex: "1 1 300px",
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ display: "flex", flexDirection:"column" }}>
+                            <div>00:00:01.000</div>
+                            <div>00:00:02.000</div>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
+                            <div className="sbte-small-font">Dialogue</div>
+                            <div className="sbte-small-font" style={{ paddingRight: "10px" }}>↓↓</div>
+                        </div>
+                    </div>
+                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                        <div
+                            className="sbte-cue-editor"
+                            style={{
+                                flexBasis: "50%",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                paddingBottom: "5px",
+                                minHeight: "54px",
+                                height: "100%",
+                                width: "100%"
+                            }}
+                        >
+                            Caption Line 1
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={1} cue={cue} playerTime={1} className="testingClassName" showGlossaryTerms />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+    });
+
     it("renders", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
@@ -69,63 +135,47 @@ describe("CueView", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
     });
 
-    it("renders with class name parameter", () => {
+    it("renders text in rtl direction", () => {
         // GIVEN
-        const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
-
-        const expectedNode = render(
-            <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="testingClassName">
-                    <div
-                        className="sbte-cue-line-left-section"
-                        style={{
-                            flex: "1 1 300px",
-                            display: "flex",
-                            flexDirection: "column",
-                            paddingLeft: "10px",
-                            paddingTop: "5px",
-                            justifyContent: "space-between"
-                        }}
-                    >
-                        <div style={{ display: "flex", flexDirection:"column" }}>
-                            <div>00:00:01.000</div>
-                            <div>00:00:02.000</div>
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
-                            <div className="sbte-small-font">Dialogue</div>
-                            <div className="sbte-small-font" style={{ paddingRight: "10px" }}>↓↓</div>
-                        </div>
-                    </div>
-                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
-                        <div
-                            className="sbte-cue-editor"
-                            style={{
-                                flexBasis: "50%",
-                                paddingLeft: "10px",
-                                paddingTop: "5px",
-                                paddingBottom: "5px",
-                                minHeight: "54px",
-                                height: "100%",
-                                width: "100%"
-                            }}
-                        >
-                            Caption Line 1
-                        </div>
-                    </div>
-                </div>
-            </Provider>
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "ar-SA", name: "Arabic", direction: "rtl" } as Language,
+            default: true,
+            mediaTitle: "Sample Polish",
+            mediaLength: 4000,
+            progress: 50
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        // GIVEN
+        const cue = { vttCue: new VTTCue(1, 2, "text\nwrapped"), cueCategory: "DIALOGUE" } as CueDto;
+        const expectedText = render(
+            <div
+                className="sbte-cue-editor"
+                style={{
+                    flexBasis: "50%",
+                    paddingLeft: "10px",
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    minHeight: "54px",
+                    height: "100%",
+                    width: "100%",
+                    direction: "rtl"
+                }}
+            >
+                text<br />wrapped
+            </div>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} className="testingClassName" showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
             </Provider>
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+            .toEqual(expectedText.container.innerHTML);
     });
 
     it("converts VTT text to HTML", () => {
