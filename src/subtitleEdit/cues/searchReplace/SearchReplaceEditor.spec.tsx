@@ -267,21 +267,22 @@ describe("SearchReplaceEditor", () => {
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
-        testingStore.dispatch(setReplacement("New Line 5") as {} as AnyAction);
-        const { getByText } = render(
+        const { getByText, getByPlaceholderText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
         const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
 
         // WHEN
+        fireEvent.change(replaceInput, { target: { value: "New Line 5" }});
         fireEvent.click(replaceAllButton);
 
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 5");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -314,21 +315,22 @@ describe("SearchReplaceEditor", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
-        testingStore.dispatch(setReplacement("New Line 2") as {} as AnyAction);
-        const { getByText } = render(
+        const { getByText, getByPlaceholderText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
         const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
 
         // WHEN
+        fireEvent.change(replaceInput, { target: { value: "New Line 2" }});
         fireEvent.click(replaceAllButton);
 
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 2");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>New Line 2</b> and <i>New Line 2</i>");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>New Line 2</b> and New Line 2");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -361,21 +363,22 @@ describe("SearchReplaceEditor", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
-        testingStore.dispatch(setReplacement("test") as {} as AnyAction);
-        const { getByText } = render(
+        const { getByText, getByPlaceholderText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
         const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
 
         // WHEN
+        fireEvent.change(replaceInput, { target: { value: "test" }});
         fireEvent.click(replaceAllButton);
 
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("test");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>test</b> and <i>test</i>");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>test</b> and test");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -408,15 +411,16 @@ describe("SearchReplaceEditor", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
-        testingStore.dispatch(setReplacement("") as {} as AnyAction);
-        const { getByText } = render(
+        const { getByText, getByPlaceholderText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
         const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
 
         // WHEN
+        fireEvent.change(replaceInput, { target: { value: "" }});
         fireEvent.click(replaceAllButton);
 
         // THEN
@@ -439,14 +443,16 @@ describe("SearchReplaceEditor", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(setFind("") as {} as AnyAction);
         testingStore.dispatch(setReplacement("New Line 5") as {} as AnyAction);
-        const { getByText } = render(
+        const { getByText, getByPlaceholderText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceEditor />
             </Provider>
         );
         const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
 
         // WHEN
+        fireEvent.change(replaceInput, { target: { value: "New Line 5" }});
         fireEvent.click(replaceAllButton);
 
         // THEN

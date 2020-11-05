@@ -43,10 +43,11 @@ const replaceAllInVttCue = (
     return newVTTCue;
 };
 
-export const searchReplaceAll = (
+const searchReplaceAll = (
     dispatch: Dispatch<AppThunk>,
     cues: Array<CueDto>,
-    searchReplace: SearchReplace
+    searchReplace: SearchReplace,
+    replacement: string
 ): void => {
     const find = searchReplace.find;
     if (find === "") {
@@ -55,7 +56,6 @@ export const searchReplaceAll = (
     dispatch(updateEditingCueIndex(-1));
     dispatch(reset());
     const newCues = cues.slice(0);
-    const replacement = searchReplace.replacement;
     for (const cue of newCues) {
         const cueIndex: number = newCues.indexOf(cue);
         const vttText = cue.vttCue.text.trim();
@@ -129,7 +129,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
-                onClick={(): void => searchReplaceAll(dispatch, cues, searchReplace)}
+                onClick={(): void => searchReplaceAll(dispatch, cues, searchReplace, replacement)}
             >
                 Replace All
             </button>
