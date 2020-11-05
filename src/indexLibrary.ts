@@ -19,7 +19,7 @@ export {
     VideoPlayer,
     Reducers,
     SubtitleEdit,
-    Actions,
+    Actions
 };
 
 export type {
