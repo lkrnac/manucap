@@ -54,7 +54,8 @@ const TestApp = (): ReactElement => {
         const cues = [] as CueDto[];
         for(let idx = 0; idx < 9999; idx++) {
             cues.push({
-                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Editing <b>Line</b></i> ${idx + 1}\nWrapped text`),
+                vttCue: new VTTCue(idx * 3, (idx + 1) * 3,
+                    `<i>Editing <b>Line</b></i> ${idx + 1}\ntext and this there for this orcx haxa`),
                 cueCategory: "DIALOGUE"
             });
         }
