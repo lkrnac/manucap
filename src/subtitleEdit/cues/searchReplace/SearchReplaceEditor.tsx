@@ -6,7 +6,7 @@ import {
     searchNextCues,
     searchPreviousCues,
     setFind,
-    setMatchCase,
+    setMatchCase, setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
@@ -16,7 +16,6 @@ import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../../common/ToggleButton";
 import { SearchReplace } from "./model";
 import { reset } from "../edit/editorStatesSlice";
-import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 
 const replaceAllInVttCue = (
     vttCue: VTTCue,
@@ -53,7 +52,7 @@ const searchReplaceAll = (
     if (find === "") {
         return;
     }
-    dispatch(updateEditingCueIndex(-1));
+    dispatch(setReplacement(replacement));
     dispatch(reset());
     const newCues = cues.slice(0);
     for (const cue of newCues) {
