@@ -1,5 +1,5 @@
 import React, { Dispatch, ReactElement } from "react";
-import { CueDto } from "../../model";
+import { CueDto, GlossaryMatchDto } from "../../model";
 import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../timeUtils";
@@ -17,31 +17,47 @@ interface Props {
     hideText?: boolean;
 }
 
-const injectGlossaryTerms = (plainWords: string[], props: Props, sanitizedHtml: string): string => {
-    plainWords.forEach((value) => {
-        const glossaryMatches = props.cue.glossaryMatches;
-        if (glossaryMatches && glossaryMatches[value]) {
-            const compositeValue = glossaryMatches[value].reduce((left, right) => `${left}/${right}`);
-            sanitizedHtml = sanitizedHtml.replace(
-                value,
-                `<span onClick="pickSetGlossaryTerm('${compositeValue}')" ` +
-                `style="background-color: #D9E9FF;">${value}</span>`
-            );
+const replaceForInsensitiveMatches = (
+    caseInsensitiveMatches: RegExpMatchArray | null,
+    plainText: string,
+    match: GlossaryMatchDto,
+    sanitizedHtml: string
+): string => {
+    caseInsensitiveMatches?.forEach(
+        (caseInsensitiveMatch: string) => {
+            if (plainText.includes(caseInsensitiveMatch)) {
+                const compositeValue =
+                    match.replacements.reduce((left, right) => `${left}/${right}`);
+                sanitizedHtml = sanitizedHtml.replace(
+                    caseInsensitiveMatch,
+                    `<span onClick="pickSetGlossaryTerm('${compositeValue}')" ` +
+                    `style="background-color: #D9E9FF;">${caseInsensitiveMatch}</span>`
+                );
+            }
         }
-    });
+    );
+    return sanitizedHtml;
+};
+
+const injectGlossaryTerms = (plainText: string, props: Props, sanitizedHtml: string): string => {
+    props.cue.glossaryMatches?.forEach(
+        (match) => {
+            const caseInsensitiveMatches = plainText.match(new RegExp(match.source,"gi"));
+            sanitizedHtml = replaceForInsensitiveMatches(caseInsensitiveMatches, plainText, match, sanitizedHtml);
+        }
+    );
     return sanitizedHtml;
 };
 
 const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
     const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
-    const plainWords = plainText.replace("\n", " ").split(" ");
     let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
 
     if (props.showGlossaryTerms) {
         // @ts-ignore We need to define function as global, because it will be used
         // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
         global.pickSetGlossaryTerm = (term: string): void => dispatch(setGlossaryTerm(term));
-        sanitizedHtml = injectGlossaryTerms(plainWords, props, sanitizedHtml);
+        sanitizedHtml = injectGlossaryTerms(plainText, props, sanitizedHtml);
     }
     return sanitizedHtml;
 };

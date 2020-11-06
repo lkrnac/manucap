@@ -119,7 +119,7 @@ describe("CaptionOverlapToggle", () => {
         );
 
         // WHEN
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        callSaveTrack(testingStore.dispatch, testingStore.getState);
         actualNode.update();
 
         // THEN
@@ -137,7 +137,7 @@ describe("CaptionOverlapToggle", () => {
         );
 
         // WHEN
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        callSaveTrack(testingStore.dispatch, testingStore.getState);
         testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
         actualNode.update();
 
@@ -156,7 +156,7 @@ describe("CaptionOverlapToggle", () => {
         );
 
         // WHEN
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        callSaveTrack(testingStore.dispatch, testingStore.getState);
         testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
         actualNode.update();
 

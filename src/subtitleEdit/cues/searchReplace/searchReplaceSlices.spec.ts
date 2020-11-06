@@ -98,7 +98,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(setFind("line 2") as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("line 2");
@@ -114,7 +114,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(setFind("line 2") as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("line 2");
@@ -129,7 +129,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
@@ -162,7 +162,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
@@ -198,7 +198,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
@@ -230,7 +230,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
@@ -262,7 +262,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
@@ -302,14 +302,14 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8]);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
+            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(1);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8, 16]);
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
@@ -331,7 +331,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(setFind("foo") as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
@@ -345,7 +345,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(setFind("") as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("");
@@ -358,7 +358,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(setFind("test") as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("test");
@@ -592,7 +592,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
             expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8]);
@@ -654,12 +654,12 @@ describe("searchReplaceSlices", () => {
     });
 
     describe("replaceCurrentMatch", () => {
-        it("sets replace match signal", () => {
+        it("sets replacement", () => {
             // WHEN
-            testingStore.dispatch(replaceCurrentMatch() as {} as AnyAction);
+            testingStore.dispatch(replaceCurrentMatch("replacementValue") as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().searchReplace.replaceMatchCounter).toEqual(1);
+            expect(testingStore.getState().searchReplace.replacement).toEqual("replacementValue");
         });
     });
 });

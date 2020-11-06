@@ -9,7 +9,8 @@ import {
     EditorState,
     getDefaultKeyBinding,
     Modifier,
-    RichUtils
+    RichUtils,
+    SelectionState
 } from "draft-js";
 import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
@@ -25,11 +26,11 @@ import { updateEditorState } from "./editorStatesSlice";
 import { updateVttCue } from "../cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
-import { callSaveTrack } from "../saveSlices";
+
 import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { searchNextCues } from "../searchReplace/searchReplaceSlices";
+import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "../CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
@@ -133,27 +134,6 @@ const createCorrectSpellingHandler = (
 ) => (replacement: string, start: number, end: number): void => {
     const newEditorState = replaceContent(editorState, replacement, start, end);
     dispatch(updateEditorState(props.index, newEditorState));
-    dispatch(callSaveTrack());
-};
-
-const isLastSearchMatch = (searchReplaceMatches: SearchReplaceMatches): boolean =>
-    searchReplaceMatches && searchReplaceMatches.offsetIndex === searchReplaceMatches.offsets.length - 1;
-
-const createReplaceMatchHandler = (
-    editorState: EditorState,
-    dispatch: Dispatch<AppThunk>,
-    props: CueTextEditorProps,
-    unmountContentRef:  React.MutableRefObject<ContentState | null>
-) => (replacement: string, start: number, end: number): void => {
-    const newEditorState = replaceContent(editorState, replacement, start, end);
-    dispatch(updateEditorState(props.index, newEditorState));
-    dispatch(callSaveTrack());
-    if (props.searchReplaceMatches && isLastSearchMatch(props.searchReplaceMatches)) {
-        // Need to ensure ref is set for unmount because searchNextCues will close editor
-        // since this is the last search match
-        unmountContentRef.current = newEditorState.getCurrentContent();
-        dispatch(searchNextCues());
-    }
 };
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
@@ -198,10 +178,37 @@ const insertGlossaryTermIfNeeded = (editorState: EditorState, glossaryTerm: stri
     return editorState;
 };
 
+const replaceIfNeeded = (
+    editorState: EditorState,
+    searchReplaceMatches: SearchReplaceMatches | undefined,
+    replacement: string
+): EditorState => {
+    if (replacement
+        && replacement !== ""
+        && searchReplaceMatches
+        && searchReplaceMatches.offsets.length > 0
+    ) {
+        const content = editorState.getCurrentContent();
+        const offset = searchReplaceMatches.offsets[searchReplaceMatches.offsetIndex];
+        const selectionState = editorState.getSelection();
+        const endOffset = offset + searchReplaceMatches.matchLength;
+        const searchSelection =
+            selectionState.set("anchorOffset", offset).set("focusOffset", endOffset) as SelectionState;
+        editorState = EditorState.forceSelection(editorState, searchSelection);
+
+        const inlineStyle = editorState.getCurrentInlineStyle();
+        const contentWithReplacement = Modifier.replaceText(content, searchSelection, replacement, inlineStyle);
+        editorState = EditorState.push(editorState, contentWithReplacement, "change-block-data");
+    }
+    return editorState;
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
+    const replacement = useSelector((state: SubtitleEditState) => state.searchReplace.replacement);
+
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);
     const dispatch = useDispatch();
@@ -224,9 +231,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         {
             strategy: findSearchReplaceMatch(props),
             component: SearchReplaceMatch,
-            props: {
-                replaceMatch: createReplaceMatchHandler(editorState, dispatch, props, unmountContentRef)
-            }
         },
         {
             strategy: findExtraCharacters(subtitleSpecifications),
@@ -252,6 +256,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     ]);
     editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
     editorState = insertGlossaryTermIfNeeded(editorState, glossaryTerm);
+    editorState = replaceIfNeeded(editorState, props.searchReplaceMatches, replacement);
 
     const currentContent = editorState.getCurrentContent();
     const currentInlineStyle = editorState.getCurrentInlineStyle();
@@ -261,6 +266,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => {
             dispatch(setGlossaryTerm(null));
+            if (replacement !== "") {
+                dispatch(setReplacement(""));
+                dispatch(searchNextCues(true));
+            }
             dispatch(updateEditorState(props.index, editorState));
         },
         // It is enough to detect changes on pieces of editor state that indicate content change.
@@ -274,8 +283,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => {
             // Only need to update vttCue if ContentState is changing
-            const shouldUpdateVttCue = unmountContentRef.current === null
-                || unmountContentRef.current !== currentContent;
+            const shouldUpdateVttCue = unmountContentRef.current !== null
+                && unmountContentRef.current !== currentContent;
             unmountContentRef.current = currentContent;
             if (shouldUpdateVttCue) {
                 changeVttCueInReduxDebounced(currentContent, props, dispatch);
@@ -293,7 +302,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     useEffect(
         () => (): void => {
             changeVttCueInReduxDebounced.cancel();
-            if (unmountContentRef.current !== null) {
+            if (unmountContentRef.current !== null && unmountContentRef.current !== currentContent) {
                 changeVttCueInRedux(unmountContentRef.current, props, dispatch);
             }
         },
@@ -329,12 +338,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 <div style={{ flex: 1 }}>
                     <Editor
                         editorState={editorState}
-                        onChange={(newEditorState: EditorState): void => {
-                            dispatch(updateEditorState(props.index, newEditorState));
-                            if (editorState.getCurrentContent() !== newEditorState.getCurrentContent()) {
-                                dispatch(callSaveTrack());
-                            }
-                        }}
+                        onChange={(newEditorState: EditorState): AppThunk =>
+                            dispatch(updateEditorState(props.index, newEditorState))}
                         ref={editorRef}
                         spellCheck={false}
                         keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}

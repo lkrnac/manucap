@@ -35,7 +35,7 @@ describe("saveSlices", () => {
             testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
 
             // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -52,7 +52,7 @@ describe("saveSlices", () => {
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // WHEN
             testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);

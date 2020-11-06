@@ -10,6 +10,11 @@ export interface Language {
 
 export type CueCategory = "DIALOGUE" | "ONSCREEN_TEXT" | "AUDIO_DESCRIPTION" | "LYRICS";
 
+export interface GlossaryMatchDto {
+    source: string;
+    replacements: string[];
+}
+
 export interface CueDto {
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
@@ -17,7 +22,7 @@ export interface CueDto {
     editUuid?: string;
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
-    glossaryMatches?: Record<string, string[]>;
+    glossaryMatches?: GlossaryMatchDto[];
 }
 
 export interface CueWithSource {

@@ -4,7 +4,6 @@ import Modal from "react-bootstrap/Modal";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { applyShiftTime } from "../../cues/cuesListActions";
 import { Field, Form } from "react-final-form";
-import { callSaveTrack } from "../../cues/saveSlices";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
@@ -24,7 +23,6 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     const handleApplyShift = (shift: string): void => {
         const shiftValue = parseFloat(shift);
         dispatch(applyShiftTime(shiftValue));
-        dispatch(callSaveTrack());
         props.onClose();
     };
 

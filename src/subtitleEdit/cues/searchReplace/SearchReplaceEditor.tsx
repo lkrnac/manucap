@@ -1,24 +1,21 @@
-import React, { Dispatch, ReactElement } from "react";
+import React, { Dispatch, ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     replaceCurrentMatch,
     searchNextCues,
     searchPreviousCues,
     setFind,
-    setMatchCase,
-    setReplacement,
+    setMatchCase, setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { updateVttCue } from "../cuesListActions";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
-import { callSaveTrack } from "../saveSlices";
 import ToggleButton from "../../../common/ToggleButton";
 import { SearchReplace } from "./model";
 import { reset } from "../edit/editorStatesSlice";
-import { updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { searchCueText } from "./searchUtils";
+import { searchCueText } from "../edit/cueEditorSlices";
 
 const replaceAllInVttCue = (
     vttCue: VTTCue,
@@ -45,26 +42,26 @@ const replaceAllInVttCue = (
     return newVTTCue;
 };
 
-export const searchReplaceAll = async (
+const searchReplaceAll = (
     dispatch: Dispatch<AppThunk>,
     cues: Array<CueDto>,
-    searchReplace: SearchReplace
-): Promise<void> => {
+    searchReplace: SearchReplace,
+    replacement: string
+): void => {
     const find = searchReplace.find;
     if (find === "") {
         return;
     }
-    await dispatch(updateEditingCueIndex(-1));
-    await dispatch(reset());
+    dispatch(setReplacement(replacement));
+    dispatch(reset());
     const newCues = cues.slice(0);
-    const replacement = searchReplace.replacement;
     for (const cue of newCues) {
         const cueIndex: number = newCues.indexOf(cue);
         const vttText = cue.vttCue.text.trim();
         const matches = searchCueText(vttText, find, searchReplace.matchCase);
         if (matches.length > 0) {
             const  newVTTCue = replaceAllInVttCue(cue.vttCue, find, replacement, searchReplace.matchCase, matches);
-            await dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
+            dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
         }
     }
 };
@@ -74,6 +71,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
     const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
     const searchReplaceVisible = useSelector((state: SubtitleEditState) => state.searchReplaceVisible);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const [replacement, setReplacement] = useState("");
 
     return searchReplaceVisible ? (
         <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
@@ -87,12 +85,11 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 />
                 <input
                     type="text"
-                    value={searchReplace?.replacement}
+                    value={replacement}
                     placeholder="Replace"
                     className="form-control"
                     style={{ marginLeft: "5px" }}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>): AppThunk =>
-                        dispatch(setReplacement(e.target.value))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setReplacement(e.target.value)}
                 />
             </div>
             <button
@@ -101,7 +98,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-next"
                 onClick={(): void => {
-                    dispatch(searchNextCues());
+                    dispatch(searchNextCues(false));
                 }}
             >
                 <i className="fa fa-arrow-down" />
@@ -122,7 +119,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 type="button"
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
-                    dispatch(replaceCurrentMatch());
+                    dispatch(replaceCurrentMatch(replacement));
                 }}
             >
                 Replace
@@ -131,9 +128,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
-                onClick={(): Promise<AppThunk> =>
-                    searchReplaceAll(dispatch, cues, searchReplace)
-                        .then(() => dispatch(callSaveTrack()))}
+                onClick={(): void => searchReplaceAll(dispatch, cues, searchReplace, replacement)}
             >
                 Replace All
             </button>

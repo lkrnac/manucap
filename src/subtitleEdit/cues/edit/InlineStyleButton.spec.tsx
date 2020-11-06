@@ -8,9 +8,6 @@ import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";
 import { TooltipWrapper } from "../../TooltipWrapper";
-import { setSaveTrack } from "../saveSlices";
-import { updateEditingTrack } from "../../trackSlices";
-import { Track } from "../../model";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -124,31 +121,6 @@ describe("InlineStyleButton", () => {
 
         // THEN
         expect(event.preventDefault).toBeCalled();
-    });
-
-    it("calls saveTrack in redux store on button toggle ", () => {
-        // GIVEN
-        const processedHTML = convertFromHTML("<u>lala</u>");
-        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
-        const editorState = EditorState.createWithContent(contentState);
-
-        testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
-
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
-
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.find(InlineStyleButton).simulate("click");
-
-        // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
     it("renders overlay with text provided to InlineStyleButton", () => {

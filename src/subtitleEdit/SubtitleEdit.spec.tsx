@@ -992,7 +992,7 @@ describe("SubtitleEdit", () => {
         );
 
         // WHEN
-        testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+        callSaveTrack(testingStore.dispatch, testingStore.getState);
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);

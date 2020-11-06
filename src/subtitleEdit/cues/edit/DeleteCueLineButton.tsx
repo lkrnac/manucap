@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { deleteCue } from "../cuesListActions";
 import { useDispatch } from "react-redux";
 import { TooltipWrapper } from "../../TooltipWrapper";
-import { callSaveTrack } from "../saveSlices";
+import { AppThunk } from "../../subtitleEditReducers";
 
 interface Props {
     cueIndex: number;
@@ -21,10 +21,7 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
                 <button
                     style={{ maxHeight: "38px", margin: "5px" }}
                     className="btn btn-outline-secondary sbte-delete-cue-button"
-                    onClick={(): void => {
-                        dispatch(deleteCue(props.cueIndex));
-                        dispatch(callSaveTrack());
-                    }}
+                    onClick={(): AppThunk => dispatch(deleteCue(props.cueIndex))}
                 >
                     <i className="fa fa-trash" />
                 </button>

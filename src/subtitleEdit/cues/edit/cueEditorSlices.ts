@@ -1,11 +1,13 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueChange, ScrollPosition, SubtitleEditAction } from "../../model";
+import { CueChange, CueDto, ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { scrollPositionSlice } from "../cuesListScrollSlice";
 import { cuesSlice } from "../cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
+import sanitizeHtml from "sanitize-html";
+import { SearchDirection } from "../searchReplace/model";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -25,12 +27,70 @@ export const editingCueIndexSlice = createSlice({
     }
 });
 
+export const searchCueText = (text: string, find: string, matchCase: boolean): Array<number> => {
+    if (find === "") {
+        return [];
+    }
+    const plainText = sanitizeHtml(text, { allowedTags: []});
+    if (plainText === "") {
+        return [];
+    }
+    const regExpFlag = matchCase ? "g" : "gi";
+    const re = new RegExp(find, regExpFlag);
+    const results = [];
+    while (re.exec(plainText)){
+        results.push(re.lastIndex - find.length);
+    }
+    return results;
+};
+
+const finNextOffsetIndexForSearch = (
+    cue: CueDto,
+    offsets: Array<number>,
+    direction: SearchDirection
+): number => {
+    const lastIndex = offsets.length - 1;
+    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex >= 0) {
+        return cue.searchReplaceMatches.offsetIndex < lastIndex ?
+            cue.searchReplaceMatches.offsetIndex : lastIndex;
+    }
+    return direction === "NEXT" ? 0 : lastIndex;
+};
+
+export const updateSearchMatches = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
+    getState: Function,
+    idx: number
+): void => {
+    const searchReplace = getState().searchReplace;
+    const cue = getState().cues[idx];
+    if (cue) {
+        const offsets = searchCueText(cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
+        const offsetIndex = finNextOffsetIndexForSearch(cue, offsets, searchReplace.direction);
+        dispatch(cuesSlice.actions.addSearchMatches(
+            {
+                idx,
+                searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }
+            }
+        ));
+    }
+};
+
+export const updateEditingCueIndexNoThunk = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
+    getState: Function,
+    idx: number
+): void => {
+    dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
+    if (idx >= 0) {
+        dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
+        updateSearchMatches(dispatch, getState, idx);
+    }
+};
+
 export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
-        dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
-        if (idx >= 0) {
-            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
-        }
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+        updateEditingCueIndexNoThunk(dispatch, getState, idx);
     };
 
 export const validationErrorSlice = createSlice({

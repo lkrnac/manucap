@@ -42,9 +42,9 @@ describe("saveSlices", () => {
 
         it("saves track after timeout when various cues changes were made", (done) => {
             // WHEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // THEN
             expect(testingStore.getState().saveState).toEqual(SaveState.TRIGGERED);
@@ -64,7 +64,7 @@ describe("saveSlices", () => {
             const expectedTestingCues = [
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "AUDIO_DESCRIPTION", corrupted: false }
             ] as CueDto[];
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
             expectedTestingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
 
             // WHEN
@@ -95,7 +95,7 @@ describe("saveSlices", () => {
 
         it("sends request to server after timeout", (done) => {
             // GIVEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // WHEN
             setTimeout(
@@ -110,12 +110,12 @@ describe("saveSlices", () => {
 
         it("doesn't send request to server when previous request is still ongoing", (done) => {
             // GIVEN
-            testingStore.dispatch(callSaveTrack() as {} as AnyAction);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
             setTimeout(() => saveTrack.mockReset(), 60);
 
             // WHEN
             setTimeout(
-                () => testingStore.dispatch(callSaveTrack() as {} as AnyAction),
+                () => callSaveTrack(testingStore.dispatch, testingStore.getState),
                 70
             );
 
