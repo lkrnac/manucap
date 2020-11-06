@@ -1,5 +1,4 @@
 import * as indexLibrary from "./indexLibrary";
-import type { CueDto , CueCategory, GlossaryMatchDto } from "./indexLibrary";
 
 describe("indexLibrary", () => {
     it("exports all the necessary actions/reducers", () => {
@@ -20,14 +19,5 @@ describe("indexLibrary", () => {
         // THEN
         expect(indexLibrary.SubtitleEdit).toBeDefined();
         expect(indexLibrary.VideoPlayer).toBeDefined();
-    });
-
-    it("exports all the necessary types", () => {
-        // WHEN type imports of indexLibrary
-
-        // THEN
-        expect({} as CueDto).toBeDefined();
-        expect({} as CueCategory).toBeDefined();
-        expect({} as GlossaryMatchDto).toBeDefined();
     });
 });

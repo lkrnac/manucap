@@ -5,7 +5,6 @@ import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import VideoPlayer from "./subtitleEdit/player/VideoPlayer";
 import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
-import { CueDto, GlossaryMatchDto, CueCategory } from "./subtitleEdit/model";
 
 const Actions = ({
     updateEditingTrack,
@@ -20,11 +19,5 @@ export {
     Reducers,
     SubtitleEdit,
     Actions
-};
-
-export type {
-    CueDto,
-    CueCategory,
-    GlossaryMatchDto
 };
 
