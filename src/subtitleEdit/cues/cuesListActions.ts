@@ -21,10 +21,9 @@ import {
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
-import { lastCueChangeSlice, validationErrorSlice } from "./edit/cueEditorSlices";
+import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "./edit/cueEditorSlices";
 import { cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
-import { updateSearchMatches } from "./searchReplace/searchReplaceSlices";
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];

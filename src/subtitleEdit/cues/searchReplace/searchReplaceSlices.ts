@@ -1,63 +1,13 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
-import sanitizeHtml from "sanitize-html";
 
-import { CueDto, SubtitleEditAction } from "../../model";
+import { SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { cuesSlice } from "../cuesListSlices";
 import { SearchDirection, SearchReplace } from "./model";
-import { updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
-
-export const searchCueText = (text: string, find: string, matchCase: boolean): Array<number> => {
-    if (find === "") {
-        return [];
-    }
-    const plainText = sanitizeHtml(text, { allowedTags: []});
-    if (plainText === "") {
-        return [];
-    }
-    const regExpFlag = matchCase ? "g" : "gi";
-    const re = new RegExp(find, regExpFlag);
-    const results = [];
-    while (re.exec(plainText)){
-        results.push(re.lastIndex - find.length);
-    }
-    return results;
-};
-
-const finNextOffsetIndexForSearch = (
-    cue: CueDto,
-    offsets: Array<number>,
-    direction: SearchDirection
-): number => {
-    const lastIndex = offsets.length - 1;
-    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex >= 0) {
-        return cue.searchReplaceMatches.offsetIndex < lastIndex ?
-            cue.searchReplaceMatches.offsetIndex : lastIndex;
-    }
-    return direction === "NEXT" ? 0 : lastIndex;
-};
-
-export const updateSearchMatches = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
-    getState: Function,
-    idx: number
-): void => {
-    const searchReplace = getState().searchReplace;
-    const cue = getState().cues[idx];
-    if (cue) {
-        const offsets = searchCueText(cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
-        const offsetIndex = finNextOffsetIndexForSearch(cue, offsets, searchReplace.direction);
-        dispatch(cuesSlice.actions.addSearchMatches(
-            {
-                idx,
-                searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }
-            }
-        ));
-    }
-};
+import { searchCueText, updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
 
 const updateCueMatchesIfNeeded = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,

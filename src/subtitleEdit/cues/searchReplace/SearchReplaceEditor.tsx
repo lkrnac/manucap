@@ -2,7 +2,6 @@ import React, { Dispatch, ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     replaceCurrentMatch,
-    searchCueText,
     searchNextCues,
     searchPreviousCues,
     setFind,
@@ -16,6 +15,7 @@ import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../../common/ToggleButton";
 import { SearchReplace } from "./model";
 import { reset } from "../edit/editorStatesSlice";
+import { searchCueText } from "../edit/cueEditorSlices";
 
 const replaceAllInVttCue = (
     vttCue: VTTCue,
