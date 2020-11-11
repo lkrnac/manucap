@@ -14,7 +14,7 @@ describe("ExportSourceTrackCuesButton", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = shallow(
-           <button type="button" className="sbte-export-button btn btn-secondary">
+           <button type="button" className="sbte-export-source-button btn btn-secondary">
                <i className="fas fa-file-export" /> Export Source File
            </button>
        );
@@ -22,7 +22,7 @@ describe("ExportSourceTrackCuesButton", () => {
        // WHEN
        const actualNode = mount(
            <Provider store={testingStore}>
-               <ExportSourceTrackCuesButton visible handleExport={jest.fn()} />
+               <ExportSourceTrackCuesButton handleExport={jest.fn()} />
            </Provider>
        );
 
@@ -35,12 +35,12 @@ describe("ExportSourceTrackCuesButton", () => {
         const mockHandleExport = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <ExportSourceTrackCuesButton visible handleExport={mockHandleExport} />
+                <ExportSourceTrackCuesButton handleExport={mockHandleExport} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-export-button").simulate("click");
+        actualNode.find(".sbte-export-source-button").simulate("click");
 
         // THEN
         expect(mockHandleExport).toHaveBeenCalled();
