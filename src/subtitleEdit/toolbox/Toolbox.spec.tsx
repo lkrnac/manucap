@@ -20,6 +20,7 @@ import { Language, Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import SyncCuesButton from "./SyncCuesButton";
 import SearchReplaceButton from "./SearchReplaceButton";
+import ExportSourceTrackCuesButton from "./ExportSourceTrackCuesButton";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -52,7 +53,7 @@ describe("Toolbox", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <Toolbox handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
+                <Toolbox handleExportSourceFile={jest.fn()} handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
             </Provider>
         );
         testingStore.dispatch(
@@ -89,6 +90,7 @@ describe("Toolbox", () => {
                                     <SubtitleSpecificationsButton />
                                     <ShiftTimeButton />
                                     <CaptionOverlapToggle />
+                                    <ExportSourceTrackCuesButton handleExport={jest.fn()} />
                                     <ExportTrackCuesButton handleExport={jest.fn()} />
                                     <ImportTrackCuesButton handleImport={jest.fn()} />
                                     <SearchReplaceButton />
@@ -104,7 +106,7 @@ describe("Toolbox", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <Toolbox handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
+                <Toolbox handleExportSourceFile={jest.fn()} handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
             </Provider>
         );
 
@@ -117,7 +119,11 @@ describe("Toolbox", () => {
         const mockExportFile = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <Toolbox handleExportFile={mockExportFile} handleImportFile={jest.fn()} />
+                <Toolbox
+                    handleExportSourceFile={jest.fn()}
+                    handleExportFile={mockExportFile}
+                    handleImportFile={jest.fn()}
+                />
             </Provider>
         );
 
@@ -133,7 +139,11 @@ describe("Toolbox", () => {
         const mockImportFile = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <Toolbox handleExportFile={jest.fn()} handleImportFile={mockImportFile} />
+                <Toolbox
+                    handleExportSourceFile={jest.fn()}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={mockImportFile}
+                />
             </Provider>
         );
 
@@ -142,5 +152,25 @@ describe("Toolbox", () => {
 
         // THEN
         expect(mockImportFile).toHaveBeenCalled();
+    });
+
+    it("passes exportSourceFile function to source export file button", () => {
+        // GIVEN
+        const mockExportSourceFile = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={mockExportSourceFile}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        actualNode.find(".sbte-export-source-button").simulate("click");
+
+        // THEN
+        expect(mockExportSourceFile).toHaveBeenCalled();
     });
 });

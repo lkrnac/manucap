@@ -30,6 +30,7 @@ export interface SubtitleEditProps {
     onSave: () => void;
     onComplete: () => void;
     onExportFile: () => void;
+    onExportSourceFile: () => void;
     onImportFile: () => void;
     spellCheckerDomain?: string;
 }
@@ -97,7 +98,11 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     onTimeChange={handleTimeChange}
                                 />
                             </div>
-                            <Toolbox handleExportFile={props.onExportFile} handleImportFile={props.onImportFile} />
+                            <Toolbox
+                                handleExportSourceFile={props.onExportSourceFile}
+                                handleExportFile={props.onExportFile}
+                                handleImportFile={props.onImportFile}
+                            />
                         </div>
                         <div
                             style={{

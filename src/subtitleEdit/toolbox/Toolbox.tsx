@@ -12,9 +12,11 @@ import SyncCuesButton from "./SyncCuesButton";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
+import ExportSourceTrackCuesButton from "./ExportSourceTrackCuesButton";
 
 interface Props {
     handleExportFile: () => void;
+    handleExportSourceFile: () => void;
     handleImportFile: () => void;
 }
 
@@ -35,6 +37,8 @@ const Toolbox = (props: Props): ReactElement => {
                             <SubtitleSpecificationsButton />
                             <ShiftTimeButton />
                             <CaptionOverlapToggle />
+                            { isTranslation ?
+                                <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} /> : null }
                             <ExportTrackCuesButton
                                 handleExport={props.handleExportFile}
                             />
