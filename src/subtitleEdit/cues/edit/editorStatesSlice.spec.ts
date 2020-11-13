@@ -73,7 +73,7 @@ describe("editorStatesSlice", () => {
             maxCharactersPerLine: 30,
         } as SubtitleSpecification;
         testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-        const incorrectContentState = ContentState.createFromText("changed editor1 \n\n text");
+        const incorrectContentState = ContentState.createFromText("changed editor1 \n\n\n text");
         const incorrectEditorState = EditorState.createWithContent(incorrectContentState);
 
         // WHEN
@@ -81,9 +81,9 @@ describe("editorStatesSlice", () => {
 
         // THEN
         expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText())
-            .toEqual("changed editor1 \n\n text");
+            .toEqual("editor1 \n\n text");
         expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
-        expect(testingStore.getState().validationError).toEqual(false);
+        expect(testingStore.getState().validationError).toEqual(true);
     });
 });
 
