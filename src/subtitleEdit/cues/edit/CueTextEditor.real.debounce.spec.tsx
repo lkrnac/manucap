@@ -128,7 +128,7 @@ describe("CueTextEditor", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" } };
+            language: { id: "1", name: "English", direction: "ltr" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const searchReplaceMatches = {
             offsets: [10],
@@ -196,7 +196,7 @@ describe("CueTextEditor", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "en-US", name: "English", direction: "ltr" } };
+            language: { id: "en-US", name: "English", direction: "ltr" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const editor = createEditorNode();
 
@@ -383,7 +383,7 @@ describe("CueTextEditor", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "en-US", name: "English", direction: "ltr" } };
+            language: { id: "en-US", name: "English", direction: "ltr" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
         // WHEN

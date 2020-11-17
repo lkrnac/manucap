@@ -226,7 +226,7 @@ describe("CueEdit", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" } };
+            language: { id: "1", name: "English", direction: "ltr" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         cues[0].editUuid = testingStore.getState().cues[0].editUuid;
 
@@ -266,7 +266,7 @@ describe("CueEdit", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" } };
+            language: { id: "1", name: "English", direction: "ltr" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         cues[1].editUuid = testingStore.getState().cues[0].editUuid;
 
@@ -351,7 +351,7 @@ describe("CueEdit", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" } };
+            language: { id: "1", name: "English", direction: "ltr" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "someText");
@@ -392,7 +392,7 @@ describe("CueEdit", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" } };
+            language: { id: "1", name: "English", direction: "ltr" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "someText");
