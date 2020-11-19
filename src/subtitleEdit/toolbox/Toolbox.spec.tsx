@@ -10,7 +10,6 @@ import ShiftTimeButton from "./shift/ShiftTimeButton";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
 import Toolbox from "./Toolbox";
-import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../testUtils/testingStore";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
@@ -21,11 +20,12 @@ import { updateEditingTrack } from "../trackSlices";
 import SyncCuesButton from "./SyncCuesButton";
 import SearchReplaceButton from "./SearchReplaceButton";
 import ExportSourceTrackCuesButton from "./ExportSourceTrackCuesButton";
+import { fireEvent, render } from "@testing-library/react";
 
 describe("Toolbox", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
                     <Card>
@@ -51,7 +51,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <Toolbox handleExportSourceFile={jest.fn()} handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
             </Provider>
@@ -61,8 +61,8 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.html())
-            .toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML)
+            .toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders for translation track", () => {
@@ -76,7 +76,7 @@ describe("Toolbox", () => {
         } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
                     <Card>
@@ -104,20 +104,21 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <Toolbox handleExportSourceFile={jest.fn()} handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML)
+            .toEqual(expectedNode.container.outerHTML);
     });
 
     it("passes exportFile function to export file button", () => {
         // GIVEN
         const mockExportFile = jest.fn();
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <Toolbox
                     handleExportSourceFile={jest.fn()}
@@ -128,7 +129,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-export-button").simulate("click");
+        fireEvent.click(actualNode.getByText("Export File"));
 
         // THEN
         expect(mockExportFile).toHaveBeenCalled();
@@ -137,7 +138,7 @@ describe("Toolbox", () => {
     it("passes importFile function to import file button", () => {
         // GIVEN
         const mockImportFile = jest.fn();
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <Toolbox
                     handleExportSourceFile={jest.fn()}
@@ -148,7 +149,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-import-button").simulate("click");
+        fireEvent.click(actualNode.getByText("Import File"));
 
         // THEN
         expect(mockImportFile).toHaveBeenCalled();
@@ -157,7 +158,7 @@ describe("Toolbox", () => {
     it("passes exportSourceFile function to source export file button", () => {
         // GIVEN
         const mockExportSourceFile = jest.fn();
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <Toolbox
                     handleExportSourceFile={mockExportSourceFile}
@@ -168,7 +169,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-export-source-button").simulate("click");
+        fireEvent.click(actualNode.getByText("Export Source File"));
 
         // THEN
         expect(mockExportSourceFile).toHaveBeenCalled();
