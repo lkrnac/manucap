@@ -335,8 +335,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     minHeight: "54px"
                 }}
             >
-                <div style={{ flex: 1 }} dir={editingTrack?.language.direction}>
+                <div style={{ flex: 1 }}>
                     <Editor
+                        textAlignment="right"
+                        textDirectionality="RTL"
                         editorState={editorState}
                         onChange={(newEditorState: EditorState): AppThunk =>
                             dispatch(updateEditorState(props.index, newEditorState))}

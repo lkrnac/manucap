@@ -4,8 +4,8 @@ import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../timeUtils";
 import sanitizeHtml from "sanitize-html";
-import { useDispatch, useSelector } from "react-redux";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { useDispatch } from "react-redux";
+import { AppThunk } from "../../subtitleEditReducers";
 import { setGlossaryTerm } from "../edit/cueEditorSlices";
 
 interface Props {
@@ -63,7 +63,6 @@ const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
 };
 
 const CueView = (props: Props): ReactElement => {
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const dispatch = useDispatch();
     const html = props.hideText
         ? ""
@@ -102,8 +101,7 @@ const CueView = (props: Props): ReactElement => {
                         paddingBottom: "5px",
                         minHeight: "54px",
                         height: "100%",
-                        width: "100%",
-                        direction: editingTrack?.language.direction
+                        width: "100%"
                     }}
                     dangerouslySetInnerHTML={{ __html: html }}
                 />
