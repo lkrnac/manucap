@@ -101,7 +101,7 @@ const CueView = (props: Props): ReactElement => {
                         paddingBottom: "5px",
                         minHeight: "54px",
                         height: "100%",
-                        width: "100%"
+                        width: "100%",
                     }}
                     dangerouslySetInnerHTML={{ __html: html }}
                 />

@@ -8,6 +8,7 @@ import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
+import "draft-js/dist/Draft.css";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
@@ -31,7 +32,7 @@ const TestApp = (): ReactElement => {
             const cues = [] as CueDto[];
             for (let idx = 0; idx < 9999; idx++) {
                 cues.push({
-                    vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text`),
+                    vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
                     glossaryMatches: [
                         { source: "text", replacements: ["text replacement1", "text replacement2"]},

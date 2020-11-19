@@ -37,8 +37,9 @@
     "@types/crypto-js": "^3.1.47",
     "@types/lodash": "^4.14.164",
     "crypto-js": "^4.0.0",
-    "draft-js": "^0.11.6",
+    "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
+    "fbjs": "^3.0.0",
     "final-form": "^4.20.1",
     "humanize-duration": "^3.23.1",
     "immutable": "^4.0.0-rc.12",
@@ -120,5 +121,17 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
