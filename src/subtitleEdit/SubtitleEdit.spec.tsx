@@ -17,7 +17,7 @@ import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice"
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
@@ -818,7 +818,7 @@ describe("SubtitleEdit", () => {
     it("calls onExportSourceFile callback when button is clicked", () => {
         // GIVEN
         const mockOnExportSourceFile = jest.fn();
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore} >
                 <SubtitleEdit
                     mp4="dummyMp4"
@@ -839,10 +839,9 @@ describe("SubtitleEdit", () => {
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
-        actualNode.update();
 
         // WHEN
-        actualNode.find(".sbte-export-source-button").simulate("click");
+        fireEvent.click(actualNode.getByText("Export Source File"));
 
         // THEN
         expect(mockOnExportSourceFile).toHaveBeenCalled();
