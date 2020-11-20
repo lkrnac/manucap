@@ -17,7 +17,7 @@ import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice"
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
@@ -119,7 +119,11 @@ describe("SubtitleEdit", () => {
                                     lastCueChange={null}
                                 />
                             </div>
-                            <Toolbox handleImportFile={jest.fn()} handleExportFile={jest.fn()} />
+                            <Toolbox
+                                handleImportFile={jest.fn()}
+                                handleExportSourceFile={jest.fn()}
+                                handleExportFile={jest.fn()}
+                            />
                         </div>
                         <div
                             style={{
@@ -194,6 +198,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -240,7 +245,11 @@ describe("SubtitleEdit", () => {
                                     lastCueChange={null}
                                 />
                             </div>
-                            <Toolbox handleExportFile={jest.fn()} handleImportFile={jest.fn()} />
+                            <Toolbox
+                                handleExportSourceFile={jest.fn()}
+                                handleExportFile={jest.fn()}
+                                handleImportFile={jest.fn()}
+                            />
                         </div>
                         <div
                             style={{
@@ -305,6 +314,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -361,6 +371,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -420,6 +431,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -466,7 +478,11 @@ describe("SubtitleEdit", () => {
                                     lastCueChange={null}
                                 />
                             </div>
-                            <Toolbox handleImportFile={jest.fn()} handleExportFile={jest.fn()} />
+                            <Toolbox
+                                handleImportFile={jest.fn()}
+                                handleExportSourceFile={jest.fn()}
+                                handleExportFile={jest.fn()}
+                            />
                         </div>
                         <div
                             style={{
@@ -542,6 +558,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -683,6 +700,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -711,6 +729,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={mockOnViewAllTracks}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -742,6 +761,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={mockOnComplete}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -774,6 +794,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={mockOnExportFile}
                     onImportFile={(): void => undefined}
                 />
@@ -794,6 +815,38 @@ describe("SubtitleEdit", () => {
         expect(mockOnExportFile).toHaveBeenCalled();
     });
 
+    it("calls onExportSourceFile callback when button is clicked", () => {
+        // GIVEN
+        const mockOnExportSourceFile = jest.fn();
+        const actualNode = render(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={mockOnExportSourceFile}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTranslationTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+
+        // WHEN
+        fireEvent.click(actualNode.getByText("Export Source File"));
+
+        // THEN
+        expect(mockOnExportSourceFile).toHaveBeenCalled();
+    });
+
     it("calls onImportFile callback when button is clicked", () => {
         // GIVEN
         const mockOnImportFile = jest.fn();
@@ -805,6 +858,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={mockOnImportFile}
                 />
@@ -844,6 +898,7 @@ describe("SubtitleEdit", () => {
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
                     onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -885,6 +940,7 @@ describe("SubtitleEdit", () => {
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
                     onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -919,6 +975,7 @@ describe("SubtitleEdit", () => {
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
                     onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -957,6 +1014,7 @@ describe("SubtitleEdit", () => {
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
                     onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -985,6 +1043,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={saveTrack}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -1015,6 +1074,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -1047,6 +1107,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -1067,6 +1128,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                     spellCheckerDomain="testing-domain"
@@ -1088,6 +1150,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
@@ -1116,6 +1179,7 @@ describe("SubtitleEdit", () => {
                     onViewAllTracks={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                 />
