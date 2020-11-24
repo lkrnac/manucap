@@ -1,5 +1,5 @@
 import React, { Dispatch, ReactElement } from "react";
-import {CueDto, GlossaryMatchDto, LanguageDirection} from "../../model";
+import { CueDto, GlossaryMatchDto, LanguageDirection } from "../../model";
 import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../timeUtils";

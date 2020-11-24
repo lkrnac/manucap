@@ -2,7 +2,7 @@ import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
-import {CueDto, Language, Track} from "../model";
+import { CueDto, Language, Track } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView from "./view/CueView";
@@ -14,7 +14,7 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import { updateCues } from "./cuesListActions";
 import CueLineFlap from "./CueLineFlap";
 import { updateEditingCueIndex } from "./edit/cueEditorSlices";
-import {updateEditingTrack} from "../trackSlices";
+import { updateEditingTrack } from "../trackSlices";
 
 let testingStore = createTestingStore();
 
