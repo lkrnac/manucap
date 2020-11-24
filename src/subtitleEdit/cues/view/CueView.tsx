@@ -1,5 +1,5 @@
 import React, { Dispatch, ReactElement } from "react";
-import { CueDto, GlossaryMatchDto } from "../../model";
+import {CueDto, GlossaryMatchDto, LanguageDirection} from "../../model";
 import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../timeUtils";
@@ -13,6 +13,7 @@ interface Props {
     cue: CueDto;
     playerTime: number;
     showGlossaryTerms: boolean;
+    languageDirection?: LanguageDirection;
     className?: string;
     hideText?: boolean;
 }
@@ -101,8 +102,9 @@ const CueView = (props: Props): ReactElement => {
                         paddingBottom: "5px",
                         minHeight: "54px",
                         height: "100%",
-                        width: "100%",
+                        width: "100%"
                     }}
+                    dir={props.languageDirection}
                     dangerouslySetInnerHTML={{ __html: html }}
                 />
             </div>
