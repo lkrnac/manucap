@@ -112,7 +112,7 @@ const createExpectedNode = (
                 minHeight: "54px"
             }}
         >
-            <div style={{ flex: 1 }} dir="ltr">
+            <div style={{ flex: 1 }}>
                 <Editor editorState={editorState} onChange={jest.fn} spellCheck={false} />
             </div>
             <div style={{ flex: 0 }}>
@@ -238,7 +238,7 @@ describe("CueTextEditor", () => {
     it("renders empty", () => {
         // GIVEN
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" }};
+            language: { id: "1", name: "English", direction: "LTR" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "");
         const contentState = ContentState.createFromText("");
@@ -253,7 +253,7 @@ describe("CueTextEditor", () => {
     it("renders with text", () => {
         // GIVEN
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" }};
+            language: { id: "1", name: "English", direction: "LTR" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "someText");
         const contentState = ContentState.createFromText(vttCue.text);
@@ -264,7 +264,7 @@ describe("CueTextEditor", () => {
     it("renders with html", () => {
         // GIVEN
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" }};
+            language: { id: "1", name: "English", direction: "LTR" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
         const processedHTML = convertFromHTML(vttCue.text);
@@ -276,7 +276,7 @@ describe("CueTextEditor", () => {
     it("renders with multiple lines", () => {
         // GIVEN
         const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "ltr" }};
+            language: { id: "1", name: "English", direction: "LTR" }};
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "some <i>HTML</i>\n <b>Text</b> sample");
         const processedHTML = convertFromHTML(convertVttToHtml(vttCue.text));
@@ -1432,7 +1432,7 @@ describe("CueTextEditor", () => {
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const testTrack = { mediaTitle: "testingTrack",
-                language: { id: "1", name: "English", direction: "ltr" }};
+                language: { id: "1", name: "English", direction: "LTR" }};
             testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("text") as {} as AnyAction);
             const searchReplaceMatches = {
@@ -1479,7 +1479,7 @@ describe("CueTextEditor", () => {
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const testTrack = { mediaTitle: "testingTrack",
-                language: { id: "1", name: "English", direction: "ltr" }};
+                language: { id: "1", name: "English", direction: "LTR" }};
             testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             const searchReplaceMatches = {
@@ -1526,7 +1526,7 @@ describe("CueTextEditor", () => {
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const testTrack = { mediaTitle: "testingTrack",
-                language: { id: "1", name: "English", direction: "ltr" }};
+                language: { id: "1", name: "English", direction: "LTR" }};
             testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             const searchReplaceMatches = {
