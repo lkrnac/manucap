@@ -8,7 +8,6 @@ import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
-import "draft-js/dist/Draft.css";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
@@ -71,7 +70,7 @@ const TestApp = (): ReactElement => {
             let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
             // @ts-ignore since it can be updated manually
             if (language.id === "ar-SA") {
-                text = `.<b>مرحبًا</b> أيها العالم ${idx + 1}`;
+                text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
             }
             cues.push({
                 vttCue: new VTTCue(idx * 3, (idx + 1) * 3, text),
