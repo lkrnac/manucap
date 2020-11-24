@@ -69,7 +69,6 @@ const saveTrackDebounced = debounce(saveTrackCurrent, DEBOUNCE_TIMEOUT, { leadin
 export const callSaveTrack =
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState: Function): void => {
         const saveState = getState().saveState;
-        console.log(getState().cues[0].vttCue);
         if (saveState === SaveState.REQUEST_SENT || saveState === SaveState.RETRY) {
             dispatch(saveStateSlice.actions.setState(SaveState.RETRY));
         } else {
