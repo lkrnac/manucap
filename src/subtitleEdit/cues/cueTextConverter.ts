@@ -52,8 +52,6 @@ const convertToHtmlOptions = {
 } as Options;
 
 export const getVttText = (currentContent: ContentState): string => {
-    console.log(currentContent.getPlainText())
     const htmlText = !currentContent.hasText() ? "" : stateToHTML(currentContent, convertToHtmlOptions);
-    console.log("htmlText: " + htmlText)
     return convertHtmlToVtt(htmlText);
 };
