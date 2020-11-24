@@ -39,7 +39,6 @@
     "crypto-js": "^4.0.0",
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
-    "fbjs": "^3.0.0",
     "final-form": "^4.20.1",
     "humanize-duration": "^3.23.1",
     "immutable": "^4.0.0-rc.12",
