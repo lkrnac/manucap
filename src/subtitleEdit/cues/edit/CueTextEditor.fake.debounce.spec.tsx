@@ -1893,4 +1893,66 @@ describe("CueTextEditor", () => {
         expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some replacementtext");
         expect(testingStore.getState().glossaryTerm).toEqual(null);
     });
+
+    it("inserts &lrm; bidi control character at cursor position for LTR language", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "en-US", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+        const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+
+        // WHEN
+        fireEvent.keyDown(editor, { keyCode: Character.B_CHAR, shiftKey: true, ctrlKey: true, metaKey: true });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200E");
+        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200E");
+    });
+
+    it("inserts &rlm; bidi control character at cursor position for RTL language", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "ar-AR", name: "Arabic", direction: "RTL" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+        const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+
+        // WHEN
+        fireEvent.keyDown(editor, { keyCode: Character.B_CHAR, shiftKey: true, ctrlKey: true, metaKey: true });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200F");
+        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200F");
+    });
 });
