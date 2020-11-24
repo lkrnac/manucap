@@ -14,8 +14,8 @@ import "./localTesting.scss";
 import "draft-js/dist/Draft.css";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 
-// const language = { id: "en-US", name: "English (US)", direction: "ltr" } as Language;
-const language = { id: "ar-SA", name: "Arabic", direction: "rtl" } as Language;
+const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
+// const language = { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language;
 
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
