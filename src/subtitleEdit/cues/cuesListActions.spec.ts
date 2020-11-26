@@ -25,6 +25,7 @@ import { generateSpellcheckHash } from "./spellCheck/spellCheckerUtils";
 import { Replacement, SpellCheck } from "./spellCheck/model";
 import { setSpellCheckDomain } from "../spellcheckerSettingsSlice";
 import { updateSourceCues } from "./view/sourceCueSlices";
+import { updateEditingCueIndex } from "./edit/cueEditorSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -155,12 +156,13 @@ describe("cueSlices", () => {
                         }
                     ]
                 };
-
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
                 const editUuid = testingStore.getState().cues[2].editUuid;
 
                 // @ts-ignore modern browsers does have it
@@ -222,6 +224,8 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
 
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
@@ -257,8 +261,10 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: vtmsLanguageId }, id: trackId } as Track
                 ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
 
-                const editUuid = testingStore.getState().cues[2].editUuid;
+
+                    const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
                     .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
@@ -291,6 +297,7 @@ describe("cueSlices", () => {
                     testingStore.dispatch(updateEditingTrack(
                         { language: { id: vtmsLanguageId }, id: trackId } as Track
                     ) as {} as AnyAction);
+                    testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
 
                     const editUuid = testingStore.getState().cues[2].editUuid;
                     // @ts-ignore modern browsers does have it
@@ -376,6 +383,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
@@ -421,6 +429,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[2].editUuid;
 
                 // @ts-ignore modern browsers does have it
@@ -463,6 +472,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: undefined } as Track
                 ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // @ts-ignore modern browsers does have it
