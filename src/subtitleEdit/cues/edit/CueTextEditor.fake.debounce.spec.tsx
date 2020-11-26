@@ -134,10 +134,10 @@ const createExpectedNode = (
     </div>
 );
 
-const createEditorNode = (text = "someText"): ReactWrapper => {
+const createEditorNode = (text = "someText"): React.ReactElement => {
     const vttCue = new VTTCue(0, 1, text);
     const editUuid = testingStore.getState().cues[0].editUuid;
-    const actualNode = mount(
+    return (
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -146,12 +146,23 @@ const createEditorNode = (text = "someText"): ReactWrapper => {
                 vttCue={vttCue}
                 editUuid={editUuid}
             />
-        </Provider>
+        </Provider>);
+};
+
+
+const mountEditorNode = (text = "someText"): ReactWrapper => {
+    const actualNode = mount(
+        createEditorNode(text)
     );
     return actualNode.find(".public-DraftEditor-content");
 };
 
-
+const renderEditorNode = (text = "someText"): HTMLElement => {
+    const { container } = render(
+        createEditorNode(text)
+    );
+    return container;
+};
 
 // @ts-ignore Cast to Options is needed, because "@types/draft-js-export-html" library doesn't allow null
 // defaultBlockTag, but it is allowed in their docs: https://www.npmjs.com/package/draft-js-export-html#defaultblocktag
@@ -275,7 +286,7 @@ describe("CueTextEditor", () => {
 
     it("updates cue in redux store when changed", () => {
         // GIVEN
-        const editor = createEditorNode();
+        const editor = mountEditorNode();
 
         // WHEN
         editor.simulate("paste", {
@@ -295,7 +306,7 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
 
-        const editor = createEditorNode();
+        const editor = mountEditorNode();
 
         // WHEN
         editor.simulate("paste", {
@@ -344,7 +355,7 @@ describe("CueTextEditor", () => {
      */
     it("does the VTT <-> HTML conversion", () => {
         // GIVEN
-        const editor = createEditorNode("some\nwrapped\ntext");
+        const editor = mountEditorNode("some\nwrapped\ntext");
 
         // WHEN
         editor.simulate("paste", {
@@ -432,7 +443,7 @@ describe("CueTextEditor", () => {
             // GIVEN
             const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
             mousetrapSpy.mockReset();
-            const editor = createEditorNode();
+            const editor = mountEditorNode();
 
             // WHEN
             editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
@@ -448,7 +459,7 @@ describe("CueTextEditor", () => {
         .it("should handle '%s' keyboard shortcut", (expectedKeyCombination: KeyCombination, character: Character) => {
             // GIVEN
             const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-            const editor = createEditorNode();
+            const editor = mountEditorNode();
 
             // WHEN
             editor.simulate("keyDown", { keyCode: character });
@@ -466,7 +477,7 @@ describe("CueTextEditor", () => {
             (expectedKeyCombination: KeyCombination, character: Character) => {
             // GIVEN
             const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-            const editor = createEditorNode();
+            const editor = mountEditorNode();
 
             // WHEN
             editor.simulate("keyDown", { keyCode: character });
@@ -492,7 +503,7 @@ describe("CueTextEditor", () => {
             // GIVEN
             const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
             mousetrapSpy.mockReset();
-            const editor = createEditorNode();
+            const editor = mountEditorNode();
 
             // WHEN
             editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
@@ -504,7 +515,7 @@ describe("CueTextEditor", () => {
     it("should handle unbound key shortcuts", () => {
         // GIVEN
         const defaultKeyBinding = jest.spyOn(Draft, "getDefaultKeyBinding");
-        const editor = createEditorNode();
+        const editor = mountEditorNode();
 
         // WHEN
         editor.simulate("keyDown", {
@@ -788,7 +799,7 @@ describe("CueTextEditor", () => {
 
     it("doesn't updates cue in redux store if new text doesn't conform to subtitle specification", () => {
         // GIVEN
-        const editor = createEditorNode();
+        const editor = mountEditorNode();
         const testingSubtitleSpecification = {
             enabled: true,
             maxLinesPerCaption: 2,
@@ -825,6 +836,16 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         });
+
+        it("calls spellchecker once component loads", () => {
+            // GIVEN, WHEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            renderEditorNode();
+
+            // THEN
+            expect(fetchSpellCheck).toBeCalledTimes(1);
+        });
+
 
         it("renders with html and spell check errors", () => {
             // GIVEN

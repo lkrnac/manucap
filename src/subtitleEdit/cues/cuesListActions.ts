@@ -2,12 +2,9 @@ import { Dispatch } from "react";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
-import { CueCategory, CueDto, ScrollPosition, SubtitleEditAction } from "../model";
+import { CueCategory, CueDto, ScrollPosition, SubtitleEditAction, Track } from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
-import {
-    constructCueValuesArray,
-    copyNonConstructorProperties
-} from "./cueUtils";
+import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
 import { Constants } from "../constants";
 import {
     applyInvalidRangePreventionEnd,
@@ -49,6 +46,22 @@ const createAndAddCue = (previousCue: CueDto,
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
 };
 
+export const applySpellchecker = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+        const track = getState().editingTrack as Track;
+        const index = getState().editingCueIndex as number;
+        const currentEditingCue = getState().cues[index];
+        if (currentEditingCue) {
+            const text = currentEditingCue.vttCue.text as string;
+            const editUuid = currentEditingCue.editUuid as string;
+            const spellCheckerSettings = getState().spellCheckerSettings;
+            if (editUuid && track && spellCheckerSettings.enabled) {
+                fetchSpellCheck(dispatch, getState, index, text,
+                    spellCheckerSettings, track.language?.id, track.id);
+            }
+        }
+    };
+
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
         const cues = getState().cues;
@@ -65,7 +78,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const previousCue = cues[idx - 1];
             const followingCue = cues[idx + 1];
             const subtitleSpecifications = getState().subtitleSpecifications;
-            const track = getState().editingTrack;
+            const track = getState().editingTrack as Track;
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
@@ -86,15 +99,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
 
-            const language = track?.language?.id;
-            const spellCheckerSettings = getState().spellCheckerSettings;
-            if (language && spellCheckerSettings.enabled) {
-                const trackId = track?.id;
-                if (editUuid) {
-                    fetchSpellCheck(dispatch, getState, idx, newVttCue.text,
-                        spellCheckerSettings, language, trackId);
-                }
-            }
+            applySpellchecker();
             updateSearchMatches(dispatch, getState, idx);
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,

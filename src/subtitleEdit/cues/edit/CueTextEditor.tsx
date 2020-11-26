@@ -23,7 +23,7 @@ import { convertVttToHtml, getVttText } from "../cueTextConverter";
 import CueLineCounts from "../CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
-import { updateVttCue } from "../cuesListActions";
+import { applySpellchecker, updateVttCue } from "../cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
@@ -262,6 +262,15 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
     const wordCountPerLine = getWordCountPerLine(currentContent.getPlainText());
+
+    useEffect(
+        () => {
+            dispatch(applySpellchecker());
+        },
+        // needed to call the effect only once
+        // eslint-disable-next-line
+        []
+    );
 
     useEffect(
         () => {
