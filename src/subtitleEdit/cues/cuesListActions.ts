@@ -46,8 +46,10 @@ const createAndAddCue = (previousCue: CueDto,
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
 };
 
-export const applySpellchecker = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+
+
+const callFetchSpellCheck = (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
+                                  getState: Function): void => {
         const track = getState().editingTrack as Track;
         const index = getState().editingCueIndex as number;
         const currentEditingCue = getState().cues[index];
@@ -60,6 +62,11 @@ export const applySpellchecker = (): AppThunk =>
                     spellCheckerSettings, track.language?.id, track.id);
             }
         }
+    };
+
+export const applySpellchecker = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState: Function): void => {
+        callFetchSpellCheck(dispatch, getState);
     };
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
@@ -98,8 +105,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const newCue = { ...originalCue, idx, vttCue: newVttCue };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
-
-            applySpellchecker();
+            callFetchSpellCheck(dispatch, getState);
             updateSearchMatches(dispatch, getState, idx);
             dispatch(cuesSlice.actions.checkErrors({
                 subtitleSpecification: subtitleSpecifications,
