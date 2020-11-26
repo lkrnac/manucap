@@ -63,9 +63,8 @@ const onOptionSelected = (props: Props, spellCheckMatch: Match, matchText: strin
     const option = optionValueType as Option;
     if(option.value === matchText) {
         ignoreKeyword(props, matchText, spellCheckMatch, dispatch);
-    } else {
-        props.correctSpelling((option).value, props.start, props.end);
     }
+    props.correctSpelling((option).value, props.start, props.end);
     props.setSpellCheckerMatchingOffset(null);
 };
 
