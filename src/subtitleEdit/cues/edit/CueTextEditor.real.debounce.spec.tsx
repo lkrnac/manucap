@@ -19,6 +19,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { replaceCurrentMatch } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
+import { updateEditingCueIndex } from "./cueEditorSlices";
 
 let testingStore = createTestingStore();
 
@@ -52,7 +53,9 @@ describe("CueTextEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        jest.resetAllMocks();
     });
 
     it("updates cue in redux store with debounce", (done) => {
@@ -254,10 +257,11 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(updateEditingTrack(
             { language: { id: "testing-language" }, id: trackId } as Track
         ) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
         global.fetch = jest.fn()
-            .mockImplementationOnce(() =>
+            .mockImplementation(() =>
                 new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
         const editor = createEditorNode();
@@ -283,7 +287,7 @@ describe("CueTextEditor", () => {
                     }
                 );
                 // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(1);
+                expect(global.fetch).toBeCalledTimes(2);
                 done();
             },
             6000
@@ -325,11 +329,11 @@ describe("CueTextEditor", () => {
                 }
             ]
         };
-
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(
             { language: { id: "testing-language" }, id: trackId } as Track
         ) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
         global.fetch = jest.fn()
@@ -367,7 +371,7 @@ describe("CueTextEditor", () => {
                     }
                 );
                 // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(1);
+                expect(global.fetch).toBeCalledTimes(2);
                 done();
             },
             6000
