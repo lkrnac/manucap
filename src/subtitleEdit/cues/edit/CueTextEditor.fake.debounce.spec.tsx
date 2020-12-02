@@ -1150,7 +1150,8 @@ describe("CueTextEditor", () => {
         it("ignores all spell check matches and revalidate corrupted when clicking ignore all option", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
-
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(reset() as {} as AnyAction);
             const testingTrack = {
                 type: "CAPTION",
@@ -1226,6 +1227,7 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+            expect(saveTrack).toBeCalled();
         });
 
         it("ignores all spell check matches and revalidate corrupted when clicking ignore all option with all cue" +
