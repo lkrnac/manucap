@@ -7,6 +7,7 @@ import { SpellcheckerSettings, SubtitleEditAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
 import { Constants } from "../../constants";
 import { spellcheckerSettingsSlice } from "../../spellcheckerSettingsSlice";
+import { checkErrors } from "../cuesListActions";
 
 const addSpellCheck = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -22,9 +23,9 @@ const addSpellCheck = (
     }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
 
-    const subtitleSpecification = getState().subtitleSpecifications;
     const overlapEnabled = getState().editingTrack?.overlapEnabled;
-    dispatch(cuesSlice.actions.checkErrors({ subtitleSpecification, overlapEnabled, index }));
+    // @ts-ignore
+    dispatch(checkErrors(index, overlapEnabled, false));
 };
 
 export const fetchSpellCheck = (
@@ -36,6 +37,7 @@ export const fetchSpellCheck = (
     language: string,
     trackId?: string
 ): void => {
+    console.log("Fetching for " + cueIndex);
     const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
     const submittedLanguageCode = languageToolMatchedLanguageCode == null ? language :
         languageToolMatchedLanguageCode;

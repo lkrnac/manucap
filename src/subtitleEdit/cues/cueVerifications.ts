@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import { CueDto, TimeGapLimit } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
+import { applySpellchecker } from "./cuesListActions";
+import { Dispatch } from "react";
 
 const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTags: []});
 
@@ -82,20 +84,30 @@ const isSpelledCorrectly = (cue: CueDto): boolean =>
     cue.spellCheck?.matches === undefined || cue.spellCheck.matches.length === 0;
 
 export const conformToRules = (
+    dispatch: Dispatch<any>,
+    index: number,
     cue: CueDto,
     subtitleSpecification: SubtitleSpecification | null,
     previousCue?: CueDto,
     followingCue?: CueDto,
-    overlapCaptions?: boolean
+    overlapCaptions?: boolean,
+    fetchSpellchecks?: boolean
+
 ): boolean =>
-    checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification)
-        && rangeOk(cue.vttCue, subtitleSpecification)
-        && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
-        && isSpelledCorrectly(cue)
-;
+{
+    if (fetchSpellchecks == null || fetchSpellchecks) {
+        dispatch(applySpellchecker(index));
+    }
+    return checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification)
+    && rangeOk(cue.vttCue, subtitleSpecification)
+    && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
+    && isSpelledCorrectly(cue);
+
+};
 
 
 export const markCues = (
+    dispatch: Dispatch<any>,
     cues: CueDto[],
     subtitleSpecifications: SubtitleSpecification | null,
     overlapCaptions: boolean | undefined
@@ -107,11 +119,13 @@ export const markCues = (
         return {
             ...cue,
             corrupted: cue.corrupted || !conformToRules(
+                dispatch,
+                index,
                 cue,
                 subtitleSpecifications,
                 previousCue,
                 followingCue,
-                overlapCaptions || false
+                overlapCaptions || false, false
             ),
             editUuid: uuidv4()
         };

@@ -65,8 +65,8 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         const cues = [] as CueDto[];
         for (let idx = 0; idx < 9999; idx++) {
-            const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
-            let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
+            // const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
+            let text = "bax text";
             // @ts-ignore since it can be updated manually
             if (language.id === "ar-SA") {
                 text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
