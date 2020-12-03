@@ -1,11 +1,12 @@
 import { SpellCheck } from "./cues/spellCheck/model";
 import { SearchReplaceMatches } from "./cues/searchReplace/model";
-import { DirectionProperty } from "csstype";
+
+export type LanguageDirection = "RTL" | "LTR";
 
 export interface Language {
     readonly id: string;
     readonly name: string;
-    readonly direction: DirectionProperty;
+    readonly direction: LanguageDirection;
 }
 
 export type CueCategory = "DIALOGUE" | "ONSCREEN_TEXT" | "AUDIO_DESCRIPTION" | "LYRICS";

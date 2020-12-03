@@ -80,6 +80,7 @@ const handleKeyShortcut = (
     props: CueTextEditorProps,
     spellCheckerMatchingOffset: number | null,
     setSpellCheckerMatchingOffset: Function,
+    languageDirection: string | undefined
 ) => (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
     if (shortcut === "openSpellChecker") {
@@ -99,6 +100,14 @@ const handleKeyShortcut = (
     if (shortcut === "newLine") {
         const newEditorState = RichUtils.insertSoftNewline(editorState);
         dispatch(updateEditorState(props.index, newEditorState));
+        return "handled";
+    }
+    if (shortcut === "insertBidiCode") {
+        const content = editorState.getCurrentContent();
+        const bidiChar = languageDirection === "RTL" ? "\u200F" : "\u200E";
+        const contentWithBidiCode = Modifier.insertText(content, editorState.getSelection(), bidiChar);
+        const newState = EditorState.push(editorState, contentWithBidiCode, "change-block-data");
+        dispatch(updateEditorState(props.index, newState));
         return "handled";
     }
     return "not-handled";
@@ -154,6 +163,8 @@ const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
         return "newLine";
     } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.SPACE) {
         return "openSpellChecker";
+    } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.B_CHAR) {
+        return "insertBidiCode";
     }
     return getDefaultKeyBinding(e);
 };
@@ -354,7 +365,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}
                         handleKeyCommand={handleKeyShortcut(editorState, dispatch, props,
                             spellCheckerMatchingOffset,
-                            setSpellCheckerMatchingOffset)}
+                            setSpellCheckerMatchingOffset,
+                            editingTrack?.language.direction)}
                     />
                 </div>
                 <div style={{ flex: 0 }}>

@@ -268,6 +268,37 @@ describe("KeyboardShortcuts", () => {
                                         an spelling error word]
                                     </span>
                                 </div>
+                                <div style={{ "display":  "flex", "alignItems": "center" }}>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Ctrl</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">Shift</span></h4>
+                                        <span>&nbsp;+&nbsp;</span>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <h4><span className="badge badge-secondary">b</span></h4>
+                                    </div>
+                                    <div className="d-none align-items-center justify-content-center">
+                                        <span>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;</span>
+                                        <div className="d-none align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Alt</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">Shift</span></h4>
+                                            <span>&nbsp;+&nbsp;</span>
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center">
+                                            <h4><span className="badge badge-secondary">b</span></h4>
+                                        </div>
+                                    </div>
+                                    <span>
+                                        <span>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
+                                        </span>Insert bidirectional text control code
+                                    </span>
+                                </div>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-primary">Close</button>
