@@ -5,6 +5,7 @@ import { os } from "platform";
 export enum Character {
     O_CHAR = 79,
     K_CHAR = 75,
+    B_CHAR = 66,
     ARROW_LEFT = 37,
     ARROW_UP = 38,
     ARROW_RIGHT = 39,

@@ -127,7 +127,9 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "1", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const searchReplaceMatches = {
             offsets: [10],
             offsetIndex: 0,
@@ -193,7 +195,9 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "en-US", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const editor = createEditorNode();
 
         // WHEN
@@ -378,7 +382,9 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "en-US", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
         // WHEN
         createEditorNode();

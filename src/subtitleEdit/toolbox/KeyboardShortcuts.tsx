@@ -43,6 +43,12 @@ const KeyboardShortcuts = (): ReactElement => {
                         character="Space"
                         name="Show a spelling error [You must be stepping on an spelling error word]"
                     />
+                    <KeyboardShortcutLabel
+                        hideAlternativeKey
+                        hideAltKey
+                        character="b"
+                        name="Insert bidirectional text control code"
+                    />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>

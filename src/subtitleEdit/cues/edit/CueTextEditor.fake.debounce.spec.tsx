@@ -237,6 +237,9 @@ describe("CueTextEditor", () => {
 
     it("renders empty", () => {
         // GIVEN
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "1", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "");
         const contentState = ContentState.createFromText("");
 
@@ -249,6 +252,9 @@ describe("CueTextEditor", () => {
 
     it("renders with text", () => {
         // GIVEN
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "1", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "someText");
         const contentState = ContentState.createFromText(vttCue.text);
 
@@ -257,6 +263,9 @@ describe("CueTextEditor", () => {
 
     it("renders with html", () => {
         // GIVEN
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "1", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
         const processedHTML = convertFromHTML(vttCue.text);
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -266,6 +275,9 @@ describe("CueTextEditor", () => {
 
     it("renders with multiple lines", () => {
         // GIVEN
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "1", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "some <i>HTML</i>\n <b>Text</b> sample");
         const processedHTML = convertFromHTML(convertVttToHtml(vttCue.text));
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -1421,7 +1433,9 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+            const testTrack = { mediaTitle: "testingTrack",
+                language: { id: "1", name: "English", direction: "LTR" }};
+            testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("text") as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10, 22, 31],
@@ -1466,7 +1480,9 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+            const testTrack = { mediaTitle: "testingTrack",
+                language: { id: "1", name: "English", direction: "LTR" }};
+            testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10, 22, 31],
@@ -1511,7 +1527,9 @@ describe("CueTextEditor", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+            const testTrack = { mediaTitle: "testingTrack",
+                language: { id: "1", name: "English", direction: "LTR" }};
+            testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10, 22, 31],
@@ -1876,5 +1894,67 @@ describe("CueTextEditor", () => {
         const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
         expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some replacementtext");
         expect(testingStore.getState().glossaryTerm).toEqual(null);
+    });
+
+    it("inserts &lrm; bidi control character at cursor position for LTR language", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "en-US", name: "English", direction: "LTR" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+        const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+
+        // WHEN
+        fireEvent.keyDown(editor, { keyCode: Character.B_CHAR, shiftKey: true, ctrlKey: true, metaKey: true });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200E");
+        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200E");
+    });
+
+    it("inserts &rlm; bidi control character at cursor position for RTL language", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "ar-AR", name: "Arabic", direction: "RTL" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+        const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+
+        // WHEN
+        fireEvent.keyDown(editor, { keyCode: Character.B_CHAR, shiftKey: true, ctrlKey: true, metaKey: true });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200F");
+        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200F");
     });
 });

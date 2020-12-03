@@ -11,10 +11,11 @@ import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults
 // eslint-disable-next-line sort-imports
 import "./localTesting.scss";
+import "draft-js/dist/Draft.css";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 
-const language = { id: "en-US", name: "English (US)", direction: "ltr" } as Language;
-// const language = { id: "ar-SA", name: "Arabic", direction: "rtl" } as Language;
+const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
+// const language = { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language;
 
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
@@ -30,7 +31,7 @@ const TestApp = (): ReactElement => {
             const cues = [] as CueDto[];
             for (let idx = 0; idx < 9999; idx++) {
                 cues.push({
-                    vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text`),
+                    vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
                     glossaryMatches: [
                         { source: "text", replacements: ["text replacement1", "text replacement2"]},

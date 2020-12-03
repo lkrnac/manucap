@@ -2,7 +2,7 @@ import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
-import { CueDto } from "../model";
+import { CueDto, Language, Track } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView from "./view/CueView";
@@ -14,6 +14,7 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import { updateCues } from "./cuesListActions";
 import CueLineFlap from "./CueLineFlap";
 import { updateEditingCueIndex } from "./edit/cueEditorSlices";
+import { updateEditingTrack } from "../trackSlices";
 
 let testingStore = createTestingStore();
 
@@ -28,6 +29,15 @@ describe("CueLine", () => {
     beforeEach(() => { testingStore = createTestingStore(); });
     it("renders edit line in captioning mode", () => {
         // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+            default: true,
+            mediaTitle: "Sample Polish",
+            mediaLength: 4000,
+            progress: 50
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         const expectedNode = mount(
@@ -66,6 +76,15 @@ describe("CueLine", () => {
 
     it("renders view line in captioning mode", () => {
         // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+            default: true,
+            mediaTitle: "Sample Polish",
+            mediaLength: 4000,
+            progress: 50
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
@@ -78,6 +97,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            languageDirection="RTL"
                         />
                     </div>
                     <CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} />
@@ -108,6 +128,16 @@ describe("CueLine", () => {
 
     it("renders middle edit line in translation mode", () => {
         // GIVEN
+        const testingTrack = {
+            type: "TRANSLATION",
+            sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+            language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+            default: true,
+            mediaTitle: "Sample Polish",
+            mediaLength: 4000,
+            progress: 50
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
@@ -120,6 +150,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            languageDirection="LTR"
                         />
                         <CueEdit index={1} cue={cues[1]} playerTime={0} />
                     </div>
@@ -194,6 +225,16 @@ describe("CueLine", () => {
 
     it("renders view line in translation mode", () => {
         // GIVEN
+        const testingTrack = {
+            type: "TRANSLATION",
+            sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+            language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+            default: true,
+            mediaTitle: "Sample Polish",
+            mediaLength: 4000,
+            progress: 50
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
@@ -205,6 +246,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            languageDirection="LTR"
                         />
                         <CueView
                             index={1}
@@ -212,6 +254,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            languageDirection="RTL"
                         />
                     </div>
                     <CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} sourceCue={sourceCue} />
