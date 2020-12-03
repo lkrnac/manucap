@@ -48,10 +48,8 @@ const createAndAddCue = (previousCue: CueDto,
 
 
 const callFetchSpellCheck = (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
-                             getState: Function, customIndex?: number): void => {
+                             getState: Function, index: number): void => {
     const track = getState().editingTrack as Track;
-    const index = customIndex != null ? customIndex : getState().editingCueIndex as number;
-    console.log("Running for cue index " + index);
     const currentEditingCue = getState().cues[index];
     if (currentEditingCue) {
         const text = currentEditingCue.vttCue.text as string;
@@ -62,64 +60,56 @@ const callFetchSpellCheck = (dispatch: Dispatch<PayloadAction<SubtitleEditAction
         console.log(track);
         console.log(spellCheckerSettings.enabled);
         console.log("//////////");
-        if (track && spellCheckerSettings.enabled) {
+        if (editUuid && track && spellCheckerSettings.enabled) {
             fetchSpellCheck(dispatch, getState, index, text,
                 spellCheckerSettings, track.language?.id, track.id);
         }
     }
 };
 
-export const applySpellchecker = (customIndex?: number): AppThunk =>
+export const applySpellchecker = (customIndex: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState: Function): void => {
         callFetchSpellCheck(dispatch, getState, customIndex);
     };
 
-export const checkErrors = (index: number, overlapEnabled?: boolean, fetchSpellcheck?: boolean): AppThunk =>
+export const checkErrors = (index: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         if (index !== undefined) {
-            console.log("checkErrors " + fetchSpellcheck);
-
             const subtitleSpecification = getState().subtitleSpecifications;
+            const overlapEnabled = getState().editingTrack?.overlapEnabled;
             const cues = getState().cues;
-            const previousPreviousCue = cues[index - 2];
             const previousCue = cues[index - 1];
             const currentCue = cues[index];
             const followingCue = cues[index + 1];
-            const followingFollowingCue = cues[index + 2];
-            if (previousCue) {
-                const periviousCorrupted = !conformToRules(
-                    dispatch, index - 1,
-                    previousCue, subtitleSpecification, previousPreviousCue, currentCue,
-                    overlapEnabled, fetchSpellcheck
-
-                );
-                dispatch(
-                    cuesSlice.actions.setCorrupted(
-                        { index : index-1 , corrupted : periviousCorrupted } as CueCorruptedSetAction));
-
-            }
-
-            const currentCorrupted = !conformToRules(
-                dispatch, index,
-                currentCue, subtitleSpecification, previousCue, followingCue,
-                overlapEnabled,fetchSpellcheck
-            );
-            dispatch(cuesSlice.actions.setCorrupted(
-                { index : index , corrupted : currentCorrupted } as CueCorruptedSetAction));
-
-            if (followingCue) {
-                const followingCorrupted = !conformToRules(
-                    dispatch, index + 1,
-                    followingCue, subtitleSpecification, currentCue, followingFollowingCue,
-                    overlapEnabled, fetchSpellcheck
+            if (currentCue != null) {
+                const currentCorrupted = !conformToRules(
+                    currentCue, subtitleSpecification, previousCue, followingCue,
+                    overlapEnabled
                 );
                 dispatch(cuesSlice.actions.setCorrupted(
-                    { index : index + 1 , corrupted : followingCorrupted } as CueCorruptedSetAction));
-
+                    { index: index, corrupted: currentCorrupted } as CueCorruptedSetAction));
             }
         }
     };
 
+const checkCueErrorsWithNeighbours = (dispatch: Dispatch<any>, index: number,
+                                      preivousCue: CueDto, followingCue: CueDto) => {
+
+    // @ts-ignore
+    if (!preivousCue.spellCheck) {
+        dispatch(applySpellchecker(index - 1));
+    }
+    dispatch(checkErrors(index - 1));
+    // @ts-ignore
+    dispatch(applySpellchecker(index));
+    dispatch(checkErrors(index));
+    // @ts-ignore
+    if (!followingCue.spellCheck) {
+        dispatch(applySpellchecker(index + 1));
+    }
+    dispatch(checkErrors(index + 1));
+
+};
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
@@ -159,12 +149,11 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
             updateSearchMatches(dispatch, getState, idx);
-            console.log("update vtt cue call checkerrors");
-            // @ts-ignore
-            dispatch(checkErrors(idx, overlapCaptionsAllowed));
+            checkCueErrorsWithNeighbours(dispatch, idx, previousCue, followingCue);
             callSaveTrack(dispatch, getState);
         }
     };
+
 
 export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {

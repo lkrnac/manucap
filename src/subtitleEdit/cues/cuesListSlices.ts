@@ -3,10 +3,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CueCategory, CueDto, SubtitleEditAction } from "../model";
 import { copyNonConstructorProperties } from "./cueUtils";
 import { editingTrackSlice } from "../trackSlices";
-import { SubtitleSpecificationAction } from "../toolbox/subtitleSpecificationSlice";
+import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
 import { Match, SpellCheck } from "./spellCheck/model";
 import { SearchReplaceMatches } from "./searchReplace/model";
 import { hasIgnoredKeyword } from "./spellCheck/spellCheckerUtils";
+import { markCues } from "./cueVerifications";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -27,6 +28,11 @@ export interface CueAction extends CueIndexAction {
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
+}
+
+interface CheckOptions extends SubtitleSpecificationAction {
+    overlapEnabled?: boolean;
+    index?: number;
 }
 
 export interface CueCorruptedSetAction extends SubtitleSpecificationAction {
@@ -132,6 +138,9 @@ export const cuesSlice = createSlice({
         }
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => []
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
+        [subtitleSpecificationSlice.actions.readSubtitleSpecification.type]:
+            (state, action: PayloadAction<CheckOptions>): CueDto[] =>
+                markCues(state, action.payload.subtitleSpecification, action.payload.overlapEnabled),
     }
 });

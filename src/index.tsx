@@ -73,7 +73,7 @@ const TestApp = (): ReactElement => {
             }
             cues.push({
                 vttCue: new VTTCue(idx * 3, (idx + 1) * 3, text),
-                cueCategory: "DIALOGUE"
+                cueCategory: "DIALOGUE", corrupted: true
             });
         }
         setTimeout( // this simulates latency caused by server roundtrip

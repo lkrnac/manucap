@@ -3,7 +3,6 @@ import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
 import { SubtitleSpecification } from "./model";
 import { SubtitleEditAction } from "../model";
-import { markCues } from "../cues/cueVerifications";
 
 export interface SubtitleSpecificationAction extends SubtitleEditAction{
     subtitleSpecification: SubtitleSpecification | null;
@@ -20,7 +19,6 @@ export const subtitleSpecificationSlice = createSlice({
 });
 
 export const readSubtitleSpecification = (subtitleSpecification: SubtitleSpecification): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleSpecificationAction>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleSpecificationAction>>): void => {
         dispatch(subtitleSpecificationSlice.actions.readSubtitleSpecification({ subtitleSpecification }));
-        markCues(dispatch, getState().cues, getState().subtitleSpecifications, getState().editingTrack?.overlapEnabled);
     };
