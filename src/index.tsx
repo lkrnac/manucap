@@ -29,7 +29,7 @@ const TestApp = (): ReactElement => {
         // @ts-ignore since it can manually be updated
         if (trackType === "TRANSLATION") {
             const cues = [] as CueDto[];
-            for (let idx = 0; idx < 100; idx++) {
+            for (let idx = 0; idx < 9999; idx++) {
                 cues.push({
                     vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
@@ -65,16 +65,16 @@ const TestApp = (): ReactElement => {
     });
     useEffect(() => {
         const cues = [] as CueDto[];
-        for (let idx = 0; idx < 100; idx++) {
-            // const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
-            let text = "bax text";
+        for (let idx = 0; idx < 9999; idx++) {
+            const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
+            let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
             // @ts-ignore since it can be updated manually
             if (language.id === "ar-SA") {
                 text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
             }
             cues.push({
                 vttCue: new VTTCue(idx * 3, (idx + 1) * 3, text),
-                cueCategory: "DIALOGUE", corrupted: true
+                cueCategory: "DIALOGUE"
             });
         }
         setTimeout( // this simulates latency caused by server roundtrip

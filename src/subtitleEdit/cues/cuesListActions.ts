@@ -13,7 +13,7 @@ import {
     applyOverlapPreventionEnd,
     applyOverlapPreventionStart,
     conformToRules,
-    getTimeGapLimits,
+    getTimeGapLimits, markCues,
     verifyCueDuration
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
@@ -206,8 +206,13 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
-        dispatch(cuesSlice.actions.updateCues({ cues }));
+    (dispatch: Dispatch<PayloadAction<CuesAction>>, getState): void => {
+        const checkedCues = markCues(
+            cues,
+            getState().subtitleSpecifications,
+            getState().editingTrack?.overlapEnabled
+        );
+        dispatch(cuesSlice.actions.updateCues({ cues: checkedCues }));
     };
 
 export const applyShiftTime = (shiftTime: number): AppThunk =>
