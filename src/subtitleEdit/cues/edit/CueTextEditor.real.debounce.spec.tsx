@@ -30,15 +30,18 @@ const cues = [
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 
-const createEditorNode = (text = "someText"): ReactWrapper => {
+const createEditorNode = (text = "someText", index?: number): ReactWrapper => {
+    const idx = index != null ? index : 0;
     const vttCue = new VTTCue(0, 1, text);
-    const editUuid = testingStore.getState().cues[0].editUuid;
+    const cue = testingStore.getState().cues[idx];
+    vttCue.text = text;
+    const editUuid = cue.editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                 unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                index={0}
+                index={idx}
                 vttCue={vttCue}
                 editUuid={editUuid}
             />
@@ -292,6 +295,81 @@ describe("CueTextEditor", () => {
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(3);
+                done();
+            },
+            6000
+        );
+    });
+
+    it("does not trigger spellchecker for previous and following cues" +
+        " if spellchecker was already fetched for them", (done) => {
+        // GIVEN
+        const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+        const ruleId = "MORFOLOGIK_RULE_EN_US";
+        const testingResponse = {
+            matches: [
+                {
+                    message: "This sentence does not start with an uppercase letter",
+                    replacements: [{ "value": "Txt" }],
+                    "offset": 0,
+                    "length": 3,
+                    context: { text: "txxt", length: 3, offset: 0 },
+                    rule: { id: ruleId }
+                },
+                {
+                    "message": "Possible spelling mistake found.",
+                    "replacements": [
+                        { value: "check" },
+                        { value: "Chuck" },
+                        { value: "chick" },
+                        { value: "chuck" },
+                        { value: "chock" },
+                        { value: "CCK" },
+                        { value: "CHC" },
+                        { value: "CHK" },
+                        { value: "cock" },
+                        { value: "ch ck" }
+                    ],
+                    "offset": 7,
+                    "length": 4,
+                    context: { text: "txxt", length: 4, offset: 7 },
+                    rule: { id: ruleId }
+                }
+            ]
+        };
+        const cues = [
+            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE",
+                spellCheck: testingResponse } as CueDto,
+            { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto,
+            { vttCue: new VTTCue(7, 10, "Caption Line 3"), cueCategory: "DIALOGUE",
+                spellCheck: testingResponse } as CueDto
+        ];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(
+            { language: { id: "testing-language" }, id: trackId } as Track
+        ) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+        // @ts-ignore modern browsers does have it
+        global.fetch = jest.fn()
+            .mockImplementation(() =>
+                new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
+
+        const editor = createEditorNode("someText", 1);
+
+        // WHEN
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => " Paste text to end",
+            }
+        });
+
+        // THEN
+        setTimeout(
+            () => {
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledTimes(2);
                 done();
             },
             6000

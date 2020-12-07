@@ -446,7 +446,7 @@ describe("cueSlices", () => {
 
                 //THEN
                 // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(2);
+                expect(global.fetch).toBeCalledTimes(4);
             });
 
             it("triggers call to spellchecker even with trackId undefined", async (done) => {
@@ -1723,7 +1723,7 @@ describe("cueSlices", () => {
     });
 
     describe("validateCorruptedCues", () => {
-        it("validate only corrupted cues", () => {
+        it("validate only corrupted cues with ignored text", () => {
             // GIVEN
             const spellCheck = {
                 matches: [
@@ -1749,7 +1749,11 @@ describe("cueSlices", () => {
                     cueCategory: "DIALOGUE", corrupted: false
                 },
                 {
-                    vttCue: new VTTCue(6, 0, "Caption Line 4"), // bad timing
+                    vttCue: new VTTCue(6, 8, "Caption Line 4"),
+                    cueCategory: "DIALOGUE", corrupted: false
+                },
+                {
+                    vttCue: new VTTCue(8, 0, "Caption Line 5"), // bad timing
                     cueCategory: "DIALOGUE", corrupted: false
                 }
             ] as CueDto[];
@@ -1757,13 +1761,14 @@ describe("cueSlices", () => {
             testingStore = createTestingStore({ cues });
 
             // WHEN
-            testingStore.dispatch(validateCorruptedCues() as {} as AnyAction);
+            testingStore.dispatch(validateCorruptedCues("Linex") as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
             expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
             expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[4].corrupted).toBeFalsy();
         });
 
     });

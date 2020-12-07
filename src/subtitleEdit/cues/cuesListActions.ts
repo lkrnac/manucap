@@ -55,11 +55,6 @@ const callFetchSpellCheck = (dispatch: Dispatch<PayloadAction<SubtitleEditAction
         const text = currentEditingCue.vttCue.text as string;
         const editUuid = currentEditingCue.editUuid as string;
         const spellCheckerSettings = getState().spellCheckerSettings;
-        console.log("required > ");
-        console.log(editUuid);
-        console.log(track);
-        console.log(spellCheckerSettings.enabled);
-        console.log("//////////");
         if (editUuid && track && spellCheckerSettings.enabled) {
             fetchSpellCheck(dispatch, getState, index, text,
                 spellCheckerSettings, track.language?.id, track.id);
@@ -104,7 +99,6 @@ const validateCue = (dispatch: Dispatch<SubtitleEditAction | void>,
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void> | SubtitleEditAction | void>, getState): void => {
-        console.log("update vtt cue ?");
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
@@ -158,7 +152,8 @@ export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
 export const validateCorruptedCues = (matchText: string): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const cues = getState().cues;
-        cues.filter(cue => cue.corrupted && cue.vttCue.text.includes(matchText)).forEach((cue: CueDto) => {
+        cues.filter(cue => cue.corrupted
+            && cue.vttCue.text.includes(matchText)).forEach((cue: CueDto) => {
             dispatch(checkErrors(cues.indexOf(cue)));
         });
     };
