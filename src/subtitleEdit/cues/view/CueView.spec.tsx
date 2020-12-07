@@ -135,11 +135,11 @@ describe("CueView", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
     });
 
-    it("renders text in rtl direction", () => {
+    it("renders text in RTL direction", () => {
         // GIVEN
         const testingTrack = {
             type: "CAPTION",
-            language: { id: "ar-SA", name: "Arabic", direction: "rtl" } as Language,
+            language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
             default: true,
             mediaTitle: "Sample Polish",
             mediaLength: 4000,
@@ -158,9 +158,9 @@ describe("CueView", () => {
                     paddingBottom: "5px",
                     minHeight: "54px",
                     height: "100%",
-                    width: "100%",
-                    direction: "rtl"
+                    width: "100%"
                 }}
+                dir="RTL"
             >
                 text<br />wrapped
             </div>
@@ -169,7 +169,13 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    index={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    languageDirection={testingTrack.language.direction}
+                />
             </Provider>
         );
 

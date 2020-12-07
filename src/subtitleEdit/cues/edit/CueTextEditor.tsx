@@ -39,7 +39,7 @@ import { setGlossaryTerm } from "./cueEditorSlices";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
-        if (props.spellCheck && props.spellCheck.matches && spellcheckerEnabled) {
+        if (props.spellCheck && props.spellCheck.matches  && spellcheckerEnabled) {
             props.spellCheck.matches.forEach(match => {
                 if (props.editUuid) {
                     if (!hasIgnoredKeyword(match, editingTrack?.id)) {
@@ -80,6 +80,7 @@ const handleKeyShortcut = (
     props: CueTextEditorProps,
     spellCheckerMatchingOffset: number | null,
     setSpellCheckerMatchingOffset: Function,
+    languageDirection: string | undefined
 ) => (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
     if (shortcut === "openSpellChecker") {
@@ -99,6 +100,14 @@ const handleKeyShortcut = (
     if (shortcut === "newLine") {
         const newEditorState = RichUtils.insertSoftNewline(editorState);
         dispatch(updateEditorState(props.index, newEditorState));
+        return "handled";
+    }
+    if (shortcut === "insertBidiCode") {
+        const content = editorState.getCurrentContent();
+        const bidiChar = languageDirection === "RTL" ? "\u200F" : "\u200E";
+        const contentWithBidiCode = Modifier.insertText(content, editorState.getSelection(), bidiChar);
+        const newState = EditorState.push(editorState, contentWithBidiCode, "change-block-data");
+        dispatch(updateEditorState(props.index, newState));
         return "handled";
     }
     return "not-handled";
@@ -138,25 +147,27 @@ const createCorrectSpellingHandler = (
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
     (e: React.KeyboardEvent<{}>): string | null => {
-        const action = getActionByKeyboardEvent(e);
-        if (action) {
-            return action;
-        }
-        if (spellCheckerMatchingOffset != null && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
-            return "popoverHandled";
-        } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
-            if (e.keyCode === Character.ESCAPE) {
-                return "closeEditor";
-            } else if (e.keyCode === Character.ENTER) {
-                return "editNext";
-            }
+    const action = getActionByKeyboardEvent(e);
+    if (action) {
+        return action;
+    }
+    if(spellCheckerMatchingOffset != null && (e.keyCode === Character.ENTER || e.keyCode === Character.ESCAPE)) {
+        return "popoverHandled";
+    } else if (!e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        if (e.keyCode === Character.ESCAPE) {
+            return "closeEditor";
         } else if (e.keyCode === Character.ENTER) {
-            return "newLine";
-        } else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode === Character.SPACE) {
-            return "openSpellChecker";
+            return "editNext";
         }
-        return getDefaultKeyBinding(e);
-    };
+    } else if (e.keyCode === Character.ENTER) {
+        return "newLine";
+    } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.SPACE) {
+        return "openSpellChecker";
+    } else if ((e.ctrlKey || e.metaKey ) && e.shiftKey && e.keyCode === Character.B_CHAR) {
+        return "insertBidiCode";
+    }
+    return getDefaultKeyBinding(e);
+};
 
 export interface CueTextEditorProps {
     index: number;
@@ -265,9 +276,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
-            console.log(props.spellCheck);
-            if (!props.spellCheck)
-                dispatch(applySpellchecker(props.index));
+            dispatch(applySpellchecker());
         },
         // needed to call the effect only once
         // eslint-disable-next-line
@@ -288,7 +297,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         // into redux when changed.
         // (Also some tests would fail if you include editorState object itself, but behavior is still OK)
         // eslint-disable-next-line
-        [currentContent, currentInlineStyle, dispatch, props.index]
+        [ currentContent, currentInlineStyle, dispatch, props.index ]
     );
 
     useEffect(
@@ -305,7 +314,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         //  - props.vttCue is not included, because it causes endless FLUX loop.
         //  - spread operator for cue values is used so that all the VTTCue properties code can be in single file.
         // eslint-disable-next-line
-        [currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue)]
+        [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
     );
 
     // Fire update VTTCue action when component is unmounted.
@@ -332,7 +341,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     padding: "5px 10px 5px 10px"
                 }}
             >
-                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue}/>
+                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
             </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
@@ -356,24 +365,25 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}
                         handleKeyCommand={handleKeyShortcut(editorState, dispatch, props,
                             spellCheckerMatchingOffset,
-                            setSpellCheckerMatchingOffset)}
+                            setSpellCheckerMatchingOffset,
+                            editingTrack?.language.direction)}
                     />
                 </div>
                 <div style={{ flex: 0 }}>
-                    {charCountPerLine.map((count: number, index: number) => (
-                        <div key={index}><span className="sbte-count-tag">{count} ch</span><br/></div>
-                    ))}
+                    { charCountPerLine.map((count: number, index: number) => (
+                        <div key={index}><span className="sbte-count-tag">{count} ch</span><br /></div>
+                    )) }
                 </div>
                 <div style={{ flex: 0, paddingRight: "5px" }}>
-                    {wordCountPerLine.map((count: number, index: number) => (
-                        <div key={index}><span className="sbte-count-tag">{count} w</span><br/></div>
-                    ))}
+                    { wordCountPerLine.map((count: number, index: number) => (
+                        <div key={index}><span className="sbte-count-tag">{count} w</span><br /></div>
+                    )) }
                 </div>
             </div>
             <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>}/>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>}/>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>}/>
+                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
+                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
             </div>
         </div>
     );

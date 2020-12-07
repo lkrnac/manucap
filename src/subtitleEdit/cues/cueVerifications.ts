@@ -87,14 +87,12 @@ export const conformToRules = (
     previousCue?: CueDto,
     followingCue?: CueDto,
     overlapCaptions?: boolean
-
 ): boolean =>
-{
-    return checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification)
-    && rangeOk(cue.vttCue, subtitleSpecification)
-    && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
-    && isSpelledCorrectly(cue);
-};
+    checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification)
+        && rangeOk(cue.vttCue, subtitleSpecification)
+        && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
+        && isSpelledCorrectly(cue)
+;
 
 
 export const markCues = (

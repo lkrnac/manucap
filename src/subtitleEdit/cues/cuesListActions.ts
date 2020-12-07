@@ -92,27 +92,26 @@ export const checkErrors = (index: number): AppThunk =>
         }
     };
 
-const checkCueErrorsWithNeighbours = (dispatch: Dispatch<any>, index: number,
-                                      preivousCue: CueDto, followingCue: CueDto) => {
+const validateCue = (dispatch: Dispatch<SubtitleEditAction | void>,
+                     index: number,
+                     previousCue: CueDto, followingCue: CueDto): void => {
 
-    // @ts-ignore
-    if (!preivousCue.spellCheck) {
+    if (!previousCue.spellCheck) {
         dispatch(applySpellchecker(index - 1));
     }
     dispatch(checkErrors(index - 1));
-    // @ts-ignore
+
     dispatch(applySpellchecker(index));
     dispatch(checkErrors(index));
-    // @ts-ignore
+
     if (!followingCue.spellCheck) {
         dispatch(applySpellchecker(index + 1));
     }
     dispatch(checkErrors(index + 1));
-
 };
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void> | SubtitleEditAction | void>, getState): void => {
         console.log("update vtt cue ?");
         const cues = getState().cues;
         const originalCue = cues[idx];
@@ -149,7 +148,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
             updateSearchMatches(dispatch, getState, idx);
-            checkCueErrorsWithNeighbours(dispatch, idx, previousCue, followingCue);
+            validateCue(dispatch, idx, previousCue, followingCue);
             callSaveTrack(dispatch, getState);
         }
     };

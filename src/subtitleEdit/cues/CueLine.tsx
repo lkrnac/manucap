@@ -21,6 +21,7 @@ interface Props {
 }
 
 const CueLine = (props: Props): ReactElement => {
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const captionClassName = "sbte-gray-100-background";
     const translationCueClassName = props.data.cue ? captionClassName : "sbte-gray-200-background";
@@ -42,6 +43,7 @@ const CueLine = (props: Props): ReactElement => {
                             playerTime={props.rowProps.playerTime}
                             className={"sbte-bottom-border " + captionClassName}
                             showGlossaryTerms={editingCueIndex === props.rowIndex}
+                            languageDirection={editingTrack?.sourceLanguage?.direction}
                           />
                         : <div />
                 }
@@ -59,6 +61,7 @@ const CueLine = (props: Props): ReactElement => {
                                 playerTime={props.rowProps.playerTime}
                                 className={captionClassName}
                                 showGlossaryTerms={false}
+                                languageDirection={editingTrack?.language.direction}
                               />
                         : <CueView
                             index={props.rowIndex}
@@ -68,6 +71,7 @@ const CueLine = (props: Props): ReactElement => {
                             hideText
                             className={translationCueClassName}
                             showGlossaryTerms={false}
+                            languageDirection={editingTrack?.language.direction}
                           />
 
                 }

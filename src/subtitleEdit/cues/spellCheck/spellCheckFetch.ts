@@ -37,7 +37,6 @@ export const fetchSpellCheck = (
     language: string,
     trackId?: string
 ): void => {
-    console.log("Fetching for " + cueIndex);
     const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
     const submittedLanguageCode = languageToolMatchedLanguageCode == null ? language :
         languageToolMatchedLanguageCode;
