@@ -72,7 +72,7 @@ export const applySpellchecker = (customIndex: number): AppThunk =>
         callFetchSpellCheck(dispatch, getState, customIndex);
     };
 
-export const checkErrors = (index: number): AppThunk =>
+export const checkErrors = (index: number, alwaysCallSpellcheck?: boolean): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         if (index !== undefined) {
             const subtitleSpecification = getState().subtitleSpecifications;
@@ -82,6 +82,9 @@ export const checkErrors = (index: number): AppThunk =>
             const currentCue = cues[index];
             const followingCue = cues[index + 1];
             if (currentCue != null) {
+                if (alwaysCallSpellcheck || !currentCue.spellCheck) {
+                    dispatch(applySpellchecker(index));
+                }
                 const currentCorrupted = !conformToRules(
                     currentCue, subtitleSpecification, previousCue, followingCue,
                     overlapEnabled
@@ -93,20 +96,9 @@ export const checkErrors = (index: number): AppThunk =>
     };
 
 const validateCue = (dispatch: Dispatch<SubtitleEditAction | void>,
-                     index: number,
-                     previousCue: CueDto, followingCue: CueDto): void => {
-
-    if (!previousCue.spellCheck) {
-        dispatch(applySpellchecker(index - 1));
-    }
+                     index: number): void => {
     dispatch(checkErrors(index - 1));
-
-    dispatch(applySpellchecker(index));
-    dispatch(checkErrors(index));
-
-    if (!followingCue.spellCheck) {
-        dispatch(applySpellchecker(index + 1));
-    }
+    dispatch(checkErrors(index, true));
     dispatch(checkErrors(index + 1));
 };
 
@@ -148,7 +140,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
             updateSearchMatches(dispatch, getState, idx);
-            validateCue(dispatch, idx, previousCue, followingCue);
+            validateCue(dispatch, idx);
             callSaveTrack(dispatch, getState);
         }
     };
@@ -163,16 +155,11 @@ export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
         }
     };
 
-export const validateCorruptedCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+export const validateCorruptedCues = (matchText: string): AppThunk =>
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const cues = getState().cues;
-        cues.filter(cue => cue.corrupted).forEach((cue: CueDto) => {
-            const track = getState().editingTrack;
-            const overlapCaptionsAllowed = track?.overlapEnabled;
-            console.log("validateCorruptedCues call checkerrors");
-
-            // @ts-ignore
-            dispatch(checkErrors(cues.indexOf(cue), overlapCaptionsAllowed));
+        cues.filter(cue => cue.corrupted && cue.vttCue.text.includes(matchText)).forEach((cue: CueDto) => {
+            dispatch(checkErrors(cues.indexOf(cue)));
         });
     };
 

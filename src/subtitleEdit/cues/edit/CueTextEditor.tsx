@@ -276,7 +276,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
-            dispatch(applySpellchecker());
+            dispatch(applySpellchecker(props.index));
         },
         // needed to call the effect only once
         // eslint-disable-next-line
