@@ -291,7 +291,7 @@ describe("CueTextEditor", () => {
                     }
                 );
                 // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(2);
+                expect(global.fetch).toBeCalledTimes(1);
                 done();
             },
             6000
@@ -375,7 +375,7 @@ describe("CueTextEditor", () => {
                     }
                 );
                 // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(2);
+                expect(global.fetch).toBeCalledTimes(1);
                 done();
             },
             6000
