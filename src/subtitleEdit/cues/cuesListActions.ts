@@ -55,9 +55,9 @@ const callFetchSpellCheck = (dispatch: Dispatch<PayloadAction<SubtitleEditAction
         const text = currentEditingCue.vttCue.text as string;
         const editUuid = currentEditingCue.editUuid as string;
         const spellCheckerSettings = getState().spellCheckerSettings;
-        if (editUuid && track && spellCheckerSettings.enabled) {
+        if (editUuid && track && track.language?.id && spellCheckerSettings.enabled) {
             fetchSpellCheck(dispatch, getState, index, text,
-                spellCheckerSettings, track.language?.id, track.id);
+                spellCheckerSettings, track.language.id, track.id);
         }
     }
 };
