@@ -134,7 +134,7 @@ const createExpectedNode = (
     </div>
 );
 
-const createEditorNode = (text = "someText"): React.ReactElement => {
+const createEditorNode = (text = "someText", spellcheck?: SpellCheck): React.ReactElement => {
     const vttCue = new VTTCue(0, 1, text);
     const editUuid = testingStore.getState().cues[0].editUuid;
     return (
@@ -145,6 +145,7 @@ const createEditorNode = (text = "someText"): React.ReactElement => {
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
+                spellCheck={spellcheck}
             />
         </Provider>);
 };
@@ -157,9 +158,9 @@ const mountEditorNode = (text = "someText"): ReactWrapper => {
     return actualNode.find(".public-DraftEditor-content");
 };
 
-const renderEditorNode = (text = "someText"): HTMLElement => {
+const renderEditorNode = (text = "someText", spellCheck?: SpellCheck): HTMLElement => {
     const { container } = render(
-        createEditorNode(text)
+        createEditorNode(text, spellCheck)
     );
     return container;
 };
@@ -849,13 +850,22 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         });
 
-        it("calls spellchecker once component loads", () => {
+        it("calls spellchecker once component loads and spellcheck is not passed", () => {
             // GIVEN, WHEN
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             renderEditorNode();
 
             // THEN
             expect(fetchSpellCheck).toBeCalledTimes(1);
+        });
+
+        it("does not call spellchecker once component loads if it is spellcheck is passed", () => {
+            // GIVEN, WHEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            renderEditorNode("someText", { matches: []} as SpellCheck);
+
+            // THEN
+            expect(fetchSpellCheck).not.toBeCalled();
         });
 
 

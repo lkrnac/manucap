@@ -1,5 +1,4 @@
 import { Dispatch } from "react";
-import { PayloadAction } from "@reduxjs/toolkit";
 import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
 import { cuesSlice } from "../cuesListSlices";
@@ -10,8 +9,7 @@ import { spellcheckerSettingsSlice } from "../../spellcheckerSettingsSlice";
 import { checkErrors } from "../cuesListActions";
 
 const addSpellCheck = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    getState: Function,
+    dispatch: Dispatch<SubtitleEditAction | void>,
     index: number,
     spellCheck: SpellCheck,
     trackId?: string
@@ -22,15 +20,11 @@ const addSpellCheck = (
         };
     }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
-
-    const overlapEnabled = getState().editingTrack?.overlapEnabled;
-    // @ts-ignore
-    dispatch(checkErrors(index, overlapEnabled, false));
+    dispatch(checkErrors(index, false));
 };
 
 export const fetchSpellCheck = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
-    getState: Function,
+    dispatch: Dispatch<SubtitleEditAction | void>,
     cueIndex: number,
     text: string,
     spellCheckerSettings: SpellcheckerSettings,
@@ -55,7 +49,7 @@ export const fetchSpellCheck = (
             }
         })
         .then(data =>
-            addSpellCheck(dispatch, getState, cueIndex, data as SpellCheck, trackId)
+            addSpellCheck(dispatch, cueIndex, data as SpellCheck, trackId)
         )
         .catch(error => {
             if (error.status === 400) {

@@ -47,7 +47,7 @@ const createAndAddCue = (previousCue: CueDto,
 };
 
 
-const callFetchSpellCheck = (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
+const callFetchSpellCheck = (dispatch: Dispatch<SubtitleEditAction | void>,
                              getState: Function, index: number): void => {
     const track = getState().editingTrack as Track;
     const currentEditingCue = getState().cues[index];
@@ -56,14 +56,14 @@ const callFetchSpellCheck = (dispatch: Dispatch<PayloadAction<SubtitleEditAction
         const editUuid = currentEditingCue.editUuid as string;
         const spellCheckerSettings = getState().spellCheckerSettings;
         if (editUuid && track && track.language?.id && spellCheckerSettings.enabled) {
-            fetchSpellCheck(dispatch, getState, index, text,
+            fetchSpellCheck(dispatch, index, text,
                 spellCheckerSettings, track.language.id, track.id);
         }
     }
 };
 
 export const applySpellchecker = (customIndex: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState: Function): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState: Function): void => {
         callFetchSpellCheck(dispatch, getState, customIndex);
     };
 
@@ -98,7 +98,7 @@ const validateCue = (dispatch: Dispatch<SubtitleEditAction | void>,
 };
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void> | SubtitleEditAction | void>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list

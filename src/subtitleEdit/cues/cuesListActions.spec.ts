@@ -541,7 +541,7 @@ describe("cueSlices", () => {
                     }, 50);
             });
 
-            it("does triggers call to spellchecker for previous and following cues if called before",
+            it("does not triggers call to spellchecker for previous and following cues if called before",
                 async (done) => {
 
                 const cues = [
