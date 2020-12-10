@@ -1,8 +1,9 @@
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
+import { clearLastCueChange } from "../cues/edit/cueEditorSlices";
 
 interface Props {
     mp4: string;
@@ -25,6 +26,11 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
     const videoSectionToPlay = useSelector((state: SubtitleEditState) => state.videoSectionToPlay);
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];
     const tracks = editingTrack ? [editingTrack] : [];
+
+    useEffect(() => {
+        dispatch(clearLastCueChange());
+    }, [dispatch, lastCueChange]);
+
     return editingTrack
         ? (
             <VideoPlayer

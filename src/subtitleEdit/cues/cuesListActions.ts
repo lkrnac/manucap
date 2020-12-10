@@ -70,7 +70,7 @@ export const applySpellchecker = (): AppThunk =>
     };
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
@@ -147,7 +147,7 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     };
 
 export const addCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | null>>, getState): void => {
         const state: SubtitleEditState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
@@ -175,7 +175,7 @@ export const addCue = (idx: number): AppThunk =>
     };
 
 export const deleteCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
         dispatch(cuesSlice.actions.deleteCue({ idx }));
         dispatch(lastCueChangeSlice.actions
             .recordCueChange({ changeType: "REMOVE", index: idx, vttCue: new VTTCue(0, 0, "") }));

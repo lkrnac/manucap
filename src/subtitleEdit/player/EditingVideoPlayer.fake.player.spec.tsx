@@ -9,14 +9,18 @@ import { CueChange, CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { mount } from "enzyme";
-import testingStore from "../../testUtils/testingStore";
+import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
 import { updateCues, updateVttCue, } from "../cues/cuesListActions";
+import { render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
 jest.mock("./VideoPlayer");
 
 // @ts-ignore We are mocking module
 VideoPlayer.mockClear();
+
+let testingStore = createTestingStore();
 
 const testingTrack = {
     type: "CAPTION",
@@ -30,6 +34,10 @@ const testingCues = [
 ] as CueDto[];
 
 describe("EditingVideoPlayer", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+    });
+
     it("passes down new video section to play", () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
@@ -57,11 +65,13 @@ describe("EditingVideoPlayer", () => {
         );
 
         // WHEN
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Cue"), editUuid) as {} as AnyAction);
-        actualNode.setProps({}); // trigger update + re-render
+        act(() => {
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Cue"), editUuid) as {} as AnyAction);
+            actualNode.setProps({}); // trigger update + re-render
+        });
 
         // THEN
         const lastCueChange = actualNode.find(VideoPlayer).props().lastCueChange as CueChange;
@@ -70,5 +80,26 @@ describe("EditingVideoPlayer", () => {
         expect(lastCueChange.vttCue.text).toEqual("Cue");
         expect(lastCueChange.vttCue.startTime).toEqual(0);
         expect(lastCueChange.vttCue.endTime).toEqual(1);
+    });
+
+    it("clears last editing change state after it is updated in video player", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        render(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
+            </Provider>
+        );
+
+        // WHEN
+        act(() => {
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Cue"), editUuid) as {} as AnyAction);
+        });
+
+        // THEN
+        expect(testingStore.getState().lastCueChange).toBeNull();
     });
 });
