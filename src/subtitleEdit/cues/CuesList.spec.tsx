@@ -501,7 +501,7 @@ describe("CuesList", () => {
         expect(cueLines.at(1).props().rowProps.playerTime).toEqual(5.5);
     });
 
-    it("scrolls to last cue", (done) => {
+    it("scrolls to last cue", async() => {
         const cues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -521,16 +521,15 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+        await act(async () => {
+            actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+        });
 
-        setTimeout(() => {
-            // THEN
-            expect(actualNode.html()).toContain("Caption Line 7");
-            done();
-        }, 10);
+        // THEN
+        expect(actualNode.html()).toContain("Caption Line 7");
     });
 
-    it("scrolls to first cue", (done) => {
+    it("scrolls to first cue", async () => {
         const cues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -552,17 +551,15 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
-        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+        await act(async () => {
+            actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+        });
 
         // THEN
-        setTimeout(() => {
-            // THEN
-            expect(actualNode.html()).toContain("Caption Line 1");
-            done();
-        }, 10);
+        expect(actualNode.html()).toContain("Caption Line 1");
     });
 
-    it("scrolls to current editing cue if not in viewport", (done) => {
+    it("scrolls to current editing cue if not in viewport", async () => {
         const cues = [
             { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -584,14 +581,12 @@ describe("CuesList", () => {
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
-        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+        await act(async () => {
+            actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+        });
 
         // THEN
-        setTimeout(() => {
-            // THEN
-            expect(actualNode.html()).toContain("Caption Line 3");
-            done();
-        }, 10);
+        expect(actualNode.html()).toContain("Caption Line 3");
     });
 
     it("adds first cue if clicked translation cue and cues are empty", () => {
