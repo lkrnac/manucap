@@ -118,7 +118,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
             <button
                 className="btn btn-secondary btn-sm"
                 type="button"
-                disabled={editingCueIndex == -1}
+                disabled={editingCueIndex === -1}
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
                     dispatch(replaceCurrentMatch(replacement));
