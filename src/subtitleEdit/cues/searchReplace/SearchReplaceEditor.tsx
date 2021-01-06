@@ -71,6 +71,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
     const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
     const searchReplaceVisible = useSelector((state: SubtitleEditState) => state.searchReplaceVisible);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const [replacement, setReplacement] = useState("");
 
     return searchReplaceVisible ? (
@@ -117,6 +118,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
             <button
                 className="btn btn-secondary btn-sm"
                 type="button"
+                disabled={editingCueIndex == -1}
                 style={{ marginLeft: "5px" }}
                 onClick={(): void => {
                     dispatch(replaceCurrentMatch(replacement));
