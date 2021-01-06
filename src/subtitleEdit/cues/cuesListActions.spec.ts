@@ -26,6 +26,7 @@ import { Replacement, SpellCheck } from "./spellCheck/model";
 import { setSpellCheckDomain } from "../spellcheckerSettingsSlice";
 import { updateSourceCues } from "./view/sourceCueSlices";
 import { updateEditingCueIndex } from "./edit/cueEditorSlices";
+import { act } from "react-dom/test-utils";
 
 const testingTrack = {
     type: "CAPTION",
@@ -359,7 +360,7 @@ describe("cueSlices", () => {
                 expect(global.fetch).not.toBeCalled();
             });
 
-            it("exclude spell check match that matches ignored hash in local storage ", (done) => {
+            it("exclude spell check match that matches ignored hash in local storage ", async () => {
                 // GIVEN
                 const cues = [
                     {
@@ -400,27 +401,23 @@ describe("cueSlices", () => {
                     JSON.stringify(ignoredKeyWordMap));
 
                 //WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"),
-                    testingStore.getState().cues[0].editUuid) as {} as AnyAction);
+                await act(async () => {
+                    testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"),
+                        testingStore.getState().cues[0].editUuid) as {} as AnyAction);
+                });
 
                 // THEN
-                setTimeout(
-                    () => {
-                        // @ts-ignore modern browsers does have it
-                        expect(global.fetch).toBeCalledWith(
-                            "https://testing-domain/v2/check",
-                            {
-                                method: "POST",
-                                body: "language=en-US&text=Dummy Cue" +
-                                    "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
-                            }
-                        );
-                        expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
-                        expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
-                        done();
-                    },
-                    50
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledWith(
+                    "https://testing-domain/v2/check",
+                    {
+                        method: "POST",
+                        body: "language=en-US&text=Dummy Cue" +
+                            "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                    }
                 );
+                expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
+                expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
             });
 
             it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
