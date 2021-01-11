@@ -69,7 +69,7 @@ describe("SearchReplaceEditor", () => {
                 >
                     <i className="fa fa-arrow-up" />
                 </button>
-                <button className="btn btn-secondary btn-sm" type="button" style={{ marginLeft: "5px" }}>
+                <button className="btn btn-secondary btn-sm" type="button" disabled style={{ marginLeft: "5px" }}>
                     Replace
                 </button>
                 <button
@@ -143,6 +143,7 @@ describe("SearchReplaceEditor", () => {
 
     it("sets replacement in redux when changed and replace button clicked", () => {
         // GIVEN
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         const { getByPlaceholderText, getByText } = render(
             <Provider store={testingStore}>
