@@ -20,6 +20,8 @@ const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Lang
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
+const randomTime = (max: number): number => Math.random() * max;
+
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
     // #############################################################################################
@@ -27,11 +29,14 @@ const TestApp = (): ReactElement => {
     // #############################################################################################
     useEffect(() => {
         // @ts-ignore since it can manually be updated
+        let endTime = 0;
         if (trackType === "TRANSLATION") {
             const cues = [] as CueDto[];
             for (let idx = 0; idx < 9999; idx++) {
+                const randomStart = endTime + randomTime(1);
+                const randomEnd = endTime = randomStart + randomTime(3);
                 cues.push({
-                    vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
+                    vttCue: new VTTCue(randomStart, randomEnd, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
                     glossaryMatches: [
                         { source: "text", replacements: ["text replacement1", "text replacement2"]},
@@ -65,6 +70,7 @@ const TestApp = (): ReactElement => {
     });
     useEffect(() => {
         const cues = [] as CueDto[];
+        let endTime = 0;
         for (let idx = 0; idx < 9999; idx++) {
             const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
             let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
@@ -72,8 +78,10 @@ const TestApp = (): ReactElement => {
             if (language.id === "ar-SA") {
                 text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
             }
+            const randomStart = endTime + randomTime(1);
+            const randomEnd = endTime = randomStart + randomTime(3);
             cues.push({
-                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, text),
+                vttCue: new VTTCue(randomStart, randomEnd, text),
                 cueCategory: "DIALOGUE"
             });
         }
