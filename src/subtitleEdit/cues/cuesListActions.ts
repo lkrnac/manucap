@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
 import { CueCategory, CueDto, ScrollPosition, SubtitleEditAction, Track } from "../model";
@@ -47,25 +47,22 @@ const createAndAddCue = (previousCue: CueDto,
 };
 
 
-const callFetchSpellCheck = (dispatch: Dispatch<SubtitleEditAction | void>,
-                             getState: Function, index: number): void => {
-    const track = getState().editingTrack as Track;
-    const currentEditingCue = getState().cues[index];
-    if (currentEditingCue) {
-        const text = currentEditingCue.vttCue.text as string;
-        const editUuid = currentEditingCue.editUuid as string;
-        const spellCheckerSettings = getState().spellCheckerSettings;
-        if (editUuid && track && track.language?.id && spellCheckerSettings.enabled) {
-            fetchSpellCheck(dispatch, index, text,
-                spellCheckerSettings, track.language.id, track.id);
+export const applySpellchecker = createAsyncThunk(
+    "spellchecker/applySpellchecker",
+    async (index: number, thunkAPI) => {
+        const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
+        const track = state.editingTrack as Track;
+        const currentEditingCue = state.cues[index];
+        if (currentEditingCue) {
+            const text = currentEditingCue.vttCue.text as string;
+            const editUuid = currentEditingCue.editUuid as string;
+            const spellCheckerSettings = state.spellCheckerSettings;
+            if (editUuid && track && track.language?.id && spellCheckerSettings.enabled) {
+                fetchSpellCheck(thunkAPI.dispatch, index, text, spellCheckerSettings, track.language.id, track.id);
+            }
         }
     }
-};
-
-export const applySpellchecker = (customIndex: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState: Function): void => {
-        callFetchSpellCheck(dispatch, getState, customIndex);
-    };
+);
 
 export const checkErrors = (index: number, alwaysCallSpellcheck?: boolean): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
