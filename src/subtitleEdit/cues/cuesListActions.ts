@@ -20,7 +20,7 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "./edit/cueEditorSlices";
-import { CueCorruptedSetAction, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
+import { CueCorruptedPayload, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
 
 interface CuesAction extends SubtitleEditAction {
@@ -92,7 +92,7 @@ export const checkErrors = createAsyncThunk(
                     overlapEnabled
                 );
                 thunkAPI.dispatch(cuesSlice.actions.setCorrupted(
-                    { index: index, corrupted: currentCorrupted } as CueCorruptedSetAction));
+                    { index: index, corrupted: currentCorrupted } as CueCorruptedPayload));
             }
         }
     });

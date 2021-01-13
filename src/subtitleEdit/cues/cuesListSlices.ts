@@ -35,7 +35,7 @@ interface CheckOptions extends SubtitleSpecificationAction {
     index?: number;
 }
 
-export interface CueCorruptedSetAction {
+export interface CueCorruptedPayload {
     corrupted: boolean;
     index: number;
 }
@@ -122,7 +122,7 @@ export const cuesSlice = createSlice({
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
         },
-        setCorrupted: (state, action: PayloadAction<CueCorruptedSetAction>): void => {
+        setCorrupted: (state, action: PayloadAction<CueCorruptedPayload>): void => {
             state[action.payload.index].corrupted = action.payload.corrupted;
         },
         syncCues: (state, action: PayloadAction<CuesAction>): CueDto[] => {
