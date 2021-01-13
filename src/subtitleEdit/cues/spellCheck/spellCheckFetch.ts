@@ -36,15 +36,13 @@ export const fetchSpellCheck = (
         body: `language=${submittedLanguageCode}&text=${plainText}&disabledRules=${
             Constants.SPELLCHECKER_EXCLUDED_RULES}`
     };
-
     return fetch(`https://${spellCheckerSettings.domain}/v2/check`, requestBody)
         .then((response: Response) => {
             if (response.ok) {
                 return response.json();
-            } else if (response.status === 400) {
+            } else {
                 throw response.status;
             }
-            return;
         });
 };
 
