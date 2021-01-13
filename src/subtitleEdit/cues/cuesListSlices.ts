@@ -35,7 +35,7 @@ interface CheckOptions extends SubtitleSpecificationAction {
     index?: number;
 }
 
-export interface CueCorruptedSetAction extends SubtitleSpecificationAction {
+export interface CueCorruptedSetAction {
     corrupted: boolean;
     index: number;
 }

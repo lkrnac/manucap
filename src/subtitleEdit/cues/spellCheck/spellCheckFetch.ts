@@ -1,14 +1,13 @@
-import { Dispatch } from "react";
 import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
-import { cuesSlice } from "../cuesListSlices";
 import { SpellcheckerSettings, SubtitleEditAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
 import { Constants } from "../../constants";
-import { spellcheckerSettingsSlice } from "../../spellcheckerSettingsSlice";
+import { cuesSlice } from "../cuesListSlices";
 import { checkErrors } from "../cuesListActions";
+import { Dispatch } from "react";
 
-const addSpellCheck = (
+export const addSpellCheck = (
     dispatch: Dispatch<SubtitleEditAction | void>,
     index: number,
     spellCheck: SpellCheck,
@@ -24,13 +23,10 @@ const addSpellCheck = (
 };
 
 export const fetchSpellCheck = (
-    dispatch: Dispatch<SubtitleEditAction | void>,
-    cueIndex: number,
     text: string,
     spellCheckerSettings: SpellcheckerSettings,
-    language: string,
-    trackId?: string
-): void => {
+    language: string
+): Promise<SpellCheck> => {
     const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
     const submittedLanguageCode = languageToolMatchedLanguageCode == null ? language :
         languageToolMatchedLanguageCode;
@@ -40,21 +36,15 @@ export const fetchSpellCheck = (
         body: `language=${submittedLanguageCode}&text=${plainText}&disabledRules=${
             Constants.SPELLCHECKER_EXCLUDED_RULES}`
     };
-    fetch(`https://${spellCheckerSettings.domain}/v2/check`, requestBody)
-        .then((response) => {
+
+    return fetch(`https://${spellCheckerSettings.domain}/v2/check`, requestBody)
+        .then((response: Response) => {
             if (response.ok) {
                 return response.json();
-            } else {
-                throw response;
+            } else if (response.status == 400) {
+                throw response.status;
             }
-        })
-        .then(data =>
-            addSpellCheck(dispatch, cueIndex, data as SpellCheck, trackId)
-        )
-        .catch(error => {
-            if (error.status === 400) {
-                dispatch(spellcheckerSettingsSlice.actions.disableSpellchecker());
-            }
+            return;
         });
 };
 

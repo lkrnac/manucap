@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
-import { CueCategory, CueDto, ScrollPosition, SubtitleEditAction, Track } from "../model";
+import { CueCategory, CueDto, ScrollPosition, SpellcheckerSettings, SubtitleEditAction, Track } from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
 import { Constants } from "../constants";
@@ -13,11 +13,12 @@ import {
     applyOverlapPreventionEnd,
     applyOverlapPreventionStart,
     conformToRules,
-    getTimeGapLimits, markCues,
+    getTimeGapLimits,
+    markCues,
     verifyCueDuration
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
-import { fetchSpellCheck } from "./spellCheck/spellCheckFetch";
+import { addSpellCheck, fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "./edit/cueEditorSlices";
 import { CueCorruptedSetAction, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
@@ -47,8 +48,8 @@ const createAndAddCue = (previousCue: CueDto,
 };
 
 
-export const applySpellchecker = createAsyncThunk(
-    "spellchecker/applySpellchecker",
+export const applySpellcheckerOnCue = createAsyncThunk(
+    "spellchecker/applySpellcheckerOnCue",
     async (index: number, thunkAPI) => {
         const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
         const track = state.editingTrack as Track;
@@ -56,17 +57,24 @@ export const applySpellchecker = createAsyncThunk(
         if (currentEditingCue) {
             const text = currentEditingCue.vttCue.text as string;
             const editUuid = currentEditingCue.editUuid as string;
-            const spellCheckerSettings = state.spellCheckerSettings;
+            const spellCheckerSettings: SpellcheckerSettings = state.spellCheckerSettings;
             if (editUuid && track && track.language?.id && spellCheckerSettings.enabled) {
-                fetchSpellCheck(thunkAPI.dispatch, index, text, spellCheckerSettings, track.language.id, track.id);
+                return fetchSpellCheck(text, spellCheckerSettings, track.language.id)
+                    .then(spellCheck => {
+                            addSpellCheck(thunkAPI.dispatch, index, spellCheck, track.id);
+                        }
+                    );
             }
         }
+        return;
     }
 );
 
+
 export const checkErrors = createAsyncThunk(
-        "validations/checkErrors",
-         async ({ index, alwaysCallSpellcheck }: {index: number; alwaysCallSpellcheck?: boolean}, thunkAPI) => {
+    "validations/checkErrors",
+    async ({ index, alwaysCallSpellcheck }: { index: number; alwaysCallSpellcheck?: boolean },
+           thunkAPI) => {
         if (index !== undefined) {
             const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
             const subtitleSpecification = state.subtitleSpecifications;
@@ -77,7 +85,7 @@ export const checkErrors = createAsyncThunk(
             const followingCue = cues[index + 1];
             if (currentCue != null) {
                 if (alwaysCallSpellcheck || !currentCue.spellCheck) {
-                    thunkAPI.dispatch(applySpellchecker(index));
+                    thunkAPI.dispatch(applySpellcheckerOnCue(index));
                 }
                 const currentCorrupted = !conformToRules(
                     currentCue, subtitleSpecification, previousCue, followingCue,
@@ -88,6 +96,7 @@ export const checkErrors = createAsyncThunk(
             }
         }
     });
+
 
 const validateCue = (dispatch: Dispatch<SubtitleEditAction | void>,
                      index: number): void => {

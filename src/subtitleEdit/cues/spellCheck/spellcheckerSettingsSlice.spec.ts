@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import testingStore from "../../../testUtils/testingStore";
-import { setSpellCheckDomain, spellcheckerSettingsSlice } from "../../spellcheckerSettingsSlice";
+import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
 describe("spellCheckSlices", () => {
 
@@ -40,19 +40,6 @@ describe("spellCheckSlices", () => {
 
             // THEN
             expect(testingStore.getState().spellCheckerSettings.domain).toEqual(undefined);
-            expect(testingStore.getState().spellCheckerSettings.enabled).toEqual(false);
-        });
-    });
-
-    describe("disableSpellchecker", () => {
-        it("sets spellcheckerDisabled to true when calling", () => {
-            //GIVEN
-            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(spellcheckerSettingsSlice.actions.disableSpellchecker() as {} as AnyAction);
-
-            // THEN
             expect(testingStore.getState().spellCheckerSettings.enabled).toEqual(false);
         });
     });
