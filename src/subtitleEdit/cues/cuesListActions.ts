@@ -64,34 +64,36 @@ export const applySpellchecker = createAsyncThunk(
     }
 );
 
-export const checkErrors = (index: number, alwaysCallSpellcheck?: boolean): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+export const checkErrors = createAsyncThunk(
+        "validations/checkErrors",
+         async ({ index, alwaysCallSpellcheck }: {index: number; alwaysCallSpellcheck?: boolean}, thunkAPI) => {
         if (index !== undefined) {
-            const subtitleSpecification = getState().subtitleSpecifications;
-            const overlapEnabled = getState().editingTrack?.overlapEnabled;
-            const cues = getState().cues;
+            const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
+            const subtitleSpecification = state.subtitleSpecifications;
+            const overlapEnabled = state.editingTrack?.overlapEnabled;
+            const cues = state.cues;
             const previousCue = cues[index - 1];
             const currentCue = cues[index];
             const followingCue = cues[index + 1];
             if (currentCue != null) {
                 if (alwaysCallSpellcheck || !currentCue.spellCheck) {
-                    dispatch(applySpellchecker(index));
+                    thunkAPI.dispatch(applySpellchecker(index));
                 }
                 const currentCorrupted = !conformToRules(
                     currentCue, subtitleSpecification, previousCue, followingCue,
                     overlapEnabled
                 );
-                dispatch(cuesSlice.actions.setCorrupted(
+                thunkAPI.dispatch(cuesSlice.actions.setCorrupted(
                     { index: index, corrupted: currentCorrupted } as CueCorruptedSetAction));
             }
         }
-    };
+    });
 
 const validateCue = (dispatch: Dispatch<SubtitleEditAction | void>,
                      index: number): void => {
-    dispatch(checkErrors(index - 1));
-    dispatch(checkErrors(index, true));
-    dispatch(checkErrors(index + 1));
+    dispatch(checkErrors({ index: index - 1 }));
+    dispatch(checkErrors({ index, alwaysCallSpellcheck: true }));
+    dispatch(checkErrors({ index: index + 1 }));
 };
 
 export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
@@ -146,14 +148,16 @@ export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
         }
     };
 
-export const validateCorruptedCues = (matchText: string): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
-        const cues = getState().cues;
+export const validateCorruptedCues = createAsyncThunk(
+    "validations/validateCorruptedCues",
+    async (matchText: string, thunkAPI) => {
+        const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
+        const cues = state.cues;
         cues.filter(cue => cue.corrupted
             && cue.vttCue.text.includes(matchText)).forEach((cue: CueDto) => {
-            dispatch(checkErrors(cues.indexOf(cue)));
+            thunkAPI.dispatch(checkErrors({ index: cues.indexOf(cue) }));
         });
-    };
+    });
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {

@@ -20,7 +20,7 @@ const addSpellCheck = (
         };
     }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
-    dispatch(checkErrors(index, false));
+    dispatch(checkErrors({ index }));
 };
 
 export const fetchSpellCheck = (
