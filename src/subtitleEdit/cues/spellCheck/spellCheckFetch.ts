@@ -41,7 +41,7 @@ export const fetchSpellCheck = (
         .then((response: Response) => {
             if (response.ok) {
                 return response.json();
-            } else if (response.status == 400) {
+            } else if (response.status === 400) {
                 throw response.status;
             }
             return;
