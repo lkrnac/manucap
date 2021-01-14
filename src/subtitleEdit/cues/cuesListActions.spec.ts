@@ -26,6 +26,7 @@ import { Replacement, SpellCheck } from "./spellCheck/model";
 import { setSpellCheckDomain } from "../spellcheckerSettingsSlice";
 import { updateSourceCues } from "./view/sourceCueSlices";
 import { updateEditingCueIndex } from "./edit/cueEditorSlices";
+import { act } from "react-dom/test-utils";
 
 const testingTrack = {
     type: "CAPTION",
@@ -123,7 +124,7 @@ describe("cueSlices", () => {
                 testingStore = createTestingStore();
                 jest.clearAllMocks();
             });
-            it("updates cues in redux with spell checking state", (done) => {
+            it("updates cues in redux with spell checking state", async () => {
                 // GIVEN
                 const testingResponse = {
                     matches: [
@@ -167,33 +168,31 @@ describe("cueSlices", () => {
 
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() =>
+                    .mockImplementation(() =>
                         new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+                await act(async () => {
+                    testingStore
+                        .dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+                });
+
 
                 // THEN
-                setTimeout(
-                    () => {
-                        // @ts-ignore modern browsers does have it
-                        expect(global.fetch).toBeCalledWith(
-                            "https://testing-domain/v2/check",
-                            {
-                              method: "POST",
-                              body: "language=en-US&text=Dummy Cue" +
-                                  "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
-                            }
-                        );
-                        expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
-                        expect(testingStore.getState().cues[2].editUuid).toEqual(editUuid);
-                        expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
-                        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
-                        expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
-                        done();
-                    },
-                    50
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledWith(
+                    "https://testing-domain/v2/check",
+                    {
+                      method: "POST",
+                      body: "language=en-US&text=Dummy Cue" +
+                          "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                    }
                 );
+                expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
+                expect(testingStore.getState().cues[2].editUuid).toEqual(editUuid);
+                expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+                expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             });
 
             it("marks cue as corrupted if there are spell check problems", () => {
@@ -207,7 +206,7 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() =>
+                    .mockImplementation(() =>
                         new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
 
                 // WHEN
@@ -230,7 +229,7 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() =>
+                    .mockImplementation(() =>
                         new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
 
                 // WHEN
@@ -267,7 +266,7 @@ describe("cueSlices", () => {
                     const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
+                    .mockImplementation(() => new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
 
                 // WHEN
                 testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
@@ -302,7 +301,7 @@ describe("cueSlices", () => {
                     const editUuid = testingStore.getState().cues[2].editUuid;
                     // @ts-ignore modern browsers does have it
                     global.fetch = jest.fn()
-                        .mockImplementationOnce(() =>
+                        .mockImplementation(() =>
                             new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
 
                     // WHEN
@@ -330,7 +329,7 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() =>
+                    .mockImplementation(() =>
                         new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
 
                 // WHEN
@@ -349,7 +348,7 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() => new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
+                    .mockImplementation(() => new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
 
                 // WHEN
                 testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
@@ -359,7 +358,7 @@ describe("cueSlices", () => {
                 expect(global.fetch).not.toBeCalled();
             });
 
-            it("exclude spell check match that matches ignored hash in local storage ", (done) => {
+            it("exclude spell check match that matches ignored hash in local storage ", async () => {
                 // GIVEN
                 const cues = [
                     {
@@ -387,7 +386,7 @@ describe("cueSlices", () => {
 
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
-                    .mockImplementationOnce(() =>
+                    .mockImplementation(() =>
                         new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
                 const hash = generateSpellcheckHash(ignoredKeyword, ruleId);
@@ -400,27 +399,23 @@ describe("cueSlices", () => {
                     JSON.stringify(ignoredKeyWordMap));
 
                 //WHEN
-                testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"),
-                    testingStore.getState().cues[0].editUuid) as {} as AnyAction);
+                await act(async () => {
+                    testingStore.dispatch(updateVttCue(0, new VTTCue(0, 2, "Dummy Cue"),
+                        testingStore.getState().cues[0].editUuid) as {} as AnyAction);
+                });
 
                 // THEN
-                setTimeout(
-                    () => {
-                        // @ts-ignore modern browsers does have it
-                        expect(global.fetch).toBeCalledWith(
-                            "https://testing-domain/v2/check",
-                            {
-                                method: "POST",
-                                body: "language=en-US&text=Dummy Cue" +
-                                    "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
-                            }
-                        );
-                        expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
-                        expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
-                        done();
-                    },
-                    50
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledWith(
+                    "https://testing-domain/v2/check",
+                    {
+                        method: "POST",
+                        body: "language=en-US&text=Dummy Cue" +
+                            "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                    }
                 );
+                expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
+                expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
             });
 
             it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
@@ -439,9 +434,11 @@ describe("cueSlices", () => {
 
                 //WHEN
                 for (let i = 0; i < 10; i++) {
-                    await testingStore.dispatch(
-                        await updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
-                            editUuid) as {} as AnyAction);
+                    await act(async () => {
+                        testingStore.dispatch(
+                            updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
+                                editUuid) as {} as AnyAction);
+                    });
                 }
 
                 //THEN
@@ -449,7 +446,7 @@ describe("cueSlices", () => {
                 expect(global.fetch).toBeCalledTimes(2);
             });
 
-            it("triggers call to spellchecker even with trackId undefined", async (done) => {
+            it("triggers call to spellchecker even with trackId undefined", async () => {
                 const cues = [
                     {
                         vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
@@ -481,17 +478,102 @@ describe("cueSlices", () => {
                         new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
 
                 //WHEN
-                await testingStore.dispatch(await updateVttCue(0, new VTTCue(2, 2.5, "Dummyx Cue"),
+                await act(async () => {
+                    testingStore.dispatch(updateVttCue(0, new VTTCue(2, 2.5, "Dummyx Cue"),
                         editUuid) as {} as AnyAction);
+                });
 
                 //THEN
-                setTimeout(
-                    () => {
-                        // @ts-ignore modern browsers does have it
-                        expect(global.fetch).toBeCalledTimes(1);
-                        expect(testingStore.getState().cues[0].spellCheck).toEqual(testingResponse);
-                        done();
-                    }, 50);
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledTimes(1);
+                expect(testingStore.getState().cues[0].spellCheck).toEqual(testingResponse);
+            });
+
+            it("triggers call to spellchecker for previous and following cues if not called before" +
+                " to validate cue in between", async () => {
+
+                const cues = [
+                    {
+                        vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
+                        corrupted: true
+                    },
+                    {
+                        vttCue: new VTTCue(2, 4, "falsex Line 2"), cueCategory: "DIALOGUE",
+                        corrupted: true
+                    },
+                    {
+                        vttCue: new VTTCue(6, 8, "falsex Line 3"), cueCategory: "DIALOGUE",
+                        corrupted: true
+                    }
+                    ] as CueDto[];
+                testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: undefined } as Track
+                ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() => new Promise((resolve) =>
+                        resolve({ json: () => ({}), ok: true })));
+                //WHEN
+                await act(async () => {
+                    testingStore.dispatch(updateVttCue(1, cues[1].vttCue, editUuid) as {} as AnyAction);
+                });
+
+                //THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledTimes(3);
+
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch.mock.calls[0][1].body).toContain("text=falsex Line 1");
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch.mock.calls[1][1].body).toContain("text=falsex Line 2");
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch.mock.calls[2][1].body).toContain("text=falsex Line 3");
+            });
+
+            it("does not triggers call to spellchecker for previous and following cues if called before",
+                async () => {
+
+                const cues = [
+                    {
+                        vttCue: new VTTCue(0, 2, "falsex Line 1"),
+                        cueCategory: "DIALOGUE", corrupted: true, spellCheck: { matches: []}
+                    },
+                    {
+                        vttCue: new VTTCue(2, 4, "falsex Line 2"),
+                        cueCategory: "DIALOGUE", corrupted: true, spellCheck: { matches: []}
+                    },
+                    {
+                        vttCue: new VTTCue(6, 8, "falsex Line 3"),
+                        cueCategory: "DIALOGUE", corrupted: true, spellCheck: { matches: []}
+                    }
+                ] as CueDto[];
+                testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: undefined } as Track
+                ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() => new Promise((resolve) =>
+                        resolve({ json: () => ({}), ok: true })));
+                //WHEN
+                await act(async () => {
+                    testingStore.dispatch(updateVttCue(1, cues[1].vttCue, editUuid) as {} as AnyAction);
+                });
+
+
+                //THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledTimes(1);
+
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch.mock.calls[0][1].body).toContain("text=falsex Line 2");
             });
         });
 
@@ -1723,7 +1805,7 @@ describe("cueSlices", () => {
     });
 
     describe("validateCorruptedCues", () => {
-        it("validate only corrupted cues", () => {
+        it("validate only corrupted cues with ignored text", () => {
             // GIVEN
             const spellCheck = {
                 matches: [
@@ -1749,7 +1831,11 @@ describe("cueSlices", () => {
                     cueCategory: "DIALOGUE", corrupted: false
                 },
                 {
-                    vttCue: new VTTCue(6, 0, "Caption Line 4"), // bad timing
+                    vttCue: new VTTCue(6, 8, "Caption Line 4"),
+                    cueCategory: "DIALOGUE", corrupted: false
+                },
+                {
+                    vttCue: new VTTCue(8, 0, "Caption Line 5"), // bad timing
                     cueCategory: "DIALOGUE", corrupted: false
                 }
             ] as CueDto[];
@@ -1757,13 +1843,14 @@ describe("cueSlices", () => {
             testingStore = createTestingStore({ cues });
 
             // WHEN
-            testingStore.dispatch(validateCorruptedCues() as {} as AnyAction);
+            testingStore.dispatch(validateCorruptedCues("Linex") as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
             expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
             expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
             expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[4].corrupted).toBeFalsy();
         });
 
     });

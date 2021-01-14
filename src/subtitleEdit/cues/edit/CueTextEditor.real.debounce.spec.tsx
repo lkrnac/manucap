@@ -29,16 +29,21 @@ const cues = [
 ];
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
+const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+const ruleId = "MORFOLOGIK_RULE_EN_US";
 
-const createEditorNode = (text = "someText"): ReactWrapper => {
+const createEditorNode = (text = "someText", index?: number): ReactWrapper => {
+    const idx = index != null ? index : 0;
     const vttCue = new VTTCue(0, 1, text);
-    const editUuid = testingStore.getState().cues[0].editUuid;
+    const cue = testingStore.getState().cues[idx];
+    vttCue.text = text;
+    const editUuid = cue.editUuid;
     const actualNode = mount(
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                 unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                index={0}
+                index={idx}
                 vttCue={vttCue}
                 editUuid={editUuid}
             />
@@ -223,8 +228,6 @@ describe("CueTextEditor", () => {
 
     it("triggers spellcheck only once immediately after text change", (done) => {
         // GIVEN
-        const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
-        const ruleId = "MORFOLOGIK_RULE_EN_US";
         const testingResponse = {
             matches: [
                 {
@@ -291,7 +294,7 @@ describe("CueTextEditor", () => {
                     }
                 );
                 // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(2);
+                expect(global.fetch).toBeCalledTimes(3);
                 done();
             },
             6000
@@ -300,8 +303,6 @@ describe("CueTextEditor", () => {
 
     it("triggers spellcheck only once immediately after clear text change", (done) => {
         // GIVEN
-        const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
-        const ruleId = "MORFOLOGIK_RULE_EN_US";
         const testingResponse = {
             matches: [
                 {
@@ -375,7 +376,7 @@ describe("CueTextEditor", () => {
                     }
                 );
                 // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(2);
+                expect(global.fetch).toBeCalledTimes(3);
                 done();
             },
             6000
