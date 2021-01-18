@@ -48,14 +48,10 @@ const onExitPopover = (props: Props): void => {
     props.bindCueViewModeKeyboardShortcut();
 };
 
-const revalidateAllCues = (dispatch: Dispatch<AppThunk>): void => {
-    dispatch(validateCorruptedCues());
-};
-
 const ignoreKeyword = (props: Props, matchText: string, spellCheckMatch: Match, dispatch: Dispatch<AppThunk>): void => {
     addIgnoredKeyword(props.trackId, matchText, spellCheckMatch.rule.id);
     dispatch(removeIgnoredSpellcheckedMatchesFromAllCues());
-    revalidateAllCues(dispatch);
+    dispatch(validateCorruptedCues(matchText));
 };
 
 const onOptionSelected = (props: Props, spellCheckMatch: Match, matchText: string , dispatch: Dispatch<AppThunk>) =>

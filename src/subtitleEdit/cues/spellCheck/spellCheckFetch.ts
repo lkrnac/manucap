@@ -1,16 +1,14 @@
-import { Dispatch } from "react";
-import { PayloadAction } from "@reduxjs/toolkit";
 import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
-import { cuesSlice } from "../cuesListSlices";
 import { SpellcheckerSettings, SubtitleEditAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
 import { Constants } from "../../constants";
-import { spellcheckerSettingsSlice } from "../../spellcheckerSettingsSlice";
+import { cuesSlice } from "../cuesListSlices";
+import { checkErrors } from "../cuesListActions";
+import { Dispatch } from "react";
 
-const addSpellCheck = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    getState: Function,
+export const addSpellCheck = (
+    dispatch: Dispatch<SubtitleEditAction | void>,
     index: number,
     spellCheck: SpellCheck,
     trackId?: string
@@ -21,21 +19,14 @@ const addSpellCheck = (
         };
     }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
-
-    const subtitleSpecification = getState().subtitleSpecifications;
-    const overlapEnabled = getState().editingTrack?.overlapEnabled;
-    dispatch(cuesSlice.actions.checkErrors({ subtitleSpecification, overlapEnabled, index }));
+    dispatch(checkErrors({ index }));
 };
 
 export const fetchSpellCheck = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
-    getState: Function,
-    cueIndex: number,
     text: string,
     spellCheckerSettings: SpellcheckerSettings,
-    language: string,
-    trackId?: string
-): void => {
+    language: string
+): Promise<SpellCheck> => {
     const languageToolMatchedLanguageCode = languageToolLanguageMapping.get(language);
     const submittedLanguageCode = languageToolMatchedLanguageCode == null ? language :
         languageToolMatchedLanguageCode;
@@ -45,20 +36,12 @@ export const fetchSpellCheck = (
         body: `language=${submittedLanguageCode}&text=${plainText}&disabledRules=${
             Constants.SPELLCHECKER_EXCLUDED_RULES}`
     };
-    fetch(`https://${spellCheckerSettings.domain}/v2/check`, requestBody)
-        .then((response) => {
+    return fetch(`https://${spellCheckerSettings.domain}/v2/check`, requestBody)
+        .then((response: Response) => {
             if (response.ok) {
                 return response.json();
             } else {
-                throw response;
-            }
-        })
-        .then(data =>
-            addSpellCheck(dispatch, getState, cueIndex, data as SpellCheck, trackId)
-        )
-        .catch(error => {
-            if (error.status === 400) {
-                dispatch(spellcheckerSettingsSlice.actions.disableSpellchecker());
+                throw response.status;
             }
         });
 };

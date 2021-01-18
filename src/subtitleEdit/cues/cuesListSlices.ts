@@ -1,18 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { CueCategory, CueDto, SubtitleEditAction } from "../model";
-import {
-    copyNonConstructorProperties
-} from "./cueUtils";
+import { copyNonConstructorProperties } from "./cueUtils";
 import { editingTrackSlice } from "../trackSlices";
 import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
-import {
-    conformToRules,
-    markCues,
-} from "./cueVerifications";
 import { Match, SpellCheck } from "./spellCheck/model";
 import { SearchReplaceMatches } from "./searchReplace/model";
 import { hasIgnoredKeyword } from "./spellCheck/spellCheckerUtils";
+import { markCues } from "./cueVerifications";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -38,6 +33,11 @@ interface CuesAction extends SubtitleEditAction {
 interface CheckOptions extends SubtitleSpecificationAction {
     overlapEnabled?: boolean;
     index?: number;
+}
+
+export interface CueCorruptedPayload {
+    corrupted: boolean;
+    index: number;
 }
 
 export interface SpellCheckAction extends CueIndexAction {
@@ -84,7 +84,7 @@ export const cuesSlice = createSlice({
             };
         },
         removeIgnoredSpellcheckedMatchesFromAllCues: (state,
-                                                     action: PayloadAction<SpellCheckRemovalAction>): void => {
+                                                      action: PayloadAction<SpellCheckRemovalAction>): void => {
             const trackId = action.payload.trackId;
             state.filter((cue: CueDto) => cue.spellCheck != null && cue.spellCheck.matches != null)
                 .forEach(cue => {
@@ -122,32 +122,8 @@ export const cuesSlice = createSlice({
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
         },
-        checkErrors: (state, action: PayloadAction<CheckOptions>): void => {
-            const index = action.payload.index;
-            if (index !== undefined) {
-                const subtitleSpecification = action.payload.subtitleSpecification;
-                const overlapCaptions = action.payload.overlapEnabled;
-
-                const previousPreviousCue = state[index - 2];
-                const previousCue = state[index - 1];
-                const currentCue = state[index];
-                const followingCue = state[index + 1];
-                const followingFollowingCue = state[index + 2];
-                if (previousCue) {
-                    previousCue.corrupted = !conformToRules(
-                        previousCue, subtitleSpecification, previousPreviousCue, currentCue, overlapCaptions
-                    );
-                }
-                currentCue.corrupted =
-                    !conformToRules(
-                        currentCue, subtitleSpecification, previousCue, followingCue, overlapCaptions
-                    );
-                if (followingCue) {
-                    followingCue.corrupted = !conformToRules(
-                        followingCue, subtitleSpecification, currentCue, followingFollowingCue, overlapCaptions
-                    );
-                }
-            }
+        setCorrupted: (state, action: PayloadAction<CueCorruptedPayload>): void => {
+            state[action.payload.index].corrupted = action.payload.corrupted;
         },
         syncCues: (state, action: PayloadAction<CuesAction>): CueDto[] => {
             const sourceCues = action.payload.cues;
