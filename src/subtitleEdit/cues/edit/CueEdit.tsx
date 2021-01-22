@@ -91,7 +91,7 @@ const CueEdit = (props: Props): ReactElement => {
     const className = validationError ? "blink-error-bg" : "bg-white";
 
     return (
-        <div style={{ display: "flex" }} className={className}>
+        <div style={{ display: "flex" }} className={"sbte-bottom-border " + className}>
             <div
                 style={{
                     flex: "1 1 300px",

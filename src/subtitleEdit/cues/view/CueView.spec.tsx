@@ -4,12 +4,14 @@ import React from "react";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
 
-import { CueDto, Language, Track } from "../../model";
+import { CueDto, Language, Task, Track } from "../../model";
 import CueView from "./CueView";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
+import { updateTask } from "../../trackSlices";
+import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();
 
@@ -67,7 +69,14 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} className="testingClassName" showGlossaryTerms />
+                <CueView
+                    index={1}
+                    cue={cue}
+                    playerTime={1}
+                    className="testingClassName"
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                />
             </Provider>
         );
 
@@ -126,7 +135,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -175,6 +184,7 @@ describe("CueView", () => {
                     playerTime={1}
                     showGlossaryTerms
                     languageDirection={testingTrack.language.direction}
+                    targetCuesLength={0}
                 />
             </Provider>
         );
@@ -207,7 +217,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -242,7 +252,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -277,7 +287,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -312,7 +322,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -345,7 +355,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} hideText showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} hideText showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -373,7 +383,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -398,7 +408,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms={false} />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms={false} targetCuesLength={0} />
             </Provider>
         );
 
@@ -419,7 +429,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -442,7 +452,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -471,7 +481,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -499,11 +509,133 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
         // THEN
         expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
-            .toEqual(expectedSourceCueContent);    });
+            .toEqual(expectedSourceCueContent);
+    });
+
+    it("adds a cue when clicked if cue index is equal to target cues count", async () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={0} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+            </Provider>
+        );
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.container.querySelector("div") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(1);
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
+    });
+
+    it("adds a cue when clicked if cue index is bigger than to target cues count", async () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+            </Provider>
+        );
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.container.querySelector("div") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(1);
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
+    });
+
+    it("open cue for editing if clicked for existing one", async () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
+            </Provider>
+        );
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM",
+            editDisabled: false
+        } as Task;
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.container.querySelector("div") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(6);
+    });
+
+    it("doesn't open cue if task disables editing", async () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
+            </Provider>
+        );
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM",
+            editDisabled: true
+        } as Task;
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.container.querySelector("div") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+    });
+
+    it("doesn't open cue if task is not defined", async () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
+            </Provider>
+        );
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.container.querySelector("div") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+    });
 });

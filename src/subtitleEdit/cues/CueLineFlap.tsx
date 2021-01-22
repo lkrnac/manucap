@@ -1,14 +1,14 @@
 import React, { ReactElement } from "react";
-import { CueDto } from "../model";
+import { CueDtoWithIndex } from "../model";
 
 interface Props {
     rowIndex: number;
-    cue?: CueDto;
+    cue?: CueDtoWithIndex;
 }
 
 const CueLineFlap = (props: Props): ReactElement => {
-    const cueHasText = props.cue && props.cue.vttCue.text.length;
-    const cueIsCorrupted = cueHasText && props.cue?.corrupted;
+    const cueHasText = props.cue && props.cue.cue.vttCue.text.length;
+    const cueIsCorrupted = cueHasText && props.cue?.cue.corrupted;
     const flapClassName = cueHasText ? cueIsCorrupted
         ? "sbte-cue-line-flap-error" : "sbte-cue-line-flap-good"
         : "sbte-cue-line-flap";

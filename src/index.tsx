@@ -14,6 +14,8 @@ import "./localTesting.scss";
 import "draft-js/dist/Draft.css";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 
+const sourceLanguage = { id: "sk", name: "Slovak", direction: "LTR" } as Language;
+
 const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
 // const language = { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language;
 
@@ -30,6 +32,7 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         // @ts-ignore since it can manually be updated
         let endTime = 0;
+        // @ts-ignore
         if (trackType === "TRANSLATION") {
             const cues = [] as CueDto[];
             for (let idx = 0; idx < 9999; idx++) {
@@ -58,7 +61,8 @@ const TestApp = (): ReactElement => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateEditingTrack({
                 type: trackType,
-                language: language as Language,
+                language: language,
+                sourceLanguage,
                 default: true,
                 mediaTitle: "This is the video title",
                 mediaLength: 4250,

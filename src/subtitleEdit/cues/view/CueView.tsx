@@ -4,13 +4,15 @@ import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../timeUtils";
 import sanitizeHtml from "sanitize-html";
-import { useDispatch } from "react-redux";
-import { AppThunk } from "../../subtitleEditReducers";
-import { setGlossaryTerm } from "../edit/cueEditorSlices";
+import { useDispatch, useSelector } from "react-redux";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { setGlossaryTerm, updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { addCue } from "../cuesListActions";
 
-interface Props {
-    index: number;
+export interface CueViewProps {
+    targetCueIndex?: number;
     cue: CueDto;
+    targetCuesLength: number;
     playerTime: number;
     showGlossaryTerms: boolean;
     languageDirection?: LanguageDirection;
@@ -40,7 +42,7 @@ const replaceForInsensitiveMatches = (
     return sanitizedHtml;
 };
 
-const injectGlossaryTerms = (plainText: string, props: Props, sanitizedHtml: string): string => {
+const injectGlossaryTerms = (plainText: string, props: CueViewProps, sanitizedHtml: string): string => {
     props.cue.glossaryMatches?.forEach(
         (match) => {
             const caseInsensitiveMatches = plainText.match(new RegExp(match.source,"gi"));
@@ -50,7 +52,7 @@ const injectGlossaryTerms = (plainText: string, props: Props, sanitizedHtml: str
     return sanitizedHtml;
 };
 
-const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
+const buildContent = (dispatch: Dispatch<AppThunk>, props: CueViewProps): string => {
     const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
     let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
 
@@ -63,13 +65,27 @@ const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
     return sanitizedHtml;
 };
 
-const CueView = (props: Props): ReactElement => {
+const CueView = (props: CueViewProps): ReactElement => {
     const dispatch = useDispatch();
+    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
+
     const html = props.hideText
         ? ""
         : buildContent(dispatch, props);
     return (
-        <div style={{ display: "flex" }} className={props.className}>
+        <div
+            style={{ display: "flex" }}
+            className={props.className}
+            onClick={(): void => {
+                if (props.targetCueIndex !== undefined) {
+                    if (props.targetCueIndex >= props.targetCuesLength) {
+                        dispatch(addCue(props.targetCuesLength));
+                    } else if (editingTask && !editingTask.editDisabled) {
+                        dispatch(updateEditingCueIndex(props.targetCueIndex));
+                    }
+                }
+            }}
+        >
             <div
                 className="sbte-cue-line-left-section"
                 style={{

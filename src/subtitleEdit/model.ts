@@ -26,9 +26,14 @@ export interface CueDto {
     glossaryMatches?: GlossaryMatchDto[];
 }
 
-export interface CueWithSource {
-    cue?: CueDto;
-    sourceCue?: CueDto;
+export interface CueDtoWithIndex {
+    index: number;
+    cue: CueDto;
+}
+
+export interface CueLineDto {
+    sourceCues?: CueDtoWithIndex[];
+    targetCues?: CueDtoWithIndex[];
 }
 
 export interface LanguageCues {

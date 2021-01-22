@@ -1,31 +1,29 @@
 import "../../testUtils/initBrowserEnvironment";
-import React from "react";
+import React, { ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
-import { mount, ReactWrapper } from "enzyme";
-// @ts-ignore ReactSmartScroll doesn't have TS signatures
-import ReactSmartScroll from "@dotsub/react-smart-scroll";
+// @ts-ignore - Doesn't have types definitions file
+import * as simulant from "simulant";
+import { render, RenderResult } from "@testing-library/react";
 
-import { CueDto, CueWithSource, Language, ScrollPosition, Task, Track } from "../model";
-import { updateEditingTrack, updateTask } from "../trackSlices";
-import CueLine, { CueLineRowProps } from "./CueLine";
+import { CueDto, Language, ScrollPosition, Task, Track } from "../model";
+import { updateTask } from "../trackSlices";
+import CueLine, { CueLineProps } from "./CueLine";
 import { updateCues } from "./cuesListActions";
 import CuesList from "./CuesList";
-import AddCueLineButton from "./edit/AddCueLineButton";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { reset } from "./edit/editorStatesSlice";
-import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import { act } from "react-dom/test-utils";
 import { changeScrollPosition } from "./cuesListScrollSlice";
 import { Character } from "../shortcutConstants";
-// @ts-ignore - Doesn't have types definitions file
-import * as simulant from "simulant";
 import { updateSourceCues } from "./view/sourceCueSlices";
 import { updateEditingCueIndex } from "./edit/cueEditorSlices";
 
+jest.mock("./CueLine", () => (props: CueLineProps): ReactElement => <div>CueLine: {JSON.stringify(props)}</div>);
+
 let testingStore = createTestingStore();
 
-const testingTrack = {
+const testingCaptionTrack = {
     type: "CAPTION",
     language: { id: "en-US", name: "English (US)" } as Language,
     default: true,
@@ -58,16 +56,10 @@ const testingTask = {
     editDisabled: false
 } as Task;
 
-const testingCompletedTask = {
-    type: "TASK_CAPTION",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: true
-} as Task;
-
-const simulateEnoughSpaceForCues = (actualNode: ReactWrapper, viewPortSize = 500): void => act(() => {
-    // @ts-ignore Simulate enough space in viewport
-    actualNode.find(".sbte-smart-scroll").at(1).getDOMNode().getBoundingClientRect =
+const simulateEnoughSpaceForCues = (actualNode: RenderResult, viewPortSize = 500): void => act(() => {
+    const smartScrollCone = actualNode.container.querySelector(".sbte-smart-scroll") as Element;
+    // @ts-ignore Mocking smart scroll calculation
+    smartScrollCone.getBoundingClientRect =
         jest.fn(() => ({
             bottom: viewPortSize,
             height: viewPortSize,
@@ -85,420 +77,897 @@ describe("CuesList", () => {
         testingStore.dispatch(reset() as {} as AnyAction);
     });
 
-    it("renders only few cues when there isn't enough space in viewport", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
+    describe("smart scrolling / captioning", () => {
+        it("renders only few cues when there isn't enough space in viewport", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
 
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                    <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                        <CueLine
-                            rowIndex={0}
-                            data={{ cue: cues[0] }}
-                            rowProps={{ playerTime: 0 } as CueLineRowProps}
-                            rowRef={React.createRef()}
-                            onClick={(): void => undefined}
-                        />
-                        <CueLine
-                            rowIndex={1}
-                            data={{ cue: cues[1] }}
-                            rowProps={{ playerTime: 0 } as CueLineRowProps}
-                            rowRef={React.createRef()}
-                            onClick={(): void => undefined}
-                        />
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            const cuesInRedux = testingStore.getState().cues;
+            const cuesWithIndexes = [
+                { index: 0, cue: cuesInRedux[0] },
+                { index: 1, cue: cuesInRedux[1] },
+                { index: 2, cue: cuesInRedux[2] }
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
                     </div >
-                </div >
-            </Provider >
-        );
+                </Provider >
+            );
 
-        // WHEN
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
+            // WHEN
+            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                </Provider >
+            );
 
-        // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
-    });
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
 
+        it("renders all cues when there is enough space in viewport", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            const cuesInRedux = testingStore.getState().cues;
+            const cuesWithIndexes = [
+                { index: 0, cue: cuesInRedux[0] },
+                { index: 1, cue: cuesInRedux[1] },
+                { index: 2, cue: cuesInRedux[2] }
+            ];
 
-    it("renders all cues when there is enough space in viewport", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                    <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                        <CueLine
-                            rowIndex={0}
-                            data={{ cue: cues[0] }}
-                            rowProps={{ playerTime: 0 } as CueLineRowProps}
-                            rowRef={React.createRef()}
-                            onClick={(): void => undefined}
-                        />
-                        <CueLine
-                            rowIndex={1}
-                            data={{ cue: cues[1] }}
-                            rowProps={{ playerTime: 0 } as CueLineRowProps}
-                            rowRef={React.createRef()}
-                            onClick={(): void => undefined}
-                        />
-                        <CueLine
-                            rowIndex={2}
-                            data={{ cue: cues[2] }}
-                            rowProps={{ playerTime: 0 } as CueLineRowProps}
-                            rowRef={React.createRef()}
-                            onClick={(): void => undefined}
-                        />
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={81}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
                     </div >
-                </div >
-            </Provider >
-        );
+                </Provider >
+            );
 
-        // WHEN
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        simulateEnoughSpaceForCues(actualNode);
-        actualNode.setProps({}); // re-render component
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
 
-        // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
     });
 
-    it("shows cues when there are same amount of translation and caption cue lines", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
+    describe("direct translation", () => {
+        it("renders", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            const cuesInRedux = testingStore.getState().cues;
+            const cuesWithIndexes = [
+                { index: 0, cue: cuesInRedux[0] },
+                { index: 1, cue: cuesInRedux[1] },
+                { index: 2, cue: cuesInRedux[2] }
+            ];
 
-        const sourceCues = [
-            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={81}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
 
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
 
-        // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        const cuesWithSource = actualNode.find(ReactSmartScroll).props().data as {} as CueWithSource[];
-        expect((cuesWithSource[0].cue as CueDto).vttCue.text).toEqual("Editing Line 1");
-        expect((cuesWithSource[0].sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
-        expect((cuesWithSource[1].cue as CueDto).vttCue.text).toEqual("Editing Line 2");
-        expect((cuesWithSource[1].sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
     });
 
-    it("shows cues in captioning mode", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
+    describe("time matching for translation mode", () => {
+        it("exact time match of translation cues", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(0, 1, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Target Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Target Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
 
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
 
-        // THEN
-        expect(actualNode.find(AddCueLineButton).length).toEqual(0);
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        const cuesWithSource = actualNode.find(ReactSmartScroll).props().data as {} as CueWithSource[];
-        expect((cuesWithSource[0].cue as CueDto).vttCue.text).toEqual("Editing Line 1");
-        expect(cuesWithSource[0].sourceCue).toBeUndefined();
-        expect((cuesWithSource[1].cue as CueDto).vttCue.text).toEqual("Editing Line 2");
-        expect(cuesWithSource[1].sourceCue).toBeUndefined();
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+                { index: 1, cue: targetCuesInRedux[1] },
+                { index: 2, cue: targetCuesInRedux[2] }
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+                { index: 1, cue: sourceCuesInRedux[1] },
+                { index: 2, cue: sourceCuesInRedux[2] }
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("match when there are no translation cues created so far", () => {
+            // GIVEN
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+                { index: 1, cue: sourceCuesInRedux[1] },
+                { index: 2, cue: sourceCuesInRedux[2] }
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("3 lines, 1 source cue, 3 target cues", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(0, 1, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Target Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Target Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+                { index: 1, cue: targetCuesInRedux[1] },
+                { index: 2, cue: targetCuesInRedux[2] }
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("4 lines, 1 source cue, 3 target cues", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(0, 1, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Target Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 4, "Target Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+                { index: 1, cue: targetCuesInRedux[1] },
+                { index: 2, cue: targetCuesInRedux[2] }
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: []}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={3}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("3 lines, 3 source cues, 1 target cue", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(1, 2, "Target Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+                { index: 1, cue: sourceCuesInRedux[1] },
+                { index: 2, cue: sourceCuesInRedux[2] }
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("4 lines, 3 source cues, 1 target cue", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(1, 2, "Target Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 4, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+                { index: 1, cue: sourceCuesInRedux[1] },
+                { index: 2, cue: sourceCuesInRedux[2] }
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={3}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("1 line, 1 source cue, 3 target cues", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(0, 1, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Target Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Target Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 3, "Source Line 1"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+                { index: 1, cue: targetCuesInRedux[1] },
+                { index: 2, cue: targetCuesInRedux[2] }
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "17px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("1 line, 3 source cues, 1 target cues", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(0, 3, "Target Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+                { index: 1, cue: sourceCuesInRedux[1] },
+                { index: 2, cue: sourceCuesInRedux[2] }
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "17px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("same middle time, source cue longer", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(1, 2, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Target Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 4, "Target Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(1, 1.5, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1.5, 3.5, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3.5, 4, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+                { index: 1, cue: targetCuesInRedux[1] },
+                { index: 2, cue: targetCuesInRedux[2] }
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+                { index: 1, cue: sourceCuesInRedux[1] },
+                { index: 2, cue: sourceCuesInRedux[2] }
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("same middle time, target cue longer", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(1, 1.5, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1.5, 3.5, "Target Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3.5, 4, "Target Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 4, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+                { index: 1, cue: targetCuesInRedux[1] },
+                { index: 2, cue: targetCuesInRedux[2] }
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+                { index: 1, cue: sourceCuesInRedux[1] },
+                { index: 2, cue: sourceCuesInRedux[2] }
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                // @ts-ignore This parameter is added by smart scroll
+                                height={180}
+                                rowIndex={2}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
     });
 
-    it("shows cues when there are more translation cues than caption cues", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
 
-        const sourceCues = [
-            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
+    it("shows starts captioning button for empty direct translation track", async () => {
         // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
-
-        // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        const cuesWithSource = actualNode.find(ReactSmartScroll).props().data as {} as CueWithSource[];
-        expect((cuesWithSource[0].cue as CueDto).vttCue.text).toEqual("Editing Line 1");
-        expect((cuesWithSource[0].sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
-        expect((cuesWithSource[1].cue as CueDto).vttCue.text).toEqual("Editing Line 2");
-        expect((cuesWithSource[1].sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
-        expect(cuesWithSource[2].cue).toBeUndefined();
-        expect((cuesWithSource[2].sourceCue as CueDto).vttCue.text).toEqual("Source Line 3");
-    });
-
-    it("shows cues when there are more caption cues than translation cues", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        const sourceCues = [
-            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
-
-        // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        const cuesWithSource = actualNode.find(ReactSmartScroll).props().data as {} as CueWithSource[];
-        expect((cuesWithSource[0].cue as CueDto).vttCue.text).toEqual("Editing Line 1");
-        expect((cuesWithSource[0].sourceCue as CueDto).vttCue.text).toEqual("Source Line 1");
-        expect((cuesWithSource[1].cue as CueDto).vttCue.text).toEqual("Editing Line 2");
-        expect((cuesWithSource[1].sourceCue as CueDto).vttCue.text).toEqual("Source Line 2");
-        expect(actualNode.find(CueLine).at(2)).toEqual({});
-    });
-
-    it("shows cues as caption cues for direct translation track", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
             </Provider >
         );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
+        await act(async () => {
+            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        });
 
         // THEN
-        expect(actualNode.find(AddCueLineButton).length).toEqual(0);
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        const cuesWithSource = actualNode.find(ReactSmartScroll).props().data as {} as CueWithSource[];
-        expect((cuesWithSource[0].cue as CueDto).vttCue.text).toEqual("Editing Line 1");
-        expect(cuesWithSource[0].sourceCue as CueDto).toBeUndefined();
-        expect((cuesWithSource[1].cue as CueDto).vttCue.text).toEqual("Editing Line 2");
-        expect(cuesWithSource[1].sourceCue as CueDto).toBeUndefined();
-        expect((cuesWithSource[2].cue as CueDto).vttCue.text).toEqual("Editing Line 3");
-        expect(cuesWithSource[2].sourceCue as CueDto).toBeUndefined();
-    });
-
-    it("shows starts captioning button for empty direct translation track", () => {
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues([]) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
-
-        // THEN
-        expect(actualNode.find(AddCueLineButton).length).toEqual(1);
-        expect(actualNode.find(CueLine).length).toEqual(0);
-    });
-
-    it("does not show starts captioning button for translation track empty source cues", () => {
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
-        testingStore.dispatch(updateCues([]) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues([]) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
-
-        // THEN
-        expect(actualNode.find(AddCueLineButton).length).toEqual(0);
-        expect(actualNode.find(CueLine).length).toEqual(0);
-    });
-
-    it("opens cue for editing", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        const sourceCues = [
-            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList
-                    editingTrack={testingTranslationTrack}
-                    currentPlayerTime={0}
-                />
-            </Provider >
-        );
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
-        simulateEnoughSpaceForCues(actualNode);
-        actualNode.setProps({}); // re-render component
-        actualNode.find(CueLine).at(1).simulate("click");
-
-        // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(1);
-    });
-
-    it("does not open cue for editing on task with edit disabled", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        const sourceCues = [
-            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList
-                    editingTrack={testingTranslationTrack}
-                    currentPlayerTime={0}
-                />
-            </Provider >
-        );
-        testingStore.dispatch(updateTask(testingCompletedTask) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
-        simulateEnoughSpaceForCues(actualNode);
-        actualNode.setProps({}); // re-render component
-        actualNode.find(CueLine).at(1).simulate("click");
-
-        // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(-1);
-    });
-
-    it("adds new cue if empty cue is clicked in translation mode", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        const sourceCues = [
-            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList
-                    editingTrack={testingTranslationTrack}
-                    currentPlayerTime={0}
-                />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
-        simulateEnoughSpaceForCues(actualNode);
-        actualNode.setProps({}); // re-render component
-        actualNode.find(CueLine).at(2).simulate("click");
-
-        // THEN
-        expect(testingStore.getState().cues.length).toEqual(3);
-        expect(testingStore.getState().cues[2].vttCue.text).toEqual("");
-        expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
-        expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(3);
-    });
-
-    it("passes down properties via row props object", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={5.5} />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
-        simulateEnoughSpaceForCues(actualNode);
-        actualNode.setProps({}); // re-render component
-
-        // THEN
-        const cueLines = actualNode.find(CueLine);
-        expect(cueLines.at(0).props().rowProps.cuesLength).toEqual(2);
-        expect(cueLines.at(0).props().rowProps.playerTime).toEqual(5.5);
-        expect(cueLines.at(1).props().rowProps.cuesLength).toEqual(2);
-        expect(cueLines.at(1).props().rowProps.playerTime).toEqual(5.5);
+        expect(actualNode.container.outerHTML).toContain("Start Captioning");
+        expect(actualNode.container.outerHTML).not.toContain("CueLine");
     });
 
     it("scrolls to last cue", async() => {
@@ -511,22 +980,24 @@ describe("CuesList", () => {
             { vttCue: new VTTCue(5, 6, "Caption Line 6"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
             </Provider >
         );
         simulateEnoughSpaceForCues(actualNode, 100);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // WHEN
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
         await act(async () => {
-            actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+        });
+        await act(async () => {
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
         });
 
         // THEN
-        expect(actualNode.html()).toContain("Caption Line 7");
+        expect(actualNode.container.outerHTML).toContain("Caption Line 7");
     });
 
     it("scrolls to first cue", async () => {
@@ -540,23 +1011,27 @@ describe("CuesList", () => {
             { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
             </Provider >
         );
         simulateEnoughSpaceForCues(actualNode, 100);
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+        await act(async () => {
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+        });
+        await act(async () => {
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
+        });
 
         // WHEN
         testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
         await act(async () => {
-            actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
         });
 
         // THEN
-        expect(actualNode.html()).toContain("Caption Line 1");
+        expect(actualNode.container.outerHTML).toContain("Caption Line 1");
     });
 
     it("scrolls to current editing cue if not in viewport", async () => {
@@ -570,158 +1045,62 @@ describe("CuesList", () => {
             { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
             </Provider >
         );
         simulateEnoughSpaceForCues(actualNode, 100);
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-        actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+        await act(async () => {
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+        });
+        await act(async () => {
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
+        });
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
         await act(async () => {
-            actualNode.find(ReactSmartScroll).getDOMNode().dispatchEvent(new Event("scroll"));
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
         });
 
         // THEN
-        expect(actualNode.html()).toContain("Caption Line 3");
+        expect(actualNode.container.outerHTML).toContain("Caption Line 3");
     });
 
-    it("adds first cue if clicked translation cue and cues are empty", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
-            { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
-        ];
-
-        testingStore.dispatch(updateCues([]) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-
-        // WHEN
-        actualNode.find(".sbte-cue-editor").at(0).simulate("click");
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
-        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
-        expect(testingStore.getState().editingCueIndex).toEqual(0);
-        expect(testingStore.getState().validationError).toEqual(false);
-    });
-
-    it("resets scroll position after jump", () => {
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-
-        // WHEN
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-
-
-        // THEN
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(actualNode.find(ReactSmartScroll).props().startAt).toBeUndefined;
-    });
-
-    it("adds first cue if clicked second translation cue without creating first cue", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
-            { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
-        ];
-        testingStore.dispatch(updateCues([]) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-
-        // WHEN
-        actualNode.find(".sbte-cue-editor").at(1).simulate("click");
-
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
-        expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
-        expect(testingStore.getState().editingCueIndex).toEqual(0);
-        expect(testingStore.getState().validationError).toEqual(false);
-    });
-
-    it("configures row height for captioning mode", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
-
-        // THEN
-        const smartScroll = actualNode.find(ReactSmartScroll);
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(smartScroll.props().rowHeight).toEqual(81);
-    });
-
-    it("configures row height for translation mode", () => {
-        // GIVEN
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        const sourceCues = [
-            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingTrack} currentPlayerTime={0} />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
-
-        // THEN
-        const smartScroll = actualNode.find(ReactSmartScroll);
-        // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-        expect(smartScroll.props().rowHeight).toEqual(180);
-    });
+    // TODO: Figure out this test case with react-testing-library where ReactSmartScroll is not faked
+    //  (or fake it in different test)
+    //
+    // it("resets scroll position after jump", async () => {
+    //     const cues = [
+    //         { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    //         { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    //     ] as CueDto[];
+    //     testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+    //     const actualNode = render(
+    //         <Provider store={testingStore}>
+    //             <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+    //         </Provider >
+    //     );
+    //
+    //     // WHEN
+    //     await act(async () => {
+    //         testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+    //     });
+    //
+    //     // THEN
+    //     // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
+    //     expect(actualNode.find(ReactSmartScroll).props().startAt).toBeUndefined;
+    // });
 
     it("adds first cue when ENTER is pressed", () => {
         // GIVEN
-        const actualNode = mount(
+        render(
             <Provider store={testingStore}>
                 <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
             </Provider >
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
-        actualNode.setProps({}); // re-render component
 
         // WHEN
         simulant.fire(

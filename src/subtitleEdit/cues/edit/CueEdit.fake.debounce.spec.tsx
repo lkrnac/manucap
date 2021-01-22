@@ -72,7 +72,7 @@ describe("CueEdit", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="bg-white">
+                <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
                     <div
                         style={{
                             flex: "1 1 300px",

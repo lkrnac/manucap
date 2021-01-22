@@ -133,6 +133,18 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     background-color: $green;
 }
 
+.sbte-cue-divider-error {
+  border: 1px solid $red;
+}
+
+.sbte-cue-divider-good {
+  border: 1px solid $green;
+}
+
+.sbte-cue-divider {
+  border: 1px solid $secondary;
+}
+
 #sbte-spell-check-popover {
   margin-bottom: 8px;
 }
