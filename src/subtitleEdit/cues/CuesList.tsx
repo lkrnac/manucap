@@ -96,11 +96,11 @@ const matchCuesByTime = (
             || (targetCueEndTime === sourceCueEndTime && targetCueStartTime > sourceCueStartTime)
         ) {
             cuesMapValue?.targetCues?.push({ index: targetCuesIdx, cue });
-            if (cueMiddleTime <= sourceCueStartTime) {
-                cuesMapIdx++;
-            }
             if (targetCuesIdx === editingCueIndex) {
                 editingFocusIdx = cuesMapIdx;
+            }
+            if (cueMiddleTime <= sourceCueStartTime) {
+                cuesMapIdx++;
             }
             targetCuesIdx++;
         } else if (targetCueEndTime > sourceCueEndTime
