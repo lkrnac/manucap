@@ -93,7 +93,7 @@ const matchCuesByTime = (
             continue;
         }
         if (targetCueEndTime < sourceCueEndTime
-            || (targetCueEndTime == sourceCueEndTime && targetCueStartTime > sourceCueStartTime)
+            || (targetCueEndTime === sourceCueEndTime && targetCueStartTime > sourceCueStartTime)
         ) {
             cuesMapValue?.targetCues?.push({ index: targetCuesIdx, cue });
             if (cueMiddleTime <= sourceCueStartTime) {
@@ -104,7 +104,7 @@ const matchCuesByTime = (
             }
             targetCuesIdx++;
         } else if (targetCueEndTime > sourceCueEndTime
-            || (targetCueEndTime == sourceCueEndTime && targetCueStartTime < sourceCueStartTime)
+            || (targetCueEndTime === sourceCueEndTime && targetCueStartTime < sourceCueStartTime)
         ) {
             cuesMapValue?.sourceCues?.push({ index: sourceCuesIdx, cue: sourceCue });
             if (sourceCueMiddleTime <= targetCueStartTime) {
