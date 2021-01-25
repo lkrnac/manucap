@@ -46,6 +46,11 @@ const cues = [
     { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
 
+const cuesWithIndexes = [
+    { index: 0, cue: cues[0] },
+    { index: 1, cue: cues[1] },
+];
+
 const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US", name: "English (US)" } as Language,
@@ -139,15 +144,15 @@ describe("SubtitleEdit", () => {
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                                     <CueLine
                                         rowIndex={0}
-                                        data={{ cue: cues[0] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
                                         rowIndex={1}
-                                        data={{ cue: cues[1] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
@@ -499,15 +504,15 @@ describe("SubtitleEdit", () => {
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                                     <CueLine
                                         rowIndex={0}
-                                        data={{ cue: cues[0] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
                                         rowIndex={1}
-                                        data={{ cue: cues[1] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
@@ -641,15 +646,15 @@ describe("SubtitleEdit", () => {
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                                     <CueLine
                                         rowIndex={0}
-                                        data={{ cue: cues[0] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
                                         rowIndex={1}
-                                        data={{ cue: cues[1] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />

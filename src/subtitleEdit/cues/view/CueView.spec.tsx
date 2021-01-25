@@ -70,7 +70,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
-                    index={1}
+                    targetCueIndex={1}
                     cue={cue}
                     playerTime={1}
                     className="testingClassName"
@@ -135,7 +135,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -179,7 +179,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
-                    index={1}
+                    targetCueIndex={1}
                     cue={cue}
                     playerTime={1}
                     showGlossaryTerms
@@ -217,7 +217,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -252,7 +252,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -287,7 +287,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -322,7 +322,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -355,7 +355,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} hideText showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} hideText showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -383,7 +383,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -408,7 +408,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms={false} targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms={false} targetCuesLength={0} />
             </Provider>
         );
 
@@ -429,7 +429,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -452,7 +452,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -481,7 +481,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -509,7 +509,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -526,7 +526,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={0} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={0} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -548,7 +548,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
             </Provider>
         );
 
@@ -570,7 +570,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
+                <CueView targetCueIndex={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
             </Provider>
         );
         const testingTask = {
@@ -598,7 +598,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
+                <CueView targetCueIndex={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
             </Provider>
         );
         const testingTask = {
@@ -626,7 +626,7 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
+                <CueView targetCueIndex={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
             </Provider>
         );
 

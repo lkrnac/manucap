@@ -95,7 +95,7 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cue={cue} />
+                <CueLineFlap rowIndex={0} cue={{ index: 0, cue }} />
             </Provider>
         );
 
@@ -144,7 +144,7 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cue={cue} />
+                <CueLineFlap rowIndex={0} cue={{ index: 0, cue }} />
             </Provider>
         );
 
