@@ -112,7 +112,7 @@ describe("CueLine", () => {
                             cue={targetCuesWithIndexes[0].cue}
                             targetCuesLength={1}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -164,7 +164,7 @@ describe("CueLine", () => {
                             cue={sourceCues[0]}
                             targetCuesLength={1}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms
                             languageDirection="LTR"
                         />
@@ -217,7 +217,7 @@ describe("CueLine", () => {
                             cue={sourceCues[0]}
                             targetCuesLength={1}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                         />
@@ -226,7 +226,7 @@ describe("CueLine", () => {
                             cue={targetCues[0]}
                             targetCuesLength={1}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -267,7 +267,7 @@ describe("CueLine", () => {
                             cue={sourceCues[0]}
                             targetCuesLength={0}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                         />
                         <CueView
@@ -275,7 +275,7 @@ describe("CueLine", () => {
                             targetCuesLength={0}
                             playerTime={0}
                             hideText
-                            className="sbte-bottom-border sbte-gray-200-background"
+                            className="sbte-gray-200-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                         />
@@ -387,7 +387,7 @@ describe("CueLine", () => {
                             cue={sourceCues[0]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                         />
@@ -397,7 +397,7 @@ describe("CueLine", () => {
                             cue={targetCues[0]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -407,7 +407,7 @@ describe("CueLine", () => {
                             cue={targetCues[1]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -417,7 +417,7 @@ describe("CueLine", () => {
                             cue={targetCues[2]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -469,7 +469,7 @@ describe("CueLine", () => {
                             cue={sourceCues[0]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                         />
@@ -479,7 +479,7 @@ describe("CueLine", () => {
                             cue={targetCues[0]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -490,7 +490,7 @@ describe("CueLine", () => {
                             cue={targetCues[2]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -542,7 +542,7 @@ describe("CueLine", () => {
                             cue={sourceCues[0]}
                             targetCuesLength={1}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                         />
@@ -551,7 +551,7 @@ describe("CueLine", () => {
                             cue={sourceCues[1]}
                             targetCuesLength={1}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                         />
@@ -560,7 +560,7 @@ describe("CueLine", () => {
                             cue={sourceCues[2]}
                             targetCuesLength={1}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                         />
@@ -570,7 +570,7 @@ describe("CueLine", () => {
                             cue={targetCues[0]}
                             targetCuesLength={1}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -622,7 +622,7 @@ describe("CueLine", () => {
                             cue={sourceCues[0]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                         />
@@ -632,7 +632,7 @@ describe("CueLine", () => {
                             cue={targetCues[0]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
@@ -643,7 +643,7 @@ describe("CueLine", () => {
                             cue={targetCues[2]}
                             targetCuesLength={3}
                             playerTime={0}
-                            className="sbte-bottom-border sbte-gray-100-background"
+                            className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
