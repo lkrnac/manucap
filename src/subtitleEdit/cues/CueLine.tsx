@@ -110,6 +110,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         playerTime={props.rowProps.playerTime}
                                         className={"sbte-bottom-border " + captionClassName}
                                         showGlossaryTerms={false}
+                                        showActionsPanel
                                         languageDirection={editingTrack?.language.direction}
                                     />
                                 );
@@ -123,19 +124,12 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 hideText
                                 className={"sbte-bottom-border " + translationCueClassName}
                                 showGlossaryTerms={false}
+                                showActionsPanel
                                 languageDirection={editingTrack?.language.direction}
                             />
                         )
                 }
             </div>
-            {/* TODO: Fix cue action panel */}
-            {/*<CueActionsPanel*/}
-            {/*    index={props.rowIndex}*/}
-            {/*    editingCueIndex={editingCueIndex}*/}
-            {/*    cue={props.data.cue}*/}
-            {/*    sourceCue={props.data.sourceCue}*/}
-            {/*    lastCue={lastCue}*/}
-            {/*/>*/}
         </div>
     );
 };

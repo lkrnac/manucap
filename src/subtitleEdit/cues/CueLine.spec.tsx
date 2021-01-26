@@ -66,7 +66,6 @@ describe("CueLine", () => {
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                         <CueEdit index={0} cue={targetCues[0]} playerTime={0} />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={1} cue={cuesWithIndexes[1].cue} />*/}
                 </div>
             </Provider>
         );
@@ -115,10 +114,10 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={-1} cue={cuesWithIndexes[1]} />*/}
                 </div>
             </Provider>
         );
@@ -171,7 +170,6 @@ describe("CueLine", () => {
                         />
                         <CueEdit index={0} cue={targetCues[0]} playerTime={0} />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={1} cue={cues[1]} sourceCue={sourceCue} />*/}
                 </div>
             </Provider>
         );
@@ -230,10 +228,10 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} sourceCue={sourceCue} />*/}
                 </div>
             </Provider>
         );
@@ -279,9 +277,9 @@ describe("CueLine", () => {
                             hideText
                             className="sbte-bottom-border sbte-gray-200-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                         />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={-1} sourceCue={sourceCue} />*/}
                 </div>
             </Provider>
         );
@@ -339,6 +337,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                         <CueView
@@ -348,6 +347,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                         <CueView
@@ -357,10 +357,10 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} sourceCue={sourceCue} />*/}
                 </div>
             </Provider>
         );
@@ -419,6 +419,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                         <CueEdit index={1} cue={targetCues[1]} playerTime={0} />
@@ -429,10 +430,10 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} sourceCue={sourceCue} />*/}
                 </div>
             </Provider>
         );
@@ -509,10 +510,10 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} sourceCue={sourceCue} />*/}
                 </div>
             </Provider>
         );
@@ -571,6 +572,7 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                         <CueEdit index={1} cue={targetCues[1]} playerTime={0} />
@@ -581,10 +583,10 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-bottom-border sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            showActionsPanel
                             languageDirection="RTL"
                         />
                     </div>
-                    {/*<CueActionsPanel index={1} editingCueIndex={-1} cue={cues[1]} sourceCue={sourceCue} />*/}
                 </div>
             </Provider>
         );
@@ -608,33 +610,6 @@ describe("CueLine", () => {
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
-
-    // TODO: Fix action panel
-    // it("passes down parameters into actions panel component", () => {
-    //     // WHEN
-    //     const cueWithSource = { targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]};
-    //     const cueLineRowProps = { playerTime: 0, cuesLength: 2, withoutSourceCues: false } as CueLineRowProps;
-    //     testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-    //     const actualNode = render(
-    //         <Provider store={testingStore}>
-    //             <CueLine
-    //                 rowIndex={1}
-    //                 data={cueWithSource}
-    //                 rowProps={cueLineRowProps}
-    //                 rowRef={React.createRef()}
-    //                 onClick={(): void => undefined}
-    //             />
-    //         </Provider>
-    //     );
-    //
-    //     // THEN
-    //     const actualProps = actualNode.find(CueActionsPanel).props();
-    //     expect(actualProps.index).toEqual(1);
-    //     expect(actualProps.editingCueIndex).toEqual(1);
-    //     expect(actualProps.cue).toEqual(targetCuesWithIndexes[1].cue);
-    //     expect(actualProps.sourceCue).toEqual(sourceCues[0]);
-    //     expect(actualProps.lastCue).toEqual(true);
-    // });
 
     it("configures rowReference to root container HTML element", () => {
         // GIVEN

@@ -1068,31 +1068,6 @@ describe("CuesList", () => {
         expect(actualNode.container.outerHTML).toContain("Caption Line 3");
     });
 
-    // TODO: Figure out this test case with react-testing-library where ReactSmartScroll is not faked
-    //  (or fake it in different test)
-    //
-    // it("resets scroll position after jump", async () => {
-    //     const cues = [
-    //         { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    //         { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-    //     ] as CueDto[];
-    //     testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-    //     const actualNode = render(
-    //         <Provider store={testingStore}>
-    //             <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
-    //         </Provider >
-    //     );
-    //
-    //     // WHEN
-    //     await act(async () => {
-    //         testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-    //     });
-    //
-    //     // THEN
-    //     // @ts-ignore ReactSmartScroll doesn't have TS signatures + it would fail if undefined
-    //     expect(actualNode.find(ReactSmartScroll).props().startAt).toBeUndefined;
-    // });
-
     it("adds first cue when ENTER is pressed", () => {
         // GIVEN
         render(

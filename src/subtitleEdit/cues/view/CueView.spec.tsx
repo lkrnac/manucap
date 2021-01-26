@@ -638,4 +638,33 @@ describe("CueView", () => {
         // THEN
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
+
+    it("doesn't propagate click event on actions panel to parent DOM node", async () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    targetCueIndex={0}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    showActionsPanel
+                    targetCuesLength={0}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        console.log(actualNode.container.outerHTML);
+        await act(async() => {
+            fireEvent.click(actualNode.container.querySelector(".sbte-actions-panel") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(0);
+    });
 });

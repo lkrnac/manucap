@@ -12,6 +12,7 @@ import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { playVideoSection } from "../../player/playbackSlices";
 import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
+import { CueActionsPanel } from "../CueActionsPanel";
 
 interface Props {
     index: number;
@@ -152,6 +153,7 @@ const CueEdit = (props: Props): ReactElement => {
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcut}
                 />
             </div>
+            <CueActionsPanel index={props.index} cue={props.cue} isEdit />
         </div>
     );
 };

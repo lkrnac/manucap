@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { setGlossaryTerm, updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { addCue } from "../cuesListActions";
+import { CueActionsPanel } from "../CueActionsPanel";
 
 export interface CueViewProps {
     targetCueIndex?: number;
@@ -15,6 +16,7 @@ export interface CueViewProps {
     targetCuesLength: number;
     playerTime: number;
     showGlossaryTerms: boolean;
+    showActionsPanel?: boolean;
     languageDirection?: LanguageDirection;
     className?: string;
     hideText?: boolean;
@@ -124,6 +126,11 @@ const CueView = (props: CueViewProps): ReactElement => {
                     dangerouslySetInnerHTML={{ __html: html }}
                 />
             </div>
+            {
+                props.targetCueIndex !== undefined && props.showActionsPanel
+                    ? <CueActionsPanel index={props.targetCueIndex} cue={props.cue} isEdit={false} />
+                    : null
+            }
         </div>
     );
 };

@@ -32,6 +32,7 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
+import { CueActionsPanel } from "../CueActionsPanel";
 
 jest.mock("lodash", () => (
     {
@@ -150,6 +151,7 @@ describe("CueEdit", () => {
                             unbindCueViewModeKeyboardShortcut={jest.fn()}
                         />
                     </div>
+                    <CueActionsPanel index={0} cue={cues[0]} isEdit />
                 </div>
             </Provider>
         );
