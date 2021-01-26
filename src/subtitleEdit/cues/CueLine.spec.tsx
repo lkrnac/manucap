@@ -256,7 +256,7 @@ describe("CueLine", () => {
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("renders empty line in translation mode", () => {
+    it("renders view + translation without target", () => {
         // GIVEN
         const expectedNode = render(
             <Provider store={testingStore}>
@@ -287,6 +287,68 @@ describe("CueLine", () => {
         const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 0 } as CueLineRowProps;
 
         // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLine
+                    rowIndex={0}
+                    data={cueWithSource}
+                    rowProps={cueLineRowProps}
+                    rowRef={React.createRef()}
+                    onClick={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders view + translation without source", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "TRANSLATION",
+            sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+            language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+            default: true,
+            mediaTitle: "Sample Polish",
+            mediaLength: 4000,
+            progress: 50
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const expectedNode = render(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                    <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <CueView
+                            targetCueIndex={0}
+                            cue={targetCues[0]}
+                            targetCuesLength={1}
+                            playerTime={0}
+                            hideText
+                            className="sbte-gray-200-background"
+                            showGlossaryTerms={false}
+                            languageDirection="RTL"
+                        />
+                        <CueView
+                            targetCueIndex={0}
+                            cue={targetCues[0]}
+                            targetCuesLength={1}
+                            playerTime={0}
+                            className="sbte-gray-100-background"
+                            showGlossaryTerms={false}
+                            showActionsPanel
+                            languageDirection="RTL"
+                        />
+                    </div>
+                </div>
+            </Provider>
+        );
+        const cueWithSource = { targetCues: [targetCuesWithIndexes[0]], sourceCues: []};
+        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 1 } as CueLineRowProps;
+
+        // WHEN
+        testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueLine
