@@ -12,6 +12,7 @@ import { updateEditingTrack } from "../../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { updateTask } from "../../trackSlices";
 import { act } from "react-dom/test-utils";
+import { CueActionsPanel } from "../CueActionsPanel";
 
 let testingStore = createTestingStore();
 
@@ -25,7 +26,7 @@ describe("CueView", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="testingClassName">
+                <div style={{ display: "flex" }} className="testingClassName sbte-bottom-border">
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -62,6 +63,7 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
+                    <div className="testingClassName sbte-left-border" style={{ minWidth: "52px" }} />
                 </div>
             </Provider>
         );
@@ -85,13 +87,13 @@ describe("CueView", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
     });
 
-    it("renders", () => {
+    it("renders without actions panel", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }}>
+                <div style={{ display: "flex" }} className="sbte-bottom-border">
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -128,6 +130,7 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
+                    <div className="sbte-left-border" style={{ minWidth: "52px" }} />
                 </div>
             </Provider>
         );
@@ -136,6 +139,73 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+    });
+
+    it("renders with actions panel", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+        const expectedNode = render(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex" }} className="sbte-bottom-border">
+                    <div
+                        className="sbte-cue-line-left-section"
+                        style={{
+                            flex: "1 1 300px",
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ display: "flex", flexDirection:"column" }}>
+                            <div>00:00:01.000</div>
+                            <div>00:00:02.000</div>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
+                            <div className="sbte-small-font">Dialogue</div>
+                            <div className="sbte-small-font" style={{ paddingRight: "10px" }}>↓↓</div>
+                        </div>
+                    </div>
+                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                        <div
+                            className="sbte-cue-editor"
+                            style={{
+                                flexBasis: "50%",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                paddingBottom: "5px",
+                                minHeight: "54px",
+                                height: "100%",
+                                width: "100%"
+                            }}
+                        >
+                            Caption Line 1
+                        </div>
+                    </div>
+                    <CueActionsPanel index={1} cue={cue} isEdit={false} />
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    showActionsPanel
+                />
             </Provider>
         );
 

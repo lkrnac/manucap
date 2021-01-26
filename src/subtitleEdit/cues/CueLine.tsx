@@ -61,7 +61,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.cuesLength}
                                     playerTime={props.rowProps.playerTime}
-                                    className={"sbte-bottom-border " + captionClassName}
+                                    className={captionClassName}
                                     showGlossaryTerms={editingCueIndex === sourceCue.index}
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
                                 />
@@ -78,7 +78,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     targetCuesLength={props.rowProps.cuesLength}
                                     playerTime={props.rowProps.playerTime}
                                     hideText
-                                    className={"sbte-bottom-border " + translationCueClassName}
+                                    className={translationCueClassName}
                                     showGlossaryTerms={false}
                                     languageDirection={editingTrack?.language.direction}
                                 />
@@ -108,7 +108,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         cue={targetCue.cue}
                                         targetCuesLength={props.rowProps.cuesLength}
                                         playerTime={props.rowProps.playerTime}
-                                        className={"sbte-bottom-border " + captionClassName}
+                                        className={captionClassName}
                                         showGlossaryTerms={false}
                                         showActionsPanel
                                         languageDirection={editingTrack?.language.direction}
@@ -122,7 +122,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 targetCuesLength={props.rowProps.cuesLength}
                                 playerTime={props.rowProps.playerTime}
                                 hideText
-                                className={"sbte-bottom-border " + translationCueClassName}
+                                className={translationCueClassName}
                                 showGlossaryTerms={false}
                                 showActionsPanel
                                 languageDirection={editingTrack?.language.direction}

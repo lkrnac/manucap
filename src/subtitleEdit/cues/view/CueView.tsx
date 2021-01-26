@@ -74,10 +74,11 @@ const CueView = (props: CueViewProps): ReactElement => {
     const html = props.hideText
         ? ""
         : buildContent(dispatch, props);
+    const undefinedSafeClassName = props.className ? `${props.className} ` : "";
     return (
         <div
             style={{ display: "flex" }}
-            className={props.className}
+            className={`${undefinedSafeClassName}sbte-bottom-border`}
             onClick={(): void => {
                 if (props.targetCueIndex !== undefined) {
                     if (props.targetCueIndex >= props.targetCuesLength) {
@@ -129,7 +130,12 @@ const CueView = (props: CueViewProps): ReactElement => {
             {
                 props.targetCueIndex !== undefined && props.showActionsPanel
                     ? <CueActionsPanel index={props.targetCueIndex} cue={props.cue} isEdit={false} />
-                    : null
+                    : (
+                        <div
+                            className={`${undefinedSafeClassName}sbte-left-border`}
+                            style={{ minWidth: "52px" }}
+                        />
+                    )
             }
         </div>
     );
