@@ -7,6 +7,7 @@ import PlayCueButton from "./PlayCueButton";
 interface Props {
     index: number;
     cue: CueDto;
+    sourceCueIndexes: number[];
     isEdit: boolean;
 }
 
@@ -25,9 +26,8 @@ export const CueActionsPanel = (props: Props): ReactElement => {
             <PlayCueButton cue={props.cue} />
             {
                 props.isEdit
-                    ? <AddCueLineButton cueIndex={props.index} />
+                    ? <AddCueLineButton cueIndex={props.index} sourceCueIndexes={props.sourceCueIndexes} />
                     : <div />
-
             }
         </div>
     );

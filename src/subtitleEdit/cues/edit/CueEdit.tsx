@@ -17,6 +17,7 @@ import { CueActionsPanel } from "../CueActionsPanel";
 interface Props {
     index: number;
     cue: CueDto;
+    nextSourceCuesIndexes: number[];
     playerTime: number;
 }
 
@@ -25,12 +26,6 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateVttCue(props.index, newCue, editUuid));
-};
-
-const handleEnterForLastCue = (sourceCues: CueDto[], index: number): AppThunk => {
-    return sourceCues.length === 0 || sourceCues.length > index + 1
-        ? addCue(index + 1)
-        : updateEditingCueIndex(-1);
 };
 
 const CueEdit = (props: Props): ReactElement => {
@@ -46,9 +41,7 @@ const CueEdit = (props: Props): ReactElement => {
             }
         }, [ dispatch, validationError ]
     );
-
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
-    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
 
     const unbindCueViewModeKeyboardShortcut =(): void => {
         Mousetrap.unbind([KeyCombination.ESCAPE, KeyCombination.ENTER]);
@@ -58,7 +51,7 @@ const CueEdit = (props: Props): ReactElement => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
             return props.index === cuesCount - 1
-                ? dispatch(handleEnterForLastCue(sourceCues, props.index))
+                ? dispatch(addCue(props.index + 1, props.nextSourceCuesIndexes))
                 : dispatch(updateEditingCueIndex(props.index + 1));
         });
     };
@@ -153,7 +146,12 @@ const CueEdit = (props: Props): ReactElement => {
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcut}
                 />
             </div>
-            <CueActionsPanel index={props.index} cue={props.cue} isEdit />
+            <CueActionsPanel
+                index={props.index}
+                cue={props.cue}
+                isEdit
+                sourceCueIndexes={props.nextSourceCuesIndexes}
+            />
         </div>
     );
 };

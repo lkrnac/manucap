@@ -145,7 +145,7 @@ const CuesList = (props: Props): ReactElement => {
         () => {
             Mousetrap.bind([KeyCombination.ENTER], () => {
                 if (showStartCaptioning) {
-                    dispatch(addCue(0));
+                    dispatch(addCue(0, []));
                 }
                 return false;
             });
@@ -157,7 +157,7 @@ const CuesList = (props: Props): ReactElement => {
         <>
             {
                 showStartCaptioning
-                    ? <AddCueLineButton text="Start Captioning" cueIndex={-1} />
+                    ? <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
                     : null
             }
             <ReactSmartScroll
@@ -167,7 +167,8 @@ const CuesList = (props: Props): ReactElement => {
                 rowProps={{
                     playerTime: props.currentPlayerTime,
                     cuesLength: targetCuesArray.length,
-                    withoutSourceCues
+                    withoutSourceCues,
+                    matchedCues
                 }}
                 rowHeight={rowHeight}
                 startAt={startAt}

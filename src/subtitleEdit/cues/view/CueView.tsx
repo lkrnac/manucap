@@ -16,6 +16,8 @@ export interface CueViewProps {
     targetCuesLength: number;
     playerTime: number;
     showGlossaryTerms: boolean;
+    sourceCuesIndexes: number[];
+    nextTargetCueIndex: number;
     showActionsPanel?: boolean;
     languageDirection?: LanguageDirection;
     className?: string;
@@ -82,10 +84,15 @@ const CueView = (props: CueViewProps): ReactElement => {
             onClick={(): void => {
                 if (props.targetCueIndex !== undefined) {
                     if (props.targetCueIndex >= props.targetCuesLength) {
-                        dispatch(addCue(props.targetCuesLength));
+                        dispatch(addCue(props.targetCuesLength, props.sourceCuesIndexes));
                     } else if (editingTask && !editingTask.editDisabled) {
                         dispatch(updateEditingCueIndex(props.targetCueIndex));
                     }
+                } else {
+                    const finalTargetIndex = props.nextTargetCueIndex >= 0
+                        ? props.nextTargetCueIndex
+                        : props.targetCuesLength;
+                    dispatch(addCue(finalTargetIndex, props.sourceCuesIndexes));
                 }
             }}
         >
@@ -129,7 +136,14 @@ const CueView = (props: CueViewProps): ReactElement => {
             </div>
             {
                 props.targetCueIndex !== undefined && props.showActionsPanel
-                    ? <CueActionsPanel index={props.targetCueIndex} cue={props.cue} isEdit={false} />
+                    ? (
+                        <CueActionsPanel
+                            index={props.targetCueIndex}
+                            cue={props.cue}
+                            isEdit={false}
+                            sourceCueIndexes={props.sourceCuesIndexes}
+                        />
+                    )
                     : (
                         <div
                             className={`${undefinedSafeClassName}sbte-left-border`}

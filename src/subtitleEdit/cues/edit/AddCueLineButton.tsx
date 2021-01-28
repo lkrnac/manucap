@@ -6,6 +6,7 @@ import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
     cueIndex: number;
+    sourceCueIndexes: number[];
     text?: string;
 }
 
@@ -20,7 +21,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-add-cue-button"
-                onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1))}
+                onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1, props.sourceCueIndexes))}
             >
                 {
                     props.text ? <span>{props.text}</span> : <b>+</b>

@@ -22,7 +22,9 @@ const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Lang
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
-const randomTime = (max: number): number => Math.random() * max;
+const MIN_DURATION_SECONDS = 0.5;
+
+const randomTime = (max: number): number => MIN_DURATION_SECONDS + Math.random() * (max - MIN_DURATION_SECONDS);
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
@@ -75,7 +77,7 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         const cues = [] as CueDto[];
         let endTime = 0;
-        for (let idx = 0; idx < 9999; idx++) {
+        for (let idx = 0; idx < 10; idx++) {
             const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
             let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
             // @ts-ignore since it can be updated manually
@@ -118,7 +120,7 @@ const TestApp = (): ReactElement => {
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 40,
-                minCaptionDurationInMillis: 500,
+                minCaptionDurationInMillis: MIN_DURATION_SECONDS * 1000,
                 maxCaptionDurationInMillis: 4000,
                 comments: "Media comments, please click [here](https://dotsub.com)",
                 mediaNotes: "Media notes, please click [here](https://dotsub.com)"

@@ -13,6 +13,7 @@ export interface CueLineRowProps {
     // Following parameter is needed,
     // because empty/undefined props.data.sourceCues might indicate that there is no time match in translation mode
     withoutSourceCues: boolean;
+    matchedCues: CueLineDto[];
 }
 
 export interface CueLineProps {
@@ -44,6 +45,26 @@ const CueLine = (props: CueLineProps): ReactElement => {
         : "sbte-cue-divider";
 
     const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
+    const sourceCuesIndexes = props.data.sourceCues
+        ? props.data.sourceCues.map(sourceCue => sourceCue.index)
+        : [];
+
+    const nextCueLine = props.rowProps.matchedCues[props.rowIndex + 1];
+    const nextSourceCuesIndexes = nextCueLine && nextCueLine.sourceCues && nextCueLine.sourceCues.length > 0
+        ? nextCueLine.sourceCues.map(sourceCue => sourceCue.index)
+        : [];
+
+    let nextIndex = 1;
+    let nextTargetCueIndex= -1;
+    let targetCues;
+    do {
+        targetCues = props.rowProps.matchedCues[props.rowIndex + nextIndex].targetCues;
+        nextTargetCueIndex = targetCues && targetCues.length > 0 ? targetCues[0].index : -1;
+        nextIndex++;
+    } while ((targetCues === undefined || targetCues.length === 0)
+        && nextTargetCueIndex === -1
+        && props.rowIndex + nextIndex < props.rowProps.matchedCues.length);
+
     return (
         <div
             ref={props.rowRef}
@@ -64,6 +85,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     className={captionClassName}
                                     showGlossaryTerms={editingCueIndex === sourceCue.index}
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
+                                    sourceCuesIndexes={sourceCuesIndexes}
+                                    nextTargetCueIndex={nextTargetCueIndex}
                                 />
                             );
                         })
@@ -81,6 +104,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     className={translationCueClassName}
                                     showGlossaryTerms={false}
                                     languageDirection={editingTrack?.language.direction}
+                                    sourceCuesIndexes={sourceCuesIndexes}
+                                    nextTargetCueIndex={nextTargetCueIndex}
                                 />
                             )
                         )
@@ -100,6 +125,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         index={targetCue.index}
                                         cue={targetCue.cue}
                                         playerTime={props.rowProps.playerTime}
+                                        nextSourceCuesIndexes={nextSourceCuesIndexes}
                                     />
                                 )
                                 : (
@@ -112,6 +138,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         showGlossaryTerms={false}
                                         showActionsPanel
                                         languageDirection={editingTrack?.language.direction}
+                                        sourceCuesIndexes={sourceCuesIndexes}
+                                        nextTargetCueIndex={nextTargetCueIndex}
                                     />
                                 );
                         })
@@ -126,6 +154,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 showGlossaryTerms={false}
                                 showActionsPanel
                                 languageDirection={editingTrack?.language.direction}
+                                sourceCuesIndexes={sourceCuesIndexes}
+                                nextTargetCueIndex={nextTargetCueIndex}
                             />
                         )
                 }
