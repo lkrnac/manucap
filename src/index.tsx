@@ -77,7 +77,7 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         const cues = [] as CueDto[];
         let endTime = 0;
-        for (let idx = 0; idx < 10; idx++) {
+        for (let idx = 0; idx < 9999; idx++) {
             const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
             let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
             // @ts-ignore since it can be updated manually
