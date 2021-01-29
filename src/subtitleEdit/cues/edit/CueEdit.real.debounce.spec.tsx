@@ -1,14 +1,21 @@
+/**  * @jest-environment jsdom-sixteen  */
+// TODO Remove above when we update to react-scripts with Jest 26:
+// https://github.com/facebook/create-react-app/pull/8362
+// eslint-disable-next-line
+// https://stackoverflow.com/questions/61036156/react-typescript-testing-typeerror-mutationobserver-is-not-a-constructor#comment110029314_61039444
+
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
+import { Provider } from "react-redux";
+import React from "react";
+import { render } from "@testing-library/react";
+import { AnyAction } from "redux";
+
 // @ts-ignore - Doesn't have types definitions file
 import { CueDto } from "../../model";
 import CueEdit from "./CueEdit";
-import { Provider } from "react-redux";
-import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { mount } from "enzyme";
 import { updateCues } from "../cuesListActions";
-import { AnyAction } from "redux";
 import { setValidationError } from "./cueEditorSlices";
 
 let testingStore = createTestingStore();
@@ -27,9 +34,9 @@ describe("CueEdit", () => {
     it("auto sets validation error to false after receiving it", (done) => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} />
+                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
             </Provider>
         );
 
@@ -39,7 +46,8 @@ describe("CueEdit", () => {
         // THEN
         setTimeout(() => {
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(actualNode.find("div").at(0).hasClass("bg-white")).toBeTruthy();
+            const rootElement = actualNode.container.querySelector("div") as HTMLDivElement;
+            expect(rootElement.className).toEqual("sbte-bottom-border bg-white");
             done();
         }, 1100);
     });

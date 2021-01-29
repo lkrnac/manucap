@@ -93,6 +93,11 @@ describe("CuesList", () => {
                 { index: 1, cue: cuesInRedux[1] },
                 { index: 2, cue: cuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [cuesWithIndexes[0]], sourceCues: []},
+                { targetCues: [cuesWithIndexes[1]], sourceCues: []},
+                { targetCues: [cuesWithIndexes[2]], sourceCues: []},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -102,14 +107,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -143,6 +148,11 @@ describe("CuesList", () => {
                 { index: 1, cue: cuesInRedux[1] },
                 { index: 2, cue: cuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [cuesWithIndexes[0]], sourceCues: []},
+                { targetCues: [cuesWithIndexes[1]], sourceCues: []},
+                { targetCues: [cuesWithIndexes[2]], sourceCues: []},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -152,14 +162,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -168,7 +178,7 @@ describe("CuesList", () => {
                                 height={81}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -205,6 +215,11 @@ describe("CuesList", () => {
                 { index: 1, cue: cuesInRedux[1] },
                 { index: 2, cue: cuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [cuesWithIndexes[0]], sourceCues: []},
+                { targetCues: [cuesWithIndexes[1]], sourceCues: []},
+                { targetCues: [cuesWithIndexes[2]], sourceCues: []},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -214,14 +229,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -230,7 +245,7 @@ describe("CuesList", () => {
                                 height={81}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues:true, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -282,6 +297,11 @@ describe("CuesList", () => {
                 { index: 1, cue: sourceCuesInRedux[1] },
                 { index: 2, cue: sourceCuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]},
+                { targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -291,14 +311,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -307,7 +327,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -344,6 +364,11 @@ describe("CuesList", () => {
                 { index: 1, cue: sourceCuesInRedux[1] },
                 { index: 2, cue: sourceCuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]},
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -353,14 +378,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -369,7 +394,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 0, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -415,6 +440,11 @@ describe("CuesList", () => {
             const sourceCuesWithIndexes = [
                 { index: 0, cue: sourceCuesInRedux[0] },
             ];
+            const matchedCues = [
+                { targetCues: [targetCuesWithIndexes[0]], sourceCues: []},
+                { targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [targetCuesWithIndexes[2]], sourceCues: []},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -424,14 +454,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -440,7 +470,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -486,6 +516,12 @@ describe("CuesList", () => {
             const sourceCuesWithIndexes = [
                 { index: 0, cue: sourceCuesInRedux[0] },
             ];
+            const matchedCues = [
+                { targetCues: [targetCuesWithIndexes[0]], sourceCues: []},
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [targetCuesWithIndexes[1]], sourceCues: []},
+                { targetCues: [targetCuesWithIndexes[2]], sourceCues: []},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -495,14 +531,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -511,7 +547,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -520,7 +556,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={3}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -566,6 +602,11 @@ describe("CuesList", () => {
                 { index: 1, cue: sourceCuesInRedux[1] },
                 { index: 2, cue: sourceCuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]},
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -575,14 +616,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -591,7 +632,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -637,6 +678,12 @@ describe("CuesList", () => {
                 { index: 1, cue: sourceCuesInRedux[1] },
                 { index: 2, cue: sourceCuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [targetCuesWithIndexes[0]], sourceCues: []},
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]},
+                { targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -646,14 +693,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -662,7 +709,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -671,7 +718,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={3}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -714,9 +761,8 @@ describe("CuesList", () => {
             ];
 
             const sourceCuesInRedux = testingStore.getState().sourceCues;
-            const sourceCuesWithIndexes = [
-                { index: 0, cue: sourceCuesInRedux[0] },
-            ];
+            const sourceCuesWithIndexes = [{ index: 0, cue: sourceCuesInRedux[0] }];
+            const matchedCues = [{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -726,7 +772,7 @@ describe("CuesList", () => {
                                 data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -772,6 +818,7 @@ describe("CuesList", () => {
                 { index: 1, cue: sourceCuesInRedux[1] },
                 { index: 2, cue: sourceCuesInRedux[2] }
             ];
+            const matchedCues = [{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -781,7 +828,7 @@ describe("CuesList", () => {
                                 data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 1, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -831,6 +878,11 @@ describe("CuesList", () => {
                 { index: 1, cue: sourceCuesInRedux[1] },
                 { index: 2, cue: sourceCuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]},
+                { targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -840,14 +892,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -856,7 +908,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -906,6 +958,11 @@ describe("CuesList", () => {
                 { index: 1, cue: sourceCuesInRedux[1] },
                 { index: 2, cue: sourceCuesInRedux[2] }
             ];
+            const matchedCues = [
+                { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]},
+                { targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]},
+            ];
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -915,14 +972,14 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -931,7 +988,7 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false }}
+                                rowProps={{ playerTime: 0, cuesLength: 3, withoutSourceCues: false, matchedCues }}
                                 onClick={(): void => undefined}
                             />
                         </div >

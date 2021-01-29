@@ -1,18 +1,20 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import AddCueLineButton from "./AddCueLineButton";
-import { AnyAction } from "@reduxjs/toolkit";
-import { CueDto } from "../../model";
 import { Provider } from "react-redux";
 import React from "react";
-import { mount } from "enzyme";
+import { AnyAction } from "@reduxjs/toolkit";
+import { render, fireEvent } from "@testing-library/react";
+
+import AddCueLineButton from "./AddCueLineButton";
+import { CueDto } from "../../model";
 import testingStore from "../../../testUtils/testingStore";
 import { updateCues } from "../cuesListActions";
+import { updateSourceCues } from "../view/sourceCueSlices";
 
 describe("AddCueLineButton", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-add-cue-button"
@@ -22,19 +24,19 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} />
+                <AddCueLineButton cueIndex={0} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with custom text", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-add-cue-button"
@@ -44,28 +46,28 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <AddCueLineButton text="Add Cue Line" cueIndex={0} />
+                <AddCueLineButton text="Add Cue Line" cueIndex={0} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("adds cue when clicked", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} />
+                <AddCueLineButton cueIndex={0} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
@@ -82,14 +84,14 @@ describe("AddCueLineButton", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "AUDIO_DESCRIPTION" } as CueDto;
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} />
+                <AddCueLineButton cueIndex={0} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
@@ -106,14 +108,14 @@ describe("AddCueLineButton", () => {
         cue.vttCue.position = 35;
         cue.vttCue.positionAlign = "center";
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} />
+                <AddCueLineButton cueIndex={0} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
@@ -133,15 +135,14 @@ describe("AddCueLineButton", () => {
         ] as CueDto[];
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} />
+                <AddCueLineButton cueIndex={0} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
-
+        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(2);
@@ -155,15 +156,14 @@ describe("AddCueLineButton", () => {
         ] as CueDto[];
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={0} />
+                <AddCueLineButton cueIndex={0} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
-
+        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues).toHaveLength(3);
@@ -177,17 +177,43 @@ describe("AddCueLineButton", () => {
         ] as CueDto[];
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <AddCueLineButton cueIndex={1} />
+                <AddCueLineButton cueIndex={1} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
-
+        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues).toHaveLength(3);
+    });
+
+    it("passes source cues parameters when cue is added", () => {
+        // GIVEN
+        const targetCues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        const sourceCues = [
+            { vttCue: new VTTCue(1, 1.225, "Target Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1.225, 2, "Target Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <AddCueLineButton cueIndex={0} sourceCueIndexes={[0, 1]} />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(2);
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
     });
 });

@@ -46,7 +46,7 @@ describe("CueActionsPanel", () => {
                 >
                     <DeleteCueLineButton cueIndex={1} />
                     <PlayCueButton cue={cues[1]} />
-                    <AddCueLineButton cueIndex={1} />
+                    <AddCueLineButton cueIndex={1} sourceCueIndexes={[]} />
                 </div>
             </Provider>
         );
@@ -54,7 +54,7 @@ describe("CueActionsPanel", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} isEdit />
+                <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
 
@@ -82,7 +82,7 @@ describe("CueActionsPanel", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} isEdit={false} />
+                <CueActionsPanel index={1} cue={cues[1]} isEdit={false} sourceCueIndexes={[]} />
             </Provider>
         );
 
@@ -97,7 +97,7 @@ describe("CueActionsPanel", () => {
 
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} isEdit />
+                <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
 
@@ -117,7 +117,7 @@ describe("CueActionsPanel", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={0} cue={cues[0]} isEdit />
+                <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
 
@@ -136,7 +136,7 @@ describe("CueActionsPanel", () => {
         // GIVEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} isEdit />
+                <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
         saveTrack.mockReset();

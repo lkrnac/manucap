@@ -173,14 +173,14 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
         const step = Math.min(timeGapLimit.maxGap, Constants.NEW_ADDED_CUE_DEFAULT_STEP);
         const cues = state.cues;
         const previousCue = cues[idx - 1] || Constants.DEFAULT_CUE;
-        const startTime = sourceIndexes
-            && sourceIndexes[0]
+        const startTime = sourceIndexes !== undefined
+            && sourceIndexes[0] !== undefined
             && state.sourceCues[sourceIndexes[0]].vttCue.startTime >= previousCue.vttCue.endTime
                 ? state.sourceCues[sourceIndexes[0]].vttCue.startTime
-                : cues[idx - 1].vttCue.endTime;
+                : previousCue.vttCue.endTime;
         const endTime = sourceIndexes && sourceIndexes[sourceIndexes.length - 1]
             ? state.sourceCues[sourceIndexes[sourceIndexes.length - 1]].vttCue.endTime
-            : cues[idx - 1].vttCue.endTime + step;
+            : previousCue.vttCue.endTime + step;
         const cue = createAndAddCue(previousCue, startTime, endTime);
         const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
 

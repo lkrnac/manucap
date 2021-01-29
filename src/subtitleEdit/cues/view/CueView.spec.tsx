@@ -3,16 +3,18 @@ import "video.js"; // VTTCue definition
 import React from "react";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
+import { AnyAction } from "@reduxjs/toolkit";
 
 import { CueDto, Language, Task, Track } from "../../model";
 import CueView from "./CueView";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
-import { AnyAction } from "@reduxjs/toolkit";
 import { updateTask } from "../../trackSlices";
-import { act } from "react-dom/test-utils";
 import { CueActionsPanel } from "../CueActionsPanel";
+import { updateSourceCues } from "./sourceCueSlices";
+import { updateCues } from "../cuesListActions";
 
 let testingStore = createTestingStore();
 
@@ -78,6 +80,8 @@ describe("CueView", () => {
                     className="testingClassName"
                     showGlossaryTerms
                     targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
                 />
             </Provider>
         );
@@ -138,7 +142,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -190,7 +202,7 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
-                    <CueActionsPanel index={1} cue={cue} isEdit={false} />
+                    <CueActionsPanel index={1} cue={cue} isEdit={false} sourceCueIndexes={[]} />
                 </div>
             </Provider>
         );
@@ -205,6 +217,8 @@ describe("CueView", () => {
                     showGlossaryTerms
                     targetCuesLength={0}
                     showActionsPanel
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
                 />
             </Provider>
         );
@@ -255,6 +269,8 @@ describe("CueView", () => {
                     showGlossaryTerms
                     languageDirection={testingTrack.language.direction}
                     targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
                 />
             </Provider>
         );
@@ -287,7 +303,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -322,7 +346,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -357,7 +389,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -392,7 +432,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -425,7 +473,16 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} hideText showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    hideText
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -453,7 +510,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -478,7 +543,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms={false} targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms={false}
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -499,7 +572,15 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -522,7 +603,15 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -551,7 +640,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -579,7 +676,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -588,125 +693,306 @@ describe("CueView", () => {
             .toEqual(expectedSourceCueContent);
     });
 
-    it("adds a cue when clicked if cue index is equal to target cues count", async () => {
-        // GIVEN
-        const cue = {
-            vttCue: new VTTCue(1, 2, "some text"),
-            cueCategory: "DIALOGUE"
-        } as CueDto;
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CueView targetCueIndex={0} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
-            </Provider>
-        );
+    describe("caption mode", () => {
+        it("open cue for editing if clicked for existing one", async () => {
+            // GIVEN
+            const cue = {
+                vttCue: new VTTCue(1, 2, "some text"),
+                cueCategory: "DIALOGUE"
+            } as CueDto;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueView
+                        targetCueIndex={6}
+                        cue={cue}
+                        playerTime={1}
+                        showGlossaryTerms
+                        targetCuesLength={8}
+                        sourceCuesIndexes={[]}
+                        nextTargetCueIndex={-1}
+                    />
+                </Provider>
+            );
+            const testingTask = {
+                type: "TASK_CAPTION",
+                projectName: "Project One",
+                dueDate: "2019/12/30 10:00AM",
+                editDisabled: false
+            } as Task;
+            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
-        // WHEN
-        await act(async () => {
-            fireEvent.click(actualNode.container.querySelector("div") as Element);
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(6);
         });
 
-        // THEN
-        expect(testingStore.getState().cues).toHaveLength(1);
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
+        it("doesn't open cue if task disables editing", async () => {
+            // GIVEN
+            const cue = {
+                vttCue: new VTTCue(1, 2, "some text"),
+                cueCategory: "DIALOGUE"
+            } as CueDto;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueView
+                        targetCueIndex={6}
+                        cue={cue}
+                        playerTime={1}
+                        showGlossaryTerms
+                        targetCuesLength={8}
+                        sourceCuesIndexes={[]}
+                        nextTargetCueIndex={-1}
+                    />
+                </Provider>
+            );
+            const testingTask = {
+                type: "TASK_CAPTION",
+                projectName: "Project One",
+                dueDate: "2019/12/30 10:00AM",
+                editDisabled: true
+            } as Task;
+            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        });
+
+        it("doesn't open cue if task is not defined", async () => {
+            // GIVEN
+            const cue = {
+                vttCue: new VTTCue(1, 2, "some text"),
+                cueCategory: "DIALOGUE"
+            } as CueDto;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueView
+                        targetCueIndex={6}
+                        cue={cue}
+                        playerTime={1}
+                        showGlossaryTerms
+                        targetCuesLength={8}
+                        sourceCuesIndexes={[]}
+                        nextTargetCueIndex={-1}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        });
     });
 
-    it("adds a cue when clicked if cue index is bigger than to target cues count", async () => {
-        // GIVEN
-        const cue = {
-            vttCue: new VTTCue(1, 2, "some text"),
-            cueCategory: "DIALOGUE"
-        } as CueDto;
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CueView targetCueIndex={1} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={0} />
-            </Provider>
-        );
+    describe("translation mode", () => {
+        it("adds a cue when clicked if cue index is equal to target cues count", async () => {
+            // GIVEN
+            testingStore.dispatch(updateSourceCues([
+                { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
 
-        // WHEN
-        await act(async () => {
-            fireEvent.click(actualNode.container.querySelector("div") as Element);
+            const cue = {
+                vttCue: new VTTCue(1, 2, "some text"),
+                cueCategory: "DIALOGUE"
+            } as CueDto;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueView
+                        targetCueIndex={0}
+                        cue={cue}
+                        playerTime={1}
+                        showGlossaryTerms
+                        targetCuesLength={0}
+                        sourceCuesIndexes={[0, 1]}
+                        nextTargetCueIndex={-1}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().cues).toHaveLength(1);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
         });
 
-        // THEN
-        expect(testingStore.getState().cues).toHaveLength(1);
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
-    });
+        it("adds a cue when clicked if cue index is bigger than to target cues count", async () => {
+            // GIVEN
+            testingStore.dispatch(updateSourceCues([
+                { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
 
-    it("open cue for editing if clicked for existing one", async () => {
-        // GIVEN
-        const cue = {
-            vttCue: new VTTCue(1, 2, "some text"),
-            cueCategory: "DIALOGUE"
-        } as CueDto;
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CueView targetCueIndex={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
-            </Provider>
-        );
-        const testingTask = {
-            type: "TASK_CAPTION",
-            projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
-            editDisabled: false
-        } as Task;
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+            const cue = {
+                vttCue: new VTTCue(1, 2, "some text"),
+                cueCategory: "DIALOGUE"
+            } as CueDto;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueView
+                        targetCueIndex={1}
+                        cue={cue}
+                        playerTime={1}
+                        showGlossaryTerms
+                        targetCuesLength={0}
+                        sourceCuesIndexes={[0, 1]}
+                        nextTargetCueIndex={-1}
+                    />
+                </Provider>
+            );
 
-        // WHEN
-        await act(async () => {
-            fireEvent.click(actualNode.container.querySelector("div") as Element);
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().cues).toHaveLength(1);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("");
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
         });
 
-        // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(6);
-    });
+        it("open cue for editing if clicked for existing one", async () => {
+            // GIVEN
+            testingStore.dispatch(updateSourceCues([
+                { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
 
-    it("doesn't open cue if task disables editing", async () => {
-        // GIVEN
-        const cue = {
-            vttCue: new VTTCue(1, 2, "some text"),
-            cueCategory: "DIALOGUE"
-        } as CueDto;
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CueView targetCueIndex={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
-            </Provider>
-        );
-        const testingTask = {
-            type: "TASK_CAPTION",
-            projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
-            editDisabled: true
-        } as Task;
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+            const cue = {
+                vttCue: new VTTCue(1, 2, "some text"),
+                cueCategory: "DIALOGUE"
+            } as CueDto;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueView
+                        targetCueIndex={6}
+                        cue={cue}
+                        playerTime={1}
+                        showGlossaryTerms
+                        targetCuesLength={8}
+                        sourceCuesIndexes={[0, 1]}
+                        nextTargetCueIndex={-1}
+                    />
+                </Provider>
+            );
+            const testingTask = {
+                type: "TASK_CAPTION",
+                projectName: "Project One",
+                dueDate: "2019/12/30 10:00AM",
+                editDisabled: false
+            } as Task;
+            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
-        // WHEN
-        await act(async () => {
-            fireEvent.click(actualNode.container.querySelector("div") as Element);
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(6);
         });
 
-        // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(-1);
-    });
+        it("adds a cue when clicked if cue index is undefined and this is last cue", async () => {
+            // GIVEN
+            testingStore.dispatch(updateSourceCues([
+                { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
 
-    it("doesn't open cue if task is not defined", async () => {
-        // GIVEN
-        const cue = {
-            vttCue: new VTTCue(1, 2, "some text"),
-            cueCategory: "DIALOGUE"
-        } as CueDto;
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CueView targetCueIndex={6} cue={cue} playerTime={1} showGlossaryTerms targetCuesLength={8} />
-            </Provider>
-        );
+            testingStore.dispatch(updateCues([
+                { vttCue: new VTTCue(1, 2, "Target Line 1"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
 
-        // WHEN
-        await act(async () => {
-            fireEvent.click(actualNode.container.querySelector("div") as Element);
+            const cue = {
+                vttCue: new VTTCue(1, 2, "some text"),
+                cueCategory: "DIALOGUE"
+            } as CueDto;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueView
+                        cue={cue}
+                        playerTime={1}
+                        showGlossaryTerms
+                        targetCuesLength={1}
+                        sourceCuesIndexes={[0, 1]}
+                        nextTargetCueIndex={-1}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().cues).toHaveLength(2);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
         });
 
-        // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        it("adds a cue when clicked if cue index is undefined and this is middle cue", async () => {
+            // GIVEN
+            testingStore.dispatch(updateSourceCues([
+                { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
+
+            testingStore.dispatch(updateCues([
+                { vttCue: new VTTCue(1, 2.5, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3.5, 6, "Target Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
+
+            const cue = {
+                vttCue: new VTTCue(1, 2, "some text"),
+                cueCategory: "DIALOGUE"
+            } as CueDto;
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueView
+                        cue={cue}
+                        playerTime={1}
+                        showGlossaryTerms
+                        targetCuesLength={1}
+                        sourceCuesIndexes={[0, 1]}
+                        nextTargetCueIndex={1}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().cues).toHaveLength(3);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2.5);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3.5);
+        });
     });
 
     it("doesn't propagate click event on actions panel to parent DOM node", async () => {
@@ -724,6 +1010,8 @@ describe("CueView", () => {
                     showGlossaryTerms
                     showActionsPanel
                     targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
                 />
             </Provider>
         );

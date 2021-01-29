@@ -45,6 +45,12 @@ const sourceCuesWithIndexes = [
     { index: 2, cue: sourceCues[2] }
 ];
 
+const matchedCues = [
+    { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]},
+    { targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]},
+    { targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]},
+];
+
 describe("CueLine", () => {
     beforeEach(() => { testingStore = createTestingStore(); });
     it("renders edit line in captioning mode", () => {
@@ -64,13 +70,13 @@ describe("CueLine", () => {
                 <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                     <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
                     <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
-                        <CueEdit index={0} cue={targetCues[0]} playerTime={0} />
+                        <CueEdit index={0} cue={targetCues[0]} playerTime={0} nextSourceCuesIndexes={[]} />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: [targetCuesWithIndexes[0]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: true } as CueLineRowProps;
+        const cueLineRowProps = { playerTime: 0, withoutSourceCues: true, matchedCues } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
@@ -116,13 +122,20 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[]}
+                            nextTargetCueIndex={1}
                         />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: [targetCuesWithIndexes[0]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: true, cuesLength: 1 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: true,
+            cuesLength: 1,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
@@ -167,14 +180,21 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms
                             languageDirection="LTR"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
-                        <CueEdit index={0} cue={targetCues[0]} playerTime={0} />
+                        <CueEdit index={0} cue={targetCues[0]} playerTime={0} nextSourceCuesIndexes={[]} />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 1 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: false,
+            cuesLength: 1,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
@@ -220,6 +240,8 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                         <CueView
                             targetCueIndex={0}
@@ -230,13 +252,20 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 1 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: false,
+            cuesLength: 1,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
@@ -269,6 +298,8 @@ describe("CueLine", () => {
                             playerTime={0}
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                         <CueView
                             cue={sourceCues[0]}
@@ -278,13 +309,20 @@ describe("CueLine", () => {
                             className="sbte-gray-200-background"
                             showGlossaryTerms={false}
                             showActionsPanel
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { sourceCues: [sourceCuesWithIndexes[0]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 0 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: false,
+            cuesLength: 0,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         const actualNode = render(
@@ -329,6 +367,8 @@ describe("CueLine", () => {
                             className="sbte-gray-200-background"
                             showGlossaryTerms={false}
                             languageDirection="RTL"
+                            sourceCuesIndexes={[]}
+                            nextTargetCueIndex={1}
                         />
                         <CueView
                             targetCueIndex={0}
@@ -339,13 +379,20 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[]}
+                            nextTargetCueIndex={1}
                         />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: [targetCuesWithIndexes[0]], sourceCues: []};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 1 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: false,
+            cuesLength: 1,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
@@ -390,6 +437,8 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                         <div className="sbte-cue-divider-good" />
                         <CueView
@@ -401,6 +450,8 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                         <CueView
                             targetCueIndex={1}
@@ -411,6 +462,8 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                         <CueView
                             targetCueIndex={2}
@@ -421,13 +474,20 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 3 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: false,
+            cuesLength: 3,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
@@ -472,6 +532,8 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                         <div className="sbte-cue-divider-good" />
                         <CueView
@@ -483,8 +545,10 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
-                        <CueEdit index={1} cue={targetCues[1]} playerTime={0} />
+                        <CueEdit index={1} cue={targetCues[1]} playerTime={0} nextSourceCuesIndexes={[]} />
                         <CueView
                             targetCueIndex={2}
                             cue={targetCues[2]}
@@ -494,13 +558,20 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 3 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: false,
+            cuesLength: 3,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
@@ -545,6 +616,8 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
+                            sourceCuesIndexes={[0, 1, 2]}
+                            nextTargetCueIndex={1}
                         />
                         <CueView
                             targetCueIndex={0}
@@ -554,6 +627,8 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
+                            sourceCuesIndexes={[0, 1, 2]}
+                            nextTargetCueIndex={1}
                         />
                         <CueView
                             targetCueIndex={0}
@@ -563,6 +638,8 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
+                            sourceCuesIndexes={[0, 1, 2]}
+                            nextTargetCueIndex={1}
                         />
                         <div className="sbte-cue-divider-good" />
                         <CueView
@@ -574,13 +651,20 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0, 1, 2]}
+                            nextTargetCueIndex={1}
                         />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: [targetCuesWithIndexes[0]], sourceCues: sourceCuesWithIndexes };
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 1 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: false,
+            cuesLength: 1,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
@@ -625,6 +709,8 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             languageDirection="LTR"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                         <div className="sbte-cue-divider-good" />
                         <CueView
@@ -636,8 +722,10 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
-                        <CueEdit index={1} cue={targetCues[1]} playerTime={0} />
+                        <CueEdit index={1} cue={targetCues[1]} playerTime={0} nextSourceCuesIndexes={[]} />
                         <CueView
                             targetCueIndex={2}
                             cue={targetCues[2]}
@@ -647,13 +735,20 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             languageDirection="RTL"
+                            sourceCuesIndexes={[0]}
+                            nextTargetCueIndex={1}
                         />
                     </div>
                 </div>
             </Provider>
         );
         const cueWithSource = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: false, cuesLength: 3 } as CueLineRowProps;
+        const cueLineRowProps = {
+            playerTime: 0,
+            withoutSourceCues: false,
+            cuesLength: 3,
+            matchedCues
+        } as CueLineRowProps;
 
         // WHEN
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
@@ -676,7 +771,7 @@ describe("CueLine", () => {
     it("configures rowReference to root container HTML element", () => {
         // GIVEN
         const cueWithSource = { targetCues: [targetCuesWithIndexes[1]]};
-        const cueLineRowProps = { playerTime: 0, withoutSourceCues: true } as CueLineRowProps;
+        const cueLineRowProps = { playerTime: 0, withoutSourceCues: true, matchedCues } as CueLineRowProps;
         const rowRef = React.createRef() as React.RefObject<HTMLDivElement>;
 
         // WHEN
