@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 // import { CueActionsPanel } from "./CueActionsPanel";
-import { CueLineDto } from "../model";
+import { CueDtoWithIndex, CueLineDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
 import { SubtitleEditState } from "../subtitleEditReducers";
@@ -24,6 +24,31 @@ export interface CueLineProps {
     onClick: (idx: number) => void;
 }
 
+const findNextTargetCueIndex = (props: CueLineProps): number => {
+    let nextIndex = 0;
+    let nextTargetCueIndex = -1;
+    let targetCues;
+    do {
+        targetCues = props.rowProps.matchedCues[props.rowIndex + nextIndex].targetCues;
+        nextTargetCueIndex = targetCues && targetCues.length > 0 ? targetCues[0].index : -1;
+        nextIndex++;
+    } while ((targetCues === undefined || targetCues.length === 0)
+    && nextTargetCueIndex === -1
+    && props.rowIndex + nextIndex < props.rowProps.matchedCues.length);
+    return nextTargetCueIndex;
+};
+
+const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
+    ? cues.map(sourceCue => sourceCue.index)
+    : [];
+
+const findNextSourceCuesIndexes = (props: CueLineProps): number [] => {
+    const nextCueLine = props.rowProps.matchedCues[props.rowIndex + 1];
+    return nextCueLine
+        ? getCueIndexes(nextCueLine.sourceCues)
+        : [];
+};
+
 const CueLine = (props: CueLineProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
@@ -45,25 +70,9 @@ const CueLine = (props: CueLineProps): ReactElement => {
         : "sbte-cue-divider";
 
     const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
-    const sourceCuesIndexes = props.data.sourceCues
-        ? props.data.sourceCues.map(sourceCue => sourceCue.index)
-        : [];
-
-    const nextCueLine = props.rowProps.matchedCues[props.rowIndex + 1];
-    const nextSourceCuesIndexes = nextCueLine && nextCueLine.sourceCues && nextCueLine.sourceCues.length > 0
-        ? nextCueLine.sourceCues.map(sourceCue => sourceCue.index)
-        : [];
-
-    let nextIndex = 0;
-    let nextTargetCueIndex = -1;
-    let targetCues;
-    do {
-        targetCues = props.rowProps.matchedCues[props.rowIndex + nextIndex].targetCues;
-        nextTargetCueIndex = targetCues && targetCues.length > 0 ? targetCues[0].index : -1;
-        nextIndex++;
-    } while ((targetCues === undefined || targetCues.length === 0)
-        && nextTargetCueIndex === -1
-        && props.rowIndex + nextIndex < props.rowProps.matchedCues.length);
+    const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
+    const nextSourceCuesIndexes = findNextSourceCuesIndexes(props);
+    const nextTargetCueIndex = findNextTargetCueIndex(props);
 
     return (
         <div
