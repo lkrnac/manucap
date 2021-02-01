@@ -122,6 +122,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                             return editingCueIndex === targetCue.index
                                 ? (
                                     <CueEdit
+                                        key={targetCue.index}
                                         index={targetCue.index}
                                         cue={targetCue.cue}
                                         playerTime={props.rowProps.playerTime}
@@ -130,6 +131,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 )
                                 : (
                                     <CueView
+                                        key={targetCue.index}
                                         targetCueIndex={targetCue.index}
                                         cue={targetCue.cue}
                                         targetCuesLength={props.rowProps.cuesLength}
