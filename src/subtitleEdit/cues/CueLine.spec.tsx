@@ -123,7 +123,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                     </div>
                 </div>
@@ -181,7 +181,7 @@ describe("CueLine", () => {
                             showGlossaryTerms
                             languageDirection="LTR"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueEdit index={0} cue={targetCues[0]} playerTime={0} nextSourceCuesIndexes={[]} />
                     </div>
@@ -241,7 +241,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueView
                             targetCueIndex={0}
@@ -253,7 +253,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                     </div>
                 </div>
@@ -299,7 +299,7 @@ describe("CueLine", () => {
                             className="sbte-gray-100-background"
                             showGlossaryTerms={false}
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueView
                             cue={sourceCues[0]}
@@ -310,7 +310,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             showActionsPanel
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                     </div>
                 </div>
@@ -368,7 +368,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             languageDirection="RTL"
                             sourceCuesIndexes={[]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueView
                             targetCueIndex={0}
@@ -380,7 +380,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                     </div>
                 </div>
@@ -438,7 +438,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <div className="sbte-cue-divider-good" />
                         <CueView
@@ -451,7 +451,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueView
                             targetCueIndex={1}
@@ -463,7 +463,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueView
                             targetCueIndex={2}
@@ -475,7 +475,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                     </div>
                 </div>
@@ -533,7 +533,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <div className="sbte-cue-divider-good" />
                         <CueView
@@ -546,7 +546,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueEdit index={1} cue={targetCues[1]} playerTime={0} nextSourceCuesIndexes={[]} />
                         <CueView
@@ -559,7 +559,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                     </div>
                 </div>
@@ -617,7 +617,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                             sourceCuesIndexes={[0, 1, 2]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueView
                             targetCueIndex={0}
@@ -628,7 +628,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                             sourceCuesIndexes={[0, 1, 2]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueView
                             targetCueIndex={0}
@@ -639,7 +639,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                             sourceCuesIndexes={[0, 1, 2]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <div className="sbte-cue-divider-good" />
                         <CueView
@@ -652,7 +652,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0, 1, 2]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                     </div>
                 </div>
@@ -710,7 +710,7 @@ describe("CueLine", () => {
                             showGlossaryTerms={false}
                             languageDirection="LTR"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <div className="sbte-cue-divider-good" />
                         <CueView
@@ -723,7 +723,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                         <CueEdit index={1} cue={targetCues[1]} playerTime={0} nextSourceCuesIndexes={[]} />
                         <CueView
@@ -736,7 +736,7 @@ describe("CueLine", () => {
                             showActionsPanel
                             languageDirection="RTL"
                             sourceCuesIndexes={[0]}
-                            nextTargetCueIndex={1}
+                            nextTargetCueIndex={0}
                         />
                     </div>
                 </div>

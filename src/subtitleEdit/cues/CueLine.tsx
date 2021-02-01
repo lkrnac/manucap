@@ -54,7 +54,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
         ? nextCueLine.sourceCues.map(sourceCue => sourceCue.index)
         : [];
 
-    let nextIndex = 1;
+    let nextIndex = 0;
     let nextTargetCueIndex= -1;
     let targetCues;
     do {
