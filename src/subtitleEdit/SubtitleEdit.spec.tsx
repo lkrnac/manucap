@@ -51,6 +51,11 @@ const cuesWithIndexes = [
     { index: 1, cue: cues[1] },
 ];
 
+const matchedCues = [
+    { targetCues: [cuesWithIndexes[0]], sourceCues: []},
+    { targetCues: [cuesWithIndexes[1]], sourceCues: []},
+];
+
 const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US", name: "English (US)" } as Language,
@@ -145,14 +150,24 @@ describe("SubtitleEdit", () => {
                                     <CueLine
                                         rowIndex={0}
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            cuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
                                         rowIndex={1}
                                         data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            cuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
@@ -269,6 +284,7 @@ describe("SubtitleEdit", () => {
                             <AddCueLineButton
                                 text="Start Captioning"
                                 cueIndex={-1}
+                                sourceCueIndexes={[]}
                             />
                             <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
@@ -505,14 +521,24 @@ describe("SubtitleEdit", () => {
                                     <CueLine
                                         rowIndex={0}
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            cuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
                                         rowIndex={1}
                                         data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            cuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
@@ -647,14 +673,24 @@ describe("SubtitleEdit", () => {
                                     <CueLine
                                         rowIndex={0}
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            cuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
                                         rowIndex={1}
                                         data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: true }}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            cuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
