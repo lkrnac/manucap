@@ -14,21 +14,21 @@ import { playVideoSection } from "../../player/playbackSlices";
 import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../CueActionsPanel";
 
-interface Props {
+export interface CueEditProps {
     index: number;
     cue: CueDto;
     nextSourceCuesIndexes: number[];
     playerTime: number;
 }
 
-const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
+const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEditProps,
                                     startTime: number, endTime: number, editUuid?: string): void => {
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateVttCue(props.index, newCue, editUuid));
 };
 
-const CueEdit = (props: Props): ReactElement => {
+const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
     const validationError = useSelector((state: SubtitleEditState) => state.validationError);
 

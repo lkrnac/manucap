@@ -55,7 +55,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
         : [];
 
     let nextIndex = 0;
-    let nextTargetCueIndex= -1;
+    let nextTargetCueIndex = -1;
     let targetCues;
     do {
         targetCues = props.rowProps.matchedCues[props.rowIndex + nextIndex].targetCues;
