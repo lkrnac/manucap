@@ -2,7 +2,7 @@ import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueActionsPanel } from "./CueActionsPanel";
-import { CueDto, Language, Track } from "../model";
+import { CueDto, GlossaryMatchDto, Language, Track } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView from "./view/CueView";
@@ -454,6 +454,19 @@ describe("CueLine", () => {
 
     it("edit line in translation mode shows glossary terms in source cue", () => {
         // GIVEN
+        const glossary = [] as GlossaryMatchDto[];
+        glossary.push({ source: "source text", replacements: ["target text"]});
+        const testingTrack = {
+            type: "TRANSLATION",
+            sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+            language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+            default: true,
+            mediaTitle: "Sample Polish",
+            mediaLength: 4000,
+            progress: 50,
+            glossary
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const cueWithSource = { cue: cues[1], sourceCue };
         const cueLineRowProps = { playerTime: 0, cuesLength: 1 } as CueLineRowProps;
@@ -474,6 +487,7 @@ describe("CueLine", () => {
 
         // THEN
         expect(actualNode.find(CueView).props().showGlossaryTerms).toBeTruthy();
+        expect(actualNode.find(CueView).props().glossary).toEqual(glossary);
     });
 
     it("view line in translation mode doesn't show glossary terms in source cue", () => {

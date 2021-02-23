@@ -43,6 +43,7 @@ const CueLine = (props: Props): ReactElement => {
                             playerTime={props.rowProps.playerTime}
                             className={"sbte-bottom-border " + captionClassName}
                             showGlossaryTerms={editingCueIndex === props.rowIndex}
+                            glossary={editingTrack?.glossary}
                             languageDirection={editingTrack?.sourceLanguage?.direction}
                           />
                         : <div />

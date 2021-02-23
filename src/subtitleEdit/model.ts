@@ -23,7 +23,6 @@ export interface CueDto {
     editUuid?: string;
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
-    glossaryMatches?: GlossaryMatchDto[];
 }
 
 export interface CueWithSource {
@@ -46,6 +45,7 @@ export interface Track {
     readonly progress: number;
     overlapEnabled?: boolean;
     id?: string;
+    readonly glossary?: GlossaryMatchDto[];
 }
 
 export interface SpellcheckerSettings {

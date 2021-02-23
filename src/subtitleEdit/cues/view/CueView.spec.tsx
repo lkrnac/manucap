@@ -3,8 +3,7 @@ import "video.js"; // VTTCue definition
 import React from "react";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
-
-import { CueDto, Language, Track } from "../../model";
+import { CueDto, GlossaryMatchDto, Language, Track } from "../../model";
 import CueView from "./CueView";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { createTestingStore } from "../../../testUtils/testingStore";
@@ -20,7 +19,6 @@ describe("CueView", () => {
     it("renders with class name parameter", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
-
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div style={{ display: "flex" }} className="testingClassName">
@@ -356,15 +354,13 @@ describe("CueView", () => {
 
     it("renders source cue with glossary terms highlighted if enabled", () => {
         // GIVEN
+        const glossary = [] as GlossaryMatchDto[];
+        glossary.push({ source: "text", replacements: ["text replacement1", "text replacement2"]});
+        glossary.push({ source: "Line", replacements: ["lineReplacement1"]});
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
-            cueCategory: "DIALOGUE",
-            glossaryMatches: [
-                { source: "text", replacements: ["text replacement1", "text replacement2"]},
-                { source: "Line", replacements: ["lineReplacement1"]}
-            ]
+            cueCategory: "DIALOGUE"
         } as CueDto;
-
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
             "style=\"background-color: #D9E9FF;\">Line</span></b></i> <br>Wrapped " +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
@@ -373,7 +369,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} glossary={glossary} showGlossaryTerms />
             </Provider>
         );
 
@@ -386,11 +382,7 @@ describe("CueView", () => {
         // GIVEN
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
-            cueCategory: "DIALOGUE",
-            glossaryMatches: [
-                { source: "text", replacements: ["text replacement1", "text replacement2", "repl3"]},
-                { source: "Line", replacements: ["lineReplacement1"]}
-            ]
+            cueCategory: "DIALOGUE"
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b>Line</b></i> <br>Wrapped text";
@@ -409,17 +401,16 @@ describe("CueView", () => {
 
     it("sends simple glossary term to redux when clicked", () => {
         // GIVEN
+        const glossary = [] as GlossaryMatchDto[];
+        glossary.push({ source: "text", replacements: ["text replacement1", "text replacement2"]});
+        glossary.push({ source: "Line", replacements: ["lineReplacement1"]});
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
-            cueCategory: "DIALOGUE",
-            glossaryMatches: [
-                { source: "text", replacements: ["text replacement1", "text replacement2", "repl3"]},
-                { source: "Line", replacements: ["lineReplacement1"]}
-            ]
+            cueCategory: "DIALOGUE"
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} glossary={glossary} showGlossaryTerms />
             </Provider>
         );
 
@@ -432,17 +423,16 @@ describe("CueView", () => {
 
     it("sends composite glossary term to redux when clicked", () => {
         // GIVEN
+        const glossary = [] as GlossaryMatchDto[];
+        glossary.push({ source: "text", replacements: ["text replacement1", "text replacement2", "repl3"]});
+        glossary.push({ source: "Line", replacements: ["lineReplacement1"]});
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
-            cueCategory: "DIALOGUE",
-            glossaryMatches: [
-                { source: "text", replacements: ["text replacement1", "text replacement2", "repl3"]},
-                { source: "Line", replacements: ["lineReplacement1"]}
-            ]
+            cueCategory: "DIALOGUE"
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} glossary={glossary} showGlossaryTerms />
             </Provider>
         );
 
@@ -455,12 +445,11 @@ describe("CueView", () => {
 
     it("handles glossary case insensitively", () => {
         // GIVEN
+        const glossary = [] as GlossaryMatchDto[];
+        glossary.push({ source: "Line", replacements: ["replacement"]});
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text LINE"),
-            cueCategory: "DIALOGUE",
-            glossaryMatches: [
-                { source: "line", replacements: ["replacement"]}
-            ]
+            cueCategory: "DIALOGUE"
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('replacement')\" " +
@@ -471,7 +460,7 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} glossary={glossary} showGlossaryTerms />
             </Provider>
         );
 
@@ -482,13 +471,12 @@ describe("CueView", () => {
 
     it("handles glossary for multi word phrases", () => {
         // GIVEN
+        const glossary = [] as GlossaryMatchDto[];
+        glossary.push({ source: "Wrapped text", replacements: ["text replacement1", "text replacement2"]});
+        glossary.push({ source: "Source Line", replacements: ["lineReplacement1"]});
         const cue = {
             vttCue: new VTTCue(1, 2, "<i>Source Line</i> \nWrapped text"),
-            cueCategory: "DIALOGUE",
-            glossaryMatches: [
-                { source: "Wrapped text", replacements: ["text replacement1", "text replacement2"]},
-                { source: "Source Line", replacements: ["lineReplacement1"]}
-            ]
+            cueCategory: "DIALOGUE"
         } as CueDto;
 
         const expectedSourceCueContent = "<i><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
@@ -499,7 +487,41 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView index={1} cue={cue} playerTime={1} glossary={glossary} showGlossaryTerms />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);    });
+
+    it("handles glossary with large number of items", () => {
+        // GIVEN
+        const glossary = [] as GlossaryMatchDto[];
+        for (let idx = 1000; idx < 99999; idx++) {
+            glossary.push({
+                source: `Source Line ${idx + 1}`,
+                replacements: [`Replacement for cue ${idx + 1}`]
+            });
+            glossary.push({
+                source: `Wrapped text ${idx + 1}`,
+                replacements: [`Text burrito ${idx + 1}`]
+            });
+        }
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source Line 6732</i> \nWrapped text 9222"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+
+        const expectedSourceCueContent = "<i><span onclick=\"pickSetGlossaryTerm('Replacement for cue 6732')\" " +
+            "style=\"background-color: #D9E9FF;\">Source Line 6732</span></i> <br>" +
+            "<span onclick=\"pickSetGlossaryTerm('Text burrito 9222')\" " +
+            "style=\"background-color: #D9E9FF;\">Wrapped text 9222</span>";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={1} cue={cue} playerTime={1} glossary={glossary} showGlossaryTerms />
             </Provider>
         );
 

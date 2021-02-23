@@ -2,7 +2,7 @@ import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
-import { CueDto, Language } from "./subtitleEdit/model";
+import { CueDto, GlossaryMatchDto, Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
@@ -31,12 +31,9 @@ const TestApp = (): ReactElement => {
             const cues = [] as CueDto[];
             for (let idx = 0; idx < 9999; idx++) {
                 cues.push({
-                    vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
-                    cueCategory: "DIALOGUE",
-                    glossaryMatches: [
-                        { source: "text", replacements: ["text replacement1", "text replacement2"]},
-                        { source: "line", replacements: ["lineReplacement1"]}
-                    ]
+                    vttCue: new VTTCue(
+                        idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}, cue ${idx + 1}\nWrapped text.`),
+                    cueCategory: "DIALOGUE"
                 });
             }
             setTimeout( // this simulates latency caused by server roundtrip
@@ -48,8 +45,14 @@ const TestApp = (): ReactElement => {
     });
 
     // #############################################################################################
-
     useEffect(() => {
+        const glossary = [] as GlossaryMatchDto[];
+        for (let idx = 0; idx < 9999; idx++) {
+            glossary.push({
+                source: `cue ${idx + 1}`,
+                replacements: [`Replacement for cue ${idx + 1}`]
+            });
+        }
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateEditingTrack({
                 type: trackType,
@@ -58,7 +61,8 @@ const TestApp = (): ReactElement => {
                 mediaTitle: "This is the video title",
                 mediaLength: 4250,
                 progress: 50,
-                id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d"
+                id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d",
+                glossary: glossary as GlossaryMatchDto[]
             })),
             500
         );

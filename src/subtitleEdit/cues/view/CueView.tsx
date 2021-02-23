@@ -13,6 +13,7 @@ interface Props {
     cue: CueDto;
     playerTime: number;
     showGlossaryTerms: boolean;
+    glossary?: GlossaryMatchDto[];
     languageDirection?: LanguageDirection;
     className?: string;
     hideText?: boolean;
@@ -41,7 +42,9 @@ const replaceForInsensitiveMatches = (
 };
 
 const injectGlossaryTerms = (plainText: string, props: Props, sanitizedHtml: string): string => {
-    props.cue.glossaryMatches?.forEach(
+    const glossaryMatches = props.glossary?.filter(
+        glossaryItem => plainText.toLowerCase().match(new RegExp(glossaryItem.source,"gi")));
+    glossaryMatches?.forEach(
         (match) => {
             const caseInsensitiveMatches = plainText.match(new RegExp(match.source,"gi"));
             sanitizedHtml = replaceForInsensitiveMatches(caseInsensitiveMatches, plainText, match, sanitizedHtml);
@@ -53,7 +56,6 @@ const injectGlossaryTerms = (plainText: string, props: Props, sanitizedHtml: str
 const buildContent = (dispatch: Dispatch<AppThunk>, props: Props): string => {
     const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
     let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
-
     if (props.showGlossaryTerms) {
         // @ts-ignore We need to define function as global, because it will be used
         // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
