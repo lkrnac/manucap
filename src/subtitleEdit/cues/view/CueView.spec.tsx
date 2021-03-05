@@ -527,6 +527,32 @@ describe("CueView", () => {
             .toEqual(expectedSourceCueContent);
     });
 
+    it("should only highlight whole words glossary matches", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "This is some sample text"),
+            cueCategory: "DIALOGUE",
+            glossaryMatches: [
+                { source: "some", replacements: ["qualche"]},
+                { source: "ample", replacements: ["amplio"]}
+            ]
+        } as CueDto;
+
+        const expectedSourceCueContent = "This is <span onclick=\"pickSetGlossaryTerm('qualche')\" " +
+            "style=\"background-color: #D9E9FF;\">some</span> sample text";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
     it("renders source cue without glossary terms highlighted if not enabled", () => {
         // GIVEN
         const cue = {

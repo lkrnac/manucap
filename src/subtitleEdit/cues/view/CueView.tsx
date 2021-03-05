@@ -49,7 +49,7 @@ const replaceForInsensitiveMatches = (
 const injectGlossaryTerms = (plainText: string, props: CueViewProps, sanitizedHtml: string): string => {
     props.cue.glossaryMatches?.forEach(
         (match) => {
-            const caseInsensitiveMatches = plainText.match(new RegExp(match.source,"gi"));
+            const caseInsensitiveMatches = plainText.match(new RegExp("\\b" + match.source + "\\b","gi"));
             sanitizedHtml = replaceForInsensitiveMatches(caseInsensitiveMatches, plainText, match, sanitizedHtml);
         }
     );
