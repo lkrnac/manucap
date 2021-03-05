@@ -152,7 +152,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 targetCuesLength={props.rowProps.cuesLength}
                                 playerTime={props.rowProps.playerTime}
                                 hideText
-                                className={translationCueClassName}
+                                className={"sbte-gray-200-background"}
                                 showGlossaryTerms={false}
                                 showActionsPanel
                                 languageDirection={editingTrack?.language.direction}

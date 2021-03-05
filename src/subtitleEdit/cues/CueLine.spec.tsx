@@ -363,7 +363,7 @@ describe("CueLine", () => {
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
 
-        it("renders view line that doesn't have target)", () => {
+        it("renders view line that doesn't have target", () => {
             // GIVEN
             const testingTrack = {
                 type: "TRANSLATION",
@@ -395,7 +395,7 @@ describe("CueLine", () => {
                                 targetCuesLength={3}
                                 playerTime={0}
                                 hideText
-                                className="sbte-gray-100-background"
+                                className="sbte-gray-200-background"
                                 showGlossaryTerms={false}
                                 showActionsPanel
                                 languageDirection="RTL"
@@ -468,7 +468,7 @@ describe("CueLine", () => {
                                 targetCuesLength={3}
                                 playerTime={0}
                                 hideText
-                                className="sbte-gray-100-background"
+                                className="sbte-gray-200-background"
                                 showGlossaryTerms={false}
                                 showActionsPanel
                                 languageDirection="RTL"
