@@ -1051,7 +1051,6 @@ describe("CueView", () => {
         );
 
         // WHEN
-        console.log(actualNode.container.outerHTML);
         await act(async() => {
             fireEvent.click(actualNode.container.querySelector(".sbte-actions-panel") as Element);
         });
