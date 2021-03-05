@@ -544,7 +544,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
