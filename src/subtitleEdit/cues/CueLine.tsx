@@ -42,13 +42,6 @@ const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
     ? cues.map(sourceCue => sourceCue.index)
     : [];
 
-const findNextSourceCuesIndexes = (props: CueLineProps): number [] => {
-    const nextCueLine = props.rowProps.matchedCues[props.rowIndex + 1];
-    return nextCueLine
-        ? getCueIndexes(nextCueLine.sourceCues)
-        : [];
-};
-
 const CueLine = (props: CueLineProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
@@ -71,7 +64,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
 
     const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
     const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
-    const nextSourceCuesIndexes = findNextSourceCuesIndexes(props);
     const nextTargetCueIndex = findNextTargetCueIndex(props);
 
     return (
@@ -135,7 +127,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         index={targetCue.index}
                                         cue={targetCue.cue}
                                         playerTime={props.rowProps.playerTime}
-                                        nextSourceCuesIndexes={nextSourceCuesIndexes}
+                                        nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
                                     />
                                 )
                                 : (

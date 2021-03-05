@@ -76,7 +76,12 @@ describe("CueLine", () => {
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                         <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
-                            <CueEdit index={0} cue={targetCues[0]} playerTime={0} nextSourceCuesIndexes={[]} />
+                            <CueEdit
+                                index={0}
+                                cue={targetCues[0]}
+                                playerTime={0}
+                                nextCueLine={matchedCuesCaptioning[1]}
+                            />
                         </div>
                     </div>
                 </Provider>
@@ -194,7 +199,12 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[1]}
                                 nextTargetCueIndex={1}
                             />
-                            <CueEdit index={1} cue={targetCues[1]} playerTime={0} nextSourceCuesIndexes={[2]} />
+                            <CueEdit
+                                index={1}
+                                cue={targetCues[1]}
+                                playerTime={0}
+                                nextCueLine={matchedCuesTranslation[2]}
+                            />
                         </div>
                     </div>
                 </Provider>
@@ -252,7 +262,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[2]}
                                 nextTargetCueIndex={2}
                             />
-                            <CueEdit index={2} cue={targetCues[2]} playerTime={0} nextSourceCuesIndexes={[]} />
+                            <CueEdit index={2} cue={targetCues[2]} playerTime={0} />
                         </div>
                     </div>
                 </Provider>
@@ -761,7 +771,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
-                            <CueEdit index={1} cue={targetCues[1]} playerTime={0} nextSourceCuesIndexes={[]} />
+                            <CueEdit index={1} cue={targetCues[1]} playerTime={0} />
                             <CueView
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
@@ -938,7 +948,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
-                            <CueEdit index={1} cue={targetCues[1]} playerTime={0} nextSourceCuesIndexes={[]} />
+                            <CueEdit index={1} cue={targetCues[1]} playerTime={0} />
                             <CueView
                                 targetCueIndex={2}
                                 cue={targetCues[2]}

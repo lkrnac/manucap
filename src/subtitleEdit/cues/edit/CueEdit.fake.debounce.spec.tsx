@@ -165,7 +165,6 @@ describe("CueEdit", () => {
                     index={0}
                     cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
                     playerTime={0}
-                    nextSourceCuesIndexes={[]}
                 />
             </Provider>
         );
@@ -180,7 +179,7 @@ describe("CueEdit", () => {
         const cue = testingStore.getState().cues[1];
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={1} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={1} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -197,7 +196,7 @@ describe("CueEdit", () => {
         const cue = testingStore.getState().cues[1];
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={1} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={1} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -214,7 +213,7 @@ describe("CueEdit", () => {
         const cue = testingStore.getState().cues[0];
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -237,7 +236,7 @@ describe("CueEdit", () => {
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[0]} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cues[0]} playerTime={0} />
             </Provider>
         );
 
@@ -254,7 +253,7 @@ describe("CueEdit", () => {
         const cue = testingStore.getState().cues[0];
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -277,7 +276,7 @@ describe("CueEdit", () => {
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cues[1]} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cues[1]} playerTime={0} />
             </Provider>
         );
 
@@ -297,7 +296,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE", editUuid: testingStore.getState().cues[0].editUuid } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -318,7 +317,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE", editUuid: testingStore.getState().cues[0].editUuid } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -337,7 +336,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE", editUuid: testingStore.getState().cues[0].editUuid } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -363,7 +362,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE", editUuid: testingStore.getState().cues[0].editUuid } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -380,7 +379,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -404,7 +403,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -424,7 +423,7 @@ describe("CueEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -439,7 +438,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={0.5} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0.5} />
             </Provider>
         );
 
@@ -459,12 +458,12 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         const { container, rerender } = render(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={0.5} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0.5} />
             </Provider>
         );
         rerender(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={0.867} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0.867} />
             </Provider>
         );
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
@@ -484,7 +483,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -504,12 +503,12 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         const { container, rerender } = render(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1.0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1.0} />
             </Provider>
         );
         rerender(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1.781} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1.781} />
             </Provider>
         );
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
@@ -531,7 +530,7 @@ describe("CueEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -549,7 +548,7 @@ describe("CueEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={1} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={1} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -566,7 +565,7 @@ describe("CueEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1.6} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1.6} />
             </Provider>
         );
         simulant.fire(
@@ -586,7 +585,7 @@ describe("CueEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={0.4} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0.4} />
             </Provider>
         );
         simulant.fire(
@@ -603,7 +602,7 @@ describe("CueEdit", () => {
         const cue = testingStore.getState().cues[0];
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -620,7 +619,7 @@ describe("CueEdit", () => {
         const cue = testingStore.getState().cues[0];
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -637,7 +636,7 @@ describe("CueEdit", () => {
         const cue = testingStore.getState().cues[0];
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -656,7 +655,7 @@ describe("CueEdit", () => {
         const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -675,7 +674,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -701,7 +700,12 @@ describe("CueEdit", () => {
 
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[1]} />
+                <CueEdit
+                    index={0}
+                    cue={cue}
+                    playerTime={1}
+                    nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                />
             </Provider>
         );
 
@@ -726,7 +730,7 @@ describe("CueEdit", () => {
 
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -744,6 +748,38 @@ describe("CueEdit", () => {
 
     it("moves cue editing mode to next cue when ENTER is pressed on non-last", () => {
         // GIVEN
+        const cues = [{ vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" }] as CueDto[];
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit
+                    index={0}
+                    cue={cues[0]}
+                    playerTime={1}
+                    nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+    });
+
+    it("created new cue on ENTER where next cue line/match doest have target cue", () => {
+        // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
@@ -752,19 +788,23 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cues[0]} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit
+                    index={0}
+                    cue={cues[0]}
+                    playerTime={1}
+                    nextCueLine={{ targetCues: [{ index: 1, cue: cues[1] }]}}
+                />
             </Provider>
         );
 
         // WHEN
-        simulant.fire(
-            document.documentElement, "keydown", { keyCode: Character.ENTER });
-
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(2);
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
+
 
     it("closes cue editing mode when ESCAPE is pressed", () => {
         // GIVEN
@@ -773,7 +813,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -788,10 +828,11 @@ describe("CueEdit", () => {
 
     it("uses source cues times when new cue is inserted via + button", async () => {
         // GIVEN
-        testingStore.dispatch(updateSourceCues([
+        const sourceCues = [
             { vttCue: new VTTCue(2.1, 2.5, "Source Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(2.6, 2.8, "Source Line 2"), cueCategory: "DIALOGUE" },
-        ] as CueDto[]) as {} as AnyAction);
+        ] as CueDto[];
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
 
         const cue = {
             vttCue: new VTTCue(1, 2, "some text"),
@@ -800,7 +841,14 @@ describe("CueEdit", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[0, 1]} />
+                    <CueEdit
+                        index={0}
+                        cue={cue}
+                        playerTime={1}
+                        nextCueLine={{
+                            sourceCues: [{ index: 0, cue: sourceCues[0] }, { index: 1, cue: sourceCues[1] }]
+                        }}
+                    />
                 </Provider>
             </Provider>
         );
@@ -817,7 +865,6 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.8);
     });
 
-
     it("edits previous cue ALT+SHIFT+ESCAPE is pressed", () => {
         // GIVEN
         const cues = [
@@ -829,7 +876,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={2} cue={cues[2]} playerTime={2} nextSourceCuesIndexes={[]} />
+                <CueEdit index={2} cue={cues[2]} playerTime={2} />
             </Provider>
         );
 
@@ -852,7 +899,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={2} cue={cues[2]} playerTime={2} nextSourceCuesIndexes={[]} />
+                <CueEdit index={2} cue={cues[2]} playerTime={2} />
             </Provider>
         );
 
@@ -869,7 +916,7 @@ describe("CueEdit", () => {
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 
@@ -891,7 +938,7 @@ describe("CueEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -908,7 +955,7 @@ describe("CueEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -925,7 +972,7 @@ describe("CueEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={0} />
             </Provider>
         );
 
@@ -981,7 +1028,7 @@ describe("CueEdit", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} playerTime={0} nextSourceCuesIndexes={[]} />
+                    <CueEdit index={0} cue={cue} playerTime={0} />
                 </Provider>
             );
 
@@ -997,7 +1044,6 @@ describe("CueEdit", () => {
                         index={0}
                         cue={testingStore.getState().cues[0]}
                         playerTime={1}
-                        nextSourceCuesIndexes={[]}
                     />
                 </Provider>
             );
@@ -1026,7 +1072,6 @@ describe("CueEdit", () => {
                         index={0}
                         cue={testingStore.getState().cues[0]}
                         playerTime={1}
-                        nextSourceCuesIndexes={[]}
                     />
                 </Provider>
             );

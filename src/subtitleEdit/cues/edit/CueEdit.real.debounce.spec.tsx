@@ -36,7 +36,7 @@ describe("CueEdit", () => {
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = render(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} nextSourceCuesIndexes={[]} />
+                <CueEdit index={0} cue={cue} playerTime={1} />
             </Provider>
         );
 

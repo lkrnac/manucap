@@ -1,4 +1,4 @@
-import { CueCategory, CueDto } from "../../model";
+import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import { addCue, updateCueCategory, updateVttCue } from "../cuesListActions";
@@ -17,8 +17,8 @@ import { CueActionsPanel } from "../CueActionsPanel";
 export interface CueEditProps {
     index: number;
     cue: CueDto;
-    nextSourceCuesIndexes: number[];
     playerTime: number;
+    nextCueLine?: CueLineDto;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEditProps,
@@ -28,9 +28,16 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEdi
     dispatch(updateVttCue(props.index, newCue, editUuid));
 };
 
+const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
+    ? cues.map(sourceCue => sourceCue.index)
+    : [];
+
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
     const validationError = useSelector((state: SubtitleEditState) => state.validationError);
+    const nextSourceCuesIndexes = props.nextCueLine
+        ? getCueIndexes(props.nextCueLine.sourceCues)
+        : [];
 
     useEffect(
         () => {
@@ -51,8 +58,11 @@ const CueEdit = (props: CueEditProps): ReactElement => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
             return props.index === cuesCount - 1
-                ? dispatch(addCue(props.index + 1, props.nextSourceCuesIndexes))
-                : dispatch(updateEditingCueIndex(props.index + 1));
+                || !props.nextCueLine
+                || !props.nextCueLine.targetCues
+                || props.nextCueLine.targetCues.length === 0
+                    ? dispatch(addCue(props.index + 1, nextSourceCuesIndexes))
+                    : dispatch(updateEditingCueIndex(props.index + 1));
         });
     };
 
@@ -150,7 +160,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 index={props.index}
                 cue={props.cue}
                 isEdit
-                sourceCueIndexes={props.nextSourceCuesIndexes}
+                sourceCueIndexes={nextSourceCuesIndexes}
             />
         </div>
     );
