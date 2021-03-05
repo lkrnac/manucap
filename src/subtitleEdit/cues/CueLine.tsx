@@ -47,7 +47,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const captionClassName = "sbte-gray-100-background";
     const translationCueClassName = props.data.targetCues?.length === 0 ? captionClassName : "sbte-gray-200-background";
-    // const lastCue = props.rowIndex === props.rowProps.cuesLength - 1;
 
     // TODO: Pass down to cue flap all the target cues -> to claim error if any of them is errornous
     const cue = props.data.targetCues && props.data.targetCues.length > 0
