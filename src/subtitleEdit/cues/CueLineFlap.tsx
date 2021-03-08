@@ -1,17 +1,38 @@
 import React, { ReactElement } from "react";
-import { CueDtoWithIndex } from "../model";
+import { CueDtoWithIndex, CueLineDto } from "../model";
+import _ from "lodash";
+
 
 interface Props {
     rowIndex: number;
-    cue?: CueDtoWithIndex;
+    cueLine?: CueLineDto;
 }
 
+const hasTargetText = (cueLine?: CueLineDto): boolean => {
+    if (cueLine && cueLine.targetCues && cueLine.targetCues.length > 0) {
+        return cueLine.targetCues
+            .map((cueWithIndex: CueDtoWithIndex): boolean => !_.isEmpty(cueWithIndex?.cue.vttCue.text))
+            .reduce((hasText1: boolean, hasText2: boolean): boolean => hasText1 || hasText2);
+    }
+    return false;
+};
+
+const hasCorruptedTargetCue = (cueLine?: CueLineDto): boolean => {
+    if (cueLine && cueLine.targetCues && cueLine.targetCues.length > 0) {
+        return cueLine.targetCues
+            .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.corrupted === true)
+            .reduce((hasText1: boolean, hasText2: boolean): boolean => hasText1 || hasText2);
+    }
+    return false;
+};
+
+
 const CueLineFlap = (props: Props): ReactElement => {
-    const cueHasText = props.cue && props.cue.cue.vttCue.text.length;
-    const cueIsCorrupted = cueHasText && props.cue?.cue.corrupted;
-    const flapClassName = cueHasText ? cueIsCorrupted
-        ? "sbte-cue-line-flap-error" : "sbte-cue-line-flap-good"
-        : "sbte-cue-line-flap";
+    const someCueHasText = hasTargetText(props.cueLine);
+    const someCueCorrupted = someCueHasText && hasCorruptedTargetCue(props.cueLine);
+    const flapClassName = someCueHasText
+            ? someCueCorrupted ? "sbte-cue-line-flap-error" : "sbte-cue-line-flap-good"
+            : "sbte-cue-line-flap";
     return (
         <div
             className={flapClassName}
@@ -43,11 +64,11 @@ const CueLineFlap = (props: Props): ReactElement => {
                 }}
             >
                 {
-                    cueIsCorrupted
+                    someCueCorrupted
                         ? <i className="fas fa-exclamation-triangle" />
-                        : cueHasText
-                        ? <i className="fa fa-check" />
-                        : null
+                        : someCueHasText
+                            ? <i className="fa fa-check" />
+                            : null
                 }
             </div>
         </div>

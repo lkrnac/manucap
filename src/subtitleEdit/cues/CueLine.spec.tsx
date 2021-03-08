@@ -74,7 +74,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                        <CueLineFlap rowIndex={0} cueLine={matchedCuesCaptioning[0]} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueEdit
                                 index={0}
@@ -86,7 +86,6 @@ describe("CueLine", () => {
                     </div>
                 </Provider>
             );
-            const cueWithSource = { targetCues: [targetCuesWithIndexes[0]]};
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: true,
@@ -100,7 +99,7 @@ describe("CueLine", () => {
                 <Provider store={testingStore}>
                     <CueLine
                         rowIndex={0}
-                        data={cueWithSource}
+                        data={matchedCuesCaptioning[0]}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
                         onClick={(): void => undefined}
@@ -126,7 +125,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                        <CueLineFlap rowIndex={0} cueLine={matchedCuesCaptioning[0]} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -186,7 +185,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={1} cue={targetCuesWithIndexes[1]} />
+                        <CueLineFlap rowIndex={1} cueLine={matchedCuesTranslation[1]} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={1}
@@ -246,10 +245,11 @@ describe("CueLine", () => {
                 progress: 50
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={2} cue={targetCuesWithIndexes[2]} />
+                        <CueLineFlap rowIndex={2} cueLine={cueLine} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={2}
@@ -267,7 +267,6 @@ describe("CueLine", () => {
                     </div>
                 </Provider>
             );
-            const cueWithSource = { targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]};
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
@@ -281,7 +280,7 @@ describe("CueLine", () => {
                 <Provider store={testingStore}>
                     <CueLine
                         rowIndex={2}
-                        data={cueWithSource}
+                        data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
                         onClick={(): void => undefined}
@@ -305,10 +304,11 @@ describe("CueLine", () => {
                 progress: 50
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -337,7 +337,6 @@ describe("CueLine", () => {
                     </div>
                 </Provider>
             );
-            const cueWithSource = { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]};
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
@@ -351,7 +350,7 @@ describe("CueLine", () => {
                 <Provider store={testingStore}>
                     <CueLine
                         rowIndex={0}
-                        data={cueWithSource}
+                        data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
                         onClick={(): void => undefined}
@@ -576,10 +575,11 @@ describe("CueLine", () => {
                 progress: 50
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: [targetCuesWithIndexes[0]], sourceCues: []};
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -609,12 +609,11 @@ describe("CueLine", () => {
                     </div>
                 </Provider>
             );
-            const cueWithSource = { targetCues: [targetCuesWithIndexes[0]], sourceCues: []};
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
                 cuesLength: 1,
-                matchedCues: [cueWithSource]
+                matchedCues: [cueLine]
             } as CueLineRowProps;
 
             // WHEN
@@ -623,7 +622,7 @@ describe("CueLine", () => {
                 <Provider store={testingStore}>
                     <CueLine
                         rowIndex={0}
-                        data={cueWithSource}
+                        data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
                         onClick={(): void => undefined}
@@ -647,10 +646,11 @@ describe("CueLine", () => {
                 progress: 50
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -704,12 +704,11 @@ describe("CueLine", () => {
                     </div>
                 </Provider>
             );
-            const cueWithSource = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
                 cuesLength: 3,
-                matchedCues: [cueWithSource]
+                matchedCues: [cueLine]
             } as CueLineRowProps;
 
             // WHEN
@@ -718,7 +717,7 @@ describe("CueLine", () => {
                 <Provider store={testingStore}>
                     <CueLine
                         rowIndex={0}
-                        data={cueWithSource}
+                        data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
                         onClick={(): void => undefined}
@@ -742,10 +741,11 @@ describe("CueLine", () => {
                 progress: 50
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -788,12 +788,11 @@ describe("CueLine", () => {
                     </div>
                 </Provider>
             );
-            const cueWithSource = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
                 cuesLength: 3,
-                matchedCues: [cueWithSource]
+                matchedCues: [cueLine]
             } as CueLineRowProps;
 
             // WHEN
@@ -802,7 +801,7 @@ describe("CueLine", () => {
                 <Provider store={testingStore}>
                     <CueLine
                         rowIndex={0}
-                        data={cueWithSource}
+                        data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
                         onClick={(): void => undefined}
@@ -826,10 +825,11 @@ describe("CueLine", () => {
                 progress: 50
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: [targetCuesWithIndexes[0]], sourceCues: sourceCuesWithIndexes };
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -881,12 +881,11 @@ describe("CueLine", () => {
                     </div>
                 </Provider>
             );
-            const cueWithSource = { targetCues: [targetCuesWithIndexes[0]], sourceCues: sourceCuesWithIndexes };
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
                 cuesLength: 1,
-                matchedCues: [cueWithSource]
+                matchedCues: [cueLine]
             } as CueLineRowProps;
 
             // WHEN
@@ -895,7 +894,7 @@ describe("CueLine", () => {
                 <Provider store={testingStore}>
                     <CueLine
                         rowIndex={0}
-                        data={cueWithSource}
+                        data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
                         onClick={(): void => undefined}
@@ -919,10 +918,11 @@ describe("CueLine", () => {
                 progress: 50
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cue={targetCuesWithIndexes[0]} />
+                        <CueLineFlap rowIndex={0} cueLine={cueLine}  />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -965,12 +965,11 @@ describe("CueLine", () => {
                     </div>
                 </Provider>
             );
-            const cueWithSource = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
                 cuesLength: 3,
-                matchedCues: [cueWithSource]
+                matchedCues: [cueLine]
             } as CueLineRowProps;
 
             // WHEN
@@ -979,7 +978,7 @@ describe("CueLine", () => {
                 <Provider store={testingStore}>
                     <CueLine
                         rowIndex={0}
-                        data={cueWithSource}
+                        data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
                         onClick={(): void => undefined}

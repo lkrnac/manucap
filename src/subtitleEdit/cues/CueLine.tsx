@@ -70,7 +70,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <CueLineFlap rowIndex={props.rowIndex} cue={cue} />
+            <CueLineFlap rowIndex={props.rowIndex} cueLine={props.rowProps.matchedCues[props.rowIndex]} />
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {
                     props.data.sourceCues && props.data.sourceCues.length > 0
