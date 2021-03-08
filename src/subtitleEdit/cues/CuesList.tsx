@@ -13,6 +13,8 @@ import Mousetrap from "mousetrap";
 import { KeyCombination } from "../shortcutConstants";
 import { changeScrollPosition } from "./cuesListScrollSlice";
 
+const OVERLAP_RATIO = 0.65;
+
 interface MatchedCuesWithEditingFocus {
     matchedCues: CueLineDto[];
     editingFocusIndex: number;
@@ -22,7 +24,6 @@ interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
 }
-
 const getScrollCueIndex = (
     matchedCuesSize: number,
     editingFocusInMap: number,
@@ -39,9 +40,6 @@ const getScrollCueIndex = (
     }
     return undefined; // out of range value, because need to trigger change of ReactSmartScroll.startAt
 };
-
-const getMiddleTime = (cue: CueDto): number =>
-    cue.vttCue.startTime + (cue.vttCue.endTime - cue.vttCue.startTime) / 2;
 
 const matchCuesByTime = (
     targetCuesArray: CueDto[],
@@ -75,12 +73,12 @@ const matchCuesByTime = (
             cuesMapIdx++;
             continue;
         }
-        const cueMiddleTime = getMiddleTime(cue);
-        const sourceCueMiddleTime = getMiddleTime(sourceCue);
         const sourceCueStartTime = sourceCue.vttCue.startTime;
         const sourceCueEndTime = sourceCue.vttCue.endTime;
+        const sourceLength = sourceCueEndTime - sourceCueStartTime;
         const targetCueStartTime = cue.vttCue.startTime;
         const targetCueEndTime = cue.vttCue.endTime;
+        const targetLength = targetCueEndTime - targetCueStartTime;
         if (targetCueStartTime === sourceCueStartTime && targetCueEndTime === sourceCueEndTime) {
             cuesMapValue?.targetCues?.push({ index: targetCuesIdx, cue });
             cuesMapValue?.sourceCues?.push({ index: sourceCuesIdx, cue: sourceCue });
@@ -99,7 +97,8 @@ const matchCuesByTime = (
             if (targetCuesIdx === editingCueIndex) {
                 editingFocusIdx = cuesMapIdx;
             }
-            if (cueMiddleTime <= sourceCueStartTime) {
+            const overlapLength = targetCueEndTime - sourceCueStartTime;
+            if (overlapLength / targetLength <= OVERLAP_RATIO) {
                 cuesMapIdx++;
             }
             targetCuesIdx++;
@@ -107,7 +106,8 @@ const matchCuesByTime = (
             || (targetCueEndTime === sourceCueEndTime && targetCueStartTime < sourceCueStartTime)
         ) {
             cuesMapValue?.sourceCues?.push({ index: sourceCuesIdx, cue: sourceCue });
-            if (sourceCueMiddleTime <= targetCueStartTime) {
+            const overlapLength = sourceCueEndTime - targetCueStartTime;
+            if (overlapLength / sourceLength <= OVERLAP_RATIO) {
                 cuesMapIdx++;
             }
             sourceCuesIdx++;

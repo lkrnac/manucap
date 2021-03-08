@@ -1008,6 +1008,72 @@ describe("CuesList", () => {
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
+
+        it("uses 65% overlap mechanism", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(21.979, 22.055, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(22.414, 25.209, "Target Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(21.674, 23.656, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(24.024, 24.504, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+            const targetCuesInRedux = testingStore.getState().cues;
+            const targetCuesWithIndexes = [
+                { index: 0, cue: targetCuesInRedux[0] },
+                { index: 1, cue: targetCuesInRedux[1] },
+            ];
+
+            const sourceCuesInRedux = testingStore.getState().sourceCues;
+            const sourceCuesWithIndexes = [
+                { index: 0, cue: sourceCuesInRedux[0] },
+                { index: 1, cue: sourceCuesInRedux[1] },
+            ];
+            const matchedCues = [
+                { targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]},
+                { targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]},
+            ];
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: false, matchedCues }}
+                                onClick={(): void => undefined}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowRef={React.createRef()}
+                                rowProps={{ playerTime: 0, cuesLength: 2, withoutSourceCues: false, matchedCues }}
+                                onClick={(): void => undefined}
+                            />
+                        </div >
+                    </div >
+                </Provider >
+            );
+
+            // WHEN
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                </Provider >
+            );
+            simulateEnoughSpaceForCues(actualNode);
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
     });
 
 
