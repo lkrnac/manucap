@@ -89,7 +89,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: true,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: matchedCuesCaptioning
             } as CueLineRowProps;
 
@@ -146,7 +146,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: true,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: matchedCuesCaptioning
             } as CueLineRowProps;
 
@@ -211,7 +211,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: matchedCuesTranslation
             } as CueLineRowProps;
 
@@ -270,7 +270,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: matchedCuesTranslation
             } as CueLineRowProps;
 
@@ -340,7 +340,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 1,
+                targetCuesLength: 1,
                 matchedCues: matchedCuesTranslation
             } as CueLineRowProps;
 
@@ -414,7 +414,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: matchedCues
             } as CueLineRowProps;
 
@@ -486,7 +486,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: matchedCues
             } as CueLineRowProps;
 
@@ -542,7 +542,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 0,
+                targetCuesLength: 0,
                 matchedCues: [cueWithSource]
             } as CueLineRowProps;
 
@@ -612,7 +612,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 1,
+                targetCuesLength: 1,
                 matchedCues: [cueLine]
             } as CueLineRowProps;
 
@@ -707,7 +707,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: [cueLine]
             } as CueLineRowProps;
 
@@ -791,7 +791,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: [cueLine]
             } as CueLineRowProps;
 
@@ -884,7 +884,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 1,
+                targetCuesLength: 1,
                 matchedCues: [cueLine]
             } as CueLineRowProps;
 
@@ -968,7 +968,7 @@ describe("CueLine", () => {
             const cueLineRowProps = {
                 playerTime: 0,
                 withoutSourceCues: false,
-                cuesLength: 3,
+                targetCuesLength: 3,
                 matchedCues: [cueLine]
             } as CueLineRowProps;
 
@@ -1000,7 +1000,7 @@ describe("CueLine", () => {
         const cueLineRowProps = {
             playerTime: 0,
             withoutSourceCues: true,
-            cuesLength: 1,
+            targetCuesLength: 1,
             matchedCues
         } as CueLineRowProps;
         const rowRef = React.createRef() as React.RefObject<HTMLDivElement>;

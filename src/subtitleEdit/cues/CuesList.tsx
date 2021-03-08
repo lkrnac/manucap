@@ -166,7 +166,7 @@ const CuesList = (props: Props): ReactElement => {
                 row={CueLine}
                 rowProps={{
                     playerTime: props.currentPlayerTime,
-                    cuesLength: targetCuesArray.length,
+                    targetCuesLength: targetCuesArray.length,
                     withoutSourceCues,
                     matchedCues
                 }}

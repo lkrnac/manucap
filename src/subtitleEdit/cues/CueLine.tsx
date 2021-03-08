@@ -9,7 +9,7 @@ import CueLineFlap from "./CueLineFlap";
 
 export interface CueLineRowProps {
     playerTime: number;
-    cuesLength: number;
+    targetCuesLength: number;
     // Following parameter is needed,
     // because empty/undefined props.data.sourceCues might indicate that there is no time match in translation mode
     withoutSourceCues: boolean;
@@ -80,7 +80,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     key={sourceCue.index}
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
-                                    targetCuesLength={props.rowProps.cuesLength}
+                                    targetCuesLength={props.rowProps.targetCuesLength}
                                     playerTime={props.rowProps.playerTime}
                                     className={captionClassName}
                                     showGlossaryTerms={editingCueIndex === sourceCue.index}
@@ -98,7 +98,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     targetCueIndex={firstTargetCueIndex}
                                     // @ts-ignore TODO comment
                                     cue={props.data.targetCues[0].cue}
-                                    targetCuesLength={props.rowProps.cuesLength}
+                                    targetCuesLength={props.rowProps.targetCuesLength}
                                     playerTime={props.rowProps.playerTime}
                                     hideText
                                     className={translationCueClassName}
@@ -134,7 +134,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         key={targetCue.index}
                                         targetCueIndex={targetCue.index}
                                         cue={targetCue.cue}
-                                        targetCuesLength={props.rowProps.cuesLength}
+                                        targetCuesLength={props.rowProps.targetCuesLength}
                                         playerTime={props.rowProps.playerTime}
                                         className={captionClassName}
                                         showGlossaryTerms={false}
@@ -149,7 +149,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                             <CueView
                                 // @ts-ignore If cues is empty, sourceCue is passed in (ensured by SubtitleEdit tests)
                                 cue={props.data.sourceCues[0].cue}
-                                targetCuesLength={props.rowProps.cuesLength}
+                                targetCuesLength={props.rowProps.targetCuesLength}
                                 playerTime={props.rowProps.playerTime}
                                 hideText
                                 className={"sbte-gray-200-background"}

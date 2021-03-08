@@ -154,7 +154,7 @@ describe("SubtitleEdit", () => {
                                         rowIndex={0}
                                         rowProps={{
                                             playerTime: 0,
-                                            cuesLength: 2,
+                                            targetCuesLength: 2,
                                             withoutSourceCues: true,
                                             matchedCues
                                         }}
@@ -166,7 +166,7 @@ describe("SubtitleEdit", () => {
                                         rowIndex={1}
                                         rowProps={{
                                             playerTime: 0,
-                                            cuesLength: 2,
+                                            targetCuesLength: 2,
                                             withoutSourceCues: true,
                                             matchedCues
                                         }}
@@ -525,7 +525,7 @@ describe("SubtitleEdit", () => {
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowProps={{
                                             playerTime: 0,
-                                            cuesLength: 2,
+                                            targetCuesLength: 2,
                                             withoutSourceCues: true,
                                             matchedCues
                                         }}
@@ -537,7 +537,7 @@ describe("SubtitleEdit", () => {
                                         data={{ targetCues: [cuesWithIndexes[1]]}}
                                         rowProps={{
                                             playerTime: 0,
-                                            cuesLength: 2,
+                                            targetCuesLength: 2,
                                             withoutSourceCues: true,
                                             matchedCues
                                         }}
@@ -677,7 +677,7 @@ describe("SubtitleEdit", () => {
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowProps={{
                                             playerTime: 0,
-                                            cuesLength: 2,
+                                            targetCuesLength: 2,
                                             withoutSourceCues: true,
                                             matchedCues
                                         }}
@@ -689,7 +689,7 @@ describe("SubtitleEdit", () => {
                                         data={{ targetCues: [cuesWithIndexes[1]]}}
                                         rowProps={{
                                             playerTime: 0,
-                                            cuesLength: 2,
+                                            targetCuesLength: 2,
                                             withoutSourceCues: true,
                                             matchedCues
                                         }}
