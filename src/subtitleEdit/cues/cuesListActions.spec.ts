@@ -76,6 +76,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
 
         it("preserves all other existing cue parameters", () => {

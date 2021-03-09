@@ -132,6 +132,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const newCue = { ...originalCue, idx, vttCue: newVttCue };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
+            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
             updateSearchMatches(dispatch, getState, idx);
             validateCue(dispatch, idx);
             callSaveTrack(dispatch, getState);
