@@ -6,17 +6,17 @@
 
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
 import React from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { render, fireEvent } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 
 import AddCueLineButton from "./AddCueLineButton";
 import { CueDto } from "../../model";
 import testingStore from "../../../testUtils/testingStore";
 import { updateCues } from "../cuesListActions";
 import { updateSourceCues } from "../view/sourceCueSlices";
+import { Tooltip } from "react-bootstrap";
 
 describe("AddCueLineButton", () => {
     it("renders", () => {
@@ -226,6 +226,16 @@ describe("AddCueLineButton", () => {
 
     it("shows tooltip when mouse hovers over", async () => {
         // GIVEN
+        const expectedNode = render(
+            <Tooltip
+                id="addCueBtnTooltip"
+                placement="left"
+                show
+            >
+                <div className="tooltip-inner">Insert new subtitle</div>
+            </Tooltip>
+        );
+
         const actualNode = render(
             <Provider store={testingStore}>
                 <AddCueLineButton cueIndex={0} sourceCueIndexes={[]} />
@@ -236,6 +246,7 @@ describe("AddCueLineButton", () => {
         fireEvent.mouseOver(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
-        expect(await actualNode.findByText("Insert new subtitle")).toBeInTheDocument();
+        const tooltip = await actualNode.findByText("Insert new subtitle");
+        expect(tooltip.parentElement?.parentElement?.outerHTML).toEqual(expectedNode.container.innerHTML);
     });
 });
