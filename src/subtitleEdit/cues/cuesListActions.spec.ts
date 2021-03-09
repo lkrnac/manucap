@@ -71,7 +71,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(testingStore.getState().lastCueChange).toBeUndefined;
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
             expect(testingStore.getState().lastCueChange.index).toEqual(1);
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
@@ -104,7 +104,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(testingStore.getState().lastCueChange).toBeUndefined;
+            expect(testingStore.getState().lastCueChange).toBeNull();
         });
 
         it("doesn't update top level cue when not existing already in the array", () => {
@@ -114,7 +114,7 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(0);
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(testingStore.getState().lastCueChange).toBeUndefined;
+            expect(testingStore.getState().lastCueChange).toBeNull();
         });
 
         describe("spell checking", () => {
@@ -1319,7 +1319,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
                 expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
-                expect(testingStore.getState().cues[0].editUuid).not.toBeEmptyDOMElement;
+                expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
@@ -1431,7 +1431,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
-                expect(testingStore.getState().cues[0].editUuid).not.toBeEmptyDOMElement;
+                expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
@@ -1744,11 +1744,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(expectedCues[0].vttCue);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues[0].corrupted).toEqual(false);
-            expect(testingStore.getState().cues[0].editUuid).not.toBeEmptyDOMElement;
+            expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().cues[1].vttCue).toEqual(expectedCues[1].vttCue);
             expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[1].corrupted).toEqual(false);
-            expect(testingStore.getState().cues[1].editUuid).not.toBeEmptyDOMElement;
+            expect(testingStore.getState().cues[1].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
@@ -1766,7 +1766,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(replacementCues[0].vttCue);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues[0].corrupted).toEqual(false);
-            expect(testingStore.getState().cues[0].editUuid).not.toBeEmptyDOMElement;
+            expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
