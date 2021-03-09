@@ -15,7 +15,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
     return (
         <TooltipWrapper
             tooltipId="addCueBtnTooltip"
-            text="Add new subtitle (ENTER)"
+            text="Insert new subtitle"
             placement="left"
         >
             <button

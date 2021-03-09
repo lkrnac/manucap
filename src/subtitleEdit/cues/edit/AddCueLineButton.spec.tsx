@@ -1,5 +1,12 @@
+/**  * @jest-environment jsdom-sixteen  */
+// TODO Remove above when we update to react-scripts with Jest 26:
+// https://github.com/facebook/create-react-app/pull/8362
+// eslint-disable-next-line
+// https://stackoverflow.com/questions/61036156/react-typescript-testing-typeerror-mutationobserver-is-not-a-constructor#comment110029314_61039444
+
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
+import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
 import React from "react";
 import { AnyAction } from "@reduxjs/toolkit";
@@ -215,5 +222,20 @@ describe("AddCueLineButton", () => {
         expect(testingStore.getState().cues).toHaveLength(2);
         expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+    });
+
+    it("shows tooltip when mouse hovers over", async () => {
+        // GIVEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <AddCueLineButton cueIndex={0} sourceCueIndexes={[]} />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.mouseOver(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+
+        // THEN
+        expect(await actualNode.findByText("Insert new subtitle")).toBeInTheDocument();
     });
 });
