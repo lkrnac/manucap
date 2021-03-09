@@ -634,6 +634,99 @@ describe("CueLine", () => {
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
 
+        it("renders translation view line with 3 source cues", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: [targetCuesWithIndexes[0]], sourceCues: sourceCuesWithIndexes };
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
+                        <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                            <CueView
+                                targetCueIndex={0}
+                                cue={sourceCues[0]}
+                                targetCuesLength={1}
+                                playerTime={0}
+                                className="sbte-gray-100-background"
+                                showGlossaryTerms={false}
+                                languageDirection="LTR"
+                                sourceCuesIndexes={[0, 1, 2]}
+                                nextTargetCueIndex={0}
+                            />
+                            <CueView
+                                targetCueIndex={0}
+                                cue={sourceCues[1]}
+                                targetCuesLength={1}
+                                playerTime={0}
+                                className="sbte-gray-100-background"
+                                showGlossaryTerms={false}
+                                languageDirection="LTR"
+                                sourceCuesIndexes={[0, 1, 2]}
+                                nextTargetCueIndex={0}
+                            />
+                            <CueView
+                                targetCueIndex={0}
+                                cue={sourceCues[2]}
+                                targetCuesLength={1}
+                                playerTime={0}
+                                className="sbte-gray-100-background"
+                                showGlossaryTerms={false}
+                                languageDirection="LTR"
+                                sourceCuesIndexes={[0, 1, 2]}
+                                nextTargetCueIndex={0}
+                            />
+                            <div className="sbte-cue-divider-good" />
+                            <CueView
+                                targetCueIndex={0}
+                                cue={targetCues[0]}
+                                targetCuesLength={1}
+                                playerTime={0}
+                                className="sbte-gray-100-background"
+                                showGlossaryTerms={false}
+                                showActionsPanel
+                                languageDirection="RTL"
+                                sourceCuesIndexes={[0, 1, 2]}
+                                nextTargetCueIndex={0}
+                            />
+                        </div>
+                    </div>
+                </Provider>
+            );
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: false,
+                targetCuesLength: 1,
+                matchedCues: [cueLine]
+            } as CueLineRowProps;
+
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={0}
+                        data={cueLine}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        onClick={(): void => undefined}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
         it("renders translation view line with 3 target cues", () => {
             // GIVEN
             const testingTrack = {
@@ -753,7 +846,7 @@ describe("CueLine", () => {
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background"
-                                showGlossaryTerms={false}
+                                showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
@@ -813,99 +906,6 @@ describe("CueLine", () => {
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
 
-        it("renders translation view line with 3 source cues", () => {
-            // GIVEN
-            const testingTrack = {
-                type: "TRANSLATION",
-                sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
-                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
-                default: true,
-                mediaTitle: "Sample Polish",
-                mediaLength: 4000,
-                progress: 50
-            } as Track;
-            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-            const cueLine = { targetCues: [targetCuesWithIndexes[0]], sourceCues: sourceCuesWithIndexes };
-            const expectedNode = render(
-                <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
-                        <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
-                            <CueView
-                                targetCueIndex={0}
-                                cue={sourceCues[0]}
-                                targetCuesLength={1}
-                                playerTime={0}
-                                className="sbte-gray-100-background"
-                                showGlossaryTerms={false}
-                                languageDirection="LTR"
-                                sourceCuesIndexes={[0, 1, 2]}
-                                nextTargetCueIndex={0}
-                            />
-                            <CueView
-                                targetCueIndex={0}
-                                cue={sourceCues[1]}
-                                targetCuesLength={1}
-                                playerTime={0}
-                                className="sbte-gray-100-background"
-                                showGlossaryTerms={false}
-                                languageDirection="LTR"
-                                sourceCuesIndexes={[0, 1, 2]}
-                                nextTargetCueIndex={0}
-                            />
-                            <CueView
-                                targetCueIndex={0}
-                                cue={sourceCues[2]}
-                                targetCuesLength={1}
-                                playerTime={0}
-                                className="sbte-gray-100-background"
-                                showGlossaryTerms={false}
-                                languageDirection="LTR"
-                                sourceCuesIndexes={[0, 1, 2]}
-                                nextTargetCueIndex={0}
-                            />
-                            <div className="sbte-cue-divider-good" />
-                            <CueView
-                                targetCueIndex={0}
-                                cue={targetCues[0]}
-                                targetCuesLength={1}
-                                playerTime={0}
-                                className="sbte-gray-100-background"
-                                showGlossaryTerms={false}
-                                showActionsPanel
-                                languageDirection="RTL"
-                                sourceCuesIndexes={[0, 1, 2]}
-                                nextTargetCueIndex={0}
-                            />
-                        </div>
-                    </div>
-                </Provider>
-            );
-            const cueLineRowProps = {
-                playerTime: 0,
-                withoutSourceCues: false,
-                targetCuesLength: 1,
-                matchedCues: [cueLine]
-            } as CueLineRowProps;
-
-            // WHEN
-            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
-            const actualNode = render(
-                <Provider store={testingStore}>
-                    <CueLine
-                        rowIndex={0}
-                        data={cueLine}
-                        rowProps={cueLineRowProps}
-                        rowRef={React.createRef()}
-                        onClick={(): void => undefined}
-                    />
-                </Provider>
-            );
-
-            // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
-        });
-
         it("renders translation edit line with 3 target cues", () => {
             // GIVEN
             const testingTrack = {
@@ -930,7 +930,7 @@ describe("CueLine", () => {
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background"
-                                showGlossaryTerms={false}
+                                showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}

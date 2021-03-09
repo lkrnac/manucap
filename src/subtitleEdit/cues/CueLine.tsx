@@ -65,6 +65,9 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
     const nextTargetCueIndex = findNextTargetCueIndex(props);
 
+    const showGlossaryTerms = props.data.targetCues !== undefined &&
+        props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
+
     return (
         <div
             ref={props.rowRef}
@@ -83,7 +86,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     targetCuesLength={props.rowProps.targetCuesLength}
                                     playerTime={props.rowProps.playerTime}
                                     className={captionClassName}
-                                    showGlossaryTerms={editingCueIndex === sourceCue.index}
+                                    showGlossaryTerms={showGlossaryTerms}
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
