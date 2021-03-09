@@ -32,37 +32,36 @@ const randomTime = (max: number): number => MIN_DURATION_SECONDS + Math.random()
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
-    // #############################################################################################
-    // #################### Comment this out if you need to test Captioning mode ###################
-    // #############################################################################################
+
+    // ################################## Source Cues ###########################################
     useEffect(() => {
         // @ts-ignore
         if (trackType === "TRANSLATION") {
-            const targetCues = [] as CueDto[];
+            const sourceCues = [] as CueDto[];
             let endTime = 0;
 
             if (TIME_MATCH_TESTING) {
-                targetCues.push({ vttCue: new VTTCue(0, 1, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(1, 2, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(2, 3, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(3, 6, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(0, 1, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(1, 2, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(2, 3, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(3, 6, "text"), cueCategory: "DIALOGUE" });
 
-                targetCues.push({ vttCue: new VTTCue(7.673, 10.208, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(10.746, 11.782, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(12.504, 14.768, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(15.169, 17.110, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(7.673, 10.208, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(10.746, 11.782, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(12.504, 14.768, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(15.169, 17.110, "text"), cueCategory: "DIALOGUE" });
 
-                targetCues.push({ vttCue: new VTTCue(18.954, 20.838, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(21.674, 23.656, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(24.024, 24.504, "text"), cueCategory: "DIALOGUE" });
-                targetCues.push({ vttCue: new VTTCue(25.383, 28.115, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(18.954, 20.838, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(21.674, 23.656, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(24.024, 24.504, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(25.383, 28.115, "text"), cueCategory: "DIALOGUE" });
             }
 
             for (let idx = 0; idx < 9999; idx++) {
                 const randomStart = START_SHIFT + (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
                 const randomEnd = endTime =
                     START_SHIFT + (TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3);
-                targetCues.push({
+                sourceCues.push({
                    vttCue: new VTTCue(randomStart, randomEnd, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
                     glossaryMatches: [
@@ -75,14 +74,56 @@ const TestApp = (): ReactElement => {
 
             setTimeout( // this simulates latency caused by server roundtrip
 
-                () => dispatch(updateSourceCues(targetCues)),
+                () => dispatch(updateSourceCues(sourceCues)),
                 500
             );
         }
     });
 
-    // #############################################################################################
+    // ################################## Target Cues ###########################################
+    useEffect(() => {
+        const targetCues = [] as CueDto[];
+        if (TIME_MATCH_TESTING) {
+            targetCues.push({ vttCue: new VTTCue(0, 3, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(3, 4, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(4, 5, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(5, 6, "text"), cueCategory: "DIALOGUE" });
 
+            targetCues.push({ vttCue: new VTTCue(7.087, 10.048, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(10.411, 11.231, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(11.240, 13.985, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(14.380, 16.998, "text"), cueCategory: "DIALOGUE" });
+
+            targetCues.push({ vttCue: new VTTCue(20.140, 21.494, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(21.979, 22.055, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(22.414, 25.209, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(26.198, 27.412, "text"), cueCategory: "DIALOGUE" });
+        }
+
+        let endTime = 0;
+        for (let idx = 0; idx < 9999; idx++) {
+            const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
+            let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
+            // @ts-ignore since it can be updated manually
+            if (language.id === "ar-SA") {
+                text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
+            }
+            const randomStart = START_SHIFT + (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
+            const randomEnd = endTime =
+                START_SHIFT + (TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3);
+            targetCues.push({
+                vttCue: new VTTCue(randomStart, randomEnd, text),
+                cueCategory: "DIALOGUE"
+            });
+        }
+
+        setTimeout( // this simulates latency caused by server roundtrip
+            () => dispatch(updateCues(targetCues)),
+            500
+        );
+    });
+
+    // ################################## Track ###########################################
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateEditingTrack({
@@ -98,47 +139,8 @@ const TestApp = (): ReactElement => {
             500
         );
     });
-    useEffect(() => {
-        const sourceCues = [] as CueDto[];
-        if (TIME_MATCH_TESTING) {
-            sourceCues.push({ vttCue: new VTTCue(0, 3, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(3, 4, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(4, 5, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(5, 6, "text"), cueCategory: "DIALOGUE" });
 
-            sourceCues.push({ vttCue: new VTTCue(7.087, 10.048, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(10.411, 11.231, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(11.240, 13.985, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(14.380, 16.998, "text"), cueCategory: "DIALOGUE" });
-
-            sourceCues.push({ vttCue: new VTTCue(20.140, 21.494, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(21.979, 22.055, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(22.414, 25.209, "text"), cueCategory: "DIALOGUE" });
-            sourceCues.push({ vttCue: new VTTCue(26.198, 27.412, "text"), cueCategory: "DIALOGUE" });
-        }
-
-        let endTime = 0;
-        for (let idx = 0; idx < 9999; idx++) {
-            const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
-            let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
-            // @ts-ignore since it can be updated manually
-            if (language.id === "ar-SA") {
-                text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
-            }
-            const randomStart = START_SHIFT + (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
-            const randomEnd = endTime =
-                START_SHIFT + (TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3);
-            sourceCues.push({
-                vttCue: new VTTCue(randomStart, randomEnd, text),
-                cueCategory: "DIALOGUE"
-            });
-        }
-
-        setTimeout( // this simulates latency caused by server roundtrip
-            () => dispatch(updateCues(sourceCues)),
-            500
-        );
-    });
+    // ################################## Task ###########################################
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateTask({
@@ -150,6 +152,8 @@ const TestApp = (): ReactElement => {
             500
         );
     });
+
+    // ################################## Subtitle Specs ###########################################
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(readSubtitleSpecification({
