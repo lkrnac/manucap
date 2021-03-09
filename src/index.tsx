@@ -38,7 +38,6 @@ const TestApp = (): ReactElement => {
         // @ts-ignore
         if (trackType === "TRANSLATION") {
             const sourceCues = [] as CueDto[];
-            let endTime = 0;
 
             if (TIME_MATCH_TESTING) {
                 sourceCues.push({ vttCue: new VTTCue(0, 1, "text"), cueCategory: "DIALOGUE" });
@@ -57,10 +56,10 @@ const TestApp = (): ReactElement => {
                 sourceCues.push({ vttCue: new VTTCue(25.383, 28.115, "text"), cueCategory: "DIALOGUE" });
             }
 
+            let endTime = START_SHIFT;
             for (let idx = 0; idx < 9999; idx++) {
-                const randomStart = START_SHIFT + (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
-                const randomEnd = endTime =
-                    START_SHIFT + (TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3);
+                const randomStart = TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3;
+                const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
                 sourceCues.push({
                    vttCue: new VTTCue(randomStart, randomEnd, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
@@ -100,7 +99,7 @@ const TestApp = (): ReactElement => {
             targetCues.push({ vttCue: new VTTCue(26.198, 27.412, "text"), cueCategory: "DIALOGUE" });
         }
 
-        let endTime = 0;
+        let endTime = START_SHIFT;
         for (let idx = 0; idx < 9999; idx++) {
             const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
             let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
@@ -108,9 +107,8 @@ const TestApp = (): ReactElement => {
             if (language.id === "ar-SA") {
                 text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
             }
-            const randomStart = START_SHIFT + (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
-            const randomEnd = endTime =
-                START_SHIFT + (TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3);
+            const randomStart = (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
+            const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
             targetCues.push({
                 vttCue: new VTTCue(randomStart, randomEnd, text),
                 cueCategory: "DIALOGUE"
