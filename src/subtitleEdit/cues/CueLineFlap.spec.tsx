@@ -1,15 +1,15 @@
 import "../../testUtils/initBrowserEnvironment";
 import React from "react";
-import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import testingStore from "../../testUtils/testingStore";
 import CueLineFlap from "./CueLineFlap";
 import { CueLineDto } from "../model";
+import { render } from "@testing-library/react";
 
 describe("CueLineFlap", () => {
     it("renders without content", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 className="sbte-cue-line-flap"
                 style={{
@@ -44,14 +44,14 @@ describe("CueLineFlap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueLineFlap rowIndex={0} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders good cue line", () => {
@@ -67,7 +67,7 @@ describe("CueLineFlap", () => {
             targetCues: targetCuesWithIndexes
         } as CueLineDto;
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 className="sbte-cue-line-flap-good"
                 style={{
@@ -103,14 +103,14 @@ describe("CueLineFlap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueLineFlap rowIndex={0} cueLine={cueLine} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with first target cue corrupted", () => {
@@ -126,7 +126,7 @@ describe("CueLineFlap", () => {
             targetCues: targetCuesWithIndexes
         } as CueLineDto;
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 className="sbte-cue-line-flap-error"
                 style={{
@@ -162,14 +162,14 @@ describe("CueLineFlap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueLineFlap rowIndex={0} cueLine={cueLine} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with second target cue corrupted", () => {
@@ -185,7 +185,7 @@ describe("CueLineFlap", () => {
             targetCues: targetCuesWithIndexes
         } as CueLineDto;
 
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 className="sbte-cue-line-flap-error"
                 style={{
@@ -221,13 +221,13 @@ describe("CueLineFlap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueLineFlap rowIndex={0} cueLine={cueLine} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 });

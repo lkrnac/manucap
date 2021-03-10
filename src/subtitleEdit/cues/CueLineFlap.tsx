@@ -29,7 +29,7 @@ const hasCorruptedTargetCue = (cueLine?: CueLineDto): boolean => {
 
 const CueLineFlap = (props: Props): ReactElement => {
     const someCueHasText = hasTargetText(props.cueLine);
-    const someCueCorrupted = someCueHasText && hasCorruptedTargetCue(props.cueLine);
+    const someCueCorrupted = hasCorruptedTargetCue(props.cueLine);
     const flapClassName = someCueHasText
             ? someCueCorrupted ? "sbte-cue-line-flap-error" : "sbte-cue-line-flap-good"
             : "sbte-cue-line-flap";
