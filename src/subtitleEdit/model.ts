@@ -16,6 +16,18 @@ export interface GlossaryMatchDto {
     replacements: string[];
 }
 
+export enum CueLineState {
+    NONE,
+    GOOD,
+    ERROR
+}
+
+export const CUE_LINE_STATE_CLASSES = new Map ([
+    [CueLineState.NONE, { dividerClass: "sbte-cue-divider", flapClass: "sbte-cue-line-flap" }],
+    [CueLineState.GOOD, { dividerClass: "sbte-cue-divider-good", flapClass: "sbte-cue-line-flap-good" }],
+    [CueLineState.ERROR, { dividerClass: "sbte-cue-divider-error", flapClass: "sbte-cue-line-flap-error" }],
+]);
+
 export interface CueDto {
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;

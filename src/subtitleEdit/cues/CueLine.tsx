@@ -1,10 +1,11 @@
 import React, { ReactElement } from "react";
-import { CueDtoWithIndex, CueLineDto } from "../model";
+import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueLineDto, CueLineState } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
 import CueLineFlap from "./CueLineFlap";
+import _ from "lodash";
 
 export interface CueLineRowProps {
     playerTime: number;
@@ -22,6 +23,33 @@ export interface CueLineProps {
     rowRef: React.RefObject<HTMLDivElement>;
     onClick: (idx: number) => void;
 }
+
+const hasTargetText = (cueLine?: CueLineDto): boolean => {
+    if (cueLine && cueLine.targetCues && cueLine.targetCues.length > 0) {
+        return cueLine.targetCues
+            .map((cueWithIndex: CueDtoWithIndex): boolean => !_.isEmpty(cueWithIndex?.cue.vttCue.text))
+            .reduce((hasText1: boolean, hasText2: boolean): boolean => hasText1 || hasText2);
+    }
+    return false;
+};
+
+const hasCorruptedTargetCue = (cueLine?: CueLineDto): boolean => {
+    if (cueLine && cueLine.targetCues && cueLine.targetCues.length > 0) {
+        return cueLine.targetCues
+            .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.corrupted === true)
+            .reduce((hasText1: boolean, hasText2: boolean): boolean => hasText1 || hasText2);
+    }
+    return false;
+};
+
+const findCueLineState = (props: CueLineProps): CueLineState => {
+    const cueLine = props.rowProps.matchedCues[props.rowIndex];
+    const someCueHasText = hasTargetText(cueLine);
+    const someCueCorrupted = hasCorruptedTargetCue(cueLine);
+    return someCueHasText
+        ? someCueCorrupted ? CueLineState.ERROR : CueLineState.GOOD
+        : CueLineState.NONE;
+};
 
 const findNextTargetCueIndex = (props: CueLineProps): number => {
     let nextIndex = 0;
@@ -47,18 +75,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const captionClassName = "sbte-gray-100-background";
     const translationCueClassName = props.data.targetCues?.length === 0 ? captionClassName : "sbte-gray-200-background";
 
-    // TODO: Pass down to cue flap all the target cues -> to claim error if any of them is errornous
-    const cue = props.data.targetCues && props.data.targetCues.length > 0
-        ? props.data.targetCues[0]
-        : undefined;
-
-    const cueHasText = cue && cue.cue.vttCue.text.length;
-    const cueIsCorrupted = cueHasText && cue?.cue.corrupted;
-    const sbteCueDivider = cueHasText
-        ? cueIsCorrupted
-            ? "sbte-cue-divider-error"
-            : "sbte-cue-divider-good"
-        : "sbte-cue-divider";
+    const cueLineState = findCueLineState(props);
+    const dividerClass = CUE_LINE_STATE_CLASSES.get(cueLineState)?.dividerClass;
 
     const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
     const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
@@ -72,7 +90,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <CueLineFlap rowIndex={props.rowIndex} cueLine={props.rowProps.matchedCues[props.rowIndex]} />
+            <CueLineFlap rowIndex={props.rowIndex} cueLineState={cueLineState} />
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {
                     props.data.sourceCues && props.data.sourceCues.length > 0
@@ -115,7 +133,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 {
                     (props.data.targetCues?.length && props.data.targetCues?.length > 1)
                     || (props.data.sourceCues?.length && props.data.sourceCues?.length > 1)
-                        ? <div className={sbteCueDivider} />
+                        ? <div className={dividerClass} />
                         : null
                 }
                 {

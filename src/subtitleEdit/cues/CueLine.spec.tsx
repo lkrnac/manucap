@@ -5,7 +5,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 
-import { CueDto, Language, Track } from "../model";
+import { CueDto, CueLineState, Language, Track } from "../model";
 import CueEdit, { CueEditProps } from "./edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView, { CueViewProps } from "./view/CueView";
@@ -74,7 +74,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={matchedCuesCaptioning[0]} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueEdit
                                 index={0}
@@ -125,7 +125,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={matchedCuesCaptioning[0]} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -185,7 +185,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={1} cueLine={matchedCuesTranslation[1]} />
+                        <CueLineFlap rowIndex={1} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={1}
@@ -249,7 +249,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={2} cueLine={cueLine} />
+                        <CueLineFlap rowIndex={2} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={2}
@@ -308,7 +308,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -377,7 +377,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 cue={sourceCues[0]}
@@ -450,7 +450,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 cue={sourceCues[0]}
@@ -512,7 +512,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 cue={sourceCues[0]}
@@ -579,7 +579,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -650,7 +650,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -743,7 +743,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -838,7 +838,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={cueLine} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -920,7 +920,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLine={cueLine}  />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 targetCueIndex={0}
@@ -972,6 +972,109 @@ describe("CueLine", () => {
 
             // WHEN
             testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={0}
+                        data={cueLine}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        onClick={(): void => undefined}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("renders multi-match view line with corrupted target cue", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+
+            const corruptedTargetCueWithIndex = {
+                index: 2,
+                cue: { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE", corrupted: true } as CueDto
+            };
+
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = {
+                targetCues: [targetCuesWithIndexes[0], targetCuesWithIndexes[1], corruptedTargetCueWithIndex],
+                sourceCues: [sourceCuesWithIndexes[0]]};
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} />
+                        <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                            <CueView
+                                targetCueIndex={0}
+                                cue={sourceCues[0]}
+                                targetCuesLength={3}
+                                playerTime={0}
+                                className="sbte-gray-100-background"
+                                showGlossaryTerms={false}
+                                languageDirection="LTR"
+                                sourceCuesIndexes={[0]}
+                                nextTargetCueIndex={0}
+                            />
+                            <div className="sbte-cue-divider-error" />
+                            <CueView
+                                targetCueIndex={0}
+                                cue={targetCues[0]}
+                                targetCuesLength={3}
+                                playerTime={0}
+                                className="sbte-gray-100-background"
+                                showGlossaryTerms={false}
+                                showActionsPanel
+                                languageDirection="RTL"
+                                sourceCuesIndexes={[0]}
+                                nextTargetCueIndex={0}
+                            />
+                            <CueView
+                                targetCueIndex={1}
+                                cue={targetCues[1]}
+                                targetCuesLength={3}
+                                playerTime={0}
+                                className="sbte-gray-100-background"
+                                showGlossaryTerms={false}
+                                showActionsPanel
+                                languageDirection="RTL"
+                                sourceCuesIndexes={[0]}
+                                nextTargetCueIndex={0}
+                            />
+                            <CueView
+                                targetCueIndex={2}
+                                cue={corruptedTargetCueWithIndex.cue}
+                                targetCuesLength={3}
+                                playerTime={0}
+                                className="sbte-gray-100-background"
+                                showGlossaryTerms={false}
+                                showActionsPanel
+                                languageDirection="RTL"
+                                sourceCuesIndexes={[0]}
+                                nextTargetCueIndex={0}
+                            />
+                        </div>
+                    </div>
+                </Provider>
+            );
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: false,
+                targetCuesLength: 3,
+                matchedCues: [cueLine]
+            } as CueLineRowProps;
+
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CueLine
