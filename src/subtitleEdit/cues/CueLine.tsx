@@ -1,5 +1,4 @@
 import React, { ReactElement } from "react";
-// import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDtoWithIndex, CueLineDto } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
