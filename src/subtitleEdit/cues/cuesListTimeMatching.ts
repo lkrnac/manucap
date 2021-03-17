@@ -23,6 +23,9 @@ interface Indexes {
     target: number;
 }
 
+const isExactMatch = (times: Times): boolean =>
+times.targetStart === times.sourceStart && times.targetEnd === times.sourceEnd;
+
 const isTargetShorter = (times: Times): boolean =>
     times.targetEnd < times.sourceEnd
     || (times.targetEnd === times.sourceEnd && times.targetStart > times.sourceStart);
@@ -128,7 +131,7 @@ export const matchCuesByTime = (
             targetLength: cue?.vttCue.endTime - cue?.vttCue.startTime,
         };
 
-        if (sourceCues.length === 0 || indexes.source === sourceCues.length) {
+        if (!sourceCue) {
             pushTarget(indexes, times, cue, editingCueIndex, cuesMapValue);
             continue;
         }
@@ -136,8 +139,7 @@ export const matchCuesByTime = (
             pushSource(indexes, times, sourceCue, cuesMapValue);
             continue;
         }
-
-        if (times.targetStart === times.sourceStart && times.targetEnd === times.sourceEnd) {
+        if (isExactMatch(times)) {
             pushBoth(indexes, sourceCue, cue, editingCueIndex, cuesMapValue);
             continue;
         }
