@@ -741,13 +741,13 @@ describe("CuesList", () => {
 
         it("1 line, 1 source cue, 3 target cues", () => {
             // GIVEN
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 3, "Source Line 1"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
             const targetCues = [
                 { vttCue: new VTTCue(0, 1, "Target Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(1, 2, "Target Line 2"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(2, 3, "Target Line 3"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-            const sourceCues = [
-                { vttCue: new VTTCue(0, 3, "Source Line 1"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
 
             testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
@@ -795,13 +795,13 @@ describe("CuesList", () => {
 
         it("1 line, 3 source cues, 1 target cues", () => {
             // GIVEN
-            const targetCues = [
-                { vttCue: new VTTCue(0, 3, "Target Line 2"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
             const sourceCues = [
                 { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const targetCues = [
+                { vttCue: new VTTCue(0, 3, "Target Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
 
             testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);

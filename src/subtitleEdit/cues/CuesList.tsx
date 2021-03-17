@@ -41,80 +41,148 @@ const getScrollCueIndex = (
     return undefined; // out of range value, because need to trigger change of ReactSmartScroll.startAt
 };
 
+interface Times {
+    sourceEnd: number;
+    targetStart: number;
+    targetLength: number;
+    targetEnd: number;
+    sourceStart: number;
+    sourceLength: number;
+}
+
+interface Indexes {
+    cuesMap: number;
+    editingFocus: number;
+    source: number;
+    target: number;
+}
+
+const isTargetShorter = (times: Times): boolean =>
+    times.targetEnd < times.sourceEnd
+        || (times.targetEnd === times.sourceEnd && times.targetStart > times.sourceStart);
+
+const isSourceShorter = (times: Times): boolean =>
+    times.targetEnd > times.sourceEnd
+        || (times.targetEnd === times.sourceEnd && times.targetStart < times.sourceStart);
+
+const pushTargetWithoutMatchedIndex = (
+    indexes: Indexes,
+    cue: CueDto,
+    editingCueIndex: number,
+    cuesMapValue?: CueLineDto,
+): void => {
+    cuesMapValue?.targetCues?.push({ index: indexes.target, cue });
+    if (indexes.target === editingCueIndex) {
+        indexes.editingFocus = indexes.cuesMap;
+    }
+    indexes.target++;
+};
+
+const pushSourceWithoutMatchedIndex = (
+    indexes: Indexes,
+    sourceCue: CueDto,
+    cuesMapValue?: CueLineDto
+): void => {
+    cuesMapValue?.sourceCues?.push({ index: indexes.source, cue: sourceCue });
+    indexes.source++;
+};
+
+const pushTarget = (
+    indexes: Indexes,
+    times: Times,
+    cue: CueDto,
+    editingCueIndex: number,
+    cuesMapValue?: CueLineDto,
+): void => {
+    pushTargetWithoutMatchedIndex(indexes, cue, editingCueIndex, cuesMapValue);
+    if (times.targetEnd === undefined || times.sourceStart === undefined) {
+        indexes.cuesMap++;
+        return;
+    }
+    const overlapLength = times.targetEnd - times.sourceStart;
+    if (overlapLength / times.targetLength <= OVERLAP_RATIO) {
+        indexes.cuesMap++;
+    }
+};
+
+const pushSource = (
+    indexes: Indexes,
+    times: Times,
+    sourceCue: CueDto,
+    cuesMapValue?: CueLineDto
+): void => {
+    pushSourceWithoutMatchedIndex(indexes, sourceCue, cuesMapValue);
+    if (times.sourceEnd === undefined || times.targetStart === undefined) {
+        indexes.cuesMap++;
+        return;
+    }
+    const overlapLength = times.sourceEnd - times.targetStart;
+    if (overlapLength / times.sourceLength <= OVERLAP_RATIO) {
+        indexes.cuesMap++;
+    }
+};
+
+const pushBoth = (
+    indexes: Indexes,
+    sourceCue: CueDto,
+    cue: CueDto,
+    editingCueIndex: number,
+    cuesMapValue?: CueLineDto,
+): void => {
+    pushTargetWithoutMatchedIndex(indexes, cue, editingCueIndex, cuesMapValue);
+    pushSourceWithoutMatchedIndex(indexes, sourceCue, cuesMapValue);
+    indexes.cuesMap++;
+};
+
 const matchCuesByTime = (
-    targetCuesArray: CueDto[],
-    sourceCuesArray: CueDto[],
+    targetCues: CueDto[],
+    sourceCues: CueDto[],
     editingCueIndex: number
 ): MatchedCuesWithEditingFocus => {
     const cuesMap = new Map<number, CueLineDto>();
-    let cuesMapIdx = 0;
-    let sourceCuesIdx = 0; // will not be used for captions only
-    let targetCuesIdx = 0;
-    let editingFocusIdx = 0;
-    while (targetCuesIdx < targetCuesArray.length || sourceCuesIdx < sourceCuesArray.length) {
-        if (!cuesMap.get(cuesMapIdx)) {
-            cuesMap.set(cuesMapIdx, { targetCues: [], sourceCues: []});
+    const indexes = {
+        cuesMap: 0,
+        source: 0, // will not be used for captions only
+        target: 0,
+        editingFocus: 0,
+    };
+    while (indexes.target < targetCues.length || indexes.source < sourceCues.length) {
+        if (!cuesMap.get(indexes.cuesMap)) {
+            cuesMap.set(indexes.cuesMap, { targetCues: [], sourceCues: []});
         }
-        const cuesMapValue = cuesMap.get(cuesMapIdx);
-        const cue = targetCuesArray[targetCuesIdx];
-        if (sourceCuesArray.length === 0 || sourceCuesIdx === sourceCuesArray.length) {
-            cuesMapValue?.targetCues?.push({ index: targetCuesIdx, cue });
-            if (targetCuesIdx === editingCueIndex) {
-                editingFocusIdx = cuesMapIdx;
-            }
-            targetCuesIdx++;
-            cuesMapIdx++;
+        const cuesMapValue = cuesMap.get(indexes.cuesMap);
+        const cue = targetCues[indexes.target];
+        const sourceCue = sourceCues[indexes.source];
+        const times = {
+            sourceStart: sourceCue?.vttCue.startTime,
+            sourceEnd: sourceCue?.vttCue.endTime,
+            sourceLength: sourceCue?.vttCue.endTime - sourceCue?.vttCue.startTime,
+            targetStart: cue?.vttCue.startTime,
+            targetEnd: cue?.vttCue.endTime,
+            targetLength: cue?.vttCue.endTime - cue?.vttCue.startTime,
+        };
+
+        if (sourceCues.length === 0 || indexes.source === sourceCues.length) {
+            pushTarget(indexes, times, cue, editingCueIndex, cuesMapValue);
             continue;
         }
-        const sourceCue = sourceCuesArray[sourceCuesIdx];
         if (!cue) {
-            cuesMapValue?.sourceCues?.push({ index: sourceCuesIdx, cue: sourceCue });
-            sourceCuesIdx++;
-            cuesMapIdx++;
+            pushSource(indexes, times, sourceCue, cuesMapValue);
             continue;
         }
-        const sourceCueStartTime = sourceCue.vttCue.startTime;
-        const sourceCueEndTime = sourceCue.vttCue.endTime;
-        const sourceLength = sourceCueEndTime - sourceCueStartTime;
-        const targetCueStartTime = cue.vttCue.startTime;
-        const targetCueEndTime = cue.vttCue.endTime;
-        const targetLength = targetCueEndTime - targetCueStartTime;
-        if (targetCueStartTime === sourceCueStartTime && targetCueEndTime === sourceCueEndTime) {
-            cuesMapValue?.targetCues?.push({ index: targetCuesIdx, cue });
-            cuesMapValue?.sourceCues?.push({ index: sourceCuesIdx, cue: sourceCue });
-            if (targetCuesIdx === editingCueIndex) {
-                editingFocusIdx = cuesMapIdx;
-            }
-            targetCuesIdx++;
-            sourceCuesIdx++;
-            cuesMapIdx++;
+
+        if (times.targetStart === times.sourceStart && times.targetEnd === times.sourceEnd) {
+            pushBoth(indexes, sourceCue, cue, editingCueIndex, cuesMapValue);
             continue;
         }
-        if (targetCueEndTime < sourceCueEndTime
-            || (targetCueEndTime === sourceCueEndTime && targetCueStartTime > sourceCueStartTime)
-        ) {
-            cuesMapValue?.targetCues?.push({ index: targetCuesIdx, cue });
-            if (targetCuesIdx === editingCueIndex) {
-                editingFocusIdx = cuesMapIdx;
-            }
-            const overlapLength = targetCueEndTime - sourceCueStartTime;
-            if (overlapLength / targetLength <= OVERLAP_RATIO) {
-                cuesMapIdx++;
-            }
-            targetCuesIdx++;
-        } else if (targetCueEndTime > sourceCueEndTime
-            || (targetCueEndTime === sourceCueEndTime && targetCueStartTime < sourceCueStartTime)
-        ) {
-            cuesMapValue?.sourceCues?.push({ index: sourceCuesIdx, cue: sourceCue });
-            const overlapLength = sourceCueEndTime - targetCueStartTime;
-            if (overlapLength / sourceLength <= OVERLAP_RATIO) {
-                cuesMapIdx++;
-            }
-            sourceCuesIdx++;
+        if (isTargetShorter(times)) {
+            pushTarget(indexes, times, cue, editingCueIndex, cuesMapValue);
+        } else if (isSourceShorter(times)) {
+            pushSource(indexes, times, sourceCue, cuesMapValue);
         }
     }
     const matchedCues = Array.from(cuesMap.values());
-    return { matchedCues, editingFocusIndex: editingFocusIdx };
+    return { matchedCues, editingFocusIndex: indexes.editingFocus };
 };
 
 const CuesList = (props: Props): ReactElement => {
