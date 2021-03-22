@@ -4,11 +4,11 @@ import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../timeUtils";
 import sanitizeHtml from "sanitize-html";
-import { useDispatch, useSelector } from "react-redux";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { setGlossaryTerm, updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { addCue } from "../cuesListActions";
+import { useDispatch } from "react-redux";
+import { AppThunk } from "../../subtitleEditReducers";
+import { setGlossaryTerm } from "../edit/cueEditorSlices";
 import { CueActionsPanel } from "../CueActionsPanel";
+import ClickCueWrapper from "./ClickCueWrapper";
 
 export interface CueViewProps {
     targetCueIndex?: number;
@@ -71,87 +71,77 @@ const buildContent = (dispatch: Dispatch<AppThunk>, props: CueViewProps): string
 
 const CueView = (props: CueViewProps): ReactElement => {
     const dispatch = useDispatch();
-    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
 
     const html = props.hideText
         ? ""
         : buildContent(dispatch, props);
     const undefinedSafeClassName = props.className ? `${props.className} ` : "";
     return (
-        <div
-            style={{ display: "flex" }}
-            className={`${undefinedSafeClassName}sbte-bottom-border`}
-            onClick={(): void => {
-                if (props.targetCueIndex !== undefined) {
-                    if (props.targetCueIndex >= props.targetCuesLength) {
-                        dispatch(addCue(props.targetCuesLength, props.sourceCuesIndexes));
-                    } else if (editingTask && !editingTask.editDisabled) {
-                        dispatch(updateEditingCueIndex(props.targetCueIndex));
-                    }
-                } else {
-                    const finalTargetIndex = props.nextTargetCueIndex >= 0
-                        ? props.nextTargetCueIndex
-                        : props.targetCuesLength;
-                    dispatch(addCue(finalTargetIndex, props.sourceCuesIndexes));
-                }
-            }}
+        <ClickCueWrapper
+            targetCueIndex={props.targetCueIndex}
+            targetCuesLength={props.targetCuesLength}
+            sourceCuesIndexes={props.sourceCuesIndexes}
+            nextTargetCueIndex={props.nextTargetCueIndex}
+            className={props.className}
         >
-            <div
-                className="sbte-cue-line-left-section"
-                style={{
-                    flex: "1 1 300px",
-                    display: "flex",
-                    flexDirection: "column",
-                    paddingLeft: "10px",
-                    paddingTop: "5px",
-                    justifyContent: "space-between"
-                }}
-            >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div>{getTimeString(props.cue.vttCue.startTime)}</div>
-                    <div>{getTimeString(props.cue.vttCue.endTime)}</div>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "5px" }}>
-                    <div className="sbte-small-font">{cueCategoryToPrettyName[props.cue.cueCategory]}</div>
-                    <div className="sbte-small-font" style={{ paddingRight: "10px" }}>
-                        {findPositionIcon(props.cue.vttCue).iconText}
-                    </div>
-                </div>
-            </div>
-            <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+            <>
                 <div
-                    className="sbte-cue-editor"
+                    className="sbte-cue-line-left-section"
                     style={{
-                        flexBasis: "50%",
+                        flex: "1 1 300px",
+                        display: "flex",
+                        flexDirection: "column",
                         paddingLeft: "10px",
                         paddingTop: "5px",
-                        paddingBottom: "5px",
-                        minHeight: "54px",
-                        height: "100%",
-                        width: "100%"
+                        justifyContent: "space-between"
                     }}
-                    dir={props.languageDirection}
-                    dangerouslySetInnerHTML={{ __html: html }}
-                />
-            </div>
-            {
-                props.targetCueIndex !== undefined && props.showActionsPanel
-                    ? (
-                        <CueActionsPanel
-                            index={props.targetCueIndex}
-                            cue={props.cue}
-                            isEdit={false}
-                            sourceCueIndexes={props.sourceCuesIndexes}
-                        />
-                    )
-                    : (
-                        <div
-                            className={`${undefinedSafeClassName}sbte-left-border`}
-                            style={{ minWidth: "52px" }}
-                        />
-                    )
-            }
-        </div>
+                >
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <div>{getTimeString(props.cue.vttCue.startTime)}</div>
+                        <div>{getTimeString(props.cue.vttCue.endTime)}</div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "5px" }}>
+                        <div className="sbte-small-font">{cueCategoryToPrettyName[props.cue.cueCategory]}</div>
+                        <div className="sbte-small-font" style={{ paddingRight: "10px" }}>
+                            {findPositionIcon(props.cue.vttCue).iconText}
+                        </div>
+                    </div>
+                </div>
+                <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                    <div
+                        className="sbte-cue-editor"
+                        style={{
+                            flexBasis: "50%",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
+                            paddingBottom: "5px",
+                            minHeight: "54px",
+                            height: "100%",
+                            width: "100%"
+                        }}
+                        dir={props.languageDirection}
+                        dangerouslySetInnerHTML={{ __html: html }}
+                    />
+                </div>
+                {
+                    props.targetCueIndex !== undefined && props.showActionsPanel
+                        ? (
+                            <CueActionsPanel
+                                index={props.targetCueIndex}
+                                cue={props.cue}
+                                isEdit={false}
+                                sourceCueIndexes={props.sourceCuesIndexes}
+                            />
+                        )
+                        : (
+                            <div
+                                className={`${undefinedSafeClassName}sbte-left-border`}
+                                style={{ minWidth: "52px" }}
+                            />
+                        )
+                }
+            </>
+        </ClickCueWrapper>
     );
 };
 

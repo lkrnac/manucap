@@ -2,18 +2,20 @@ import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React, { ReactElement } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 
-import { CueDto, CueLineState, Language, Track } from "../model";
+import { CueDto, CueLineState, Language, Task, Track } from "../model";
 import CueEdit, { CueEditProps } from "./edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView, { CueViewProps } from "./view/CueView";
 import { createTestingStore } from "../../testUtils/testingStore";
 import CueLineFlap from "./CueLineFlap";
 import { updateEditingCueIndex } from "./edit/cueEditorSlices";
-import { updateEditingTrack } from "../trackSlices";
+import { updateEditingTrack, updateTask } from "../trackSlices";
 import "./edit/CueTextEditor";
+import { updateSourceCues } from "./view/sourceCueSlices";
+import { updateCues } from "./cuesListActions";
 
 jest.mock("./edit/CueEdit", () => (props: CueEditProps): ReactElement => <div>CueEdit: {JSON.stringify(props)}</div>);
 jest.mock("./view/CueView", () => (props: CueViewProps): ReactElement => <div>CueView: {JSON.stringify(props)}</div>);
@@ -389,18 +391,27 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={1}
                             />
-                            <CueView
-                                cue={sourceCues[0]}
-                                targetCuesLength={3}
-                                playerTime={0}
-                                hideText
-                                className="sbte-gray-200-background"
-                                showGlossaryTerms={false}
-                                showActionsPanel
-                                languageDirection="RTL"
-                                sourceCuesIndexes={[0]}
-                                nextTargetCueIndex={1}
-                            />
+                            <div
+                                style={{ display: "flex" }}
+                                className="sbte-gray-200-background sbte-bottom-border sbte-click-cue-wrapper"
+                            >
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        minHeight: "78px"
+                                    }}
+                                >
+                                    <button
+                                        style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
+                                        className="btn btn-outline-secondary sbte-add-cue-button"
+                                    >
+                                        Insert cue
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </Provider>
@@ -462,18 +473,27 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={-1}
                             />
-                            <CueView
-                                cue={sourceCues[0]}
-                                targetCuesLength={3}
-                                playerTime={0}
-                                hideText
-                                className="sbte-gray-200-background"
-                                showGlossaryTerms={false}
-                                showActionsPanel
-                                languageDirection="RTL"
-                                sourceCuesIndexes={[0]}
-                                nextTargetCueIndex={-1}
-                            />
+                            <div
+                                style={{ display: "flex" }}
+                                className="sbte-gray-200-background sbte-bottom-border sbte-click-cue-wrapper"
+                            >
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        minHeight: "78px"
+                                    }}
+                                >
+                                    <button
+                                        style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
+                                        className="btn btn-outline-secondary sbte-add-cue-button"
+                                    >
+                                        Insert cue
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </Provider>
@@ -523,17 +543,27 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={-1}
                             />
-                            <CueView
-                                cue={sourceCues[0]}
-                                targetCuesLength={0}
-                                playerTime={0}
-                                hideText
-                                className="sbte-gray-200-background"
-                                showGlossaryTerms={false}
-                                showActionsPanel
-                                sourceCuesIndexes={[0]}
-                                nextTargetCueIndex={-1}
-                            />
+                            <div
+                                style={{ display: "flex" }}
+                                className="sbte-gray-200-background sbte-bottom-border sbte-click-cue-wrapper"
+                            >
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        minHeight: "78px"
+                                    }}
+                                >
+                                    <button
+                                        style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
+                                        className="btn btn-outline-secondary sbte-add-cue-button"
+                                    >
+                                        Insert cue
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </Provider>
@@ -581,18 +611,12 @@ describe("CueLine", () => {
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
-                            <CueView
-                                targetCueIndex={0}
-                                cue={targetCues[0]}
-                                targetCuesLength={1}
-                                playerTime={0}
-                                hideText
-                                className="sbte-gray-200-background"
-                                showGlossaryTerms={false}
-                                languageDirection="RTL"
-                                sourceCuesIndexes={[]}
-                                nextTargetCueIndex={0}
-                            />
+                            <div
+                                style={{ display: "flex" }}
+                                className="sbte-gray-200-background sbte-bottom-border sbte-click-cue-wrapper"
+                            >
+                                <div style={{ width: "100%", minHeight: "78px" }} />
+                            </div>
                             <CueView
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
@@ -1089,6 +1113,113 @@ describe("CueLine", () => {
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("fires write cue action when empty target cue is clicked", () => {
+            // GIVEN
+            const cueWithSource = { sourceCues: [sourceCuesWithIndexes[1]]};
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: false,
+                targetCuesLength: 0,
+                matchedCues: matchedCuesTranslation
+            } as CueLineRowProps;
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={1}
+                        data={cueWithSource}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        onClick={(): void => undefined}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            fireEvent.click(actualNode.container.querySelector(".sbte-click-cue-wrapper") as Element);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+        });
+
+        it("fires write cue action when insert cue button is clicked", () => {
+            // GIVEN
+            const cueWithSource = { sourceCues: [sourceCuesWithIndexes[1]]};
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: false,
+                targetCuesLength: 0,
+                matchedCues: matchedCuesTranslation
+            } as CueLineRowProps;
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={1}
+                        data={cueWithSource}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        onClick={(): void => undefined}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+        });
+
+
+        it("fires write cue action when empty source cue is clicked", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: [targetCuesWithIndexes[1]], sourceCues: []};
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: false,
+                targetCuesLength: 3,
+                matchedCues: matchedCuesCaptioning
+            } as CueLineRowProps;
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+
+            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={1}
+                        data={cueLine}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        onClick={(): void => undefined}
+                    />
+                </Provider>
+            );
+            const testingTask = {
+                type: "TASK_CAPTION",
+                projectName: "Project One",
+                dueDate: "2019/12/30 10:00AM",
+                editDisabled: false
+            } as Task;
+            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+            // WHEN
+            fireEvent.click(actualNode.container.querySelector(".sbte-click-cue-wrapper") as Element);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
     });
 

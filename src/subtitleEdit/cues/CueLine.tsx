@@ -6,6 +6,8 @@ import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
 import CueLineFlap from "./CueLineFlap";
 import _ from "lodash";
+import InsertCueButton from "./view/InsertCueButton";
+import ClickCueWrapper from "./view/ClickCueWrapper";
 
 export interface CueLineRowProps {
     playerTime: number;
@@ -114,19 +116,15 @@ const CueLine = (props: CueLineProps): ReactElement => {
                             props.rowProps.withoutSourceCues
                             ? null
                             : (
-                                <CueView
+                                <ClickCueWrapper
                                     targetCueIndex={firstTargetCueIndex}
-                                    // @ts-ignore TODO comment
-                                    cue={props.data.targetCues[0].cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
-                                    playerTime={props.rowProps.playerTime}
-                                    hideText
                                     className={translationCueClassName}
-                                    showGlossaryTerms={false}
-                                    languageDirection={editingTrack?.language.direction}
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
-                                />
+                                >
+                                    <div style={{ width: "100%", minHeight: "78px" }} />
+                                </ClickCueWrapper>
                             )
                         )
                 }
@@ -166,20 +164,18 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 );
                         })
                         : (
-                            <CueView
-                                // @ts-ignore If cues is empty, sourceCue is passed in (ensured by SubtitleEdit tests)
-                                cue={props.data.sourceCues[0].cue}
+
+                            <ClickCueWrapper
+                                targetCueIndex={firstTargetCueIndex}
                                 targetCuesLength={props.rowProps.targetCuesLength}
-                                playerTime={props.rowProps.playerTime}
-                                hideText
                                 className={"sbte-gray-200-background"}
-                                showGlossaryTerms={false}
-                                showActionsPanel
-                                languageDirection={editingTrack?.language.direction}
                                 sourceCuesIndexes={sourceCuesIndexes}
                                 nextTargetCueIndex={nextTargetCueIndex}
-                            />
+                            >
+                                <InsertCueButton />
+                            </ClickCueWrapper>
                         )
+
                 }
             </div>
         </div>
