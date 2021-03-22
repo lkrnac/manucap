@@ -179,7 +179,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             && state.sourceCues[sourceIndexes[0]].vttCue.startTime >= previousCue.vttCue.endTime
                 ? state.sourceCues[sourceIndexes[0]].vttCue.startTime
                 : previousCue.vttCue.endTime;
-        const endTime = sourceIndexes && sourceIndexes[sourceIndexes.length - 1]
+        const endTime = sourceIndexes && sourceIndexes.length > 0
             ? state.sourceCues[sourceIndexes[sourceIndexes.length - 1]].vttCue.endTime
             : previousCue.vttCue.endTime + step;
         const cue = createAndAddCue(previousCue, startTime, endTime);

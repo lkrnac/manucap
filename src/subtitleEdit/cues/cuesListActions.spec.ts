@@ -1541,6 +1541,26 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(5);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
+
+            it("uses source cues times for target cue with index 0", () => {
+                // GIVEN
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }
+                ]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(0, [0]) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+                expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
+                expect(testingStore.getState().editingCueIndex).toEqual(0);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
         });
 
         describe("range prevention", () => {
