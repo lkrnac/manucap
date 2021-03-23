@@ -288,7 +288,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 5");
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 
     it("replaces all matches replace contains find", async () => {
@@ -335,7 +335,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>New Line 2</b> and New Line 2");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 2");
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 
     it("replaces all matches replace shorter than find", async () => {
@@ -382,7 +382,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>test</b> and test");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption test");
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 
     it("replaces all matches replace is empty string", async () => {
@@ -430,7 +430,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption ");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 
     it("does not replace all match when Replace All button is clicked and find is empty", async () => {

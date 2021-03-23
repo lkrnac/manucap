@@ -1,88 +1,183 @@
 import React, { ReactElement } from "react";
-import { CueActionsPanel } from "./CueActionsPanel";
-import { CueWithSource } from "../model";
+import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueLineDto, CueLineState } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { useSelector } from "react-redux";
 import CueLineFlap from "./CueLineFlap";
+import _ from "lodash";
+import InsertCueButton from "./view/InsertCueButton";
+import ClickCueWrapper from "./view/ClickCueWrapper";
 
 export interface CueLineRowProps {
     playerTime: number;
-    cuesLength: number;
+    targetCuesLength: number;
+    // Following parameter is needed,
+    // because empty/undefined props.data.sourceCues might indicate that there is no time match in translation mode
+    withoutSourceCues: boolean;
+    matchedCues: CueLineDto[];
 }
 
-interface Props {
+export interface CueLineProps {
     rowIndex: number;
-    data: CueWithSource;
+    data: CueLineDto;
     rowProps: CueLineRowProps;
     rowRef: React.RefObject<HTMLDivElement>;
     onClick: (idx: number) => void;
 }
 
-const CueLine = (props: Props): ReactElement => {
+const hasTargetText = (cueLine?: CueLineDto): boolean => {
+    if (cueLine && cueLine.targetCues && cueLine.targetCues.length > 0) {
+        return cueLine.targetCues
+            .map((cueWithIndex: CueDtoWithIndex): boolean => !_.isEmpty(cueWithIndex?.cue.vttCue.text))
+            .reduce((hasText1: boolean, hasText2: boolean): boolean => hasText1 || hasText2);
+    }
+    return false;
+};
+
+const hasCorruptedTargetCue = (cueLine?: CueLineDto): boolean => {
+    if (cueLine && cueLine.targetCues && cueLine.targetCues.length > 0) {
+        return cueLine.targetCues
+            .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.corrupted === true)
+            .reduce((hasText1: boolean, hasText2: boolean): boolean => hasText1 || hasText2);
+    }
+    return false;
+};
+
+const findCueLineState = (props: CueLineProps): CueLineState => {
+    const cueLine = props.rowProps.matchedCues[props.rowIndex];
+    const someCueHasText = hasTargetText(cueLine);
+    const someCueCorrupted = hasCorruptedTargetCue(cueLine);
+    return someCueHasText
+        ? someCueCorrupted ? CueLineState.ERROR : CueLineState.GOOD
+        : CueLineState.NONE;
+};
+
+const findNextTargetCueIndex = (props: CueLineProps): number => {
+    let nextIndex = 0;
+    let nextTargetCueIndex = -1;
+    let targetCues;
+    do {
+        targetCues = props.rowProps.matchedCues[props.rowIndex + nextIndex].targetCues;
+        nextTargetCueIndex = targetCues && targetCues.length > 0 ? targetCues[0].index : -1;
+        nextIndex++;
+    } while ((targetCues === undefined || targetCues.length === 0)
+    && nextTargetCueIndex === -1
+    && props.rowIndex + nextIndex < props.rowProps.matchedCues.length);
+    return nextTargetCueIndex;
+};
+
+const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
+    ? cues.map(sourceCue => sourceCue.index)
+    : [];
+
+const CueLine = (props: CueLineProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const captionClassName = "sbte-gray-100-background";
-    const translationCueClassName = props.data.cue ? captionClassName : "sbte-gray-200-background";
-    const lastCue = props.rowIndex === props.rowProps.cuesLength - 1;
+    const translationCueClassName = props.data.targetCues?.length === 0 ? captionClassName : "sbte-gray-200-background";
+
+    const cueLineState = findCueLineState(props);
+    const dividerClass = CUE_LINE_STATE_CLASSES.get(cueLineState)?.dividerClass;
+
+    const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
+    const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
+    const nextTargetCueIndex = findNextTargetCueIndex(props);
+
+    const showGlossaryTerms = props.data.targetCues !== undefined &&
+        props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
 
     return (
         <div
             ref={props.rowRef}
-            onClick={(): void => props.onClick(props.rowIndex)}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <CueLineFlap rowIndex={props.rowIndex} cue={props.data.cue} />
+            <CueLineFlap rowIndex={props.rowIndex} cueLineState={cueLineState} />
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {
-                    props.data.sourceCue
-                        ? <CueView
-                            index={props.rowIndex}
-                            cue={props.data.sourceCue}
-                            playerTime={props.rowProps.playerTime}
-                            className={"sbte-bottom-border " + captionClassName}
-                            showGlossaryTerms={editingCueIndex === props.rowIndex}
-                            languageDirection={editingTrack?.sourceLanguage?.direction}
-                          />
-                        : <div />
+                    props.data.sourceCues && props.data.sourceCues.length > 0
+                        ? props.data.sourceCues.map(sourceCue => {
+                            return (
+                                <CueView
+                                    key={sourceCue.index}
+                                    targetCueIndex={firstTargetCueIndex}
+                                    cue={sourceCue.cue}
+                                    targetCuesLength={props.rowProps.targetCuesLength}
+                                    playerTime={props.rowProps.playerTime}
+                                    className={captionClassName}
+                                    showGlossaryTerms={showGlossaryTerms}
+                                    languageDirection={editingTrack?.sourceLanguage?.direction}
+                                    sourceCuesIndexes={sourceCuesIndexes}
+                                    nextTargetCueIndex={nextTargetCueIndex}
+                                />
+                            );
+                        })
+                        : (
+                            props.rowProps.withoutSourceCues
+                            ? null
+                            : (
+                                <ClickCueWrapper
+                                    targetCueIndex={firstTargetCueIndex}
+                                    targetCuesLength={props.rowProps.targetCuesLength}
+                                    className={translationCueClassName}
+                                    sourceCuesIndexes={sourceCuesIndexes}
+                                    nextTargetCueIndex={nextTargetCueIndex}
+                                >
+                                    <div style={{ width: "100%", minHeight: "78px" }} />
+                                </ClickCueWrapper>
+                            )
+                        )
                 }
                 {
-                    props.data.cue
-                        ? editingCueIndex === props.rowIndex
-                            ? <CueEdit
-                                index={props.rowIndex}
-                                cue={props.data.cue}
-                                playerTime={props.rowProps.playerTime}
-                              />
-                            : <CueView
-                                index={props.rowIndex}
-                                cue={props.data.cue}
-                                playerTime={props.rowProps.playerTime}
-                                className={captionClassName}
-                                showGlossaryTerms={false}
-                                languageDirection={editingTrack?.language.direction}
-                              />
-                        : <CueView
-                            index={props.rowIndex}
-                            // @ts-ignore If cue is undefined, sourceCue is passed in (ensured by SubtitleEdit tests)
-                            cue={props.data.sourceCue}
-                            playerTime={props.rowProps.playerTime}
-                            hideText
-                            className={translationCueClassName}
-                            showGlossaryTerms={false}
-                            languageDirection={editingTrack?.language.direction}
-                          />
+                    (props.data.targetCues?.length && props.data.targetCues?.length > 1)
+                    || (props.data.sourceCues?.length && props.data.sourceCues?.length > 1)
+                        ? <div className={dividerClass} />
+                        : null
+                }
+                {
+                    props.data.targetCues && props.data.targetCues.length > 0
+                        ? props.data.targetCues.map(targetCue => {
+                            return editingCueIndex === targetCue.index
+                                ? (
+                                    <CueEdit
+                                        key={targetCue.index}
+                                        index={targetCue.index}
+                                        cue={targetCue.cue}
+                                        playerTime={props.rowProps.playerTime}
+                                        nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
+                                    />
+                                )
+                                : (
+                                    <CueView
+                                        key={targetCue.index}
+                                        targetCueIndex={targetCue.index}
+                                        cue={targetCue.cue}
+                                        targetCuesLength={props.rowProps.targetCuesLength}
+                                        playerTime={props.rowProps.playerTime}
+                                        className={captionClassName}
+                                        showGlossaryTerms={false}
+                                        showActionsPanel
+                                        languageDirection={editingTrack?.language.direction}
+                                        sourceCuesIndexes={sourceCuesIndexes}
+                                        nextTargetCueIndex={nextTargetCueIndex}
+                                    />
+                                );
+                        })
+                        : (
+
+                            <ClickCueWrapper
+                                targetCueIndex={firstTargetCueIndex}
+                                targetCuesLength={props.rowProps.targetCuesLength}
+                                className={"sbte-gray-200-background"}
+                                sourceCuesIndexes={sourceCuesIndexes}
+                                nextTargetCueIndex={nextTargetCueIndex}
+                            >
+                                <InsertCueButton />
+                            </ClickCueWrapper>
+                        )
 
                 }
             </div>
-            <CueActionsPanel
-                index={props.rowIndex}
-                editingCueIndex={editingCueIndex}
-                cue={props.data.cue}
-                sourceCue={props.data.sourceCue}
-                lastCue={lastCue}
-            />
         </div>
     );
 };

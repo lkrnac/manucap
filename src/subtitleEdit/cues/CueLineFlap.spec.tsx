@@ -1,15 +1,15 @@
 import "../../testUtils/initBrowserEnvironment";
 import React from "react";
-import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import testingStore from "../../testUtils/testingStore";
 import CueLineFlap from "./CueLineFlap";
-import { CueDto } from "../model";
+import { CueLineState } from "../model";
+import { render } from "@testing-library/react";
 
 describe("CueLineFlap", () => {
-    it("renders", () => {
+    it("renders without content", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 className="sbte-cue-line-flap"
                 style={{
@@ -44,19 +44,19 @@ describe("CueLineFlap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} />
+                <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("renders good cue", () => {
+    it("renders good cue line", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 className="sbte-cue-line-flap-good"
                 style={{
@@ -90,22 +90,21 @@ describe("CueLineFlap", () => {
                 </div>
             </div>
         );
-        const cue = { vttCue: new VTTCue(0, 3, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cue={cue} />
+                <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("renders corrupted cue", () => {
+    it("renders corrupted cue line", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 className="sbte-cue-line-flap-error"
                 style={{
@@ -139,16 +138,15 @@ describe("CueLineFlap", () => {
                 </div>
             </div>
         );
-        const cue = { vttCue: new VTTCue(0, 0, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: true } as CueDto;
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cue={cue} />
+                <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 });

@@ -33,15 +33,7 @@ const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
         JSON.stringify(constructCueValuesArray(x)) !== JSON.stringify(constructCueValuesArray(y));
 };
 
-const createAndAddCue = (previousCue: CueDto,
-                         maxGapLimit: number,
-                         sourceCue?: CueDto): CueDto => {
-    const startTime = sourceCue
-        ? sourceCue.vttCue.startTime
-        : previousCue.vttCue.endTime;
-    const endTime = sourceCue
-        ? sourceCue.vttCue.endTime
-        : previousCue.vttCue.endTime + maxGapLimit;
+const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number): CueDto => {
     const newCue = new VTTCue(startTime, endTime, "");
     copyNonConstructorProperties(newCue, previousCue.vttCue);
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
@@ -140,6 +132,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const newCue = { ...originalCue, idx, vttCue: newVttCue };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
+            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
             updateSearchMatches(dispatch, getState, idx);
             validateCue(dispatch, idx);
             callSaveTrack(dispatch, getState);
@@ -173,7 +166,7 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
         callSaveTrack(dispatch, getState);
     };
 
-export const addCue = (idx: number): AppThunk =>
+export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | null>>, getState): void => {
         const state: SubtitleEditState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
@@ -181,8 +174,15 @@ export const addCue = (idx: number): AppThunk =>
         const step = Math.min(timeGapLimit.maxGap, Constants.NEW_ADDED_CUE_DEFAULT_STEP);
         const cues = state.cues;
         const previousCue = cues[idx - 1] || Constants.DEFAULT_CUE;
-        const sourceCue = state.sourceCues[idx];
-        const cue = createAndAddCue(previousCue, step, sourceCue);
+        const startTime = sourceIndexes !== undefined
+            && sourceIndexes[0] !== undefined
+            && state.sourceCues[sourceIndexes[0]].vttCue.startTime >= previousCue.vttCue.endTime
+                ? state.sourceCues[sourceIndexes[0]].vttCue.startTime
+                : previousCue.vttCue.endTime;
+        const endTime = sourceIndexes && sourceIndexes.length > 0
+            ? state.sourceCues[sourceIndexes[sourceIndexes.length - 1]].vttCue.endTime
+            : previousCue.vttCue.endTime + step;
+        const cue = createAndAddCue(previousCue, startTime, endTime);
         const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
 
         if (!overlapCaptionsAllowed) {

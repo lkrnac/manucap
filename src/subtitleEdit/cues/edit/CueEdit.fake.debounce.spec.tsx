@@ -8,30 +8,33 @@ import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
+import { Provider } from "react-redux";
+import React from "react";
+import { mount } from "enzyme";
+import { AnyAction } from "redux";
+import { fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
+
 import { Character } from "../../shortcutConstants";
 import { CueDto, Language, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
-import { Provider } from "react-redux";
-import React from "react";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { mount } from "enzyme";
 import { MockedDebouncedFunction, removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { updateCues } from "../cuesListActions";
-import { AnyAction } from "redux";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { fireEvent, render } from "@testing-library/react";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
+import { CueActionsPanel } from "../CueActionsPanel";
 
 jest.mock("lodash", () => (
     {
@@ -72,7 +75,7 @@ describe("CueEdit", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="bg-white">
+                <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
                     <div
                         style={{
                             flex: "1 1 300px",
@@ -150,6 +153,7 @@ describe("CueEdit", () => {
                             unbindCueViewModeKeyboardShortcut={jest.fn()}
                         />
                     </div>
+                    <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                 </div>
             </Provider>
         );
@@ -696,7 +700,12 @@ describe("CueEdit", () => {
 
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} playerTime={1} />
+                <CueEdit
+                    index={0}
+                    cue={cue}
+                    playerTime={1}
+                    nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                />
             </Provider>
         );
 
@@ -712,7 +721,7 @@ describe("CueEdit", () => {
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
     });
 
-    it("escapes editing mode for last translation cue, where cue index is same last source cue index", () => {
+    it("adds cue when on ENTER for last translation cue, when there are no more source cues", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
@@ -731,11 +740,45 @@ describe("CueEdit", () => {
 
 
         // THEN
-        expect(testingStore.getState().cues.length).toEqual(1);
-        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
     });
 
     it("moves cue editing mode to next cue when ENTER is pressed on non-last", () => {
+        // GIVEN
+        const cues = [{ vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" }] as CueDto[];
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit
+                    index={0}
+                    cue={cues[0]}
+                    playerTime={1}
+                    nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+    });
+
+    it("created new cue on ENTER where next cue line/match doest have target cue", () => {
         // GIVEN
         const cues = [
             { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
@@ -745,19 +788,23 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         mount(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cues[0]} playerTime={1} />
+                <CueEdit
+                    index={0}
+                    cue={cues[0]}
+                    playerTime={1}
+                    nextCueLine={{ targetCues: [{ index: 1, cue: cues[1] }]}}
+                />
             </Provider>
         );
 
         // WHEN
-        simulant.fire(
-            document.documentElement, "keydown", { keyCode: Character.ENTER });
-
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(2);
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
+
 
     it("closes cue editing mode when ESCAPE is pressed", () => {
         // GIVEN
@@ -777,6 +824,45 @@ describe("CueEdit", () => {
         // THEN
         expect(testingStore.getState().cues.length).toEqual(1);
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
+    });
+
+    it("uses source cues times when new cue is inserted via + button", async () => {
+        // GIVEN
+        const sourceCues = [
+            { vttCue: new VTTCue(2.1, 2.5, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2.6, 2.8, "Source Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <Provider store={testingStore} >
+                    <CueEdit
+                        index={0}
+                        cue={cue}
+                        playerTime={1}
+                        nextCueLine={{
+                            sourceCues: [{ index: 0, cue: sourceCues[0] }, { index: 1, cue: sourceCues[1] }]
+                        }}
+                    />
+                </Provider>
+            </Provider>
+        );
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(3);
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2.1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.8);
     });
 
     it("edits previous cue ALT+SHIFT+ESCAPE is pressed", () => {
@@ -954,7 +1040,11 @@ describe("CueEdit", () => {
             // GIVEN
             const { container } = render(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={testingStore.getState().cues[0]} playerTime={1} />
+                    <CueEdit
+                        index={0}
+                        cue={testingStore.getState().cues[0]}
+                        playerTime={1}
+                    />
                 </Provider>
             );
 
@@ -978,7 +1068,11 @@ describe("CueEdit", () => {
             // GIVEN
             const { container } = render(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={testingStore.getState().cues[0]} playerTime={1} />
+                    <CueEdit
+                        index={0}
+                        cue={testingStore.getState().cues[0]}
+                        playerTime={1}
+                    />
                 </Provider>
             );
 
@@ -997,6 +1091,6 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(0);
         });
-
     });
+
 });

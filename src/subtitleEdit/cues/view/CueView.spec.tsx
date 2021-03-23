@@ -3,13 +3,16 @@ import "video.js"; // VTTCue definition
 import React from "react";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
+import { AnyAction } from "@reduxjs/toolkit";
 
-import { CueDto, Language, Track } from "../../model";
+import { CueDto, Language, Task, Track } from "../../model";
 import CueView from "./CueView";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
-import { AnyAction } from "@reduxjs/toolkit";
+import { updateTask } from "../../trackSlices";
+import { CueActionsPanel } from "../CueActionsPanel";
 
 let testingStore = createTestingStore();
 
@@ -23,7 +26,7 @@ describe("CueView", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="testingClassName">
+                <div style={{ display: "flex" }} className="testingClassName sbte-bottom-border sbte-click-cue-wrapper">
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -60,6 +63,7 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
+                    <div className="testingClassName sbte-left-border" style={{ minWidth: "52px" }} />
                 </div>
             </Provider>
         );
@@ -67,7 +71,16 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} className="testingClassName" showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    className="testingClassName"
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -76,13 +89,13 @@ describe("CueView", () => {
             .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
     });
 
-    it("renders", () => {
+    it("renders without actions panel", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }}>
+                <div style={{ display: "flex" }} className="sbte-bottom-border sbte-click-cue-wrapper">
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -119,6 +132,7 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
+                    <div className="sbte-left-border" style={{ minWidth: "52px" }} />
                 </div>
             </Provider>
         );
@@ -126,7 +140,84 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+    });
+
+    it("renders with actions panel", () => {
+        // GIVEN
+        const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+        const expectedNode = render(
+            <Provider store={testingStore}>
+                <div style={{ display: "flex" }} className="sbte-bottom-border sbte-click-cue-wrapper">
+                    <div
+                        className="sbte-cue-line-left-section"
+                        style={{
+                            flex: "1 1 300px",
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingLeft: "10px",
+                            paddingTop: "5px",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ display: "flex", flexDirection:"column" }}>
+                            <div>00:00:01.000</div>
+                            <div>00:00:02.000</div>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
+                            <div className="sbte-small-font">Dialogue</div>
+                            <div className="sbte-small-font" style={{ paddingRight: "10px" }}>↓↓</div>
+                        </div>
+                    </div>
+                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                        <div
+                            className="sbte-cue-editor"
+                            style={{
+                                flexBasis: "50%",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                paddingBottom: "5px",
+                                minHeight: "54px",
+                                height: "100%",
+                                width: "100%"
+                            }}
+                        >
+                            Caption Line 1
+                        </div>
+                    </div>
+                    <CueActionsPanel index={1} cue={cue} isEdit={false} sourceCueIndexes={[]} />
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    showActionsPanel
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -170,11 +261,14 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
-                    index={1}
+                    targetCueIndex={1}
                     cue={cue}
                     playerTime={1}
                     showGlossaryTerms
                     languageDirection={testingTrack.language.direction}
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
                 />
             </Provider>
         );
@@ -207,7 +301,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -242,7 +344,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -277,7 +387,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -312,7 +430,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -345,7 +471,16 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} hideText showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    hideText
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -373,7 +508,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -399,7 +542,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -424,7 +575,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms={false} />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms={false}
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -445,7 +604,15 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -468,7 +635,15 @@ describe("CueView", () => {
         } as CueDto;
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -497,7 +672,15 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
@@ -525,11 +708,86 @@ describe("CueView", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueView index={1} cue={cue} playerTime={1} showGlossaryTerms />
+                <CueView
+                    targetCueIndex={1}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
             </Provider>
         );
 
         // THEN
         expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
-            .toEqual(expectedSourceCueContent);    });
+            .toEqual(expectedSourceCueContent);
+    });
+
+    it("open cue for editing if clicked for existing one", async () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    targetCueIndex={6}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    targetCuesLength={8}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
+            </Provider>
+        );
+        const testingTask = {
+            type: "TASK_CAPTION",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM",
+            editDisabled: false
+        } as Task;
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.container.querySelector("div") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().editingCueIndex).toEqual(6);
+    });
+
+    it("doesn't propagate click event on actions panel to parent DOM node", async () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "some text"),
+            cueCategory: "DIALOGUE"
+        } as CueDto;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    targetCueIndex={0}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms
+                    showActionsPanel
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        await act(async() => {
+            fireEvent.click(actualNode.container.querySelector(".sbte-actions-panel") as Element);
+        });
+
+        // THEN
+        expect(testingStore.getState().cues).toHaveLength(0);
+    });
 });

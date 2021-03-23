@@ -5,52 +5,46 @@ import ReactSmartScroll from "@dotsub/react-smart-scroll";
 
 import { isDirectTranslationTrack } from "../subtitleEditUtils";
 import AddCueLineButton from "./edit/AddCueLineButton";
-import { CueDto, CueWithSource, ScrollPosition, Track } from "../model";
+import { ScrollPosition, Track } from "../model";
 import CueLine from "./CueLine";
 import { addCue } from "./cuesListActions";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../shortcutConstants";
 import { changeScrollPosition } from "./cuesListScrollSlice";
-import { updateEditingCueIndex } from "./edit/cueEditorSlices";
+import { matchCuesByTime } from "./cuesListTimeMatching";
 
 interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
 }
-
 const getScrollCueIndex = (
-    cues: CueWithSource[],
-    editingCueIndex: number,
+    matchedCuesSize: number,
+    editingFocusInMap: number,
     scrollPosition?: ScrollPosition
 ): number | undefined => {
     if (scrollPosition === ScrollPosition.FIRST) {
         return 0;
     }
     if (scrollPosition === ScrollPosition.LAST) {
-        return cues.length - 1;
+        return matchedCuesSize - 1;
     }
     if (scrollPosition === ScrollPosition.CURRENT) {
-        return editingCueIndex;
+        return editingFocusInMap;
     }
     return undefined; // out of range value, because need to trigger change of ReactSmartScroll.startAt
 };
 
 const CuesList = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const cues = useSelector((state: SubtitleEditState) => state.cues);
-    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
-    const drivingCues = sourceCues.length > 0
-        ? sourceCues
-        : cues;
-    const cuesWithSource = drivingCues.map((cue: CueDto, idx: number): CueWithSource =>
-        ({ cue: (cues[idx] === cue ? cue : cues[idx]), sourceCue: sourceCues[idx] }));
+    const targetCuesArray = useSelector((state: SubtitleEditState) => state.cues);
+    const sourceCuesArray = useSelector((state: SubtitleEditState) => state.sourceCues);
+    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const { editingFocusIndex, matchedCues } = matchCuesByTime(targetCuesArray, sourceCuesArray, editingCueIndex);
 
     const scrollPosition = useSelector((state: SubtitleEditState) => state.scrollPosition);
-    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
-    const startAt = getScrollCueIndex(cuesWithSource, editingCueIndex, scrollPosition);
-    const rowHeight = sourceCues.length > 0
+    const startAt = getScrollCueIndex(matchedCues.length, editingFocusIndex, scrollPosition);
+    const rowHeight = sourceCuesArray.length > 0
         ? 180 // This is bigger than real translation view cue, because if there is at least one
               // editing cue, bigger rowHeight scrolls properly to bottom
         : 81; // Value is taken from Elements > Computed from browser DEV tools
@@ -63,13 +57,13 @@ const CuesList = (props: Props): ReactElement => {
             dispatch(changeScrollPosition(ScrollPosition.NONE));
         }
     );
-    const showStartCaptioning = drivingCues.length === 0
-        && (props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack));
+    const withoutSourceCues = props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack);
+    const showStartCaptioning = matchedCues.length === 0;
     useEffect(
         () => {
             Mousetrap.bind([KeyCombination.ENTER], () => {
                 if (showStartCaptioning) {
-                    dispatch(addCue(0));
+                    dispatch(addCue(0, []));
                 }
                 return false;
             });
@@ -81,23 +75,21 @@ const CuesList = (props: Props): ReactElement => {
         <>
             {
                 showStartCaptioning
-                    ? <AddCueLineButton text="Start Captioning" cueIndex={-1} />
+                    ? <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
                     : null
             }
             <ReactSmartScroll
                 className="sbte-smart-scroll"
-                data={cuesWithSource}
+                data={matchedCues}
                 row={CueLine}
-                rowProps={{ playerTime: props.currentPlayerTime, cuesLength: cues.length }}
+                rowProps={{
+                    playerTime: props.currentPlayerTime,
+                    targetCuesLength: targetCuesArray.length,
+                    withoutSourceCues,
+                    matchedCues
+                }}
                 rowHeight={rowHeight}
                 startAt={startAt}
-                onClick={(idx: number): void => {
-                    if (idx >= cues.length) {
-                        dispatch(addCue(cues.length));
-                    } else if (editingTask && !editingTask.editDisabled) {
-                        dispatch(updateEditingCueIndex(idx));
-                    }
-                }}
             />
         </>
     );

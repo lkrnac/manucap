@@ -1,30 +1,31 @@
 import "../testUtils/initBrowserEnvironment";
+import React  from "react";
+import { Provider } from "react-redux";
+import { AnyAction } from "@reduxjs/toolkit";
+import Card from "react-bootstrap/Card";
+import Accordion from "react-bootstrap/Accordion";
+import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+import { mount } from "enzyme";
+import { fireEvent, render } from "@testing-library/react";
+import ReactDOM from "react-dom";
+
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
-import { AnyAction } from "@reduxjs/toolkit";
 import CueLine from "./cues/CueLine";
-import { Provider } from "react-redux";
-import React from "react";
 import SubtitleEdit from "./SubtitleEdit";
 import { SubtitleSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
-import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
-import { fireEvent, render } from "@testing-library/react";
-import ReactDOM from "react-dom";
 import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
-import Card from "react-bootstrap/Card";
-import Accordion from "react-bootstrap/Accordion";
-import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import KeyboardShortcuts from "./toolbox/KeyboardShortcuts";
 import SubtitleSpecificationsButton from "./toolbox/SubtitleSpecificationsButton";
 import ShiftTimeButton from "./toolbox/shift/ShiftTimeButton";
@@ -36,7 +37,8 @@ import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 
 jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
+    debounce: (callback: Function): Function => callback,
+    isEmpty: jest.requireActual("lodash/isEmpty")
 }));
 
 let testingStore = createTestingStore();
@@ -45,6 +47,16 @@ const cues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
+
+const cuesWithIndexes = [
+    { index: 0, cue: cues[0] },
+    { index: 1, cue: cues[1] },
+];
+
+const matchedCues = [
+    { targetCues: [cuesWithIndexes[0]], sourceCues: []},
+    { targetCues: [cuesWithIndexes[1]], sourceCues: []},
+];
 
 const testingTrack = {
     type: "CAPTION",
@@ -138,16 +150,26 @@ describe("SubtitleEdit", () => {
                             <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                                     <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
-                                        data={{ cue: cues[0] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
                                         rowIndex={1}
-                                        data={{ cue: cues[1] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
@@ -264,6 +286,7 @@ describe("SubtitleEdit", () => {
                             <AddCueLineButton
                                 text="Start Captioning"
                                 cueIndex={-1}
+                                sourceCueIndexes={[]}
                             />
                             <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
@@ -499,15 +522,25 @@ describe("SubtitleEdit", () => {
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                                     <CueLine
                                         rowIndex={0}
-                                        data={{ cue: cues[0] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
                                         rowIndex={1}
-                                        data={{ cue: cues[1] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
@@ -641,15 +674,25 @@ describe("SubtitleEdit", () => {
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                                     <CueLine
                                         rowIndex={0}
-                                        data={{ cue: cues[0] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />
                                     <CueLine
                                         rowIndex={1}
-                                        data={{ cue: cues[1] }}
-                                        rowProps={{ playerTime: 0, cuesLength: 2 }}
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
                                     />

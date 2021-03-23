@@ -6,35 +6,28 @@ import PlayCueButton from "./PlayCueButton";
 
 interface Props {
     index: number;
-    editingCueIndex: number;
-    cue?: CueDto;
-    sourceCue?: CueDto;
-    lastCue?: boolean;
+    cue: CueDto;
+    sourceCueIndexes: number[];
+    isEdit: boolean;
 }
 
 export const CueActionsPanel = (props: Props): ReactElement => {
     return (
         <div
             style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-            className={"sbte-gray-100-background sbte-left-border"}
+            className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
             onClick={(event: React.MouseEvent<HTMLElement>): void => event.stopPropagation()}
         >
             {
-                props.editingCueIndex === props.index && props.sourceCue === undefined
+                props.isEdit
                     ? <DeleteCueLineButton cueIndex={props.index} />
                     : <div />
             }
+            <PlayCueButton cue={props.cue} />
             {
-                props.cue
-                    ? <PlayCueButton cue={props.cue} />
+                props.isEdit
+                    ? <AddCueLineButton cueIndex={props.index} sourceCueIndexes={props.sourceCueIndexes} />
                     : <div />
-            }
-            {
-                props.editingCueIndex === props.index && props.sourceCue === undefined
-                    // @ts-ignore If cue is undefined, sourceCue is passed in (ensured by SubtitleEdit tests)
-                    ? <AddCueLineButton cueIndex={props.index} cue={props.cue} />
-                    : <div />
-
             }
         </div>
     );

@@ -14,24 +14,54 @@ import "./localTesting.scss";
 import "draft-js/dist/Draft.css";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 
+// ################## TESTING DATA TWEAKS ##############################
 const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
 // const language = { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language;
 
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
+const TIME_MATCH_TESTING = false;
+// ################## TESTING DATA TWEAKS - END ########################
+
+const sourceLanguage = { id: "sk", name: "Slovak", direction: "LTR" } as Language;
+const MIN_DURATION_SECONDS = 0.5;
+const START_SHIFT = TIME_MATCH_TESTING ? 30 : 0;
+
+const randomTime = (max: number): number => MIN_DURATION_SECONDS + Math.random() * (max - MIN_DURATION_SECONDS);
+
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
-    // #############################################################################################
-    // #################### Comment this out if you need to test Captioning mode ###################
-    // #############################################################################################
+
+    // ################################## Source Cues ###########################################
     useEffect(() => {
-        // @ts-ignore since it can manually be updated
+        // @ts-ignore
         if (trackType === "TRANSLATION") {
-            const cues = [] as CueDto[];
+            const sourceCues = [] as CueDto[];
+
+            if (TIME_MATCH_TESTING) {
+                sourceCues.push({ vttCue: new VTTCue(0, 1, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(1, 2, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(2, 3, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(3, 6, "text"), cueCategory: "DIALOGUE" });
+
+                sourceCues.push({ vttCue: new VTTCue(7.673, 10.208, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(10.746, 11.782, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(12.504, 14.768, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(15.169, 17.110, "text"), cueCategory: "DIALOGUE" });
+
+                sourceCues.push({ vttCue: new VTTCue(18.954, 20.838, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(21.674, 23.656, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(24.024, 24.504, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({ vttCue: new VTTCue(25.383, 28.115, "text"), cueCategory: "DIALOGUE" });
+            }
+
+            let endTime = START_SHIFT;
             for (let idx = 0; idx < 9999; idx++) {
-                cues.push({
-                    vttCue: new VTTCue(idx * 3, (idx + 1) * 3, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
+                const randomStart = TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3;
+                const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
+                sourceCues.push({
+                   vttCue: new VTTCue(randomStart, randomEnd, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
                     glossaryMatches: [
                         { source: "text", replacements: ["text replacement1", "text replacement2"]},
@@ -39,21 +69,65 @@ const TestApp = (): ReactElement => {
                     ]
                 });
             }
+
+
             setTimeout( // this simulates latency caused by server roundtrip
 
-                () => dispatch(updateSourceCues(cues)),
+                () => dispatch(updateSourceCues(sourceCues)),
                 500
             );
         }
     });
 
-    // #############################################################################################
+    // ################################## Target Cues ###########################################
+    useEffect(() => {
+        const targetCues = [] as CueDto[];
+        if (TIME_MATCH_TESTING) {
+            targetCues.push({ vttCue: new VTTCue(0, 3, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(3, 4, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(4, 5, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(5, 6, "text"), cueCategory: "DIALOGUE" });
 
+            targetCues.push({ vttCue: new VTTCue(7.087, 10.048, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(10.411, 11.231, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(11.240, 13.985, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(14.380, 16.998, "text"), cueCategory: "DIALOGUE" });
+
+            targetCues.push({ vttCue: new VTTCue(20.140, 21.494, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(21.979, 22.055, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(22.414, 25.209, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({ vttCue: new VTTCue(26.198, 27.412, "text"), cueCategory: "DIALOGUE" });
+        }
+
+        let endTime = START_SHIFT;
+        for (let idx = 0; idx < 9999; idx++) {
+            const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
+            let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
+            // @ts-ignore since it can be updated manually
+            if (language.id === "ar-SA") {
+                text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
+            }
+            const randomStart = (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
+            const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
+            targetCues.push({
+                vttCue: new VTTCue(randomStart, randomEnd, text),
+                cueCategory: "DIALOGUE"
+            });
+        }
+
+        setTimeout( // this simulates latency caused by server roundtrip
+            () => dispatch(updateCues(targetCues)),
+            500
+        );
+    });
+
+    // ################################## Track ###########################################
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateEditingTrack({
                 type: trackType,
-                language: language as Language,
+                language: language,
+                sourceLanguage,
                 default: true,
                 mediaTitle: "This is the video title",
                 mediaLength: 4250,
@@ -63,25 +137,8 @@ const TestApp = (): ReactElement => {
             500
         );
     });
-    useEffect(() => {
-        const cues = [] as CueDto[];
-        for (let idx = 0; idx < 9999; idx++) {
-            const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
-            let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
-            // @ts-ignore since it can be updated manually
-            if (language.id === "ar-SA") {
-                text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
-            }
-            cues.push({
-                vttCue: new VTTCue(idx * 3, (idx + 1) * 3, text),
-                cueCategory: "DIALOGUE"
-            });
-        }
-        setTimeout( // this simulates latency caused by server roundtrip
-            () => dispatch(updateCues(cues)),
-            500
-        );
-    });
+
+    // ################################## Task ###########################################
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(updateTask({
@@ -93,6 +150,8 @@ const TestApp = (): ReactElement => {
             500
         );
     });
+
+    // ################################## Subtitle Specs ###########################################
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
             () => dispatch(readSubtitleSpecification({
@@ -106,7 +165,7 @@ const TestApp = (): ReactElement => {
                 dialogueStyle: "DOUBLE_CHEVRON",
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 40,
-                minCaptionDurationInMillis: 500,
+                minCaptionDurationInMillis: MIN_DURATION_SECONDS * 1000,
                 maxCaptionDurationInMillis: 4000,
                 comments: "Media comments, please click [here](https://dotsub.com)",
                 mediaNotes: "Media notes, please click [here](https://dotsub.com)"

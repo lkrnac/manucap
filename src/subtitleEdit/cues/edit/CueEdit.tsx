@@ -1,4 +1,4 @@
-import { CueCategory, CueDto } from "../../model";
+import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import { addCue, updateCueCategory, updateVttCue } from "../cuesListActions";
@@ -12,29 +12,32 @@ import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { playVideoSection } from "../../player/playbackSlices";
 import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
+import { CueActionsPanel } from "../CueActionsPanel";
 
-interface Props {
+export interface CueEditProps {
     index: number;
     cue: CueDto;
     playerTime: number;
+    nextCueLine?: CueLineDto;
 }
 
-const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: Props,
+const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEditProps,
                                     startTime: number, endTime: number, editUuid?: string): void => {
     const newCue = new VTTCue(startTime, endTime, props.cue.vttCue.text);
     copyNonConstructorProperties(newCue, props.cue.vttCue);
     dispatch(updateVttCue(props.index, newCue, editUuid));
 };
 
-const handleEnterForLastCue = (sourceCues: CueDto[], index: number): AppThunk => {
-    return sourceCues.length === 0 || sourceCues.length > index + 1
-        ? addCue(index + 1)
-        : updateEditingCueIndex(-1);
-};
+const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
+    ? cues.map(sourceCue => sourceCue.index)
+    : [];
 
-const CueEdit = (props: Props): ReactElement => {
+const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
     const validationError = useSelector((state: SubtitleEditState) => state.validationError);
+    const nextSourceCuesIndexes = props.nextCueLine
+        ? getCueIndexes(props.nextCueLine.sourceCues)
+        : [];
 
     useEffect(
         () => {
@@ -45,9 +48,7 @@ const CueEdit = (props: Props): ReactElement => {
             }
         }, [ dispatch, validationError ]
     );
-
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
-    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
 
     const unbindCueViewModeKeyboardShortcut =(): void => {
         Mousetrap.unbind([KeyCombination.ESCAPE, KeyCombination.ENTER]);
@@ -57,8 +58,11 @@ const CueEdit = (props: Props): ReactElement => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
             return props.index === cuesCount - 1
-                ? dispatch(handleEnterForLastCue(sourceCues, props.index))
-                : dispatch(updateEditingCueIndex(props.index + 1));
+                || !props.nextCueLine
+                || !props.nextCueLine.targetCues
+                || props.nextCueLine.targetCues.length === 0
+                    ? dispatch(addCue(props.index + 1, nextSourceCuesIndexes))
+                    : dispatch(updateEditingCueIndex(props.index + 1));
         });
     };
 
@@ -91,7 +95,7 @@ const CueEdit = (props: Props): ReactElement => {
     const className = validationError ? "blink-error-bg" : "bg-white";
 
     return (
-        <div style={{ display: "flex" }} className={className}>
+        <div style={{ display: "flex" }} className={"sbte-bottom-border " + className}>
             <div
                 style={{
                     flex: "1 1 300px",
@@ -152,6 +156,12 @@ const CueEdit = (props: Props): ReactElement => {
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcut}
                 />
             </div>
+            <CueActionsPanel
+                index={props.index}
+                cue={props.cue}
+                isEdit
+                sourceCueIndexes={nextSourceCuesIndexes}
+            />
         </div>
     );
 };

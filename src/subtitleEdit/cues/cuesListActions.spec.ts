@@ -3,6 +3,7 @@ import { EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
 import { v4 as uuidv4 } from "uuid";
+import { act } from "react-dom/test-utils";
 
 import {
     addCue,
@@ -26,7 +27,6 @@ import { Replacement, SpellCheck } from "./spellCheck/model";
 import { setSpellCheckDomain } from "../spellcheckerSettingsSlice";
 import { updateSourceCues } from "./view/sourceCueSlices";
 import { updateEditingCueIndex } from "./edit/cueEditorSlices";
-import { act } from "react-dom/test-utils";
 
 const testingTrack = {
     type: "CAPTION",
@@ -71,11 +71,12 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.5);
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(testingStore.getState().lastCueChange).toBeUndefined;
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
             expect(testingStore.getState().lastCueChange.index).toEqual(1);
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
 
         it("preserves all other existing cue parameters", () => {
@@ -104,7 +105,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(testingStore.getState().lastCueChange).toBeUndefined;
+            expect(testingStore.getState().lastCueChange).toBeNull();
         });
 
         it("doesn't update top level cue when not existing already in the array", () => {
@@ -114,7 +115,7 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(0);
             expect(testingStore.getState().validationError).toEqual(false);
-            expect(testingStore.getState().lastCueChange).toBeUndefined;
+            expect(testingStore.getState().lastCueChange).toBeNull();
         });
 
         describe("spell checking", () => {
@@ -1279,114 +1280,6 @@ describe("cueSlices", () => {
     });
 
     describe("addCue", () => {
-        it("adds first cue to the cue array", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues([]) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(
-                addCue(0) as {} as AnyAction
-            );
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
-            expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
-            expect(testingStore.getState().cues[0].editUuid).not.toBeEmpty;
-            expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
-        it("record cues change when cue is added", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues([]) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(addCue(0) as {} as AnyAction);
-
-            // THEN
-            const lastCueChange = testingStore.getState().lastCueChange;
-            expect(lastCueChange.changeType).toEqual("ADD");
-            expect(lastCueChange.index).toEqual(0);
-            expect(lastCueChange.vttCue.text).toEqual("");
-            expect(lastCueChange.vttCue.startTime).toEqual(0);
-            expect(lastCueChange.vttCue.endTime).toEqual(3);
-        });
-
-        it("adds cue to the end of the cue array", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(
-                addCue(3) as {} as AnyAction
-            );
-
-            // THEN
-            expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(4, 6, "Caption Line 3"));
-            expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(6);
-            expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(9);
-            expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
-            expect(testingStore.getState().editingCueIndex).toEqual(3);
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
-        it("add cue in middle of cue array cues", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues([
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            ] as CueDto[]) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(addCue(1) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4.225);
-            expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
-        it("doesn't add cue in middle of cue array cues if there's overlap", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues([
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            ] as CueDto[]) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(addCue(1) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().validationError).toEqual(true);
-        });
-
-        it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues([
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            ] as CueDto[]) as {} as AnyAction);
-
-            // WHEN
-            testingTrack.overlapEnabled = true;
-            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-            testingStore.dispatch(addCue(1) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(3);
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().validationError).toEqual(false);
-        });
-
         it("resets editor states map in Redux", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -1395,7 +1288,7 @@ describe("cueSlices", () => {
 
             // WHEN
             testingStore.dispatch(
-                addCue(3) as {} as AnyAction
+                addCue(3, []) as {} as AnyAction
             );
 
             // THEN
@@ -1407,10 +1300,267 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(addCue(0) as {} as AnyAction);
+            testingStore.dispatch(addCue(0, []) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        describe("without source cues", () => {
+            it("adds first cue to the cue array", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(0, []) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
+                expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+                expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
+                expect(testingStore.getState().editingCueIndex).toEqual(0);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("record cues change when cue is added", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(addCue(0, []) as {} as AnyAction);
+
+                // THEN
+                const lastCueChange = testingStore.getState().lastCueChange;
+                expect(lastCueChange.changeType).toEqual("ADD");
+                expect(lastCueChange.index).toEqual(0);
+                expect(lastCueChange.vttCue.text).toEqual("");
+                expect(lastCueChange.vttCue.startTime).toEqual(0);
+                expect(lastCueChange.vttCue.endTime).toEqual(3);
+            });
+
+            it("adds cue to the end of the cue array", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(3, []) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(4, 6, "Caption Line 3"));
+                expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(6);
+                expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(9);
+                expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
+                expect(testingStore.getState().editingCueIndex).toEqual(3);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("add cue in middle of cue array cues", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(addCue(1, []) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4.225);
+                expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
+                expect(testingStore.getState().editingCueIndex).toEqual(1);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("doesn't add cue in middle of cue array cues if there's overlap", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(addCue(1, []) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
+                testingStore.dispatch(addCue(1, []) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+        });
+
+        describe("with source cues", () => {
+            it("adds first cue to the cue array", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([]) as {} as AnyAction);
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(addCue(0, [0, 1]) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+                expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
+                expect(testingStore.getState().editingCueIndex).toEqual(0);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("adds cue to the end of the cue array", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const sourceCues = [
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                    {
+                        vttCue: new VTTCue(4, 6, "Source Line 3"),
+                        cueCategory: "ONSCREEN_TEXT",
+                        spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                    },
+                ] as CueDto[];
+                testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(3, []) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(4, 6, "Caption Line 3"));
+                expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(6);
+                expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(9);
+                expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
+                expect(testingStore.getState().editingCueIndex).toEqual(3);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("add cue in middle of cue array cues with one source cue", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(4.225, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(4.225, 5, "Source Line 3"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(addCue(1, [1]) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
+                expect(testingStore.getState().editingCueIndex).toEqual(1);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("add cue in middle of cue array cues with two source cues", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(4.225, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(3, 3.5, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(3.5, 4, "Source Line 3"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(addCue(1, [1, 2]) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
+                expect(testingStore.getState().editingCueIndex).toEqual(1);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 3.1, "Source Line 3"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
+                testingStore.dispatch(addCue(1, [1, 2]) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(3);
+                // TODo refactor towards this expectation
+                // expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                // expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3.1);
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(5);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("uses source cues times for target cue with index 0", () => {
+                // GIVEN
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }
+                ]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(0, [0]) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
+                expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
+                expect(testingStore.getState().editingCueIndex).toEqual(0);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
         });
 
         describe("range prevention", () => {
@@ -1420,7 +1570,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue(1) as {} as AnyAction
+                    addCue(1, []) as {} as AnyAction
                 );
 
                 // THEN
@@ -1442,7 +1592,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue(1) as {} as AnyAction
+                    addCue(1, []) as {} as AnyAction
                 );
 
                 // THEN
@@ -1464,7 +1614,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue(2) as {} as AnyAction
+                    addCue(2, []) as {} as AnyAction
                 );
 
                 // THEN
@@ -1485,7 +1635,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue(2) as {} as AnyAction
+                    addCue(2, []) as {} as AnyAction
                 );
 
                 // THEN
@@ -1500,7 +1650,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue(2) as {} as AnyAction
+                    addCue(2, []) as {} as AnyAction
                 );
 
                 // THEN
@@ -1533,7 +1683,7 @@ describe("cueSlices", () => {
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[]) as {} as AnyAction);
-            testingStore.dispatch(addCue(1) as {} as AnyAction);
+            testingStore.dispatch(addCue(1, []) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(deleteCue(1) as {} as AnyAction);
@@ -1615,11 +1765,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(expectedCues[0].vttCue);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues[0].corrupted).toEqual(false);
-            expect(testingStore.getState().cues[0].editUuid).not.toBeEmpty;
+            expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().cues[1].vttCue).toEqual(expectedCues[1].vttCue);
             expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[1].corrupted).toEqual(false);
-            expect(testingStore.getState().cues[1].editUuid).not.toBeEmpty;
+            expect(testingStore.getState().cues[1].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
@@ -1637,7 +1787,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue).toEqual(replacementCues[0].vttCue);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues[0].corrupted).toEqual(false);
-            expect(testingStore.getState().cues[0].editUuid).not.toBeEmpty;
+            expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 

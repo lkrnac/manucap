@@ -1,14 +1,15 @@
 import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import AddCueLineButton from "./edit/AddCueLineButton";
+import React from "react";
 import { AnyAction } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import { render, fireEvent } from "@testing-library/react";
+
+import AddCueLineButton from "./edit/AddCueLineButton";
 import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto, Track } from "../model";
 import DeleteCueLineButton from "./edit/DeleteCueLineButton";
 import PlayCueButton from "./PlayCueButton";
-import { Provider } from "react-redux";
-import React from "react";
-import { mount } from "enzyme";
 import { removeDraftJsDynamicValues } from "../../testUtils/testUtils";
 import { updateCues } from "./cuesListActions";
 import { setSaveTrack } from "./saveSlices";
@@ -24,7 +25,6 @@ const cues = [
     { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
-const sourceCue = { vttCue: new VTTCue(0, 0, "Source Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 let testingStore = createTestingStore();
 
 describe("CueActionsPanel", () => {
@@ -38,39 +38,39 @@ describe("CueActionsPanel", () => {
 
     it("renders for caption cue in edit mode", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                    className="sbte-gray-100-background sbte-left-border"
+                    className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
                 >
                     <DeleteCueLineButton cueIndex={1} />
                     <PlayCueButton cue={cues[1]} />
-                    <AddCueLineButton cueIndex={1} />
+                    <AddCueLineButton cueIndex={1} sourceCueIndexes={[]} />
                 </div>
             </Provider>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
+                <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
 
     });
 
     it("renders for caption cue in view mode", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                    className="sbte-gray-100-background sbte-left-border"
+                    className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
                 >
                     <div />
                     <PlayCueButton cue={cues[1]} />
@@ -80,137 +80,29 @@ describe("CueActionsPanel", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={-1} />
+                <CueActionsPanel index={1} cue={cues[1]} isEdit={false} sourceCueIndexes={[]} />
             </Provider>
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    });
-
-    it("renders for translation cue in view mode", () => {
-        // GIVEN
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <div
-                    style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                    className="sbte-gray-100-background sbte-left-border"
-                >
-                    <div />
-                    <PlayCueButton cue={cues[1]} />
-                    <div />
-                </div>
-            </Provider>
-        );
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} sourceCue={sourceCue} editingCueIndex={-1} />
-            </Provider>
-        );
-
-        // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    });
-
-    it("renders for middle translation cue in edit mode", () => {
-        // GIVEN
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <div
-                    style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                    className="sbte-gray-100-background sbte-left-border"
-                >
-                    <div />
-                    <PlayCueButton cue={cues[1]} />
-                    <div />
-                </div>
-            </Provider>
-        );
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} sourceCue={sourceCue} editingCueIndex={1} />
-            </Provider>
-        );
-
-        // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    });
-
-    it("renders for last translation cue in edit mode", () => {
-        // GIVEN
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <div
-                    style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                    className="sbte-gray-100-background sbte-left-border"
-                >
-                    <div />
-                    <PlayCueButton cue={cues[1]} />
-                    <div />
-                </div>
-            </Provider>
-        );
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} sourceCue={sourceCue} editingCueIndex={1} lastCue />
-            </Provider>
-        );
-
-        // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    });
-
-    it("renders for empty translation cue", () => {
-        // GIVEN
-        const expectedNode = mount(
-            <Provider store={testingStore}>
-                <div
-                    style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                    className="sbte-gray-100-background sbte-left-border"
-                >
-                    <div />
-                    <div />
-                    <div />
-                </div>
-            </Provider>
-        );
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueActionsPanel index={1} sourceCue={sourceCue} editingCueIndex={-1} />
-            </Provider>
-        );
-
-        // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html()))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
     });
 
     it("opens next cue line for editing when add button is clicked", () => {
         // GIVEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
+                <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-add-cue-button").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().editingCueIndex).toEqual(2);
@@ -223,15 +115,14 @@ describe("CueActionsPanel", () => {
             { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={0} cue={cues[0]} editingCueIndex={0} />
+                <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
-        actualNode.update();
 
         // WHEN
-        actualNode.find(".sbte-delete-cue-button").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".sbte-delete-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(1);
@@ -243,33 +134,17 @@ describe("CueActionsPanel", () => {
 
     it("calls saveTrack in redux store when delete button is clicked", () => {
         // GIVEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
-                <CueActionsPanel index={1} cue={cues[1]} editingCueIndex={1} />
+                <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
         saveTrack.mockReset();
 
         // WHEN
-        actualNode.find(".sbte-delete-cue-button").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".sbte-delete-cue-button") as Element);
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
-    });
-
-    it("doesn't propagate click event to parent DOM nodes", () => {
-        // GIVEN
-        const fakeEvent = { stopPropagation: jest.fn() };
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueActionsPanel index={0} cue={cues[0]} editingCueIndex={0} />
-            </Provider>
-        );
-
-        // WHEN
-        actualNode.simulate("click", fakeEvent);
-
-        // THEN
-        expect(fakeEvent.stopPropagation).toBeCalled();
     });
 });
