@@ -104,7 +104,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
                                     playerTime={props.rowProps.playerTime}
-                                    className={captionClassName}
+                                    className={`${captionClassName} sbte-source-cue`}
                                     showGlossaryTerms={showGlossaryTerms}
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
                                     sourceCuesIndexes={sourceCuesIndexes}
@@ -154,7 +154,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         cue={targetCue.cue}
                                         targetCuesLength={props.rowProps.targetCuesLength}
                                         playerTime={props.rowProps.playerTime}
-                                        className={captionClassName}
+                                        className={`${captionClassName} sbte-target-cue`}
                                         showGlossaryTerms={false}
                                         showActionsPanel
                                         languageDirection={editingTrack?.language.direction}
