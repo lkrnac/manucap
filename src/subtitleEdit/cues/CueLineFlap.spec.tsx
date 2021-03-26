@@ -35,6 +35,17 @@ describe("CueLineFlap", () => {
                         marginRight: "auto",
                         left: "0",
                         right: "0",
+                        bottom: "30px",
+                        fontSize: "14px"
+                    }}
+                />
+                <div
+                    style={{
+                        position: "absolute",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        left: "0",
+                        right: "0",
                         bottom: "10px",
                         fontSize: "14px"
                     }}
@@ -82,6 +93,17 @@ describe("CueLineFlap", () => {
                         marginRight: "auto",
                         left: "0",
                         right: "0",
+                        bottom: "30px",
+                        fontSize: "14px"
+                    }}
+                />
+                <div
+                    style={{
+                        position: "absolute",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        left: "0",
+                        right: "0",
                         bottom: "10px",
                         fontSize: "14px"
                     }}
@@ -95,6 +117,67 @@ describe("CueLineFlap", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders good cue and edit disabled line", () => {
+        // GIVEN
+        const expectedNode = render(
+            <div
+                className="sbte-cue-line-flap-good"
+                style={{
+                    textAlign: "center",
+                    width: "30px",
+                    color: "white",
+                    position: "relative"
+                }}
+            >
+                <div
+                    style={{
+                        paddingTop: "10px",
+                        fontSize: "11px",
+                        fontWeight: "bold"
+                    }}
+                >
+                    1
+                </div>
+                <div
+                    style={{
+                        position: "absolute",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        left: "0",
+                        right: "0",
+                        bottom: "30px",
+                        fontSize: "14px"
+                    }}
+                >
+                    <i className="fa fa-lock" />
+                </div>
+                <div
+                    style={{
+                        position: "absolute",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        left: "0",
+                        right: "0",
+                        bottom: "10px",
+                        fontSize: "14px"
+                    }}
+                >
+                    <i className="fa fa-check" />
+                </div>
+            </div>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} editDisabled />
             </Provider>
         );
 
@@ -130,6 +213,17 @@ describe("CueLineFlap", () => {
                         marginRight: "auto",
                         left: "0",
                         right: "0",
+                        bottom: "30px",
+                        fontSize: "14px"
+                    }}
+                />
+                <div
+                    style={{
+                        position: "absolute",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        left: "0",
+                        right: "0",
                         bottom: "10px",
                         fontSize: "14px"
                     }}
@@ -143,6 +237,67 @@ describe("CueLineFlap", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders corrupted and edit disabled cue line", () => {
+        // GIVEN
+        const expectedNode = render(
+            <div
+                className="sbte-cue-line-flap-error"
+                style={{
+                    textAlign: "center",
+                    width: "30px",
+                    color: "white",
+                    position: "relative"
+                }}
+            >
+                <div
+                    style={{
+                        paddingTop: "10px",
+                        fontSize: "11px",
+                        fontWeight: "bold"
+                    }}
+                >
+                    1
+                </div>
+                <div
+                    style={{
+                        position: "absolute",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        left: "0",
+                        right: "0",
+                        bottom: "30px",
+                        fontSize: "14px"
+                    }}
+                >
+                    <i className="fa fa-lock" />
+                </div>
+                <div
+                    style={{
+                        position: "absolute",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        left: "0",
+                        right: "0",
+                        bottom: "10px",
+                        fontSize: "14px"
+                    }}
+                >
+                    <i className="fas fa-exclamation-triangle" />
+                </div>
+            </div>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} editDisabled />
             </Provider>
         );
 
