@@ -53,6 +53,20 @@ const findCueLineState = (props: CueLineProps): CueLineState => {
         : CueLineState.NONE;
 };
 
+const hasEditDisabledCues = (cueDtos?: CueDtoWithIndex[]): boolean => {
+    if (cueDtos && cueDtos.length > 0) {
+        return cueDtos
+            .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.editDisabled === true)
+            .reduce((editDisabled1: boolean, editDisabled2: boolean): boolean => editDisabled1 || editDisabled2);
+    }
+    return false;
+};
+
+const findCueLineEditDisabled = (props: CueLineProps): boolean | undefined => {
+    const cueLine = props.rowProps.matchedCues[props.rowIndex];
+    return hasEditDisabledCues(cueLine.sourceCues) || hasEditDisabledCues(cueLine.targetCues);
+};
+
 const findNextTargetCueIndex = (props: CueLineProps): number => {
     let nextIndex = 0;
     let nextTargetCueIndex = -1;
@@ -83,6 +97,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
     const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
     const nextTargetCueIndex = findNextTargetCueIndex(props);
+    const cueLineEditDisabled = findCueLineEditDisabled(props);
 
     const showGlossaryTerms = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
@@ -92,8 +107,11 @@ const CueLine = (props: CueLineProps): ReactElement => {
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <CueLineFlap rowIndex={props.rowIndex} cueLineState={cueLineState} />
-            <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+            <CueLineFlap rowIndex={props.rowIndex} cueLineState={cueLineState} editDisabled={cueLineEditDisabled} />
+            <div
+                className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
+                style={{ display: "flex", flexDirection:"column", width: "100%" }}
+            >
                 {
                     props.data.sourceCues && props.data.sourceCues.length > 0
                         ? props.data.sourceCues.map(sourceCue => {
