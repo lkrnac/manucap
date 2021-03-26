@@ -32,6 +32,7 @@ export interface CueDto {
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
     corrupted?: boolean;
+    editDisabled?: boolean;
     editUuid?: string;
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
@@ -59,6 +60,8 @@ export interface Track {
     readonly default: boolean;
     readonly mediaTitle: string;
     readonly mediaLength: number;
+    readonly mediaChunkStart?: number;
+    readonly mediaChunkEnd?: number;
     readonly sourceLanguage?: Language;
     readonly progress: number;
     overlapEnabled?: boolean;
