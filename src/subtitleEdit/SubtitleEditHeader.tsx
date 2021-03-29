@@ -18,11 +18,28 @@ const getLanguageDescription = (track: Track): ReactElement => {
     return <b>{languageNameNullSafe}</b>;
 };
 
+const getSecondsInHMS = (seconds: number): string =>
+    new Date(seconds).toISOString().substr(11, 8);
+
+const getMediaChunkRange = (track: Track): ReactElement | null => {
+    if (track && track.mediaChunkEnd && track.mediaChunkStart !== undefined) {
+        return (
+            <span>
+                <span>(Media Chunk Range </span>
+                <span>{getSecondsInHMS(track.mediaChunkStart)}</span>
+                <span> to </span>
+                <span>{getSecondsInHMS(track.mediaChunkEnd)})</span>
+            </span>
+        );
+    }
+    return null;
+};
+
 const getTrackLength = (track: Track): ReactElement => {
     if (!track || !track.mediaLength || track.mediaLength <= 0) {
         return <i />;
     }
-    return <i>{humanizer({ delimiter: " ", round: true })(track.mediaLength)}</i>;
+    return <i>{humanizer({ delimiter: " ", round: true })(track.mediaLength)} {getMediaChunkRange(track)}</i>;
 };
 
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
