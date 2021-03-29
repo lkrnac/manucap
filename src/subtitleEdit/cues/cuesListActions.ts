@@ -7,6 +7,8 @@ import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
 import { Constants } from "../constants";
 import {
+    applyInvalidChunkRangePreventionEnd,
+    applyInvalidChunkRangePreventionStart,
     applyInvalidRangePreventionEnd,
     applyInvalidRangePreventionStart,
     applyLineLimitation,
@@ -118,10 +120,12 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 overlapCaptionsAllowed || applyOverlapPreventionStart(newVttCue, previousCue);
                 applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications);
+                applyInvalidChunkRangePreventionStart(newVttCue, originalCue.vttCue.startTime, track);
             }
             if (vttCue.endTime !== originalCue.vttCue.endTime) {
                 overlapCaptionsAllowed || applyOverlapPreventionEnd(newVttCue, followingCue);
                 applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications);
+                applyInvalidChunkRangePreventionEnd(newVttCue, originalCue.vttCue.endTime, track);
             }
             applyLineLimitation(newVttCue, originalCue, subtitleSpecifications);
 

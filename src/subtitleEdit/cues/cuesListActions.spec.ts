@@ -34,6 +34,14 @@ const testingTrack = {
     default: true,
 } as Track;
 
+const testingChunkTrack = {
+    type: "CAPTION",
+    language: { id: "en-US" },
+    default: true,
+    mediaChunkStart: 4000,
+    mediaChunkEnd: 6000
+} as Track;
+
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
@@ -60,6 +68,7 @@ describe("cueSlices", () => {
     describe("updateVttCue", () => {
         it("update top level cue", () => {
             // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -81,6 +90,7 @@ describe("cueSlices", () => {
 
         it("preserves all other existing cue parameters", () => {
             // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[2].editUuid;
 
@@ -581,6 +591,7 @@ describe("cueSlices", () => {
         describe("range prevention", () => {
             it("apply invalid end time prevention on start time change", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
@@ -596,6 +607,7 @@ describe("cueSlices", () => {
 
             it("apply invalid end time prevention on end time change", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -605,6 +617,82 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.001);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("doesn't allow start time to be less than chunk start time", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingChunkTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(3, 6, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("doesn't allow end time to be greater than chunk end time", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingChunkTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(4, 6.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("doesn't allow start time to be less than chunk start time with sub spec", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 1200,
+                    maxCaptionDurationInMillis: 4000,
+                    enabled: true
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(testingChunkTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(3, 6, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("doesn't allow end time to be greater than chunk end time with sub spec", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 1200,
+                    maxCaptionDurationInMillis: 4000,
+                    enabled: true
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(testingChunkTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(1, new VTTCue(4, 6.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().validationError).toEqual(true);
             });
@@ -619,6 +707,7 @@ describe("cueSlices", () => {
                     enabled: true
                 } as SubtitleSpecification;
 
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
@@ -643,6 +732,7 @@ describe("cueSlices", () => {
                     enabled: true
                 } as SubtitleSpecification;
 
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
@@ -667,6 +757,7 @@ describe("cueSlices", () => {
                     enabled: true
                 } as SubtitleSpecification;
 
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
@@ -691,6 +782,7 @@ describe("cueSlices", () => {
                     enabled: true
                 } as SubtitleSpecification;
 
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
@@ -741,6 +833,7 @@ describe("cueSlices", () => {
                     enabled: true
                 } as SubtitleSpecification;
 
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
@@ -757,6 +850,7 @@ describe("cueSlices", () => {
 
             it("Adjust startTime to follow min caption gap with default gap limits values", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -773,6 +867,7 @@ describe("cueSlices", () => {
 
             it("Adjust endtime to follow min caption gap with default gap limits values", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -788,6 +883,7 @@ describe("cueSlices", () => {
 
             it("Adjust startTime to follow max caption gap with default gap limits values", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[2].editUuid;
 
@@ -804,6 +900,7 @@ describe("cueSlices", () => {
 
             it("Adjust endtime to follow max caption gap with default gap limits values", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[2].editUuid;
 
@@ -843,6 +940,7 @@ describe("cueSlices", () => {
         describe("overlap prevention", () => {
             it("apply overlap prevention for end time", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
@@ -903,6 +1001,7 @@ describe("cueSlices", () => {
 
             it("apply overlap prevention for start time", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -1028,6 +1127,7 @@ describe("cueSlices", () => {
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 30,
                 } as SubtitleSpecification;
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -1085,6 +1185,7 @@ describe("cueSlices", () => {
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 15,
                 } as SubtitleSpecification;
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -1106,6 +1207,7 @@ describe("cueSlices", () => {
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 15,
                 } as SubtitleSpecification;
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -1211,6 +1313,7 @@ describe("cueSlices", () => {
         describe("text only update", () => {
             it("ignores time code changes if text only change", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
@@ -1226,6 +1329,7 @@ describe("cueSlices", () => {
 
             it("doesn't set validation error if change is text only and time codes are different", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 

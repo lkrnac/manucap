@@ -1,7 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 import { v4 as uuidv4 } from "uuid";
 
-import { CueDto, TimeGapLimit } from "../model";
+import {CueDto, TimeGapLimit, Track} from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
 
@@ -154,6 +154,33 @@ export const applyOverlapPreventionStart = (vttCue: VTTCue, previousCue: CueDto)
 export const applyOverlapPreventionEnd = (vttCue: VTTCue, followingCue: CueDto): void => {
     if (!endOverlapOk(vttCue, followingCue)) {
         vttCue.endTime = followingCue.vttCue.startTime;
+    }
+};
+
+const withinChunkRange = (time: number, chunkStart: number, chunkEnd: number): boolean =>
+    time >= (chunkStart / 1000) && time <= (chunkEnd / 1000);
+
+export const applyInvalidChunkRangePreventionStart = (
+    vttCue: VTTCue,
+    originalVttCueStart: number,
+    editingTrack: Track
+): void => {
+
+    if (editingTrack.mediaChunkStart !== undefined && editingTrack.mediaChunkEnd !== undefined
+        && !withinChunkRange(vttCue.startTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)) {
+        vttCue.startTime = originalVttCueStart;
+    }
+};
+
+export const applyInvalidChunkRangePreventionEnd = (
+    vttCue: VTTCue,
+    originalVttCueEnd: number,
+    editingTrack: Track
+): void => {
+
+    if (editingTrack.mediaChunkStart !== undefined && editingTrack.mediaChunkEnd !== undefined
+        && !withinChunkRange(vttCue.endTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)) {
+        vttCue.endTime = originalVttCueEnd;
     }
 };
 
