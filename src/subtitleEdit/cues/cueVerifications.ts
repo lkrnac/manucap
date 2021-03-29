@@ -1,7 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 import { v4 as uuidv4 } from "uuid";
 
-import {CueDto, TimeGapLimit, Track} from "../model";
+import { CueDto, TimeGapLimit, Track } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
 

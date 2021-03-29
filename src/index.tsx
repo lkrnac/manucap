@@ -39,7 +39,7 @@ const inChunkRange = (start: number, end: number): boolean => {
     const chunkStartSeconds = mediaChunkStart / 1000;
     const chunkEndSeconds = mediaChunkEnd / 1000;
     return start >= chunkStartSeconds  && end >= chunkStartSeconds
-        && start <= chunkEndSeconds  && end <= chunkEndSeconds
+        && start <= chunkEndSeconds  && end <= chunkEndSeconds;
 };
 
 const TestApp = (): ReactElement => {

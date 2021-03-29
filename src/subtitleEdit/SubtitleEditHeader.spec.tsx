@@ -37,7 +37,7 @@ describe("SubtitleEditHeader", () => {
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Caption in: <b>English (US)</b> <i>2 minutes 5 seconds </i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 5 seconds</i></div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -312,7 +312,7 @@ describe("SubtitleEditHeader", () => {
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Caption in: <b>English (US)</b> <i>2 minutes </i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes</i></div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -404,7 +404,7 @@ describe("SubtitleEditHeader", () => {
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Caption in: <b>English (US)</b> <i>2 minutes </i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes</i></div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -448,7 +448,7 @@ describe("SubtitleEditHeader", () => {
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Caption in: <b>English (US)</b> <i>1 hour 2 minutes 10 seconds </i></div>
+                    <div>Caption in: <b>English (US)</b> <i>1 hour 2 minutes 10 seconds</i></div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -492,7 +492,7 @@ describe("SubtitleEditHeader", () => {
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Caption in: <b>English (US)</b> <i>2 minutes 3 seconds </i></div>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 3 seconds</i></div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -538,10 +538,13 @@ describe("SubtitleEditHeader", () => {
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Caption in: <b>English (US)</b> <i>2 minutes 5 seconds <span><span>
-                            (Media Chunk Range </span><span>00:00:10</span><span> to </span><span>00:01:50)</span>
-                        </span>
-                        </i>
+                    <div>Caption in: <b>English (US)</b> <i>2 minutes 5 seconds<span>
+                        <span> (Media Chunk Range </span>
+                        <span>00:00:10</span>
+                        <span> to </span>
+                        <span>00:01:50)</span>
+                    </span>{/* eslint-disable-line react/jsx-closing-tag-location */}
+                    </i>{/* eslint-disable-line react/jsx-closing-tag-location */}
                     </div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>

@@ -28,7 +28,7 @@ const testingCuesWithEditDisabled = [
     {
         vttCue: new VTTCue(4, 6, "Caption Line 3"),
         cueCategory: "ONSCREEN_TEXT",
-        spellCheck: { matches: [{ message: "some-spell-check-problem" }] },
+        spellCheck: { matches: [{ message: "some-spell-check-problem" }]},
         editDisabled: false
     },
     {

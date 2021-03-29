@@ -25,7 +25,7 @@ const getMediaChunkRange = (track: Track): ReactElement | null => {
     if (track && track.mediaChunkEnd && track.mediaChunkStart !== undefined) {
         return (
             <span>
-                <span>(Media Chunk Range </span>
+                <span>{" "}(Media Chunk Range{" "}</span>
                 <span>{getSecondsInHMS(track.mediaChunkStart)}</span>
                 <span> to </span>
                 <span>{getSecondsInHMS(track.mediaChunkEnd)})</span>
@@ -39,7 +39,7 @@ const getTrackLength = (track: Track): ReactElement => {
     if (!track || !track.mediaLength || track.mediaLength <= 0) {
         return <i />;
     }
-    return <i>{humanizer({ delimiter: " ", round: true })(track.mediaLength)} {getMediaChunkRange(track)}</i>;
+    return <i>{humanizer({ delimiter: " ", round: true })(track.mediaLength)}{getMediaChunkRange(track)}</i>;
 };
 
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
