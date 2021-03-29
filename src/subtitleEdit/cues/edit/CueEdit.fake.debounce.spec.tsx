@@ -55,6 +55,8 @@ const cues = [
     { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
+const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
+
 describe("CueEdit", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
@@ -66,7 +68,7 @@ describe("CueEdit", () => {
             maxCharactersPerLine: 30,
             enabled: true
         } as SubtitleSpecification;
-
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
@@ -229,9 +231,6 @@ describe("CueEdit", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "LTR" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         cues[0].editUuid = testingStore.getState().cues[0].editUuid;
 
         const actualNode = mount(
@@ -269,9 +268,6 @@ describe("CueEdit", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "LTR" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         cues[1].editUuid = testingStore.getState().cues[0].editUuid;
 
         const actualNode = mount(
@@ -354,9 +350,6 @@ describe("CueEdit", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "LTR" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE", editUuid: testingStore.getState().cues[0].editUuid } as CueDto;
@@ -395,9 +388,6 @@ describe("CueEdit", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "LTR" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "someText");
         const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;

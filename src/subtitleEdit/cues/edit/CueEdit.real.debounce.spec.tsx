@@ -12,11 +12,12 @@ import { render } from "@testing-library/react";
 import { AnyAction } from "redux";
 
 // @ts-ignore - Doesn't have types definitions file
-import { CueDto } from "../../model";
+import { CueDto, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateCues } from "../cuesListActions";
 import { setValidationError } from "./cueEditorSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 let testingStore = createTestingStore();
 
@@ -25,9 +26,12 @@ const cues = [
     { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
+const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
+
 describe("CueEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
     });
 
