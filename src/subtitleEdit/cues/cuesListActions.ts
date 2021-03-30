@@ -41,6 +41,17 @@ const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
 };
 
+const isShiftWithinChunkRange = (shiftTime: number, mediaChunkStart: number, mediaChunkEnd: number, cues: CueDto[]) => {
+    const editableCues = cues.filter(cue => !cue.editDisabled);
+    const firstChunkCue = editableCues.shift();
+    if (firstChunkCue && (firstChunkCue.vttCue.startTime + shiftTime) < (mediaChunkStart / 1000)) {
+        throw new Error("Exceeds media chunk start range");
+    }
+    const lastChunkCue = editableCues.pop();
+    if (lastChunkCue && (lastChunkCue.vttCue.endTime + shiftTime) > (mediaChunkEnd / 1000)) {
+        throw new Error("Exceeds media chunk end range");
+    }
+};
 
 export const applySpellcheckerOnCue = createAsyncThunk(
     "spellchecker/applySpellcheckerOnCue",
@@ -225,6 +236,10 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
 
 export const applyShiftTime = (shiftTime: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+        const editTrack = getState().editingTrack;
+        if (editTrack && editTrack.mediaChunkStart !== undefined && editTrack.mediaChunkEnd) {
+            isShiftWithinChunkRange(shiftTime, editTrack.mediaChunkStart, editTrack.mediaChunkEnd, getState().cues);
+        }
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
         callSaveTrack(dispatch, getState);
     };

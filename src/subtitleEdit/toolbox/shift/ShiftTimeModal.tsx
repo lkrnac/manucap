@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, {ReactElement, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { SubtitleEditState } from "../../subtitleEditReducers";
@@ -7,7 +7,8 @@ import { Field, Form } from "react-final-form";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
-const isShiftTimeValid = (value: string, firstTrackTime: number): boolean => (parseFloat(value) + firstTrackTime) < 0;
+const isShiftTimeValid = (value: string, firstTrackTime: number, isMediaChunk: boolean): boolean =>
+    !isMediaChunk && (parseFloat(value) + firstTrackTime) < 0;
 
 const normalizeValue = (value: string): string => parseFloat(value).toFixed(3);
 
@@ -17,16 +18,25 @@ interface Props {
 }
 
 const ShiftTimeModal = (props: Props): ReactElement => {
+    const [errorMessage, setErrorMessage] = useState();
     const dispatch = useDispatch();
     const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
+    const mediaChunkStart = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaChunkStart);
+    const isMediaChunk = mediaChunkStart !== undefined;
 
     const handleApplyShift = (shift: string): void => {
         const shiftValue = parseFloat(shift);
-        dispatch(applyShiftTime(shiftValue));
+        try {
+            dispatch(applyShiftTime(shiftValue));
+        } catch (e) {
+            setErrorMessage(e.message);
+            return;
+        }
         props.onClose();
     };
 
     const handleCancelShift = (): void => {
+        setErrorMessage(undefined);
         props.onClose();
     };
 
@@ -54,9 +64,9 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                 />
                             </div>
                             {
-                                isShiftTimeValid(values.shift, firstTrackTime) ? (
+                                errorMessage || isShiftTimeValid(values.shift, firstTrackTime, isMediaChunk) ? (
                                     <span className="alert alert-danger" style={{ display: "block" }}>
-                                        {INVALID_SHIFT_MSG}
+                                        {errorMessage || INVALID_SHIFT_MSG}
                                     </span>
                                 ): null
                             }
@@ -64,7 +74,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                         <Modal.Footer>
                             <button
                                 type="submit"
-                                disabled={isShiftTimeValid(values.shift, firstTrackTime)}
+                                disabled={isShiftTimeValid(values.shift, firstTrackTime, isMediaChunk)}
                                 className="dotsub-shift-modal-apply-button btn btn-primary"
                             >
                                 Apply

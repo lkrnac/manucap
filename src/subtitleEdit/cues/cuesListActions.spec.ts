@@ -52,6 +52,16 @@ const testingCues = [
     },
 ] as CueDto[];
 
+const testingCuesEditDisabled = [
+    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", editDisabled: true },
+    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    {
+        vttCue: new VTTCue(4, 6, "Caption Line 3"),
+        cueCategory: "ONSCREEN_TEXT",
+        spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+    },
+] as CueDto[];
+
 const testingCuesWithGaps = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -2055,6 +2065,28 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
+        });
+
+        it("doesn't syncs timecodes between sourceCues and cues if editDisabled", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesEditDisabled) as {} as AnyAction);
+            const sourceTestingCues = [
+                { vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                { vttCue: new VTTCue(5, 7, "Caption Line 3"), cueCategory: "ONSCREEN_TEXT" },
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceTestingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(syncCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(5);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
         });
     });
 
