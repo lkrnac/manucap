@@ -41,7 +41,8 @@ const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
 };
 
-const isShiftWithinChunkRange = (shiftTime: number, mediaChunkStart: number, mediaChunkEnd: number, cues: CueDto[]) => {
+const isShiftWithinChunkRange = (shiftTime: number, mediaChunkStart: number, mediaChunkEnd: number,
+                                 cues: CueDto[]): void => {
     const editableCues = cues.filter(cue => !cue.editDisabled);
     const firstChunkCue = editableCues.shift();
     if (firstChunkCue && (firstChunkCue.vttCue.startTime + shiftTime) < (mediaChunkStart / 1000)) {

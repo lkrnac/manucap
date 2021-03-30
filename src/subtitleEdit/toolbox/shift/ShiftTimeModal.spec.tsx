@@ -2,7 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { applyShiftTime, updateCues } from "../../cues/cuesListActions";
 import { AnyAction } from "@reduxjs/toolkit";
-import {CueDto, Language, Track} from "../../model";
+import { CueDto, Language, Track } from "../../model";
 import { Provider } from "react-redux";
 import React from "react";
 import ShiftTimesModal from "./ShiftTimeModal";
@@ -71,8 +71,8 @@ const expectedNodeWithErrorMsg = mount(
                                 />
                             </div >
                             <span className="alert alert-danger" style={{ display: "block" }}>
-                                    The start time of the first cue plus the shift value must be greater or equal to 0
-                                </span >
+                                The start time of the first cue plus the shift value must be greater or equal to 0
+                            </span >
                         </div >
                         <div className="modal-footer">
                             <button
