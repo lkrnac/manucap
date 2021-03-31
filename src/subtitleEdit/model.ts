@@ -106,3 +106,11 @@ export enum ScrollPosition {
     LAST,
     CURRENT
 }
+
+export enum CueError {
+    LINE_CHAR_LIMIT_EXCEEDED,
+    LINE_COUNT_EXCEEDED,
+    TIME_GAP_LIMIT_EXCEEDED,
+    TIME_GAP_OVERLAP,
+    SPELLCHECK_ERROR
+}

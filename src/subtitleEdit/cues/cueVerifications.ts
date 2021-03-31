@@ -1,7 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 import { v4 as uuidv4 } from "uuid";
 
-import { CueDto, TimeGapLimit } from "../model";
+import { CueDto, CueError, TimeGapLimit } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
 
@@ -38,10 +38,17 @@ export const checkCharacterLimitation = (
 export const checkCharacterAndLineLimitation = (
     text: string,
     subtitleSpecification: SubtitleSpecification | null
-): boolean => {
+): CueError[] => {
+    const cueErrors = [];
     const charactersPerLineLimitOk = checkCharacterLimitation(text, subtitleSpecification);
     const linesCountLimitOk = checkLineLimitation(text, subtitleSpecification);
-    return charactersPerLineLimitOk && linesCountLimitOk;
+    if (!charactersPerLineLimitOk) {
+        cueErrors.push(CueError.LINE_CHAR_LIMIT_EXCEEDED);
+    }
+    if (!linesCountLimitOk) {
+        cueErrors.push(CueError.LINE_COUNT_EXCEEDED);
+    }
+    return cueErrors;
 };
 
 export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
@@ -87,11 +94,20 @@ export const conformToRules = (
     previousCue?: CueDto,
     followingCue?: CueDto,
     overlapCaptions?: boolean
-): boolean =>
-    checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification)
-        && rangeOk(cue.vttCue, subtitleSpecification)
-        && (overlapCaptions || overlapOk(cue.vttCue, previousCue, followingCue))
-        && isSpelledCorrectly(cue)
+): CueError[] => {
+        const cueErrors = [];
+        cueErrors.push(...checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification));
+        if (!rangeOk(cue.vttCue, subtitleSpecification)) {
+            cueErrors.push(CueError.TIME_GAP_LIMIT_EXCEEDED);
+        }
+        if (overlapCaptions && !overlapOk(cue.vttCue, previousCue, followingCue)) {
+            cueErrors.push(CueError.TIME_GAP_OVERLAP);
+        }
+        if (!isSpelledCorrectly(cue)) {
+            cueErrors.push(CueError.SPELLCHECK_ERROR);
+        }
+        return cueErrors;
+    }
 ;
 
 
@@ -103,16 +119,15 @@ export const markCues = (
     cues.map((cue, index) => {
         const previousCue = cues[index - 1];
         const followingCue = cues[index + 1];
-
+        const cueErrors = conformToRules(
+            cue,
+            subtitleSpecifications,
+            previousCue,
+            followingCue,
+            overlapCaptions || false);
         return {
             ...cue,
-            corrupted: cue.corrupted || !conformToRules(
-                cue,
-                subtitleSpecifications,
-                previousCue,
-                followingCue,
-                overlapCaptions || false
-            ),
+            corrupted: cue.corrupted || cueErrors.length > 0,
             editUuid: uuidv4()
         };
     });
