@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Tooltip, Popover } from "react-bootstrap";
 
 interface Props {
     text: string;
@@ -9,7 +9,7 @@ interface Props {
         | "bottom" | "bottom-start" | "left-end" | "left" | "left-start";
     tooltipId: string;
     children: React.ReactElement;
-
+    popover?: boolean;
 }
 export const TooltipWrapper = (props: Props): ReactElement => {
 
@@ -19,7 +19,16 @@ export const TooltipWrapper = (props: Props): ReactElement => {
             trigger={props.trigger || ["hover", "focus"]}
             placement={props.placement}
             delay={{ show: 600, hide: 100 }}
-            overlay={<Tooltip id={props.tooltipId}>{props.text}</Tooltip>}
+            overlay={
+                props.popover ?
+                    <Popover id={props.tooltipId}>
+                        <Popover.Content>
+                            {props.text}
+                        </Popover.Content>
+                    </Popover>
+                    :
+                    <Tooltip id={props.tooltipId}>{props.text}</Tooltip>
+            }
         >
             {props.children}
         </OverlayTrigger>
