@@ -100,7 +100,7 @@ export const conformToRules = (
         if (!rangeOk(cue.vttCue, subtitleSpecification)) {
             cueErrors.push(CueError.TIME_GAP_LIMIT_EXCEEDED);
         }
-        if (overlapCaptions && !overlapOk(cue.vttCue, previousCue, followingCue)) {
+        if (!overlapCaptions && !overlapOk(cue.vttCue, previousCue, followingCue)) {
             cueErrors.push(CueError.TIME_GAP_OVERLAP);
         }
         if (!isSpelledCorrectly(cue)) {

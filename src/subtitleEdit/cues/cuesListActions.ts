@@ -78,10 +78,11 @@ export const checkErrors = createAsyncThunk(
                 if (alwaysCallSpellcheck || !currentCue.spellCheck) {
                     thunkAPI.dispatch(applySpellcheckerOnCue(index));
                 }
-                const currentCorrupted = !conformToRules(
+                const cueErrors = conformToRules(
                     currentCue, subtitleSpecification, previousCue, followingCue,
                     overlapEnabled
                 );
+                const currentCorrupted = cueErrors.length > 0;
                 thunkAPI.dispatch(cuesSlice.actions.setCorrupted(
                     { index: index, corrupted: currentCorrupted } as CueCorruptedPayload));
             }
