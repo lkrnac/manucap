@@ -3,7 +3,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { SubtitleSpecification } from "./model";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { CueDto } from "../model";
+import { CueDto, CueError } from "../model";
 import { updateCues } from "../cues/cuesListActions";
 
 const testingSubtitleSpecification = {
@@ -41,8 +41,8 @@ describe("subtitleSpecificationSlices", () => {
         it("marks existing cues as corrupted", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption Long 2"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
@@ -57,10 +57,11 @@ describe("subtitleSpecificationSlices", () => {
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[3].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[0].errors).toEqual([]);
+            expect(testingStore.getState().cues[1].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
+            expect(testingStore.getState().cues[2].errors).toEqual(
+                [CueError.TIME_GAP_OVERLAP, CueError.LINE_CHAR_LIMIT_EXCEEDED]);
+            expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
         });
     });
 });

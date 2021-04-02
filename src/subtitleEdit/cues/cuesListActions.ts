@@ -20,7 +20,7 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "./edit/cueEditorSlices";
-import { CueCorruptedPayload, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
+import { CueErrorsPayload, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
 
 interface CuesAction extends SubtitleEditAction {
@@ -82,9 +82,8 @@ export const checkErrors = createAsyncThunk(
                     currentCue, subtitleSpecification, previousCue, followingCue,
                     overlapEnabled
                 );
-                const currentCorrupted = cueErrors.length > 0;
-                thunkAPI.dispatch(cuesSlice.actions.setCorrupted(
-                    { index: index, corrupted: currentCorrupted } as CueCorruptedPayload));
+                thunkAPI.dispatch(cuesSlice.actions.setErrors(
+                    { index: index, errors: cueErrors } as CueErrorsPayload));
             }
         }
     });
@@ -155,7 +154,7 @@ export const validateCorruptedCues = createAsyncThunk(
     async (matchText: string, thunkAPI) => {
         const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
         const cues = state.cues;
-        cues.filter(cue => cue.corrupted
+        cues.filter(cue => cue.errors
             && cue.vttCue.text.includes(matchText)).forEach((cue: CueDto) => {
             thunkAPI.dispatch(checkErrors({ index: cues.indexOf(cue) }));
         });

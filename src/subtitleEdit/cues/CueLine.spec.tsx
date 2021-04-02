@@ -2,10 +2,10 @@ import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React, { ReactElement } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { render, fireEvent } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { Provider } from "react-redux";
 
-import { CueDto, CueLineState, Language, Task, Track } from "../model";
+import { CueDto, CueError, CueLineState, Language, Task, Track } from "../model";
 import CueEdit, { CueEditProps } from "./edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView, { CueViewProps } from "./view/CueView";
@@ -1026,7 +1026,8 @@ describe("CueLine", () => {
 
             const corruptedTargetCueWithIndex = {
                 index: 2,
-                cue: { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE", corrupted: true } as CueDto
+                cue: { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE",
+                    errors: [CueError.SPELLCHECK_ERROR]} as CueDto
             };
 
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);

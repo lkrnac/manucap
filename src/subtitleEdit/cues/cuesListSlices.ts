@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueCategory, CueDto, SubtitleEditAction } from "../model";
+import { CueCategory, CueDto, CueError, SubtitleEditAction } from "../model";
 import { copyNonConstructorProperties } from "./cueUtils";
 import { editingTrackSlice } from "../trackSlices";
 import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
@@ -35,8 +35,8 @@ interface CheckOptions extends SubtitleSpecificationAction {
     index?: number;
 }
 
-export interface CueCorruptedPayload {
-    corrupted: boolean;
+export interface CueErrorsPayload {
+    errors: CueError[];
     index: number;
 }
 
@@ -122,8 +122,8 @@ export const cuesSlice = createSlice({
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
         },
-        setCorrupted: (state, action: PayloadAction<CueCorruptedPayload>): void => {
-            state[action.payload.index].corrupted = action.payload.corrupted;
+        setErrors: (state, action: PayloadAction<CueErrorsPayload>): void => {
+            state[action.payload.index].errors = action.payload.errors;
         },
         syncCues: (state, action: PayloadAction<CuesAction>): CueDto[] => {
             const sourceCues = action.payload.cues;

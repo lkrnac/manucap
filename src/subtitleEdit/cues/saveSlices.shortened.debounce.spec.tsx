@@ -24,7 +24,7 @@ describe("saveSlices", () => {
     const saveTrack = jest.fn();
     const testingTrack = { mediaTitle: "testingTrack" } as Track;
     const testingCues = [
-        { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", corrupted: false }
+        { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
     ] as CueDto[];
 
     beforeEach(() => {
@@ -62,7 +62,7 @@ describe("saveSlices", () => {
         it("sends latest version of track from Redux to server", (done) => {
             // GIVEN
             const expectedTestingCues = [
-                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "AUDIO_DESCRIPTION", corrupted: false }
+                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "AUDIO_DESCRIPTION", errors: []}
             ] as CueDto[];
             callSaveTrack(testingStore.dispatch, testingStore.getState);
             expectedTestingCues[0].editUuid = testingStore.getState().cues[0].editUuid;

@@ -15,7 +15,7 @@ import {
     updateVttCue,
     validateCorruptedCues,
 } from "./cuesListActions";
-import { CueDto, ScrollPosition, Track } from "../model";
+import { CueDto, CueError, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditorState } from "./edit/editorStatesSlice";
 import { SubtitleSpecification } from "../toolbox/model";
@@ -191,7 +191,8 @@ describe("cueSlices", () => {
                 );
                 expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
                 expect(testingStore.getState().cues[2].editUuid).toEqual(editUuid);
-                expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+                expect(testingStore.getState().cues[2].errors).toEqual(
+                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
                 expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             });
@@ -214,7 +215,8 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
 
                 // THEN
-                expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+                expect(testingStore.getState().cues[2].errors).toEqual(
+                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
             });
 
             it("triggers autosave content is changed", () => {
@@ -364,7 +366,7 @@ describe("cueSlices", () => {
                 const cues = [
                     {
                         vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
-                        corrupted: true
+                        errors: [CueError.SPELLCHECK_ERROR]
                     }] as CueDto[];
                 testingStore.dispatch(updateCues(cues) as {} as AnyAction);
                 const testingResponse = {
@@ -416,7 +418,7 @@ describe("cueSlices", () => {
                     }
                 );
                 expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
-                expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
+                expect(testingStore.getState().cues[0].errors).toEqual([]);
             });
 
             it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
@@ -451,7 +453,7 @@ describe("cueSlices", () => {
                 const cues = [
                     {
                         vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
-                        corrupted: true
+                        errors: [CueError.SPELLCHECK_ERROR]
                     }] as CueDto[];
                 testingStore.dispatch(updateCues(cues) as {} as AnyAction);
                 const testingResponse = {
@@ -496,15 +498,15 @@ describe("cueSlices", () => {
                 const cues = [
                     {
                         vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
-                        corrupted: true
+                        errors: [CueError.SPELLCHECK_ERROR]
                     },
                     {
                         vttCue: new VTTCue(2, 4, "falsex Line 2"), cueCategory: "DIALOGUE",
-                        corrupted: true
+                        errors: [CueError.SPELLCHECK_ERROR]
                     },
                     {
                         vttCue: new VTTCue(6, 8, "falsex Line 3"), cueCategory: "DIALOGUE",
-                        corrupted: true
+                        errors: [CueError.SPELLCHECK_ERROR]
                     }
                     ] as CueDto[];
                 testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -541,15 +543,15 @@ describe("cueSlices", () => {
                 const cues = [
                     {
                         vttCue: new VTTCue(0, 2, "falsex Line 1"),
-                        cueCategory: "DIALOGUE", corrupted: true, spellCheck: { matches: []}
+                        cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: { matches: []}
                     },
                     {
                         vttCue: new VTTCue(2, 4, "falsex Line 2"),
-                        cueCategory: "DIALOGUE", corrupted: true, spellCheck: { matches: []}
+                        cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: { matches: []}
                     },
                     {
                         vttCue: new VTTCue(6, 8, "falsex Line 3"),
-                        cueCategory: "DIALOGUE", corrupted: true, spellCheck: { matches: []}
+                        cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: { matches: []}
                     }
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -726,7 +728,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+                expect(testingStore.getState().cues[0].errors).toEqual([CueError.TIME_GAP_LIMIT_EXCEEDED]);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
@@ -872,8 +874,8 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().cues[1].corrupted).toEqual(false);
-                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+                expect(testingStore.getState().cues[1].errors).toEqual([]);
+                expect(testingStore.getState().cues[0].errors).toEqual([]);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
@@ -894,10 +896,10 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
-                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+                expect(testingStore.getState().cues[0].errors).toEqual([]);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().cues[1].corrupted).toEqual(false);
+                expect(testingStore.getState().cues[1].errors).toEqual([]);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
@@ -934,8 +936,8 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-                expect(testingStore.getState().cues[1].corrupted).toEqual(false);
-                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+                expect(testingStore.getState().cues[1].errors).toEqual([]);
+                expect(testingStore.getState().cues[0].errors).toEqual([]);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
@@ -955,8 +957,8 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
-                expect(testingStore.getState().cues[1].corrupted).toEqual(false);
+                expect(testingStore.getState().cues[0].errors).toEqual([]);
+                expect(testingStore.getState().cues[1].errors).toEqual([]);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
@@ -981,8 +983,8 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().cues[1].corrupted).toEqual(false);
-                expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+                expect(testingStore.getState().cues[1].errors).toEqual([]);
+                expect(testingStore.getState().cues[0].errors).toEqual([]);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
 
@@ -1013,8 +1015,8 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1.4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2.4);
-                expect(testingStore.getState().cues[1].corrupted).toEqual(true);
-                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+                expect(testingStore.getState().cues[1].errors).toEqual([]);
+                expect(testingStore.getState().cues[0].errors).toEqual([]);
                 expect(testingStore.getState().validationError).toEqual(true);
             });
         });
@@ -1203,7 +1205,7 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("line 1\nlong line 2");
-                expect(testingStore.getState().cues[0].corrupted).toEqual(true);
+                expect(testingStore.getState().cues[0].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
         });
@@ -1271,7 +1273,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6);
-            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[2].errors).toEqual([CueError.SPELLCHECK_ERROR]);
             expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
@@ -1754,8 +1756,8 @@ describe("cueSlices", () => {
         it("initializes cues", () => {
             // GIVEN
             const expectedCues = [
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", corrupted: false },
-                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT", corrupted: false },
+                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT", errors: []},
             ] as CueDto[];
 
             // WHEN
@@ -1764,11 +1766,11 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(expectedCues[0].vttCue);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
-            expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+            expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().cues[1].vttCue).toEqual(expectedCues[1].vttCue);
             expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
-            expect(testingStore.getState().cues[1].corrupted).toEqual(false);
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[1].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
@@ -1777,7 +1779,7 @@ describe("cueSlices", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const replacementCues = [
-                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE", corrupted: false },
+                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE", errors: []},
             ] as CueDto[];
 
             // WHEN
@@ -1786,7 +1788,7 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(replacementCues[0].vttCue);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
-            expect(testingStore.getState().cues[0].corrupted).toEqual(false);
+            expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
@@ -1806,7 +1808,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editorStates.size).toEqual(0);
         });
 
-        it("mark cues as corrupted if  they doesn't conform to rules", () => {
+        it("marks cues as corrupted if they don't conform to rules", () => {
             // GIVEN
             const cuesCorrupted = [
                 { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
@@ -1825,10 +1827,11 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[2].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[3].corrupted).toBeTruthy();
+            expect(testingStore.getState().cues[0].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual(
+                [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
+            expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
@@ -1850,10 +1853,10 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[0].errors).toEqual([]);
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toEqual([]);
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
@@ -1875,10 +1878,10 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[0].errors).toEqual([]);
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toEqual([]);
         });
     });
 
@@ -1970,23 +1973,23 @@ describe("cueSlices", () => {
             const cues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption Linex 1"),
-                    cueCategory: "DIALOGUE", corrupted: true, spellCheck: spellCheck
+                    cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: spellCheck
                 },
                 {
                     vttCue: new VTTCue(2, 4, "Caption Linex 2"),
-                    cueCategory: "DIALOGUE", corrupted: true, spellCheck: spellCheck
+                    cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: spellCheck
                 },
                 {
                     vttCue: new VTTCue(4, 6, "Caption Line 3"),
-                    cueCategory: "DIALOGUE", corrupted: false
+                    cueCategory: "DIALOGUE", errors: []
                 },
                 {
                     vttCue: new VTTCue(6, 8, "Caption Line 4"),
-                    cueCategory: "DIALOGUE", corrupted: false
+                    cueCategory: "DIALOGUE", errors: []
                 },
                 {
                     vttCue: new VTTCue(8, 0, "Caption Line 5"), // bad timing
-                    cueCategory: "DIALOGUE", corrupted: false
+                    cueCategory: "DIALOGUE", errors: []
                 }
             ] as CueDto[];
 
@@ -1996,11 +1999,11 @@ describe("cueSlices", () => {
             testingStore.dispatch(validateCorruptedCues("Linex") as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[1].corrupted).toBeTruthy();
-            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[3].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[4].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[0].errors).toEqual([CueError.SPELLCHECK_ERROR]);
+            expect(testingStore.getState().cues[1].errors).toEqual([CueError.SPELLCHECK_ERROR]);
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toEqual([]);
+            expect(testingStore.getState().cues[4].errors).toEqual([]);
         });
 
     });

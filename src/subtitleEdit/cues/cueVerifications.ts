@@ -13,7 +13,7 @@ export const checkLineLimitation = (
 ): boolean => {
     if (subtitleSpecification && subtitleSpecification.enabled) {
         const lines = text.split("\n");
-        return subtitleSpecification.maxLinesPerCaption === null
+        return !subtitleSpecification.maxLinesPerCaption
             || lines.length <= subtitleSpecification.maxLinesPerCaption;
     }
     return true;
@@ -119,15 +119,18 @@ export const markCues = (
     cues.map((cue, index) => {
         const previousCue = cues[index - 1];
         const followingCue = cues[index + 1];
-        const cueErrors = conformToRules(
+        const existingCueErrors = cue.errors ? [...cue.errors] : [];
+        const newCueErrors = conformToRules(
             cue,
             subtitleSpecifications,
             previousCue,
             followingCue,
-            overlapCaptions || false);
+            overlapCaptions || false
+        );
+        const cueErrors = Array.from(new Set([...existingCueErrors,...newCueErrors]));
         return {
             ...cue,
-            corrupted: cue.corrupted || cueErrors.length > 0,
+            errors: cueErrors,
             editUuid: uuidv4()
         };
     });

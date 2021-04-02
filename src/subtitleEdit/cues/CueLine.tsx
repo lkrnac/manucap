@@ -38,7 +38,8 @@ const hasTargetText = (cueLine?: CueLineDto): boolean => {
 const hasCorruptedTargetCue = (cueLine?: CueLineDto): boolean => {
     if (cueLine && cueLine.targetCues && cueLine.targetCues.length > 0) {
         return cueLine.targetCues
-            .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.corrupted === true)
+            .map((cueWithIndex: CueDtoWithIndex): boolean =>
+                cueWithIndex?.cue.errors ? cueWithIndex?.cue.errors?.length > 0 : false)
             .reduce((hasText1: boolean, hasText2: boolean): boolean => hasText1 || hasText2);
     }
     return false;
