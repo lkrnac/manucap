@@ -1223,6 +1223,16 @@ describe("CueLine", () => {
 
         it("fires write cue action when empty target cue is clicked", () => {
             // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             const cueWithSource = { sourceCues: [sourceCuesWithIndexes[1]]};
             const cueLineRowProps = {
                 playerTime: 0,
@@ -1252,6 +1262,16 @@ describe("CueLine", () => {
 
         it("fires write cue action when insert cue button is clicked", () => {
             // GIVEN
+            const testingTrack = {
+                type: "TRANSLATION",
+                sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             const cueWithSource = { sourceCues: [sourceCuesWithIndexes[1]]};
             const cueLineRowProps = {
                 playerTime: 0,

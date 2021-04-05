@@ -22,7 +22,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
     const mediaChunkStart = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaChunkStart);
-    const isMediaChunk = mediaChunkStart !== undefined;
+    const isMediaChunk = !!mediaChunkStart || mediaChunkStart === 0;
 
     const handleApplyShift = (shift: string): void => {
         const shiftValue = parseFloat(shift);

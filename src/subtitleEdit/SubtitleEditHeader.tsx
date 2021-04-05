@@ -22,7 +22,7 @@ const getSecondsInHMS = (seconds: number): string =>
     new Date(seconds).toISOString().substr(11, 8);
 
 const getMediaChunkRange = (track: Track): ReactElement | null => {
-    if (track && track.mediaChunkEnd && track.mediaChunkStart !== undefined) {
+    if ((track.mediaChunkStart || track.mediaChunkStart === 0) && track.mediaChunkEnd) {
         return (
             <span>
                 <span>{" "}(Media Chunk Range{" "}</span>

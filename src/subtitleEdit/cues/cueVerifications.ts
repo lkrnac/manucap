@@ -166,7 +166,7 @@ export const applyInvalidChunkRangePreventionStart = (
     editingTrack: Track
 ): void => {
 
-    if (editingTrack.mediaChunkStart !== undefined && editingTrack.mediaChunkEnd !== undefined
+    if ((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd
         && !withinChunkRange(vttCue.startTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)) {
         vttCue.startTime = originalVttCueStart;
     }
@@ -178,7 +178,7 @@ export const applyInvalidChunkRangePreventionEnd = (
     editingTrack: Track
 ): void => {
 
-    if (editingTrack.mediaChunkStart !== undefined && editingTrack.mediaChunkEnd !== undefined
+    if ((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd
         && !withinChunkRange(vttCue.endTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)) {
         vttCue.endTime = originalVttCueEnd;
     }
@@ -187,6 +187,12 @@ export const applyInvalidChunkRangePreventionEnd = (
 export const verifyCueDuration = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean => {
     const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
     return cueDuration >= timeGapLimit.minGap;
+};
+
+export const verifyCueChunkRange = (vttCue: VTTCue, editingTrack: Track): boolean => {
+    return !((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd)
+        || (withinChunkRange(vttCue.startTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)
+        && withinChunkRange(vttCue.endTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd));
 };
 
 export const applyLineLimitation = (

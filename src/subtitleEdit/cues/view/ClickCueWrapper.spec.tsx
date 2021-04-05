@@ -6,18 +6,20 @@ import { fireEvent, render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { CueDto, Task } from "../../model";
+import { CueDto, Task, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateTask } from "../../trackSlices";
+import { updateEditingTrack, updateTask } from "../../trackSlices";
 import { updateSourceCues } from "./sourceCueSlices";
 import { updateCues } from "../cuesListActions";
 import ClickCueWrapper from "./ClickCueWrapper";
 
 let testingStore = createTestingStore();
+const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
 
-describe("CueView", () => {
+describe("ClickCueWrapper", () => {
     beforeEach(()=> {
        testingStore = createTestingStore();
+       testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
     });
 
     describe("caption mode", () => {
