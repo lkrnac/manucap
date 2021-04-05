@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueLineDto, CueLineState } from "../model";
+import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
 import { SubtitleEditState } from "../subtitleEditReducers";
@@ -88,12 +88,30 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const showGlossaryTerms = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
 
+    const sourceCuesErrors = [] as CueError[];
+    props.data.sourceCues?.forEach((sourceCue: CueDtoWithIndex) => {
+        if (sourceCue.cue.errors && sourceCue.cue.errors.length > 0) {
+            sourceCuesErrors.push(...sourceCue.cue.errors);
+        }
+    });
+    const targetCuesErrors = [] as CueError[];
+    props.data.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
+        if (targetCue.cue.errors && targetCue.cue.errors.length > 0) {
+            targetCuesErrors.push(...targetCue.cue.errors);
+        }
+    });
+
     return (
         <div
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <CueLineFlap rowIndex={props.rowIndex} cueLineState={cueLineState} />
+            <CueLineFlap
+                rowIndex={props.rowIndex}
+                cueLineState={cueLineState}
+                sourceCuesErrors={sourceCuesErrors}
+                targetCuesErrors={targetCuesErrors}
+            />
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {
                     props.data.sourceCues && props.data.sourceCues.length > 0
