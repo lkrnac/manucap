@@ -1722,6 +1722,64 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
+
+            it("doesn't add cue to the end of the cue array if out of chunk range", () => {
+                // GIVEN
+                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 6000};
+                testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const sourceCues = [
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                    {
+                        vttCue: new VTTCue(4, 6, "Source Line 3"),
+                        cueCategory: "ONSCREEN_TEXT",
+                        spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                    },
+                ] as CueDto[];
+                testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(2, []) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("adds cue to the end of the cue array if in of chunk range", () => {
+                // GIVEN
+                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000};
+                testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const sourceCues = [
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                    {
+                        vttCue: new VTTCue(4, 6, "Source Line 3"),
+                        cueCategory: "ONSCREEN_TEXT",
+                        spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                    },
+                ] as CueDto[];
+                testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(3, []) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues[2].vttCue).toEqual(new VTTCue(4, 6, "Caption Line 3"));
+                expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(6);
+                expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(9);
+                expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
+                expect(testingStore.getState().editingCueIndex).toEqual(3);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
         });
 
         describe("range prevention", () => {
