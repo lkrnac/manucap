@@ -1394,6 +1394,9 @@ describe("cueSlices", () => {
     });
 
     describe("addCue", () => {
+        beforeEach(() => {
+            testingStore.dispatch(updateEditingTrack(testingTrack as Track) as {} as AnyAction);
+        });
         it("resets editor states map in Redux", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -1526,6 +1529,50 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().validationError).toEqual(false);
+            });
+
+            it("doesn't add cue to the end of the cue array if out of chunk range", () => {
+                // GIVEN
+                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 4000};
+                testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(2, []) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().validationError).toEqual(true);
+            });
+
+            it("adds cue to the end of the cue array if in of chunk range", () => {
+                // GIVEN
+                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000};
+                testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(2, []) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(3);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
                 expect(testingStore.getState().validationError).toEqual(false);
             });
         });
@@ -1776,6 +1823,10 @@ describe("cueSlices", () => {
     });
 
     describe("deleteCue", () => {
+        beforeEach(() => {
+            testingStore.dispatch(updateEditingTrack(testingTrack as Track) as {} as AnyAction);
+        });
+
         it("deletes cue at the beginning of the cue array", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);

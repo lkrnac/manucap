@@ -17,6 +17,7 @@ import {
     conformToRules,
     getTimeGapLimits,
     markCues,
+    verifyCueChunkRange,
     verifyCueDuration
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
@@ -41,16 +42,17 @@ const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
 };
 
-const isShiftWithinChunkRange = (shiftTime: number, mediaChunkStart: number, mediaChunkEnd: number,
-                                 cues: CueDto[]): void => {
-    const editableCues = cues.filter(cue => !cue.editDisabled);
-    const firstChunkCue = editableCues.shift();
-    if (firstChunkCue && (firstChunkCue.vttCue.startTime + shiftTime) < (mediaChunkStart / 1000)) {
-        throw new Error("Exceeds media chunk start range");
-    }
-    const lastChunkCue = editableCues.pop();
-    if (lastChunkCue && (lastChunkCue.vttCue.endTime + shiftTime) > (mediaChunkEnd / 1000)) {
-        throw new Error("Exceeds media chunk end range");
+const validateShiftWithinChunkRange = (shiftTime: number, track: Track | null, cues: CueDto[]): void => {
+    if (track && (track.mediaChunkStart || track.mediaChunkStart === 0) && track.mediaChunkEnd) {
+        const editableCues = cues.filter(cue => !cue.editDisabled);
+        const firstChunkCue = editableCues.shift();
+        if (firstChunkCue && (firstChunkCue.vttCue.startTime + shiftTime) < (track.mediaChunkStart / 1000)) {
+            throw new Error("Exceeds media chunk start range");
+        }
+        const lastChunkCue = editableCues.pop();
+        if (lastChunkCue && (lastChunkCue.vttCue.endTime + shiftTime) > (track.mediaChunkEnd / 1000)) {
+            throw new Error("Exceeds media chunk end range");
+        }
     }
 };
 
@@ -206,7 +208,9 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             applyOverlapPreventionStart(cue.vttCue, previousCue);
             applyOverlapPreventionEnd(cue.vttCue, followingCue);
         }
-        const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
+        const editingTrack = state.editingTrack;
+        const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit)
+            && editingTrack && verifyCueChunkRange(cue.vttCue, editingTrack);
 
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
@@ -237,10 +241,8 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
 
 export const applyShiftTime = (shiftTime: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
-        const editTrack = getState().editingTrack;
-        if (editTrack && editTrack.mediaChunkStart !== undefined && editTrack.mediaChunkEnd) {
-            isShiftWithinChunkRange(shiftTime, editTrack.mediaChunkStart, editTrack.mediaChunkEnd, getState().cues);
-        }
+        const editingTrack = getState().editingTrack;
+        validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
         callSaveTrack(dispatch, getState);
     };
