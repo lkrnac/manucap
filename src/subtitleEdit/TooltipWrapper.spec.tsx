@@ -8,6 +8,7 @@ import "../testUtils/initBrowserEnvironment";
 import React from "react";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { fireEvent, render } from "@testing-library/react";
+import { findByTextIgnoreTags } from "../testUtils/testUtils";
 
 describe("TooltipWrapper", () => {
     it("renders overlay", async () => {
@@ -69,14 +70,8 @@ describe("TooltipWrapper", () => {
         fireEvent.mouseOver(actualNode.container.querySelector(".btn") as Element);
 
         // THEN
-        const tooltip = await actualNode.findByText((_content, node) => {
-            const hasText = (node: Element): boolean => node.textContent === "Tooltip with bold text";
-            const nodeHasText = hasText(node);
-            const childrenDontHaveText = Array.from(node.children).every(
-                (child) => !hasText(child)
-            );
-            return nodeHasText && childrenDontHaveText;
-        });
+        const tooltip = await actualNode.findByText((_content, node) =>
+            findByTextIgnoreTags("Tooltip with bold text", node));
         expect(tooltip).toBeInTheDocument();
     });
 });
