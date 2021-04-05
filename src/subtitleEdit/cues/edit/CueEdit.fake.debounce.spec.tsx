@@ -678,6 +678,53 @@ describe("CueEdit", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(1);
     });
 
+    it("doesn't add cue when ENTER is pressed on last caption cue out of range of chunk", () => {
+        // GIVEN
+        const chunkTrack = { ...testTrack, mediaChunkStart: 0, mediaChunkEnd: 1000 };
+        testingStore.dispatch(updateEditingTrack(chunkTrack as Track) as {} as AnyAction);
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE", editUuid } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+    });
+
+    it("adds cue when ENTER is pressed on last caption cue in range of chunk", () => {
+        // GIVEN
+        const chunkTrack = { ...testTrack, mediaChunkStart: 0, mediaChunkEnd: 5000 };
+        testingStore.dispatch(updateEditingTrack(chunkTrack as Track) as {} as AnyAction);
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE", editUuid } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit index={0} cue={cue} playerTime={1} />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().editingCueIndex).toEqual(1);
+    });
+
     it("adds cue when on ENTER for last translation cue, where cue index is smaller than amount of source cues", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
@@ -709,6 +756,43 @@ describe("CueEdit", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(1);
         expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+    });
+
+    it("doesn't add cue when on ENTER for last translation cue, where cue index is smaller than amount " +
+        "of source cues, out of range for chunk", () => {
+        // GIVEN
+        const chunkTrack = { ...testTrack, mediaChunkStart: 0, mediaChunkEnd: 1000 };
+        testingStore.dispatch(updateEditingTrack(chunkTrack as Track) as {} as AnyAction);
+        const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+        testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit
+                    index={0}
+                    cue={cue}
+                    playerTime={1}
+                    nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
     });
 
     it("adds cue when on ENTER for last translation cue, when there are no more source cues", () => {
@@ -764,6 +848,73 @@ describe("CueEdit", () => {
         // THEN
         expect(testingStore.getState().cues.length).toEqual(2);
         expect(testingStore.getState().editingCueIndex).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+    });
+
+    it("doesn't moves cue editing mode to next cue when ENTER is pressed on non-last if out of chunk range",
+        () => {
+        // GIVEN
+        const chunkTrack = { ...testTrack, mediaChunkStart: 0, mediaChunkEnd: 1000 };
+        testingStore.dispatch(updateEditingTrack(chunkTrack as Track) as {} as AnyAction);
+        const cues = [{ vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" }] as CueDto[];
+        const sourceCues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE",
+            editDisabled: true},
+        ] as CueDto[];
+
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit
+                    index={0}
+                    cue={cues[0]}
+                    playerTime={1}
+                    nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+    });
+
+    it("doesn't move cue editing mode to next cue when ENTER is pressed on non-last if cue is editDisabled",
+        () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE",
+                editDisabled: true },
+        ] as CueDto[];
+
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        mount(
+            <Provider store={testingStore} >
+                <CueEdit
+                    index={0}
+                    cue={cues[0]}
+                    playerTime={1}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(2);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
         expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
         expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
     });

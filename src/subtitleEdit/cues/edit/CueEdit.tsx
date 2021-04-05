@@ -61,6 +61,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 || !props.nextCueLine
                 || !props.nextCueLine.targetCues
                 || props.nextCueLine.targetCues.length === 0
+                || props.nextCueLine.targetCues[0].cue.editDisabled
                     ? dispatch(addCue(props.index + 1, nextSourceCuesIndexes))
                     : dispatch(updateEditingCueIndex(props.index + 1));
         });
