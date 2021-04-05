@@ -52,4 +52,31 @@ describe("TooltipWrapper", () => {
         expect(popover).toBeInTheDocument();
         expect(popover).toHaveClass("popover-body");
     });
+
+    it("renders with html", async () => {
+        //WHEN
+        const actualNode = render(
+            <TooltipWrapper
+                text={<span>Tooltip with <strong>bold text</strong></span>}
+                tooltipId="testId"
+                placement="left"
+                trigger={["hover", "focus"]}
+            >
+                <button className="btn">Span</button>
+            </TooltipWrapper>
+        );
+
+        fireEvent.mouseOver(actualNode.container.querySelector(".btn") as Element);
+
+        // THEN
+        const tooltip = await actualNode.findByText((_content, node) => {
+            const hasText = (node: Element): boolean => node.textContent === "Tooltip with bold text";
+            const nodeHasText = hasText(node);
+            const childrenDontHaveText = Array.from(node.children).every(
+                (child) => !hasText(child)
+            );
+            return nodeHasText && childrenDontHaveText;
+        });
+        expect(tooltip).toBeInTheDocument();
+    });
 });
