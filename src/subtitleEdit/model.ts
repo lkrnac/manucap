@@ -108,9 +108,9 @@ export enum ScrollPosition {
 }
 
 export enum CueError {
-    LINE_CHAR_LIMIT_EXCEEDED,
-    LINE_COUNT_EXCEEDED,
-    TIME_GAP_LIMIT_EXCEEDED,
-    TIME_GAP_OVERLAP,
-    SPELLCHECK_ERROR
+    LINE_CHAR_LIMIT_EXCEEDED = "Max Characters Per Line Exceeded",
+    LINE_COUNT_EXCEEDED = "Max Lines Per Caption Exceeded",
+    TIME_GAP_LIMIT_EXCEEDED = "Min/Max Caption Duration In Seconds Exceeded",
+    TIME_GAP_OVERLAP = "Cue Overlap",
+    SPELLCHECK_ERROR = "Spelling Error"
 }
