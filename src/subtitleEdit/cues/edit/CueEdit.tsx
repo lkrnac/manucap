@@ -11,7 +11,7 @@ import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { playVideoSection } from "../../player/playbackSlices";
-import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
+import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../CueActionsPanel";
 
 export interface CueEditProps {
@@ -34,19 +34,19 @@ const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
 
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
-    const validationError = useSelector((state: SubtitleEditState) => state.validationError);
+    const validationErrors = useSelector((state: SubtitleEditState) => state.validationErrors);
     const nextSourceCuesIndexes = props.nextCueLine
         ? getCueIndexes(props.nextCueLine.sourceCues)
         : [];
 
     useEffect(
         () => {
-            if (validationError) {
+            if (validationErrors && validationErrors.length > 0) {
                 setTimeout(() => {
-                    dispatch(setValidationError(false));
+                    dispatch(setValidationErrors([]));
                 }, 1000);
             }
-        }, [ dispatch, validationError ]
+        }, [ dispatch, validationErrors ]
     );
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
 
@@ -92,7 +92,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
         });
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
-    const className = validationError ? "blink-error-bg" : "bg-white";
+    const className = (validationErrors && validationErrors.length) > 0 ? "blink-error-bg" : "bg-white";
 
     return (
         <div style={{ display: "flex" }} className={"sbte-bottom-border " + className}>

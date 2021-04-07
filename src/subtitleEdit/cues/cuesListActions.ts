@@ -1,8 +1,15 @@
 import { Dispatch } from "react";
 import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-
-import { CueCategory, CueDto, ScrollPosition, SpellcheckerSettings, SubtitleEditAction, Track } from "../model";
+import {
+    CueCategory,
+    CueDto,
+    CueError,
+    ScrollPosition,
+    SpellcheckerSettings,
+    SubtitleEditAction,
+    Track
+} from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
 import { Constants } from "../constants";
@@ -100,6 +107,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
+        const cueErrors = [] as CueError[];
         if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed in the meantime from cues list
             let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
             if (textOnly) {
@@ -116,17 +124,30 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
-                overlapCaptionsAllowed || applyOverlapPreventionStart(newVttCue, previousCue);
-                applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications);
+                if (!overlapCaptionsAllowed) {
+                    if (applyOverlapPreventionStart(newVttCue, previousCue)) {
+                        cueErrors.push(CueError.TIME_GAP_OVERLAP);
+                    }
+                }
+                if (applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications)) {
+                    cueErrors.push(CueError.INVALID_RANGE_START);
+                }
             }
             if (vttCue.endTime !== originalCue.vttCue.endTime) {
-                overlapCaptionsAllowed || applyOverlapPreventionEnd(newVttCue, followingCue);
+                if (!overlapCaptionsAllowed) {
+                    if (applyOverlapPreventionEnd(newVttCue, followingCue)) {
+                        cueErrors.push(CueError.TIME_GAP_OVERLAP);
+                    }
+                }
                 applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications);
+                cueErrors.push(CueError.INVALID_RANGE_END);
             }
-            applyLineLimitation(newVttCue, originalCue, subtitleSpecifications);
+            if (applyLineLimitation(newVttCue, originalCue, subtitleSpecifications)) {
+                cueErrors.push(CueError.LINE_COUNT_EXCEEDED);
+            }
 
             if (shouldBlink(vttCue, newVttCue, textOnly)) {
-                dispatch(validationErrorSlice.actions.setValidationError(true));
+                dispatch(validationErrorSlice.actions.setValidationErrors(cueErrors));
             }
 
             const newCue = { ...originalCue, idx, vttCue: newVttCue };
@@ -197,7 +218,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
             dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
         } else {
-            dispatch(validationErrorSlice.actions.setValidationError(true));
+            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_OVERLAP]));
         }
     };
 

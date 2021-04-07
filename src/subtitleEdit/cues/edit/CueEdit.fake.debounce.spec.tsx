@@ -16,7 +16,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
 import { Character } from "../../shortcutConstants";
-import { CueDto, Language, Track } from "../../model";
+import { CueDto, CueError, Language, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
@@ -33,7 +33,7 @@ import { SearchReplaceMatches } from "../searchReplace/model";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
-import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
+import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../CueActionsPanel";
 
 jest.mock("lodash", () => (
@@ -921,11 +921,11 @@ describe("CueEdit", () => {
         );
 
         // WHEN
-        testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+        testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
         actualNode.update();
 
         // THEN
-        expect(testingStore.getState().validationError).toEqual(true);
+        expect(testingStore.getState().validationErrors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
         expect(actualNode.find("div").at(0).hasClass("blink-error-bg")).toBeTruthy();
     });
 

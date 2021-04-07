@@ -2,8 +2,8 @@ import "video.js"; // VTTCue definition
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
 
-import { setValidationError, updateEditingCueIndex } from "./cueEditorSlices";
-import { ScrollPosition } from "../../model";
+import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
+import { CueError, ScrollPosition } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 
 let testingStore = createTestingStore();
@@ -51,10 +51,10 @@ describe("cueSlices", () => {
             //GIVEN
 
             // WHEN
-            testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+            testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().validationError).toEqual(true);
+            expect(testingStore.getState().validationErrors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
         });
     });
 });

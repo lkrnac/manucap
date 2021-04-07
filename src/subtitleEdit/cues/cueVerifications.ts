@@ -138,41 +138,53 @@ export const markCues = (
 export const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
     subtitleSpecification: SubtitleSpecification | null
-): void => {
+): boolean => {
+    let applied = false;
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
 
     if (!minRangeOk(vttCue, timeGapLimit)) {
         vttCue.startTime = Number((vttCue.endTime - timeGapLimit.minGap).toFixed(3));
+        applied = true;
     }
     if (!maxRangeOk(vttCue, timeGapLimit)) {
         vttCue.startTime = Number((vttCue.endTime - timeGapLimit.maxGap).toFixed(3));
+        applied = true;
     }
+    return applied;
 };
 
 export const applyInvalidRangePreventionEnd = (
     vttCue: VTTCue,
     subtitleSpecification: SubtitleSpecification | null
-): void => {
+): boolean => {
+    let applied = false;
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
 
     if (!minRangeOk(vttCue, timeGapLimit)) {
         vttCue.endTime = Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3));
+        applied = true;
     }
     if (!maxRangeOk(vttCue, timeGapLimit)) {
         vttCue.endTime = Number((vttCue.startTime + timeGapLimit.maxGap).toFixed(3));
+        applied = true;
     }
+    return applied;
 };
 
-export const applyOverlapPreventionStart = (vttCue: VTTCue, previousCue: CueDto): void => {
+export const applyOverlapPreventionStart = (vttCue: VTTCue, previousCue: CueDto): boolean => {
     if (!startOverlapOk(vttCue, previousCue)) {
         vttCue.startTime = previousCue.vttCue.endTime;
+        return true;
     }
+    return false;
 };
 
-export const applyOverlapPreventionEnd = (vttCue: VTTCue, followingCue: CueDto): void => {
+export const applyOverlapPreventionEnd = (vttCue: VTTCue, followingCue: CueDto): boolean => {
     if (!endOverlapOk(vttCue, followingCue)) {
         vttCue.endTime = followingCue.vttCue.startTime;
+        return true;
     }
+    return false;
 };
 
 export const verifyCueDuration = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean => {
@@ -184,10 +196,11 @@ export const applyLineLimitation = (
     vttCue: VTTCue,
     originalCue: CueDto,
     subtitleSpecifications: SubtitleSpecification | null
-): VTTCue => {
+): boolean => {
     if (!checkLineLimitation(vttCue.text, subtitleSpecifications)
         && checkLineLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
         vttCue.text = originalCue.vttCue.text;
+        return true;
     }
-    return vttCue;
+    return false;
 };
