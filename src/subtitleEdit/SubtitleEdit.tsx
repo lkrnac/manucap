@@ -190,7 +190,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                 <span>Unable to complete action due to the following error(s):</span><br />
                 {
                     cueErrors.map((cueError: CueError, index: number): ReactElement =>
-                        (<><span key={index}>&#8226; {cueError}</span><br /></>))
+                        <div key={`cueErrorAlert-${index}`}>&#8226; {cueError}<br /></div>)
                 }
             </Alert>
         </div>

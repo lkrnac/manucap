@@ -1250,7 +1250,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = mount(
             <Alert key="cueErrorsAlert" variant="danger" className="sbte-cue-errors-alert" dismissible show>
                 <span>Unable to complete action due to the following error(s):</span><br />
-                <><span key="0">&#8226; {CueError.LINE_CHAR_LIMIT_EXCEEDED}</span><br /></>
+                <div>&#8226; {CueError.LINE_CHAR_LIMIT_EXCEEDED}<br /></div>
             </Alert>
         );
 

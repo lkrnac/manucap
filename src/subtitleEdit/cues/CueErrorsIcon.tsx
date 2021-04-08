@@ -10,8 +10,10 @@ interface Props {
 
 const CueErrorsIcon = (props: Props): ReactElement => {
     const tooltipId = `cue${props.cueIndex}ErrorTooltip`;
-    const sourceCuesErrors = props.sourceCuesErrors?.map(cueError => <><span>&#8226; {cueError}</span><br /></>);
-    const targetCuesErrors = props.targetCuesErrors?.map(cueError => <><span>&#8226; {cueError}</span><br /></>);
+    const sourceCuesErrors = props.sourceCuesErrors?.map((cueError: CueError, index: number): ReactElement =>
+        <div key={`sourceCueError-${props.cueIndex}-${index}`}>&#8226; {cueError}<br /></div>);
+    const targetCuesErrors = props.targetCuesErrors?.map((cueError: CueError, index: number): ReactElement =>
+        <div key={`targetCueError-${props.cueIndex}-${index}`}>&#8226; {cueError}<br /></div>);
     return (
         <TooltipWrapper
             tooltipId={tooltipId}
