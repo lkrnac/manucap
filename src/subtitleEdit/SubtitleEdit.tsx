@@ -84,7 +84,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                 setTimeout(() => {
                     setShowCueErrorsAlert(false);
                     setCueErrors([]);
-                }, 10000);
+                }, 8000);
             }
         }, [ validationErrors ]
     );
