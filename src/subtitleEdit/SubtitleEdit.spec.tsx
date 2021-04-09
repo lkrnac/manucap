@@ -1277,6 +1277,39 @@ describe("SubtitleEdit", () => {
         expect(alert.html()).toEqual(expectedNode.html());
     });
 
+    it("closes cue errors alert if dismiss button is clicked", async (done) => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        await actualNode.find("Alert");
+
+        // THEN
+        actualNode.find("Alert button").simulate("click");
+
+        setTimeout(() => {
+            actualNode.update();
+            expect(actualNode.find("Alert").html()).toBeFalsy();
+            done();
+        }, 100);
+    });
+
     it("closes cue errors alert automatically", async (done) => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
