@@ -90,5 +90,23 @@ describe("cueVerifications", () => {
             expect(markedCues[0].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
             expect(markedCues[1].errors).toEqual([]);
         });
+
+        it("marks cue with line count error if cue has too many lines", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Caption\nLine\n1"), cueCategory: "DIALOGUE",
+                    errors: []},
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+            } as SubtitleSpecification;
+            // WHEN
+            const markedCues = markCues(cues, testingSubtitleSpecification, false);
+
+            // THEN
+            expect(markedCues[0].errors).toEqual([CueError.LINE_COUNT_EXCEEDED]);
+        });
     });
 });
