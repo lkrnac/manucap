@@ -98,6 +98,8 @@ const testingCompletedTask = {
     editDisabled: true
 } as Task;
 
+jest.setTimeout(9000);
+
 describe("SubtitleEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -1273,5 +1275,36 @@ describe("SubtitleEdit", () => {
         // THEN
         const alert = await actualNode.find("Alert");
         expect(alert.html()).toEqual(expectedNode.html());
+    });
+
+    it("closes cue errors alert automatically", async (done) => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        await actualNode.find("Alert");
+
+        // THEN
+        setTimeout(() => {
+            actualNode.update();
+            expect(actualNode.find("Alert").html()).toBeFalsy();
+            done();
+        }, 8100);
     });
 });
