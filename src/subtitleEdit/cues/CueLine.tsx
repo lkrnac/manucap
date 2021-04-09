@@ -88,16 +88,10 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const showGlossaryTerms = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
 
-    const sourceCuesErrors = [] as CueError[];
-    props.data.sourceCues?.forEach((sourceCue: CueDtoWithIndex) => {
-        if (sourceCue.cue.errors && sourceCue.cue.errors.length > 0) {
-            sourceCuesErrors.push(...sourceCue.cue.errors);
-        }
-    });
-    const targetCuesErrors = [] as CueError[];
+    const cuesErrors = [] as CueError[];
     props.data.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
         if (targetCue.cue.errors && targetCue.cue.errors.length > 0) {
-            targetCuesErrors.push(...targetCue.cue.errors);
+            cuesErrors.push(...targetCue.cue.errors);
         }
     });
 
@@ -109,8 +103,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
             <CueLineFlap
                 rowIndex={props.rowIndex}
                 cueLineState={cueLineState}
-                sourceCuesErrors={sourceCuesErrors}
-                targetCuesErrors={targetCuesErrors}
+                cuesErrors={cuesErrors}
             />
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {

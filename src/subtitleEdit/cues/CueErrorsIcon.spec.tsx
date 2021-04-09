@@ -12,38 +12,40 @@ import { CueError } from "../model";
 import { findByTextIgnoreTags } from "../../testUtils/testUtils";
 
 describe("TooltipWrapper", () => {
-    it("renders for single source cue error", async () => {
+
+    it("renders for single cue error", async () => {
         // GIVEN
-        const sourceCueErrors = [CueError.LINE_CHAR_LIMIT_EXCEEDED];
+        const cueError = [CueError.LINE_CHAR_LIMIT_EXCEEDED];
         const expectedContent = render(
-            <div className="sbte-source-cues-classNames">
-                <strong>Caption(s)</strong><br />
+            <div className="sbte-cues-errors">
+                <strong>Cue(s) errors</strong><br />
                 <div><span>• Max Characters Per Line Exceeded</span><br /></div>
             </div>
         );
 
         //WHEN
         const actualNode = render(
-            <CueErrorsIcon cueIndex={0} sourceCuesErrors={sourceCueErrors} />
+            <CueErrorsIcon cueIndex={0} cuesErrors={cueError} />
         );
 
         fireEvent.mouseOver(actualNode.container.querySelector(".fa-exclamation-triangle") as Element);
 
         // THEN
-        const sourceErrors = await actualNode.findByText((_content, node) =>
-            findByTextIgnoreTags("Caption(s)", node));
-        expect(sourceErrors.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
+        const cueErrorsContent = await actualNode.findByText((_content, node) =>
+            findByTextIgnoreTags("Cue(s) errors", node));
+        expect(cueErrorsContent.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
     });
-    it("renders for multiple source cue errors", async () => {
+
+    it("renders for multiple cue errors", async () => {
         // GIVEN
-        const sourceCueErrors = [
+        const cueErrors = [
             CueError.LINE_CHAR_LIMIT_EXCEEDED,
             CueError.LINE_COUNT_EXCEEDED,
             CueError.TIME_GAP_OVERLAP
         ];
         const expectedContent = render(
-            <div className="sbte-source-cues-classNames">
-                <strong>Caption(s)</strong><br />
+            <div className="sbte-cues-errors">
+                <strong>Cue(s) errors</strong><br />
                 <div><span>• Max Characters Per Line Exceeded</span><br /></div>
                 <div><span>• Max Lines Per Caption Exceeded</span><br /></div>
                 <div><span>• Cue Overlap</span><br /></div>
@@ -52,124 +54,14 @@ describe("TooltipWrapper", () => {
 
         //WHEN
         const actualNode = render(
-            <CueErrorsIcon cueIndex={0} sourceCuesErrors={sourceCueErrors} />
+            <CueErrorsIcon cueIndex={0} cuesErrors={cueErrors} />
         );
 
         fireEvent.mouseOver(actualNode.container.querySelector(".fa-exclamation-triangle") as Element);
 
         // THEN
-        const sourceErrors = await actualNode.findByText((_content, node) =>
-            findByTextIgnoreTags("Caption(s)", node));
-        expect(sourceErrors.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
-    });
-    it("renders for single target cue error", async () => {
-        // GIVEN
-        const targetCueErrors = [CueError.LINE_CHAR_LIMIT_EXCEEDED];
-        const expectedContent = render(
-            <div className="sbte-target-cues-classNames">
-                <strong>Translations(s)</strong><br />
-                <div><span>• Max Characters Per Line Exceeded</span><br /></div>
-            </div>
-        );
-
-        //WHEN
-        const actualNode = render(
-            <CueErrorsIcon cueIndex={0} targetCuesErrors={targetCueErrors} />
-        );
-
-        fireEvent.mouseOver(actualNode.container.querySelector(".fa-exclamation-triangle") as Element);
-
-        // THEN
-        const targetErrors = await actualNode.findByText((_content, node) =>
-            findByTextIgnoreTags("Translations(s)", node));
-        expect(targetErrors.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
-    });
-    it("renders for multiple target cue with errors", async () => {
-        // GIVEN
-        const targetCueErrors = [
-            CueError.LINE_CHAR_LIMIT_EXCEEDED,
-            CueError.LINE_COUNT_EXCEEDED,
-            CueError.TIME_GAP_OVERLAP
-        ];
-        const expectedContent = render(
-            <div className="sbte-target-cues-classNames">
-                <strong>Translations(s)</strong><br />
-                <div><span>• Max Characters Per Line Exceeded</span><br /></div>
-                <div><span>• Max Lines Per Caption Exceeded</span><br /></div>
-                <div><span>• Cue Overlap</span><br /></div>
-            </div>
-        );
-
-        //WHEN
-        const actualNode = render(
-            <CueErrorsIcon cueIndex={0} targetCuesErrors={targetCueErrors} />
-        );
-
-        fireEvent.mouseOver(actualNode.container.querySelector(".fa-exclamation-triangle") as Element);
-
-        // THEN
-        const targetErrors = await actualNode.findByText((_content, node) =>
-            findByTextIgnoreTags("Translations(s)", node));
-        expect(targetErrors.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
-    });
-    it("renders for single source cue error and single target cue error", async () => {
-        // GIVEN
-        const sourceCueErrors = [CueError.LINE_CHAR_LIMIT_EXCEEDED];
-        const targetCueErrors = [CueError.LINE_CHAR_LIMIT_EXCEEDED];
-        const expectedContent = render(
-            <>
-                <div className="sbte-source-cues-classNames">
-                    <strong>Caption(s)</strong><br />
-                    <div><span>• Max Characters Per Line Exceeded</span><br /></div>
-                </div>
-                <div className="sbte-target-cues-classNames">
-                    <strong>Translations(s)</strong><br />
-                    <div><span>• Max Characters Per Line Exceeded</span><br /></div>
-                </div>
-            </>
-        );
-
-        //WHEN
-        const actualNode = render(
-            <CueErrorsIcon cueIndex={0} sourceCuesErrors={sourceCueErrors} targetCuesErrors={targetCueErrors} />
-        );
-
-        fireEvent.mouseOver(actualNode.container.querySelector(".fa-exclamation-triangle") as Element);
-
-        // THEN
-        const sourceErrors = await actualNode.findByText((_content, node) =>
-            findByTextIgnoreTags("Caption(s)", node));
-        expect(sourceErrors.parentElement?.parentElement?.innerHTML).toEqual(expectedContent.container.innerHTML);
-    });
-    it("renders for multiple source cue errors and multiple target cue errors", async () => {
-        // GIVEN
-        const sourceCueErrors = [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.LINE_COUNT_EXCEEDED];
-        const targetCueErrors = [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.LINE_COUNT_EXCEEDED];
-        const expectedContent = render(
-            <>
-                <div className="sbte-source-cues-classNames">
-                    <strong>Caption(s)</strong><br />
-                    <div><span>• Max Characters Per Line Exceeded</span><br /></div>
-                    <div><span>• Max Lines Per Caption Exceeded</span><br /></div>
-                </div>
-                <div className="sbte-target-cues-classNames">
-                    <strong>Translations(s)</strong><br />
-                    <div><span>• Max Characters Per Line Exceeded</span><br /></div>
-                    <div><span>• Max Lines Per Caption Exceeded</span><br /></div>
-                </div>
-            </>
-        );
-
-        //WHEN
-        const actualNode = render(
-            <CueErrorsIcon cueIndex={0} sourceCuesErrors={sourceCueErrors} targetCuesErrors={targetCueErrors} />
-        );
-
-        fireEvent.mouseOver(actualNode.container.querySelector(".fa-exclamation-triangle") as Element);
-
-        // THEN
-        const sourceErrors = await actualNode.findByText((_content, node) =>
-            findByTextIgnoreTags("Caption(s)", node));
-        expect(sourceErrors.parentElement?.parentElement?.innerHTML).toEqual(expectedContent.container.innerHTML);
+        const cueErrorsContent = await actualNode.findByText((_content, node) =>
+            findByTextIgnoreTags("Cue(s) errors", node));
+        expect(cueErrorsContent.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
     });
 });

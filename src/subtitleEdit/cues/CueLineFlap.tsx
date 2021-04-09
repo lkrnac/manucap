@@ -5,8 +5,7 @@ import CueErrorsIcon from "./CueErrorsIcon";
 interface Props {
     rowIndex: number;
     cueLineState: CueLineState;
-    sourceCuesErrors?: CueError[];
-    targetCuesErrors?: CueError[];
+    cuesErrors?: CueError[];
 }
 
 const CueLineFlap = (props: Props): ReactElement => (
@@ -32,8 +31,7 @@ const CueLineFlap = (props: Props): ReactElement => (
                 props.cueLineState === CueLineState.ERROR ?
                     <CueErrorsIcon
                         cueIndex={props.rowIndex}
-                        sourceCuesErrors={props.sourceCuesErrors}
-                        targetCuesErrors={props.targetCuesErrors}
+                        cuesErrors={props.cuesErrors || []}
                     /> : null
             }
             {
