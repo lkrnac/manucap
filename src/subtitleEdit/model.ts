@@ -112,7 +112,7 @@ export enum CueError {
     LINE_COUNT_EXCEEDED = "Max Lines Per Caption Exceeded",
     TIME_GAP_LIMIT_EXCEEDED = "Min/Max Caption Duration In Seconds Exceeded",
     TIME_GAP_OVERLAP = "Cue Overlap",
-    SPELLCHECK_ERROR = "Spelling Error",
+    SPELLCHECK_ERROR = "Spelling Error(s)",
     INVALID_RANGE_START = "Invalid Start Time",
     INVALID_RANGE_END = "Invalid End Time",
 }
