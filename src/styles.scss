@@ -256,3 +256,16 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     padding: unset !important;
     margin-right: unset !important;
 }
+
+div[id^=cueErrorTooltip-] {
+    background-color: #f8d7da;
+    border-color: #f8d7da;
+}
+
+div[id^=cueErrorTooltip-] .arrow:after {
+    border-right-color: #f8d7da;
+}
+
+.sbte-cues-errors {
+    color: #721c24;
+}

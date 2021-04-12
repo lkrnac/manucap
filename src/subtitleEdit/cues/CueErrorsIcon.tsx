@@ -8,7 +8,7 @@ interface Props {
 }
 
 const CueErrorsIcon = (props: Props): ReactElement => {
-    const tooltipId = `cue${props.cueIndex}ErrorTooltip`;
+    const tooltipId = `cueErrorTooltip-${props.cueIndex}`;
     const cuesErrors = props.cuesErrors?.map((cueError: CueError, index: number): ReactElement =>
         <div key={`cueError-${props.cueIndex}-${index}`}>&#8226; {cueError}<br /></div>);
     return (
