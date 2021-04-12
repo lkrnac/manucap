@@ -1026,8 +1026,11 @@ describe("CueLine", () => {
 
             const corruptedTargetCueWithIndex = {
                 index: 2,
-                cue: { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE",
-                    errors: [CueError.SPELLCHECK_ERROR]} as CueDto
+                cue: {
+                    vttCue: new VTTCue(2, 3, "Editing Line 3"),
+                    cueCategory: "DIALOGUE",
+                    errors: [CueError.SPELLCHECK_ERROR]
+                } as CueDto
             };
 
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
