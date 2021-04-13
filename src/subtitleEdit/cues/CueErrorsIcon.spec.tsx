@@ -13,7 +13,7 @@ import { findByTextIgnoreTags } from "../../testUtils/testUtils";
 import { Provider } from "react-redux";
 import testingStore from "../../testUtils/testingStore";
 
-describe("TooltipWrapper", () => {
+describe("CueErrorsIcon", () => {
 
     it("renders for single cue error", async () => {
         // GIVEN
