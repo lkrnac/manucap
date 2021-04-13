@@ -861,7 +861,7 @@ describe("CueEdit", () => {
         const sourceCues = [
             { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE",
-            editDisabled: true},
+            editDisabled: true },
         ] as CueDto[];
 
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);

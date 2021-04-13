@@ -1534,7 +1534,7 @@ describe("cueSlices", () => {
 
             it("doesn't add cue to the end of the cue array if out of chunk range", () => {
                 // GIVEN
-                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 4000};
+                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 4000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues([
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -1555,7 +1555,7 @@ describe("cueSlices", () => {
 
             it("adds cue to the end of the cue array if in of chunk range", () => {
                 // GIVEN
-                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000};
+                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues([
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -1725,7 +1725,7 @@ describe("cueSlices", () => {
 
             it("doesn't add cue to the end of the cue array if out of chunk range", () => {
                 // GIVEN
-                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 6000};
+                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 6000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const sourceCues = [
@@ -1753,7 +1753,7 @@ describe("cueSlices", () => {
 
             it("adds cue to the end of the cue array if in of chunk range", () => {
                 // GIVEN
-                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000};
+                const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const sourceCues = [
