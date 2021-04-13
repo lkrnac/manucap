@@ -78,6 +78,7 @@ export interface Task {
     readonly projectName: string;
     readonly dueDate: string;
     readonly editDisabled: boolean;
+    readonly finalChunkReview?: boolean;
 }
 
 /**
