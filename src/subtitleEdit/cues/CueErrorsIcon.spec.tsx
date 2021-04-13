@@ -10,6 +10,8 @@ import { fireEvent, render } from "@testing-library/react";
 import CueErrorsIcon from "./CueErrorsIcon";
 import { CueError } from "../model";
 import { findByTextIgnoreTags } from "../../testUtils/testUtils";
+import { Provider } from "react-redux";
+import testingStore from "../../testUtils/testingStore";
 
 describe("TooltipWrapper", () => {
 
@@ -25,7 +27,9 @@ describe("TooltipWrapper", () => {
 
         //WHEN
         const actualNode = render(
-            <CueErrorsIcon cueIndex={0} cuesErrors={cueError} />
+            <Provider store={testingStore}>
+                <CueErrorsIcon cueIndex={0} cuesErrors={cueError} />
+            </Provider>
         );
 
         fireEvent.mouseOver(actualNode.container.querySelector(".fa-exclamation-triangle") as Element);
@@ -54,7 +58,9 @@ describe("TooltipWrapper", () => {
 
         //WHEN
         const actualNode = render(
-            <CueErrorsIcon cueIndex={0} cuesErrors={cueErrors} />
+            <Provider store={testingStore}>
+                <CueErrorsIcon cueIndex={0} cuesErrors={cueErrors} />
+            </Provider>
         );
 
         fireEvent.mouseOver(actualNode.container.querySelector(".fa-exclamation-triangle") as Element);
