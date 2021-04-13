@@ -74,4 +74,23 @@ describe("TooltipWrapper", () => {
             findByTextIgnoreTags("Tooltip with bold text", node));
         expect(tooltip).toBeInTheDocument();
     });
+
+    it("renders with auto show", async () => {
+        //WHEN
+        const actualNode = render(
+            <TooltipWrapper
+                text="This is a tooltip"
+                tooltipId="testId"
+                placement="left"
+                trigger={["hover", "focus"]}
+                show
+            >
+                <button className="btn">Span</button>
+            </TooltipWrapper>
+        );
+
+        // THEN
+        const tooltip = await actualNode.findByText("This is a tooltip");
+        expect(tooltip).toBeInTheDocument();
+    });
 });

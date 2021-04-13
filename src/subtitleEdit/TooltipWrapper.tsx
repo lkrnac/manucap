@@ -10,9 +10,14 @@ interface Props {
     tooltipId: string;
     children: ReactElement;
     popover?: boolean;
+    show?: boolean;
 }
 export const TooltipWrapper = (props: Props): ReactElement => {
-
+    const otherProps = {};
+    if (props.show) {
+        // @ts-ignore need to dynamically add this property otherwise other tooltips don't work
+        otherProps.show = props.show;
+    }
     return (
         <OverlayTrigger
             // @ts-ignore ignores type of trigger, passing strings instead
@@ -27,6 +32,7 @@ export const TooltipWrapper = (props: Props): ReactElement => {
                     :
                     <Tooltip id={props.tooltipId}>{props.text}</Tooltip>
             }
+            {...otherProps}
         >
             {props.children}
         </OverlayTrigger>
