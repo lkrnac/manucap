@@ -113,7 +113,7 @@ describe("SubtitleEdit", () => {
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
+                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -249,7 +249,7 @@ describe("SubtitleEdit", () => {
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
+                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -366,7 +366,7 @@ describe("SubtitleEdit", () => {
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
+                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -423,9 +423,8 @@ describe("SubtitleEdit", () => {
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
                             <div>
-                                Translation from <span>
-                                    <b>English (US)</b> to <b>French (France)</b>
-                                </span> <i>4 seconds</i>{/* eslint-disable-line react/jsx-closing-tag-location */}
+                                Translation from <span><b>English (US)</b> to <b>French (France)</b></span>{" "}
+                                <span><i>4 seconds</i></span>
                             </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
@@ -483,7 +482,7 @@ describe("SubtitleEdit", () => {
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
+                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -621,7 +620,7 @@ describe("SubtitleEdit", () => {
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <i>4 seconds</i></div>
+                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
