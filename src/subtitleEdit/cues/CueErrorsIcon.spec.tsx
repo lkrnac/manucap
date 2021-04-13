@@ -20,7 +20,7 @@ describe("CueErrorsIcon", () => {
         const cueError = [CueError.LINE_CHAR_LIMIT_EXCEEDED];
         const expectedContent = render(
             <div className="sbte-cues-errors">
-                <strong>Cue(s) errors</strong><br />
+                <strong>Cue errors</strong><br />
                 <div><span>• Max Characters Per Line Exceeded</span><br /></div>
             </div>
         );
@@ -36,7 +36,7 @@ describe("CueErrorsIcon", () => {
 
         // THEN
         const cueErrorsContent = await actualNode.findByText((_content, node) =>
-            findByTextIgnoreTags("Cue(s) errors", node));
+            findByTextIgnoreTags("Cue errors", node));
         expect(cueErrorsContent.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
     });
 
@@ -49,7 +49,7 @@ describe("CueErrorsIcon", () => {
         ];
         const expectedContent = render(
             <div className="sbte-cues-errors">
-                <strong>Cue(s) errors</strong><br />
+                <strong>Cue errors</strong><br />
                 <div><span>• Max Characters Per Line Exceeded</span><br /></div>
                 <div><span>• Max Lines Per Caption Exceeded</span><br /></div>
                 <div><span>• Cue Overlap</span><br /></div>
@@ -67,7 +67,7 @@ describe("CueErrorsIcon", () => {
 
         // THEN
         const cueErrorsContent = await actualNode.findByText((_content, node) =>
-            findByTextIgnoreTags("Cue(s) errors", node));
+            findByTextIgnoreTags("Cue errors", node));
         expect(cueErrorsContent.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
     });
 });

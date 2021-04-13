@@ -20,7 +20,7 @@ const CueErrorsIcon = (props: Props): ReactElement => {
             tooltipId={tooltipId}
             text={
                 <div className="sbte-cues-errors">
-                    <strong>Cue(s) errors</strong>
+                    <strong>Cue errors</strong>
                     <br />
                     <div>{cuesErrors}</div>
                 </div>
