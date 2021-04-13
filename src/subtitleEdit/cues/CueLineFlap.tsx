@@ -28,11 +28,14 @@ const CueLineFlap = (props: Props): ReactElement => (
             }}
         >
             {
-                props.cueLineState === CueLineState.ERROR ?
-                    <CueErrorsIcon
-                        cueIndex={props.rowIndex}
-                        cuesErrors={props.cuesErrors || []}
-                    /> : null
+                props.cueLineState === CueLineState.ERROR
+                    ? (
+                        <CueErrorsIcon
+                            cueIndex={props.rowIndex}
+                            cuesErrors={props.cuesErrors || []}
+                        />
+                    )
+                    : null
             }
             {
                 props.cueLineState === CueLineState.GOOD
