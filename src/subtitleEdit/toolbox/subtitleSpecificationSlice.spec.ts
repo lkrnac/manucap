@@ -57,7 +57,7 @@ describe("subtitleSpecificationSlices", () => {
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].errors).toEqual([]);
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
             expect(testingStore.getState().cues[1].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
             expect(testingStore.getState().cues[2].errors).toEqual(
                 [CueError.TIME_GAP_OVERLAP, CueError.LINE_CHAR_LIMIT_EXCEEDED]);

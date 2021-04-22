@@ -6,13 +6,15 @@ import { fireEvent, render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { CueDto, Language, Task, Track } from "../../model";
+import { CueDto, CueError, Language, Task, Track } from "../../model";
 import CueView from "./CueView";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateEditingTrack } from "../../trackSlices";
-import { updateTask } from "../../trackSlices";
+import { updateEditingTrack, updateTask } from "../../trackSlices";
 import { CueActionsPanel } from "../CueActionsPanel";
+import { updateCues } from "../cuesListActions";
+import { SubtitleSpecification } from "../../toolbox/model";
+import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
 
 let testingStore = createTestingStore();
 
@@ -789,5 +791,49 @@ describe("CueView", () => {
 
         // THEN
         expect(testingStore.getState().cues).toHaveLength(0);
+    });
+
+    it("validates cue if errors property is undefined (old cues after corrupted flag removal)", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(1, 40, "Line 1\nLine 2\nLine 3"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const cue = {
+            vttCue: new VTTCue(1, 40, "Line 1\nLine 2\nLine 3"), cueCategory: "DIALOGUE"
+        } as CueDto;
+        const testingSubtitleSpecification = {
+            enabled: true,
+            maxLinesPerCaption: 2,
+            maxCharactersPerLine: 10,
+            maxCaptionDurationInMillis: 6000
+        } as SubtitleSpecification;
+        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+        const expectedSourceCueContent = "Line 1<br>Line 2<br>Line 3";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    targetCueIndex={0}
+                    cue={cue}
+                    playerTime={1}
+                    showGlossaryTerms={false}
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+        expect(testingStore.getState().cues[0].errors).toEqual(
+            [CueError.TIME_GAP_OVERLAP, CueError.LINE_COUNT_EXCEEDED, CueError.TIME_GAP_LIMIT_EXCEEDED]);
+        expect(testingStore.getState().cues[1].errors).toEqual(
+            [CueError.TIME_GAP_OVERLAP, CueError.LINE_CHAR_LIMIT_EXCEEDED]);
     });
 });

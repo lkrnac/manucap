@@ -45,8 +45,8 @@ jest.mock("lodash", () => ({
 let testingStore = createTestingStore();
 
 const cues = [
-    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
 ] as CueDto[];
 
 const cuesWithIndexes = [

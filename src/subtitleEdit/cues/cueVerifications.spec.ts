@@ -88,7 +88,7 @@ describe("cueVerifications", () => {
 
             // THEN
             expect(markedCues[0].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
-            expect(markedCues[1].errors).toEqual([]);
+            expect(markedCues[1].errors).toBeUndefined();
         });
 
         it("marks cue with line count error if cue has too many lines", () => {

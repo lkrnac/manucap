@@ -1766,11 +1766,11 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(expectedCues[0].vttCue);
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
-            expect(testingStore.getState().cues[0].errors).toEqual([]);
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().cues[1].vttCue).toEqual(expectedCues[1].vttCue);
             expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
-            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
             expect(testingStore.getState().cues[1].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
@@ -1828,7 +1828,7 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
-            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
             expect(testingStore.getState().cues[2].errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
@@ -1853,10 +1853,10 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].errors).toEqual([]);
-            expect(testingStore.getState().cues[1].errors).toEqual([]);
-            expect(testingStore.getState().cues[2].errors).toEqual([]);
-            expect(testingStore.getState().cues[3].errors).toEqual([]);
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
+            expect(testingStore.getState().cues[2].errors).toBeUndefined();
+            expect(testingStore.getState().cues[3].errors).toBeUndefined();
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
@@ -1878,10 +1878,10 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].errors).toEqual([]);
-            expect(testingStore.getState().cues[1].errors).toEqual([]);
-            expect(testingStore.getState().cues[2].errors).toEqual([]);
-            expect(testingStore.getState().cues[3].errors).toEqual([]);
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
+            expect(testingStore.getState().cues[2].errors).toBeUndefined();
+            expect(testingStore.getState().cues[3].errors).toBeUndefined();
         });
     });
 

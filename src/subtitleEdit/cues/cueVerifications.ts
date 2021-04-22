@@ -119,7 +119,7 @@ export const markCues = (
     cues.map((cue, index) => {
         const previousCue = cues[index - 1];
         const followingCue = cues[index + 1];
-        const existingCueErrors = cue.errors ? [...cue.errors] : [];
+        const existingCueErrors = cue.errors ? [...cue.errors] : undefined;
         const newCueErrors = conformToRules(
             cue,
             subtitleSpecifications,
@@ -127,10 +127,11 @@ export const markCues = (
             followingCue,
             overlapCaptions || false
         );
-        const cueErrors = Array.from(new Set([...existingCueErrors,...newCueErrors]));
+        const cueErrors = Array.from(
+            new Set([...(existingCueErrors ? existingCueErrors : []), ...newCueErrors]));
         return {
             ...cue,
-            errors: cueErrors,
+            errors: cueErrors.length > 0 ? cueErrors : existingCueErrors ? [] : undefined,
             editUuid: uuidv4()
         };
     });
