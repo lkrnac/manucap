@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement } from "react";
+import React, { Dispatch, ReactElement, useEffect } from "react";
 import { CueDto, GlossaryMatchDto, LanguageDirection } from "../../model";
 import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
@@ -9,6 +9,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { setGlossaryTerm } from "../edit/cueEditorSlices";
 import { CueActionsPanel } from "../CueActionsPanel";
 import ClickCueWrapper from "./ClickCueWrapper";
+import { updateVttCue } from "../cuesListActions";
 
 export interface CueViewProps {
     targetCueIndex?: number;
@@ -76,6 +77,14 @@ const CueView = (props: CueViewProps): ReactElement => {
         ? ""
         : buildContent(dispatch, props);
     const undefinedSafeClassName = props.className ? `${props.className} ` : "";
+
+    useEffect(() => {
+        if (props.cue.errors === undefined && props.targetCueIndex !== undefined) {
+            dispatch(updateVttCue(props.targetCueIndex, props.cue.vttCue, props.cue.editUuid));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // need to run only once on mount
+
     return (
         <ClickCueWrapper
             targetCueIndex={props.targetCueIndex}

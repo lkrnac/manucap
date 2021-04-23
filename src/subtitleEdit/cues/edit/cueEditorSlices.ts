@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueChange, CueDto, ScrollPosition, SubtitleEditAction } from "../../model";
+import { CueChange, CueDto, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { scrollPositionSlice } from "../cuesListScrollSlice";
 import { cuesSlice } from "../cuesListSlices";
@@ -95,18 +95,18 @@ export const updateEditingCueIndex = (idx: number): AppThunk =>
 
 export const validationErrorSlice = createSlice({
     name: "validationError",
-    initialState: false,
+    initialState: [] as CueError[],
     reducers: {
-        setValidationError: (_state, action: PayloadAction<boolean>): boolean => action.payload
+        setValidationErrors: (_state, action: PayloadAction<CueError[]>): CueError[] => action.payload
     },
     extraReducers: {
-        [editingCueIndexSlice.actions.updateEditingCueIndex.type]: (): boolean => false
+        [editingCueIndexSlice.actions.updateEditingCueIndex.type]: (): CueError[] => []
     }
 });
 
-export const setValidationError = (error: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean>>): void => {
-        dispatch(validationErrorSlice.actions.setValidationError(error));
+export const setValidationErrors = (errors: CueError[]): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<CueError[]>>): void => {
+        dispatch(validationErrorSlice.actions.setValidationErrors(errors));
     };
 
 export const lastCueChangeSlice = createSlice({
