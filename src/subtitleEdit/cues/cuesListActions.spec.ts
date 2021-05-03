@@ -13,7 +13,7 @@ import {
     updateCueCategory,
     updateCues,
     updateVttCue,
-    validateCorruptedCues,
+    validateCorruptedCues, validateVttCue,
 } from "./cuesListActions";
 import { CueDto, CueError, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
@@ -125,6 +125,7 @@ describe("cueSlices", () => {
                 testingStore = createTestingStore();
                 jest.clearAllMocks();
             });
+
             it("updates cues in redux with spell checking state", async () => {
                 // GIVEN
                 const testingResponse = {
@@ -165,8 +166,6 @@ describe("cueSlices", () => {
                 ) as {} as AnyAction);
                 testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
 
-                const editUuid = testingStore.getState().cues[2].editUuid;
-
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
                     .mockImplementation(() =>
@@ -175,7 +174,7 @@ describe("cueSlices", () => {
                 // WHEN
                 await act(async () => {
                     testingStore
-                        .dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
+                        .dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue")) as {} as AnyAction);
                 });
 
 
@@ -190,7 +189,7 @@ describe("cueSlices", () => {
                     }
                 );
                 expect(testingStore.getState().cues[2].spellCheck).toEqual(testingResponse);
-                expect(testingStore.getState().cues[2].editUuid).toEqual(editUuid);
+                expect(testingStore.getState().cues[2].editUuid).not.toBeNull();
                 expect(testingStore.getState().cues[2].errors).toEqual(
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
                 expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
@@ -446,7 +445,7 @@ describe("cueSlices", () => {
 
                 //THEN
                 // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(2);
+                expect(global.fetch).toBeCalledTimes(1);
             });
 
             it("triggers call to spellchecker even with trackId undefined", async () => {
@@ -492,51 +491,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].spellCheck).toEqual(testingResponse);
             });
 
-            it("triggers call to spellchecker for previous and following cues if not called before" +
-                " to validate cue in between", async () => {
-
-                const cues = [
-                    {
-                        vttCue: new VTTCue(0, 2, "falsex Line 1"), cueCategory: "DIALOGUE",
-                        errors: [CueError.SPELLCHECK_ERROR]
-                    },
-                    {
-                        vttCue: new VTTCue(2, 4, "falsex Line 2"), cueCategory: "DIALOGUE",
-                        errors: [CueError.SPELLCHECK_ERROR]
-                    },
-                    {
-                        vttCue: new VTTCue(6, 8, "falsex Line 3"), cueCategory: "DIALOGUE",
-                        errors: [CueError.SPELLCHECK_ERROR]
-                    }
-                    ] as CueDto[];
-                testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-                testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "en-US" }, id: undefined } as Track
-                ) as {} as AnyAction);
-                testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[1].editUuid;
-                // @ts-ignore modern browsers does have it
-                global.fetch = jest.fn()
-                    .mockImplementation(() => new Promise((resolve) =>
-                        resolve({ json: () => ({}), ok: true })));
-                //WHEN
-                await act(async () => {
-                    testingStore.dispatch(updateVttCue(1, cues[1].vttCue, editUuid) as {} as AnyAction);
-                });
-
-                //THEN
-                // @ts-ignore modern browsers does have it
-                expect(global.fetch).toBeCalledTimes(3);
-
-                // @ts-ignore modern browsers does have it
-                expect(global.fetch.mock.calls[0][1].body).toContain("text=falsex Line 1");
-                // @ts-ignore modern browsers does have it
-                expect(global.fetch.mock.calls[1][1].body).toContain("text=falsex Line 2");
-                // @ts-ignore modern browsers does have it
-                expect(global.fetch.mock.calls[2][1].body).toContain("text=falsex Line 3");
-            });
-
             it("does not triggers call to spellchecker for previous and following cues if called before",
                 async () => {
 
@@ -569,7 +523,6 @@ describe("cueSlices", () => {
                 await act(async () => {
                     testingStore.dispatch(updateVttCue(1, cues[1].vttCue, editUuid) as {} as AnyAction);
                 });
-
 
                 //THEN
                 // @ts-ignore modern browsers does have it
@@ -1242,6 +1195,87 @@ describe("cueSlices", () => {
         });
     });
 
+    describe("validateCue", () => {
+        it("mark cue + surrounding cues as corrupted if they don't conform to rules", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual(
+                [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
+            expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
+        });
+
+        it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toEqual([]);
+        });
+
+        it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 0,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toEqual([]);
+        });
+    });
+
     describe("updateCueCategory", () => {
         it("ignores category update if cue doesn't exist in top level cues", () => {
             // WHEN
@@ -1273,7 +1307,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6);
-            expect(testingStore.getState().cues[2].errors).toEqual([CueError.SPELLCHECK_ERROR]);
+            expect(testingStore.getState().cues[2].errors).toBeUndefined();
             expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
@@ -1806,82 +1840,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editorStates.size).toEqual(0);
-        });
-
-        it("marks cues as corrupted if they don't conform to rules", () => {
-            // GIVEN
-            const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-            const testingSubtitleSpecification = {
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 10,
-                enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
-            expect(testingStore.getState().cues[1].errors).toBeUndefined();
-            expect(testingStore.getState().cues[2].errors).toEqual(
-                [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
-            expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
-        });
-
-        it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
-            // GIVEN
-            const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-            const testingSubtitleSpecification = {
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: null,
-                enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].errors).toBeUndefined();
-            expect(testingStore.getState().cues[1].errors).toBeUndefined();
-            expect(testingStore.getState().cues[2].errors).toBeUndefined();
-            expect(testingStore.getState().cues[3].errors).toBeUndefined();
-        });
-
-        it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
-            // GIVEN
-            const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-            const testingSubtitleSpecification = {
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 0,
-                enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].errors).toBeUndefined();
-            expect(testingStore.getState().cues[1].errors).toBeUndefined();
-            expect(testingStore.getState().cues[2].errors).toBeUndefined();
-            expect(testingStore.getState().cues[3].errors).toBeUndefined();
         });
     });
 

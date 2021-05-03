@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement } from "react";
+import React, { Dispatch, ReactElement, useEffect } from "react";
 import { CueDto, GlossaryMatchDto, LanguageDirection } from "../../model";
 import { convertVttToHtml } from "../cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
@@ -9,17 +9,17 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { setGlossaryTerm } from "../edit/cueEditorSlices";
 import { CueActionsPanel } from "../CueActionsPanel";
 import ClickCueWrapper from "./ClickCueWrapper";
-// import { updateVttCue } from "../cuesListActions";
+import { validateVttCue } from "../cuesListActions";
 
 export interface CueViewProps {
-    targetCueIndex?: number;
     cue: CueDto;
+    isTargetCue: boolean;
     targetCuesLength: number;
     playerTime: number;
     showGlossaryTerms: boolean;
     sourceCuesIndexes: number[];
     nextTargetCueIndex: number;
-    showActionsPanel?: boolean;
+    targetCueIndex?: number;
     languageDirection?: LanguageDirection;
     className?: string;
     hideText?: boolean;
@@ -78,12 +78,14 @@ const CueView = (props: CueViewProps): ReactElement => {
         : buildContent(dispatch, props);
     const undefinedSafeClassName = props.className ? `${props.className} ` : "";
 
-    // useEffect(() => {
-    //     if (props.cue.errors === undefined && props.targetCueIndex !== undefined) {
-    //         dispatch(updateVttCue(props.targetCueIndex, props.cue.vttCue, props.cue.editUuid));
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []); // need to run only once on mount
+    useEffect(() => {
+        if (props.isTargetCue
+            && (props.cue.errors === undefined || props.cue.errors === null)
+            && props.targetCueIndex !== undefined) {
+            dispatch(validateVttCue(props.targetCueIndex));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // need to run only once on mount
 
     return (
         <ClickCueWrapper
@@ -133,7 +135,7 @@ const CueView = (props: CueViewProps): ReactElement => {
                     />
                 </div>
                 {
-                    props.targetCueIndex !== undefined && props.showActionsPanel
+                    props.targetCueIndex !== undefined && props.isTargetCue
                         ? (
                             <CueActionsPanel
                                 index={props.targetCueIndex}

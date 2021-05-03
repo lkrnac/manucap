@@ -19,7 +19,7 @@ export const addSpellCheck = (
         };
     }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
-    dispatch(checkErrors({ index }));
+    dispatch(checkErrors({ index, shouldSpellCheck: false }));
 };
 
 export const fetchSpellCheck = (
