@@ -32,7 +32,6 @@ describe("saveSlices", () => {
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
 
             // WHEN
             callSaveTrack(testingStore.dispatch, testingStore.getState);
@@ -51,7 +50,6 @@ describe("saveSlices", () => {
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
             callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // WHEN
