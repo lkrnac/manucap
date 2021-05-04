@@ -114,6 +114,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                             return (
                                 <CueView
                                     key={sourceCue.index}
+                                    isTargetCue={false}
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
@@ -164,13 +165,13 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 : (
                                     <CueView
                                         key={targetCue.index}
+                                        isTargetCue
                                         targetCueIndex={targetCue.index}
                                         cue={targetCue.cue}
                                         targetCuesLength={props.rowProps.targetCuesLength}
                                         playerTime={props.rowProps.playerTime}
                                         className={`${captionClassName} sbte-target-cue`}
                                         showGlossaryTerms={false}
-                                        showActionsPanel
                                         languageDirection={editingTrack?.language.direction}
                                         sourceCuesIndexes={sourceCuesIndexes}
                                         nextTargetCueIndex={nextTargetCueIndex}

@@ -1,6 +1,5 @@
-import { getTimeGapLimits, markCues } from "./cueVerifications";
+import { getTimeGapLimits } from "./cueVerifications";
 import { SubtitleSpecification } from "../toolbox/model";
-import { CueDto, CueError } from "../model";
 
 describe("cueVerifications", () => {
     describe("getTimeGapLimits", () => {
@@ -71,42 +70,6 @@ describe("cueVerifications", () => {
             // THEN
             expect(timeGap.minGap).toEqual(1.5);
             expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
-        });
-    });
-
-    describe("markCues", () => {
-        it("returns errors if cue has errors", () => {
-            // GIVEN
-            const cues = [
-                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE",
-                    errors: [CueError.LINE_CHAR_LIMIT_EXCEEDED]},
-                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-
-            // WHEN
-            const markedCues = markCues(cues, null, false);
-
-            // THEN
-            expect(markedCues[0].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
-            expect(markedCues[1].errors).toBeUndefined();
-        });
-
-        it("marks cue with line count error if cue has too many lines", () => {
-            // GIVEN
-            const cues = [
-                { vttCue: new VTTCue(0, 1, "Caption\nLine\n1"), cueCategory: "DIALOGUE",
-                    errors: []},
-            ] as CueDto[];
-            const testingSubtitleSpecification = {
-                enabled: true,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            // WHEN
-            const markedCues = markCues(cues, testingSubtitleSpecification, false);
-
-            // THEN
-            expect(markedCues[0].errors).toEqual([CueError.LINE_COUNT_EXCEEDED]);
         });
     });
 });

@@ -19,24 +19,19 @@ jest.mock("lodash", () => ({
         (...args: any[]): NodeJS.Timeout => setTimeout(() => callback(...args), 50)
 }));
 
+const saveTrack = jest.fn();
+const testingTrack = { mediaTitle: "testingTrack" } as Track;
+const testingCues = [
+    { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS" }
+] as CueDto[];
+
 describe("saveSlices", () => {
-    beforeEach(() => testingStore = createTestingStore());
-    const saveTrack = jest.fn();
-    const testingTrack = { mediaTitle: "testingTrack" } as Track;
-    const testingCues = [
-        { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS" }
-    ] as CueDto[];
-
-    beforeEach(() => {
-        // GIVEN
-        saveTrack.mockReset();
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-        testingCues[0].editUuid = testingStore.getState().cues[0].editUuid;
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-    });
-
     describe("saveTrack", () => {
         beforeEach(() => {
+            testingStore = createTestingStore();
+            saveTrack.mockReset();
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         });
 
@@ -132,6 +127,13 @@ describe("saveSlices", () => {
     });
 
     describe("setAutoSaveSuccess", () => {
+        beforeEach(() => {
+            testingStore = createTestingStore();
+            saveTrack.mockReset();
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        });
+
         it("call doesn't fail if save track handler is not defined", () => {
             // GIVEN
             testingStore.dispatch(saveStateSlice.actions.setState(SaveState.RETRY) as {} as AnyAction);

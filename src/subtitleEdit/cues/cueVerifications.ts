@@ -1,5 +1,4 @@
 import sanitizeHtml from "sanitize-html";
-import { v4 as uuidv4 } from "uuid";
 
 import { CueDto, CueError, TimeGapLimit } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
@@ -109,32 +108,6 @@ export const conformToRules = (
         return cueErrors;
     }
 ;
-
-
-export const markCues = (
-    cues: CueDto[],
-    subtitleSpecifications: SubtitleSpecification | null,
-    overlapCaptions: boolean | undefined
-): CueDto [] =>
-    cues.map((cue, index) => {
-        const previousCue = cues[index - 1];
-        const followingCue = cues[index + 1];
-        const existingCueErrors = cue.errors ? [...cue.errors] : undefined;
-        const newCueErrors = conformToRules(
-            cue,
-            subtitleSpecifications,
-            previousCue,
-            followingCue,
-            overlapCaptions || false
-        );
-        const cueErrors = Array.from(
-            new Set([...(existingCueErrors ? existingCueErrors : []), ...newCueErrors]));
-        return {
-            ...cue,
-            errors: cueErrors.length > 0 ? cueErrors : existingCueErrors ? [] : undefined,
-            editUuid: uuidv4()
-        };
-    });
 
 export const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
