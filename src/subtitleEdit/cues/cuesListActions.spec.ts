@@ -599,7 +599,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().validationError).toEqual(true);
+                expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
             });
 
             it("doesn't allow end time to be greater than chunk end time", () => {
@@ -615,7 +615,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().validationError).toEqual(true);
+                expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
             });
 
             it("doesn't allow start time to be less than chunk start time with sub spec", () => {
@@ -637,7 +637,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().validationError).toEqual(true);
+                expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
             });
 
             it("doesn't allow end time to be greater than chunk end time with sub spec", () => {
@@ -659,7 +659,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().validationError).toEqual(true);
+                expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
             });
 
             it("Adjust startTime to follow min caption gap passed from subtitle spec", () => {
@@ -916,7 +916,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().validationErrors).toEqual(
-                    [CueError.TIME_GAP_OVERLAP, CueError.INVALID_RANGE_END]);
+                    [CueError.TIME_GAP_OVERLAP]);
             });
 
             it("doesn't apply overlap prevention for end time if wasn't changed", () => {
@@ -1586,10 +1586,10 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().validationError).toEqual(true);
+                expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
             });
 
-            it("adds cue to the end of the cue array if in of chunk range", () => {
+            it("adds cue to the end of the cue array if in chunk range", () => {
                 // GIVEN
                 const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
@@ -1609,7 +1609,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
-                expect(testingStore.getState().validationError).toEqual(false);
+                expect(testingStore.getState().validationErrors).toEqual([]);
             });
         });
 
@@ -1777,17 +1777,17 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    addCue(2, []) as {} as AnyAction
+                    addCue(3, []) as {} as AnyAction
                 );
 
                 // THEN
                 expect(testingStore.getState().cues.length).toEqual(3);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().validationError).toEqual(true);
+                expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
             });
 
-            it("adds cue to the end of the cue array if in of chunk range", () => {
+            it("adds cue to the end of the cue array if in chunk range", () => {
                 // GIVEN
                 const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
@@ -1814,7 +1814,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(9);
                 expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
                 expect(testingStore.getState().editingCueIndex).toEqual(3);
-                expect(testingStore.getState().validationError).toEqual(false);
+                expect(testingStore.getState().validationErrors).toEqual([]);
             });
         });
 

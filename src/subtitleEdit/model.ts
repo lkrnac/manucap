@@ -119,4 +119,5 @@ export enum CueError {
     SPELLCHECK_ERROR = "Spelling Error(s)",
     INVALID_RANGE_START = "Invalid Start Time",
     INVALID_RANGE_END = "Invalid End Time",
+    OUT_OF_CHUNK_RAGE = "Out of Chunk Range",
 }

@@ -195,13 +195,13 @@ describe("CueLine", () => {
                             style={{ display: "flex", flexDirection:"column", width: "100%" }}
                         >
                             <CueView
+                                isTargetCue
                                 targetCueIndex={0}
                                 cue={matchedCuesCaptioningEditDisabled[0].targetCues[0].cue}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
                                 nextTargetCueIndex={0}

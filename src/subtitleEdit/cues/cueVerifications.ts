@@ -168,24 +168,28 @@ export const applyInvalidChunkRangePreventionStart = (
     vttCue: VTTCue,
     originalVttCueStart: number,
     editingTrack: Track
-): void => {
-
+): boolean => {
+    let applied = false;
     if ((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd
         && !withinChunkRange(vttCue.startTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)) {
         vttCue.startTime = originalVttCueStart;
+        applied = true;
     }
+    return applied;
 };
 
 export const applyInvalidChunkRangePreventionEnd = (
     vttCue: VTTCue,
     originalVttCueEnd: number,
     editingTrack: Track
-): void => {
-
+): boolean => {
+    let applied = false;
     if ((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd
         && !withinChunkRange(vttCue.endTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)) {
         vttCue.endTime = originalVttCueEnd;
+        applied = true;
     }
+    return applied;
 };
 
 export const verifyCueDuration = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean => {

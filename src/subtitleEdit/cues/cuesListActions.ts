@@ -149,7 +149,9 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                 if (applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications)) {
                     cueErrors.push(CueError.INVALID_RANGE_START);
                 }
-                applyInvalidChunkRangePreventionStart(newVttCue, originalCue.vttCue.startTime, track);
+                if (applyInvalidChunkRangePreventionStart(newVttCue, originalCue.vttCue.startTime, track)) {
+                    cueErrors.push(CueError.OUT_OF_CHUNK_RAGE);
+                }
             }
             if (vttCue.endTime !== originalCue.vttCue.endTime) {
                 if (!overlapCaptionsAllowed) {
@@ -157,9 +159,12 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                         cueErrors.push(CueError.TIME_GAP_OVERLAP);
                     }
                 }
-                applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications);
-                cueErrors.push(CueError.INVALID_RANGE_END);
-                applyInvalidChunkRangePreventionEnd(newVttCue, originalCue.vttCue.endTime, track);
+                if (applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications)) {
+                    cueErrors.push(CueError.INVALID_RANGE_END);
+                }
+                if (applyInvalidChunkRangePreventionEnd(newVttCue, originalCue.vttCue.endTime, track)) {
+                    cueErrors.push(CueError.OUT_OF_CHUNK_RAGE);
+                }
             }
             if (applyLineLimitation(newVttCue, originalCue, subtitleSpecifications)) {
                 cueErrors.push(CueError.LINE_COUNT_EXCEEDED);
@@ -235,16 +240,21 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             applyOverlapPreventionStart(cue.vttCue, previousCue);
             applyOverlapPreventionEnd(cue.vttCue, followingCue);
         }
-        const editingTrack = state.editingTrack;
-        const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit)
-            && editingTrack && verifyCueChunkRange(cue.vttCue, editingTrack);
 
-        if (validCueDuration) {
+        const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
+        const editingTrack = state.editingTrack;
+        const validCueDurationChunk = editingTrack && verifyCueChunkRange(cue.vttCue, editingTrack);
+
+        if (validCueDuration && validCueDurationChunk) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
             dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
         } else {
-            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_OVERLAP]));
+            if (!validCueDuration) {
+                dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_OVERLAP]));
+            } else {
+                dispatch(validationErrorSlice.actions.setValidationErrors([CueError.OUT_OF_CHUNK_RAGE]));
+            }
         }
     };
 
