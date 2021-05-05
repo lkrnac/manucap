@@ -31,12 +31,12 @@ export const CUE_LINE_STATE_CLASSES = new Map ([
 export interface CueDto {
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
-    corrupted?: boolean;
-    editDisabled?: boolean;
     editUuid?: string;
+    editDisabled?: boolean;
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
     glossaryMatches?: GlossaryMatchDto[];
+    errors?: CueError[] | null;
 }
 
 export interface CueDtoWithIndex {
@@ -109,4 +109,14 @@ export enum ScrollPosition {
     FIRST,
     LAST,
     CURRENT
+}
+
+export enum CueError {
+    LINE_CHAR_LIMIT_EXCEEDED = "Max Characters Per Line Exceeded",
+    LINE_COUNT_EXCEEDED = "Max Lines Per Caption Exceeded",
+    TIME_GAP_LIMIT_EXCEEDED = "Min/Max Caption Duration In Seconds Exceeded",
+    TIME_GAP_OVERLAP = "Cue Overlap",
+    SPELLCHECK_ERROR = "Spelling Error(s)",
+    INVALID_RANGE_START = "Invalid Start Time",
+    INVALID_RANGE_END = "Invalid End Time",
 }

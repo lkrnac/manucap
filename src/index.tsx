@@ -126,7 +126,8 @@ const TestApp = (): ReactElement => {
             targetCues.push({
                 vttCue: new VTTCue(randomStart, randomEnd, text),
                 cueCategory: "DIALOGUE",
-                editDisabled: !withinChunkRange
+                editDisabled: !withinChunkRange,
+                errors: null
             });
         }
 

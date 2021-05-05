@@ -20,7 +20,7 @@ import {
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
-import { CueDto, Language, Track } from "../../model";
+import { CueDto, CueError, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues } from "../cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
@@ -819,12 +819,11 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
         expect(testingStore.getState().editorStates[0]).toBeUndefined();
     });
 
     describe("spell checking", () => {
-
         beforeEach(() => {
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const testingTrack = {
@@ -1147,7 +1146,7 @@ describe("CueTextEditor", () => {
             const cues = [
                 { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
-                    corrupted: true },
+                    errors: [CueError.SPELLCHECK_ERROR]},
                 { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck }
             ] as CueDto[];
@@ -1208,12 +1207,12 @@ describe("CueTextEditor", () => {
             const cues = [
                 { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
-                    corrupted: true },
+                    errors: [CueError.SPELLCHECK_ERROR]},
                 { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
-                    corrupted: true },
+                    errors: [CueError.SPELLCHECK_ERROR]},
                 { vttCue: new VTTCue(4, 6, "Caption Linex 2"),
-                    cueCategory: "DIALOGUE", corrupted: true }
+                    cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR]}
             ] as CueDto[];
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
@@ -1238,11 +1237,11 @@ describe("CueTextEditor", () => {
             );
             const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
             fireEvent(errorSpan,
-                            new MouseEvent("click", {
-                                bubbles: true,
-                                cancelable: true,
-                            })
-                        );
+                new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true,
+                })
+            );
 
             //WHEN
             const ignoreOption = document.querySelectorAll(".spellcheck__option")[0] as Element;
@@ -1257,9 +1256,9 @@ describe("CueTextEditor", () => {
             //@ts-ignore value should not be null
             const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
             expect(ignores[trackId]).not.toBeNull();
-            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[2].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[0].errors).toEqual([]);
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(saveTrack).toBeCalled();
         });
 
@@ -1291,10 +1290,10 @@ describe("CueTextEditor", () => {
             const cues = [
                 { vttCue: new VTTCue(0, 2, cueText),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
-                    corrupted: true },
+                    errors: [CueError.SPELLCHECK_ERROR]},
                 { vttCue: new VTTCue(2, 4, cueText),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
-                    corrupted: true }
+                    errors: [CueError.SPELLCHECK_ERROR]}
             ] as CueDto[];
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
@@ -1338,8 +1337,8 @@ describe("CueTextEditor", () => {
             //@ts-ignore value should not be null
             const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
             expect(ignores[trackId]).not.toBeNull();
-            expect(testingStore.getState().cues[0].corrupted).toBeFalsy();
-            expect(testingStore.getState().cues[1].corrupted).toBeFalsy();
+            expect(testingStore.getState().cues[0].errors).toEqual([]);
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
         });
     });
 
@@ -1460,9 +1459,15 @@ describe("CueTextEditor", () => {
                 offsetIndex: 0,
                 matchLength: 4
             } as SearchReplaceMatches;
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches
+                } as CueDto,
+                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+            ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            cues[0].searchReplaceMatches = searchReplaceMatches;
-            cues[0].vttCue.text = "some <i>HTML</i> <b>Text</b> sample Text and Text";
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -1504,9 +1509,15 @@ describe("CueTextEditor", () => {
                 offsetIndex: 1,
                 matchLength: 4
             } as SearchReplaceMatches;
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches
+                } as CueDto,
+                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+            ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            cues[0].searchReplaceMatches = searchReplaceMatches;
-            cues[0].vttCue.text = "some <i>HTML</i> <b>Text</b> sample Text and Text";
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -1548,9 +1559,15 @@ describe("CueTextEditor", () => {
                 offsetIndex: 2,
                 matchLength: 4
             } as SearchReplaceMatches;
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches
+                } as CueDto,
+                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+            ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            cues[0].searchReplaceMatches = searchReplaceMatches;
-            cues[0].vttCue.text = "some <i>HTML</i> <b>Text</b> sample Text and Text";
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;

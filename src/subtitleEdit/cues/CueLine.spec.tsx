@@ -2,10 +2,10 @@ import "../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import React, { ReactElement } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { render, fireEvent } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { Provider } from "react-redux";
 
-import { CueDto, CueLineState, Language, Task, Track } from "../model";
+import { CueDto, CueError, CueLineState, Language, Task, Track } from "../model";
 import CueEdit, { CueEditProps } from "./edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView, { CueViewProps } from "./view/CueView";
@@ -130,13 +130,13 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCuesWithIndexes[0].cue}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
                                 nextTargetCueIndex={0}
@@ -255,6 +255,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={1} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={1}
                                 cue={sourceCues[1]}
                                 targetCuesLength={3}
@@ -319,6 +320,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={2} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={2}
                                 cue={sourceCues[2]}
                                 targetCuesLength={3}
@@ -385,6 +387,7 @@ describe("CueLine", () => {
                             style={{ display: "flex", flexDirection:"column", width: "100%" }}
                         >
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -396,13 +399,13 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={0}
                                 cue={disabledTargetCue}
                                 targetCuesLength={1}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
@@ -454,6 +457,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
                                 playerTime={0}
@@ -536,6 +540,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
                                 playerTime={0}
@@ -607,6 +612,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={0}
                                 playerTime={0}
@@ -690,13 +696,13 @@ describe("CueLine", () => {
                                 <div style={{ width: "100%", minHeight: "78px" }} />
                             </div>
                             <CueView
+                                isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
                                 nextTargetCueIndex={0}
@@ -749,6 +755,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -760,6 +767,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
@@ -771,6 +779,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
@@ -783,13 +792,13 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
@@ -842,6 +851,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -854,37 +864,37 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
@@ -937,6 +947,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -948,6 +959,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
@@ -959,6 +971,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
@@ -1019,6 +1032,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1031,26 +1045,26 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
                             <CueEdit index={1} cue={targetCues[1]} playerTime={0} />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
@@ -1098,7 +1112,11 @@ describe("CueLine", () => {
 
             const corruptedTargetCueWithIndex = {
                 index: 2,
-                cue: { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE", corrupted: true } as CueDto
+                cue: {
+                    vttCue: new VTTCue(2, 3, "Editing Line 3"),
+                    cueCategory: "DIALOGUE",
+                    errors: [CueError.SPELLCHECK_ERROR]
+                } as CueDto
             };
 
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
@@ -1111,6 +1129,7 @@ describe("CueLine", () => {
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
+                                isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1123,37 +1142,37 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-error" />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
                             <CueView
+                                isTargetCue
                                 targetCueIndex={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                                 targetCuesLength={3}
                                 playerTime={0}
                                 className="sbte-gray-100-background sbte-target-cue"
                                 showGlossaryTerms={false}
-                                showActionsPanel
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}

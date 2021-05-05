@@ -18,3 +18,12 @@ export interface MockedDebouncedFunction extends Function {
     cancel: Function;
 }
 
+export const findByTextIgnoreTags = (text: string, node: Element): boolean => {
+    const hasText = (node: Element): boolean => node.textContent === text;
+    const nodeHasText = hasText(node);
+    const childrenDontHaveText = Array.from(node.children).every(
+        (child) => !hasText(child)
+    );
+    return nodeHasText && childrenDontHaveText;
+};
+

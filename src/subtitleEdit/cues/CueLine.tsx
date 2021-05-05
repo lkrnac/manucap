@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueLineDto, CueLineState } from "../model";
+import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../model";
 import CueEdit from "./edit/CueEdit";
 import CueView from "./view/CueView";
 import { SubtitleEditState } from "../subtitleEditReducers";
@@ -38,7 +38,10 @@ const hasTargetText = (cueLine?: CueLineDto): boolean => {
 const hasCorruptedTargetCue = (cueLine?: CueLineDto): boolean => {
     if (cueLine && cueLine.targetCues && cueLine.targetCues.length > 0) {
         return cueLine.targetCues
-            .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.corrupted === true)
+            .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.errors
+                ? cueWithIndex?.cue.errors?.length > 0
+                : false
+            )
             .reduce((hasText1: boolean, hasText2: boolean): boolean => hasText1 || hasText2);
     }
     return false;
@@ -102,12 +105,24 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const showGlossaryTerms = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
 
+    const cuesErrors = [] as CueError[];
+    props.data.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
+        if (targetCue.cue.errors && targetCue.cue.errors.length > 0) {
+            cuesErrors.push(...targetCue.cue.errors);
+        }
+    });
+
     return (
         <div
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
-            <CueLineFlap rowIndex={props.rowIndex} cueLineState={cueLineState} editDisabled={cueLineEditDisabled} />
+            <CueLineFlap
+                rowIndex={props.rowIndex}
+                cueLineState={cueLineState}
+                cuesErrors={cuesErrors}
+                editDisabled={cueLineEditDisabled}
+            />
             <div
                 className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
                 style={{ display: "flex", flexDirection:"column", width: "100%" }}
@@ -118,6 +133,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                             return (
                                 <CueView
                                     key={sourceCue.index}
+                                    isTargetCue={false}
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
@@ -168,13 +184,13 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 : (
                                     <CueView
                                         key={targetCue.index}
+                                        isTargetCue
                                         targetCueIndex={targetCue.index}
                                         cue={targetCue.cue}
                                         targetCuesLength={props.rowProps.targetCuesLength}
                                         playerTime={props.rowProps.playerTime}
                                         className={`${captionClassName} sbte-target-cue`}
                                         showGlossaryTerms={false}
-                                        showActionsPanel
                                         languageDirection={editingTrack?.language.direction}
                                         sourceCuesIndexes={sourceCuesIndexes}
                                         nextTargetCueIndex={nextTargetCueIndex}

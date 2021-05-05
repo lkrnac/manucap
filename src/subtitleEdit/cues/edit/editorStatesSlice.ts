@@ -6,6 +6,7 @@ import { EditorState, RichUtils } from "draft-js";
 import { getVttText } from "../cueTextConverter";
 import { checkLineLimitation } from "../cueVerifications";
 import { validationErrorSlice } from "./cueEditorSlices";
+import { CueError } from "../../model";
 
 interface EditorStateAction {
     editorId: number;
@@ -43,7 +44,7 @@ export const editorStatesSlice: Slice<
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export const updateEditorState = (editorId: number, newEditorState: EditorState): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<EditorStateAction | boolean>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<EditorStateAction | CueError[]>>, getState): void => {
         const subtitleSpecifications = getState().subtitleSpecifications;
 
         const editorStates = getState().editorStates;
@@ -54,7 +55,7 @@ export const updateEditorState = (editorId: number, newEditorState: EditorState)
         if (currentEditorState  != null
             && !checkLineLimitation(vttText, subtitleSpecifications)
         ) {
-            dispatch(validationErrorSlice.actions.setValidationError(true));
+            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.LINE_COUNT_EXCEEDED]));
             // Force creation of different EditorState instance, so that CueTextEditor re-renders with old content
             editorState = RichUtils.toggleCode(RichUtils.toggleCode(currentEditorState));
         }

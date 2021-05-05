@@ -38,7 +38,7 @@ export const Reducers = {
 
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
-    validationError: validationErrorSlice.reducer,
+    validationErrors: validationErrorSlice.reducer,
     glossaryTerm: glossaryTermSlice.reducer,
 };
 

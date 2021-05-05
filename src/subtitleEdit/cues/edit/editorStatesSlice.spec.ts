@@ -6,6 +6,7 @@ import { updateEditorState } from "./editorStatesSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
+import { CueError } from "../../model";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
@@ -59,7 +60,7 @@ describe("editorStatesSlice", () => {
         expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText())
             .toEqual("editor1 \n text");
         expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
-        expect(testingStore.getState().validationError).toEqual(true);
+        expect(testingStore.getState().validationErrors).toEqual([CueError.LINE_COUNT_EXCEEDED]);
     });
 
     it("does update editor state if subtitle specs limitations are not matched for old and new cue", () => {
@@ -83,7 +84,7 @@ describe("editorStatesSlice", () => {
         expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText())
             .toEqual("editor1 \n\n text");
         expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
-        expect(testingStore.getState().validationError).toEqual(true);
+        expect(testingStore.getState().validationErrors).toEqual([CueError.LINE_COUNT_EXCEEDED]);
     });
 });
 

@@ -1,10 +1,11 @@
 import React, { ReactElement } from "react";
-import { CUE_LINE_STATE_CLASSES, CueLineState } from "../model";
-
+import { CUE_LINE_STATE_CLASSES, CueError, CueLineState } from "../model";
+import CueErrorsIcon from "./CueErrorsIcon";
 
 interface Props {
     rowIndex: number;
     cueLineState: CueLineState;
+    cuesErrors?: CueError[];
     editDisabled?: boolean;
 }
 
@@ -46,7 +47,12 @@ const CueLineFlap = (props: Props): ReactElement => (
         >
             {
                 props.cueLineState === CueLineState.ERROR
-                    ? <i className="fas fa-exclamation-triangle" />
+                    ? (
+                        <CueErrorsIcon
+                            cueIndex={props.rowIndex}
+                            cuesErrors={props.cuesErrors || []}
+                        />
+                    )
                     : null
             }
             {

@@ -12,11 +12,11 @@ import { render } from "@testing-library/react";
 import { AnyAction } from "redux";
 
 // @ts-ignore - Doesn't have types definitions file
-import { CueDto, Track } from "../../model";
+import { CueDto, CueError, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateCues } from "../cuesListActions";
-import { setValidationError } from "./cueEditorSlices";
+import { setValidationErrors } from "./cueEditorSlices";
 import { updateEditingTrack } from "../../trackSlices";
 
 let testingStore = createTestingStore();
@@ -45,11 +45,11 @@ describe("CueEdit", () => {
         );
 
         // WHEN
-        testingStore.dispatch(setValidationError(true) as {} as AnyAction);
+        testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
 
         // THEN
         setTimeout(() => {
-            expect(testingStore.getState().validationError).toEqual(false);
+            expect(testingStore.getState().validationErrors).toEqual([]);
             const rootElement = actualNode.container.querySelector("div") as HTMLDivElement;
             expect(rootElement.className).toEqual("sbte-bottom-border bg-white");
             done();

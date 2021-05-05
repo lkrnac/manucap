@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueCategory, CueDto, SubtitleEditAction } from "../model";
+import { CueCategory, CueDto, CueError, SubtitleEditAction } from "../model";
 import { copyNonConstructorProperties } from "./cueUtils";
 import { editingTrackSlice } from "../trackSlices";
-import { SubtitleSpecificationAction, subtitleSpecificationSlice } from "../toolbox/subtitleSpecificationSlice";
 import { Match, SpellCheck } from "./spellCheck/model";
 import { SearchReplaceMatches } from "./searchReplace/model";
 import { hasIgnoredKeyword } from "./spellCheck/spellCheckerUtils";
-import { markCues } from "./cueVerifications";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -30,13 +28,8 @@ interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
 }
 
-interface CheckOptions extends SubtitleSpecificationAction {
-    overlapEnabled?: boolean;
-    index?: number;
-}
-
-export interface CueCorruptedPayload {
-    corrupted: boolean;
+export interface CueErrorsPayload {
+    errors: CueError[];
     index: number;
 }
 
@@ -57,31 +50,19 @@ export const cuesSlice = createSlice({
     initialState: [] as CueDto[],
     reducers: {
         updateVttCue: (state, action: PayloadAction<VttCueAction>): void => {
-            state[action.payload.idx] = {
-                ...state[action.payload.idx],
-                vttCue: action.payload.vttCue,
-                editUuid: action.payload.editUuid
-            };
+            state[action.payload.idx].vttCue = action.payload.vttCue;
+            state[action.payload.idx].editUuid = action.payload.editUuid;
         },
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
-                state[action.payload.idx] = {
-                    ...state[action.payload.idx],
-                    cueCategory: action.payload.cueCategory
-                };
+                state[action.payload.idx].cueCategory = action.payload.cueCategory;
             }
         },
         addSpellCheck: (state, action: PayloadAction<SpellCheckAction>): void => {
-            state[action.payload.idx] = {
-                ...state[action.payload.idx],
-                spellCheck: action.payload.spellCheck
-            };
+            state[action.payload.idx].spellCheck = action.payload.spellCheck;
         },
         addSearchMatches: (state, action: PayloadAction<SearchReplaceAction>): void => {
-            state[action.payload.idx] = {
-                ...state[action.payload.idx],
-                searchReplaceMatches: action.payload.searchMatches
-            };
+            state[action.payload.idx].searchReplaceMatches = action.payload.searchMatches;
         },
         removeIgnoredSpellcheckedMatchesFromAllCues: (state,
                                                       action: PayloadAction<SpellCheckRemovalAction>): void => {
@@ -125,8 +106,8 @@ export const cuesSlice = createSlice({
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
         },
-        setCorrupted: (state, action: PayloadAction<CueCorruptedPayload>): void => {
-            state[action.payload.index].corrupted = action.payload.corrupted;
+        setErrors: (state, action: PayloadAction<CueErrorsPayload>): void => {
+            state[action.payload.index].errors = action.payload.errors;
         },
         syncCues: (state, action: PayloadAction<CuesAction>): CueDto[] => {
             const sourceCues = action.payload.cues;
@@ -145,8 +126,5 @@ export const cuesSlice = createSlice({
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
-        [subtitleSpecificationSlice.actions.readSubtitleSpecification.type]:
-            (state, action: PayloadAction<CheckOptions>): CueDto[] =>
-                markCues(state, action.payload.subtitleSpecification, action.payload.overlapEnabled),
     }
 });
