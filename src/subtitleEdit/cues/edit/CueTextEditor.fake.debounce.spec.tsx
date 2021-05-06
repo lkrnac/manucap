@@ -829,12 +829,11 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
         expect(testingStore.getState().editorStates[0]).toBeUndefined();
     });
 
     describe("spell checking", () => {
-
         beforeEach(() => {
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const testingTrack = {
@@ -1473,9 +1472,15 @@ describe("CueTextEditor", () => {
                 offsetIndex: 0,
                 matchLength: 4
             } as SearchReplaceMatches;
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches
+                } as CueDto,
+                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+            ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            cues[0].searchReplaceMatches = searchReplaceMatches;
-            cues[0].vttCue.text = "some <i>HTML</i> <b>Text</b> sample Text and Text";
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -1520,9 +1525,15 @@ describe("CueTextEditor", () => {
                 offsetIndex: 1,
                 matchLength: 4
             } as SearchReplaceMatches;
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches
+                } as CueDto,
+                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+            ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            cues[0].searchReplaceMatches = searchReplaceMatches;
-            cues[0].vttCue.text = "some <i>HTML</i> <b>Text</b> sample Text and Text";
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -1567,9 +1578,15 @@ describe("CueTextEditor", () => {
                 offsetIndex: 2,
                 matchLength: 4
             } as SearchReplaceMatches;
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches
+                } as CueDto,
+                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+            ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            cues[0].searchReplaceMatches = searchReplaceMatches;
-            cues[0].vttCue.text = "some <i>HTML</i> <b>Text</b> sample Text and Text";
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;

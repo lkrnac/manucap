@@ -3,8 +3,6 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { SubtitleSpecification } from "./model";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { CueDto, CueError } from "../model";
-import { updateCues } from "../cues/cuesListActions";
 
 const testingSubtitleSpecification = {
     subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
@@ -36,32 +34,6 @@ describe("subtitleSpecificationSlices", () => {
 
             // THEN
             expect(testingStore.getState().subtitleSpecifications).toEqual(testingSubtitleSpecification);
-        });
-
-        it("marks existing cues as corrupted", () => {
-            // GIVEN
-            const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption Long 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-            const testingSubtitleSpecification = {
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 10,
-                enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().cues[0].errors).toBeUndefined();
-            expect(testingStore.getState().cues[1].errors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
-            expect(testingStore.getState().cues[2].errors).toEqual(
-                [CueError.TIME_GAP_OVERLAP, CueError.LINE_CHAR_LIMIT_EXCEEDED]);
-            expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
         });
     });
 });

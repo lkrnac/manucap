@@ -111,7 +111,8 @@ const TestApp = (): ReactElement => {
             const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
             targetCues.push({
                 vttCue: new VTTCue(randomStart, randomEnd, text),
-                cueCategory: "DIALOGUE"
+                cueCategory: "DIALOGUE",
+                errors: null
             });
         }
 
