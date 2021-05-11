@@ -269,3 +269,7 @@ div[id^=cueErrorTooltip-] .arrow:after {
 .sbte-cues-errors {
     color: #721c24;
 }
+
+.sbte-cues-errors-popover {
+    z-index: 1 !important;
+}

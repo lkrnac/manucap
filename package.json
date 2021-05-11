@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.11.2",
+  "version": "2.11.3",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -132,5 +132,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
   }
 }
