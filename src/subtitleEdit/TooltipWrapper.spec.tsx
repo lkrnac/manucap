@@ -40,6 +40,7 @@ describe("TooltipWrapper", () => {
                 tooltipId="testId"
                 placement="left"
                 trigger={["hover", "focus"]}
+                bsPrefix="dummyPopover"
                 popover
             >
                 <button className="btn">Span</button>
@@ -52,6 +53,7 @@ describe("TooltipWrapper", () => {
         const popover = await actualNode.findByText("This is a popover");
         expect(popover).toBeInTheDocument();
         expect(popover).toHaveClass("popover-body");
+        expect(document.querySelector(".dummyPopover")).toBeInTheDocument();
     });
 
     it("renders with html", async () => {
