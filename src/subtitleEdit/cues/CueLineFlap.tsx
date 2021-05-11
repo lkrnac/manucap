@@ -6,6 +6,7 @@ interface Props {
     rowIndex: number;
     cueLineState: CueLineState;
     cuesErrors?: CueError[];
+    showErrors?: boolean;
 }
 
 const CueLineFlap = (props: Props): ReactElement => (
@@ -33,6 +34,7 @@ const CueLineFlap = (props: Props): ReactElement => (
                         <CueErrorsIcon
                             cueIndex={props.rowIndex}
                             cuesErrors={props.cuesErrors || []}
+                            showErrors={props.showErrors || false}
                         />
                     )
                     : null

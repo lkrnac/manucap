@@ -87,7 +87,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
     const nextTargetCueIndex = findNextTargetCueIndex(props);
 
-    const showGlossaryTerms = props.data.targetCues !== undefined &&
+    const showGlossaryTermsAndErrors = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
 
     const cuesErrors = [] as CueError[];
@@ -106,6 +106,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 rowIndex={props.rowIndex}
                 cueLineState={cueLineState}
                 cuesErrors={cuesErrors}
+                showErrors={showGlossaryTermsAndErrors}
             />
             <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                 {
@@ -120,7 +121,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     targetCuesLength={props.rowProps.targetCuesLength}
                                     playerTime={props.rowProps.playerTime}
                                     className={`${captionClassName} sbte-source-cue`}
-                                    showGlossaryTerms={showGlossaryTerms}
+                                    showGlossaryTerms={showGlossaryTermsAndErrors}
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
