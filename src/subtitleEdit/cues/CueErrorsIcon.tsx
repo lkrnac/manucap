@@ -17,6 +17,7 @@ const CueErrorsIcon = (props: Props): ReactElement => {
         <TooltipWrapper
             show={props.showErrors}
             tooltipId={tooltipId}
+            bsPrefix="sbte-cues-errors-popover popover"
             text={
                 <div className="sbte-cues-errors">
                     <strong>Cue errors</strong>
