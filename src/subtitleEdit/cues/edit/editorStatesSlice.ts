@@ -48,12 +48,20 @@ export const updateEditorState = (editorId: number, newEditorState: EditorState)
         const subtitleSpecifications = getState().subtitleSpecifications;
 
         const editorStates = getState().editorStates;
-        const vttText = getVttText(newEditorState.getCurrentContent());
+        const newVttText = getVttText(newEditorState.getCurrentContent());
         const currentEditorState = editorStates.get(editorId);
 
+        const oldVttText = currentEditorState
+            ? getVttText(currentEditorState.getCurrentContent())
+            : "";
+
         let editorState = newEditorState;
-        if (currentEditorState  != null
-            && !checkLineLimitation(vttText, subtitleSpecifications)
+        const isNewVttTextCharLimitationOk = checkLineLimitation(newVttText, subtitleSpecifications);
+        const isOldVttTextCharLimitationOk = checkLineLimitation(oldVttText, subtitleSpecifications);
+
+        if (currentEditorState
+            && !isNewVttTextCharLimitationOk
+            && isOldVttTextCharLimitationOk
         ) {
             dispatch(validationErrorSlice.actions.setValidationErrors([CueError.LINE_COUNT_EXCEEDED]));
             // Force creation of different EditorState instance, so that CueTextEditor re-renders with old content
