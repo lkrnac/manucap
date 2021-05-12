@@ -28,7 +28,7 @@ describe("CueErrorsIcon", () => {
         //WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueErrorsIcon cueIndex={0} cuesErrors={cueError} />
+                <CueErrorsIcon cueIndex={0} cuesErrors={cueError} showErrors={false} />
             </Provider>
         );
 
@@ -59,7 +59,7 @@ describe("CueErrorsIcon", () => {
         //WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueErrorsIcon cueIndex={0} cuesErrors={cueErrors} />
+                <CueErrorsIcon cueIndex={0} cuesErrors={cueErrors} showErrors={false} />
             </Provider>
         );
 
