@@ -230,15 +230,15 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
         });
 
-    it("calls saveTrack in redux store when start time changes", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const cue = {
-            vttCue: new VTTCue(0, 2, "Caption Line 1"),
-            cueCategory: "DIALOGUE",
-            editUuid: testingStore.getState().cues[0].editUuid
-        } as CueDto;
+        it("calls saveTrack in redux store when start time changes", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            const cue = {
+                vttCue: new VTTCue(0, 2, "Caption Line 1"),
+                cueCategory: "DIALOGUE",
+                editUuid: testingStore.getState().cues[0].editUuid
+            } as CueDto;
 
             const actualNode = mount(
                 <Provider store={testingStore}>
@@ -271,15 +271,15 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
         });
 
-    it("calls saveTrack in redux store when end time changes", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const cue = {
-            vttCue: new VTTCue(3, 7, "Caption Line 2"),
-            cueCategory: "DIALOGUE",
-            editUuid: testingStore.getState().cues[0].editUuid
-        } as CueDto;
+        it("calls saveTrack in redux store when end time changes", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            const cue = {
+                vttCue: new VTTCue(3, 7, "Caption Line 2"),
+                cueCategory: "DIALOGUE",
+                editUuid: testingStore.getState().cues[0].editUuid
+            } as CueDto;
 
             const actualNode = mount(
                 <Provider store={testingStore}>
@@ -369,10 +369,10 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
         });
 
-    it("calls saveTrack in redux store when cue position changes", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        it("calls saveTrack in redux store when cue position changes", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
             const vttCue = new VTTCue(0, 1, "someText");
             const cue = {
@@ -411,10 +411,10 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
         });
 
-    it("calls saveTrack in redux store when line category changes", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        it("calls saveTrack in redux store when line category changes", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
             const vttCue = new VTTCue(0, 1, "someText");
             const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
