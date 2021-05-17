@@ -236,6 +236,41 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 
+    it("searches for next match with regex special chars when Next button is clicked", () => {
+        // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 2, "Caption [Line 2]"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+            {
+                vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                cueCategory: "ONSCREEN_TEXT",
+                spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+            },
+            {
+                vttCue: new VTTCue(6, 8, "Caption [Line 2]"),
+                cueCategory: "ONSCREEN_TEXT"
+            },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(setFind("[Line 2]") as {} as AnyAction);
+        const { getByTestId } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        );
+        const nextButton = getByTestId("sbte-search-next");
+
+        // WHEN
+        fireEvent.click(nextButton);
+
+        // THEN
+        expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+        expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8]);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+    });
+
     it("invokes replace current match when Replace button is clicked", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
@@ -429,6 +464,54 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption  and ");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption ");
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+    });
+
+    it("replaces all matches with regex special chars when Replace button is clicked", async () => {
+        // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 2, "  Caption <b>[Line 2]</b> and <i>{Line 2}</i>"),
+                cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 4, "Caption <b>[Line 2]</b> and {Line 2}"),
+                cueCategory: "ONSCREEN_TEXT" },
+            {
+                vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                cueCategory: "ONSCREEN_TEXT",
+                spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+            },
+            {
+                vttCue: new VTTCue(6, 8, "Caption [Line 2]"),
+                cueCategory: "ONSCREEN_TEXT"
+            },
+        ] as CueDto[];
+
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(setFind("[Line 2]") as {} as AnyAction);
+        const { getByText, getByPlaceholderText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        );
+        const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
+
+        // WHEN
+        fireEvent.change(replaceInput, { target: { value: "[LINE 2]" }});
+        fireEvent.click(replaceAllButton);
+
+        // THEN
+        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
+        expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("[LINE 2]");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>[LINE 2]</b> and <i>{Line 2}</i>");
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>[LINE 2]</b> and {Line 2}");
+        expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
+        expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption [LINE 2]");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
