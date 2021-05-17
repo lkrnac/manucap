@@ -56,7 +56,7 @@ const findCueLineState = (props: CueLineProps): CueLineState => {
         : CueLineState.NONE;
 };
 
-const hasEditDisabledCues = (cueDtos?: CueDtoWithIndex[]): boolean => {
+const hasCuesWithEditDisabled = (cueDtos?: CueDtoWithIndex[]): boolean => {
     if (cueDtos && cueDtos.length > 0) {
         return cueDtos
             .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.editDisabled === true)
@@ -65,9 +65,9 @@ const hasEditDisabledCues = (cueDtos?: CueDtoWithIndex[]): boolean => {
     return false;
 };
 
-const findCueLineEditDisabled = (props: CueLineProps): boolean | undefined => {
+const shouldDisableCueLine = (props: CueLineProps): boolean | undefined => {
     const cueLine = props.rowProps.matchedCues[props.rowIndex];
-    return hasEditDisabledCues(cueLine.sourceCues) || hasEditDisabledCues(cueLine.targetCues);
+    return hasCuesWithEditDisabled(cueLine.sourceCues) || hasCuesWithEditDisabled(cueLine.targetCues);
 };
 
 const findNextTargetCueIndex = (props: CueLineProps): number => {
@@ -100,7 +100,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
     const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
     const nextTargetCueIndex = findNextTargetCueIndex(props);
-    const cueLineEditDisabled = findCueLineEditDisabled(props);
+    const cueLineEditDisabled = shouldDisableCueLine(props);
 
     const showGlossaryTerms = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
