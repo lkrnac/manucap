@@ -82,9 +82,9 @@ describe("editorStatesSlice", () => {
 
         // THEN
         expect(testingStore.getState().editorStates.get(1).getCurrentContent().getPlainText())
-            .toEqual("editor1 \n\n text");
+            .toEqual("changed editor1 \n\n\n text");
         expect(testingStore.getState().editorStates.get(1)).not.toEqual(initialEditorState);
-        expect(testingStore.getState().validationErrors).toEqual([CueError.LINE_COUNT_EXCEEDED]);
+        expect(testingStore.getState().validationErrors).toEqual([]);
     });
 });
 
