@@ -140,6 +140,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const track = getState().editingTrack as Track;
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
+            // TODO: Uff, this is book example of unmaintainable code. We have to remove such ugly if/elses.
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 if (!overlapCaptionsAllowed) {
                     if (applyOverlapPreventionStart(newVttCue, previousCue)) {
