@@ -823,6 +823,47 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
         });
 
+        it("adds cue when on ENTER for last translation cue, where cue index is smaller than amount " +
+            "of source cues, within range for chunk", () => {
+            // GIVEN
+            const chunkTrack = { ...testTrack, mediaChunkStart: 0, mediaChunkEnd: 2000 };
+            testingStore.dispatch(updateEditingTrack(chunkTrack as Track) as {} as AnyAction);
+            const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+            testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE",
+                    editDisabled: true },
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+            mount(
+                <Provider store={testingStore} >
+                    <CueEdit
+                        index={0}
+                        cue={cue}
+                        playerTime={1}
+                        nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            simulant.fire(
+                document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+        });
+
         it("adds cue when on ENTER for last translation cue, when there are no more source cues", () => {
             // GIVEN
             const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
