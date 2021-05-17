@@ -880,7 +880,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
         });
 
-        it("doesn't moves cue editing mode to next cue when ENTER is pressed on non-last if out of chunk range",
+        it("doesn't move cue editing mode to next cue when ENTER is pressed on non-last if out of chunk range",
             () => {
                 // GIVEN
                 const chunkTrack = { ...testTrack, mediaChunkStart: 0, mediaChunkEnd: 1000 };
