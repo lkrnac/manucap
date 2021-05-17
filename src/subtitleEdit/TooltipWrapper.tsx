@@ -11,6 +11,7 @@ interface Props {
     children: ReactElement;
     popover?: boolean;
     show?: boolean;
+    bsPrefix?: string;
 }
 export const TooltipWrapper = (props: Props): ReactElement => {
     const otherProps = {};
@@ -26,7 +27,7 @@ export const TooltipWrapper = (props: Props): ReactElement => {
             delay={{ show: 600, hide: 100 }}
             overlay={
                 props.popover ?
-                    <Popover id={props.tooltipId}>
+                    <Popover bsPrefix={props.bsPrefix} id={props.tooltipId}>
                         <Popover.Content>{props.text}</Popover.Content>
                     </Popover>
                     :
