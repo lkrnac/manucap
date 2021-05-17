@@ -1586,7 +1586,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
             });
 
             it("adds cue to the end of the cue array if in chunk range", () => {
@@ -1784,7 +1784,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(3);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
             });
 
             it("adds cue to the end of the cue array if in chunk range", () => {

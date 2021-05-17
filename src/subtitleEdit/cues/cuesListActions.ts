@@ -23,7 +23,6 @@ import {
     applyOverlapPreventionStart,
     conformToRules,
     getTimeGapLimits,
-    verifyCueChunkRange,
     verifyCueDuration
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
@@ -242,20 +241,15 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             applyOverlapPreventionEnd(cue.vttCue, followingCue);
         }
 
-        const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
         const editingTrack = state.editingTrack;
-        const validCueDurationChunk = editingTrack && verifyCueChunkRange(cue.vttCue, editingTrack);
+        const validCueDuration = editingTrack && verifyCueDuration(cue.vttCue, editingTrack, timeGapLimit);
 
-        if (validCueDuration && validCueDurationChunk) {
+        if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
             dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
         } else {
-            if (!validCueDuration) {
-                dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_OVERLAP]));
-            } else {
-                dispatch(validationErrorSlice.actions.setValidationErrors([CueError.OUT_OF_CHUNK_RAGE]));
-            }
+            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_OVERLAP]));
         }
     };
 
