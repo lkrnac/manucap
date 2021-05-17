@@ -192,15 +192,15 @@ export const applyInvalidChunkRangePreventionEnd = (
     return applied;
 };
 
-export const verifyCueDuration = (vttCue: VTTCue, editingTrack: Track, timeGapLimit: TimeGapLimit): boolean => {
-    const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
-    return cueDuration >= timeGapLimit.minGap && verifyCueChunkRange(vttCue, editingTrack);
-};
-
 const verifyCueChunkRange = (vttCue: VTTCue, editingTrack: Track): boolean => {
     return !((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd)
         || (withinChunkRange(vttCue.startTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)
-        && withinChunkRange(vttCue.endTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd));
+            && withinChunkRange(vttCue.endTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd));
+};
+
+export const verifyCueDuration = (vttCue: VTTCue, editingTrack: Track, timeGapLimit: TimeGapLimit): boolean => {
+    const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
+    return cueDuration >= timeGapLimit.minGap && verifyCueChunkRange(vttCue, editingTrack);
 };
 
 export const applyLineLimitation = (
