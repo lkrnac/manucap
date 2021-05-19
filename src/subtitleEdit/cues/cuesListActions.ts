@@ -14,6 +14,8 @@ import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
 import { Constants } from "../constants";
 import {
+    applyInvalidChunkRangePreventionEnd,
+    applyInvalidChunkRangePreventionStart,
     applyInvalidRangePreventionEnd,
     applyInvalidRangePreventionStart,
     applyLineLimitation,
@@ -45,6 +47,19 @@ const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number
     return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
 };
 
+const validateShiftWithinChunkRange = (shiftTime: number, track: Track | null, cues: CueDto[]): void => {
+    if (track && (track.mediaChunkStart || track.mediaChunkStart === 0) && track.mediaChunkEnd) {
+        const editableCues = cues.filter(cue => !cue.editDisabled);
+        const firstChunkCue = editableCues.shift();
+        if (firstChunkCue && (firstChunkCue.vttCue.startTime + shiftTime) < (track.mediaChunkStart / 1000)) {
+            throw new Error("Exceeds media chunk start range");
+        }
+        const lastChunkCue = editableCues.pop();
+        if (lastChunkCue && (lastChunkCue.vttCue.endTime + shiftTime) > (track.mediaChunkEnd / 1000)) {
+            throw new Error("Exceeds media chunk end range");
+        }
+    }
+};
 
 export const applySpellcheckerOnCue = createAsyncThunk(
     "spellchecker/applySpellcheckerOnCue",
@@ -124,6 +139,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             const track = getState().editingTrack as Track;
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
+            // TODO: Uff, this is book example of unmaintainable code. We have to remove such ugly if/elses.
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 if (!overlapCaptionsAllowed) {
                     if (applyOverlapPreventionStart(newVttCue, previousCue)) {
@@ -133,6 +149,9 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                 if (applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications)) {
                     cueErrors.push(CueError.INVALID_RANGE_START);
                 }
+                if (applyInvalidChunkRangePreventionStart(newVttCue, originalCue.vttCue.startTime, track)) {
+                    cueErrors.push(CueError.OUT_OF_CHUNK_RAGE);
+                }
             }
             if (vttCue.endTime !== originalCue.vttCue.endTime) {
                 if (!overlapCaptionsAllowed) {
@@ -140,8 +159,12 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
                         cueErrors.push(CueError.TIME_GAP_OVERLAP);
                     }
                 }
-                applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications);
-                cueErrors.push(CueError.INVALID_RANGE_END);
+                if (applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications)) {
+                    cueErrors.push(CueError.INVALID_RANGE_END);
+                }
+                if (applyInvalidChunkRangePreventionEnd(newVttCue, originalCue.vttCue.endTime, track)) {
+                    cueErrors.push(CueError.OUT_OF_CHUNK_RAGE);
+                }
             }
             if (applyLineLimitation(newVttCue, originalCue, subtitleSpecifications)) {
                 cueErrors.push(CueError.LINE_COUNT_EXCEEDED);
@@ -217,7 +240,9 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             applyOverlapPreventionStart(cue.vttCue, previousCue);
             applyOverlapPreventionEnd(cue.vttCue, followingCue);
         }
-        const validCueDuration = verifyCueDuration(cue.vttCue, timeGapLimit);
+
+        const editingTrack = state.editingTrack;
+        const validCueDuration = editingTrack && verifyCueDuration(cue.vttCue, editingTrack, timeGapLimit);
 
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
@@ -243,6 +268,8 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
 
 export const applyShiftTime = (shiftTime: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+        const editingTrack = getState().editingTrack;
+        validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
         callSaveTrack(dispatch, getState);
     };

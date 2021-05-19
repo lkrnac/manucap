@@ -56,6 +56,9 @@ const searchReplaceAll = (
     dispatch(reset());
     const newCues = cues.slice(0);
     for (const cue of newCues) {
+        if (cue.editDisabled) {
+            continue;
+        }
         const cueIndex: number = newCues.indexOf(cue);
         const vttText = cue.vttCue.text.trim();
         const matches = searchCueText(vttText, find, searchReplace.matchCase);

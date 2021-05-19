@@ -21,6 +21,11 @@ const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Lang
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
+// const mediaChunkStart = undefined;
+// const mediaChunkEnd = undefined;
+const mediaChunkStart = 13000;
+const mediaChunkEnd = 305000;
+
 const TIME_MATCH_TESTING = false;
 // ################## TESTING DATA TWEAKS - END ########################
 
@@ -29,6 +34,12 @@ const MIN_DURATION_SECONDS = 0.5;
 const START_SHIFT = TIME_MATCH_TESTING ? 30 : 0;
 
 const randomTime = (max: number): number => MIN_DURATION_SECONDS + Math.random() * (max - MIN_DURATION_SECONDS);
+
+const inChunkRange = (start: number, end: number): boolean => {
+    const chunkStartSeconds = mediaChunkStart / 1000;
+    const chunkEndSeconds = mediaChunkEnd / 1000;
+    return start >= chunkStartSeconds  && end <= chunkEndSeconds;
+};
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
@@ -60,9 +71,11 @@ const TestApp = (): ReactElement => {
             for (let idx = 0; idx < 9999; idx++) {
                 const randomStart = TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3;
                 const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
+                const withinChunkRange = mediaChunkStart && mediaChunkEnd && inChunkRange(randomStart, randomEnd);
                 sourceCues.push({
                    vttCue: new VTTCue(randomStart, randomEnd, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
+                    editDisabled: !withinChunkRange,
                     glossaryMatches: [
                         { source: "text", replacements: ["text replacement1", "text replacement2"]},
                         { source: "line", replacements: ["lineReplacement1"]}
@@ -109,9 +122,11 @@ const TestApp = (): ReactElement => {
             }
             const randomStart = (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
             const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
+            const withinChunkRange = mediaChunkStart && mediaChunkEnd && inChunkRange(randomStart, randomEnd);
             targetCues.push({
                 vttCue: new VTTCue(randomStart, randomEnd, text),
                 cueCategory: "DIALOGUE",
+                editDisabled: !withinChunkRange,
                 errors: null
             });
         }
@@ -131,7 +146,9 @@ const TestApp = (): ReactElement => {
                 sourceLanguage,
                 default: true,
                 mediaTitle: "This is the video title",
-                mediaLength: 4250,
+                mediaLength: 305000,
+                mediaChunkStart,
+                mediaChunkEnd,
                 progress: 50,
                 id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d"
             })),

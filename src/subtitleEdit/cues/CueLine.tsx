@@ -56,6 +56,20 @@ const findCueLineState = (props: CueLineProps): CueLineState => {
         : CueLineState.NONE;
 };
 
+const hasCuesWithEditDisabled = (cueDtos?: CueDtoWithIndex[]): boolean => {
+    if (cueDtos && cueDtos.length > 0) {
+        return cueDtos
+            .map((cueWithIndex: CueDtoWithIndex): boolean => cueWithIndex?.cue.editDisabled === true)
+            .reduce((editDisabled1: boolean, editDisabled2: boolean): boolean => editDisabled1 || editDisabled2);
+    }
+    return false;
+};
+
+const shouldDisableCueLine = (props: CueLineProps): boolean | undefined => {
+    const cueLine = props.rowProps.matchedCues[props.rowIndex];
+    return hasCuesWithEditDisabled(cueLine.sourceCues) || hasCuesWithEditDisabled(cueLine.targetCues);
+};
+
 const findNextTargetCueIndex = (props: CueLineProps): number => {
     let nextIndex = 0;
     let nextTargetCueIndex = -1;
@@ -86,6 +100,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
     const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
     const nextTargetCueIndex = findNextTargetCueIndex(props);
+    const cueLineEditDisabled = shouldDisableCueLine(props);
 
     const showGlossaryTermsAndErrors = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
@@ -107,8 +122,12 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 cueLineState={cueLineState}
                 cuesErrors={cuesErrors}
                 showErrors={showGlossaryTermsAndErrors}
+                editDisabled={cueLineEditDisabled}
             />
-            <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+            <div
+                className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
+                style={{ display: "flex", flexDirection:"column", width: "100%" }}
+            >
                 {
                     props.data.sourceCues && props.data.sourceCues.length > 0
                         ? props.data.sourceCues.map(sourceCue => {

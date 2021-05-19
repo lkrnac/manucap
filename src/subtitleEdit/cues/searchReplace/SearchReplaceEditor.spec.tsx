@@ -31,6 +31,23 @@ const testingCues = [
     },
 ] as CueDto[];
 
+const testingCuesWithEditDisabled = [
+    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", editDisabled: true },
+    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    {
+        vttCue: new VTTCue(4, 6, "Caption Line 3"),
+        cueCategory: "ONSCREEN_TEXT",
+        spellCheck: { matches: [{ message: "some-spell-check-problem" }]},
+        editDisabled: false
+    },
+    {
+        vttCue: new VTTCue(6, 8, "Caption Line 4"),
+        cueCategory: "ONSCREEN_TEXT",
+        editDisabled: true
+    },
+] as CueDto[];
+
+
 describe("SearchReplaceEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -462,5 +479,37 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption Line 2");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
+    });
+
+    it("replaces all matches and skips editDisabled and save when Replace All button is clicked",
+        async () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        testingStore.dispatch(setFind("Caption Line") as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCuesWithEditDisabled) as {} as AnyAction);
+        const { getByText, getByPlaceholderText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        );
+        const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
+
+        // WHEN
+        fireEvent.change(replaceInput, { target: { value: "New Text Update" }});
+        fireEvent.click(replaceAllButton);
+
+        // THEN
+        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
+        expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("New Text Update");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("New Text Update 2");
+        expect(testingStore.getState().cues[2].vttCue.text).toEqual("New Text Update 3");
+        expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption Line 4");
+        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
     });
 });

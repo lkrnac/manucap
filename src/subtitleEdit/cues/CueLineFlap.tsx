@@ -7,6 +7,7 @@ interface Props {
     cueLineState: CueLineState;
     cuesErrors?: CueError[];
     showErrors?: boolean;
+    editDisabled?: boolean;
 }
 
 const CueLineFlap = (props: Props): ReactElement => (
@@ -16,6 +17,23 @@ const CueLineFlap = (props: Props): ReactElement => (
     >
         <div style={{ paddingTop: "10px", fontSize: "11px", fontWeight: "bold" }}>
             {props.rowIndex + 1}
+        </div>
+        <div
+            style={{
+                position: "absolute",
+                marginLeft: "auto",
+                marginRight: "auto",
+                left: "0",
+                right: "0",
+                bottom: "30px",
+                fontSize: "14px"
+            }}
+        >
+            {
+                props.editDisabled
+                    ? <i className="fa fa-lock" />
+                    : null
+            }
         </div>
         <div
             style={{

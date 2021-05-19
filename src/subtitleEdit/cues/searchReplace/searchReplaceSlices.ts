@@ -130,13 +130,14 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
         const matchCase = getState().searchReplace.matchCase;
         const matchedIndex = _.findIndex(
             cues,
-            cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0,
+            cue => !cue.editDisabled && searchCueText(cue.vttCue.text, find, matchCase).length > 0,
             fromIndex
         );
         if (matchedIndex !== -1) {
             updateEditingCueIndexNoThunk(dispatch, getState, matchedIndex);
         } else if (fromIndex > 0) {
-            let wrappedIndex = _.findIndex(cues, cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0);
+            let wrappedIndex = _.findIndex(cues, cue =>
+                !cue.editDisabled && searchCueText(cue.vttCue.text, find, matchCase).length > 0);
             wrappedIndex = wrappedIndex === (fromIndex - 1) ? -1 : wrappedIndex;
             updateEditingCueIndexNoThunk(dispatch, getState, wrappedIndex);
         }
@@ -169,12 +170,12 @@ export const searchPreviousCues = (): AppThunk =>
         }
         const matchCase = getState().searchReplace.matchCase;
         const matchedIndex = _.findLastIndex(cues,
-                cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0, fromIndex);
+                cue => !cue.editDisabled && searchCueText(cue.vttCue.text, find, matchCase).length > 0, fromIndex);
         if (matchedIndex !== -1) {
             updateEditingCueIndexNoThunk(dispatch, getState, matchedIndex);
         } else if (fromIndex >= 0) {
             let wrappedIndex = _.findLastIndex(cues,
-                    cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0);
+                    cue => !cue.editDisabled && searchCueText(cue.vttCue.text, find, matchCase).length > 0);
             wrappedIndex = wrappedIndex === (fromIndex + 1) ? -1 : wrappedIndex;
             updateEditingCueIndexNoThunk(dispatch, getState, wrappedIndex);
         }

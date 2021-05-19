@@ -22,6 +22,21 @@ const testingCues = [
     },
 ] as CueDto[];
 
+const testingCuesWithEditDisabled = [
+    { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE", editDisabled: true },
+    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    {
+        vttCue: new VTTCue(4, 6, "Caption Line 3"),
+        cueCategory: "ONSCREEN_TEXT",
+        spellCheck: { matches: [{ message: "some-spell-check-problem" }]},
+        editDisabled: false
+    },
+    {
+        vttCue: new VTTCue(6, 9, "Caption Line 4"), cueCategory: "ONSCREEN_TEXT",
+        editDisabled: true
+    },
+] as CueDto[];
+
 describe("searchReplaceSlices", () => {
     describe("setFind", () => {
         it("sets search replace find state", () => {
@@ -339,6 +354,37 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
 
+        it("skips cues with editDisabled when searches for find term in next cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithEditDisabled) as {} as AnyAction);
+            testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
+            expect(testingStore.getState().searchReplace.direction).toEqual("NEXT");
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("skips cues with editDisabled when wrapping searches for find term in next cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithEditDisabled) as {} as AnyAction);
+            testingStore.dispatch(setFind("Caption Line") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
+            expect(testingStore.getState().searchReplace.direction).toEqual("NEXT");
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
         it("does not search if find is empty string", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -596,6 +642,37 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8]);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("skips cues with editDisabled when searches for find term in previous cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithEditDisabled) as {} as AnyAction);
+            testingStore.dispatch(setFind("Caption Line") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
+            expect(testingStore.getState().searchReplace.direction).toEqual("PREVIOUS");
+            expect(testingStore.getState().editingCueIndex).toEqual(2);
+            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        });
+
+        it("skips cues with editDisabled when wrapping searches for find term in previous cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithEditDisabled) as {} as AnyAction);
+            testingStore.dispatch(setFind("Caption Line") as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
+            expect(testingStore.getState().searchReplace.direction).toEqual("PREVIOUS");
+            expect(testingStore.getState().editingCueIndex).toEqual(2);
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
         });
 

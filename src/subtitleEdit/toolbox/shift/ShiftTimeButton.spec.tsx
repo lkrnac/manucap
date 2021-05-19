@@ -69,7 +69,7 @@ describe("ShiftTimeButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("opens subtitle specifications modal when button is clicked", () => {
+    it("opens shift time modal when button is clicked", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -84,7 +84,7 @@ describe("ShiftTimeButton", () => {
         expect(actualNode.find(ShiftTimeModal).props().show).toEqual(true);
     });
 
-    it("closes subtitle specifications modal when close button is clicked", () => {
+    it("closes shift time modal when close button is clicked", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
