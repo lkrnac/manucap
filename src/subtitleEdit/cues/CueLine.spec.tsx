@@ -139,7 +139,7 @@ describe("CueLine", () => {
                             cuesErrors={[CueError.SPELLCHECK_ERROR]}
                             showErrors
                         />
-                        <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueEdit
                                 index={0}
                                 cue={corruptedCue}
@@ -1302,7 +1302,7 @@ describe("CueLine", () => {
                             cuesErrors={[CueError.SPELLCHECK_ERROR]}
                             showErrors
                         />
-                        <div style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
                                 targetCueIndex={0}
