@@ -236,7 +236,7 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} />
+                <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} showErrors />
             </Provider>
         );
 
