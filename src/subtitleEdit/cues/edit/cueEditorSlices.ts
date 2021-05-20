@@ -30,7 +30,7 @@ export const editingCueIndexSlice = createSlice({
 // Sourced from SO https://stackoverflow.com/a/3561711 See post for eslint disable about escaping /
 /* eslint-disable no-useless-escape */
 const escapeRegex = (value: string): string =>
-    value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    value.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 /* eslint-enable */
 
 export const searchCueText = (text: string, find: string, matchCase: boolean): Array<number> => {
