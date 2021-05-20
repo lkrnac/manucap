@@ -29,7 +29,6 @@ const cues = [
 ];
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
-const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
 const ruleId = "MORFOLOGIK_RULE_EN_US";
 
 const createEditorNode = (text = "someText", index?: number): ReactWrapper => {
@@ -52,6 +51,8 @@ const createEditorNode = (text = "someText", index?: number): ReactWrapper => {
     return actualNode.find(".public-DraftEditor-content");
 };
 
+const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
+
 jest.setTimeout(8000);
 
 describe("CueTextEditor", () => {
@@ -59,6 +60,7 @@ describe("CueTextEditor", () => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         jest.resetAllMocks();
     });
@@ -135,9 +137,6 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "1", name: "English", direction: "LTR" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const searchReplaceMatches = {
             offsets: [10],
             offsetIndex: 0,
@@ -203,9 +202,6 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "en-US", name: "English", direction: "LTR" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         const editor = createEditorNode();
 
         // WHEN
@@ -261,9 +257,6 @@ describe("CueTextEditor", () => {
         };
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack(
-            { language: { id: "testing-language" }, id: trackId } as Track
-        ) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
@@ -289,7 +282,7 @@ describe("CueTextEditor", () => {
                     "https://testing-domain/v2/check",
                     {
                         method: "POST",
-                        body: "language=testing-language&text=someText Paste text to end" +
+                        body: "language=en-US&text=someText Paste text to end" +
                             "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                     }
                 );
@@ -335,9 +328,6 @@ describe("CueTextEditor", () => {
             ]
         };
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack(
-            { language: { id: "testing-language" }, id: trackId } as Track
-        ) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         // @ts-ignore modern browsers does have it
@@ -371,7 +361,7 @@ describe("CueTextEditor", () => {
                     "https://testing-domain/v2/check",
                     {
                       method: "POST",
-                      body: "language=testing-language&text=test to clea" +
+                      body: "language=en-US&text=test to clea" +
                           "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
                     }
                 );
@@ -387,9 +377,6 @@ describe("CueTextEditor", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "en-US", name: "English", direction: "LTR" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
         // WHEN
         createEditorNode();

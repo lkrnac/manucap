@@ -18,11 +18,37 @@ const getLanguageDescription = (track: Track): ReactElement => {
     return <b>{languageNameNullSafe}</b>;
 };
 
+const getSecondsInHMS = (seconds: number): string =>
+    new Date(seconds).toISOString().substr(11, 8);
+
+const getMediaChunkRange = (track: Track): ReactElement | null => {
+    if ((track.mediaChunkStart || track.mediaChunkStart === 0) && track.mediaChunkEnd) {
+        return (
+            <b>
+                <span>{" "}(Media Chunk Range{" "}</span>
+                <span>{getSecondsInHMS(track.mediaChunkStart)}</span>
+                <span> to </span>
+                <span>{getSecondsInHMS(track.mediaChunkEnd)})</span>
+            </b>
+        );
+    }
+    return null;
+};
+
 const getTrackLength = (track: Track): ReactElement => {
     if (!track || !track.mediaLength || track.mediaLength <= 0) {
         return <i />;
     }
-    return <i>{humanizer({ delimiter: " ", round: true })(track.mediaLength)}</i>;
+    return (
+        <span>
+            <i>{humanizer({ delimiter: " ", round: true })(track.mediaLength)}</i>
+            {getMediaChunkRange(track)}
+        </span>
+    );
+};
+
+const getChunkReviewType = (task: Task): string => {
+    return task.finalChunkReview ? "Final Chunk " : "";
 };
 
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
@@ -32,7 +58,11 @@ const getTrackDescription = (task: Task, track: Track): ReactElement => {
     const trackDescriptions = {
         TASK_TRANSLATE: <div>Translation from {getLanguageDescription(track)} {getTrackLength(track)}</div>,
         TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}</div>,
-        TASK_REVIEW: <div>Review of {getLanguageDescription(track)} {getTrackType(track)} {getTrackLength(track)}</div>,
+        TASK_REVIEW:
+    <div>
+        {getChunkReviewType(task)}Review of {getLanguageDescription(track)} {getTrackType(track)}{" "}
+        {getTrackLength(track)}
+    </div>,
         TASK_CAPTION: <div>Caption in: {getLanguageDescription(track)} {getTrackLength(track)}</div>
     };
     return trackDescriptions[task.type] ? trackDescriptions[task.type] : <div />;

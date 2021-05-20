@@ -28,7 +28,7 @@ describe("CueErrorsIcon", () => {
         //WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueErrorsIcon cueIndex={0} cuesErrors={cueError} />
+                <CueErrorsIcon cueIndex={0} cuesErrors={cueError} showErrors={false} />
             </Provider>
         );
 
@@ -38,6 +38,20 @@ describe("CueErrorsIcon", () => {
         const cueErrorsContent = await actualNode.findByText((_content, node) =>
             findByTextIgnoreTags("Cue errors", node));
         expect(cueErrorsContent.parentElement?.outerHTML).toEqual(expectedContent.container.innerHTML);
+    });
+
+    it("renders with show without having to hover over", async () => {
+        // GIVEN
+        //WHEN
+        const cueError = [CueError.LINE_COUNT_EXCEEDED];
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueErrorsIcon cueIndex={0} cuesErrors={cueError} showErrors />
+            </Provider>
+        );
+
+        // THEN
+        expect(await actualNode.findByText("Cue errors")).toBeInTheDocument();
     });
 
     it("renders for multiple cue errors", async () => {
@@ -59,7 +73,7 @@ describe("CueErrorsIcon", () => {
         //WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueErrorsIcon cueIndex={0} cuesErrors={cueErrors} />
+                <CueErrorsIcon cueIndex={0} cuesErrors={cueErrors} showErrors={false} />
             </Provider>
         );
 

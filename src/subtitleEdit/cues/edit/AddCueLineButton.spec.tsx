@@ -12,13 +12,22 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
 
 import AddCueLineButton from "./AddCueLineButton";
-import { CueDto } from "../../model";
-import testingStore from "../../../testUtils/testingStore";
+import { CueDto, Track } from "../../model";
+import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateCues } from "../cuesListActions";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { Tooltip } from "react-bootstrap";
+import { updateEditingTrack } from "../../trackSlices";
+
+let testingStore = createTestingStore();
+const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
 
 describe("AddCueLineButton", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+    });
+
     it("renders", () => {
         // GIVEN
         const expectedNode = render(

@@ -1,6 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 
-import { CueDto, CueError, TimeGapLimit } from "../model";
+import { CueDto, CueError, TimeGapLimit, Track } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
 import { Constants } from "../constants";
 
@@ -161,9 +161,46 @@ export const applyOverlapPreventionEnd = (vttCue: VTTCue, followingCue: CueDto):
     return false;
 };
 
-export const verifyCueDuration = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean => {
+const withinChunkRange = (time: number, chunkStart: number, chunkEnd: number): boolean =>
+    time >= (chunkStart / 1000) && time <= (chunkEnd / 1000);
+
+export const applyInvalidChunkRangePreventionStart = (
+    vttCue: VTTCue,
+    originalVttCueStart: number,
+    editingTrack: Track
+): boolean => {
+    let applied = false;
+    if ((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd
+        && !withinChunkRange(vttCue.startTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)) {
+        vttCue.startTime = originalVttCueStart;
+        applied = true;
+    }
+    return applied;
+};
+
+export const applyInvalidChunkRangePreventionEnd = (
+    vttCue: VTTCue,
+    originalVttCueEnd: number,
+    editingTrack: Track
+): boolean => {
+    let applied = false;
+    if ((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd
+        && !withinChunkRange(vttCue.endTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)) {
+        vttCue.endTime = originalVttCueEnd;
+        applied = true;
+    }
+    return applied;
+};
+
+const verifyCueChunkRange = (vttCue: VTTCue, editingTrack: Track): boolean => {
+    return !((editingTrack.mediaChunkStart || editingTrack.mediaChunkStart === 0) && editingTrack.mediaChunkEnd)
+        || (withinChunkRange(vttCue.startTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd)
+            && withinChunkRange(vttCue.endTime, editingTrack.mediaChunkStart, editingTrack.mediaChunkEnd));
+};
+
+export const verifyCueDuration = (vttCue: VTTCue, editingTrack: Track, timeGapLimit: TimeGapLimit): boolean => {
     const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
-    return cueDuration >= timeGapLimit.minGap;
+    return cueDuration >= timeGapLimit.minGap && verifyCueChunkRange(vttCue, editingTrack);
 };
 
 export const applyLineLimitation = (

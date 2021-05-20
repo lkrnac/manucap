@@ -95,6 +95,9 @@ export const cuesSlice = createSlice({
         applyShiftTime: (state, action: PayloadAction<number>): CueDto[] => {
             const shift = action.payload;
             return state.map((cue: CueDto) => {
+                if (cue.editDisabled) {
+                    return cue;
+                }
                 const vttCue = cue.vttCue;
                 const startTime = vttCue.startTime + shift;
                 const endTime = vttCue.endTime + shift;
@@ -109,6 +112,9 @@ export const cuesSlice = createSlice({
         syncCues: (state, action: PayloadAction<CuesAction>): CueDto[] => {
             const sourceCues = action.payload.cues;
             return state.map((cue: CueDto, index: number) => {
+                if (cue.editDisabled) {
+                    return cue;
+                }
                 const vttCue = cue.vttCue;
                 const startTime = sourceCues[index].vttCue.startTime;
                 const endTime = sourceCues[index].vttCue.endTime;

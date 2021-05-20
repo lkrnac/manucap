@@ -32,6 +32,7 @@ export interface CueDto {
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
     editUuid?: string;
+    editDisabled?: boolean;
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
     glossaryMatches?: GlossaryMatchDto[];
@@ -59,6 +60,8 @@ export interface Track {
     readonly default: boolean;
     readonly mediaTitle: string;
     readonly mediaLength: number;
+    readonly mediaChunkStart?: number;
+    readonly mediaChunkEnd?: number;
     readonly sourceLanguage?: Language;
     readonly progress: number;
     overlapEnabled?: boolean;
@@ -75,6 +78,7 @@ export interface Task {
     readonly projectName: string;
     readonly dueDate: string;
     readonly editDisabled: boolean;
+    readonly finalChunkReview?: boolean;
 }
 
 /**
@@ -115,4 +119,5 @@ export enum CueError {
     SPELLCHECK_ERROR = "Spelling Error(s)",
     INVALID_RANGE_START = "Invalid Start Time",
     INVALID_RANGE_END = "Invalid End Time",
+    OUT_OF_CHUNK_RAGE = "Out of Chunk Range",
 }
