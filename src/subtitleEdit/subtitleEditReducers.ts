@@ -6,7 +6,7 @@ import { playVideoSectionSlice } from "./player/playbackSlices";
 import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
-import { saveStateSlice, saveTrackSlice } from "./cues/saveSlices";
+import { saveActionSlice, saveTrackSlice } from "./cues/saveSlices";
 import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
@@ -29,7 +29,7 @@ export const Reducers = {
     videoSectionToPlay: playVideoSectionSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
-    saveState: saveStateSlice.reducer,
+    saveAction: saveActionSlice.reducer,
     scrollPosition: scrollPositionSlice.reducer,
     cuesLoadingCounter: cuesLoadingCounterSlice.reducer,
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,

@@ -8,7 +8,7 @@ import { updateEditingTrack } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Track } from "./model";
 import { updateCues } from "./cues/cuesListActions";
-import { SaveState, saveStateSlice, setSaveTrack } from "./cues/saveSlices";
+import { SaveState, saveActionSlice, setSaveTrack } from "./cues/saveSlices";
 import each from "jest-each";
 
 const testingTrack = {
@@ -94,7 +94,9 @@ describe("CompleteButton", () => {
     ])
         .it("renders save pending for save state '%s'", (testingState: SaveState) => {
             // GIVEN
-            testingStore.dispatch(saveStateSlice.actions.setState(testingState) as {} as AnyAction);
+            testingStore.dispatch(saveActionSlice.actions.setState(
+                { saveState: testingState, multiCuesEdit: false }
+            ) as {} as AnyAction);
             const expectedNode = mount(
                 <Provider store={testingStore}>
                     <>
@@ -123,7 +125,9 @@ describe("CompleteButton", () => {
 
     it("renders save succeeded for save state SAVED", () => {
         // GIVEN
-        testingStore.dispatch(saveStateSlice.actions.setState(SaveState.SAVED) as {} as AnyAction);
+        testingStore.dispatch(saveActionSlice.actions.setState(
+            { saveState: SaveState.SAVED, multiCuesEdit: false }
+        ) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
@@ -154,7 +158,9 @@ describe("CompleteButton", () => {
 
     it("renders save succeeded for save state ERROR", () => {
         // GIVEN
-        testingStore.dispatch(saveStateSlice.actions.setState(SaveState.ERROR) as {} as AnyAction);
+        testingStore.dispatch(saveActionSlice.actions.setState(
+            { saveState: SaveState.ERROR, multiCuesEdit: false }
+        ) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>

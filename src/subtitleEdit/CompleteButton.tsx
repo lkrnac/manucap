@@ -47,7 +47,7 @@ const stateCssClasses = new Map([
 const CompleteButton = (props: Props): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
-    const saveState = useSelector((state: SubtitleEditState) => state.saveState);
+    const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
     return (
         <>
             <div
