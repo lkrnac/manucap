@@ -9,7 +9,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CueDto, ScrollPosition, Track } from "../../model";
 import { updateCues } from "../cuesListActions";
-import { setSaveTrack } from "../saveSlices";
+import { SaveState, setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../../common/ToggleButton";
 import { reset } from "../edit/editorStatesSlice";
@@ -341,6 +341,8 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+        expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
     });
 
     it("replaces all matches replace contains find", async () => {
