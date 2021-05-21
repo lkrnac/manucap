@@ -1598,6 +1598,59 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
             expect(testingStore.getState().searchReplace.replacement).toEqual("");
         });
+
+        it("replace match with regex special chars", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            const testTrack = { mediaTitle: "testingTrack",
+                language: { id: "1", name: "English", direction: "LTR" }};
+            testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+            testingStore.dispatch(setFind("[Text]") as {} as AnyAction);
+            const searchReplaceMatches = {
+                offsets: [10],
+                offsetIndex: 0,
+                matchLength: 6
+            } as SearchReplaceMatches;
+            const cues = [
+                {
+                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>[Text]</b>"),
+                    cueCategory: "DIALOGUE",
+                    searchReplaceMatches
+                } as CueDto,
+                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+            ];
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>[Text]</b>");
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        searchReplaceMatches={searchReplaceMatches}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            act(() => {
+                testingStore.dispatch(replaceCurrentMatch("[TEXT TEST]") as {} as AnyAction);
+            });
+
+            // THEN
+            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(testingStore.getState().cues[0].vttCue.text)
+                .toEqual("some <i>HTML</i> <b>[TEXT TEST]</b>");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([]);
+            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(-1);
+            expect(testingStore.getState().searchReplace.replacement).toEqual("");
+        });
     });
 
     describe("long lines", () => {
