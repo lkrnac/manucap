@@ -1138,7 +1138,7 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().saveTrack).toBeNull();
         expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
         expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-        expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+        expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         expect(testingStore.getState().pendingSave).toBeFalsy();
         expect(testingStore.getState().lastCueChange).toEqual(null);
     });
