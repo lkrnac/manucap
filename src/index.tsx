@@ -37,8 +37,8 @@ const randomTime = (max: number): number => MIN_DURATION_SECONDS + Math.random()
 
 const inChunkRange = (start: number, end: number): boolean => {
     if (mediaChunkStart && mediaChunkEnd) {
-        const chunkStartSeconds = mediaChunkStart! / 1000;
-        const chunkEndSeconds = mediaChunkEnd! / 1000;
+        const chunkStartSeconds = mediaChunkStart / 1000;
+        const chunkEndSeconds = mediaChunkEnd / 1000;
         return start >= chunkStartSeconds  && end <= chunkEndSeconds;
     } else {
         return true;
