@@ -13,11 +13,11 @@ import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition } from "./cues/cuesListScrollSlice";
-import { CueError, ScrollPosition } from "./model";
+import { ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
-import { Alert } from "react-bootstrap";
+import CueErrorAlert from "./cues/CueErrorAlert";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -44,9 +44,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
     const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
     const cuesLoadingCounter = useSelector((state: SubtitleEditState) => state.cuesLoadingCounter);
-    const validationErrors = useSelector((state: SubtitleEditState) => state.validationErrors);
-    const [cueErrors, setCueErrors] = useState([] as CueError[]);
-    const [showCueErrorsAlert, setShowCueErrorsAlert] = useState(false);
 
     useEffect(
         () => (): void => { // nested arrow function is needed, because React will call it as callback when unmounted
@@ -76,24 +73,12 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         [] // Run only once
     );
 
-    useEffect(
-        () => {
-            if (validationErrors && validationErrors.length > 0) {
-                setCueErrors(validationErrors);
-                setShowCueErrorsAlert(true);
-                setTimeout(() => {
-                    setShowCueErrorsAlert(false);
-                    setCueErrors([]);
-                }, 8000);
-            }
-        }, [ validationErrors ]
-    );
-
     return (
         <div
             className="sbte-subtitle-edit"
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
+            <CueErrorAlert />
             <SubtitleEditHeader />
             {
                 !hasDataLoaded(editingTrack, loadingIndicator) ?
@@ -179,20 +164,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </div>
                     </div>
             }
-            <Alert
-                key="cueErrorsAlert"
-                variant="danger"
-                className="sbte-cue-errors-alert"
-                dismissible
-                show={showCueErrorsAlert}
-                onClose={(): void => setShowCueErrorsAlert(false)}
-            >
-                <span>Unable to complete action due to the following error(s):</span><br />
-                {
-                    cueErrors.map((cueError: CueError, index: number): ReactElement =>
-                        <div key={`cueErrorAlert-${index}`}>&#8226; {cueError}<br /></div>)
-                }
-            </Alert>
         </div>
     );
 };
