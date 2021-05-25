@@ -1,5 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
-import React  from "react";
+import React, { ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import Card from "react-bootstrap/Card";
@@ -40,6 +40,8 @@ jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
     isEmpty: jest.requireActual("lodash/isEmpty")
 }));
+
+jest.mock("./cues/CueErrorAlert", () => (): ReactElement => <div>CueErrorAlert</div>);
 
 let testingStore = createTestingStore();
 
@@ -106,12 +108,13 @@ describe("SubtitleEdit", () => {
     });
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -214,7 +217,7 @@ describe("SubtitleEdit", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore} >
                 <SubtitleEdit
                     mp4="dummyMp4"
@@ -236,8 +239,8 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
     });
 
     it("renders with no cues and add cue button for CAPTION track", () => {
@@ -248,6 +251,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -365,6 +369,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -421,6 +426,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -481,6 +487,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -619,6 +626,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
