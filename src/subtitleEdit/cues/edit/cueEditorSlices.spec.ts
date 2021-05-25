@@ -2,7 +2,7 @@ import "video.js"; // VTTCue definition
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
 
-import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
+import { searchCueText, setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueError, ScrollPosition } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 
@@ -56,5 +56,24 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().validationErrors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
         });
+    });
+
+    describe("searchCueText supports regex special character escaping", () => {
+        test.each([
+            ["$", "$te$est$"], ["[", "[te[est["], ["]", "]te]est]"], ["-", "-te-est-"],
+            ["\\", "\\te\\est\\"], ["^", "^te^est^"], ["*", "*te*est*"], ["+", "+te+est+"],
+            ["?", "?te?est?"], [".", ".te.est."], ["(", "(te(est("], [")", ")te)est)"],
+            ["|", "|te|est|"], ["{", "{te{est{"], ["}", "}te}est}"], [")", ")te)est)"],
+            ["/", "/te/est/"]
+        ])(
+            "returns proper search result array for special character %s",
+            (find: string, text: string) => {
+                // WHEN
+                const result = searchCueText(text, find, false);
+
+                //THEN
+                expect(result).toEqual([0, 3, 7]);
+            },
+        );
     });
 });
