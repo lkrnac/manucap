@@ -327,7 +327,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
+        [ props ]
     );
 
     return (
