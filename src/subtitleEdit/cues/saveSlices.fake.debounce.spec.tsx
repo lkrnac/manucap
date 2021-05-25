@@ -93,7 +93,7 @@ describe("saveSlices", () => {
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
-            expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack});
+            expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
