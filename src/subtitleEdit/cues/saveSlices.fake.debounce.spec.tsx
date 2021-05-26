@@ -63,7 +63,7 @@ describe("saveSlices", () => {
     });
 
     describe("setAutoSaveSuccess", () => {
-        it("calls saveTrack", () => {
+        it("saves track without updating version", () => {
             // GIVEN
             const testingCues = [
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
@@ -78,27 +78,10 @@ describe("saveSlices", () => {
             expect(saveTrack).toHaveBeenCalledTimes(1);
             expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-        });
-
-        it("calls saveTrack", () => {
-            // GIVEN
-            const testingCues = [
-                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
-            ] as CueDto[];
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-
-            // WHEN
-            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-            // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
-            expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack});
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
-        it("calls saveTrack and create new version", () => {
+        it("saves track and create new version", () => {
             // GIVEN
             const testingCues = [
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
