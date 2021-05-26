@@ -1,5 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
-import React  from "react";
+import React, { ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import Card from "react-bootstrap/Card";
@@ -9,7 +9,7 @@ import { mount } from "enzyme";
 import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
-import { CueDto, CueError, Language, ScrollPosition, Task, Track } from "./model";
+import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
@@ -34,13 +34,14 @@ import ExportTrackCuesButton from "./toolbox/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
 import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";
-import { lastCueChangeSlice, setValidationErrors } from "./cues/edit/cueEditorSlices";
-import { Alert } from "react-bootstrap";
+import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
     isEmpty: jest.requireActual("lodash/isEmpty")
 }));
+
+jest.mock("./cues/CueErrorAlert", () => (): ReactElement => <div>CueErrorAlert</div>);
 
 let testingStore = createTestingStore();
 
@@ -107,12 +108,13 @@ describe("SubtitleEdit", () => {
     });
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -215,7 +217,7 @@ describe("SubtitleEdit", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore} >
                 <SubtitleEdit
                     mp4="dummyMp4"
@@ -237,8 +239,8 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
     });
 
     it("renders with no cues and add cue button for CAPTION track", () => {
@@ -249,6 +251,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -366,6 +369,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -422,6 +426,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -482,6 +487,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -620,6 +626,7 @@ describe("SubtitleEdit", () => {
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
                 >
+                    <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                             <div><b>This is the video title</b> <i>Project One</i></div>
@@ -1241,103 +1248,5 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
-    });
-
-    it("shows cue errors alert when cue has validation errors", async () => {
-        // GIVEN
-        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
-
-        const expectedNode = mount(
-            <Alert key="cueErrorsAlert" variant="danger" className="sbte-cue-errors-alert" dismissible show>
-                <span>Unable to complete action due to the following error(s):</span><br />
-                <div>&#8226; {CueError.LINE_CHAR_LIMIT_EXCEEDED}<br /></div>
-            </Alert>
-        );
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={jest.fn()}
-                    onComplete={(): void => undefined}
-                    onExportSourceFile={(): void => undefined}
-                    onExportFile={(): void => undefined}
-                    onImportFile={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // THEN
-        const alert = await actualNode.find("Alert");
-        expect(alert.html()).toEqual(expectedNode.html());
-    });
-
-    it("closes cue errors alert if dismiss button is clicked", async (done) => {
-        // GIVEN
-        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={jest.fn()}
-                    onComplete={(): void => undefined}
-                    onExportSourceFile={(): void => undefined}
-                    onExportFile={(): void => undefined}
-                    onImportFile={(): void => undefined}
-                />
-            </Provider>
-        );
-        await actualNode.find("Alert");
-
-        // THEN
-        actualNode.find("Alert button").simulate("click");
-
-        setTimeout(() => {
-            actualNode.update();
-            expect(actualNode.find("Alert").html()).toBeFalsy();
-            done();
-        }, 100);
-    });
-
-    it("closes cue errors alert automatically", async (done) => {
-        // GIVEN
-        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
-                    onSave={jest.fn()}
-                    onComplete={(): void => undefined}
-                    onExportSourceFile={(): void => undefined}
-                    onExportFile={(): void => undefined}
-                    onImportFile={(): void => undefined}
-                />
-            </Provider>
-        );
-        await actualNode.find("Alert");
-
-        // THEN
-        setTimeout(() => {
-            actualNode.update();
-            expect(actualNode.find("Alert").html()).toBeFalsy();
-            done();
-        }, 8100);
     });
 });
