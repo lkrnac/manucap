@@ -27,6 +27,7 @@ import { Replacement, SpellCheck } from "./spellCheck/model";
 import { setSpellCheckDomain } from "../spellcheckerSettingsSlice";
 import { updateSourceCues } from "./view/sourceCueSlices";
 import { updateEditingCueIndex } from "./edit/cueEditorSlices";
+import { SaveState } from "./saveSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -96,6 +97,24 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
             expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+        });
+
+        it("stores multi cues flag if defined", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[1].editUuid;
+
+            // WHEN
+            testingStore.dispatch(
+                updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue"), editUuid, true, true
+            ) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
         it("preserves all other existing cue parameters", () => {
@@ -1335,6 +1354,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
@@ -1408,6 +1429,8 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("preserves all other existing cue parameters", () => {
@@ -1426,7 +1449,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
         });
-
     });
 
     describe("addCue", () => {
@@ -1934,6 +1956,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(0);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("deletes cue in the middle of the cue array", () => {
@@ -2077,6 +2101,8 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
     });
 
@@ -2135,6 +2161,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
         it("doesn't syncs timecodes between sourceCues and cues if editDisabled", () => {
@@ -2208,7 +2236,5 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().cues[4].errors).toEqual([]);
         });
-
     });
-
 });

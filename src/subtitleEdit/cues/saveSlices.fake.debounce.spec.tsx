@@ -39,12 +39,31 @@ describe("saveSlices", () => {
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
             expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
-            expect(testingStore.getState().saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+        });
+
+        it("calls saveTrack and update version", () => {
+            // GIVEN
+            const testingCues = [
+                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            callSaveTrack(testingStore.dispatch, testingStore.getState, true);
+
+            // THEN
+            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(saveTrack).toBeCalledWith(
+                { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
+            );
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
     });
 
     describe("setAutoSaveSuccess", () => {
-        it("calls saveTrack", () => {
+        it("saves track without updating version", () => {
             // GIVEN
             const testingCues = [
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
@@ -58,7 +77,28 @@ describe("saveSlices", () => {
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
             expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
-            expect(testingStore.getState().saveState).toEqual(SaveState.SAVED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+        });
+
+        it("saves track and create new version", () => {
+            // GIVEN
+            const testingCues = [
+                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            callSaveTrack(testingStore.dispatch, testingStore.getState, true);
+
+            // WHEN
+            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
+
+            // THEN
+            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(saveTrack).toBeCalledWith(
+                { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
+            );
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
     });
 });

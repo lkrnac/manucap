@@ -1,12 +1,13 @@
 import "../../testUtils/initBrowserEnvironment";
 import React from "react";
-import { mount, shallow } from "enzyme";
+import { Provider } from "react-redux";
+import { AnyAction } from "@reduxjs/toolkit";
+import { fireEvent, render } from "@testing-library/react";
+
+import { Track } from "../model";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { Provider } from "react-redux";
 import { updateEditingTrack } from "../trackSlices";
-import { AnyAction } from "@reduxjs/toolkit";
-import { Track } from "../model";
 import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "../cues/saveSlices";
 
 jest.mock("lodash", () => ({
@@ -26,64 +27,65 @@ describe("CaptionOverlapToggle", () => {
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
     });
+
    it("renders", () => {
        // GIVEN
-       const expectedNode = shallow(
+       const expectedNode = render(
            <button type="button" className="btn btn-secondary">
                <i className="fas fa-lock-open" /> Enable Overlapping
            </button>
        );
 
        // WHEN
-       const actualNode = mount(
+       const actualNode = render(
            <Provider store={testingStore}>
                <CaptionOverlapToggle />
            </Provider>
        );
 
        // THEN
-       expect(actualNode.html()).toEqual(expectedNode.html());
+       expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
    });
 
     it("changes icon on toggle", () => {
         // GIVEN
-        const expectedNode = shallow(
+        const expectedNode = render(
             <button type="button" className="btn btn-secondary sbte-toggled-btn">
                 <i className="fas fa-lock" /> Disable Overlapping
             </button>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CaptionOverlapToggle />
             </Provider>
         );
-        actualNode.find("ToggleButton").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("changes icon back on double toggle", () => {
         // GIVEN
-        const expectedNode = shallow(
+        const expectedNode = render(
             <button type="button" className="btn btn-secondary">
                 <i className="fas fa-lock-open" /> Enable Overlapping
             </button>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CaptionOverlapToggle />
             </Provider>
         );
-        actualNode.find("ToggleButton").simulate("click");
-        actualNode.find("ToggleButton").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("toggles overlap caption flag in store on toggle", () => {
@@ -95,14 +97,14 @@ describe("CaptionOverlapToggle", () => {
             overlapEnabled: false
         } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CaptionOverlapToggle />
             </Provider>
         );
 
         // WHEN
-        actualNode.find("ToggleButton").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
 
         // THEN
         expect(testingStore.getState().editingTrack.overlapEnabled).toEqual(true);
@@ -112,7 +114,7 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CaptionOverlapToggle />
             </Provider>
@@ -120,17 +122,16 @@ describe("CaptionOverlapToggle", () => {
 
         // WHEN
         callSaveTrack(testingStore.dispatch, testingStore.getState);
-        actualNode.update();
 
         // THEN
-        expect(actualNode.find("button").props().disabled).toBeTruthy();
+        expect(actualNode.container.querySelector("button") as Element).toBeDisabled();
     });
 
     it("enables button after successful save", () => {
         // GIVEN
         const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CaptionOverlapToggle />
             </Provider>
@@ -139,17 +140,16 @@ describe("CaptionOverlapToggle", () => {
         // WHEN
         callSaveTrack(testingStore.dispatch, testingStore.getState);
         testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-        actualNode.update();
 
         // THEN
-        expect(actualNode.find("button").props().disabled).toBeFalsy();
+        expect(actualNode.container.querySelector("button") as Element).toBeEnabled();
     });
 
     it("enables button after failed save", () => {
         // GIVEN
         const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CaptionOverlapToggle />
             </Provider>
@@ -158,9 +158,8 @@ describe("CaptionOverlapToggle", () => {
         // WHEN
         callSaveTrack(testingStore.dispatch, testingStore.getState);
         testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-        actualNode.update();
 
         // THEN
-        expect(actualNode.find("button").props().disabled).toBeFalsy();
+        expect(actualNode.container.querySelector("button") as Element).toBeEnabled();
     });
 });

@@ -119,7 +119,13 @@ const validateCue = (
     dispatch(checkErrors({ index: index + 1, shouldSpellCheck: false }));
 };
 
-export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, textOnly?: boolean): AppThunk =>
+export const updateVttCue = (
+    idx: number,
+    vttCue: VTTCue,
+    editUuid?: string,
+    textOnly?: boolean,
+    multiCuesEdit?: boolean
+): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
@@ -180,7 +186,7 @@ export const updateVttCue = (idx: number, vttCue: VTTCue, editUuid?: string, tex
             dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
             updateSearchMatches(dispatch, getState, idx);
             validateCue(dispatch, idx, true);
-            callSaveTrack(dispatch, getState);
+            callSaveTrack(dispatch, getState, multiCuesEdit);
         }
     };
 
@@ -271,7 +277,7 @@ export const applyShiftTime = (shiftTime: number): AppThunk =>
         const editingTrack = getState().editingTrack;
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
-        callSaveTrack(dispatch, getState);
+        callSaveTrack(dispatch, getState, true);
     };
 
 export const syncCues = (): AppThunk =>
@@ -279,6 +285,6 @@ export const syncCues = (): AppThunk =>
         const cues = getState().sourceCues;
         if (cues && cues.length > 0) {
             dispatch(cuesSlice.actions.syncCues({ cues }));
-            callSaveTrack(dispatch, getState);
+            callSaveTrack(dispatch, getState, true);
         }
     };
