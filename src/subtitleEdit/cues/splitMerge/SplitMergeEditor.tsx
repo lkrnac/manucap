@@ -1,8 +1,10 @@
 import React, { ReactElement } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
+import { showSplitMerge } from "./splitMergeSlices";
 
 const SplitMergeEditor = (): ReactElement | null => {
+    const dispatch = useDispatch();
     const splitMergeVisible = useSelector((state: SubtitleEditState) => state.splitMergeVisible);
 
     return splitMergeVisible ? (
@@ -24,6 +26,18 @@ const SplitMergeEditor = (): ReactElement | null => {
                 onClick={(): void => console.log("hi")}
             >
                 <i className="fa fa-arrow-up" />
+            </button>
+            <span style={{ flex: 1 }} />
+            <button
+                className="btn btn-secondary btn-sm"
+                type="button"
+                style={{ marginLeft: "5px" }}
+                data-testid="sbte-close-search-replace-btn"
+                onClick={(): void => {
+                    dispatch(showSplitMerge(false));
+                }}
+            >
+                <i className="far fa-times-circle" />
             </button>
         </div>
     ) : null;
