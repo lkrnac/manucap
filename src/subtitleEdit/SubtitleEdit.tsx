@@ -18,6 +18,7 @@ import CompleteButton from "./CompleteButton";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
+import SplitMergeEditor from "./cues/splitMerge/SplitMergeEditor";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -117,6 +118,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             }}
                         >
                             <SearchReplaceEditor />
+                            <SplitMergeEditor />
                             <CuesList editingTrack={editingTrack} currentPlayerTime={currentPlayerTime} />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button

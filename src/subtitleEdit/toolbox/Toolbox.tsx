@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
 import ExportSourceTrackCuesButton from "./ExportSourceTrackCuesButton";
+import SplitMergeCuesButton from "./SplitMergeCuesButton";
 
 interface Props {
     handleExportFile: () => void;
@@ -48,6 +49,7 @@ const Toolbox = (props: Props): ReactElement => {
                             />
                             <SearchReplaceButton />
                             { isTranslation ? <SyncCuesButton /> : null }
+                            <SplitMergeCuesButton />
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>
