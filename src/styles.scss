@@ -133,6 +133,12 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     background-color: $green;
 }
 
+.sbte-cue-line-flap-checkbox {
+    background-color: unset;
+    border: unset;
+    margin-right: 10px;
+}
+
 .sbte-cue-divider-error {
   border: 1px solid $red;
 }
