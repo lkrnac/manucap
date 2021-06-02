@@ -50,7 +50,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                         left: "0",
                         right: "0",
                         bottom: "30px",
-                        fontSize: "16px"
+                        fontSize: "14px"
                     }}
                 >
                     {
