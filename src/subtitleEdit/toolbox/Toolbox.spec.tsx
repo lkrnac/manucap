@@ -21,6 +21,7 @@ import SyncCuesButton from "./SyncCuesButton";
 import SearchReplaceButton from "./SearchReplaceButton";
 import ExportSourceTrackCuesButton from "./ExportSourceTrackCuesButton";
 import { fireEvent, render } from "@testing-library/react";
+import SplitMergeCuesButton from "./SplitMergeCuesButton";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -42,6 +43,7 @@ describe("Toolbox", () => {
                                     <ExportTrackCuesButton handleExport={jest.fn()} />
                                     <ImportTrackCuesButton handleImport={jest.fn()} />
                                     <SearchReplaceButton />
+                                    <SplitMergeCuesButton />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>
@@ -95,6 +97,7 @@ describe("Toolbox", () => {
                                     <ImportTrackCuesButton handleImport={jest.fn()} />
                                     <SearchReplaceButton />
                                     <SyncCuesButton />
+                                    <SplitMergeCuesButton />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>

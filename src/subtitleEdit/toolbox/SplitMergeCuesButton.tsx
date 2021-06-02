@@ -7,7 +7,7 @@ const SplitMergeCuesButton = (): ReactElement => {
     return (
         <button
             type="button"
-            className="btn btn-secondary dotsub-merge-cues-button"
+            className="btn btn-secondary sbte-split-merge-cues-button"
             onClick={(): void => {
                 dispatch(showSplitMerge(true));
             }}
