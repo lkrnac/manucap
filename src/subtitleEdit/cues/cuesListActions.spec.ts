@@ -7,13 +7,16 @@ import { act } from "react-dom/test-utils";
 
 import {
     addCue,
+    addRowToMergeList,
     applyShiftTime,
     deleteCue,
+    removeRowToMergeList,
     syncCues,
     updateCueCategory,
     updateCues,
     updateVttCue,
-    validateCorruptedCues, validateVttCue,
+    validateCorruptedCues,
+    validateVttCue,
 } from "./cuesListActions";
 import { CueDto, CueError, ScrollPosition, Track } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
@@ -2235,6 +2238,29 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().cues[4].errors).toEqual([]);
+        });
+    });
+
+    describe("addRowToMergeList", () => {
+        it("adds row index to merge list", () => {
+            // GIVEN
+            // WHEN
+            testingStore.dispatch(addRowToMergeList(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().rowsToMerge).toEqual([1]);
+        });
+    });
+
+    describe("removeRowToMergeList", () => {
+        it("removes row index from merge list", () => {
+            // GIVEN
+            // WHEN
+            testingStore.dispatch(addRowToMergeList(1) as {} as AnyAction);
+            testingStore.dispatch(removeRowToMergeList(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().rowsToMerge).toEqual([]);
         });
     });
 });
