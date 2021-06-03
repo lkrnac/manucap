@@ -1,5 +1,5 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
-import { cuesSlice } from "./cues/cuesListSlices";
+import { cuesSlice, mergeSlice } from "./cues/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
@@ -37,6 +37,7 @@ export const Reducers = {
     searchReplace: searchReplaceSlice.reducer,
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,
     splitMergeVisible: splitMergeVisibleSlice.reducer,
+    rowsToMerge: mergeSlice.reducer,
 
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { CueCategory, CueDto, CueError, SubtitleEditAction } from "../model";
@@ -6,6 +7,7 @@ import { editingTrackSlice } from "../trackSlices";
 import { Match, SpellCheck } from "./spellCheck/model";
 import { SearchReplaceMatches } from "./searchReplace/model";
 import { hasIgnoredKeyword } from "./spellCheck/spellCheckerUtils";
+import { splitMergeVisibleSlice } from "./splitMerge/splitMergeSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -126,5 +128,23 @@ export const cuesSlice = createSlice({
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
+    }
+});
+
+export const mergeSlice = createSlice({
+    name: "rowsToMerge",
+    initialState: [] as number[],
+    reducers: {
+        addRowIndex: (state, action: PayloadAction<number>): void => {
+            state.push(action.payload);
+        },
+        removeRowIndex: (state, action: PayloadAction<number>): void => {
+            _.remove(state, (index) => index === action.payload);
+        }
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): number[] => [],
+        [splitMergeVisibleSlice.actions.setSplitMergeVisible.type]:
+            (_state, action: PayloadAction<boolean>): number[] => action.payload ? _state : []
     }
 });

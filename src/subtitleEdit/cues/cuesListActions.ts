@@ -28,7 +28,7 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "./edit/cueEditorSlices";
-import { CueErrorsPayload, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
+import { CueErrorsPayload, cuesSlice, mergeSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
 
 interface CuesAction extends SubtitleEditAction {
@@ -288,3 +288,11 @@ export const syncCues = (): AppThunk =>
             callSaveTrack(dispatch, getState, true);
         }
     };
+
+export const addRowToMergeList = (rowIndex: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>): void =>
+        dispatch(mergeSlice.actions.addRowIndex(rowIndex));
+
+export const removeRowToMergeList = (rowIndex: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>): void =>
+        dispatch(mergeSlice.actions.removeRowIndex(rowIndex));

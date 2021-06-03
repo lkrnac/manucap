@@ -1,8 +1,9 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { CUE_LINE_STATE_CLASSES, CueError, CueLineState } from "../model";
 import CueErrorsIcon from "./CueErrorsIcon";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
+import { addRowToMergeList, removeRowToMergeList } from "./cuesListActions";
 
 interface Props {
     rowIndex: number;
@@ -13,7 +14,21 @@ interface Props {
 }
 
 const CueLineFlap = (props: Props): ReactElement => {
+    const dispatch = useDispatch();
     const splitMergeVisible = useSelector((state: SubtitleEditState) => state.splitMergeVisible);
+    const rowsToMerge = useSelector((state: SubtitleEditState) => state.rowsToMerge);
+    const [checked, setChecked] = useState(false);
+
+    const isContiguousToSelected = (): boolean => {
+        if (rowsToMerge && rowsToMerge.length > 0) {
+            const validIndices = [props.rowIndex - 1, props.rowIndex, props.rowIndex + 1];
+            return rowsToMerge
+                .map((selectedRow: number): boolean => validIndices.indexOf(selectedRow) > -1)
+                .reduce((selectedRow1: boolean, selectedRow2: boolean): boolean => selectedRow1 || selectedRow2);
+        }
+        return true;
+    };
+
     return (
         <div style={{ display: "flex", flexDirection: "row" }}>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -21,9 +36,15 @@ const CueLineFlap = (props: Props): ReactElement => {
                     splitMergeVisible
                         ? <input
                             type="checkbox"
-                            value=""
                             className="sbte-cue-line-flap-checkbox"
-                            disabled={props.editDisabled}
+                            disabled={props.editDisabled || !isContiguousToSelected()}
+                            checked={checked}
+                            onChange={(): void => {
+                                dispatch(checked
+                                    ? removeRowToMergeList(props.rowIndex)
+                                    : addRowToMergeList(props.rowIndex));
+                                setChecked(!checked);
+                            }}
                           />
                         : null
                 }
