@@ -1,13 +1,14 @@
-import React, { ReactElement, useState } from "react";
-import { CUE_LINE_STATE_CLASSES, CueError, CueLineState } from "../model";
+import React, { ReactElement, useEffect, useState } from "react";
+import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineState, CuesWithRowIndex } from "../model";
 import CueErrorsIcon from "./CueErrorsIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
-import { addRowToMergeList, removeRowToMergeList } from "./cuesListActions";
+import { addCuesToMergeList, removeCuesToMergeList } from "./cuesListActions";
 
 interface Props {
     rowIndex: number;
     cueLineState: CueLineState;
+    workingCues: CueDtoWithIndex[] | undefined;
     cuesErrors?: CueError[];
     showErrors?: boolean;
     editDisabled?: boolean;
@@ -19,11 +20,15 @@ const CueLineFlap = (props: Props): ReactElement => {
     const rowsToMerge = useSelector((state: SubtitleEditState) => state.rowsToMerge);
     const [checked, setChecked] = useState(false);
 
+    useEffect(() => {
+        setChecked(rowsToMerge.find(row => row.index === props.rowIndex) !== undefined);
+    }, [props.rowIndex, rowsToMerge]);
+
     const isContiguousToSelected = (): boolean => {
         if (rowsToMerge && rowsToMerge.length > 0) {
             const validIndices = [props.rowIndex - 1, props.rowIndex, props.rowIndex + 1];
             return rowsToMerge
-                .map((selectedRow: number): boolean => validIndices.indexOf(selectedRow) > -1)
+                .map((selectedRow: CuesWithRowIndex): boolean => validIndices.indexOf(selectedRow.index) > -1)
                 .reduce((selectedRow1: boolean, selectedRow2: boolean): boolean => selectedRow1 || selectedRow2);
         }
         return true;
@@ -40,9 +45,13 @@ const CueLineFlap = (props: Props): ReactElement => {
                             disabled={props.editDisabled || !isContiguousToSelected()}
                             checked={checked}
                             onChange={(): void => {
+                                const cuesWithIndex = {
+                                    index: props.rowIndex,
+                                    cues: props.workingCues
+                                };
                                 dispatch(checked
-                                    ? removeRowToMergeList(props.rowIndex)
-                                    : addRowToMergeList(props.rowIndex));
+                                    ? removeCuesToMergeList(cuesWithIndex)
+                                    : addCuesToMergeList(cuesWithIndex));
                                 setChecked(!checked);
                             }}
                           />

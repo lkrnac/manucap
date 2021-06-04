@@ -49,6 +49,11 @@ export interface CueLineDto {
     targetCues?: CueDtoWithIndex[];
 }
 
+export interface CuesWithRowIndex {
+    index: number;
+    cues?: CueDtoWithIndex[];
+}
+
 export interface LanguageCues {
     readonly languageId: string;
     readonly cues: CueDto[];

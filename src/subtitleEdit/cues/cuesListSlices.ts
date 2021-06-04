@@ -1,7 +1,15 @@
 import _ from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueCategory, CueDto, CueError, SubtitleEditAction } from "../model";
+import {
+    CueCategory,
+    CueDto,
+    CueDtoWithIndex,
+    CueError,
+    CuesWithRowIndex,
+    GlossaryMatchDto,
+    SubtitleEditAction
+} from "../model";
 import { copyNonConstructorProperties } from "./cueUtils";
 import { editingTrackSlice } from "../trackSlices";
 import { Match, SpellCheck } from "./spellCheck/model";
@@ -45,6 +53,10 @@ export interface SearchReplaceAction extends CueIndexAction {
 
 export interface SpellCheckRemovalAction extends CueIndexAction {
     trackId: string;
+}
+
+export interface RowsAction {
+    rows: CuesWithRowIndex[];
 }
 
 export const cuesSlice = createSlice({
@@ -124,6 +136,68 @@ export const cuesSlice = createSlice({
                 copyNonConstructorProperties(newCue, vttCue);
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
+        },
+        mergeCues: (state, action: PayloadAction<RowsAction>): CueDto[] => {
+            const rowsToMerge = _.sortBy(action.payload.rows, row => row.index);
+            let mergedContent = "";
+            let mergedErrors = null as CueError[] | null;
+            let mergedGlossaryMatches = null as GlossaryMatchDto[] | null;
+            // let mergedSearchReplaceMatches = null as SearchReplaceMatches[] | null;
+            let rowStartTime = 0;
+            let rowEndTime = 0;
+            let firstCue = {} as CueDtoWithIndex;
+            let lastCue = {} as CueDtoWithIndex;
+            rowsToMerge.forEach((row: CuesWithRowIndex, rowIndex: number, rows: CuesWithRowIndex[]) => {
+                row.cues?.forEach((cue: CueDtoWithIndex, cueIndex: number, cues: CueDtoWithIndex[]) => {
+                    if (cue.cue.errors && cue.cue.errors.length > 0) {
+                        if (!mergedErrors) {
+                            mergedErrors = cue.cue.errors;
+                        } else {
+                            mergedErrors.push(...cue.cue.errors);
+                        }
+                    }
+                    if (cue.cue.glossaryMatches && cue.cue.glossaryMatches.length > 0) {
+                        if (!mergedGlossaryMatches) {
+                            mergedGlossaryMatches = cue.cue.glossaryMatches;
+                        } else {
+                            mergedGlossaryMatches.push(...cue.cue.glossaryMatches);
+                        }
+                    }
+                    // TODO: fix this
+                    // if (cue.cue.searchReplaceMatches && cue.cue.searchReplaceMatches.matchLength > 0) {
+                    //     if (!mergedSearchReplaceMatches) {
+                    //         mergedSearchReplaceMatches = cue.cue.searchReplaceMatches;
+                    //     } else {
+                    //         mergedSearchReplaceMatches.push(...cue.cue.searchReplaceMatches);
+                    //     }
+                    // }
+                    if (rowIndex === 0 && cueIndex === 0) {
+                        firstCue = cue;
+                        rowStartTime = cue.cue.vttCue.startTime;
+                    } else {
+                        mergedContent += "\n";
+                    }
+                    if (rowIndex === rows.length - 1 && cueIndex === cues.length - 1) {
+                        lastCue = cue;
+                        rowEndTime = cue.cue.vttCue.endTime;
+                    }
+                    mergedContent += cue.cue.vttCue.text;
+                });
+            });
+            state[firstCue.index] = {
+                vttCue: {
+                    ...firstCue.cue.vttCue,
+                    text: mergedContent,
+                    startTime: rowStartTime,
+                    endTime: rowEndTime
+                },
+                errors: mergedErrors,
+                glossaryMatches: mergedGlossaryMatches,
+                editUuid: firstCue.cue.editUuid,
+                cueCategory: firstCue.cue.cueCategory
+            } as CueDto;
+            state.splice(firstCue.index + 1, lastCue.index - firstCue.index);
+            return state;
         }
     },
     extraReducers: {
@@ -133,18 +207,20 @@ export const cuesSlice = createSlice({
 
 export const mergeSlice = createSlice({
     name: "rowsToMerge",
-    initialState: [] as number[],
+    initialState: [] as CuesWithRowIndex[],
     reducers: {
-        addRowIndex: (state, action: PayloadAction<number>): void => {
+        addRowCues: (state, action: PayloadAction<CuesWithRowIndex>): void => {
             state.push(action.payload);
         },
-        removeRowIndex: (state, action: PayloadAction<number>): void => {
-            _.remove(state, (index) => index === action.payload);
+        removeRowCues: (state, action: PayloadAction<CuesWithRowIndex>): void => {
+            // TODO: do i need to reassign the state?
+            _.remove(state, (row) => row.index === action.payload.index);
         }
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): number[] => [],
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): CuesWithRowIndex[] => [],
+        [cuesSlice.actions.mergeCues.type]: (): CuesWithRowIndex[] => [],
         [splitMergeVisibleSlice.actions.setSplitMergeVisible.type]:
-            (_state, action: PayloadAction<boolean>): number[] => action.payload ? _state : []
+            (_state, action: PayloadAction<CuesWithRowIndex>): CuesWithRowIndex[] => action.payload ? _state : []
     }
 });

@@ -7,7 +7,7 @@ import { CueLineState } from "../model";
 import { render } from "@testing-library/react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { showSplitMerge } from "./splitMerge/splitMergeSlices";
-import { addRowToMergeList } from "./cuesListActions";
+import { addCuesToMergeList } from "./cuesListActions";
 
 describe("CueLineFlap", () => {
     it("renders without content", () => {
@@ -66,7 +66,11 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.NONE}
+                    workingCues={testingStore.getState().cues[0]}
+                />
             </Provider>
         );
 
@@ -131,7 +135,11 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    workingCues={testingStore.getState().cues[0]}
+                />
             </Provider>
         );
 
@@ -198,7 +206,12 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} editDisabled />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    workingCues={testingStore.getState().cues[0]}
+                    editDisabled
+                />
             </Provider>
         );
 
@@ -263,7 +276,12 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} showErrors />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.ERROR}
+                    workingCues={testingStore.getState().cues[0]}
+                    showErrors
+                />
             </Provider>
         );
 
@@ -330,7 +348,12 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} editDisabled />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.ERROR}
+                    workingCues={testingStore.getState().cues[0]}
+                    editDisabled
+                />
             </Provider>
         );
 
@@ -400,7 +423,11 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    workingCues={testingStore.getState().cues[0]}
+                />
             </Provider>
         );
 
@@ -473,7 +500,12 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} editDisabled />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    workingCues={testingStore.getState().cues[0]}
+                    editDisabled
+                />
             </Provider>
         );
 
@@ -484,7 +516,7 @@ describe("CueLineFlap", () => {
     it("renders for cue line when split/merge mode is activated and no contiguous cue is checked", () => {
         // GIVEN
         testingStore.dispatch(showSplitMerge(true) as {} as AnyAction);
-        testingStore.dispatch(addRowToMergeList(3) as {} as AnyAction);
+        testingStore.dispatch(addCuesToMergeList({ index: 3 }) as {} as AnyAction);
         const expectedNode = render(
             <div style={{ display: "flex", flexDirection: "row" }}>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -546,7 +578,11 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    workingCues={testingStore.getState().cues[0]}
+                />
             </Provider>
         );
 
@@ -557,7 +593,7 @@ describe("CueLineFlap", () => {
     it("renders for cue line when split/merge mode is activated and a contiguous cue is checked", () => {
         // GIVEN
         testingStore.dispatch(showSplitMerge(true) as {} as AnyAction);
-        testingStore.dispatch(addRowToMergeList(1) as {} as AnyAction);
+        testingStore.dispatch(addCuesToMergeList({ index: 1 }) as {} as AnyAction);
         const expectedNode = render(
             <div style={{ display: "flex", flexDirection: "row" }}>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -618,7 +654,11 @@ describe("CueLineFlap", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    workingCues={testingStore.getState().cues[0]}
+                />
             </Provider>
         );
 

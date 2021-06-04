@@ -2,10 +2,12 @@ import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { showSplitMerge } from "./splitMergeSlices";
+import { mergeCues } from "../cuesListActions";
 
 const SplitMergeEditor = (): ReactElement | null => {
     const dispatch = useDispatch();
     const splitMergeVisible = useSelector((state: SubtitleEditState) => state.splitMergeVisible);
+    // const rowsToMerge = useSelector((state: SubtitleEditState) => state.rowsToMerge);
 
     return splitMergeVisible ? (
         <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
@@ -13,19 +15,12 @@ const SplitMergeEditor = (): ReactElement | null => {
                 className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
-                data-testid="sbte-search-next"
-                onClick={(): void => console.log("hi")}
-            >
-                <i className="fa fa-arrow-down" />
-            </button>
-            <button
-                className="btn btn-secondary btn-sm"
-                type="button"
-                style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-prev"
-                onClick={(): void => console.log("hi")}
+                onClick={(): void => {
+                    dispatch(mergeCues());
+                }}
             >
-                <i className="fa fa-arrow-up" />
+                Merge
             </button>
             <span style={{ flex: 1 }} />
             <button

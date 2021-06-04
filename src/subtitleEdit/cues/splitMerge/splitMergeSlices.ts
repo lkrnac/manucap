@@ -14,6 +14,7 @@ export const splitMergeVisibleSlice = createSlice({
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
+        // TODO: try to set to false after merge
     }
 });
 

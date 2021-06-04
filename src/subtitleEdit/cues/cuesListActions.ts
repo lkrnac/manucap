@@ -8,7 +8,8 @@ import {
     ScrollPosition,
     SpellcheckerSettings,
     SubtitleEditAction,
-    Track
+    Track,
+    CuesWithRowIndex
 } from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
@@ -289,10 +290,19 @@ export const syncCues = (): AppThunk =>
         }
     };
 
-export const addRowToMergeList = (rowIndex: number): AppThunk =>
+export const addCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>): void =>
-        dispatch(mergeSlice.actions.addRowIndex(rowIndex));
+        dispatch(mergeSlice.actions.addRowCues(row));
 
-export const removeRowToMergeList = (rowIndex: number): AppThunk =>
+export const removeCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>): void =>
-        dispatch(mergeSlice.actions.removeRowIndex(rowIndex));
+        dispatch(mergeSlice.actions.removeRowCues(row));
+
+export const mergeCues = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+        const rowsToMerge = getState().rowsToMerge;
+        if (rowsToMerge && rowsToMerge.length > 0) {
+            dispatch(cuesSlice.actions.mergeCues({ rows: rowsToMerge }));
+            callSaveTrack(dispatch, getState, true);
+        }
+    };

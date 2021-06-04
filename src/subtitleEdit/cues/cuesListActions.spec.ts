@@ -7,10 +7,10 @@ import { act } from "react-dom/test-utils";
 
 import {
     addCue,
-    addRowToMergeList,
+    addCuesToMergeList,
     applyShiftTime,
     deleteCue,
-    removeRowToMergeList,
+    removeCuesToMergeList,
     syncCues,
     updateCueCategory,
     updateCues,
@@ -2245,10 +2245,10 @@ describe("cueSlices", () => {
         it("adds row index to merge list", () => {
             // GIVEN
             // WHEN
-            testingStore.dispatch(addRowToMergeList(1) as {} as AnyAction);
+            testingStore.dispatch(addCuesToMergeList({ index: 1 }) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().rowsToMerge).toEqual([1]);
+            expect(testingStore.getState().rowsToMerge).toEqual([{ index: 1 }]);
         });
     });
 
@@ -2256,8 +2256,8 @@ describe("cueSlices", () => {
         it("removes row index from merge list", () => {
             // GIVEN
             // WHEN
-            testingStore.dispatch(addRowToMergeList(1) as {} as AnyAction);
-            testingStore.dispatch(removeRowToMergeList(1) as {} as AnyAction);
+            testingStore.dispatch(addCuesToMergeList({ index: 1 }) as {} as AnyAction);
+            testingStore.dispatch(removeCuesToMergeList({ index: 1 }) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().rowsToMerge).toEqual([]);
