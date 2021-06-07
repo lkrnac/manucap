@@ -2317,8 +2317,10 @@ describe("cueSlices", () => {
             ] as CueDto[];
 
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList({ index: 0, cues: [cues[0], cues[1]]}) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList({ index: 1, cues: [cues[2], cues[3]]}) as {} as AnyAction);
+            testingStore.dispatch(addCuesToMergeList(
+                { index: 0, cues: [cues[0], cues[1]]}) as {} as AnyAction);
+            testingStore.dispatch(addCuesToMergeList(
+                { index: 1, cues: [cues[2], cues[3]]}) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(mergeCues() as {} as AnyAction);
