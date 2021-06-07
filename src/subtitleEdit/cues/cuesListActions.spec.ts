@@ -2270,9 +2270,9 @@ describe("cueSlices", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingStore.dispatch(addCuesToMergeList(
-                { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
+                { index: 0, cues: [testingCues[0]]}) as {} as AnyAction);
             testingStore.dispatch(addCuesToMergeList(
-                { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
+                { index: 1, cues: [testingCues[1]]}) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(mergeCues() as {} as AnyAction);
@@ -2290,11 +2290,11 @@ describe("cueSlices", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingStore.dispatch(addCuesToMergeList(
-                { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
+                { index: 0, cues: [testingCues[0]]}) as {} as AnyAction);
             testingStore.dispatch(addCuesToMergeList(
-                { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
+                { index: 1, cues: [testingCues[1]]}) as {} as AnyAction);
             testingStore.dispatch(addCuesToMergeList(
-                { index: 2, cues: [{ index: 2, cue: testingCues[2] }]}) as {} as AnyAction);
+                { index: 2, cues: [testingCues[2]]}) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(mergeCues() as {} as AnyAction);
@@ -2317,18 +2317,8 @@ describe("cueSlices", () => {
             ] as CueDto[];
 
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList({
-                index: 0,
-                cues: [
-                    { index: 0, cue: cues[0] },
-                    { index: 1, cue: cues[1] }
-                ]}) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList({
-                index: 1,
-                cues: [
-                    { index: 0, cue: cues[2] },
-                    { index: 1, cue: cues[3] }
-                ]}) as {} as AnyAction);
+            testingStore.dispatch(addCuesToMergeList({ index: 0, cues: [cues[0], cues[1]]}) as {} as AnyAction);
+            testingStore.dispatch(addCuesToMergeList({ index: 1, cues: [cues[2], cues[3]]}) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(mergeCues() as {} as AnyAction);
