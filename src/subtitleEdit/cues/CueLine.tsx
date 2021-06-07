@@ -123,7 +123,9 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 cuesErrors={cuesErrors}
                 showErrors={showGlossaryTermsAndErrors}
                 editDisabled={cueLineEditDisabled}
-                workingCues={props.rowProps.targetCuesLength > 0 ? props.data.targetCues : props.data.sourceCues}
+                workingCues={props.rowProps.targetCuesLength > 0
+                    ? props.data.targetCues?.map(cue => cue.cue)
+                    : props.data.sourceCues?.map(cue => cue.cue)}
             />
             <div
                 className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}

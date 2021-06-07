@@ -76,7 +76,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[targetCues[0]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueEdit
                                 index={0}
@@ -136,6 +140,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
+                            workingCues={[corruptedCue]}
                             cuesErrors={[CueError.SPELLCHECK_ERROR]}
                             showErrors
                         />
@@ -189,7 +194,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[targetCuesWithIndexes[0].cue]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue
@@ -251,7 +260,12 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} editDisabled />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[matchedCuesCaptioningEditDisabled[0].targetCues[0].cue]}
+                            editDisabled
+                        />
                         <div
                             className="sbte-edit-disabled"
                             style={{ display: "flex", flexDirection:"column", width: "100%" }}
@@ -314,7 +328,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={1} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={1}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[targetCues[1]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -379,7 +397,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={2} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={2}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[sourceCues[2]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -443,7 +465,12 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} editDisabled />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[disabledTargetCue]}
+                            editDisabled
+                        />
                         <div
                             className="sbte-edit-disabled"
                             style={{ display: "flex", flexDirection:"column", width: "100%" }}
@@ -516,7 +543,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.NONE}
+                            workingCues={[sourceCues[0]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -599,7 +630,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.NONE}
+                            workingCues={[sourceCues[0]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -671,7 +706,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.NONE}
+                            workingCues={[sourceCues[0]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -749,7 +788,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[targetCues[0]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <div
                                 style={{ display: "flex" }}
@@ -814,7 +857,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[targetCues[0]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -910,7 +957,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={targetCues}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -1006,7 +1057,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={[targetCues[0]]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -1091,7 +1146,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            workingCues={targetCues}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -1188,7 +1247,11 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} />
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.ERROR}
+                            workingCues={[targetCues[0], targetCues[1], corruptedTargetCueWithIndex.cue]}
+                        />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
@@ -1299,6 +1362,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.ERROR}
+                            workingCues={[targetCues[0], targetCues[1], corruptedTargetCueWithIndex.cue]}
                             cuesErrors={[CueError.SPELLCHECK_ERROR]}
                             showErrors
                         />

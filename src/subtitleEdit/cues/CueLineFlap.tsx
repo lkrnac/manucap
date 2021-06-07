@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineState, CuesWithRowIndex } from "../model";
+import { CUE_LINE_STATE_CLASSES, CueDto, CueError, CueLineState, CuesWithRowIndex } from "../model";
 import CueErrorsIcon from "./CueErrorsIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
@@ -8,7 +8,7 @@ import { addCuesToMergeList, removeCuesToMergeList } from "./cuesListActions";
 interface Props {
     rowIndex: number;
     cueLineState: CueLineState;
-    workingCues: CueDtoWithIndex[] | undefined;
+    workingCues: CueDto[] | undefined;
     cuesErrors?: CueError[];
     showErrors?: boolean;
     editDisabled?: boolean;
