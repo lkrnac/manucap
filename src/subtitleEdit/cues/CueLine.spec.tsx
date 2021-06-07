@@ -79,7 +79,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[targetCues[0]]}
+                            workingCues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueEdit
@@ -140,7 +140,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[corruptedCue]}
+                            workingCues={[{ index: 0, cue: corruptedCue }]}
                             cuesErrors={[CueError.SPELLCHECK_ERROR]}
                             showErrors
                         />
@@ -197,7 +197,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[targetCuesWithIndexes[0].cue]}
+                            workingCues={[{ index: 0, cue: targetCuesWithIndexes[0].cue }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -263,7 +263,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[matchedCuesCaptioningEditDisabled[0].targetCues[0].cue]}
+                            workingCues={[{ index: 0, cue: matchedCuesCaptioningEditDisabled[0].targetCues[0].cue }]}
                             editDisabled
                         />
                         <div
@@ -331,7 +331,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={1}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[targetCues[1]]}
+                            workingCues={[{ index: 0, cue: targetCues[1] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -400,7 +400,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={2}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[sourceCues[2]]}
+                            workingCues={[{ index: 0, cue: targetCues[2] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -468,7 +468,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[disabledTargetCue]}
+                            workingCues={[{ index: 0, cue: disabledTargetCue }]}
                             editDisabled
                         />
                         <div
@@ -546,7 +546,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.NONE}
-                            workingCues={[sourceCues[0]]}
+                            workingCues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -633,7 +633,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.NONE}
-                            workingCues={[sourceCues[0]]}
+                            workingCues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -709,7 +709,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.NONE}
-                            workingCues={[sourceCues[0]]}
+                            workingCues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -791,7 +791,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[targetCues[0]]}
+                            workingCues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <div
@@ -860,7 +860,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[targetCues[0]]}
+                            workingCues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -960,7 +960,11 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={targetCues}
+                            workingCues={[
+                                { index: 0, cue: targetCues[0] },
+                                { index: 1, cue: targetCues[1] },
+                                { index: 2, cue: targetCues[2] }
+                            ]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -1060,7 +1064,7 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={[targetCues[0]]}
+                            workingCues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -1149,7 +1153,11 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
-                            workingCues={targetCues}
+                            workingCues={[
+                                { index: 0, cue: targetCues[0] },
+                                { index: 1, cue: targetCues[1] },
+                                { index: 2, cue: targetCues[2] }
+                            ]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -1250,7 +1258,11 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.ERROR}
-                            workingCues={[targetCues[0], targetCues[1], corruptedTargetCueWithIndex.cue]}
+                            workingCues={[
+                                { index: 0, cue: targetCues[0] },
+                                { index: 1, cue: targetCues[1] },
+                                { index: 2, cue: corruptedTargetCueWithIndex.cue }
+                            ]}
                         />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -1362,7 +1374,11 @@ describe("CueLine", () => {
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.ERROR}
-                            workingCues={[targetCues[0], targetCues[1], corruptedTargetCueWithIndex.cue]}
+                            workingCues={[
+                                { index: 0, cue: targetCues[0] },
+                                { index: 1, cue: targetCues[1] },
+                                { index: 2, cue: corruptedTargetCueWithIndex.cue }
+                            ]}
                             cuesErrors={[CueError.SPELLCHECK_ERROR]}
                             showErrors
                         />

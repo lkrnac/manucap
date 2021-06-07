@@ -148,19 +148,19 @@ export const cuesSlice = createSlice({
             let firstCue = {} as CueDtoWithIndex;
             let lastCue = {} as CueDtoWithIndex;
             rowsToMerge.forEach((row: CuesWithRowIndex, rowIndex: number, rows: CuesWithRowIndex[]) => {
-                row.cues?.forEach((cue: CueDto, cueIndex: number, cues: CueDto[]) => {
-                    if (cue.errors && cue.errors.length > 0) {
+                row.cues?.forEach((cue: CueDtoWithIndex, cueIndex: number, cues: CueDtoWithIndex[]) => {
+                    if (cue.cue.errors && cue.cue.errors.length > 0) {
                         if (!mergedErrors) {
-                            mergedErrors = cue.errors;
+                            mergedErrors = cue.cue.errors;
                         } else {
-                            mergedErrors.push(...cue.errors);
+                            mergedErrors.push(...cue.cue.errors);
                         }
                     }
-                    if (cue.glossaryMatches && cue.glossaryMatches.length > 0) {
+                    if (cue.cue.glossaryMatches && cue.cue.glossaryMatches.length > 0) {
                         if (!mergedGlossaryMatches) {
-                            mergedGlossaryMatches = cue.glossaryMatches;
+                            mergedGlossaryMatches = cue.cue.glossaryMatches;
                         } else {
-                            mergedGlossaryMatches.push(...cue.glossaryMatches);
+                            mergedGlossaryMatches.push(...cue.cue.glossaryMatches);
                         }
                     }
                     // TODO: fix this
@@ -172,16 +172,16 @@ export const cuesSlice = createSlice({
                     //     }
                     // }
                     if (rowIndex === 0 && cueIndex === 0) {
-                        firstCue = { index: rowIndex, cue };
-                        rowStartTime = cue.vttCue.startTime;
+                        firstCue = cue;
+                        rowStartTime = cue.cue.vttCue.startTime;
                     } else {
                         mergedContent += "\n";
                     }
                     if (rowIndex === rows.length - 1 && cueIndex === cues.length - 1) {
-                        lastCue = { index: rowIndex, cue };
-                        rowEndTime = cue.vttCue.endTime;
+                        lastCue = cue;
+                        rowEndTime = cue.cue.vttCue.endTime;
                     }
-                    mergedContent += cue.vttCue.text;
+                    mergedContent += cue.cue.vttCue.text;
                 });
             });
             state[firstCue.index] = {

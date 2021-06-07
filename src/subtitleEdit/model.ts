@@ -51,7 +51,7 @@ export interface CueLineDto {
 
 export interface CuesWithRowIndex {
     index: number;
-    cues?: CueDto[];
+    cues?: CueDtoWithIndex[];
 }
 
 export interface LanguageCues {
