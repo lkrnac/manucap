@@ -1081,6 +1081,42 @@ describe("SubtitleEdit", () => {
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
+    it("jumps to current edit cue when button is clicked", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-edit-cue-button").simulate("click");
+
+        // THEN
+        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.CURRENT);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.CURRENT);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+    });
+
     it("calls onSave callback on auto save", () => {
         // GIVEN
         const saveTrack = jest.fn();

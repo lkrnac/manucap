@@ -162,42 +162,14 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     tooltipId="scrollToEditCueToolTip"
                                     text="Jump to edit cue"
                                     placement="top">
-                                        <button 
-                                            className="btn btn-secondary"
+                                        <button
+                                            className="btn btn-secondary sbte-jump-to-edit-cue-button"
                                             type="button"
                                             style={{ marginLeft: "10px"}}
                                             onClick={(): void => {
                                                 dispatch(changeScrollPosition(ScrollPosition.CURRENT))
                                             }}>
                                                 <i className="fa fa-edit"/>
-                                        </button>
-                                </TooltipWrapper>
-                                <TooltipWrapper
-                                    tooltipId="scrollToPlaybackCueToolTip"
-                                    text="Jump to playback position cue"
-                                    placement="top">
-                                        <button 
-                                            className="btn btn-secondary"
-                                            type="button"
-                                            style={{ marginLeft: "10px"}}
-                                            onClick={(): void => {
-                                                dispatch(changeScrollPosition(ScrollPosition.CURRENT))
-                                            }}>
-                                                <i className="fa fa-play"/>
-                                        </button>
-                                </TooltipWrapper>
-                                <TooltipWrapper
-                                    tooltipId="scrollToLastTranslatedToolTip"
-                                    text="Jump to last translated cue"
-                                    placement="top">
-                                        <button 
-                                            className="btn btn-secondary"
-                                            type="button"
-                                            style={{ marginLeft: "10px"}}
-                                            onClick={(): void => {
-                                                dispatch(changeScrollPosition(ScrollPosition.CURRENT))
-                                            }}>
-                                                <i className="far fa-language"></i>
                                         </button>
                                 </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
