@@ -15,6 +15,7 @@ import { updateCues } from "./cuesListActions";
 import { setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
 import { createTestingStore } from "../../testUtils/testingStore";
+import SplitCueLineButton from "./edit/SplitCueLineButton";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -46,6 +47,7 @@ describe("CueActionsPanel", () => {
                 >
                     <DeleteCueLineButton cueIndex={1} />
                     <PlayCueButton cue={cues[1]} />
+                    <SplitCueLineButton cueIndex={1} />
                     <AddCueLineButton cueIndex={1} sourceCueIndexes={[]} />
                 </div>
             </Provider>
@@ -74,6 +76,7 @@ describe("CueActionsPanel", () => {
                 >
                     <div />
                     <PlayCueButton cue={cues[1]} />
+                    <div />
                     <div />
                 </div>
             </Provider>

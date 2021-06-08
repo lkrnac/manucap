@@ -260,6 +260,34 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
         }
     };
 
+export const splitCue = (idx: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
+        const state: SubtitleEditState = getState();
+        const subtitleSpecifications = state.subtitleSpecifications;
+        const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+        const originalCue = state.cues[idx];
+        const originalStartTime = originalCue.vttCue.startTime;
+        const originalEndTime = originalCue.vttCue.endTime;
+        const splitStartTime = originalStartTime + ((originalEndTime - originalStartTime) / 2);
+        const splitCue = createAndAddCue(originalCue, splitStartTime, originalEndTime);
+        const updatedVttCue =
+            new VTTCue(originalCue.vttCue.startTime, splitStartTime, originalCue.vttCue.text);
+
+        const editingTrack = state.editingTrack;
+        const validCueDuration = editingTrack && verifyCueDuration(updatedVttCue, editingTrack, timeGapLimit);
+
+        if (validCueDuration) {
+            const updatedCue = { ...originalCue, idx, vttCue: updatedVttCue, editUuid: originalCue.editUuid };
+            dispatch(cuesSlice.actions.updateVttCue(updatedCue));
+            dispatch(cuesSlice.actions.addCue({ idx: idx + 1, cue: splitCue }));
+            dispatch(lastCueChangeSlice.actions.recordCueChange(
+                { changeType: "SPLIT", index: idx, vttCue: originalCue.vttCue }));
+            callSaveTrack(dispatch, getState);
+        } else {
+            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.INVALID_RANGE_END]));
+        }
+    };
+
 export const deleteCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
         dispatch(cuesSlice.actions.deleteCue({ idx }));

@@ -104,7 +104,7 @@ export interface LoadingIndicator {
 }
 
 export interface CueChange {
-    changeType: "ADD" | "EDIT" | "REMOVE";
+    changeType: "ADD" | "EDIT" | "REMOVE" | "SPLIT";
     index: number;
     vttCue: VTTCue;
 }

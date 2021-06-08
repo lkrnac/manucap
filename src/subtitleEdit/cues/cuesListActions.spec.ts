@@ -12,6 +12,7 @@ import {
     deleteCue,
     mergeCues,
     removeCuesToMergeList,
+    splitCue,
     syncCues,
     updateCueCategory,
     updateCues,
@@ -2339,6 +2340,26 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(8);
             expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                 "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
+        });
+    });
+
+    describe("splitCue", () => {
+        it("splits cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(splitCue(0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(4);
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
         });
     });
 });
