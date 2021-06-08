@@ -163,13 +163,27 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     text="Jump to edit cue"
                                     placement="top">
                                         <button
-                                            className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                            className="btn btn-secondary"
                                             type="button"
                                             style={{ marginLeft: "10px"}}
                                             onClick={(): void => {
                                                 dispatch(changeScrollPosition(ScrollPosition.CURRENT))
                                             }}>
                                                 <i className="fa fa-edit"/>
+                                        </button>
+                                </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="scrollToPlaybackCueToolTip"
+                                    text="Jump to playback position cue"
+                                    placement="top">
+                                        <button
+                                            className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                            type="button"
+                                            style={{ marginLeft: "10px"}}
+                                            onClick={(): void => {
+                                                dispatch(changeScrollPosition(ScrollPosition.PLAYBACK))
+                                            }}>
+                                                <i className="fa fa-play"/>
                                         </button>
                                 </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
