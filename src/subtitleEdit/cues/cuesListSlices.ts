@@ -15,7 +15,7 @@ import { editingTrackSlice } from "../trackSlices";
 import { Match, SpellCheck } from "./spellCheck/model";
 import { SearchReplaceMatches } from "./searchReplace/model";
 import { hasIgnoredKeyword } from "./spellCheck/spellCheckerUtils";
-import { splitMergeVisibleSlice } from "./splitMerge/splitMergeSlices";
+import { mergeVisibleSlice } from "./merge/mergeSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -220,7 +220,7 @@ export const mergeSlice = createSlice({
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CuesWithRowIndex[] => [],
         [cuesSlice.actions.mergeCues.type]: (): CuesWithRowIndex[] => [],
-        [splitMergeVisibleSlice.actions.setSplitMergeVisible.type]:
+        [mergeVisibleSlice.actions.setMergeVisible.type]:
             (_state, action: PayloadAction<CuesWithRowIndex>): CuesWithRowIndex[] => action.payload ? _state : []
     }
 });

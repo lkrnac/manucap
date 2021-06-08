@@ -1,15 +1,14 @@
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import { showSplitMerge } from "./splitMergeSlices";
+import { showMerge } from "./mergeSlices";
 import { mergeCues } from "../cuesListActions";
 
-const SplitMergeEditor = (): ReactElement | null => {
+const MergeEditor = (): ReactElement | null => {
     const dispatch = useDispatch();
-    const splitMergeVisible = useSelector((state: SubtitleEditState) => state.splitMergeVisible);
-    // const rowsToMerge = useSelector((state: SubtitleEditState) => state.rowsToMerge);
+    const mergeVisible = useSelector((state: SubtitleEditState) => state.mergeVisible);
 
-    return splitMergeVisible ? (
+    return mergeVisible ? (
         <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
             <button
                 className="btn btn-secondary btn-sm"
@@ -29,7 +28,7 @@ const SplitMergeEditor = (): ReactElement | null => {
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-close-search-replace-btn"
                 onClick={(): void => {
-                    dispatch(showSplitMerge(false));
+                    dispatch(showMerge(false));
                 }}
             >
                 <i className="far fa-times-circle" />
@@ -38,4 +37,4 @@ const SplitMergeEditor = (): ReactElement | null => {
     ) : null;
 };
 
-export default SplitMergeEditor;
+export default MergeEditor;

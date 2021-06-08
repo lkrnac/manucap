@@ -35,7 +35,7 @@ import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
 import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
-import SplitMergeCuesButton from "./toolbox/SplitMergeCuesButton";
+import MergeCuesButton from "./toolbox/MergeCuesButton";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -664,7 +664,7 @@ describe("SubtitleEdit", () => {
                                                 <ExportTrackCuesButton handleExport={jest.fn()} />
                                                 <ImportTrackCuesButton handleImport={jest.fn()} disabled />
                                                 <SearchReplaceButton />
-                                                <SplitMergeCuesButton />
+                                                <MergeCuesButton />
                                             </ButtonToolbar>
                                         </Card.Body>
                                     </Accordion.Collapse>

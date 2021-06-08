@@ -5,11 +5,11 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { SubtitleEditAction } from "../../model";
 
-export const splitMergeVisibleSlice = createSlice({
-    name: "splitMergeVisible",
+export const mergeVisibleSlice = createSlice({
+    name: "mergeVisible",
     initialState: false,
     reducers: {
-        setSplitMergeVisible: (_state, action: PayloadAction<boolean>): boolean => action.payload
+        setMergeVisible: (_state, action: PayloadAction<boolean>): boolean => action.payload
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
@@ -17,7 +17,7 @@ export const splitMergeVisibleSlice = createSlice({
     }
 });
 
-export const showSplitMerge = (visible: boolean): AppThunk =>
+export const showMerge = (visible: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<boolean | SubtitleEditAction>>): void => {
-        dispatch(splitMergeVisibleSlice.actions.setSplitMergeVisible(visible));
+        dispatch(mergeVisibleSlice.actions.setMergeVisible(visible));
     };

@@ -6,7 +6,7 @@ import CueLineFlap from "./CueLineFlap";
 import { CueLineState } from "../model";
 import { render } from "@testing-library/react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { showSplitMerge } from "./splitMerge/splitMergeSlices";
+import { showMerge } from "./merge/mergeSlices";
 import { addCuesToMergeList } from "./cuesListActions";
 
 describe("CueLineFlap", () => {
@@ -361,9 +361,9 @@ describe("CueLineFlap", () => {
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("renders for enabled cue line when split/merge mode is activated", () => {
+    it("renders for enabled cue line when merge mode is activated", () => {
         // GIVEN
-        testingStore.dispatch(showSplitMerge(true) as {} as AnyAction);
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
         const expectedNode = render(
             <div style={{ display: "flex", flexDirection: "row" }}>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -435,9 +435,9 @@ describe("CueLineFlap", () => {
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("renders for disabled cue line when split/merge mode is activated", () => {
+    it("renders for disabled cue line when merge mode is activated", () => {
         // GIVEN
-        testingStore.dispatch(showSplitMerge(true) as {} as AnyAction);
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
         const expectedNode = render(
             <div style={{ display: "flex", flexDirection: "row" }}>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -513,9 +513,9 @@ describe("CueLineFlap", () => {
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("renders for cue line when split/merge mode is activated and no contiguous cue is checked", () => {
+    it("renders for cue line when merge mode is activated and no contiguous cue is checked", () => {
         // GIVEN
-        testingStore.dispatch(showSplitMerge(true) as {} as AnyAction);
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
         testingStore.dispatch(addCuesToMergeList({ index: 3 }) as {} as AnyAction);
         const expectedNode = render(
             <div style={{ display: "flex", flexDirection: "row" }}>
@@ -590,9 +590,9 @@ describe("CueLineFlap", () => {
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("renders for cue line when split/merge mode is activated and a contiguous cue is checked", () => {
+    it("renders for cue line when merge mode is activated and a contiguous cue is checked", () => {
         // GIVEN
-        testingStore.dispatch(showSplitMerge(true) as {} as AnyAction);
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
         testingStore.dispatch(addCuesToMergeList({ index: 1 }) as {} as AnyAction);
         const expectedNode = render(
             <div style={{ display: "flex", flexDirection: "row" }}>

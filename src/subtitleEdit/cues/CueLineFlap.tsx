@@ -16,7 +16,7 @@ interface Props {
 
 const CueLineFlap = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const splitMergeVisible = useSelector((state: SubtitleEditState) => state.splitMergeVisible);
+    const mergeVisible = useSelector((state: SubtitleEditState) => state.mergeVisible);
     const rowsToMerge = useSelector((state: SubtitleEditState) => state.rowsToMerge);
     const [checked, setChecked] = useState(false);
 
@@ -38,7 +38,7 @@ const CueLineFlap = (props: Props): ReactElement => {
         <div style={{ display: "flex", flexDirection: "row" }}>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 {
-                    splitMergeVisible
+                    mergeVisible
                         ? <input
                             type="checkbox"
                             className="sbte-cue-line-flap-checkbox"
