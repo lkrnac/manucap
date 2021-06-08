@@ -2267,99 +2267,182 @@ describe("cueSlices", () => {
     });
 
     describe("mergeCues", () => {
-        it("merges 2 single cue lines", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList(
-                { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList(
-                { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
+        describe("without source cues", () => {
+            it("merges 2 single cue lines", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(mergeCues() as {} as AnyAction);
+                // WHEN
+                testingStore.dispatch(mergeCues() as {} as AnyAction);
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(2);
-            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-        });
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+            });
 
-        it("merges 3 single cue lines", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList(
-                { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList(
-                { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList(
-                { index: 2, cues: [{ index: 2, cue: testingCues[2] }]}) as {} as AnyAction);
+            it("merges 3 single cue lines", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 2, cues: [{ index: 2, cue: testingCues[2] }]}) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(mergeCues() as {} as AnyAction);
+                // WHEN
+                testingStore.dispatch(mergeCues() as {} as AnyAction);
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(1);
-            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(6);
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual(
-                "Caption Line 1\nCaption Line 2\nCaption Line 3");
-        });
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(1);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual(
+                    "Caption Line 1\nCaption Line 2\nCaption Line 3");
+            });
 
-        it("merges 2 multiple cue lines", () => {
-            // GIVEN
-            const cues = [
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Line 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(6, 8, "Caption Line 4"), cueCategory: "DIALOGUE" }
-            ] as CueDto[];
+            it("merges 2 multiple cue lines", () => {
+                // GIVEN
+                const cues = [
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(4, 6, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(6, 8, "Caption Line 4"), cueCategory: "DIALOGUE" }
+                ] as CueDto[];
 
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList({
-                index: 0,
-                cues: [
-                    { index: 0, cue: cues[0] },
-                    { index: 1, cue: cues[1] }
-                ]}) as {} as AnyAction);
-            testingStore.dispatch(addCuesToMergeList({
-                index: 1,
-                cues: [
-                    { index: 0, cue: cues[2] },
-                    { index: 1, cue: cues[3] }
-                ]}) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList({
+                    index: 0,
+                    cues: [
+                        { index: 0, cue: cues[0] },
+                        { index: 1, cue: cues[1] }
+                    ]
+                }) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList({
+                    index: 1,
+                    cues: [
+                        { index: 0, cue: cues[2] },
+                        { index: 1, cue: cues[3] }
+                    ]
+                }) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(mergeCues() as {} as AnyAction);
+                // WHEN
+                testingStore.dispatch(mergeCues() as {} as AnyAction);
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(2);
-            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(8);
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual(
-                "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(8);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual(
+                    "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
+            });
+
+            describe("without source cues", () => {
+                it("merges 2 single cue lines", () => {
+                    // GIVEN
+                    testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                    testingStore.dispatch(updateSourceCues([
+                        { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                        { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    ] as CueDto[]) as {} as AnyAction);
+                    testingStore.dispatch(addCuesToMergeList(
+                        { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
+                    testingStore.dispatch(addCuesToMergeList(
+                        { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
+
+                    // WHEN
+                    testingStore.dispatch(mergeCues() as {} as AnyAction);
+
+                    // THEN
+                    expect(testingStore.getState().cues.length).toEqual(2);
+                    expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                    expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
+                    expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
+                    expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                    expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                });
+            });
         });
     });
 
     describe("splitCue", () => {
-        it("splits cue", () => {
-            // GIVEN
-            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        describe("without source cues", () => {
+            it("splits cue", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
-            // WHEN
-            testingStore.dispatch(splitCue(0) as {} as AnyAction);
+                // WHEN
+                testingStore.dispatch(splitCue(0) as {} as AnyAction);
 
-            // THEN
-            expect(testingStore.getState().cues.length).toEqual(4);
-            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
-            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
-            expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+                // THEN
+                expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().cues.length).toEqual(4);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+            });
+
+            it("doesn't split too short cue", () => {
+                // GIVEN
+                const testingSubtitleSpecification = {
+                    minCaptionDurationInMillis: 2000,
+                    maxCaptionDurationInMillis: 4000,
+                    enabled: true
+                } as SubtitleSpecification;
+                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(splitCue(0) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().validationErrors).toEqual([CueError.INVALID_RANGE_END]);
+                expect(testingStore.getState().cues.length).toEqual(3);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+            });
+        });
+
+        describe("without source cues", () => {
+            it("splits cue", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(splitCue(0) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().cues.length).toEqual(4);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+            });
         });
     });
 });
