@@ -4,6 +4,7 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import SearchReplaceButton from "./SearchReplaceButton";
 import { fireEvent, render } from "@testing-library/react";
+import MergeCuesButton from "./MergeCuesButton";
 
 let testingStore = createTestingStore();
 
@@ -45,5 +46,24 @@ describe("SeachReplaceButton", () => {
 
         // THEN
         expect(testingStore.getState().searchReplaceVisible).toBeTruthy();
+    });
+
+    it("hides merge on button click", () => {
+        // GIVEN
+        const { getByText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceButton />
+                <MergeCuesButton />
+            </Provider>
+        );
+        const mergeButton = getByText("Merge Cues");
+        const searchButton = getByText("Search/Replace");
+
+        // WHEN
+        fireEvent.click(mergeButton);
+        fireEvent.click(searchButton);
+
+        // THEN
+        expect(testingStore.getState().mergeVisible).toBeFalsy();
     });
 });
