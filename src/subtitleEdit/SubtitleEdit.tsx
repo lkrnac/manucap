@@ -160,7 +160,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 </TooltipWrapper>
                                 <TooltipWrapper
                                     tooltipId="scrollToEditCueToolTip"
-                                    text="Jump to edit cue"
+                                    text="Scroll to currently editing subtitle"
                                     placement="top">
                                         <button
                                             className="btn btn-secondary"
@@ -174,7 +174,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 </TooltipWrapper>
                                 <TooltipWrapper
                                     tooltipId="scrollToPlaybackCueToolTip"
-                                    text="Jump to playback position cue"
+                                    text="Scroll to subtitle in playback position"
                                     placement="top">
                                         <button
                                             className="btn btn-secondary sbte-jump-to-edit-cue-button"
