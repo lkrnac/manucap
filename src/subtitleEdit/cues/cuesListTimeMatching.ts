@@ -103,12 +103,6 @@ const pushBoth = (
     indexes.cuesMap++;
 };
 
-/**
- * Get cue index of track time.
- * @author Mario Dennis
- * @param cues - array of media cue
- * @param trackTime - track time in seconds
- */
 export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
     const cueIndex = cues.findIndex(cue => cue.vttCue.startTime >= trackTime);
     return cueIndex <= 0 ? 0 : cueIndex - 1;
