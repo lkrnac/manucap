@@ -140,9 +140,9 @@ export const cuesSlice = createSlice({
         mergeCues: (state, action: PayloadAction<RowsAction>): CueDto[] => {
             const rowsToMerge = _.sortBy(action.payload.rows, row => row.index);
             let mergedContent = "";
-            let mergedErrors = null as CueError[] | null;
-            let mergedGlossaryMatches = null as GlossaryMatchDto[] | null;
-            // let mergedSearchReplaceMatches = null as SearchReplaceMatches[] | null;
+            const mergedErrors = [] as CueError[];
+            const mergedGlossaryMatches = [] as GlossaryMatchDto[];
+            // let mergedSearchReplaceMatches = {} as SearchReplaceMatches;
             let rowStartTime = 0;
             let rowEndTime = 0;
             let firstCue = {} as CueDtoWithIndex;
@@ -150,27 +150,14 @@ export const cuesSlice = createSlice({
             rowsToMerge.forEach((row: CuesWithRowIndex, rowIndex: number, rows: CuesWithRowIndex[]) => {
                 row.cues?.forEach((cue: CueDtoWithIndex, cueIndex: number, cues: CueDtoWithIndex[]) => {
                     if (cue.cue.errors && cue.cue.errors.length > 0) {
-                        if (!mergedErrors) {
-                            mergedErrors = cue.cue.errors;
-                        } else {
-                            mergedErrors.push(...cue.cue.errors);
-                        }
+                        mergedErrors.push(...cue.cue.errors);
                     }
                     if (cue.cue.glossaryMatches && cue.cue.glossaryMatches.length > 0) {
-                        if (!mergedGlossaryMatches) {
-                            mergedGlossaryMatches = cue.cue.glossaryMatches;
-                        } else {
-                            mergedGlossaryMatches.push(...cue.cue.glossaryMatches);
-                        }
+                        mergedGlossaryMatches.push(...cue.cue.glossaryMatches);
                     }
-                    // TODO: fix this
-                    // if (cue.cue.searchReplaceMatches && cue.cue.searchReplaceMatches.matchLength > 0) {
-                    //     if (!mergedSearchReplaceMatches) {
-                    //         mergedSearchReplaceMatches = cue.cue.searchReplaceMatches;
-                    //     } else {
-                    //         mergedSearchReplaceMatches.push(...cue.cue.searchReplaceMatches);
-                    //     }
-                    // }
+                    if (cue.cue.searchReplaceMatches) {
+                        // mergedSearchReplaceMatches = cue.cue.searchReplaceMatches;
+                    }
                     if (rowIndex === 0 && cueIndex === 0) {
                         firstCue = cue;
                         rowStartTime = cue.cue.vttCue.startTime;
@@ -193,6 +180,7 @@ export const cuesSlice = createSlice({
                 },
                 errors: mergedErrors,
                 glossaryMatches: mergedGlossaryMatches,
+                searchReplaceMatches: undefined,
                 editUuid: firstCue.cue.editUuid,
                 cueCategory: firstCue.cue.cueCategory
             } as CueDto;
@@ -213,7 +201,6 @@ export const mergeSlice = createSlice({
             state.push(action.payload);
         },
         removeRowCues: (state, action: PayloadAction<CuesWithRowIndex>): void => {
-            // TODO: do i need to reassign the state?
             _.remove(state, (row) => row.index === action.payload.index);
         }
     },
