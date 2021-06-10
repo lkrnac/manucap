@@ -282,7 +282,7 @@ export const splitCue = (idx: number): AppThunk =>
             dispatch(cuesSlice.actions.addCue({ idx: idx + 1, cue: splitCue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange(
                 { changeType: "SPLIT", index: idx, vttCue: originalCue.vttCue }));
-            callSaveTrack(dispatch, getState);
+            callSaveTrack(dispatch, getState, true);
         } else {
             dispatch(validationErrorSlice.actions.setValidationErrors([CueError.INVALID_RANGE_END]));
         }
