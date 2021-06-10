@@ -163,7 +163,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     text="Scroll to currently editing subtitle"
                                     placement="top">
                                         <button
-                                            className="btn btn-secondary"
+                                            className="btn btn-secondary sbte-jump-to-edit-cue-button"
                                             type="button"
                                             style={{ marginLeft: "10px"}}
                                             onClick={(): void => {
@@ -177,7 +177,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     text="Scroll to subtitle in playback position"
                                     placement="top">
                                         <button
-                                            className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                            className="btn btn-secondary"
                                             type="button"
                                             style={{ marginLeft: "10px"}}
                                             onClick={(): void => {

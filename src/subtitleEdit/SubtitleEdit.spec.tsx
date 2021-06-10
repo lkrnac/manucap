@@ -150,8 +150,7 @@ describe("SubtitleEdit", () => {
                                 display: "flex",
                                 flexDirection: "column",
                                 justifyContent: "space-between"
-                            }}
-                        >
+                            }}>
                             <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
                                 <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
                                     <CueLine
@@ -199,6 +198,20 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px"}}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-edit"/>
+                                </button>
+                                <button
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px"}}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-video"/>
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -317,6 +330,20 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px"}}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-edit"/>
+                                </button>
+                                <button
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px"}}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-video"/>
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -574,6 +601,20 @@ describe("SubtitleEdit", () => {
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px"}}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-edit"/>
+                                </button>
+                                <button
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px"}}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-video"/>
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -725,7 +766,22 @@ describe("SubtitleEdit", () => {
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
                                 >
+
                                     <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px"}}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-edit"/>
+                                </button>
+                                <button
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px"}}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-video"/>
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
