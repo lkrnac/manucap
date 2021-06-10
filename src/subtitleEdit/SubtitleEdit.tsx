@@ -180,7 +180,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     placement="top"
                                 >
                                     <button
-                                        className="btn btn-secondary"
+                                        className="btn btn-secondary sbte-jump-to-playback-cue-button"
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {

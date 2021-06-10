@@ -209,7 +209,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary"
+                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -343,7 +343,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary"
+                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -615,7 +615,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary"
+                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -785,7 +785,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary"
+                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -1178,6 +1178,42 @@ describe("SubtitleEdit", () => {
         expect(changeScrollPositionSpy).toBeCalledTimes(3);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.CURRENT);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.CURRENT);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+    });
+
+    it("jumps to playback cue when button is clicked", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
+
+        // WHEN
+        actualNode.find(".sbte-jump-to-playback-cue-button").simulate("click");
+
+        // THEN
+        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.PLAYBACK);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.PLAYBACK);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
