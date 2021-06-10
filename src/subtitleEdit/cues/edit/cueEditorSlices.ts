@@ -8,6 +8,7 @@ import { cuesSlice } from "../cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
 import sanitizeHtml from "sanitize-html";
 import { SearchDirection } from "../searchReplace/model";
+import { mergeVisibleSlice } from "../merge/mergeSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -24,6 +25,8 @@ export const editingCueIndexSlice = createSlice({
             (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
         [cuesSlice.actions.deleteCue.type]: (): number => -1,
         [cuesSlice.actions.updateCues.type]: (): number => -1,
+        [cuesSlice.actions.updateCues.type]: (): number => -1,
+        [mergeVisibleSlice.actions.setMergeVisible.type]: (): number => -1
     }
 });
 

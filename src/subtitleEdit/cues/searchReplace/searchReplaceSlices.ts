@@ -8,6 +8,7 @@ import { editingTrackSlice } from "../../trackSlices";
 import { cuesSlice } from "../cuesListSlices";
 import { SearchDirection, SearchReplace } from "./model";
 import { searchCueText, updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
+import { mergeVisibleSlice } from "../merge/mergeSlices";
 
 const updateCueMatchesIfNeeded = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -65,6 +66,7 @@ export const searchReplaceSlice = createSlice({
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): SearchReplace => initialSearchReplace,
+        [mergeVisibleSlice.actions.setMergeVisible.type]: (): SearchReplace => initialSearchReplace,
         [searchReplaceVisibleSlice.actions.setSearchReplaceVisible.type]:
             (_state, action: PayloadAction<boolean>): SearchReplace =>
                 action.payload ? _state : initialSearchReplace
