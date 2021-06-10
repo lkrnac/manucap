@@ -103,6 +103,11 @@ const pushBoth = (
     indexes.cuesMap++;
 };
 
+export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
+    const cueIndex = cues.findIndex(cue => cue.vttCue.startTime >= trackTime);
+    return cueIndex <= 0 ? 0 : cueIndex - 1;
+};
+
 export const matchCuesByTime = (
     targetCues: CueDto[],
     sourceCues: CueDto[],
