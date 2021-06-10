@@ -183,7 +183,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                             onClick={(): void => {
                                                 dispatch(changeScrollPosition(ScrollPosition.PLAYBACK))
                                             }}>
-                                                <i className="fa fa-play"/>
+                                                <i className="fa fa-video"/>
                                         </button>
                                 </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
