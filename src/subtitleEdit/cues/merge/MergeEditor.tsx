@@ -10,6 +10,9 @@ const MergeEditor = (): ReactElement | null => {
 
     return mergeVisible ? (
         <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
+            <label style={{ marginTop: "10px" }}>
+                Select the lines to be merged then click Merge
+            </label>
             <button
                 className="btn btn-secondary btn-sm"
                 type="button"
