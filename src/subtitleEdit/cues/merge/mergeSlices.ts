@@ -13,7 +13,6 @@ export const mergeVisibleSlice = createSlice({
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
-        // TODO: try to set to false after merge
     }
 });
 
