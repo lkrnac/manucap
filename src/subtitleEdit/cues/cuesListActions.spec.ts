@@ -2345,30 +2345,47 @@ describe("cueSlices", () => {
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
             });
 
-            describe("without source cues", () => {
-                it("merges 2 single cue lines", () => {
-                    // GIVEN
-                    testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                    testingStore.dispatch(updateSourceCues([
-                        { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                        { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
-                    ] as CueDto[]) as {} as AnyAction);
-                    testingStore.dispatch(addCuesToMergeList(
-                        { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
-                    testingStore.dispatch(addCuesToMergeList(
-                        { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
+            it("clears editor sates on merge", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
+                testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
 
-                    // WHEN
-                    testingStore.dispatch(mergeCues() as {} as AnyAction);
+                // WHEN
+                testingStore.dispatch(mergeCues() as {} as AnyAction);
 
-                    // THEN
-                    expect(testingStore.getState().cues.length).toEqual(2);
-                    expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-                    expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
-                    expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
-                    expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
-                    expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                });
+                // THEN
+                expect(testingStore.getState().editorStates.size).toEqual(0);
+            });
+        });
+
+        describe("without source cues", () => {
+            it("merges 2 single cue lines", () => {
+                // GIVEN
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(mergeCues() as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
             });
         });
     });

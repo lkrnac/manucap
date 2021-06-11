@@ -7,7 +7,6 @@ import { getVttText } from "../cueTextConverter";
 import { checkLineLimitation } from "../cueVerifications";
 import { validationErrorSlice } from "./cueEditorSlices";
 import { CueError } from "../../model";
-import { mergeVisibleSlice } from "../merge/mergeSlices";
 
 interface EditorStateAction {
     editorId: number;
@@ -40,8 +39,7 @@ export const editorStatesSlice: Slice<
             (state, action: PayloadAction<CueIndexAction>): void => {
                 state.delete(action.payload.idx);
             },
-        [mergeVisibleSlice.actions.setMergeVisible.type]:
-            (): Map<number, EditorState> => new Map<number, EditorState>(),
+        [cuesSlice.actions.mergeCues.type]: (): Map<number, EditorState> => new Map<number, EditorState>(),
     }
 });
 /* eslint-enable @typescript-eslint/no-explicit-any */

@@ -4,8 +4,6 @@ import { showMerge } from "./mergeSlices";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { CueDto } from "../../model";
 import { updateCues } from "../cuesListActions";
-import { updateEditorState } from "../edit/editorStatesSlice";
-import { EditorState } from "draft-js";
 import { setFind } from "../searchReplace/searchReplaceSlices";
 
 const testingCues = [
@@ -32,19 +30,6 @@ describe("mergeSlices", () => {
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        });
-
-        it("clears editor sates on merge visible change", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(showMerge(true) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().editorStates.size).toEqual(0);
         });
 
         it("resets search replace state on merge visible change", () => {

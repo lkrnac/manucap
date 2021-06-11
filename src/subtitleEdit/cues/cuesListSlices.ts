@@ -142,7 +142,6 @@ export const cuesSlice = createSlice({
             let mergedContent = "";
             const mergedErrors = [] as CueError[];
             const mergedGlossaryMatches = [] as GlossaryMatchDto[];
-            // let mergedSearchReplaceMatches = {} as SearchReplaceMatches;
             let rowStartTime = 0;
             let rowEndTime = 0;
             let firstCue = {} as CueDtoWithIndex;
@@ -154,9 +153,6 @@ export const cuesSlice = createSlice({
                     }
                     if (cue.cue.glossaryMatches && cue.cue.glossaryMatches.length > 0) {
                         mergedGlossaryMatches.push(...cue.cue.glossaryMatches);
-                    }
-                    if (cue.cue.searchReplaceMatches) {
-                        // mergedSearchReplaceMatches = cue.cue.searchReplaceMatches;
                     }
                     if (rowIndex === 0 && cueIndex === 0) {
                         firstCue = cue;
@@ -171,13 +167,10 @@ export const cuesSlice = createSlice({
                     mergedContent += cue.cue.vttCue.text;
                 });
             });
+            const vttCue = new VTTCue(rowStartTime, rowEndTime, mergedContent);
+            copyNonConstructorProperties(vttCue, firstCue.cue.vttCue);
             state[firstCue.index] = {
-                vttCue: {
-                    ...firstCue.cue.vttCue,
-                    text: mergedContent,
-                    startTime: rowStartTime,
-                    endTime: rowEndTime
-                },
+                vttCue,
                 errors: mergedErrors,
                 glossaryMatches: mergedGlossaryMatches,
                 searchReplaceMatches: undefined,
