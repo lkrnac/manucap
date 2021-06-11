@@ -9,20 +9,24 @@ import "video.js"; // VTTCue definition
 import { Provider } from "react-redux";
 import React from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 
 import SplitCueLineButton from "./SplitCueLineButton";
-import { Track } from "../../model";
+import { CueDto, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
+import { updateCues } from "../cuesListActions";
 
 let testingStore = createTestingStore();
 const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
+const testingCues = [
+    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+] as CueDto[];
 
 describe("SplitCueLineButton", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
     });
 
     it("renders", () => {
@@ -45,5 +49,23 @@ describe("SplitCueLineButton", () => {
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("splits a cue on split button click", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <SplitCueLineButton cueIndex={0} />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(actualNode.container.querySelector(".sbte-split-cue-button") as Element);
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(3);
     });
 });

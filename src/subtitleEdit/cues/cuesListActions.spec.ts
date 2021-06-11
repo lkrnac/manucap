@@ -2386,6 +2386,54 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().editorStates.size).toEqual(0);
             });
+
+            it("merges 2 single cue lines with errors", () => {
+                // GIVEN
+                const corruptedCue1 = { ...testingCues[0], errors: [CueError.LINE_COUNT_EXCEEDED]} as CueDto;
+                const corruptedCue2 = { ...testingCues[1], errors: [CueError.LINE_CHAR_LIMIT_EXCEEDED]} as CueDto;
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 0, cues: [{ index: 0, cue: corruptedCue1 }]}) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 1, cues: [{ index: 1, cue: corruptedCue2 }]}) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(mergeCues() as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
+                expect(testingStore.getState().cues[0].errors).toEqual(
+                    [CueError.LINE_COUNT_EXCEEDED, CueError.LINE_CHAR_LIMIT_EXCEEDED]);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+            });
+
+            it("merges 2 single cue lines with errors", () => {
+                // GIVEN
+                const cue1 = { ...testingCues[0],
+                    glossaryMatches: [{ source: "1", replacements: ["rep1"]}]} as CueDto;
+                const cue2 = { ...testingCues[1],
+                    glossaryMatches: [{ source: "2", replacements: ["rep2"]}]} as CueDto;
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 0, cues: [{ index: 0, cue: cue1 }]}) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 1, cues: [{ index: 1, cue: cue2 }]}) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(mergeCues() as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
+                expect(testingStore.getState().cues[0].glossaryMatches).toEqual(
+                    [{ source: "1", replacements: ["rep1"]}, { source: "2", replacements: ["rep2"]}]);
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+            });
         });
 
         describe("without source cues", () => {
