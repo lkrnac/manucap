@@ -4,10 +4,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
     CueCategory,
     CueDto,
-    CueDtoWithIndex,
     CueError,
     CuesWithRowIndex,
-    GlossaryMatchDto,
     SubtitleEditAction
 } from "../model";
 import { copyNonConstructorProperties } from "./cueUtils";
@@ -55,8 +53,10 @@ export interface SpellCheckRemovalAction extends CueIndexAction {
     trackId: string;
 }
 
-export interface RowsAction {
-    rows: CuesWithRowIndex[];
+export interface MergeAction {
+    mergedCue: CueDto;
+    startIndex: number;
+    endIndex: number;
 }
 
 export const cuesSlice = createSlice({
@@ -137,47 +137,9 @@ export const cuesSlice = createSlice({
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
         },
-        mergeCues: (state, action: PayloadAction<RowsAction>): CueDto[] => {
-            const rowsToMerge = _.sortBy(action.payload.rows, row => row.index);
-            let mergedContent = "";
-            const mergedErrors = [] as CueError[];
-            const mergedGlossaryMatches = [] as GlossaryMatchDto[];
-            let rowStartTime = 0;
-            let rowEndTime = 0;
-            let firstCue = {} as CueDtoWithIndex;
-            let lastCue = {} as CueDtoWithIndex;
-            rowsToMerge.forEach((row: CuesWithRowIndex, rowIndex: number, rows: CuesWithRowIndex[]) => {
-                row.cues?.forEach((cue: CueDtoWithIndex, cueIndex: number, cues: CueDtoWithIndex[]) => {
-                    if (cue.cue.errors && cue.cue.errors.length > 0) {
-                        mergedErrors.push(...cue.cue.errors);
-                    }
-                    if (cue.cue.glossaryMatches && cue.cue.glossaryMatches.length > 0) {
-                        mergedGlossaryMatches.push(...cue.cue.glossaryMatches);
-                    }
-                    if (rowIndex === 0 && cueIndex === 0) {
-                        firstCue = cue;
-                        rowStartTime = cue.cue.vttCue.startTime;
-                    } else {
-                        mergedContent += "\n";
-                    }
-                    if (rowIndex === rows.length - 1 && cueIndex === cues.length - 1) {
-                        lastCue = cue;
-                        rowEndTime = cue.cue.vttCue.endTime;
-                    }
-                    mergedContent += cue.cue.vttCue.text;
-                });
-            });
-            const vttCue = new VTTCue(rowStartTime, rowEndTime, mergedContent);
-            copyNonConstructorProperties(vttCue, firstCue.cue.vttCue);
-            state[firstCue.index] = {
-                vttCue,
-                errors: mergedErrors,
-                glossaryMatches: mergedGlossaryMatches,
-                searchReplaceMatches: undefined,
-                editUuid: firstCue.cue.editUuid,
-                cueCategory: firstCue.cue.cueCategory
-            } as CueDto;
-            state.splice(firstCue.index + 1, lastCue.index - firstCue.index);
+        mergeCues: (state, action: PayloadAction<MergeAction>): CueDto[] => {
+            state[action.payload.startIndex] = action.payload.mergedCue;
+            state.splice(action.payload.startIndex + 1, action.payload.endIndex - action.payload.startIndex);
             return state;
         }
     },

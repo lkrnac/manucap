@@ -9,7 +9,9 @@ import {
     SpellcheckerSettings,
     SubtitleEditAction,
     Track,
-    CuesWithRowIndex
+    CuesWithRowIndex,
+    GlossaryMatchDto,
+    CueDtoWithIndex
 } from "../model";
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "./cueUtils";
@@ -31,6 +33,7 @@ import { addSpellCheck, fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "./edit/cueEditorSlices";
 import { CueErrorsPayload, cuesSlice, mergeSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
+import _ from "lodash";
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
@@ -327,10 +330,62 @@ export const removeCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
         dispatch(mergeSlice.actions.removeRowCues(row));
 
 export const mergeCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
-        const rowsToMerge = getState().rowsToMerge;
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
+        const rowsToMerge = _.sortBy(getState().rowsToMerge, row => row.index);
         if (rowsToMerge && rowsToMerge.length > 0) {
-            dispatch(cuesSlice.actions.mergeCues({ rows: rowsToMerge }));
-            callSaveTrack(dispatch, getState, true);
+            let mergedContent = "";
+            const mergedErrors = [] as CueError[];
+            const mergedGlossaryMatches = [] as GlossaryMatchDto[];
+            let rowStartTime = 0;
+            let rowEndTime = 0;
+            let firstCue = {} as CueDtoWithIndex;
+            let lastCue = {} as CueDtoWithIndex;
+            rowsToMerge.forEach((row: CuesWithRowIndex, rowIndex: number, rows: CuesWithRowIndex[]) => {
+                row.cues?.forEach((cue: CueDtoWithIndex, cueIndex: number, cues: CueDtoWithIndex[]) => {
+                    if (cue.cue.errors && cue.cue.errors.length > 0) {
+                        mergedErrors.push(...cue.cue.errors);
+                    }
+                    if (cue.cue.glossaryMatches && cue.cue.glossaryMatches.length > 0) {
+                        mergedGlossaryMatches.push(...cue.cue.glossaryMatches);
+                    }
+                    if (rowIndex === 0 && cueIndex === 0) {
+                        firstCue = cue;
+                        rowStartTime = cue.cue.vttCue.startTime;
+                    } else {
+                        mergedContent += "\n";
+                    }
+                    if (rowIndex === rows.length - 1 && cueIndex === cues.length - 1) {
+                        lastCue = cue;
+                        rowEndTime = cue.cue.vttCue.endTime;
+                    }
+                    mergedContent += cue.cue.vttCue.text;
+                });
+            });
+            const mergedVttCue = new VTTCue(rowStartTime, rowEndTime, mergedContent);
+            copyNonConstructorProperties(mergedVttCue, firstCue.cue.vttCue);
+            const mergedCue = {
+                vttCue: mergedVttCue,
+                errors: mergedErrors,
+                glossaryMatches: mergedGlossaryMatches,
+                searchReplaceMatches: undefined,
+                editUuid: firstCue.cue.editUuid,
+                cueCategory: firstCue.cue.cueCategory
+            } as CueDto;
+
+            const state: SubtitleEditState = getState();
+            const subtitleSpecifications = state.subtitleSpecifications;
+            const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+            const editingTrack = state.editingTrack;
+            const validCueDuration = editingTrack && verifyCueDuration(mergedVttCue, editingTrack, timeGapLimit);
+
+            if (validCueDuration) {
+                dispatch(cuesSlice.actions.mergeCues(
+                    { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
+                dispatch(lastCueChangeSlice.actions.recordCueChange(
+                    { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
+                callSaveTrack(dispatch, getState, true);
+            } else {
+                dispatch(validationErrorSlice.actions.setValidationErrors([CueError.INVALID_RANGE_END]));
+            }
         }
     };
