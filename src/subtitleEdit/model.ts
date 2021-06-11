@@ -109,11 +109,21 @@ export interface CueChange {
     vttCue: VTTCue;
 }
 
+
+/**
+ * Declare video cue scroll position
+ * @author Mario Dennis
+ * @param FIRST - scrolls to first cue item
+ * @param LAST - scrolls to last cue item
+ * @param CURRENT - scroll to cue item currently being edited
+ * @param PLAYBACK - scroll to currently playing media track cue item
+ */
 export enum ScrollPosition {
     NONE,
     FIRST,
     LAST,
-    CURRENT
+    CURRENT,
+    PLAYBACK
 }
 
 export enum CueError {

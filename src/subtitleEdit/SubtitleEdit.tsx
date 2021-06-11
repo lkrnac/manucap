@@ -160,6 +160,38 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         <i className="fa fa-angle-double-down" />
                                     </button>
                                 </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="scrollToEditCueToolTip"
+                                    text="Scroll to currently editing subtitle"
+                                    placement="top"
+                                >
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                        type="button"
+                                        style={{ marginLeft: "10px" }}
+                                        onClick={(): void => {
+                                                dispatch(changeScrollPosition(ScrollPosition.CURRENT));
+                                            }}
+                                    >
+                                        <i className="fa fa-edit" />
+                                    </button>
+                                </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="scrollToPlaybackCueToolTip"
+                                    text="Scroll to subtitle in playback position"
+                                    placement="top"
+                                >
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                        type="button"
+                                        style={{ marginLeft: "10px" }}
+                                        onClick={(): void => {
+                                                dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
+                                            }}
+                                    >
+                                        <i className="fa fa-video" />
+                                    </button>
+                                </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
                                 <CompleteButton onComplete={props.onComplete} disabled={editingTask?.editDisabled} />
                             </div>
