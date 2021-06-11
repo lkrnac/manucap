@@ -1,7 +1,7 @@
 import "../../testUtils/initBrowserEnvironment";
 import React from "react";
 import { Provider } from "react-redux";
-import testingStore from "../../testUtils/testingStore";
+import { createTestingStore } from "../../testUtils/testingStore";
 import CueLineFlap from "./CueLineFlap";
 import { CueLineState } from "../model";
 import { fireEvent, render } from "@testing-library/react";
@@ -9,7 +9,11 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { showMerge } from "./merge/mergeSlices";
 import { addCuesToMergeList } from "./cuesListActions";
 
+let testingStore = createTestingStore();
+
 describe("CueLineFlap", () => {
+    beforeEach(() => testingStore = createTestingStore());
+
     it("renders without content", () => {
         // GIVEN
         const expectedNode = render(
