@@ -29,7 +29,7 @@ const MergeEditor = (): ReactElement | null => {
                 className="btn btn-secondary btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
-                data-testid="sbte-close-search-replace-btn"
+                data-testid="sbte-close-merge-btn"
                 onClick={(): void => {
                     dispatch(showMerge(false));
                 }}

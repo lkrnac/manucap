@@ -49,7 +49,7 @@ describe("MergeEditor", () => {
                     className="btn btn-secondary btn-sm"
                     type="button"
                     style={{ marginLeft: "5px" }}
-                    data-testid="sbte-close-search-replace-btn"
+                    data-testid="sbte-close-merge-btn"
                 >
                     <i className="far fa-times-circle" />
                 </button>
@@ -80,6 +80,23 @@ describe("MergeEditor", () => {
 
         // THEN
         expect(container.outerHTML).toEqual("<div></div>");
+    });
+
+    it("hides when close button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
+        const { getByTestId } = render(
+            <Provider store={testingStore}>
+                <MergeEditor />
+            </Provider>
+        );
+        const closeButton = getByTestId("sbte-close-merge-btn");
+
+        // WHEN
+        fireEvent.click(closeButton);
+
+        // THEN
+        expect(testingStore.getState().mergeVisible).toBeFalsy();
     });
 
     it("merges cues when Merge button is clicked", async () => {
