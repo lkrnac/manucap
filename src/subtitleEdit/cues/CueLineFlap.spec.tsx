@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import testingStore from "../../testUtils/testingStore";
 import CueLineFlap from "./CueLineFlap";
 import { CueLineState } from "../model";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { showMerge } from "./merge/mergeSlices";
 import { addCuesToMergeList } from "./cuesListActions";
@@ -664,5 +664,46 @@ describe("CueLineFlap", () => {
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("adds line index to merge list when merge checkbox is checked", () => {
+        // GIVEN
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    workingCues={testingStore.getState().cues[0]}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(actualNode.container.querySelector(".sbte-cue-line-flap-checkbox") as Element);
+
+        // THEN
+        expect(testingStore.getState().rowsToMerge).toEqual([{ index: 0 }]);
+    });
+
+    it("removes line index to merge list when merge checkbox is unchecked", () => {
+        // GIVEN
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    workingCues={testingStore.getState().cues[0]}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(actualNode.container.querySelector(".sbte-cue-line-flap-checkbox") as Element);
+        fireEvent.click(actualNode.container.querySelector(".sbte-cue-line-flap-checkbox") as Element);
+
+        // THEN
+        expect(testingStore.getState().rowsToMerge).toEqual([]);
     });
 });
