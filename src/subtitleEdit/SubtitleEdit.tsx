@@ -197,6 +197,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     <button
                                         className="btn btn-secondary sbte-jump-to-last_translated-cue-button"
                                         type="button"
+                                        hidden={editingTrack?.type !== 'TRANSLATION'}
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
