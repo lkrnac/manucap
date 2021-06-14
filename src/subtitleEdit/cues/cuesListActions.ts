@@ -280,6 +280,7 @@ export const splitCue = (idx: number): AppThunk =>
         const validCueDuration = editingTrack && verifyCueDuration(updatedVttCue, editingTrack, timeGapLimit);
 
         if (validCueDuration) {
+            copyNonConstructorProperties(updatedVttCue, originalCue.vttCue);
             const updatedCue = { ...originalCue, idx, vttCue: updatedVttCue, editUuid: originalCue.editUuid };
             dispatch(cuesSlice.actions.updateVttCue(updatedCue));
             dispatch(cuesSlice.actions.addCue({ idx: idx + 1, cue: splitCue }));
