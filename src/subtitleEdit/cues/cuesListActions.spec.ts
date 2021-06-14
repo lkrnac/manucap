@@ -2313,6 +2313,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(mergeCues() as {} as AnyAction);
 
                 // THEN
+                expect(testingStore.getState().validationErrors).toEqual([CueError.MERGE_ERROR]);
                 expect(testingStore.getState().cues.length).toEqual(3);
             });
 
@@ -2497,7 +2498,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(splitCue(0) as {} as AnyAction);
 
                 // THEN
-                expect(testingStore.getState().validationErrors).toEqual([CueError.INVALID_RANGE_END]);
+                expect(testingStore.getState().validationErrors).toEqual([CueError.SPLIT_ERROR]);
                 expect(testingStore.getState().cues.length).toEqual(3);
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
