@@ -288,7 +288,7 @@ export const splitCue = (idx: number): AppThunk =>
                 { changeType: "SPLIT", index: idx, vttCue: originalCue.vttCue }));
             callSaveTrack(dispatch, getState, true);
         } else {
-            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.INVALID_RANGE_END]));
+            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.SPLIT_ERROR]));
         }
     };
 
@@ -332,61 +332,66 @@ export const removeCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
 
 export const mergeCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
+        let mergeSuccess = false;
         const rowsToMerge = _.sortBy(getState().rowsToMerge, row => row.index);
         if (rowsToMerge && rowsToMerge.length > 0) {
-            let mergedContent = "";
-            const mergedErrors = [] as CueError[];
-            const mergedGlossaryMatches = [] as GlossaryMatchDto[];
-            let rowStartTime = 0;
-            let rowEndTime = 0;
-            let firstCue = {} as CueDtoWithIndex;
-            let lastCue = {} as CueDtoWithIndex;
-            rowsToMerge.forEach((row: CuesWithRowIndex, rowIndex: number, rows: CuesWithRowIndex[]) => {
-                row.cues?.forEach((cue: CueDtoWithIndex, cueIndex: number, cues: CueDtoWithIndex[]) => {
+            const cuesToMerge = rowsToMerge.map(row => row.cues || []).reduce((cues1, cues2) => cues1.concat(...cues2));
+            if (cuesToMerge.length >= 2) {
+                let mergedContent = "";
+                const mergedErrors = [] as CueError[];
+                const mergedGlossaryMatches = [] as GlossaryMatchDto[];
+                let rowStartTime = 0;
+                let rowEndTime = 0;
+                let firstCue = {} as CueDtoWithIndex;
+                let lastCue = {} as CueDtoWithIndex;
+                cuesToMerge.forEach((cue: CueDtoWithIndex, cueIndex: number) => {
                     if (cue.cue.errors && cue.cue.errors.length > 0) {
                         mergedErrors.push(...cue.cue.errors);
                     }
                     if (cue.cue.glossaryMatches && cue.cue.glossaryMatches.length > 0) {
                         mergedGlossaryMatches.push(...cue.cue.glossaryMatches);
                     }
-                    if (rowIndex === 0 && cueIndex === 0) {
+                    if (cueIndex === 0) {
                         firstCue = cue;
                         rowStartTime = cue.cue.vttCue.startTime;
                     } else {
                         mergedContent += "\n";
                     }
-                    if (rowIndex === rows.length - 1 && cueIndex === cues.length - 1) {
+                    if (cueIndex === cuesToMerge.length - 1) {
                         lastCue = cue;
                         rowEndTime = cue.cue.vttCue.endTime;
                     }
                     mergedContent += cue.cue.vttCue.text;
                 });
-            });
-            const mergedVttCue = new VTTCue(rowStartTime, rowEndTime, mergedContent);
-            copyNonConstructorProperties(mergedVttCue, firstCue.cue.vttCue);
-            const mergedCue = {
-                vttCue: mergedVttCue,
-                errors: mergedErrors,
-                glossaryMatches: mergedGlossaryMatches,
-                searchReplaceMatches: undefined,
-                editUuid: firstCue.cue.editUuid,
-                cueCategory: firstCue.cue.cueCategory
-            } as CueDto;
+                const mergedVttCue = new VTTCue(rowStartTime, rowEndTime, mergedContent);
+                copyNonConstructorProperties(mergedVttCue, firstCue.cue.vttCue);
+                const mergedCue = {
+                    vttCue: mergedVttCue,
+                    errors: mergedErrors,
+                    glossaryMatches: mergedGlossaryMatches,
+                    searchReplaceMatches: undefined,
+                    editUuid: firstCue.cue.editUuid,
+                    cueCategory: firstCue.cue.cueCategory
+                } as CueDto;
 
-            const state: SubtitleEditState = getState();
-            const subtitleSpecifications = state.subtitleSpecifications;
-            const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
-            const editingTrack = state.editingTrack;
-            const validCueDuration = editingTrack && verifyCueDuration(mergedVttCue, editingTrack, timeGapLimit);
+                const state: SubtitleEditState = getState();
+                const subtitleSpecifications = state.subtitleSpecifications;
+                const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+                const editingTrack = state.editingTrack;
+                const validCueDuration = editingTrack && verifyCueDuration(mergedVttCue, editingTrack, timeGapLimit);
 
-            if (validCueDuration) {
-                dispatch(cuesSlice.actions.mergeCues(
-                    { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
-                dispatch(lastCueChangeSlice.actions.recordCueChange(
-                    { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
-                callSaveTrack(dispatch, getState, true);
-            } else {
-                dispatch(validationErrorSlice.actions.setValidationErrors([CueError.INVALID_RANGE_END]));
+                debugger;
+                if (validCueDuration) {
+                    dispatch(cuesSlice.actions.mergeCues(
+                        { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
+                    dispatch(lastCueChangeSlice.actions.recordCueChange(
+                        { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
+                    callSaveTrack(dispatch, getState, true);
+                    mergeSuccess = true;
+                }
             }
+        }
+        if (!mergeSuccess) {
+            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.MERGE_ERROR]));
         }
     };
