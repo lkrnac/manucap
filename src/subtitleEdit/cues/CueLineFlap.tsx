@@ -8,7 +8,7 @@ import { addCuesToMergeList, removeCuesToMergeList } from "./cuesListActions";
 interface Props {
     rowIndex: number;
     cueLineState: CueLineState;
-    workingCues: CueDtoWithIndex[] | undefined;
+    cues: CueDtoWithIndex[] | undefined;
     cuesErrors?: CueError[];
     showErrors?: boolean;
     editDisabled?: boolean;
@@ -47,7 +47,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                             onChange={(): void => {
                                 const cuesWithIndex = {
                                     index: props.rowIndex,
-                                    cues: props.workingCues
+                                    cues: props.cues
                                 };
                                 dispatch(checked
                                     ? removeCuesToMergeList(cuesWithIndex)

@@ -73,7 +73,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.NONE}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                 />
             </Provider>
         );
@@ -142,7 +142,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                 />
             </Provider>
         );
@@ -213,7 +213,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                     editDisabled
                 />
             </Provider>
@@ -283,7 +283,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.ERROR}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                     showErrors
                 />
             </Provider>
@@ -355,7 +355,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.ERROR}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                     editDisabled
                 />
             </Provider>
@@ -430,7 +430,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                 />
             </Provider>
         );
@@ -507,7 +507,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                     editDisabled
                 />
             </Provider>
@@ -585,7 +585,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                 />
             </Provider>
         );
@@ -661,7 +661,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                 />
             </Provider>
         );
@@ -738,7 +738,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                 />
             </Provider>
         );
@@ -755,7 +755,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                 />
             </Provider>
         );
@@ -775,7 +775,7 @@ describe("CueLineFlap", () => {
                 <CueLineFlap
                     rowIndex={0}
                     cueLineState={CueLineState.GOOD}
-                    workingCues={testingStore.getState().cues[0]}
+                    cues={testingStore.getState().cues[0]}
                 />
             </Provider>
         );
