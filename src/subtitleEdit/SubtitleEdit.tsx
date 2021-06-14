@@ -168,8 +168,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
-                                                dispatch(changeScrollPosition(ScrollPosition.CURRENT));
-                                            }}
+                                            dispatch(changeScrollPosition(ScrollPosition.CURRENT));
+                                        }}
                                     >
                                         <i className="fa fa-edit" />
                                     </button>
@@ -177,17 +177,32 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <TooltipWrapper
                                     tooltipId="scrollToPlaybackCueToolTip"
                                     text="Scroll to subtitle in playback position"
-                                    placement="top"
-                                >
+                                    placement="top">
                                     <button
                                         className="btn btn-secondary sbte-jump-to-playback-cue-button"
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
-                                                dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
-                                            }}
+                                            dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
+                                        }}
                                     >
                                         <i className="fa fa-video" />
+                                    </button>
+                                </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="scrollToLastTranslatedCueToolTip"
+                                    text="Scroll to last translated subtitle"
+                                    placement="top"
+                                >
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last_translated-cue-button"
+                                        type="button"
+                                        style={{ marginLeft: "10px" }}
+                                        onClick={(): void => {
+                                            dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
+                                        }}
+                                    >
+                                        <i className="fa fa-language" />
                                     </button>
                                 </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
