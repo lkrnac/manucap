@@ -188,33 +188,37 @@ describe("SubtitleEdit", () => {
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
-                                >
+                                    onClick={(): void => undefined}>
                                     <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
                                     className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
-                                >
+                                    onClick={(): void => undefined}>
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
                                     className="btn btn-secondary sbte-jump-to-edit-cue-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
-                                >
+                                    onClick={(): void => undefined}>
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
                                     className="btn btn-secondary sbte-jump-to-playback-cue-button"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
-                                >
+                                    onClick={(): void => undefined}>
                                     <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last_translated-cue-button"
+                                    type="button"
+                                    hidden={testingTrack.type !== 'TRANSLATION'}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-language" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -349,6 +353,14 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last_translated-cue-button"
+                                    type="button"
+                                    hidden={testingTrack.type !== 'TRANSLATION'}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-language" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -622,6 +634,14 @@ describe("SubtitleEdit", () => {
                                 >
                                     <i className="fa fa-video" />
                                 </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last_translated-cue-button"
+                                    type="button"
+                                    hidden={testingTrack.type !== 'TRANSLATION'}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-language" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -791,6 +811,14 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last_translated-cue-button"
+                                    type="button"
+                                    hidden={testingTrack.type !== 'TRANSLATION'}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}>
+                                    <i className="fa fa-language" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
