@@ -1246,6 +1246,39 @@ describe("SubtitleEdit", () => {
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
+    it("jump to last translated subtitle button clicked", () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
+
+        actualNode.find(".sbte-jump-to-last_translated-cue-button").simulate("click");
+        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+    });
+
     it("calls onSave callback on auto save", () => {
         // GIVEN
         const saveTrack = jest.fn();
@@ -1414,4 +1447,5 @@ describe("SubtitleEdit", () => {
         // THEN
         expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
     });
+
 });
