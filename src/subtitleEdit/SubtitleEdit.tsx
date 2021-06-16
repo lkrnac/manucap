@@ -177,7 +177,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <TooltipWrapper
                                     tooltipId="scrollToPlaybackCueToolTip"
                                     text="Scroll to subtitle in playback position"
-                                    placement="top">
+                                    placement="top"
+                                >
                                     <button
                                         className="btn btn-secondary sbte-jump-to-playback-cue-button"
                                         type="button"
@@ -197,7 +198,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     <button
                                         className="btn btn-secondary sbte-jump-to-last_translated-cue-button"
                                         type="button"
-                                        hidden={editingTrack?.type !== 'TRANSLATION'}
+                                        hidden={editingTrack?.type !== "TRANSLATION"}
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));

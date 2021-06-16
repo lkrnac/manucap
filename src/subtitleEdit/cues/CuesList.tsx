@@ -1,18 +1,18 @@
-import React, {ReactElement, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, { ReactElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore It doesn't have TS type module
 import ReactSmartScroll from "@dotsub/react-smart-scroll";
 
-import {isDirectTranslationTrack} from "../subtitleEditUtils";
+import { isDirectTranslationTrack } from "../subtitleEditUtils";
 import AddCueLineButton from "./edit/AddCueLineButton";
-import {ScrollPosition, Track} from "../model";
+import { ScrollPosition, Track } from "../model";
 import CueLine from "./CueLine";
-import {addCue} from "./cuesListActions";
-import {SubtitleEditState} from "../subtitleEditReducers";
+import { addCue } from "./cuesListActions";
+import { SubtitleEditState } from "../subtitleEditReducers";
 import Mousetrap from "mousetrap";
-import {KeyCombination} from "../shortcutConstants";
-import {changeScrollPosition} from "./cuesListScrollSlice";
-import {matchCuesByTime, matchCueTimeIndex} from "./cuesListTimeMatching";
+import { KeyCombination } from "../shortcutConstants";
+import { changeScrollPosition } from "./cuesListScrollSlice";
+import { matchCuesByTime, matchCueTimeIndex } from "./cuesListTimeMatching";
 
 interface Props {
     editingTrack: Track | null;
