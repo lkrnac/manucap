@@ -69,6 +69,7 @@ const testingTrack = {
     progress: 50
 } as Track;
 
+
 const testingTranslationTrack = {
     type: "TRANSLATION",
     language: { id: "fr-FR", name: "French (France)" } as Language,
@@ -1271,8 +1272,9 @@ describe("SubtitleEdit", () => {
         for (let idx = 0; idx < 9999; idx++) {
             cues.push({ vttCue: new VTTCue(idx, idx + 1, `Editing Line ${idx + 1}`), cueCategory: "DIALOGUE" });
         }
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore} >
                 <SubtitleEdit
@@ -1289,7 +1291,8 @@ describe("SubtitleEdit", () => {
         );
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
-        fireEvent.click(actualNode.getByTestId("sbte-jump-to-last_translated-cue-button"))
+
+        fireEvent.click(actualNode.getByTestId("sbte-jump-to-last_translated-cue-button"));
         expect(changeScrollPositionSpy).toBeCalledTimes(3);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
