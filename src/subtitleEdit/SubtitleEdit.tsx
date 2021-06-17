@@ -164,7 +164,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     placement="top"
                                 >
                                     <button
-                                        className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
@@ -180,7 +181,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     placement="top"
                                 >
                                     <button
-                                        className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
                                         type="button"
                                         style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
@@ -196,7 +198,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     placement="top"
                                 >
                                     <button
-                                        className="btn btn-secondary sbte-jump-to-last_translated-cue-button"
+                                        data-testid="sbte-jump-to-last_translated-cue-button"
+                                        className="btn btn-secondary"
                                         type="button"
                                         hidden={editingTrack?.type !== "TRANSLATION"}
                                         style={{ marginLeft: "10px" }}
