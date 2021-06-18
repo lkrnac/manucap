@@ -1256,7 +1256,7 @@ describe("SubtitleEdit", () => {
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
-        fireEvent.click(actualNode.getByTestId("sbte-jump-to-playback-cue-button"))
+        fireEvent.click(actualNode.getByTestId("sbte-jump-to-playback-cue-button"));
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(3);
