@@ -2365,7 +2365,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(mergeCues() as {} as AnyAction);
 
                 // THEN
-                // expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues.length).toEqual(2);
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(8);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
@@ -2386,6 +2386,23 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().editorStates.size).toEqual(0);
+            });
+
+            it("scrolls to merged cue on edit mode on merge", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
+                testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
+                testingStore.dispatch(addCuesToMergeList(
+                    { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(mergeCues() as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().editingCueIndex).toEqual(0);
+                expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
             });
 
             it("merges 2 single cue lines with errors", () => {

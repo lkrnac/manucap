@@ -30,7 +30,12 @@ import {
 } from "./cueVerifications";
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "./spellCheck/spellCheckFetch";
-import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "./edit/cueEditorSlices";
+import {
+    editingCueIndexSlice,
+    lastCueChangeSlice,
+    updateSearchMatches,
+    validationErrorSlice
+} from "./edit/cueEditorSlices";
 import { CueErrorsPayload, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
 import _ from "lodash";
@@ -384,6 +389,8 @@ export const mergeCues = (): AppThunk =>
                 if (validCueDuration) {
                     dispatch(cuesSlice.actions.mergeCues(
                         { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
+                    dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: firstCue.index }));
+                    dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
                     dispatch(lastCueChangeSlice.actions.recordCueChange(
                         { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
                     callSaveTrack(dispatch, getState, true);
