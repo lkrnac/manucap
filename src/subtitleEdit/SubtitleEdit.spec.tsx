@@ -1269,7 +1269,7 @@ describe("SubtitleEdit", () => {
     it("jump to last translated subtitle button clicked", () => {
         // GIVEN
         const cues = [] as CueDto[];
-        for (let idx = 0; idx < 9999; idx++) {
+        for (let idx = 0; idx < 50; idx++) {
             cues.push({ vttCue: new VTTCue(idx, idx + 1, `Editing Line ${idx + 1}`), cueCategory: "DIALOGUE" });
         }
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
