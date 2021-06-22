@@ -165,7 +165,6 @@ describe("CueActionsPanel", () => {
         fireEvent.click(actualNode.container.querySelector(".sbte-split-cue-button") as Element);
 
         // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(1);
         expect(testingStore.getState().cues.length).toEqual(3);
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Editing Line 2");
         expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
