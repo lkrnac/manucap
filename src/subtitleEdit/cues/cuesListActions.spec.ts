@@ -686,8 +686,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 4000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -711,8 +709,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 3000,
                     maxCaptionDurationInMillis: 4000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -736,8 +732,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 4000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -761,8 +755,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 500,
                     maxCaptionDurationInMillis: 1000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -786,8 +778,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 1500,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -811,8 +801,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 500,
                     maxCaptionDurationInMillis: 1000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -1408,6 +1396,26 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
+        });
+
+        it("marks cue as corrupted if chars per second max is exceeded", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "line with too many characters per second"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxCharactersPerSecondPerCaption: 15,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
         });
     });
 

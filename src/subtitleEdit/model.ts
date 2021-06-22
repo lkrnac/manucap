@@ -130,4 +130,5 @@ export enum CueError {
     INVALID_RANGE_START = "Invalid Start Time",
     INVALID_RANGE_END = "Invalid End Time",
     OUT_OF_CHUNK_RAGE = "Out of Chunk Range",
+    CHARS_PER_SECOND_EXCEEDED = "Max Characters Per Second Exceeded"
 }

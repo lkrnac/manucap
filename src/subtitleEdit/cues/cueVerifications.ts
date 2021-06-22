@@ -87,6 +87,12 @@ const overlapOk = (vttCue: VTTCue, previousCue?: CueDto, followingCue?: CueDto):
 const isSpelledCorrectly = (cue: CueDto): boolean =>
     cue.spellCheck?.matches === undefined || cue.spellCheck.matches.length === 0;
 
+const charsPerSecondOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): boolean => {
+    const maxCharsPerSecond = subtitleSpecification?.maxCharactersPerSecondPerCaption;
+    const cueTextCharsPerSecond = vttCue.text.length / (vttCue.endTime - vttCue.startTime);
+    return maxCharsPerSecond ? cueTextCharsPerSecond <= maxCharsPerSecond : true;
+};
+
 export const conformToRules = (
     cue: CueDto,
     subtitleSpecification: SubtitleSpecification | null,
@@ -104,6 +110,9 @@ export const conformToRules = (
         }
         if (!isSpelledCorrectly(cue)) {
             cueErrors.push(CueError.SPELLCHECK_ERROR);
+        }
+        if (!charsPerSecondOk(cue.vttCue, subtitleSpecification)) {
+            cueErrors.push(CueError.CHARS_PER_SECOND_EXCEEDED);
         }
         return cueErrors;
     }
