@@ -381,7 +381,6 @@ export const mergeCues = (): AppThunk =>
                 const editingTrack = state.editingTrack;
                 const validCueDuration = editingTrack && verifyCueDuration(mergedVttCue, editingTrack, timeGapLimit);
 
-                debugger;
                 if (validCueDuration) {
                     dispatch(cuesSlice.actions.mergeCues(
                         { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
