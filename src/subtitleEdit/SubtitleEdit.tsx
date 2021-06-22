@@ -198,7 +198,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     placement="top"
                                 >
                                     <button
-                                        data-testid="sbte-jump-to-last_translated-cue-button"
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
                                         className="btn btn-secondary"
                                         type="button"
                                         hidden={editingTrack?.type !== "TRANSLATION"}

@@ -220,7 +220,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
-                                    data-testid="sbte-jump-to-last_translated-cue-button"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
                                     hidden={testingTrack.type !== "TRANSLATION"}
@@ -366,7 +366,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
-                                    data-testid="sbte-jump-to-last_translated-cue-button"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
                                     hidden={testingTrack.type !== "TRANSLATION"}
@@ -650,7 +650,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
-                                    data-testid="sbte-jump-to-last_translated-cue-button"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
                                     hidden={testingTrack.type !== "TRANSLATION"}
@@ -832,7 +832,7 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
-                                    data-testid="sbte-jump-to-last_translated-cue-button"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
                                     hidden={testingTrack.type !== "TRANSLATION"}
@@ -1292,7 +1292,7 @@ describe("SubtitleEdit", () => {
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
-        fireEvent.click(actualNode.getByTestId("sbte-jump-to-last_translated-cue-button"));
+        fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
         expect(changeScrollPositionSpy).toBeCalledTimes(3);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
