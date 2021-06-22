@@ -36,6 +36,8 @@ import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 import MergeCuesButton from "./toolbox/MergeCuesButton";
+import { showMerge } from "./cues/merge/mergeSlices";
+import MergeEditor from "./cues/merge/MergeEditor";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -661,6 +663,161 @@ describe("SubtitleEdit", () => {
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+        // THEN
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
+    });
+
+    it("renders with merge pane", () => {
+        // GIVEN
+        const expectedNode = render(
+            <Provider store={testingStore} >
+                <div
+                    className="sbte-subtitle-edit"
+                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                >
+                    <div>CueErrorAlert</div>
+                    <header style={{ display: "flex", paddingBottom: "10px" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
+                            <div><b>This is the video title</b> <i>Project One</i></div>
+                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                        </div>
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Completed: <b>50%</b></div>
+                        </div>
+                    </header>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                            <div className="video-player-wrapper">
+                                <VideoPlayer
+                                    mp4="dummyMp4"
+                                    poster="dummyPoster"
+                                    tracks={[testingTrack]}
+                                    languageCuesArray={[]}
+                                    lastCueChange={null}
+                                />
+                            </div>
+                            <Toolbox
+                                handleImportFile={jest.fn()}
+                                handleExportSourceFile={jest.fn()}
+                                handleExportFile={jest.fn()}
+                            />
+                        </div>
+                        <div
+                            style={{
+                                flex: "1 1 60%",
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <MergeEditor />
+                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
+                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
+                                    <CueLine
+                                        rowIndex={0}
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
+                                        rowRef={React.createRef()}
+                                        onClick={(): void => undefined}
+                                    />
+                                    <CueLine
+                                        rowIndex={1}
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowProps={{
+                                            playerTime: 0,
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues
+                                        }}
+                                        rowRef={React.createRef()}
+                                        onClick={(): void => undefined}
+                                    />
+                                </div>
+                            </div>
+                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                    View All Tracks
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <span style={{ flexGrow: 2 }} />
+                                <div
+                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
+                                >
+                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                </div>
+                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                    Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
 
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
