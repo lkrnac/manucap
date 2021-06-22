@@ -150,4 +150,28 @@ describe("CueActionsPanel", () => {
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
     });
+
+    it("splits cue line when split button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(actualNode.container.querySelector(".sbte-split-cue-button") as Element);
+
+        // THEN
+        expect(saveTrack).toHaveBeenCalledTimes(1);
+        expect(testingStore.getState().cues.length).toEqual(3);
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("Editing Line 2");
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(1.5);
+        expect(testingStore.getState().cues[2].vttCue.text).toEqual("");
+        expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(1.5);
+        expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(2);
+    });
 });
