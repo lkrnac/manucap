@@ -1076,7 +1076,6 @@ describe("CuesList", () => {
         });
     });
 
-
     it("shows starts captioning button for empty direct translation track", async () => {
         // WHEN
         const actualNode = render(
@@ -1155,6 +1154,37 @@ describe("CuesList", () => {
 
         // THEN
         expect(actualNode.container.outerHTML).toContain("Caption Line 1");
+    });
+
+    it("scrolls to last translated cue", async () => {
+        const cues = [] as CueDto[];
+        const cueSize = 50;
+        for (let idx = 0; idx < cueSize; idx++) {
+            cues.push({ vttCue: new VTTCue(idx, idx + 1, `Editing Line ${idx + 1}`), cueCategory: "DIALOGUE" });
+        }
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+            </Provider >
+        );
+        simulateEnoughSpaceForCues(actualNode, 100);
+        await act(async () => {
+            testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED) as {} as AnyAction);
+        });
+        await act(async () => {
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
+        });
+
+        // WHEN
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
+        await act(async () => {
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
+        });
+
+        // THEN
+        expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize - 1}`);
     });
 
     it("scrolls to current editing cue if not in viewport", async () => {
