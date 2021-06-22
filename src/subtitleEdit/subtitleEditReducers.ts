@@ -1,5 +1,5 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
-import { cuesSlice, mergeSlice } from "./cues/cuesListSlices";
+import { cuesSlice } from "./cues/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
@@ -10,7 +10,7 @@ import { saveActionSlice, saveTrackSlice } from "./cues/saveSlices";
 import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
-import { mergeVisibleSlice } from "./cues/merge/mergeSlices";
+import { mergeVisibleSlice, rowsToMergeSlice } from "./cues/merge/mergeSlices";
 import { spellcheckerSettingsSlice } from "./spellcheckerSettingsSlice";
 import { sourceCuesSlice } from "./cues/view/sourceCueSlices";
 import {
@@ -37,7 +37,7 @@ export const Reducers = {
     searchReplace: searchReplaceSlice.reducer,
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,
     mergeVisible: mergeVisibleSlice.reducer,
-    rowsToMerge: mergeSlice.reducer,
+    rowsToMerge: rowsToMergeSlice.reducer,
 
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,

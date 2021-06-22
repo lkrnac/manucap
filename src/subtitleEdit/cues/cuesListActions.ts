@@ -31,9 +31,10 @@ import {
 import { scrollPositionSlice } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "./spellCheck/spellCheckFetch";
 import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "./edit/cueEditorSlices";
-import { CueErrorsPayload, cuesSlice, mergeSlice, SpellCheckRemovalAction } from "./cuesListSlices";
+import { CueErrorsPayload, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "./saveSlices";
 import _ from "lodash";
+import { rowsToMergeSlice } from "./merge/mergeSlices";
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
@@ -324,11 +325,11 @@ export const syncCues = (): AppThunk =>
 
 export const addCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>): void =>
-        dispatch(mergeSlice.actions.addRowCues(row));
+        dispatch(rowsToMergeSlice.actions.addRowCues(row));
 
 export const removeCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>): void =>
-        dispatch(mergeSlice.actions.removeRowCues(row));
+        dispatch(rowsToMergeSlice.actions.removeRowCues(row));
 
 export const mergeCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {

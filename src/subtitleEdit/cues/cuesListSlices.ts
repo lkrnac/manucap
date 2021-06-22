@@ -1,11 +1,9 @@
-import _ from "lodash";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import {
     CueCategory,
     CueDto,
     CueError,
-    CuesWithRowIndex,
     SubtitleEditAction
 } from "../model";
 import { copyNonConstructorProperties } from "./cueUtils";
@@ -13,7 +11,6 @@ import { editingTrackSlice } from "../trackSlices";
 import { Match, SpellCheck } from "./spellCheck/model";
 import { SearchReplaceMatches } from "./searchReplace/model";
 import { hasIgnoredKeyword } from "./spellCheck/spellCheckerUtils";
-import { mergeVisibleSlice } from "./merge/mergeSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -145,24 +142,5 @@ export const cuesSlice = createSlice({
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
-    }
-});
-
-export const mergeSlice = createSlice({
-    name: "rowsToMerge",
-    initialState: [] as CuesWithRowIndex[],
-    reducers: {
-        addRowCues: (state, action: PayloadAction<CuesWithRowIndex>): void => {
-            state.push(action.payload);
-        },
-        removeRowCues: (state, action: PayloadAction<CuesWithRowIndex>): void => {
-            _.remove(state, (row) => row.index === action.payload.index);
-        }
-    },
-    extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): CuesWithRowIndex[] => [],
-        [cuesSlice.actions.mergeCues.type]: (): CuesWithRowIndex[] => [],
-        [mergeVisibleSlice.actions.setMergeVisible.type]:
-            (_state, action: PayloadAction<CuesWithRowIndex>): CuesWithRowIndex[] => action.payload ? _state : []
     }
 });
