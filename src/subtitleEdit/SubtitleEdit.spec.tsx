@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import { mount } from "enzyme";
-import { fireEvent, render } from "@testing-library/react";
+import {fireEvent, render, RenderResult} from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
@@ -35,6 +35,7 @@ import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
 import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
+import {act} from "react-dom/test-utils";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -99,6 +100,21 @@ const testingCompletedTask = {
     dueDate: "2019/12/30 10:00AM",
     editDisabled: true
 } as Task;
+
+const simulateEnoughSpaceForCues = (actualNode: RenderResult, viewPortSize = 500): void => act(() => {
+    const smartScrollCone = actualNode.container.querySelector(".sbte-smart-scroll") as Element;
+    // @ts-ignore Mocking smart scroll calculation
+    smartScrollCone.getBoundingClientRect =
+        jest.fn(() => ({
+            bottom: viewPortSize,
+            height: viewPortSize,
+            left: 0,
+            right: viewPortSize,
+            top: 0,
+            width: viewPortSize
+        }));
+    window.dispatchEvent(new Event("resize")); // trigger smart scroll space re-calculation
+});
 
 jest.setTimeout(9000);
 
@@ -1266,10 +1282,11 @@ describe("SubtitleEdit", () => {
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
-    it("jump to last translated subtitle button clicked", () => {
+    it("jump to last translated subtitle button clicked", async () => {
         // GIVEN
         const cues = [] as CueDto[];
-        for (let idx = 0; idx < 50; idx++) {
+        const cueSize = 50;
+        for (let idx = 0; idx < cueSize; idx++) {
             cues.push({ vttCue: new VTTCue(idx, idx + 1, `Editing Line ${idx + 1}`), cueCategory: "DIALOGUE" });
         }
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
@@ -1289,15 +1306,20 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        simulateEnoughSpaceForCues(actualNode, 100);
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
-        fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
-        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        //WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
+        });
+        await act(async () => {
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
+        });
+
+        expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize - 1}`);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("calls onSave callback on auto save", () => {
