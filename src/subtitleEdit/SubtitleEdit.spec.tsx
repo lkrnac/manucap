@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import { mount } from "enzyme";
-import {fireEvent, render, RenderResult} from "@testing-library/react";
+import { fireEvent, render, RenderResult } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
@@ -35,7 +35,7 @@ import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
 import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
-import {act} from "react-dom/test-utils";
+import { act } from "react-dom/test-utils";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
