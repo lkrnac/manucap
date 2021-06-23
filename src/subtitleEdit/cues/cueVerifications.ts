@@ -6,6 +6,8 @@ import { Constants } from "../constants";
 
 const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTags: []});
 
+const removeLineBreaks = (text: string): string => text.replace(/(\r\n|\n|\r)/gm, "");
+
 export const checkLineLimitation = (
     text: string,
     subtitleSpecification: SubtitleSpecification | null
@@ -88,9 +90,12 @@ const isSpelledCorrectly = (cue: CueDto): boolean =>
     cue.spellCheck?.matches === undefined || cue.spellCheck.matches.length === 0;
 
 const charsPerSecondOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): boolean => {
-    const maxCharsPerSecond = subtitleSpecification?.maxCharactersPerSecondPerCaption;
-    const cueTextCharsPerSecond = vttCue.text.length / (vttCue.endTime - vttCue.startTime);
-    return maxCharsPerSecond ? cueTextCharsPerSecond <= maxCharsPerSecond : true;
+    if (subtitleSpecification?.enabled && subtitleSpecification.maxCharactersPerSecondPerCaption) {
+        const cleanText = removeHtmlTags(removeLineBreaks(vttCue.text));
+        const cueTextCharsPerSecond = cleanText.length / (vttCue.endTime - vttCue.startTime);
+        return cueTextCharsPerSecond <= subtitleSpecification.maxCharactersPerSecondPerCaption;
+    }
+    return true;
 };
 
 export const conformToRules = (
