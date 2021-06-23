@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
-import { render, RenderResult } from "@testing-library/react";
+import { render } from "@testing-library/react";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "../model";
 import { updateEditingTrack, updateTask } from "../trackSlices";
@@ -12,6 +12,7 @@ import CueLine, { CueLineProps } from "./CueLine";
 import { updateCues } from "./cuesListActions";
 import CuesList from "./CuesList";
 import { createTestingStore } from "../../testUtils/testingStore";
+import { simulateEnoughSpaceForCues } from "../../testUtils/testUtils";
 import { reset } from "./edit/editorStatesSlice";
 import { act } from "react-dom/test-utils";
 import { changeScrollPosition } from "./cuesListScrollSlice";
@@ -55,21 +56,6 @@ const testingTask = {
     dueDate: "2019/12/30 10:00AM",
     editDisabled: false
 } as Task;
-
-const simulateEnoughSpaceForCues = (actualNode: RenderResult, viewPortSize = 500): void => act(() => {
-    const smartScrollCone = actualNode.container.querySelector(".sbte-smart-scroll") as Element;
-    // @ts-ignore Mocking smart scroll calculation
-    smartScrollCone.getBoundingClientRect =
-        jest.fn(() => ({
-            bottom: viewPortSize,
-            height: viewPortSize,
-            left: 0,
-            right: viewPortSize,
-            top: 0,
-            width: viewPortSize
-        }));
-    window.dispatchEvent(new Event("resize")); // trigger smart scroll space re-calculation
-});
 
 describe("CuesList", () => {
     beforeEach(() => {

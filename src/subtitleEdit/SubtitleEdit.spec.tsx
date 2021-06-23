@@ -6,11 +6,11 @@ import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import { mount } from "enzyme";
-import { fireEvent, render, RenderResult } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
-import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue, simulateEnoughSpaceForCues } from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import CueLine from "./cues/CueLine";
@@ -100,21 +100,6 @@ const testingCompletedTask = {
     dueDate: "2019/12/30 10:00AM",
     editDisabled: true
 } as Task;
-
-const simulateEnoughSpaceForCues = (actualNode: RenderResult, viewPortSize = 500): void => act(() => {
-    const smartScrollCone = actualNode.container.querySelector(".sbte-smart-scroll") as Element;
-    // @ts-ignore Mocking smart scroll calculation
-    smartScrollCone.getBoundingClientRect =
-        jest.fn(() => ({
-            bottom: viewPortSize,
-            height: viewPortSize,
-            left: 0,
-            right: viewPortSize,
-            top: 0,
-            width: viewPortSize
-        }));
-    window.dispatchEvent(new Event("resize")); // trigger smart scroll space re-calculation
-});
 
 jest.setTimeout(9000);
 
