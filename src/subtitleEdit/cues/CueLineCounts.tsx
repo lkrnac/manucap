@@ -28,12 +28,14 @@ const CueLineCounts = (props: Props): ReactElement => {
         state.editorStates.get(props.cueIndex)) as EditorState;
     const currentContent = editorState && editorState.getCurrentContent();
     const text = !currentContent || !currentContent.hasText() ? "" : currentContent.getPlainText();
+    const cps = (getCharacterCount(text)/getDuration(props.vttCue)).toFixed(1);
 
     return (
         <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
             <span>DURATION: <span className="sbte-green-text">{getDuration(props.vttCue)}s</span>, </span>
             <span>CHARACTERS: <span className="sbte-green-text">{getCharacterCount(text)}</span>, </span>
-            <span>WORDS: <span className="sbte-green-text">{getWordCount(text)}</span></span>
+            <span>WORDS: <span className="sbte-green-text">{getWordCount(text)}</span>, </span>
+            <span>CPS: <span className="sbte-green-text">{cps}</span></span>
         </div>
     );
 };
