@@ -10,7 +10,11 @@ import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
-import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue, simulateEnoughSpaceForCues } from "../testUtils/testUtils";
+import {
+    removeDraftJsDynamicValues,
+    removeVideoPlayerDynamicValue,
+    simulateEnoughSpaceForCues
+} from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import CueLine from "./cues/CueLine";
@@ -1303,7 +1307,7 @@ describe("SubtitleEdit", () => {
             actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
         });
 
-        expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize - 1}`);
+        expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize}`);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
     });
 
