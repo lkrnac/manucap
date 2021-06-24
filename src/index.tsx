@@ -188,7 +188,8 @@ const TestApp = (): ReactElement => {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 40,
                 minCaptionDurationInMillis: MIN_DURATION_SECONDS * 1000,
-                maxCaptionDurationInMillis: 4000,
+                maxCaptionDurationInMillis: 8000,
+                maxCharactersPerSecondPerCaption: 50,
                 comments: "Media comments, please click [here](https://dotsub.com)",
                 mediaNotes: "Media notes, please click [here](https://dotsub.com)"
             })),
