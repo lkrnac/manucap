@@ -806,7 +806,8 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -814,12 +815,23 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    hidden={testingTrack.type !== "TRANSLATION"}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-language" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
