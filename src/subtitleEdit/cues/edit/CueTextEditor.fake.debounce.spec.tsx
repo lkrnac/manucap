@@ -288,7 +288,8 @@ describe("CueTextEditor", () => {
         const processedHTML = convertFromHTML(convertVttToHtml(vttCue.text));
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
 
-        testForContentState(contentState, vttCue, "some <i>HTML</i><br>\n <b>Text</b> sample", 1, [9,12], [2,2], [9,12]);
+        testForContentState(
+            contentState, vttCue, "some <i>HTML</i><br>\n <b>Text</b> sample", 1, [9,12], [2,2], [9,12]);
     });
 
     it("updates cue in redux store when changed", () => {
