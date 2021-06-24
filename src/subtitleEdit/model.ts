@@ -117,13 +117,15 @@ export interface CueChange {
  * @param LAST - scrolls to last cue item
  * @param CURRENT - scroll to cue item currently being edited
  * @param PLAYBACK - scroll to currently playing media track cue item
+ * @param LAST_TRANSLATED - scroll to last translated cue
  */
 export enum ScrollPosition {
     NONE,
     FIRST,
     LAST,
     CURRENT,
-    PLAYBACK
+    PLAYBACK,
+    LAST_TRANSLATED
 }
 
 export enum CueError {

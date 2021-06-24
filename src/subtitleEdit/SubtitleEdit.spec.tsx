@@ -10,7 +10,11 @@ import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
-import { removeDraftJsDynamicValues, removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
+import {
+    removeDraftJsDynamicValues,
+    removeVideoPlayerDynamicValue,
+    simulateEnoughSpaceForCues
+} from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import CueLine from "./cues/CueLine";
@@ -38,6 +42,7 @@ import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 import MergeCuesButton from "./toolbox/MergeCuesButton";
 import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
+import { act } from "react-dom/test-utils";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -204,7 +209,8 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -212,12 +218,23 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    hidden={testingTrack.type !== "TRANSLATION"}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-language" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -338,7 +355,8 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -346,12 +364,23 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    hidden={testingTrack.type !== "TRANSLATION"}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-language" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -610,7 +639,8 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -618,12 +648,23 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    hidden={testingTrack.type !== "TRANSLATION"}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-language" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -936,7 +977,8 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-edit-cue-button"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
@@ -944,12 +986,23 @@ describe("SubtitleEdit", () => {
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
-                                    className="btn btn-secondary sbte-jump-to-playback-cue-button"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
                                     type="button"
                                     style={{ marginLeft: "10px" }}
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    hidden={testingTrack.type !== "TRANSLATION"}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-language" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -1313,7 +1366,7 @@ describe("SubtitleEdit", () => {
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore} >
                 <SubtitleEdit
                     mp4="dummyMp4"
@@ -1331,7 +1384,7 @@ describe("SubtitleEdit", () => {
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        actualNode.find(".sbte-jump-to-edit-cue-button").simulate("click");
+        fireEvent.click(actualNode.getByTestId("sbte-jump-to-edit-cue-button"));
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(3);
@@ -1349,7 +1402,7 @@ describe("SubtitleEdit", () => {
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore} >
                 <SubtitleEdit
                     mp4="dummyMp4"
@@ -1366,8 +1419,7 @@ describe("SubtitleEdit", () => {
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
-        // WHEN
-        actualNode.find(".sbte-jump-to-playback-cue-button").simulate("click");
+        fireEvent.click(actualNode.getByTestId("sbte-jump-to-playback-cue-button"));
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(3);
@@ -1375,6 +1427,46 @@ describe("SubtitleEdit", () => {
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.PLAYBACK);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
+    });
+
+    it("jump to last translated subtitle button clicked", async () => {
+        // GIVEN
+        const cues = [] as CueDto[];
+        const cueSize = 50;
+        for (let idx = 0; idx < cueSize; idx++) {
+            cues.push({ vttCue: new VTTCue(idx, idx + 1, `Editing Line ${idx + 1}`), cueCategory: "DIALOGUE" });
+        }
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        simulateEnoughSpaceForCues(actualNode, 100);
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
+
+        //WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
+        });
+        await act(async () => {
+            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
+        });
+
+        expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize}`);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
     });
 
     it("calls onSave callback on auto save", () => {
