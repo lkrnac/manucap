@@ -105,23 +105,22 @@ export const conformToRules = (
     followingCue?: CueDto,
     overlapCaptions?: boolean
 ): CueError[] => {
-        const cueErrors = [];
-        cueErrors.push(...checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification));
-        if (!rangeOk(cue.vttCue, subtitleSpecification)) {
-            cueErrors.push(CueError.TIME_GAP_LIMIT_EXCEEDED);
-        }
-        if (!overlapCaptions && !overlapOk(cue.vttCue, previousCue, followingCue)) {
-            cueErrors.push(CueError.TIME_GAP_OVERLAP);
-        }
-        if (!isSpelledCorrectly(cue)) {
-            cueErrors.push(CueError.SPELLCHECK_ERROR);
-        }
-        if (!charsPerSecondOk(cue.vttCue, subtitleSpecification)) {
-            cueErrors.push(CueError.CHARS_PER_SECOND_EXCEEDED);
-        }
-        return cueErrors;
+    const cueErrors = [];
+    cueErrors.push(...checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification));
+    if (!rangeOk(cue.vttCue, subtitleSpecification)) {
+        cueErrors.push(CueError.TIME_GAP_LIMIT_EXCEEDED);
     }
-;
+    if (!overlapCaptions && !overlapOk(cue.vttCue, previousCue, followingCue)) {
+        cueErrors.push(CueError.TIME_GAP_OVERLAP);
+    }
+    if (!isSpelledCorrectly(cue)) {
+        cueErrors.push(CueError.SPELLCHECK_ERROR);
+    }
+    if (!charsPerSecondOk(cue.vttCue, subtitleSpecification)) {
+        cueErrors.push(CueError.CHARS_PER_SECOND_EXCEEDED);
+    }
+    return cueErrors;
+};
 
 export const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
