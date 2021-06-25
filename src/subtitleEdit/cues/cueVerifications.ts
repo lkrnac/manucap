@@ -36,11 +36,11 @@ export const checkCharacterLimitation = (
     return true;
 };
 
-export const checkCharacterAndLineLimitation = (
+const checkCharacterAndLineLimitation = (
+    cueErrors: CueError[],
     text: string,
     subtitleSpecification: SubtitleSpecification | null
-): CueError[] => {
-    const cueErrors = [];
+): void => {
     const charactersPerLineLimitOk = checkCharacterLimitation(text, subtitleSpecification);
     const linesCountLimitOk = checkLineLimitation(text, subtitleSpecification);
     if (!charactersPerLineLimitOk) {
@@ -49,7 +49,6 @@ export const checkCharacterAndLineLimitation = (
     if (!linesCountLimitOk) {
         cueErrors.push(CueError.LINE_COUNT_EXCEEDED);
     }
-    return cueErrors;
 };
 
 export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
@@ -116,8 +115,8 @@ export const conformToRules = (
     followingCue?: CueDto,
     overlapCaptions?: boolean
 ): CueError[] => {
-    const cueErrors = [];
-    cueErrors.push(...checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification));
+    const cueErrors = [] as CueError[];
+    checkCharacterAndLineLimitation(cueErrors, cue.vttCue.text, subtitleSpecification);
     checkRange(cueErrors, cue.vttCue, subtitleSpecification);
     if (!overlapCaptions) {
         checkOverlap(cueErrors, cue.vttCue, previousCue, followingCue);
