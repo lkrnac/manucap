@@ -1104,11 +1104,11 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 4, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-                expect(testingStore.getState().validationErrors).not.toContain(CueError.LINE_CHAR_LIMIT_EXCEEDED);
+                expect(testingStore.getState().validationErrors).toContain(CueError.LINE_COUNT_EXCEEDED);
             });
 
             it("ignore line count prevention if null in subtitle specs", () => {
