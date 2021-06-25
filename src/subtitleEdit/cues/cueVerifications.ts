@@ -72,9 +72,12 @@ const minRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
 const maxRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
 
-const rangeOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): boolean => {
+const checkRange =
+    (cueErrors: CueError[], vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): void => {
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
-    return minRangeOk(vttCue, timeGapLimit) && maxRangeOk(vttCue, timeGapLimit);
+    if(!minRangeOk(vttCue, timeGapLimit) || !maxRangeOk(vttCue, timeGapLimit)) {
+        cueErrors.push(CueError.TIME_GAP_LIMIT_EXCEEDED);
+    }
 };
 
 const startOverlapOk = (vttCue: VTTCue, previousCue?: CueDto): boolean =>
@@ -83,19 +86,27 @@ const startOverlapOk = (vttCue: VTTCue, previousCue?: CueDto): boolean =>
 const endOverlapOk = (vttCue: VTTCue, followingCue?: CueDto): boolean =>
     !followingCue || vttCue.endTime <= followingCue.vttCue.startTime;
 
-const overlapOk = (vttCue: VTTCue, previousCue?: CueDto, followingCue?: CueDto): boolean =>
-    startOverlapOk(vttCue, previousCue) && endOverlapOk(vttCue, followingCue);
+const checkOverlap = (cueErrors: CueError[], vttCue: VTTCue, previousCue?: CueDto, followingCue?: CueDto): void => {
+    if (!startOverlapOk(vttCue, previousCue) || !endOverlapOk(vttCue, followingCue)) {
+        cueErrors.push(CueError.TIME_GAP_OVERLAP);
+    }
+};
 
-const isSpelledCorrectly = (cue: CueDto): boolean =>
-    cue.spellCheck?.matches === undefined || cue.spellCheck.matches.length === 0;
+const checkSpelling = (cueErrors: CueError[], cue: CueDto): void => {
+    if (cue.spellCheck?.matches !== undefined && cue.spellCheck.matches.length > 0) {
+        cueErrors.push(CueError.SPELLCHECK_ERROR);
+    }
+};
 
-const charsPerSecondOk = (vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): boolean => {
+const checkCharsPerSecond =
+    (cueErrors: CueError[], vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): void => {
     if (subtitleSpecification?.enabled && subtitleSpecification.maxCharactersPerSecondPerCaption) {
         const cleanText = removeHtmlTags(removeLineBreaks(vttCue.text));
         const cueTextCharsPerSecond = cleanText.length / (vttCue.endTime - vttCue.startTime);
-        return cueTextCharsPerSecond <= subtitleSpecification.maxCharactersPerSecondPerCaption;
+        if (cueTextCharsPerSecond > subtitleSpecification.maxCharactersPerSecondPerCaption) {
+            cueErrors.push(CueError.CHARS_PER_SECOND_EXCEEDED);
+        }
     }
-    return true;
 };
 
 export const conformToRules = (
@@ -107,18 +118,12 @@ export const conformToRules = (
 ): CueError[] => {
     const cueErrors = [];
     cueErrors.push(...checkCharacterAndLineLimitation(cue.vttCue.text, subtitleSpecification));
-    if (!rangeOk(cue.vttCue, subtitleSpecification)) {
-        cueErrors.push(CueError.TIME_GAP_LIMIT_EXCEEDED);
+    checkRange(cueErrors, cue.vttCue, subtitleSpecification);
+    if (!overlapCaptions) {
+        checkOverlap(cueErrors, cue.vttCue, previousCue, followingCue);
     }
-    if (!overlapCaptions && !overlapOk(cue.vttCue, previousCue, followingCue)) {
-        cueErrors.push(CueError.TIME_GAP_OVERLAP);
-    }
-    if (!isSpelledCorrectly(cue)) {
-        cueErrors.push(CueError.SPELLCHECK_ERROR);
-    }
-    if (!charsPerSecondOk(cue.vttCue, subtitleSpecification)) {
-        cueErrors.push(CueError.CHARS_PER_SECOND_EXCEEDED);
-    }
+    checkSpelling(cueErrors, cue);
+    checkCharsPerSecond(cueErrors, cue.vttCue, subtitleSpecification);
     return cueErrors;
 };
 
