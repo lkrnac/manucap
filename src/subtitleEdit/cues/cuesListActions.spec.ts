@@ -686,8 +686,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 4000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -711,8 +709,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 3000,
                     maxCaptionDurationInMillis: 4000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -736,8 +732,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 4000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -761,8 +755,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 500,
                     maxCaptionDurationInMillis: 1000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -786,8 +778,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 1500,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -811,8 +801,6 @@ describe("cueSlices", () => {
                 const testingSubtitleSpecification = {
                     minCaptionDurationInMillis: 500,
                     maxCaptionDurationInMillis: 1000,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
                     enabled: true
                 } as SubtitleSpecification;
 
@@ -1116,11 +1104,11 @@ describe("cueSlices", () => {
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(0, 2, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
+                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 4, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-                expect(testingStore.getState().validationErrors).not.toContain(CueError.LINE_CHAR_LIMIT_EXCEEDED);
+                expect(testingStore.getState().validationErrors).toContain(CueError.LINE_COUNT_EXCEEDED);
             });
 
             it("ignore line count prevention if null in subtitle specs", () => {
@@ -1408,6 +1396,172 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
+        });
+
+        it("marks cue as corrupted if chars per second max is exceeded", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "line with too many characters per second."), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxCharactersPerSecondPerCaption: 20,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+        });
+
+        it("marks cue as corrupted if chars per second max is exceeded in multiple lines", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "line with too many \ncharacters \nper second."), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxCharactersPerSecondPerCaption: 20,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+        });
+
+        it("marks cue as corrupted if chars per second max and chars per line are exceeded", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "line with too many characters per second."), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxCharactersPerLine: 15,
+                maxCharactersPerSecondPerCaption: 20,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].errors).toEqual(
+                [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
+        });
+
+        it("marks cue as corrupted if chars per second max and lines per caption are exceeded", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "line with\ntoo many\ncharacters per second."), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerSecondPerCaption: 15,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("line with\ntoo many\ncharacters per second.");
+            expect(testingStore.getState().cues[1].errors).toEqual(
+                [CueError.LINE_COUNT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
+        });
+
+        it("doesn't mark cue as corrupted if chars per second max is not exceeded", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "line with many characters, but not too many"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxCharactersPerSecondPerCaption: 40,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+        });
+
+        it("ignores max chars per second if null in subtitle specs", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "line with too many characters per second"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxCharactersPerSecondPerCaption: null,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+        });
+
+        it("ignores max chars per second if subtitle specs are disabled", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "line with too many characters per second"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                enabled: false,
+                maxCharactersPerSecondPerCaption: 15,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+        });
+
+        it("do not count HTML tags into max chars per second limitation", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4,
+                        "line with <i>too</i> many <b>characters</b> per second"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxCharactersPerSecondPerCaption: 20,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
         });
     });
 
