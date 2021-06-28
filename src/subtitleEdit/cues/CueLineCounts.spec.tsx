@@ -15,7 +15,8 @@ const testContentRendered = (
     endTime: number,
     duration: number,
     characters: number,
-    words: number
+    words: number,
+    cps: number
 ): void => {
     // GIVEN
     const processedHTML = convertFromHTML(text);
@@ -28,7 +29,8 @@ const testContentRendered = (
         <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
             <span>DURATION: <span className="sbte-green-text">{duration}s</span>, </span>
             <span>CHARACTERS: <span className="sbte-green-text">{characters}</span>, </span>
-            <span>WORDS: <span className="sbte-green-text">{words}</span></span>
+            <span>WORDS: <span className="sbte-green-text">{words}</span>, </span>
+            <span>CPS: <span className="sbte-green-text">{cps.toFixed(1)}</span></span>
         </div>
     );
 
@@ -45,20 +47,20 @@ const testContentRendered = (
 
 describe("CueLineCounts", () => {
     it("renders", () => {
-        testContentRendered("", 0, 1,1, 0, 0);
+        testContentRendered("", 0, 1,1, 0, 0, 0);
     });
 
     it("renders with text", () => {
-        testContentRendered("i am a subtitle line", 0, 1, 1, 20, 5);
+        testContentRendered("i am a subtitle line", 0, 1, 1, 20, 5, 20);
     });
 
     it("renders with text and line breaks, spaces and tabs ", () => {
         testContentRendered("    this is      sample <br>" +
-            "     text with      multiple        blanks", 0, 1, 1, 62, 7);
+            "     text with      multiple        blanks", 0, 1, 1, 62, 7, 62);
     });
 
     it("renders with html", () => {
-        testContentRendered("i <i>am</i> <b>a subtitle</b> line", 0, 1, 1, 20, 5);
+        testContentRendered("i <i>am</i> <b>a subtitle</b> line", 0, 1, 1, 20, 5, 20);
     });
 
     it("renders with long text and duration", () => {
@@ -70,6 +72,7 @@ describe("CueLineCounts", () => {
             3898.45,
             3883.45,
             275,
-            40);
+            40,
+            .1);
     });
 });

@@ -23,6 +23,7 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: 0,
             minCaptionDurationInMillis: 0,
             maxCaptionDurationInMillis: 0,
+            maxCharactersPerSecondPerCaption: 0,
             comments: "",
             mediaNotes: ""
         };
@@ -60,6 +61,7 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: 40,
             minCaptionDurationInMillis: 1000,
             maxCaptionDurationInMillis: 3000,
+            maxCharactersPerSecondPerCaption: 60,
             comments: "sample **comment** ~~test~~",
             mediaNotes: "media **notes** ~~test~~"
         };
@@ -100,6 +102,10 @@ describe("SubtitleSpecificationsForm", () => {
                         <div>
                             <label><strong>Max Characters Per Line:&nbsp;</strong></label>
                             <label>40</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Characters Per Second Per Caption:&nbsp;</strong></label>
+                            <label>60</label>
                         </div>
                         <div>
                             <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
@@ -151,6 +157,7 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: null,
             minCaptionDurationInMillis: null,
             maxCaptionDurationInMillis: null,
+            maxCharactersPerSecondPerCaption: null,
             comments: "sample **comment** ~~test~~",
             mediaNotes: "media **notes** ~~test~~"
         };
@@ -190,6 +197,10 @@ describe("SubtitleSpecificationsForm", () => {
                         </div>
                         <div>
                             <label><strong>Max Characters Per Line:&nbsp;</strong></label>
+                            <label>n/a</label>
+                        </div>
+                        <div>
+                            <label><strong>Max Characters Per Second Per Caption:&nbsp;</strong></label>
                             <label>n/a</label>
                         </div>
                         <div>
@@ -241,6 +252,7 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: 40,
             minCaptionDurationInMillis: 1000,
             maxCaptionDurationInMillis: 3000,
+            maxCharactersPerSecondPerCaption: 60,
             comments: "This is a sample comment"
         };
 
@@ -320,6 +332,7 @@ describe("SubtitleSpecificationsForm", () => {
             maxCharactersPerLine: 40,
             minCaptionDurationInMillis: 1000,
             maxCaptionDurationInMillis: 3000,
+            maxCharactersPerSecondPerCaption: 60,
             comments: "This is a sample media node"
         };
 

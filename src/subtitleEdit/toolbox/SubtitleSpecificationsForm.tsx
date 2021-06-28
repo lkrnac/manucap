@@ -85,6 +85,16 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                             </label>
                         </div>
                         <div>
+                            <label><strong>Max Characters Per Second Per Caption:&nbsp;</strong></label>
+                            <label>
+                                {
+                                    props.subTitleSpecifications.maxCharactersPerSecondPerCaption
+                                        ? props.subTitleSpecifications.maxCharactersPerSecondPerCaption
+                                        : "n/a"
+                                }
+                            </label>
+                        </div>
+                        <div>
                             <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
                             <label>
                                 {millisToSeconds(props.subTitleSpecifications.minCaptionDurationInMillis)}

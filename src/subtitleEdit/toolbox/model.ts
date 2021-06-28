@@ -11,6 +11,7 @@ export interface SubtitleSpecification {
     maxCharactersPerLine: number | null;
     minCaptionDurationInMillis: number | null;
     maxCaptionDurationInMillis: number | null;
+    maxCharactersPerSecondPerCaption: number | null;
     comments: string;
     mediaNotes?: string;
 }
