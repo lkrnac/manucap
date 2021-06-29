@@ -7,7 +7,7 @@ const InsertCueButton = (): ReactElement => (
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            minHeight: "78px"
+            minHeight: "76px"
         }}
     >
         <button

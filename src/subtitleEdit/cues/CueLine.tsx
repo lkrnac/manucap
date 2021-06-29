@@ -158,7 +158,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
                                 >
-                                    <div style={{ width: "100%", minHeight: "78px" }} />
+                                    <div style={{ width: "100%", minHeight: "76px" }} />
                                 </ClickCueWrapper>
                             )
                         )
