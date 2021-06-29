@@ -26,7 +26,7 @@ const trackType = "TRANSLATION";
 const mediaChunkStart = 13000;
 const mediaChunkEnd = 305000;
 
-const TIME_MATCH_TESTING = false;
+const TIME_MATCH_TESTING = true;
 // ################## TESTING DATA TWEAKS - END ########################
 
 const sourceLanguage = { id: "sk", name: "Slovak", direction: "LTR" } as Language;

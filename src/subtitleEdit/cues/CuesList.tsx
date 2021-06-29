@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore It doesn't have TS type module
-import ReactSmartScroll from "@dotsub/react-smart-scroll";
 
 import { isDirectTranslationTrack } from "../subtitleEditUtils";
 import AddCueLineButton from "./edit/AddCueLineButton";
@@ -13,6 +12,7 @@ import Mousetrap from "mousetrap";
 import { KeyCombination } from "../shortcutConstants";
 import { changeScrollPosition } from "./cuesListScrollSlice";
 import { matchCuesByTime, matchCueTimeIndex } from "./cuesListTimeMatching";
+import ReactSmartScroll, { Item } from "./ReactSmartScroll";
 
 interface Props {
     editingTrack: Track | null;
@@ -58,14 +58,6 @@ const CuesList = (props: Props): ReactElement => {
         targetCuesArray.length,
         scrollPosition
     );
-    const rowHeight = sourceCuesArray.length > 0
-        ? 180 // This is bigger than real translation view cue, because if there is at least one
-              // editing cue, bigger rowHeight scrolls properly to bottom
-        : 81; // Value is taken from Elements > Computed from browser DEV tools
-              // yes, we don't use bigger value as in translation mode,
-              // because we needed to properly scroll to added cue
-              // -> yes, there is glitch where if there is some editing cue on top, jump to bottom
-              // does not scroll so that last cue is in view port. I didn't figure out fix for this issue so far.
     useEffect(
         () => {
             dispatch(changeScrollPosition(ScrollPosition.NONE));
@@ -94,7 +86,7 @@ const CuesList = (props: Props): ReactElement => {
             }
             <ReactSmartScroll
                 className="sbte-smart-scroll"
-                data={matchedCues}
+                data={matchedCues as Item[]}
                 row={CueLine}
                 rowProps={{
                     playerTime: props.currentPlayerTime,
@@ -102,7 +94,6 @@ const CuesList = (props: Props): ReactElement => {
                     withoutSourceCues,
                     matchedCues
                 }}
-                rowHeight={rowHeight}
                 startAt={startAt}
             />
         </>
