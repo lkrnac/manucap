@@ -37,7 +37,7 @@ export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): vo
  * @param cue Cue object to construct values from
  */
 // eslint-disable-next-line
-export const constructCueValuesArray = (cue: VTTCue): any[] => [
+export const constructCueValuesArray = (cue: VTTCue): (number | string | boolean)[] => [
     cue.startTime,
     cue.endTime,
     cue.text,
