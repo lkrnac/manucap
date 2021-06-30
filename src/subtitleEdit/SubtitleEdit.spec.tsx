@@ -15,26 +15,26 @@ import {
     removeVideoPlayerDynamicValue,
     simulateEnoughSpaceForCues
 } from "../testUtils/testUtils";
-import { updateCues, updateVttCue } from "./cues/cuesListActions";
+import { updateCues, updateVttCue } from "./cues/cuesList/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
-import CueLine from "./cues/CueLine";
+import CueLine from "./cues/cueLine/CueLine";
 import SubtitleEdit from "./SubtitleEdit";
 import { SubtitleSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
-import { readSubtitleSpecification } from "./toolbox/subtitleSpecificationSlice";
+import { readSubtitleSpecification } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
-import * as cuesListScrollSlice from "./cues/cuesListScrollSlice";
+import * as cuesListScrollSlice from "./cues/cuesList/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
-import KeyboardShortcuts from "./toolbox/KeyboardShortcuts";
-import SubtitleSpecificationsButton from "./toolbox/SubtitleSpecificationsButton";
+import KeyboardShortcuts from "./toolbox/keyboardShortcuts/KeyboardShortcuts";
+import SubtitleSpecificationsButton from "./toolbox/subtitleSpecifications/SubtitleSpecificationsButton";
 import ShiftTimeButton from "./toolbox/shift/ShiftTimeButton";
 import CaptionOverlapToggle from "./toolbox/CaptionOverlapToggle";
-import ExportTrackCuesButton from "./toolbox/ExportTrackCuesButton";
+import ExportTrackCuesButton from "./toolbox/export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
 import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";

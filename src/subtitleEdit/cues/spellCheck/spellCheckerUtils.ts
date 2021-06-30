@@ -1,8 +1,8 @@
-import { Constants } from "../../constants";
 import _ from "lodash";
 import { Match, SpellCheckHash } from "./model";
 import CryptoJS from "crypto-js";
 
+const SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY = "SpellcheckerIgnores";
 
 export const getMatchText = (match: Match): string => {
     const context = match.context;
@@ -11,7 +11,7 @@ export const getMatchText = (match: Match): string => {
 };
 
 const getSpellcheckIgnores = (): {} => {
-    const localStorageIgnoredSpellchecks = localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY);
+    const localStorageIgnoredSpellchecks = localStorage.getItem(SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY);
     return localStorageIgnoredSpellchecks == null ? {} : JSON.parse(localStorageIgnoredSpellchecks);
 };
 
@@ -29,7 +29,7 @@ export const addIgnoredKeyword = (trackId: string, keyword: string, ruleId: stri
     } else {
         hashes.push(hash);
     }
-    localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, JSON.stringify(spellcheckIgnores));
+    localStorage.setItem(SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, JSON.stringify(spellcheckIgnores));
 };
 
 export const hasIgnoredKeyword = (match: Match, trackId?: string): boolean => {

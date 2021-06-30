@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { deleteCue } from "../cuesListActions";
+import { deleteCue } from "../cuesList/cuesListActions";
 import { useDispatch } from "react-redux";
 import { TooltipWrapper } from "../../TooltipWrapper";
 import { AppThunk } from "../../subtitleEditReducers";

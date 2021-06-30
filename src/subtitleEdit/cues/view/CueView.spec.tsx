@@ -11,10 +11,10 @@ import CueView from "./CueView";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack, updateTask } from "../../trackSlices";
-import { CueActionsPanel } from "../CueActionsPanel";
-import { updateCues } from "../cuesListActions";
+import { CueActionsPanel } from "../cueLine/CueActionsPanel";
+import { updateCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
+import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 
 let testingStore = createTestingStore();
 

@@ -1,11 +1,11 @@
 import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
-import { updateCues } from "./subtitleEdit/cues/cuesListActions";
+import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { CueDto, Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
-import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecificationSlice";
+import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 // Following CSS import has to be after SubtitleEdit import to override Bootstrap defaults

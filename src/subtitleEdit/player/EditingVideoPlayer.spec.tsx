@@ -9,7 +9,7 @@ import { CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { updateCues } from "../cues/cuesListActions";
+import { updateCues } from "../cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "../trackSlices";
 
 let testingStore = createTestingStore();
