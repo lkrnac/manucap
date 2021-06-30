@@ -12,26 +12,32 @@ export interface Item {
     id?: number;
 }
 
-// TODO Remove unknowns/any from this file
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface RowPropsParameterMarker {}
+
 interface RowProps {
     data: Item;
-    rowProps: unknown;
-    Component: any;
-    rowRef: unknown;
+    rowProps: RowPropsParameterMarker;
+    rowRef: RefObject<HTMLDivElement>;
     rowIndex: number;
+}
+
+interface InternalRowProps extends RowProps {
+    Component: React.ComponentClass<RowProps>;
 }
 
 interface Props {
     className: string;
     data: Item[];
-    row: unknown;
-    rowProps: unknown;
+    row: React.ComponentClass<RowProps>;
+    rowProps: RowPropsParameterMarker;
     startAt: number | undefined;
 }
 
-const ReactSmartScrollRow = (props: RowProps): ReactElement => {
+const ReactSmartScrollRow = (props: InternalRowProps): ReactElement => {
+    const { Component } = props;
     return (
-        <props.Component
+        <Component
             data={props.data}
             rowIndex={props.rowIndex}
             rowRef={props.rowRef}
