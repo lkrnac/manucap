@@ -1,3 +1,4 @@
+import "video.js";
 import { Dispatch } from "react";
 import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
