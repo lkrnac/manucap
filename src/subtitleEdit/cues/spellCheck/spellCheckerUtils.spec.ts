@@ -1,5 +1,4 @@
 import "../../../testUtils/initBrowserEnvironment";
-import { Constants } from "../../constants";
 import {
     addIgnoredKeyword,
     generateSpellcheckHash, getMatchText,
@@ -42,7 +41,7 @@ describe("spellCheckerUtils", () => {
                 context: { text: "this is falsex", offset: 8, length: 13 },
                 rule: { id: ruleId }} as Match;
 
-            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
+            localStorage.setItem("SpellcheckerIgnores", ignoresHashMap);
 
             //WHEN
             const containsIgnoredKeyword = hasIgnoredKeyword(match, trackId);
@@ -57,7 +56,7 @@ describe("spellCheckerUtils", () => {
                 context: { text: "this is falsex", offset: 8, length: 5 },
                 rule: { id: ruleId }} as Match;
 
-            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
+            localStorage.setItem("SpellcheckerIgnores", ignoresHashMap);
 
             //WHEN
             const containsIgnoredKeyword = hasIgnoredKeyword(match, trackId);
@@ -71,7 +70,7 @@ describe("spellCheckerUtils", () => {
             const match = { offset: 8, length: 5, replacements: [] as Replacement[],
                 context: { text: "this is falsex", offset: 8, length: 5 },
                 rule: { id: ruleId }} as Match;
-            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
+            localStorage.setItem("SpellcheckerIgnores", ignoresHashMap);
 
             //WHEN
             const containsIgnoredKeyword = hasIgnoredKeyword(match, undefined);
@@ -100,7 +99,7 @@ describe("spellCheckerUtils", () => {
             const newKeyword = "bumbum";
             const expectedHash = generateSpellcheckHash(newKeyword,ruleId);
 
-            localStorage.setItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY, ignoresHashMap);
+            localStorage.setItem("SpellcheckerIgnores", ignoresHashMap);
 
             //WHEN
             addIgnoredKeyword(trackId, newKeyword, ruleId);

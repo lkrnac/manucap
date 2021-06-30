@@ -10,7 +10,7 @@ import { Options, stateToHTML } from "draft-js-export-html";
 import { mount, ReactWrapper } from "enzyme";
 import each from "jest-each";
 
-import { Character, KeyCombination } from "../../shortcutConstants";
+import { Character, KeyCombination } from "../../utils/shortcutConstants";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import {
     MockedDebouncedFunction,
@@ -19,21 +19,20 @@ import {
 } from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
+import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { CueDto, CueError, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
-import { convertVttToHtml } from "../cueTextConverter";
+import { convertVttToHtml } from "./cueTextConverter";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
 import { replaceCurrentMatch, setFind } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
-import { Constants } from "../../constants";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { setGlossaryTerm, updateEditingCueIndex } from "./cueEditorSlices";
 

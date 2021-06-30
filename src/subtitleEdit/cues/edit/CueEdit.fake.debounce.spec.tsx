@@ -15,7 +15,7 @@ import { AnyAction } from "redux";
 import { fireEvent, render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
-import { Character } from "../../shortcutConstants";
+import { Character } from "../../utils/shortcutConstants";
 import { CueDto, CueError, Language, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
@@ -23,9 +23,9 @@ import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { MockedDebouncedFunction, removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
+import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
@@ -34,7 +34,7 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
-import { CueActionsPanel } from "../CueActionsPanel";
+import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 
 jest.mock("lodash", () => (
     {

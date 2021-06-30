@@ -15,7 +15,7 @@ import { AnyAction } from "redux";
 import { CueDto, CueError, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import { setValidationErrors } from "./cueEditorSlices";
 import { updateEditingTrack } from "../../trackSlices";
 

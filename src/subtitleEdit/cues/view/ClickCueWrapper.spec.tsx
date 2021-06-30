@@ -10,7 +10,7 @@ import { CueDto, Task, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack, updateTask } from "../../trackSlices";
 import { updateSourceCues } from "./sourceCueSlices";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import ClickCueWrapper from "./ClickCueWrapper";
 
 let testingStore = createTestingStore();

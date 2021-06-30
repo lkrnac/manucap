@@ -13,9 +13,9 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { CueDto, Track } from "../../model";
 import CueTextEditor from "./CueTextEditor";
 import { updateEditingTrack } from "../../trackSlices";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
-import { Character } from "../../shortcutConstants";
+import { Character } from "../../utils/shortcutConstants";
 import { fireEvent, render } from "@testing-library/react";
 import { setSaveTrack } from "../saveSlices";
 //@ts-ignore

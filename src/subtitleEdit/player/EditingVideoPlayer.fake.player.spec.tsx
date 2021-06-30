@@ -11,7 +11,7 @@ import { playVideoSection } from "./playbackSlices";
 import { mount } from "enzyme";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
-import { updateCues, updateVttCue, } from "../cues/cuesListActions";
+import { updateCues, updateVttCue, } from "../cues/cuesList/cuesListActions";
 import { render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 

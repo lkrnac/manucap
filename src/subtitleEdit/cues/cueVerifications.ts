@@ -2,7 +2,6 @@ import sanitizeHtml from "sanitize-html";
 
 import { CueDto, CueError, TimeGapLimit, Track } from "../model";
 import { SubtitleSpecification } from "../toolbox/model";
-import { Constants } from "../constants";
 
 const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTags: []});
 
@@ -52,8 +51,10 @@ const checkCharacterAndLineLimitation = (
 };
 
 export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
-    let minGap: number = Constants.DEFAULT_MIN_GAP;
-    let maxGap: number = Constants.DEFAULT_MAX_GAP;
+    const DEFAULT_MIN_GAP = 0.001;
+    const DEFAULT_MAX_GAP = Number.MAX_SAFE_INTEGER;
+    let minGap: number = DEFAULT_MIN_GAP;
+    let maxGap: number = DEFAULT_MAX_GAP;
 
     if (subtitleSpecs?.enabled) {
         if (subtitleSpecs.minCaptionDurationInMillis)
