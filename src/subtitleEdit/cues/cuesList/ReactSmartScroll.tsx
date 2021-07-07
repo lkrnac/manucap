@@ -15,21 +15,21 @@ export interface Item {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RowPropsParameterMarker {}
 
-interface RowProps {
+export interface SmartScrollRowProps {
     data: Item;
     rowProps: RowPropsParameterMarker;
     rowRef: RefObject<HTMLDivElement>;
     rowIndex: number;
 }
 
-interface InternalRowProps extends RowProps {
-    Component: React.ComponentClass<RowProps>;
+interface InternalRowProps extends SmartScrollRowProps {
+    Component: React.ElementType;
 }
 
 interface Props {
     className: string;
     data: Item[];
-    row: React.ComponentClass<RowProps>;
+    row: React.ElementType;
     rowProps: RowPropsParameterMarker;
     startAt: number | undefined;
 }
@@ -37,28 +37,27 @@ interface Props {
 const ReactSmartScrollRow = (props: InternalRowProps): ReactElement => {
     const { Component } = props;
     return (
-        <Component
-            data={props.data}
-            rowIndex={props.rowIndex}
-            rowRef={props.rowRef}
-            rowProps={props.rowProps}
-        />
+        <Component {...props} />
     );
 };
 
 console.log(Bowser.getParser(window.navigator.userAgent).getEngineName());
 const mouseWheelStep = Bowser.getParser(window.navigator.userAgent).getEngineName() === "Gecko" ? 50: 500;
-const cuesCountToRender = 20;
+const CUES_COUNT_TO_RENDER = 20;
 let shouldScroll = true;
 
 const ReactSmartScroll = (props: Props): ReactElement => {
     const [refs, setRefs] = useState([] as RefObject<HTMLDivElement>[]);
+
+    const cuesCountToRender = props.data.length > CUES_COUNT_TO_RENDER ? CUES_COUNT_TO_RENDER : props.data.length;
     useEffect(() => {
         setRefs(
             Array(cuesCountToRender)
                 .fill(undefined)
                 .map(() => createRef())
         );
+    // This initialization should run only once.
+    // eslint-disable-next-line
     }, []);
 
     const scrollRef = useRef(null as HTMLDivElement | null);
