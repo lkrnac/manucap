@@ -20,7 +20,10 @@ import { Character } from "../../utils/shortcutConstants";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 
-jest.mock("./CueLine", () => (props: CueLineProps): ReactElement => <div>CueLine: {JSON.stringify(props)}</div>);
+jest.mock(
+    "../cueLine/CueLine",
+    () => (props: CueLineProps): ReactElement => <div>CueLine: {JSON.stringify(props)}</div>
+);
 
 let testingStore = createTestingStore();
 
