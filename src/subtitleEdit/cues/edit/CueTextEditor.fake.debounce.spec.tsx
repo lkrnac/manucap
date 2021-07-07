@@ -1257,7 +1257,7 @@ describe("CueTextEditor", () => {
 
             // THEN
             //@ts-ignore value should not be null
-            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
+            const ignores = JSON.parse(localStorage.getItem("SpellcheckerIgnores"));
             expect(ignores[trackId]).not.toBeNull();
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[1].errors).toEqual([]);
@@ -1338,7 +1338,7 @@ describe("CueTextEditor", () => {
 
             // THEN
             //@ts-ignore value should not be null
-            const ignores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
+            const ignores = JSON.parse(localStorage.getItem("SpellcheckerIgnores"));
             expect(ignores[trackId]).not.toBeNull();
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[1].errors).toEqual([]);
