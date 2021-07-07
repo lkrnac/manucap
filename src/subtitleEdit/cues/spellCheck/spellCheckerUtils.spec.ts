@@ -89,7 +89,7 @@ describe("spellCheckerUtils", () => {
 
             //THEN
             //@ts-ignore there is always a value returned by get item
-            const actualIgnores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
+            const actualIgnores = JSON.parse(localStorage.getItem("SpellcheckerIgnores"));
             expect(actualIgnores[trackId].hashes).toContain(expectedHash);
             const creationDate = new Date(actualIgnores[trackId].creationDate);
             expect(creationDate.getTime()).toBeLessThan(new Date().getTime());
@@ -106,7 +106,7 @@ describe("spellCheckerUtils", () => {
 
             //THEN
             //@ts-ignore there is always a value returned by get item
-            const actualIgnores = JSON.parse(localStorage.getItem(Constants.SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY));
+            const actualIgnores = JSON.parse(localStorage.getItem("SpellcheckerIgnores"));
             expect(actualIgnores[trackId].hashes.length).toEqual(2);
             expect(actualIgnores[trackId].hashes).toContain(expectedHash);
             const creationDate = new Date(actualIgnores[trackId].creationDate);
