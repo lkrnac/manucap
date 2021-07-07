@@ -4,13 +4,12 @@ import { SearchReplaceMatch } from "./SearchReplaceMatch";
 import testingStore from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import { render } from "@testing-library/react";
-import { Constants } from "../../constants";
 
 describe("SearchReplaceMatch", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <span style={{ backgroundColor: Constants.BLUE_BACKGROUND_COLOR }}>
+            <span style={{ backgroundColor: "#D9E9FF" }}>
                 <div className="text" />
             </span>
         );
