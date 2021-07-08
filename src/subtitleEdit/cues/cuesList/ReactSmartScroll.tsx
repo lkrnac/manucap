@@ -42,9 +42,11 @@ const ReactSmartScrollRow = (props: InternalRowProps): ReactElement => {
 };
 
 console.log(Bowser.getParser(window.navigator.userAgent).getEngineName());
-const mouseWheelStep = Bowser.getParser(window.navigator.userAgent).getEngineName() === "Gecko" ? 50: 500;
+const scrollStepScaling = Bowser.getParser(window.navigator.userAgent).getEngineName() === "Gecko" ? 100: 10;
 const CUES_COUNT_TO_RENDER = 20;
 let shouldScroll = true;
+let lastScrollTop = 0;
+let scrollStep = Number.MAX_SAFE_INTEGER;
 
 const ReactSmartScroll = (props: Props): ReactElement => {
     const [refs, setRefs] = useState([] as RefObject<HTMLDivElement>[]);
@@ -66,23 +68,47 @@ const ReactSmartScroll = (props: Props): ReactElement => {
     const [scroll, setScroll] = useState(0);
     useEffect(() => {
         const { current } = scrollRef;
+
         const onScroll = (
+            // event: Event
         ): void => {
-            if (shouldScroll)
-                setScroll(current ? current.scrollTop : 0);
-            else {
+            if (shouldScroll) {
+                const scrollTop = current ? current.scrollTop : 0;
+                const lastScrollStep = Math.abs(lastScrollTop - scrollTop) * scrollStepScaling;
+                lastScrollTop = scrollTop;
+                scrollStep = lastScrollStep < scrollStep && lastScrollStep > 0 ? lastScrollStep : scrollStep;
+                console.log(scrollStep);
+                setScroll(scrollTop);
+                // console.log(scrollTop);
+                // console.log(event);
+            } else {
                 shouldScroll = true;
             }
         };
         if (current) {
             current.addEventListener("scroll", onScroll);
         }
+
+        // const onWheel = (
+        //     event: WheelEvent
+        // ): void => {
+        //     if (shouldScroll) {
+        //         const number = current ? current.scrollTop : 0;
+        //         setScroll(number);
+        //         console.log(event.deltaY);
+        //     } else {
+        //         shouldScroll = true;
+        //     }
+        // };
+        // if (current) {
+        //     current.addEventListener("wheel", onWheel);
+        // }
     }, [scrollRef]);
 
 
     let idToScroll = props.startAt !== undefined
         ? props.startAt
-        : Math.round(scroll/mouseWheelStep);
+        : Math.round(scroll/scrollStep);
     idToScroll = idToScroll < props.data.length
         ? idToScroll
         : props.data.length;
@@ -94,13 +120,13 @@ const ReactSmartScroll = (props: Props): ReactElement => {
         ? endIndex - cuesCountToRender
         : idToScroll;
 
-    const upperGap = (startIndex - 1) * mouseWheelStep > 0 ? (startIndex - 1) * mouseWheelStep : 0;
-    const belowGap = (props.data.length - endIndex) * mouseWheelStep;
+    const upperGap = (startIndex - 1) * scrollStep > 0 ? (startIndex - 1) * scrollStep : 0;
+    const belowGap = (props.data.length - endIndex) * scrollStep;
 
     useEffect(
         () => {
             if (props.startAt !== undefined) {
-                setScroll(props.startAt * mouseWheelStep);
+                setScroll(props.startAt * scrollStep);
                 shouldScroll = false;
                 refs[idToScroll - startIndex]?.current?.scrollIntoView();
             }
