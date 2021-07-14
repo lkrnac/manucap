@@ -2,10 +2,10 @@ import React, { Dispatch, MutableRefObject, ReactElement, RefObject, useEffect, 
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { Match, SpellCheck } from "./model";
-import { Character } from "../../shortcutConstants";
+import { Character } from "../../utils/shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { addIgnoredKeyword, getMatchText } from "./spellCheckerUtils";
-import { removeIgnoredSpellcheckedMatchesFromAllCues, validateCorruptedCues } from "../cuesListActions";
+import { removeIgnoredSpellcheckedMatchesFromAllCues, validateCorruptedCues } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 
 
@@ -129,6 +129,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
             }
         >
             {props.children}
+            {/* TODO fix IJ/TS warnings */}
             <Overlay
                 onEntering={(): void => onEnterPopover(props, selectRef)}
                 onExiting={(): void => onExitPopover(props)}

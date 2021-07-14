@@ -2,10 +2,11 @@ import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
 import { SpellcheckerSettings, SubtitleEditAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
-import { Constants } from "../../constants";
-import { cuesSlice } from "../cuesListSlices";
-import { checkErrors } from "../cuesListActions";
+import { cuesSlice } from "../cuesList/cuesListSlices";
+import { checkErrors } from "../cuesList/cuesListActions";
 import { Dispatch } from "react";
+
+const SPELLCHECKER_EXCLUDED_RULES = "UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END";
 
 export const addSpellCheck = (
     dispatch: Dispatch<SubtitleEditAction | void>,
@@ -33,8 +34,7 @@ export const fetchSpellCheck = (
     const plainText = sanitizeHtml(text, { allowedTags: []});
     const requestBody = {
         method: "POST",
-        body: `language=${submittedLanguageCode}&text=${plainText}&disabledRules=${
-            Constants.SPELLCHECKER_EXCLUDED_RULES}`
+        body: `language=${submittedLanguageCode}&text=${plainText}&disabledRules=${SPELLCHECKER_EXCLUDED_RULES}`
     };
     return fetch(`https://${spellCheckerSettings.domain}/v2/check`, requestBody)
         .then((response: Response) => {

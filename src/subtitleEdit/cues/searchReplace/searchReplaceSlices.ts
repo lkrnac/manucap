@@ -5,7 +5,7 @@ import _ from "lodash";
 import { SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
-import { cuesSlice } from "../cuesListSlices";
+import { cuesSlice } from "../cuesList/cuesListSlices";
 import { SearchDirection, SearchReplace } from "./model";
 import { searchCueText, updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
 

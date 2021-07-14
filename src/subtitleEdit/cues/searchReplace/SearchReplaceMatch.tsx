@@ -1,12 +1,13 @@
 import React, { ReactElement } from "react";
-import { Constants } from "../../constants";
+
+const BLUE_BACKGROUND_COLOR = "#D9E9FF";
 
 interface Props {
     children: ReactElement;
 }
 
 export const SearchReplaceMatch = (props: Props): ReactElement => (
-    <span style={{ backgroundColor: Constants.BLUE_BACKGROUND_COLOR }}>
+    <span style={{ backgroundColor: BLUE_BACKGROUND_COLOR }}>
         {props.children}
     </span>
 );

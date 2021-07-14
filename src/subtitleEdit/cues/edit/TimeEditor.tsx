@@ -1,7 +1,7 @@
 import React, { ReactElement, SyntheticEvent } from "react";
 import TimeField from "react-advanced-timefield";
 
-import { getTimeFromString, getTimeString } from "../timeUtils";
+import { getTimeFromString, getTimeString } from "../../utils/timeUtils";
 
 interface Props {
     time?: number;

@@ -1,15 +1,15 @@
 import React, { Dispatch, ReactElement, useEffect } from "react";
 import { CueDto, GlossaryMatchDto, LanguageDirection } from "../../model";
-import { convertVttToHtml } from "../cueTextConverter";
+import { convertVttToHtml } from "../edit/cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
-import { getTimeString } from "../timeUtils";
+import { getTimeString } from "../../utils/timeUtils";
 import sanitizeHtml from "sanitize-html";
 import { useDispatch } from "react-redux";
 import { AppThunk } from "../../subtitleEditReducers";
 import { setGlossaryTerm } from "../edit/cueEditorSlices";
-import { CueActionsPanel } from "../CueActionsPanel";
+import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import ClickCueWrapper from "./ClickCueWrapper";
-import { validateVttCue } from "../cuesListActions";
+import { validateVttCue } from "../cuesList/cuesListActions";
 
 export interface CueViewProps {
     cue: CueDto;

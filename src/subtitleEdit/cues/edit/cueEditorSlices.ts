@@ -3,8 +3,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { CueChange, CueDto, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
-import { scrollPositionSlice } from "../cuesListScrollSlice";
-import { cuesSlice } from "../cuesListSlices";
+import { scrollPositionSlice } from "../cuesList/cuesListScrollSlice";
+import { cuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
 import sanitizeHtml from "sanitize-html";
 import { SearchDirection } from "../searchReplace/model";

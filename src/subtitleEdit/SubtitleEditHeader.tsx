@@ -3,7 +3,7 @@ import React, { ReactElement } from "react";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import { humanizer } from "humanize-duration";
 import { useSelector } from "react-redux";
-import { hasDataLoaded } from "./subtitleEditUtils";
+import { hasDataLoaded } from "./utils/subtitleEditUtils";
 
 const REVIEW_TYPE_LABEL_MAP = new Map([
     ["GENERAL", ""],

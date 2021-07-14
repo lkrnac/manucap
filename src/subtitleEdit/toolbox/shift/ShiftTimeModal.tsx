@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import { applyShiftTime } from "../../cues/cuesListActions";
+import { applyShiftTime } from "../../cues/cuesList/cuesListActions";
 import { Field, Form } from "react-final-form";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";

@@ -5,7 +5,7 @@ import deepFreeze from "deep-freeze";
 import { updateEditorState } from "./editorStatesSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { readSubtitleSpecification } from "../../toolbox/subtitleSpecificationSlice";
+import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { CueError } from "../../model";
 
 let testingStore = createTestingStore();

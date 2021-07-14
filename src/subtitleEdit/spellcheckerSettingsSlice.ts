@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SpellcheckerSettings } from "./model";
 import { AppThunk } from "./subtitleEditReducers";
 import { Dispatch } from "react";
-import { applySpellcheckerOnCue } from "./cues/cuesListActions";
+import { applySpellcheckerOnCue } from "./cues/cuesList/cuesListActions";
 
 export const spellcheckerSettingsSlice = createSlice({
     name: "spellcheckerSettings",

@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { addCue } from "../cuesListActions";
+import { addCue } from "../cuesList/cuesListActions";
 
 export interface CueViewProps {
     targetCueIndex?: number;
