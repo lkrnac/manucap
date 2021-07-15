@@ -14,7 +14,7 @@ export const scrollPositionSlice = createSlice({
 
 const getScrollCueIndex = (
     matchedCuesSize: number,
-    // editingFocusInMap: number,
+    editingFocusInMap: number,
     // currentPlayerCueIndex: number,
     lastTranslatedIndex: number,
     previousFocusedCueIndex: number,
@@ -26,9 +26,9 @@ const getScrollCueIndex = (
     if (scrollPosition === ScrollPosition.LAST) {
         return matchedCuesSize - 1;
     }
-    // if (scrollPosition === ScrollPosition.CURRENT) {
-    //     return editingFocusInMap;
-    // }
+    if (scrollPosition === ScrollPosition.CURRENT) {
+        return editingFocusInMap;
+    }
     // if (scrollPosition === ScrollPosition.PLAYBACK) {
     //     return currentPlayerCueIndex;
     // }
@@ -50,7 +50,8 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition): AppThunk =
         const state = getState();
         const previousFocusedCueIndex = getState().focusedCueIndex;
         const focusedCueIndex = getScrollCueIndex(
-            state.matchedCues.length,
+            state.matchedCues.matchedCues.length,
+            state.matchedCues.editingFocusIndex,
             state.cues.length,
             previousFocusedCueIndex,
             scrollPosition

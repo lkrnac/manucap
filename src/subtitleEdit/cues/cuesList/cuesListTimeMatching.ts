@@ -2,7 +2,7 @@ import { CueDto, CueLineDto } from "../../model";
 
 const OVERLAP_RATIO = 0.65;
 
-interface MatchedCuesWithEditingFocus {
+export interface MatchedCuesWithEditingFocus {
     matchedCues: CueLineDto[];
     editingFocusIndex: number;
 }

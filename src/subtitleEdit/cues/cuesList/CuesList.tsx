@@ -70,7 +70,7 @@ const CuesList = (props: Props): ReactElement => {
     //     scrollPosition
     // );
     const withoutSourceCues = props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack);
-    const showStartCaptioning = matchedCues.length === 0;
+    const showStartCaptioning = matchedCues.matchedCues.length === 0;
     const pageIndex = startAt ? Math.floor(startAt / DEFAULT_PAGE_SIZE) : 0;
     const startIndex = pageIndex * DEFAULT_PAGE_SIZE;
     const endIndex = (pageIndex + 1) * DEFAULT_PAGE_SIZE;
@@ -79,7 +79,7 @@ const CuesList = (props: Props): ReactElement => {
     useEffect(
         () => {
             setRefs(
-                Array(matchedCues.length)
+                Array(matchedCues.matchedCues.length)
                     .fill(undefined)
                     .map(() => createRef())
             );
@@ -135,7 +135,7 @@ const CuesList = (props: Props): ReactElement => {
                         : null
                 }
                 {
-                    matchedCues.slice(startIndex, endIndex)
+                    matchedCues.matchedCues.slice(startIndex, endIndex)
                         .map((item: CueLineDto, i) => {
                             return (
                                 <CueLine
@@ -146,7 +146,7 @@ const CuesList = (props: Props): ReactElement => {
                                         playerTime: props.currentPlayerTime,
                                         targetCuesLength: targetCuesArray.length,
                                         withoutSourceCues,
-                                        matchedCues
+                                        matchedCues: matchedCues.matchedCues
                                     }}
                                     rowRef={refs[startIndex + i]}
                                 />
@@ -154,7 +154,7 @@ const CuesList = (props: Props): ReactElement => {
                         })
                 }
                 {
-                    endIndex < matchedCues.length
+                    endIndex < matchedCues.matchedCues.length
                         ? (
                             <button
                                 style={{ width: "100%", paddingTop: "5px" }}

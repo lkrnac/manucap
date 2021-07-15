@@ -8,6 +8,7 @@ import { cuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
 import sanitizeHtml from "sanitize-html";
 import { SearchDirection } from "../searchReplace/model";
+import { matchedCuesSlice } from "../cuesList/matchedCuesSlice";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -89,6 +90,10 @@ export const updateEditingCueIndexNoThunk = (
 ): void => {
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
+        const lastState = getState();
+        dispatch(matchedCuesSlice.actions.matchCuesByTime(
+            { cues: lastState.cues, sourceCues: lastState.sourceCues, editingCueIndex: lastState.editingCueIndex }
+        ));
         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
         updateSearchMatches(dispatch, getState, idx);
     }
