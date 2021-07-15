@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CueDto, Track } from "../../model";
-import { addCuesToMergeList, updateCues } from "../cuesListActions";
+import { addCuesToMergeList, updateCues } from "../cuesList/cuesListActions";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { reset } from "../edit/editorStatesSlice";
