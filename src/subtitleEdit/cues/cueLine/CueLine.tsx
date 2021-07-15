@@ -23,7 +23,7 @@ export interface CueLineProps {
     data: CueLineDto;
     rowProps: CueLineRowProps;
     rowRef: React.RefObject<HTMLDivElement>;
-    onClick: (idx: number) => void;
+    // onClick: (idx: number) => void;
 }
 
 const hasTargetText = (cueLine?: CueLineDto): boolean => {

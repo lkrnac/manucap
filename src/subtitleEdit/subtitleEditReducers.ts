@@ -18,6 +18,7 @@ import {
     lastCueChangeSlice,
     validationErrorSlice
 } from "./cues/edit/cueEditorSlices";
+import { matchedCuesSlice } from "./cues/cuesList/matchedCuesSlice";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -40,6 +41,8 @@ export const Reducers = {
     lastCueChange: lastCueChangeSlice.reducer,
     validationErrors: validationErrorSlice.reducer,
     glossaryTerm: glossaryTermSlice.reducer,
+    focusedCueIndex: scrollPositionSlice.reducer,
+    matchedCues: matchedCuesSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

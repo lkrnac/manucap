@@ -99,7 +99,7 @@ export const showSearchReplace = (visible: boolean): AppThunk =>
     };
 
 export const searchNextCues = (replacement: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const find = getState().searchReplace.find;
         if (find === "") {
             return;
@@ -144,7 +144,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
     };
 
 export const searchPreviousCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const find = getState().searchReplace.find;
         if (find === "") {
             return;
