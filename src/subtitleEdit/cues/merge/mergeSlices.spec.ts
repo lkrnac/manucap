@@ -3,7 +3,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { showMerge } from "./mergeSlices";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { CueDto } from "../../model";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import { setFind } from "../searchReplace/searchReplaceSlices";
 
 const testingCues = [

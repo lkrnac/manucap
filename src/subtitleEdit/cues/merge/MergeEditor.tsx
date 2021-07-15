@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { showMerge } from "./mergeSlices";
-import { mergeCues } from "../cuesListActions";
+import { mergeCues } from "../cuesList/cuesListActions";
 
 const MergeEditor = (): ReactElement | null => {
     const dispatch = useDispatch();

@@ -3,7 +3,7 @@ import AddCueLineButton from "../edit/AddCueLineButton";
 import { CueDto } from "../../model";
 import DeleteCueLineButton from "../edit/DeleteCueLineButton";
 import PlayCueButton from "./PlayCueButton";
-import SplitCueLineButton from "./edit/SplitCueLineButton";
+import SplitCueLineButton from "../edit/SplitCueLineButton";
 
 interface Props {
     index: number;

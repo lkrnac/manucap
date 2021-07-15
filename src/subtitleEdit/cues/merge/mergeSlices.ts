@@ -5,7 +5,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { CuesWithRowIndex, SubtitleEditAction } from "../../model";
 import _ from "lodash";
-import { cuesSlice } from "../cuesListSlices";
+import { cuesSlice } from "../cuesList/cuesListSlices";
 
 export const mergeVisibleSlice = createSlice({
     name: "mergeVisible",
