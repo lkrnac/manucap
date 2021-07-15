@@ -1,13 +1,13 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
-import { cuesSlice } from "./cues/cuesListSlices";
+import { cuesSlice } from "./cues/cuesList/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
 import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
-import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecificationSlice";
+import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 import { saveActionSlice, saveTrackSlice } from "./cues/saveSlices";
-import { scrollPositionSlice } from "./cues/cuesListScrollSlice";
+import { scrollPositionSlice } from "./cues/cuesList/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 import { mergeVisibleSlice, rowsToMergeSlice } from "./cues/merge/mergeSlices";

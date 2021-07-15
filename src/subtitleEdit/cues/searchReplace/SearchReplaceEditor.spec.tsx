@@ -8,10 +8,10 @@ import { setFind, setReplacement, showSearchReplace } from "./searchReplaceSlice
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CueDto, ScrollPosition, Track } from "../../model";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import { SaveState, setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
-import ToggleButton from "../../../common/ToggleButton";
+import ToggleButton from "../../toolbox/ToggleButton";
 import { reset } from "../edit/editorStatesSlice";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 

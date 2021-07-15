@@ -2,18 +2,18 @@ import React, { ReactElement } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from "react-bootstrap/Card";
-import KeyboardShortcuts from "./KeyboardShortcuts";
+import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
-import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
+import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
-import ExportTrackCuesButton from "./ExportTrackCuesButton";
+import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import SyncCuesButton from "./SyncCuesButton";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
-import ExportSourceTrackCuesButton from "./ExportSourceTrackCuesButton";
 import MergeCuesButton from "./MergeCuesButton";
+import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 
 interface Props {
     handleExportFile: () => void;

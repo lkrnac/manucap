@@ -9,10 +9,10 @@ import {
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { updateVttCue } from "../cuesListActions";
+import { updateVttCue } from "../cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
-import ToggleButton from "../../../common/ToggleButton";
+import ToggleButton from "../../toolbox/ToggleButton";
 import { SearchReplace } from "./model";
 import { reset } from "../edit/editorStatesSlice";
 import { searchCueText } from "../edit/cueEditorSlices";

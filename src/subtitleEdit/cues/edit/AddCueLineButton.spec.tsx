@@ -14,7 +14,7 @@ import { fireEvent, render } from "@testing-library/react";
 import AddCueLineButton from "./AddCueLineButton";
 import { CueDto, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { Tooltip } from "react-bootstrap";
 import { updateEditingTrack } from "../../trackSlices";

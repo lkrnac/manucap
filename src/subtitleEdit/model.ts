@@ -84,6 +84,7 @@ export interface Task {
     readonly dueDate: string;
     readonly editDisabled: boolean;
     readonly finalChunkReview?: boolean;
+    readonly trackReviewType?: "GENERAL" | "POST_EDITING";
 }
 
 /**

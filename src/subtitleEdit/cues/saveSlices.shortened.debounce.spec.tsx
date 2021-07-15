@@ -6,7 +6,7 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import { callSaveTrack, SaveState, saveActionSlice, setAutoSaveSuccess, setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
 import { CueDto, Track } from "../model";
-import { updateCueCategory, updateCues } from "./cuesListActions";
+import { updateCueCategory, updateCues } from "./cuesList/cuesListActions";
 
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());

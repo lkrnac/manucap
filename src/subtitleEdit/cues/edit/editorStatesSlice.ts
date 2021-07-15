@@ -1,9 +1,9 @@
-import { CueIndexAction, cuesSlice } from "../cuesListSlices";
+import { CueIndexAction, cuesSlice } from "../cuesList/cuesListSlices";
 import { PayloadAction, createSlice, Slice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../subtitleEditReducers";
 import { Dispatch } from "react";
 import { EditorState, RichUtils } from "draft-js";
-import { getVttText } from "../cueTextConverter";
+import { getVttText } from "./cueTextConverter";
 import { checkLineLimitation } from "../cueVerifications";
 import { validationErrorSlice } from "./cueEditorSlices";
 import { CueError } from "../../model";
