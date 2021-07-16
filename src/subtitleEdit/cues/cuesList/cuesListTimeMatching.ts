@@ -103,6 +103,7 @@ const pushBoth = (
     indexes.cuesMap++;
 };
 
+// TODO: figure out why this is not needed anymore. Maybe some bug was created
 export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
     const cueIndex = cues.findIndex(cue => cue.vttCue.startTime >= trackTime);
     return cueIndex <= 0 ? 0 : cueIndex - 1;
