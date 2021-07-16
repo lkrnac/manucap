@@ -4,10 +4,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CueChange, CueDto, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { changeScrollPosition } from "../cuesList/cuesListScrollSlice";
-import { cuesSlice, matchedCuesSlice } from "../cuesList/cuesListSlices";
+import { cuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
 import sanitizeHtml from "sanitize-html";
 import { SearchDirection } from "../searchReplace/model";
+import { updateMatchedCues } from "../cuesList/cuesListActions";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -83,16 +84,13 @@ export const updateSearchMatches = (
 };
 
 export const updateEditingCueIndexNoThunk = (
-    dispatch: Dispatch<SubtitleEditAction | void>,
+    dispatch: Dispatch<SubtitleEditAction>,
     getState: Function,
     idx: number
 ): void => {
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
-        const lastState = getState();
-        dispatch(matchedCuesSlice.actions.matchCuesByTime(
-            { cues: lastState.cues, sourceCues: lastState.sourceCues, editingCueIndex: lastState.editingCueIndex }
-        ));
+        updateMatchedCues(dispatch, getState);
         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
         updateSearchMatches(dispatch, getState, idx);
     }
