@@ -15,7 +15,7 @@ import {
     updateVttCue,
     validateCorruptedCues, validateVttCue,
 } from "./cuesListActions";
-import { CueDto, CueError, ScrollPosition, Track } from "../../model";
+import { CueDto, CueError, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditorState } from "../edit/editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
@@ -95,9 +95,9 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
         });
 
         it("stores multi cues flag if defined", () => {
@@ -1622,15 +1622,15 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editorStates.size).toEqual(0);
         });
 
-        it("scrolls to bottom", () => {
+        it("scrolls to added cue", () => {
             // GIVEN
-            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(addCue(0, []) as {} as AnyAction);
+            testingStore.dispatch(addCue(3, []) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(3);
         });
 
         describe("without source cues", () => {
