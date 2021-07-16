@@ -4,11 +4,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CueChange, CueDto, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { changeScrollPosition } from "../cuesList/cuesListScrollSlice";
-import { cuesSlice } from "../cuesList/cuesListSlices";
+import { cuesSlice, matchedCuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
 import sanitizeHtml from "sanitize-html";
 import { SearchDirection } from "../searchReplace/model";
-import { matchedCuesSlice } from "../cuesList/matchedCuesSlice";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;

@@ -28,9 +28,8 @@ import {
 import { changeScrollPosition } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { lastCueChangeSlice, updateSearchMatches, validationErrorSlice } from "../edit/cueEditorSlices";
-import { CueErrorsPayload, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
+import { CueErrorsPayload, cuesSlice, matchedCuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "../saveSlices";
-import { matchedCuesSlice } from "./matchedCuesSlice";
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];

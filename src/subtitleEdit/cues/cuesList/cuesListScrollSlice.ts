@@ -29,6 +29,7 @@ const getScrollCueIndex = (
     if (scrollPosition === ScrollPosition.CURRENT) {
         return editingFocusInMap;
     }
+    // TODO: Make player jumps work
     // if (scrollPosition === ScrollPosition.PLAYBACK) {
     //     return currentPlayerCueIndex;
     // }

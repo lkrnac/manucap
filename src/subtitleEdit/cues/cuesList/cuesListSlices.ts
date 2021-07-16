@@ -6,6 +6,7 @@ import { editingTrackSlice } from "../../trackSlices";
 import { Match, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
+import { matchCuesByTime, MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -127,4 +128,20 @@ export const cuesSlice = createSlice({
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
     }
+});
+
+interface MatchCuesAction {
+    cues: CueDto[];
+    sourceCues: CueDto[];
+    editingCueIndex: number;
+}
+
+export const matchedCuesSlice = createSlice({
+    name: "matchedCues",
+    initialState: { matchedCues: [], editingFocusIndex: 0 } as MatchedCuesWithEditingFocus,
+    reducers: {
+        matchCuesByTime: (_state, action: PayloadAction<MatchCuesAction>): MatchedCuesWithEditingFocus => {
+            return matchCuesByTime(action.payload.cues, action.payload.sourceCues, action.payload.editingCueIndex);
+        }
+    },
 });

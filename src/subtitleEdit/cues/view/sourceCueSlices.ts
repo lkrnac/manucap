@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CueDto, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
-import { matchedCuesSlice } from "../cuesList/matchedCuesSlice";
+import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
