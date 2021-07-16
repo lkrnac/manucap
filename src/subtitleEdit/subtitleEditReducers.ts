@@ -30,7 +30,6 @@ export const Reducers = {
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
     saveAction: saveActionSlice.reducer,
-    scrollPosition: scrollPositionSlice.reducer,
     cuesLoadingCounter: cuesLoadingCounterSlice.reducer,
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
