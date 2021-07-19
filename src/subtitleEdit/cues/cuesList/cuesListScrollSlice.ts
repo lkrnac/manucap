@@ -34,7 +34,7 @@ const getScrollCueIndex = (
     //     return currentPlayerCueIndex;
     // }
     if (scrollPosition === ScrollPosition.LAST_TRANSLATED) {
-        return lastTranslatedIndex  - 1;
+        return lastTranslatedIndex - 1;
     }
     const currentPageIndex = Math.floor(previousFocusedCueIndex / DEFAULT_PAGE_SIZE);
     if (scrollPosition === ScrollPosition.NEXT_PAGE) {
