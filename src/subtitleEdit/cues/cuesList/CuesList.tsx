@@ -52,7 +52,7 @@ const CuesList = (props: Props): ReactElement => {
     useEffect(
         () => {
             const ref = refs[startAt];
-            if (ref !== null && ref.current !== null) {
+            if (ref !== undefined && ref.current !== null) {
                 dispatch(changeScrollPosition(ScrollPosition.NONE));
                 ref.current.scrollIntoView({ block: "nearest", inline: "nearest" });
             }
