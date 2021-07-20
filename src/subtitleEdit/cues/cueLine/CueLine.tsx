@@ -8,6 +8,7 @@ import CueLineFlap from "./CueLineFlap";
 import _ from "lodash";
 import InsertCueButton from "../view/InsertCueButton";
 import ClickCueWrapper from "../view/ClickCueWrapper";
+import CueComments from "./CueComments";
 
 export interface CueLineRowProps {
     playerTime: number;
@@ -113,106 +114,109 @@ const CueLine = (props: CueLineProps): ReactElement => {
     });
 
     return (
-        <div
-            ref={props.rowRef}
-            style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
-        >
-            <CueLineFlap
-                rowIndex={props.rowIndex}
-                cueLineState={cueLineState}
-                cuesErrors={cuesErrors}
-                showErrors={showGlossaryTermsAndErrors}
-                editDisabled={cueLineEditDisabled}
-            />
+        <div style={{ display: "flex", flexDirection: "row" }}>
             <div
-                className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
-                style={{ display: "flex", flexDirection:"column", width: "100%" }}
+                className="sbte-cue-line"
+                ref={props.rowRef}
+                style={{ display: "flex", flex: "2", paddingBottom: "5px", width: "100%" }}
             >
-                {
-                    props.data.sourceCues && props.data.sourceCues.length > 0
-                        ? props.data.sourceCues.map(sourceCue => {
-                            return (
-                                <CueView
-                                    key={sourceCue.index}
-                                    isTargetCue={false}
-                                    targetCueIndex={firstTargetCueIndex}
-                                    cue={sourceCue.cue}
-                                    targetCuesLength={props.rowProps.targetCuesLength}
-                                    playerTime={props.rowProps.playerTime}
-                                    className={`${captionClassName} sbte-source-cue`}
-                                    showGlossaryTerms={showGlossaryTermsAndErrors}
-                                    languageDirection={editingTrack?.sourceLanguage?.direction}
-                                    sourceCuesIndexes={sourceCuesIndexes}
-                                    nextTargetCueIndex={nextTargetCueIndex}
-                                />
-                            );
-                        })
-                        : (
-                            props.rowProps.withoutSourceCues
-                            ? null
-                            : (
-                                <ClickCueWrapper
-                                    targetCueIndex={firstTargetCueIndex}
-                                    targetCuesLength={props.rowProps.targetCuesLength}
-                                    className={translationCueClassName}
-                                    sourceCuesIndexes={sourceCuesIndexes}
-                                    nextTargetCueIndex={nextTargetCueIndex}
-                                >
-                                    <div style={{ width: "100%", minHeight: "78px" }} />
-                                </ClickCueWrapper>
-                            )
-                        )
-                }
-                {
-                    (props.data.targetCues?.length && props.data.targetCues?.length > 1)
-                    || (props.data.sourceCues?.length && props.data.sourceCues?.length > 1)
-                        ? <div className={dividerClass} />
-                        : null
-                }
-                {
-                    props.data.targetCues && props.data.targetCues.length > 0
-                        ? props.data.targetCues.map(targetCue => {
-                            return editingCueIndex === targetCue.index
-                                ? (
-                                    <CueEdit
-                                        key={targetCue.index}
-                                        index={targetCue.index}
-                                        cue={targetCue.cue}
-                                        playerTime={props.rowProps.playerTime}
-                                        nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
-                                    />
-                                )
-                                : (
+                <CueLineFlap
+                    rowIndex={props.rowIndex}
+                    cueLineState={cueLineState}
+                    cuesErrors={cuesErrors}
+                    showErrors={showGlossaryTermsAndErrors}
+                    editDisabled={cueLineEditDisabled}
+                />
+                <div
+                    className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
+                    style={{ display: "grid", flexDirection:"column", width: "100%" }}
+                >
+                    {
+                        props.data.sourceCues && props.data.sourceCues.length > 0
+                            ? props.data.sourceCues.map(sourceCue => {
+                                return (
                                     <CueView
-                                        key={targetCue.index}
-                                        isTargetCue
-                                        targetCueIndex={targetCue.index}
-                                        cue={targetCue.cue}
+                                        key={sourceCue.index}
+                                        isTargetCue={false}
+                                        targetCueIndex={firstTargetCueIndex}
+                                        cue={sourceCue.cue}
                                         targetCuesLength={props.rowProps.targetCuesLength}
                                         playerTime={props.rowProps.playerTime}
-                                        className={`${captionClassName} sbte-target-cue`}
-                                        showGlossaryTerms={false}
-                                        languageDirection={editingTrack?.language.direction}
+                                        className={`${captionClassName} sbte-source-cue`}
+                                        showGlossaryTerms={showGlossaryTermsAndErrors}
+                                        languageDirection={editingTrack?.sourceLanguage?.direction}
                                         sourceCuesIndexes={sourceCuesIndexes}
                                         nextTargetCueIndex={nextTargetCueIndex}
                                     />
                                 );
-                        })
-                        : (
+                            })
+                            : (
+                                props.rowProps.withoutSourceCues
+                                ? null
+                                : (
+                                    <ClickCueWrapper
+                                        targetCueIndex={firstTargetCueIndex}
+                                        targetCuesLength={props.rowProps.targetCuesLength}
+                                        className={translationCueClassName}
+                                        sourceCuesIndexes={sourceCuesIndexes}
+                                        nextTargetCueIndex={nextTargetCueIndex}
+                                    >
+                                        <div style={{ width: "100%", minHeight: "78px" }} />
+                                    </ClickCueWrapper>
+                                )
+                            )
+                    }
+                    {
+                        (props.data.targetCues?.length && props.data.targetCues?.length > 1)
+                        || (props.data.sourceCues?.length && props.data.sourceCues?.length > 1)
+                            ? <div className={dividerClass} />
+                            : null
+                    }
+                    {
+                        props.data.targetCues && props.data.targetCues.length > 0
+                            ? props.data.targetCues.map(targetCue => {
+                                return editingCueIndex === targetCue.index
+                                    ? (
+                                        <CueEdit
+                                            key={targetCue.index}
+                                            index={targetCue.index}
+                                            cue={targetCue.cue}
+                                            playerTime={props.rowProps.playerTime}
+                                            nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
+                                        />
+                                    )
+                                    : (
+                                        <CueView
+                                            key={targetCue.index}
+                                            isTargetCue
+                                            targetCueIndex={targetCue.index}
+                                            cue={targetCue.cue}
+                                            targetCuesLength={props.rowProps.targetCuesLength}
+                                            playerTime={props.rowProps.playerTime}
+                                            className={`${captionClassName} sbte-target-cue`}
+                                            showGlossaryTerms={false}
+                                            languageDirection={editingTrack?.language.direction}
+                                            sourceCuesIndexes={sourceCuesIndexes}
+                                            nextTargetCueIndex={nextTargetCueIndex}
+                                        />
+                                    );
+                            })
+                            : (
 
-                            <ClickCueWrapper
-                                targetCueIndex={firstTargetCueIndex}
-                                targetCuesLength={props.rowProps.targetCuesLength}
-                                className={"sbte-gray-200-background"}
-                                sourceCuesIndexes={sourceCuesIndexes}
-                                nextTargetCueIndex={nextTargetCueIndex}
-                            >
-                                <InsertCueButton />
-                            </ClickCueWrapper>
-                        )
-
-                }
+                                <ClickCueWrapper
+                                    targetCueIndex={firstTargetCueIndex}
+                                    targetCuesLength={props.rowProps.targetCuesLength}
+                                    className={"sbte-gray-200-background"}
+                                    sourceCuesIndexes={sourceCuesIndexes}
+                                    nextTargetCueIndex={nextTargetCueIndex}
+                                >
+                                    <InsertCueButton />
+                                </ClickCueWrapper>
+                            )
+                    }
+                </div>
             </div>
+            <CueComments rowIndex={props.rowIndex} />
         </div>
     );
 };
