@@ -23,7 +23,6 @@ export interface CueLineProps {
     data: CueLineDto;
     rowProps: CueLineRowProps;
     rowRef: React.RefObject<HTMLDivElement>;
-    // onClick: (idx: number) => void;
 }
 
 const hasTargetText = (cueLine?: CueLineDto): boolean => {
@@ -116,6 +115,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
         <div
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
+            className="sbte-cue-line"
         >
             <CueLineFlap
                 rowIndex={props.rowIndex}
