@@ -4,7 +4,7 @@ import { AppThunk } from "./subtitleEditReducers";
 import { Dispatch } from "react";
 
 export interface UserAction {
-    currentUser: User
+    currentUser: User;
 }
 
 export const userSlice = createSlice({
@@ -19,4 +19,4 @@ export const userSlice = createSlice({
 export const updateCurrentUser = (currentUser: User): AppThunk =>
     (dispatch: Dispatch<PayloadAction<UserAction>>): void => {
         dispatch(userSlice.actions.updateCurrentUser({ currentUser }));
-    }
+    };

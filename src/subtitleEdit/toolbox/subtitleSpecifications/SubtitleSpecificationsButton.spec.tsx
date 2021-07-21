@@ -10,11 +10,11 @@ import { mount, ReactWrapper } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateCues } from "../../cues/cuesList/cuesListActions";
-import {CueDto, Language, Track, User} from "../../model";
+import { CueDto, Language, Track, User } from "../../model";
 import "video.js";
 import { act } from "react-dom/test-utils";
-import {updateCurrentUser} from "../../userSlices";
-import {updateEditingTrack} from "../../trackSlices";
+import { updateCurrentUser } from "../../userSlices";
+import { updateEditingTrack } from "../../trackSlices";
 
 jest.mock("./SubtitleSpecificationsModal");
 
@@ -287,7 +287,7 @@ describe("SubtitleSpecificationsButton", () => {
         testingStore.dispatch(updateEditingTrack(testingEditingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCurrentUser(testingUser) as {} as AnyAction);
 
-        let actualNode = mount(
+        const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleSpecificationsButton />
             </Provider>

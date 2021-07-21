@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers"
+import { SubtitleEditState } from "../../subtitleEditReducers";
 
 const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
