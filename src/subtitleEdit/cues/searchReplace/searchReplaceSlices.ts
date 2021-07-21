@@ -8,6 +8,7 @@ import { editingTrackSlice } from "../../trackSlices";
 import { cuesSlice } from "../cuesList/cuesListSlices";
 import { SearchDirection, SearchReplace } from "./model";
 import { searchCueText, updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
+import { updateMatchedCues } from "../cuesList/cuesListActions";
 
 const updateCueMatchesIfNeeded = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -122,6 +123,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
                         searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex + offsetShift }
                     }
                 ));
+                updateMatchedCues(dispatch, getState);
                 return;
             } else {
                 fromIndex += 1;
@@ -163,6 +165,7 @@ export const searchPreviousCues = (): AppThunk =>
                 dispatch(cuesSlice.actions.addSearchMatches(
                     { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex - 1 }}
                 ));
+                updateMatchedCues(dispatch, getState);
                 return;
             } else {
                 fromIndex -= 1;

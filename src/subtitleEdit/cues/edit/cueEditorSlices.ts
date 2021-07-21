@@ -90,9 +90,9 @@ export const updateEditingCueIndexNoThunk = (
 ): void => {
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
+        updateSearchMatches(dispatch, getState, idx);
         updateMatchedCues(dispatch, getState);
         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
-        updateSearchMatches(dispatch, getState, idx);
     }
 };
 
