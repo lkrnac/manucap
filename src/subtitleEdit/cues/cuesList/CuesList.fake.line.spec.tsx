@@ -85,19 +85,19 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -108,7 +108,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 
@@ -144,19 +144,19 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -167,7 +167,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingDirectTranslationTrack} />
                 </Provider >
             );
 
@@ -218,19 +218,19 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -241,7 +241,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -277,19 +277,19 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -300,7 +300,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -345,19 +345,19 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -368,7 +368,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -414,25 +414,25 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: []}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
                             rowIndex={3}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -443,7 +443,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -488,19 +488,19 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -511,7 +511,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -557,25 +557,25 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={3}
-                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -586,7 +586,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -625,7 +625,7 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -636,7 +636,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -677,7 +677,7 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -688,7 +688,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -737,19 +737,19 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -760,7 +760,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -809,19 +809,19 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
-                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -832,7 +832,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -876,13 +876,13 @@ describe("CuesList", () => {
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
-                            rowProps={{ playerTime: 0, targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
-                            rowProps={{ playerTime: 0, targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
                             rowRef={React.createRef()}
                         />
                     </div >
@@ -893,7 +893,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider >
             );
 
@@ -906,7 +906,7 @@ describe("CuesList", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingDirectTranslationTrack} />
             </Provider >
         );
         await act(async () => {
@@ -930,7 +930,7 @@ describe("CuesList", () => {
         ] as CueDto[];
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} />
             </Provider >
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -960,7 +960,7 @@ describe("CuesList", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} />
             </Provider >
         );
         await act(async () => {
@@ -993,7 +993,7 @@ describe("CuesList", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} />
             </Provider >
         );
         await act(async () => {
@@ -1027,7 +1027,7 @@ describe("CuesList", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingDirectTranslationTrack} />
             </Provider >
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);

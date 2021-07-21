@@ -15,7 +15,6 @@ export interface CueViewProps {
     cue: CueDto;
     isTargetCue: boolean;
     targetCuesLength: number;
-    playerTime: number;
     showGlossaryTerms: boolean;
     sourceCuesIndexes: number[];
     nextTargetCueIndex: number;

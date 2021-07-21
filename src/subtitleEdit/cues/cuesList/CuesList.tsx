@@ -15,7 +15,6 @@ const DEFAULT_PAGE_SIZE = 50;
 
 interface Props {
     editingTrack: Track | null;
-    currentPlayerTime: number;
 }
 
 const CuesList = (props: Props): ReactElement => {
@@ -90,7 +89,6 @@ const CuesList = (props: Props): ReactElement => {
                                     data={item}
                                     rowIndex={startIndex + i}
                                     rowProps={{
-                                        playerTime: props.currentPlayerTime,
                                         targetCuesLength: targetCuesArray.length,
                                         withoutSourceCues,
                                         matchedCues: matchedCues.matchedCues

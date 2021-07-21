@@ -85,7 +85,7 @@ describe("CuesList", () => {
             // WHEN
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider>
             );
 
@@ -118,7 +118,7 @@ describe("CuesList", () => {
             // WHEN
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} />
                 </Provider>
             );
 
@@ -153,7 +153,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 
@@ -175,7 +175,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 
@@ -197,7 +197,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 
@@ -219,7 +219,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 
@@ -252,7 +252,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 
@@ -274,7 +274,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 
@@ -296,7 +296,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 
@@ -318,7 +318,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} />
                 </Provider >
             );
 

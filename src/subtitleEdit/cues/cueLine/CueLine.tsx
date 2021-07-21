@@ -10,7 +10,6 @@ import InsertCueButton from "../view/InsertCueButton";
 import ClickCueWrapper from "../view/ClickCueWrapper";
 
 export interface CueLineRowProps {
-    playerTime: number;
     targetCuesLength: number;
     // Following parameter is needed,
     // because empty/undefined props.data.sourceCues might indicate that there is no time match in translation mode
@@ -138,7 +137,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
-                                    playerTime={props.rowProps.playerTime}
                                     className={`${captionClassName} sbte-source-cue`}
                                     showGlossaryTerms={showGlossaryTermsAndErrors}
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
@@ -178,7 +176,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         key={targetCue.index}
                                         index={targetCue.index}
                                         cue={targetCue.cue}
-                                        playerTime={props.rowProps.playerTime}
                                         nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
                                     />
                                 )
@@ -189,7 +186,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         targetCueIndex={targetCue.index}
                                         cue={targetCue.cue}
                                         targetCuesLength={props.rowProps.targetCuesLength}
-                                        playerTime={props.rowProps.playerTime}
                                         className={`${captionClassName} sbte-target-cue`}
                                         showGlossaryTerms={false}
                                         languageDirection={editingTrack?.language.direction}
