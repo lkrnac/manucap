@@ -6,13 +6,12 @@ import { AnyAction } from "@reduxjs/toolkit";
 import * as simulant from "simulant";
 import { render } from "@testing-library/react";
 
-import { CueDto, Language, ScrollPosition, Task, Track } from "../../model";
-import { updateEditingTrack, updateTask } from "../../trackSlices";
+import { CueDto, Language, ScrollPosition, Track } from "../../model";
+import { updateEditingTrack } from "../../trackSlices";
 import CueLine, { CueLineProps } from "../cueLine/CueLine";
 import { updateCues } from "./cuesListActions";
 import CuesList from "./CuesList";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { simulateEnoughSpaceForCues } from "../../../testUtils/testUtils";
 import { reset } from "../edit/editorStatesSlice";
 import { act } from "react-dom/test-utils";
 import { changeScrollPosition } from "./cuesListScrollSlice";
@@ -53,55 +52,10 @@ const testingDirectTranslationTrack = {
     mediaLength: 4000,
 } as Track;
 
-const testingTask = {
-    type: "TASK_CAPTION",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: false
-} as Task;
-
 describe("CuesList", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
-    });
-
-    describe("pagination", () => {
-        const testingMatchedCuesForPagination = Array.from({ length: 120 }, (index: number) => ({
-            targetCues: [{
-                index,
-                cue: {
-                    vttCue: new VTTCue(index, index + 1, "Caption Line " + index),
-                    cueCategory: "DIALOGUE"
-                } as CueDto
-            }],
-            sourceCues: [{
-                index,
-                cue: {
-                    vttCue: new VTTCue(index, index + 1, "Translation Line 1" + index),
-                    cueCategory: "DIALOGUE"
-                } as CueDto
-            }]
-        }));
-        const testingTargetCuesForPagination = testingMatchedCuesForPagination
-            .map(mappedCueLine => mappedCueLine.targetCues[0].cue);
-
-        it("renders first page and focused cue 0", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingTargetCuesForPagination) as {} as AnyAction);
-            // const cuesInRedux = testingStore.getState().cues;
-
-            // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-            const actualNode = render(
-                <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
-                </Provider >
-            );
-
-            // THEN
-            console.log(actualNode.container.outerHTML);
-        });
     });
 
     describe("captioning", () => {
@@ -112,7 +66,6 @@ describe("CuesList", () => {
                 { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             const cuesInRedux = testingStore.getState().cues;
             const cuesWithIndexes = [
@@ -128,82 +81,25 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            />
-                        </div >
-                    </div >
-                </Provider >
-            );
-
-            // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-            const actualNode = render(
-                <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
-                </Provider >
-            );
-
-            // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
-        });
-
-        it("renders all cues when there is enough space in viewport", () => {
-            // GIVEN
-            const cues = [
-                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-            const cuesInRedux = testingStore.getState().cues;
-            const cuesWithIndexes = [
-                { index: 0, cue: cuesInRedux[0] },
-                { index: 1, cue: cuesInRedux[1] },
-                { index: 2, cue: cuesInRedux[2] }
-            ];
-            const matchedCues = [
-                { targetCues: [cuesWithIndexes[0]], sourceCues: []},
-                { targetCues: [cuesWithIndexes[1]], sourceCues: []},
-                { targetCues: [cuesWithIndexes[2]], sourceCues: []},
-            ];
-
-            const expectedNode = render(
-                <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={81}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -215,7 +111,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -245,29 +140,25 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={81}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -279,7 +170,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -324,29 +214,25 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -358,7 +244,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -388,29 +273,25 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -422,7 +303,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -461,29 +341,25 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -495,7 +371,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -535,37 +410,31 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: []}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={3}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: []}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
+                            rowIndex={3}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -577,7 +446,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -616,29 +484,25 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -650,7 +514,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -690,37 +553,31 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={3}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                            rowIndex={3}
+                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -732,7 +589,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -765,15 +621,13 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "17px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -785,7 +639,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -820,15 +673,13 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "17px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -840,7 +691,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -883,29 +733,25 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -917,7 +763,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -960,29 +805,25 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
-                                // @ts-ignore This parameter is added by smart scroll
-                                height={180}
-                                rowIndex={2}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                            rowIndex={2}
+                            rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -994,7 +835,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -1032,21 +872,19 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                        <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                                rowIndex={0}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
-                            />
-                            <CueLine
-                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                                rowIndex={1}
-                                rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
-                            />
-                        </div >
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                            rowIndex={0}
+                            rowProps={{ playerTime: 0, targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
+                        <CueLine
+                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                            rowIndex={1}
+                            rowProps={{ playerTime: 0, targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
+                            rowRef={React.createRef()}
+                        />
                     </div >
                 </Provider >
             );
@@ -1058,7 +896,6 @@ describe("CuesList", () => {
                     <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
                 </Provider >
             );
-            simulateEnoughSpaceForCues(actualNode);
 
             // THEN
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -1096,7 +933,6 @@ describe("CuesList", () => {
                 <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
             </Provider >
         );
-        simulateEnoughSpaceForCues(actualNode, 100);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // WHEN
@@ -1127,7 +963,6 @@ describe("CuesList", () => {
                 <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
             </Provider >
         );
-        simulateEnoughSpaceForCues(actualNode, 100);
         await act(async () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
         });
@@ -1161,7 +996,6 @@ describe("CuesList", () => {
                 <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
             </Provider >
         );
-        simulateEnoughSpaceForCues(actualNode, 100);
         await act(async () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
         });
