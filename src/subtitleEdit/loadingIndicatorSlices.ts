@@ -1,5 +1,5 @@
 import { LoadingIndicator } from "./model";
-import { cuesSlice } from "./cues/cuesListSlices";
+import { cuesSlice } from "./cues/cuesList/cuesListSlices";
 import { createSlice } from "@reduxjs/toolkit";
 import { editingTrackSlice } from "./trackSlices";
 import { sourceCuesSlice } from "./cues/view/sourceCueSlices";

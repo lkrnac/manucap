@@ -1,10 +1,10 @@
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
-import ToggleButton from "../../common/ToggleButton";
+import ToggleButton from "./ToggleButton";
 import { updateEditingTrack } from "../trackSlices";
 import { Track } from "../model";
-import { updateCues } from "../cues/cuesListActions";
+import { updateCues } from "../cues/cuesList/cuesListActions";
 import { isPendingSaveState } from "../cues/saveSlices";
 
 export const CaptionOverlapToggle = (): ReactElement => {

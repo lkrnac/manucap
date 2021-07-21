@@ -1,18 +1,18 @@
 import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import React, { Dispatch, ReactElement, useEffect } from "react";
-import { addCue, updateCueCategory, updateVttCue } from "../cuesListActions";
+import { addCue, updateCueCategory, updateVttCue } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
-import { KeyCombination } from "../../shortcutConstants";
+import { KeyCombination } from "../../utils/shortcutConstants";
 import Mousetrap from "mousetrap";
 import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { playVideoSection } from "../../player/playbackSlices";
 import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
-import { CueActionsPanel } from "../CueActionsPanel";
+import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 
 export interface CueEditProps {
     index: number;

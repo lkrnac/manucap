@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { cuesSlice } from "./cuesListSlices";
+import { cuesSlice } from "./cuesList/cuesListSlices";
 
 export const cuesLoadingCounterSlice = createSlice({
     name: "cuesLoadingCounter",

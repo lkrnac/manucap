@@ -17,13 +17,13 @@ import Mousetrap from "mousetrap";
 import _ from "lodash";
 
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../shortcutConstants";
+import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../utils/shortcutConstants";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
-import { convertVttToHtml, getVttText } from "../cueTextConverter";
-import CueLineCounts from "../CueLineCounts";
+import { convertVttToHtml, getVttText } from "./cueTextConverter";
+import CueLineCounts from "../cueLine/CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
-import { applySpellcheckerOnCue, updateVttCue } from "../cuesListActions";
+import { applySpellcheckerOnCue, updateVttCue } from "../cuesList/cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
@@ -31,7 +31,7 @@ import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSlices";
-import { CueExtraCharacters } from "../CueExtraCharacters";
+import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { Track } from "../../model";

@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { applyShiftTime, updateCues } from "../../cues/cuesListActions";
+import { applyShiftTime, updateCues } from "../../cues/cuesList/cuesListActions";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Language, Track } from "../../model";
 import { Provider } from "react-redux";

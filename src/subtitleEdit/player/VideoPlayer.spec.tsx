@@ -4,7 +4,7 @@ import * as simulant from "simulant";
 
 import { LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer } from "video.js";
-import { Character } from "../shortcutConstants";
+import { Character } from "../utils/shortcutConstants";
 import React from "react";
 import VideoPlayer from "./VideoPlayer";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";

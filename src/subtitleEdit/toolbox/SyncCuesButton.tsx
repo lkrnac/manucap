@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { syncCues } from "../cues/cuesListActions";
+import { syncCues } from "../cues/cuesList/cuesListActions";
 import { Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import { SubtitleEditState } from "../subtitleEditReducers";
