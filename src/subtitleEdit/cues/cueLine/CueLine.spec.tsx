@@ -75,7 +75,7 @@ describe("CueLine", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueEdit
@@ -104,7 +104,6 @@ describe("CueLine", () => {
                         data={matchedCuesCaptioning[0]}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -132,7 +131,7 @@ describe("CueLine", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
@@ -166,7 +165,6 @@ describe("CueLine", () => {
                         data={{ targetCues: [{ index: 0, cue: corruptedCue }], sourceCues: []}}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -188,7 +186,7 @@ describe("CueLine", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -223,7 +221,6 @@ describe("CueLine", () => {
                         data={matchedCuesCaptioning[0]}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -250,7 +247,7 @@ describe("CueLine", () => {
             matchedCuesCaptioningEditDisabled[0].targetCues[0] = { index: 0, cue: disabledCue };
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} editDisabled />
                         <div
                             className="sbte-edit-disabled"
@@ -288,7 +285,6 @@ describe("CueLine", () => {
                         data={matchedCuesCaptioningEditDisabled[0]}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -313,7 +309,7 @@ describe("CueLine", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={1} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -354,7 +350,6 @@ describe("CueLine", () => {
                         data={matchedCuesTranslation[1]}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -378,7 +373,7 @@ describe("CueLine", () => {
             const cueLine = { targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={2} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -414,7 +409,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -442,7 +436,7 @@ describe("CueLine", () => {
                 sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} editDisabled />
                         <div
                             className="sbte-edit-disabled"
@@ -492,7 +486,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -515,7 +508,7 @@ describe("CueLine", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -575,7 +568,6 @@ describe("CueLine", () => {
                         data={matchedCues[0]}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -598,7 +590,7 @@ describe("CueLine", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -657,7 +649,6 @@ describe("CueLine", () => {
                         data={matchedCues[0]}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -670,7 +661,7 @@ describe("CueLine", () => {
             // GIVEN
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.NONE} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -724,7 +715,6 @@ describe("CueLine", () => {
                         data={cueWithSource}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -748,7 +738,7 @@ describe("CueLine", () => {
             const cueLine = { targetCues: [targetCuesWithIndexes[0]], sourceCues: []};
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <div
@@ -789,7 +779,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -813,7 +802,7 @@ describe("CueLine", () => {
             const cueLine = { targetCues: [targetCuesWithIndexes[0]], sourceCues: sourceCuesWithIndexes };
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -885,7 +874,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -909,7 +897,7 @@ describe("CueLine", () => {
             const cueLine = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -981,7 +969,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -1005,7 +992,7 @@ describe("CueLine", () => {
             const cueLine = { targetCues: [targetCuesWithIndexes[0]], sourceCues: sourceCuesWithIndexes };
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -1066,7 +1053,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -1090,7 +1076,7 @@ describe("CueLine", () => {
             const cueLine = { targetCues: targetCuesWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -1151,7 +1137,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -1187,7 +1172,7 @@ describe("CueLine", () => {
                 sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap rowIndex={0} cueLineState={CueLineState.ERROR} />
                         <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
                             <CueView
@@ -1259,7 +1244,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -1295,7 +1279,7 @@ describe("CueLine", () => {
                 sourceCues: [sourceCuesWithIndexes[0]]};
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.ERROR}
@@ -1365,7 +1349,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -1374,6 +1357,7 @@ describe("CueLine", () => {
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
 
+        // TODO: Verify if this test case is still relevant
         it("does not call onClick when editDisabled cue is clicked", () => {
             // GIVEN
             const matchedCuesTranslationEditDisabled = [ ...matchedCuesTranslation ];
@@ -1395,7 +1379,7 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={onClickStub}
+                        // onClick={onClickStub}
                     />
                 </Provider>
             );
@@ -1435,7 +1419,6 @@ describe("CueLine", () => {
                         data={cueWithSource}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -1474,7 +1457,6 @@ describe("CueLine", () => {
                         data={cueWithSource}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -1516,7 +1498,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        onClick={(): void => undefined}
                     />
                 </Provider>
             );
@@ -1558,7 +1539,6 @@ describe("CueLine", () => {
                     data={cueWithSource}
                     rowProps={cueLineRowProps}
                     rowRef={rowRef}
-                    onClick={(): void => undefined}
                 />
             </Provider>
         );
