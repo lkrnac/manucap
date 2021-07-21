@@ -2,6 +2,7 @@ import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
+import { updateUser } from "./subtitleEdit/userSlices";
 import { CueDto, Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
@@ -154,7 +155,30 @@ const TestApp = (): ReactElement => {
                 mediaChunkStart,
                 mediaChunkEnd,
                 progress: 50,
-                id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d"
+                id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d",
+                createdBy: {
+                    displayName: "John Doe",
+                    email: "john.doe@dotsub.com",
+                    firstname: "John",
+                    lastname: "Doe",
+                    systemAdmin: "",
+                    userId: "john.doe"
+                }
+            })),
+            500
+        );
+    });
+
+    // ################################## User ###########################################
+    useEffect(() => {
+        setTimeout(
+            () => dispatch(updateUser({
+                displayName: "Jane Doe",
+                email: "jane.doe@dotsub.com",
+                firstname: "Jane",
+                lastname: "Doe",
+                systemAdmin: "",
+                userId: "jane.doe"
             })),
             500
         );
@@ -167,7 +191,7 @@ const TestApp = (): ReactElement => {
                 type: "TASK_CAPTION",
                 projectName: "Project One",
                 dueDate: "2019/12/30 10:00AM",
-                editDisabled: false
+                editDisabled: false,
             })),
             500
         );

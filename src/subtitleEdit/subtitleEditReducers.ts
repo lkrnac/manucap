@@ -1,6 +1,7 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
 import { cuesSlice } from "./cues/cuesList/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
+import { userSlice } from "./userSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
 import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
@@ -35,7 +36,7 @@ export const Reducers = {
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,
-
+    currentUser: userSlice.reducer,
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
     validationErrors: validationErrorSlice.reducer,

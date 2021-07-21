@@ -1,18 +1,21 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../subtitleEditReducers"
 
 const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
+    const editingTask = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const currentUser = useSelector((state: SubtitleEditState) => state.currentUser);
     const [show, setShow] = useState(false);
 
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     useEffect(
         () => {
+            console.log(currentUser);
             setShow(subtitleSpecifications != null
                 && subtitleSpecifications.enabled
-                && cues.length === 0);
+                && (cues.length === 0 || editingTask?.createdBy.userId != currentUser?.userId));
             // ESLint suppress: because we want to show modal only for first render
             // and subtitle specs is loaded
             // eslint-disable-next-line react-hooks/exhaustive-deps
