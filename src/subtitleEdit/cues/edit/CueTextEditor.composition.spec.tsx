@@ -12,7 +12,7 @@ import {
 } from "../../../testUtils/testUtils";
 import { reset } from "./editorStatesSlice";
 import { CueDto, Track } from "../../model";
-import { updateCues } from "../cuesListActions";
+import { updateCues } from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { updateEditingTrack } from "../../trackSlices";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
