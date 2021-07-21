@@ -2,7 +2,7 @@ import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
-import { updateUser } from "./subtitleEdit/userSlices";
+import { updateCurrentUser } from "./subtitleEdit/userSlices";
 import { CueDto, Language } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
@@ -172,7 +172,7 @@ const TestApp = (): ReactElement => {
     // ################################## User ###########################################
     useEffect(() => {
         setTimeout(
-            () => dispatch(updateUser({
+            () => dispatch(updateCurrentUser({
                 displayName: "Jane Doe",
                 email: "jane.doe@dotsub.com",
                 firstname: "Jane",

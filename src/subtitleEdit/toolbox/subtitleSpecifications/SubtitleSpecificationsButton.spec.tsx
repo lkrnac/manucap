@@ -10,14 +10,46 @@ import { mount, ReactWrapper } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateCues } from "../../cues/cuesList/cuesListActions";
-import { CueDto } from "../../model";
+import {CueDto, Language, Track, User} from "../../model";
 import "video.js";
 import { act } from "react-dom/test-utils";
+import {updateCurrentUser} from "../../userSlices";
+import {updateEditingTrack} from "../../trackSlices";
 
 jest.mock("./SubtitleSpecificationsModal");
 
 // @ts-ignore We are mocking module
 SubtitleSpecificationsModal.mockImplementation(({ show }): ReactElement => show ? <div>shown</div> : <div />);
+
+const testingUser = {
+    displayName: "Test User",
+    email: "test@dotsub.com",
+    firstname: "Test",
+    lastname: "User",
+    systemAdmin: "",
+    userId: "test"
+} as User;
+
+const testingEditingTrack = {
+    type: "TRANSLATION",
+    language: { id: "en-US", name: "English (US)", direction: "LTR" } as Language,
+    sourceLanguage: { id: "sk", name: "Slovak", direction: "LTR" } as Language,
+    default: true,
+    mediaTitle: "This is the video title",
+    mediaLength: 305000,
+    mediaChunkStart: 13000,
+    mediaChunkEnd: 305000,
+    progress: 50,
+    id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d",
+    createdBy: {
+        displayName: "John Doe",
+        email: "john.doe@dotsub.com",
+        firstname: "John",
+        lastname: "Doe",
+        systemAdmin: "",
+        userId: "john.doe"
+    }
+} as Track;
 
 const cues = [
     { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
@@ -244,5 +276,25 @@ describe("SubtitleSpecificationsButton", () => {
 
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+    });
+
+    it("Show subtitle specification pop up when user opening track is different from createdBy", () => {
+        // GIVEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testingEditingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCurrentUser(testingUser) as {} as AnyAction);
+
+        let actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+
     });
 });

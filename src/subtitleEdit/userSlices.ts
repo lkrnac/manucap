@@ -11,12 +11,12 @@ export const userSlice = createSlice({
     name: "currentUser",
     initialState: null as User | null,
     reducers: {
-        updateUser: (_state, action: PayloadAction<UserAction>): User =>
+        updateCurrentUser: (_state, action: PayloadAction<UserAction>): User =>
             action.payload.currentUser
     }
 });
 
-export const updateUser = (currentUser: User): AppThunk =>
+export const updateCurrentUser = (currentUser: User): AppThunk =>
     (dispatch: Dispatch<PayloadAction<UserAction>>): void => {
-        dispatch(userSlice.actions.updateUser({ currentUser }));
+        dispatch(userSlice.actions.updateCurrentUser({ currentUser }));
     }
