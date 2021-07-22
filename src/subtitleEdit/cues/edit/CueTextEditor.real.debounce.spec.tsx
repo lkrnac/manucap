@@ -20,6 +20,7 @@ import { replaceCurrentMatch } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";
+import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 
 let testingStore = createTestingStore();
 
@@ -141,12 +142,16 @@ describe("CueTextEditor", () => {
                 getData: (): string => " Paste text to end",
             }
         });
+        testingStore.dispatch(matchedCuesSlice.actions
+            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+        );
 
         // WHEN
         actualNode.unmount();
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
+        expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
     });
 
     it("update cue in redux when unmounted after cue update and editUuid changes, before debounce timeout",
@@ -184,14 +189,19 @@ describe("CueTextEditor", () => {
                 getData: (): string => " Paste text to end",
             }
         });
+        testingStore.dispatch(matchedCuesSlice.actions
+            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+        );
 
-        // WHEN
+
+            // WHEN
         actualNode.unmount();
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.text)
             .toEqual("someText Paste text to end Paste text to end");
         expect(testingStore.getState().cues[0].editUuid).not.toEqual("1");
+        expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
     });
 
     it("updates cue in redux for single match/replace when unmounted for next match - single", (done) => {
@@ -220,6 +230,9 @@ describe("CueTextEditor", () => {
         act(() => {
             testingStore.dispatch(replaceCurrentMatch("abcd efg") as {} as AnyAction);
         });
+        testingStore.dispatch(matchedCuesSlice.actions
+            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+        );
 
         // WHEN
         actualNode.unmount();
@@ -230,6 +243,7 @@ describe("CueTextEditor", () => {
                 expect(saveTrack).toHaveBeenCalledTimes(1);
                 expect(testingStore.getState().cues[0].vttCue.text)
                     .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
                 done();
             },
             3000
