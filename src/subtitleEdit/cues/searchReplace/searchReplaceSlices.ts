@@ -123,7 +123,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
                         searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex + offsetShift }
                     }
                 ));
-                updateMatchedCues(dispatch, getState);
+                dispatch(updateMatchedCues());
                 return;
             } else {
                 fromIndex += 1;
@@ -165,7 +165,7 @@ export const searchPreviousCues = (): AppThunk =>
                 dispatch(cuesSlice.actions.addSearchMatches(
                     { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex - 1 }}
                 ));
-                updateMatchedCues(dispatch, getState);
+                dispatch(updateMatchedCues());
                 return;
             } else {
                 fromIndex -= 1;

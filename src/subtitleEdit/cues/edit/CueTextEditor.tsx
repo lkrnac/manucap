@@ -23,7 +23,7 @@ import { convertVttToHtml, getVttText } from "./cueTextConverter";
 import CueLineCounts from "../cueLine/CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
-import { applySpellcheckerOnCue, updateVttCue } from "../cuesList/cuesListActions";
+import { applySpellcheckerOnCue, updateMatchedCues, updateVttCue } from "../cuesList/cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
@@ -329,6 +329,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             changeVttCueInReduxDebounced.cancel();
             if (unmountContentRef.current !== null && unmountContentRef.current !== currentContent) {
                 changeVttCueInRedux(unmountContentRef.current, props, dispatch);
+                dispatch(updateMatchedCues());
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -22,7 +22,7 @@ export const sourceCuesSlice = createSlice({
 });
 
 export const updateSourceCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction>): void => {
         dispatch(sourceCuesSlice.actions.updateSourceCues({ cues }));
-        updateMatchedCues(dispatch, getState);
+        dispatch(updateMatchedCues());
     };
