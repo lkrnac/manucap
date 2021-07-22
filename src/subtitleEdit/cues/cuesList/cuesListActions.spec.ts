@@ -27,6 +27,7 @@ import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
+import { matchedCuesSlice } from "./cuesListSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -1310,6 +1311,23 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line X");
                 expect(testingStore.getState().validationErrors).toEqual([]);
+            });
+
+            it("doesn't update matched cues for textOnly update", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+                );
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), editUuid, true) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(0);
             });
         });
     });

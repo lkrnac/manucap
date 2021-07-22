@@ -193,7 +193,9 @@ export const updateVttCue = (
             updateSearchMatches(dispatch, getState, idx);
             validateCue(dispatch, idx, true);
             callSaveTrack(dispatch, getState, multiCuesEdit);
-            updateMatchedCues(dispatch, getState);
+            if (!textOnly) {
+                updateMatchedCues(dispatch, getState);
+            }
         }
     };
 
