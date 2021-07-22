@@ -1322,8 +1322,7 @@ describe("CueLine", () => {
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
 
-        // TODO: Verify if this test case is still relevant
-        it("does not call onClick when editDisabled cue is clicked", () => {
+        it("does not open editor when editDisabled cue is clicked", () => {
             // GIVEN
             const matchedCuesTranslationEditDisabled = [ ...matchedCuesTranslation ];
             const disabledTargetCue = { ...targetCues[0], editDisabled: true };
@@ -1336,7 +1335,6 @@ describe("CueLine", () => {
                 targetCuesLength: 1,
                 matchedCues: matchedCuesTranslation
             } as CueLineRowProps;
-            const onClickStub = jest.fn();
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CueLine
@@ -1344,7 +1342,6 @@ describe("CueLine", () => {
                         data={cueLine}
                         rowProps={cueLineRowProps}
                         rowRef={React.createRef()}
-                        // onClick={onClickStub}
                     />
                 </Provider>
             );
@@ -1353,7 +1350,6 @@ describe("CueLine", () => {
             fireEvent.click(actualNode.container.querySelector(".sbte-edit-disabled") as Element);
 
             // THEN
-            expect(onClickStub).not.toHaveBeenCalled();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
