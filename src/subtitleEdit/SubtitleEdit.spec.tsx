@@ -164,7 +164,6 @@ describe("SubtitleEdit", () => {
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
                                     rowIndex={0}
                                     rowProps={{
-                                        playerTime: 0,
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
                                         matchedCues
@@ -175,7 +174,6 @@ describe("SubtitleEdit", () => {
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
                                     rowIndex={1}
                                     rowProps={{
-                                        playerTime: 0,
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
                                         matchedCues
@@ -325,7 +323,7 @@ describe("SubtitleEdit", () => {
                                 cueIndex={-1}
                                 sourceCueIndexes={[]}
                             />
-                            <div style={{ overflow: "auto" }}/>
+                            <div style={{ overflow: "auto" }} />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
@@ -587,7 +585,6 @@ describe("SubtitleEdit", () => {
                                     rowIndex={0}
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
                                     rowProps={{
-                                        playerTime: 0,
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
                                         matchedCues
@@ -598,7 +595,6 @@ describe("SubtitleEdit", () => {
                                     rowIndex={1}
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
                                     rowProps={{
-                                        playerTime: 0,
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
                                         matchedCues
@@ -764,7 +760,6 @@ describe("SubtitleEdit", () => {
                                     rowIndex={0}
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
                                     rowProps={{
-                                        playerTime: 0,
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
                                         matchedCues
@@ -775,7 +770,6 @@ describe("SubtitleEdit", () => {
                                     rowIndex={1}
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
                                     rowProps={{
-                                        playerTime: 0,
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
                                         matchedCues
