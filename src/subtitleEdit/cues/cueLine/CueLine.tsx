@@ -113,6 +113,9 @@ const CueLine = (props: CueLineProps): ReactElement => {
         }
     });
 
+    const cueComments = props.data.targetCues?.map(cue => cue.cue.comments ? cue.cue.comments : [] )
+        .reduce((cue1, cue2) => cue1?.concat(...cue2) );
+
     return (
         <div style={{ display: "flex", flexDirection: "row" }}>
             <div
@@ -216,7 +219,10 @@ const CueLine = (props: CueLineProps): ReactElement => {
                     }
                 </div>
             </div>
-            <CueComments rowIndex={props.rowIndex} />
+            <CueComments
+                rowIndex={props.rowIndex}
+                comments={cueComments}
+            />
         </div>
     );
 };

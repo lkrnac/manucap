@@ -2,6 +2,7 @@
 // Override bootstrap defaults
 // ##############################
 $font-size-small: 0.75rem; // 12px
+$font-size-medium: 0.875rem; // 14px
 
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
@@ -43,20 +44,6 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     border-bottom-right-radius: 10px;
 }
 
-.sbte-cue-comments:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 20%;
-    width: 0;
-    height: 0;
-    border: 15px solid transparent;
-    border-right-color: white;
-    border-left: 0;
-    margin-top: -20px;
-    margin-left: -15px;
-}
-
 .sbte-green-text {
     color: $green;
 }
@@ -67,6 +54,10 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 
 .sbte-small-font {
   font-size: $font-size-small;
+}
+
+.sbte-medium-font {
+    font-size: $font-size-medium;
 }
 
 .sbte-gray-100-background {
@@ -291,10 +282,58 @@ div[id^=cueErrorTooltip-] .arrow:after {
     border-left-color: #f8d7da;
 }
 
+// ------ Cue Errors --------
+
 .sbte-cues-errors {
     color: #721c24;
 }
 
 .sbte-cues-errors-popover {
     z-index: 1 !important;
+}
+
+// ------ Cue Comments --------
+
+
+.sbte-cue-comments {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px 10px 5px 10px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+.sbte-cue-comments:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    width: 0;
+    height: 0;
+    border: 15px solid transparent;
+    border-right-color: white;
+    border-left: 0;
+    margin-top: -20px;
+    margin-left: -15px;
+}
+
+.sbte-cue-comment {
+    margin-bottom: 10px;
+}
+
+.sbte-cue-comment-user {
+    background-color: darkcyan;
+    color: white;
+    border-radius: 5px;
+    padding: 4px 6px;
+    white-space: nowrap;
+}
+
+.sbte-cue-comment-input {
+    border-style: none;
+    width: 100%;
 }
