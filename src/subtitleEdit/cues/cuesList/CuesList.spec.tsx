@@ -5,7 +5,7 @@
 // https://stackoverflow.com/questions/61036156/react-typescript-testing-typeerror-mutationobserver-is-not-a-constructor#comment110029314_61039444
 
 import "../../../testUtils/initBrowserEnvironment";
-import React from "react";
+import React, { createRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { render } from "@testing-library/react";
@@ -20,6 +20,9 @@ import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { updateTask } from "../../trackSlices";
 import { changeScrollPosition, scrollPositionSlice } from "./cuesListScrollSlice";
 import { act } from "react-dom/test-utils";
+import CueLine from "../cueLine/CueLine";
+import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
+import AddCueLineButton from "../edit/AddCueLineButton";
 
 const scrollIntoViewCallsTracker = jest.fn();
 
@@ -63,6 +66,91 @@ describe("CuesList", () => {
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
         jest.resetAllMocks();
+    });
+
+    describe("renders", () => {
+        it("empty track", () => {
+            // GIVEN
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
+                    <div style={{ overflow: "auto" }} />
+                </Provider>
+            );
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        });
+
+        it("without pagination", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(0, 1, "Target Line 0"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Target Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Line 0"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const matchedCues = [
+                { targetCues: [{ index: 0, cue: targetCues[0] }], sourceCues: [{ index: 0, cue: sourceCues[0] }]},
+                { targetCues: [{ index: 1, cue: targetCues[1] }], sourceCues: [{ index: 1, cue: sourceCues[1] }]},
+                { targetCues: [{ index: 2, cue: targetCues[2] }], sourceCues: [{ index: 2, cue: sourceCues[2] }]},
+            ];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div style={{ overflow: "auto" }}>
+                        <CueLine
+                            key={0}
+                            data={matchedCues[0]}
+                            rowIndex={0}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={createRef()}
+                        />
+                        <CueLine
+                            key={1}
+                            data={matchedCues[1]}
+                            rowIndex={1}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={createRef()}
+                        />
+                        <CueLine
+                            key={2}
+                            data={matchedCues[2]}
+                            rowIndex={2}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowRef={createRef()}
+                        />
+                    </div>
+                </Provider>
+            );
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        });
     });
 
     describe("scrolling into view", () => {
@@ -130,8 +218,6 @@ describe("CuesList", () => {
             expect(scrolledElement.outerHTML).toContain("Target Line 1");
             expect(scrolledElement.outerHTML).not.toContain("Target Line 2");
         });
-
-        // TODO: test also multi matches this way
     });
 
     describe("pagination based on editing cue index", () => {
