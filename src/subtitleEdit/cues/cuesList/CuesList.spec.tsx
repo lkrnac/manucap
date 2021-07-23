@@ -456,15 +456,13 @@ describe("CuesList", () => {
 
             // THEN
             expect(testingStore.getState().focusedCueIndex).toEqual(119);
-            expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(4);
+            expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(3);
             const scrolledElement1 = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrolledElement1.outerHTML).toContain("Caption Line 119");
             const scrolledElement2 = scrollIntoViewCallsTracker.mock.calls[1][0];
             expect(scrolledElement2.outerHTML).toContain("Caption Line 119");
             const scrolledElement3 = scrollIntoViewCallsTracker.mock.calls[2][0];
             expect(scrolledElement3.outerHTML).toContain("Caption Line 119");
-            const scrolledElement4 = scrollIntoViewCallsTracker.mock.calls[3][0];
-            expect(scrolledElement4.outerHTML).toContain("Caption Line 119");
         });
 
         it("prevent loosing page index when ficused cue index is null", async () => {
