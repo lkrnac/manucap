@@ -563,7 +563,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption Line 2");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().focusedCueIndex).toEqual(0);
+        expect(testingStore.getState().focusedCueIndex).toEqual(null);
     });
 
     it("replaces all matches and skips editDisabled and save when Replace All button is clicked",

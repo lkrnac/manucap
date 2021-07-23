@@ -1062,9 +1062,8 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(2);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jump to last cue in translation mode", () => {
@@ -1103,9 +1102,8 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(2);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to first cue when button is clicked", () => {
@@ -1138,9 +1136,8 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-first-button").simulate("click");
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(2);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.FIRST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to first cue on first render", () => {
@@ -1171,9 +1168,8 @@ describe("SubtitleEdit", () => {
         );
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(2);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.FIRST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to current edit cue when button is clicked", () => {
@@ -1206,9 +1202,8 @@ describe("SubtitleEdit", () => {
         fireEvent.click(actualNode.getByTestId("sbte-jump-to-edit-cue-button"));
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(2);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.CURRENT);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to playback cue when button is clicked", () => {
@@ -1240,9 +1235,8 @@ describe("SubtitleEdit", () => {
         fireEvent.click(actualNode.getByTestId("sbte-jump-to-playback-cue-button"));
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(2);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.PLAYBACK);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jump to last translated subtitle button clicked", async () => {
