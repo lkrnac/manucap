@@ -389,41 +389,44 @@ describe("CuesList", () => {
             expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
-        // it("scrolls to last cue twice in a row", async () => {
-        //     const cues = [
-        //         { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-        //         { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-        //         { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
-        //         { vttCue: new VTTCue(3, 4, "Caption Line 4"), cueCategory: "DIALOGUE" },
-        //         { vttCue: new VTTCue(4, 5, "Caption Line 5"), cueCategory: "DIALOGUE" },
-        //         { vttCue: new VTTCue(5, 6, "Caption Line 6"), cueCategory: "DIALOGUE" },
-        //         { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE" },
-        //     ] as CueDto[];
-        //     testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        //     const actualNode = render(
-        //         <Provider store={testingStore}>
-        //             <CuesList editingTrack={testingCaptionTrack} />
-        //         </Provider>
-        //     );
-        //
-        //     // WHEN
-        //     await act(async () => {
-        //         testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-        //     });
-        //     await act(async () => {
-        //         actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
-        //     });
-        //     await act(async () => {
-        //         testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-        //     });
-        //
-        //     // THEN
-        //     expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(2);
-        //     const scrolledElement1 = scrollIntoViewCallsTracker.mock.calls[0][0];
-        //     expect(scrolledElement1.outerHTML).toContain("Caption Line 7");
-        //     const scrolledElement2 = scrollIntoViewCallsTracker.mock.calls[1][0];
-        //     expect(scrolledElement2.outerHTML).toContain("Caption Line 7");
-        //     expect(testingStore.getState().focusedCueIndex).toEqual(6);
-        // });
+        it("scrolls to last cue twice in a row", async () => {
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(3, 4, "Caption Line 4"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 5, "Caption Line 5"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(5, 6, "Caption Line 6"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            await act(async () => {
+                testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+            await act(async () => {
+                testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+            });
+
+            // THEN
+            expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(2);
+            const scrolledElement1 = scrollIntoViewCallsTracker.mock.calls[0][0];
+            expect(scrolledElement1.outerHTML).toContain("Caption Line 7");
+            const scrolledElement2 = scrollIntoViewCallsTracker.mock.calls[1][0];
+            expect(scrolledElement2.outerHTML).toContain("Caption Line 7");
+            expect(testingStore.getState().focusedCueIndex).toEqual(6);
+        });
     });
 });
