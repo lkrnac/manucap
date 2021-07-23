@@ -1,4 +1,4 @@
-import React, { createRef, ReactElement, RefObject, useEffect, useState } from "react";
+import React, { createRef, ReactElement, RefObject, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { isDirectTranslationTrack } from "../../utils/subtitleEditUtils";
@@ -22,6 +22,8 @@ const CuesList = (props: Props): ReactElement => {
     const targetCuesArray = useSelector((state: SubtitleEditState) => state.cues);
     const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues);
     const startAt = useSelector((state: SubtitleEditState) => state.focusedCueIndex);
+    const scrollRef = useRef(null as HTMLDivElement | null);
+    const preventScroll = useRef(false);
 
     const withoutSourceCues = props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack);
     const showStartCaptioning = matchedCues.matchedCues.length === 0;
@@ -50,13 +52,35 @@ const CuesList = (props: Props): ReactElement => {
 
     useEffect(
         () => {
-            const ref = refs[startAt];
-            if (ref !== undefined && ref.current !== null) {
-                dispatch(changeScrollPosition(ScrollPosition.NONE));
-                ref.current.scrollIntoView({ block: "nearest", inline: "nearest" });
+            if (startAt !== null
+                && refs[startAt] !== undefined
+                && refs[startAt].current !== null
+            ) {
+                const ref = refs[startAt];
+                preventScroll.current = true;
+                ref?.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
+                console.log("scrollIntoView + preventScroll = true");
             }
-        }
+        },
     );
+
+    useEffect(
+        () => {
+            if (scrollRef.current) {
+                const onScroll = (): void => {
+                    if (preventScroll.current) {
+                        preventScroll.current = false;
+                        console.log("preventScroll = false");
+                    } else {
+                        dispatch(changeScrollPosition(ScrollPosition.NONE));
+                    }
+                };
+                scrollRef.current.addEventListener("scroll", onScroll);
+            }
+        },
+        [dispatch, scrollRef]
+    );
+
     return (
         <>
             {
@@ -64,7 +88,7 @@ const CuesList = (props: Props): ReactElement => {
                     ? <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
                     : null
             }
-            <div style={{ overflow: "auto" }}>
+            <div ref={scrollRef} style={{ overflow: "auto" }}>
                 {
                     startIndex > 0
                         ? (

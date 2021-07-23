@@ -19,9 +19,10 @@ export const setCurrentPlayerTime = (currentPlayerTime: number): AppThunk =>
 
 export const scrollPositionSlice = createSlice({
     name: "scrollPositionSlice",
-    initialState: 0,
+    initialState: null as number | null,
     reducers: {
-        changeFocusedCueIndex: (_state, action: PayloadAction<number>): number => action.payload
+        changeFocusedCueIndex: (_state, action: PayloadAction<number | null>): number | null =>
+            action.payload
     }
 });
 
@@ -30,9 +31,9 @@ const getScrollCueIndex = (
     editingFocusInMap: number,
     currentPlayerCueIndex: number,
     lastTranslatedIndex: number,
-    previousFocusedCueIndex: number,
+    previousFocusedCueIndex: number | null,
     scrollPosition?: ScrollPosition
-): number | undefined => {
+): number | null => {
     if (scrollPosition === ScrollPosition.FIRST) {
         return 0;
     }
@@ -48,14 +49,16 @@ const getScrollCueIndex = (
     if (scrollPosition === ScrollPosition.LAST_TRANSLATED) {
         return lastTranslatedIndex - 1;
     }
-    const currentPageIndex = Math.floor(previousFocusedCueIndex / DEFAULT_PAGE_SIZE);
-    if (scrollPosition === ScrollPosition.NEXT_PAGE) {
-        return currentPageIndex * DEFAULT_PAGE_SIZE + DEFAULT_PAGE_SIZE;
+    if (previousFocusedCueIndex !== null) {
+        const currentPageIndex = Math.floor(previousFocusedCueIndex / DEFAULT_PAGE_SIZE);
+        if (scrollPosition === ScrollPosition.NEXT_PAGE) {
+            return currentPageIndex * DEFAULT_PAGE_SIZE + DEFAULT_PAGE_SIZE;
+        }
+        if (scrollPosition === ScrollPosition.PREVIOUS_PAGE) {
+            return currentPageIndex * DEFAULT_PAGE_SIZE - 1;
+        }
     }
-    if (scrollPosition === ScrollPosition.PREVIOUS_PAGE) {
-        return currentPageIndex * DEFAULT_PAGE_SIZE - 1;
-    }
-    return undefined; // out of range value, because need to trigger change of ReactSmartScroll.startAt
+    return null; // out of range value, because need to trigger change of CueList.startAt
 };
 
 export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
@@ -64,7 +67,7 @@ export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => 
 };
 
 export const changeScrollPosition = (scrollPosition: ScrollPosition): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<ScrollPosition>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<ScrollPosition | null>>, getState): void => {
         const state = getState();
         const previousFocusedCueIndex = getState().focusedCueIndex;
         const currentPlayerTime = getState().currentPlayerTime;
@@ -77,7 +80,5 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition): AppThunk =
             previousFocusedCueIndex,
             scrollPosition
         );
-        if (focusedCueIndex !== undefined) {
-            dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
-        }
+        dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
     };

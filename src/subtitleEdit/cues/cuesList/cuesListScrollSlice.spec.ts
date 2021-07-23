@@ -34,7 +34,7 @@ describe("cuesListScrollSlice", () => {
         });
 
         each([
-            [ScrollPosition.NONE, 60],
+            [ScrollPosition.NONE, null],
             [ScrollPosition.FIRST, 0],
             [ScrollPosition.LAST, 119],
             [ScrollPosition.CURRENT, 58],
@@ -42,6 +42,7 @@ describe("cuesListScrollSlice", () => {
             [ScrollPosition.NEXT_PAGE, 100],
             [ScrollPosition.PREVIOUS_PAGE, 49],
             [ScrollPosition.LAST_TRANSLATED, 69],
+            [undefined, null],
         ])
         .it("updates scroll position focused cue index in Redux store for scroll position %s", (
             scrollPosition: ScrollPosition,

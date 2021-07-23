@@ -17,7 +17,6 @@ import { act } from "react-dom/test-utils";
 import { changeScrollPosition } from "./cuesListScrollSlice";
 import { Character } from "../../utils/shortcutConstants";
 import { updateSourceCues } from "../view/sourceCueSlices";
-import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 
 jest.mock(
     "../cueLine/CueLine",
@@ -916,101 +915,6 @@ describe("CuesList", () => {
         // THEN
         expect(actualNode.container.outerHTML).toContain("Start Captioning");
         expect(actualNode.container.outerHTML).not.toContain("CueLine");
-    });
-
-    it("scrolls to last cue", async() => {
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(3, 4, "Caption Line 4"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(4, 5, "Caption Line 5"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(5, 6, "Caption Line 6"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} />
-            </Provider >
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-
-        // WHEN
-        await act(async () => {
-            testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-        });
-        await act(async () => {
-            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
-        });
-
-        // THEN
-        expect(actualNode.container.outerHTML).toContain("Caption Line 7");
-    });
-
-    it("scrolls to first cue", async () => {
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(3, 4, "Caption Line 4"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(4, 5, "Caption Line 5"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(5, 6, "Caption Line 6"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} />
-            </Provider >
-        );
-        await act(async () => {
-            testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-        });
-        await act(async () => {
-            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
-        });
-
-        // WHEN
-        testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
-        await act(async () => {
-            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
-        });
-
-        // THEN
-        expect(actualNode.container.outerHTML).toContain("Caption Line 1");
-    });
-
-    it("scrolls to current editing cue if not in viewport", async () => {
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(3, 4, "Caption Line 4"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(4, 5, "Caption Line 5"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(5, 6, "Caption Line 6"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE" },
-        ] as CueDto[];
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} />
-            </Provider >
-        );
-        await act(async () => {
-            testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
-        });
-        await act(async () => {
-            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
-        });
-
-        // WHEN
-        testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
-        await act(async () => {
-            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
-        });
-
-        // THEN
-        expect(actualNode.container.outerHTML).toContain("Caption Line 3");
     });
 
     it("adds first cue when ENTER is pressed", () => {
