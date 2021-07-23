@@ -13,7 +13,7 @@ import { updateCues } from "../../cues/cuesList/cuesListActions";
 import { CueDto, Language, Track, User } from "../../model";
 import "video.js";
 import { act } from "react-dom/test-utils";
-import { updateCurrentUser } from "../../userSlices";
+import { userSlice } from "../../userSlices";
 import { updateEditingTrack } from "../../trackSlices";
 
 jest.mock("./SubtitleSpecificationsModal");
@@ -285,7 +285,7 @@ describe("SubtitleSpecificationsButton", () => {
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testingEditingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateCurrentUser(testingUser) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateCurrentUser({ currentUser: testingUser }) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -317,7 +317,7 @@ describe("SubtitleSpecificationsButton", () => {
 
         testingStore.dispatch(updateEditingTrack(testingEditingTrackByCurrentUser) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateCurrentUser(testingUser) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateCurrentUser({ currentUser: testingUser }) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>

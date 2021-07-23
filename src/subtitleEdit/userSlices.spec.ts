@@ -1,5 +1,5 @@
 import { User } from "./model";
-import { updateCurrentUser } from "./userSlices";
+import { userSlice } from "./userSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../testUtils/testingStore";
 
@@ -19,7 +19,7 @@ describe("userSlices", () => {
         expect(testingStore.getState().currentUser).not.toEqual(testingUser);
 
         // WHEN
-        testingStore.dispatch(updateCurrentUser(testingUser) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateCurrentUser({ currentUser: testingUser }) as {} as AnyAction);
 
         // THEN
         expect(testingStore.getState().currentUser).toEqual(testingUser);

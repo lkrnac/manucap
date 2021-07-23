@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { User } from "./model";
-import { AppThunk } from "./subtitleEditReducers";
-import { Dispatch } from "react";
+import { SubtitleEditAction, User } from "./model";
+// import { AppThunk } from "./subtitleEditReducers";
+// import { Dispatch } from "react";
 
-export interface UserAction {
+export interface UserAction extends SubtitleEditAction {
     currentUser: User;
 }
 
@@ -15,8 +15,3 @@ export const userSlice = createSlice({
             action.payload.currentUser
     }
 });
-
-export const updateCurrentUser = (currentUser: User): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<UserAction>>): void => {
-        dispatch(userSlice.actions.updateCurrentUser({ currentUser }));
-    };
