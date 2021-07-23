@@ -466,5 +466,33 @@ describe("CuesList", () => {
             const scrolledElement4 = scrollIntoViewCallsTracker.mock.calls[3][0];
             expect(scrolledElement4.outerHTML).toContain("Caption Line 119");
         });
+
+        it("prevent loosing page index when ficused cue index is null", async () => {
+            const testingSourceCuesForPagination = Array.from({ length: 120 }, (_element, index) => (
+                { vttCue: new VTTCue(index, index + 1, "Caption Line " + index), cueCategory: "DIALOGUE" } as CueDto
+            ));
+            testingStore.dispatch(updateCues(testingSourceCuesForPagination) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            await act(async () => {
+                testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+
+            // THEN
+            expect(testingStore.getState().focusedCueIndex).toEqual(null);
+            expect(actualNode.container.querySelector("div")?.outerHTML).toContain("Caption Line 119");
+            expect(actualNode.container.querySelector("div")?.outerHTML).toContain("Caption Line 100");
+        });
     });
 });

@@ -21,13 +21,19 @@ const CuesList = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const targetCuesArray = useSelector((state: SubtitleEditState) => state.cues);
     const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues);
+    const previousNonNullFocusedCueIndex = useRef(-1);
     const startAt = useSelector((state: SubtitleEditState) => state.focusedCueIndex);
+    if (startAt !== null) {
+        previousNonNullFocusedCueIndex.current = startAt;
+    }
     const scrollRef = useRef(null as HTMLDivElement | null);
     const preventScroll = useRef(false);
 
     const withoutSourceCues = props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack);
     const showStartCaptioning = matchedCues.matchedCues.length === 0;
-    const pageIndex = startAt ? Math.floor(startAt / DEFAULT_PAGE_SIZE) : 0;
+    const pageIndex = previousNonNullFocusedCueIndex.current > 0
+        ? Math.floor(previousNonNullFocusedCueIndex.current / DEFAULT_PAGE_SIZE)
+        : 0;
     const startIndex = pageIndex * DEFAULT_PAGE_SIZE;
     const endIndex = (pageIndex + 1) * DEFAULT_PAGE_SIZE;
     const [refs, setRefs] = useState([] as RefObject<HTMLDivElement>[]);
@@ -59,7 +65,6 @@ const CuesList = (props: Props): ReactElement => {
                 const ref = refs[startAt];
                 preventScroll.current = true;
                 ref?.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
-                console.log("scrollIntoView" + ref.current?.outerHTML);
             }
         }
     );
