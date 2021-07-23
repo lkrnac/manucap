@@ -59,9 +59,9 @@ const CuesList = (props: Props): ReactElement => {
                 const ref = refs[startAt];
                 preventScroll.current = true;
                 ref?.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
-                console.log("scrollIntoView + preventScroll = true");
+                console.log("scrollIntoView" + ref.current?.outerHTML);
             }
-        },
+        }
     );
 
     useEffect(
@@ -70,7 +70,6 @@ const CuesList = (props: Props): ReactElement => {
                 const onScroll = (): void => {
                     if (preventScroll.current) {
                         preventScroll.current = false;
-                        console.log("preventScroll = false");
                     } else {
                         dispatch(changeScrollPosition(ScrollPosition.NONE));
                     }

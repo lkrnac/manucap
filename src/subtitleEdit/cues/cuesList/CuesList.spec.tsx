@@ -428,5 +428,43 @@ describe("CuesList", () => {
             expect(scrolledElement2.outerHTML).toContain("Caption Line 7");
             expect(testingStore.getState().focusedCueIndex).toEqual(6);
         });
+
+        it("scrolls to last cue on different page twice in a row", async () => {
+            const testingSourceCuesForPagination = Array.from({ length: 120 }, (_element, index) => (
+                { vttCue: new VTTCue(index, index + 1, "Caption Line " + index), cueCategory: "DIALOGUE" } as CueDto
+            ));
+            testingStore.dispatch(updateCues(testingSourceCuesForPagination) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            await act(async () => {
+                testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+            await act(async () => {
+                testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+            });
+
+            // THEN
+            expect(testingStore.getState().focusedCueIndex).toEqual(119);
+            expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(4);
+            const scrolledElement1 = scrollIntoViewCallsTracker.mock.calls[0][0];
+            expect(scrolledElement1.outerHTML).toContain("Caption Line 119");
+            const scrolledElement2 = scrollIntoViewCallsTracker.mock.calls[1][0];
+            expect(scrolledElement2.outerHTML).toContain("Caption Line 119");
+            const scrolledElement3 = scrollIntoViewCallsTracker.mock.calls[2][0];
+            expect(scrolledElement3.outerHTML).toContain("Caption Line 119");
+            const scrolledElement4 = scrollIntoViewCallsTracker.mock.calls[3][0];
+            expect(scrolledElement4.outerHTML).toContain("Caption Line 119");
+        });
     });
 });
