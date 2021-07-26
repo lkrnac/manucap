@@ -321,11 +321,11 @@ describe("CuesList", () => {
     });
 
     describe("pagination button", () => {
-        it("'Load Next Cues' scrolls to next page", () => {
+        it("'Load previous Cues' scrolls to previous page", () => {
             // GIVEN
             testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
             testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingTranslationTrack} />
@@ -336,7 +336,33 @@ describe("CuesList", () => {
             fireEvent.click(actualNode.container.querySelector(".sbte-previous-button") as Element);
 
             // THEN
-            expect(testingStore.getState().focusedCueIndex).toEqual(49);
+            expect(testingStore.getState().focusedCueIndex).toEqual(99);
+        });
+
+        it("'Load Previous Cues' scrolls to previous page if focusedCueIndex is null", async () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector(".sbte-previous-button") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().focusedCueIndex).toEqual(99);
         });
 
         it("'Load Next Cues' scrolls to next page", () => {
@@ -352,6 +378,32 @@ describe("CuesList", () => {
 
             // WHEN
             fireEvent.click(actualNode.container.querySelector(".sbte-next-button") as Element);
+
+            // THEN
+            expect(testingStore.getState().focusedCueIndex).toEqual(100);
+        });
+
+        it("'Load Next Cues' scrolls to next page is focused cue index is null", async () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector(".sbte-next-button") as Element);
+            });
 
             // THEN
             expect(testingStore.getState().focusedCueIndex).toEqual(100);
