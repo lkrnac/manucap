@@ -98,7 +98,7 @@ const CuesList = (props: Props): ReactElement => {
                         ? (
                             <button
                                 style={{ maxHeight: "38px", width: "100%" }}
-                                className="btn btn-outline-secondary sbte-add-cue-button"
+                                className="btn btn-outline-secondary sbte-previous-button"
                                 onClick={(): void => {
                                     dispatch(changeScrollPosition(ScrollPosition.PREVIOUS_PAGE));
                                 }}
@@ -131,7 +131,7 @@ const CuesList = (props: Props): ReactElement => {
                         ? (
                             <button
                                 style={{ width: "100%", paddingTop: "5px" }}
-                                className="btn btn-outline-secondary"
+                                className="btn btn-outline-secondary sbte-next-button"
                                 onClick={(): void => {
                                     dispatch(changeScrollPosition(ScrollPosition.NEXT_PAGE));
                                 }}

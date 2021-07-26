@@ -8,7 +8,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import React, { createRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "../../model";
 import { updateCues } from "./cuesListActions";
@@ -205,7 +205,7 @@ describe("CuesList", () => {
                         }
                         <button
                             style={{ width: "100%", paddingTop: "5px" }}
-                            className="btn btn-outline-secondary"
+                            className="btn btn-outline-secondary sbte-next-button"
                             onClick={jest.fn()}
                         >
                             Load Next Cues
@@ -237,7 +237,7 @@ describe("CuesList", () => {
                     <div style={{ overflow: "auto" }}>
                         <button
                             style={{ maxHeight: "38px", width: "100%" }}
-                            className="btn btn-outline-secondary sbte-add-cue-button"
+                            className="btn btn-outline-secondary sbte-previous-button"
                             onClick={jest.fn()}
                         >
                             Load Previous Cues
@@ -255,7 +255,7 @@ describe("CuesList", () => {
                         }
                         <button
                             style={{ width: "100%", paddingTop: "5px" }}
-                            className="btn btn-outline-secondary"
+                            className="btn btn-outline-secondary sbte-next-button"
                             onClick={jest.fn()}
                         >
                             Load Next Cues
@@ -287,7 +287,7 @@ describe("CuesList", () => {
                     <div style={{ overflow: "auto" }}>
                         <button
                             style={{ maxHeight: "38px", width: "100%" }}
-                            className="btn btn-outline-secondary sbte-add-cue-button"
+                            className="btn btn-outline-secondary sbte-previous-button"
                             onClick={jest.fn()}
                         >
                             Load Previous Cues
@@ -317,6 +317,44 @@ describe("CuesList", () => {
             // THEN
             expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
                 .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        });
+    });
+
+    describe("pagination button", () => {
+        it("'Load Next Cues' scrolls to next page", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            fireEvent.click(actualNode.container.querySelector(".sbte-previous-button") as Element);
+
+            // THEN
+            expect(testingStore.getState().focusedCueIndex).toEqual(49);
+        });
+
+        it("'Load Next Cues' scrolls to next page", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            fireEvent.click(actualNode.container.querySelector(".sbte-next-button") as Element);
+
+            // THEN
+            expect(testingStore.getState().focusedCueIndex).toEqual(100);
         });
     });
 
