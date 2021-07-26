@@ -49,14 +49,13 @@ const getScrollCueIndex = (
     if (scrollPosition === ScrollPosition.LAST_TRANSLATED) {
         return lastTranslatedIndex - 1;
     }
-    if (previousFocusedCueIndex !== null) {
-        const currentPageIndex = Math.floor(previousFocusedCueIndex / DEFAULT_PAGE_SIZE);
-        if (scrollPosition === ScrollPosition.NEXT_PAGE) {
-            return currentPageIndex * DEFAULT_PAGE_SIZE + DEFAULT_PAGE_SIZE;
-        }
-        if (scrollPosition === ScrollPosition.PREVIOUS_PAGE) {
-            return currentPageIndex * DEFAULT_PAGE_SIZE - 1;
-        }
+    const previousFocusedCueIndexNullSafe = previousFocusedCueIndex === null ? 0 : previousFocusedCueIndex;
+    const currentPageIndex = Math.floor(previousFocusedCueIndexNullSafe / DEFAULT_PAGE_SIZE);
+    if (scrollPosition === ScrollPosition.NEXT_PAGE) {
+        return currentPageIndex * DEFAULT_PAGE_SIZE + DEFAULT_PAGE_SIZE;
+    }
+    if (scrollPosition === ScrollPosition.PREVIOUS_PAGE) {
+        return currentPageIndex * DEFAULT_PAGE_SIZE - 1;
     }
     return null; // out of range value, because need to trigger change of CueList.startAt
 };

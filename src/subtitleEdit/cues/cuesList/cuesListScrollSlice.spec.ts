@@ -21,7 +21,7 @@ let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
 describe("cuesListScrollSlice", () => {
-    describe("changeScrollPosition", () => {
+    describe("changeScrollPosition with not null previous focused index", () => {
         beforeEach(() => {
             testingStore = createTestingStore({
                 matchedCues: testingMatchedCues,
@@ -54,5 +54,39 @@ describe("cuesListScrollSlice", () => {
             // THEN
             expect(testingStore.getState().focusedCueIndex).toEqual(expectedFocusedCueIndex);
         });
+    });
+
+    describe("changeScrollPosition with not null previous focused index", () => {
+        beforeEach(() => {
+            testingStore = createTestingStore({
+                matchedCues: testingMatchedCues,
+                cues: testingTargetCues,
+                sourceCues: testingSourceCues,
+                editingCueIndex: 58,
+                currentPlayerTime: 65,
+            });
+        });
+
+        each([
+            [ScrollPosition.NONE, null],
+            [ScrollPosition.FIRST, 0],
+            [ScrollPosition.LAST, 119],
+            [ScrollPosition.CURRENT, 58],
+            [ScrollPosition.PLAYBACK, 64],
+            [ScrollPosition.NEXT_PAGE, 50],
+            [ScrollPosition.PREVIOUS_PAGE, -1],
+            [ScrollPosition.LAST_TRANSLATED, 69],
+            [undefined, null],
+        ])
+            .it("updates scroll position focused cue index in Redux store for scroll position %s", (
+                scrollPosition: ScrollPosition,
+                expectedFocusedCueIndex: number
+            ) => {
+                // WHEN
+                testingStore.dispatch(changeScrollPosition(scrollPosition) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().focusedCueIndex).toEqual(expectedFocusedCueIndex);
+            });
     });
 });
