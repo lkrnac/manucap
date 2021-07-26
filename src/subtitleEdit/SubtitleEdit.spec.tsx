@@ -1270,9 +1270,6 @@ describe("SubtitleEdit", () => {
         await act(async () => {
             fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
         });
-        await act(async () => {
-            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
-        });
 
         expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize}`);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
