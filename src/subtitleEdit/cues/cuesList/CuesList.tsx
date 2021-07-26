@@ -99,8 +99,8 @@ const CuesList = (props: Props): ReactElement => {
                     startIndex > 0
                         ? (
                             <button
-                                style={{ maxHeight: "38px", width: "100%" }}
-                                className="btn btn-outline-secondary sbte-previous-button"
+                                style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
+                                className="btn btn-outline-secondary sbte-previous-button shadow-none"
                                 onClick={(): void => {
                                     dispatch(changeScrollPosition(ScrollPosition.PREVIOUS_PAGE));
                                 }}
@@ -133,7 +133,7 @@ const CuesList = (props: Props): ReactElement => {
                         ? (
                             <button
                                 style={{ width: "100%", paddingTop: "5px" }}
-                                className="btn btn-outline-secondary sbte-next-button"
+                                className="btn btn-outline-secondary sbte-next-button shadow-none"
                                 onClick={(): void => {
                                     dispatch(changeScrollPosition(ScrollPosition.NEXT_PAGE));
                                 }}

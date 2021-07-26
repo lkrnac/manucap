@@ -205,7 +205,7 @@ describe("CuesList", () => {
                         }
                         <button
                             style={{ width: "100%", paddingTop: "5px" }}
-                            className="btn btn-outline-secondary sbte-next-button"
+                            className="btn btn-outline-secondary sbte-next-button shadow-none"
                             onClick={jest.fn()}
                         >
                             Load Next Cues
@@ -236,8 +236,8 @@ describe("CuesList", () => {
                 <Provider store={testingStore}>
                     <div style={{ overflow: "auto" }}>
                         <button
-                            style={{ maxHeight: "38px", width: "100%" }}
-                            className="btn btn-outline-secondary sbte-previous-button"
+                            style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
+                            className="btn btn-outline-secondary sbte-previous-button shadow-none"
                             onClick={jest.fn()}
                         >
                             Load Previous Cues
@@ -255,7 +255,7 @@ describe("CuesList", () => {
                         }
                         <button
                             style={{ width: "100%", paddingTop: "5px" }}
-                            className="btn btn-outline-secondary sbte-next-button"
+                            className="btn btn-outline-secondary sbte-next-button shadow-none"
                             onClick={jest.fn()}
                         >
                             Load Next Cues
@@ -286,8 +286,8 @@ describe("CuesList", () => {
                 <Provider store={testingStore}>
                     <div style={{ overflow: "auto" }}>
                         <button
-                            style={{ maxHeight: "38px", width: "100%" }}
-                            className="btn btn-outline-secondary sbte-previous-button"
+                            style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
+                            className="btn btn-outline-secondary sbte-previous-button shadow-none"
                             onClick={jest.fn()}
                         >
                             Load Previous Cues
