@@ -69,6 +69,29 @@ describe("CuesList", () => {
     });
 
     describe("renders", () => {
+        const matchedCues = Array.from({ length: 120 }, (_element, index) => (
+            {
+                sourceCues: [
+                    {
+                        index,
+                        cue: {
+                            vttCue: new VTTCue(index, index + 1, "Source Line " + index),
+                            cueCategory: "DIALOGUE"
+                        } as CueDto
+                    }
+                ],
+                targetCues: [
+                    {
+                        index,
+                        cue: {
+                            vttCue: new VTTCue(index, index + 1, "Target Line " + index),
+                            cueCategory: "DIALOGUE"
+                        } as CueDto
+                    }
+                ],
+            }
+        ));
+
         it("empty track", () => {
             // GIVEN
             const expectedNode = render(
@@ -102,7 +125,7 @@ describe("CuesList", () => {
                 { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(2, 3, "Source Line 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const matchedCues = [
+            const matchedCuesShort = [
                 { targetCues: [{ index: 0, cue: targetCues[0] }], sourceCues: [{ index: 0, cue: sourceCues[0] }]},
                 { targetCues: [{ index: 1, cue: targetCues[1] }], sourceCues: [{ index: 1, cue: sourceCues[1] }]},
                 { targetCues: [{ index: 2, cue: targetCues[2] }], sourceCues: [{ index: 2, cue: sourceCues[2] }]},
@@ -117,25 +140,182 @@ describe("CuesList", () => {
                     <div style={{ overflow: "auto" }}>
                         <CueLine
                             key={0}
-                            data={matchedCues[0]}
+                            data={matchedCuesShort[0]}
                             rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues: matchedCuesShort }}
                             rowRef={createRef()}
                         />
                         <CueLine
                             key={1}
-                            data={matchedCues[1]}
+                            data={matchedCuesShort[1]}
                             rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues: matchedCuesShort }}
                             rowRef={createRef()}
                         />
                         <CueLine
                             key={2}
-                            data={matchedCues[2]}
+                            data={matchedCuesShort[2]}
                             rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues: matchedCuesShort }}
                             rowRef={createRef()}
                         />
+                    </div>
+                </Provider>
+            );
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        });
+
+        it("first page", () => {
+            // GIVEN
+            const targetCues = matchedCues.map(matchedCue => matchedCue.targetCues)
+                .flat()
+                .map(cueWithIndex => cueWithIndex.cue);
+            const sourceCues = matchedCues.map(matchedCue => matchedCue.sourceCues)
+                .flat()
+                .map(cueWithIndex => cueWithIndex.cue);
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div style={{ overflow: "auto" }}>
+                        {
+                            Array.from({ length: 50 }, (_element, index) => (
+                                <CueLine
+                                    key={index}
+                                    data={matchedCues[index]}
+                                    rowIndex={index}
+                                    rowProps={{ targetCuesLength: 120, withoutSourceCues: false, matchedCues }}
+                                    rowRef={createRef()}
+                                />
+                            ))
+                        }
+                        <button
+                            style={{ width: "100%", paddingTop: "5px" }}
+                            className="btn btn-outline-secondary"
+                            onClick={jest.fn()}
+                        >
+                            Load Next Cues
+                        </button>
+                    </div>
+                </Provider>
+            );
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        });
+
+        it("middle page", () => {
+            // GIVEN
+            const targetCues = matchedCues.map(matchedCue => matchedCue.targetCues)
+                .flat()
+                .map(cueWithIndex => cueWithIndex.cue);
+            const sourceCues = matchedCues.map(matchedCue => matchedCue.sourceCues)
+                .flat()
+                .map(cueWithIndex => cueWithIndex.cue);
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div style={{ overflow: "auto" }}>
+                        <button
+                            style={{ maxHeight: "38px", width: "100%" }}
+                            className="btn btn-outline-secondary sbte-add-cue-button"
+                            onClick={jest.fn()}
+                        >
+                            Load Previous Cues
+                        </button>
+                        {
+                            Array.from({ length: 50 }, (_element, index) => (
+                                <CueLine
+                                    key={index + 50}
+                                    data={matchedCues[index + 50]}
+                                    rowIndex={index + 50}
+                                    rowProps={{ targetCuesLength: 120, withoutSourceCues: false, matchedCues }}
+                                    rowRef={createRef()}
+                                />
+                            ))
+                        }
+                        <button
+                            style={{ width: "100%", paddingTop: "5px" }}
+                            className="btn btn-outline-secondary"
+                            onClick={jest.fn()}
+                        >
+                            Load Next Cues
+                        </button>
+                    </div>
+                </Provider>
+            );
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        });
+
+        it("last page", () => {
+            // GIVEN
+            const targetCues = matchedCues.map(matchedCue => matchedCue.targetCues)
+                .flat()
+                .map(cueWithIndex => cueWithIndex.cue);
+            const sourceCues = matchedCues.map(matchedCue => matchedCue.sourceCues)
+                .flat()
+                .map(cueWithIndex => cueWithIndex.cue);
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div style={{ overflow: "auto" }}>
+                        <button
+                            style={{ maxHeight: "38px", width: "100%" }}
+                            className="btn btn-outline-secondary sbte-add-cue-button"
+                            onClick={jest.fn()}
+                        >
+                            Load Previous Cues
+                        </button>
+                        {
+                            Array.from({ length: 20 }, (_element, index) => (
+                                <CueLine
+                                    key={index + 100}
+                                    data={matchedCues[index + 100]}
+                                    rowIndex={index + 100}
+                                    rowProps={{ targetCuesLength: 120, withoutSourceCues: false, matchedCues }}
+                                    rowRef={createRef()}
+                                />
+                            ))
+                        }
                     </div>
                 </Provider>
             );
