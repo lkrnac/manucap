@@ -243,11 +243,11 @@ describe("CuesList", () => {
                             Load Previous Cues
                         </button>
                         {
-                            Array.from({ length: 50 }, (_element, index) => (
+                            Array.from({ length: 55 }, (_element, index) => (
                                 <CueLine
-                                    key={index + 50}
-                                    data={matchedCues[index + 50]}
-                                    rowIndex={index + 50}
+                                    key={index + 45}
+                                    data={matchedCues[index + 45]}
+                                    rowIndex={index + 45}
                                     rowProps={{ targetCuesLength: 120, withoutSourceCues: false, matchedCues }}
                                     rowRef={createRef()}
                                 />
@@ -293,11 +293,11 @@ describe("CuesList", () => {
                             Load Previous Cues
                         </button>
                         {
-                            Array.from({ length: 20 }, (_element, index) => (
+                            Array.from({ length: 25 }, (_element, index) => (
                                 <CueLine
-                                    key={index + 100}
-                                    data={matchedCues[index + 100]}
-                                    rowIndex={index + 100}
+                                    key={index + 95}
+                                    data={matchedCues[index + 95]}
+                                    rowIndex={index + 95}
                                     rowProps={{ targetCuesLength: 120, withoutSourceCues: false, matchedCues }}
                                     rowRef={createRef()}
                                 />

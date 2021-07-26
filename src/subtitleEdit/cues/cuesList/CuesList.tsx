@@ -34,7 +34,9 @@ const CuesList = (props: Props): ReactElement => {
     const pageIndex = previousNonNullFocusedCueIndex.current > 0
         ? Math.floor(previousNonNullFocusedCueIndex.current / DEFAULT_PAGE_SIZE)
         : 0;
-    const startIndex = pageIndex * DEFAULT_PAGE_SIZE;
+    const startIndex = pageIndex === 0
+        ? 0
+        : pageIndex * DEFAULT_PAGE_SIZE - 5;
     const endIndex = (pageIndex + 1) * DEFAULT_PAGE_SIZE;
     const [refs, setRefs] = useState([] as RefObject<HTMLDivElement>[]);
 
