@@ -229,6 +229,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const glossaryTerm = useSelector((state: SubtitleEditState) => state.glossaryTerm);
 
     const unmountContentRef = useRef<ContentState | null>(null);
+    const imeCompositionRef = useRef<string | null>(null);
 
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -236,37 +237,41 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         editorState = EditorState.moveFocusToEnd(editorState);
     }
 
-    const newCompositeDecorator = new CompositeDecorator([
-        {
-            strategy: findSearchReplaceMatch(props),
-            component: SearchReplaceMatch,
-        },
-        {
-            strategy: findExtraCharacters(subtitleSpecifications),
-            component: CueExtraCharacters,
-            props: {}
-        },
-        {
-            strategy: findSpellCheckIssues(props, editingTrack, spellcheckerEnabled),
-            component: SpellCheckIssue,
-            props: {
-                spellCheck: props.spellCheck,
-                correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
-                editorRef,
-                spellCheckerMatchingOffset,
-                setSpellCheckerMatchingOffset,
-                bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut,
-                unbindCueViewModeKeyboardShortcut: props.unbindCueViewModeKeyboardShortcut,
-                cueId: props.editUuid,
-                cueIdx: props.index,
-                trackId: editingTrack?.id
+    // If in composition mode (i.e. for IME input or diacritics), the decorator re-renders cannot
+    // happen because it will cause an error in the draft-js composition handler.
+    if (!imeCompositionRef.current) {
+        const newCompositeDecorator = new CompositeDecorator([
+            {
+                strategy: findSearchReplaceMatch(props),
+                component: SearchReplaceMatch,
+            },
+            {
+                strategy: findExtraCharacters(subtitleSpecifications),
+                component: CueExtraCharacters,
+                props: {}
+            },
+            {
+                strategy: findSpellCheckIssues(props, editingTrack, spellcheckerEnabled),
+                component: SpellCheckIssue,
+                props: {
+                    spellCheck: props.spellCheck,
+                    correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
+                    editorRef,
+                    spellCheckerMatchingOffset,
+                    setSpellCheckerMatchingOffset,
+                    bindCueViewModeKeyboardShortcut: props.bindCueViewModeKeyboardShortcut,
+                    unbindCueViewModeKeyboardShortcut: props.unbindCueViewModeKeyboardShortcut,
+                    cueId: props.editUuid,
+                    cueIdx: props.index,
+                    trackId: editingTrack?.id
+                }
             }
-        }
-    ]);
-    editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
+        ]);
+        editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
+    }
+
     editorState = insertGlossaryTermIfNeeded(editorState, glossaryTerm);
     editorState = replaceIfNeeded(editorState, props.searchReplaceMatches, replacement);
-
     const currentContent = editorState.getCurrentContent();
     const currentInlineStyle = editorState.getCurrentInlineStyle();
     const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
@@ -355,11 +360,19 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     minHeight: "54px"
                 }}
             >
-                <div style={{ flex: 1 }}>
+                <div
+                    style={{ flex: 1 }}
+                    onCompositionStart={(): void => { imeCompositionRef.current = "start"; }}
+                    onCompositionEnd={(): void => { imeCompositionRef.current = "end"; }}
+                >
                     <Editor
                         editorState={editorState}
-                        onChange={(newEditorState: EditorState): AppThunk =>
-                            dispatch(updateEditorState(props.index, newEditorState))}
+                        onChange={(newEditorState: EditorState): AppThunk | undefined => {
+                            if (imeCompositionRef.current === "end") {
+                                imeCompositionRef.current = null;
+                            }
+                            return dispatch(updateEditorState(props.index, newEditorState));
+                        }}
                         ref={editorRef}
                         spellCheck={false}
                         keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}
