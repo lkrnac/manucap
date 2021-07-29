@@ -154,7 +154,6 @@ describe("SubtitleEditHeader", () => {
         } as Track;
         const testingTask = {
             type: "TASK_REVIEW",
-            trackReviewType: "GENERAL",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
             editDisabled: false
@@ -195,8 +194,7 @@ describe("SubtitleEditHeader", () => {
             mediaTitle: "This is the video title",
         } as Track;
         const testingTask = {
-            type: "TASK_REVIEW",
-            trackReviewType: "POST_EDITING",
+            type: "TASK_POST_EDITING",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
             editDisabled: false
@@ -206,6 +204,88 @@ describe("SubtitleEditHeader", () => {
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>Post-Editing Review of <b>English (US)</b> Caption <i /></div>
+                </div>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div />
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders Caption Proofreading Review", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+        } as Track;
+        const testingTask = {
+            type: "TASK_PROOF_READING",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM",
+            editDisabled: false
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Proofreading Review of <b>English (US)</b> Caption <i /></div>
+                </div>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div />
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders Caption Sign-Off Review", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+        } as Track;
+        const testingTask = {
+            type: "TASK_SIGN_OFF",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM",
+            editDisabled: false
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Sign-Off Review of <b>English (US)</b> Caption <i /></div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -239,7 +319,6 @@ describe("SubtitleEditHeader", () => {
         } as Track;
         const testingTask = {
             type: "TASK_REVIEW",
-            trackReviewType: "GENERAL",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
             editDisabled: false
@@ -281,8 +360,7 @@ describe("SubtitleEditHeader", () => {
             sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
         } as Track;
         const testingTask = {
-            type: "TASK_REVIEW",
-            trackReviewType: "POST_EDITING",
+            type: "TASK_POST_EDITING",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
             editDisabled: false
@@ -293,6 +371,94 @@ describe("SubtitleEditHeader", () => {
                     <div><b>This is the video title</b> <i>Project One</i></div>
                     <div>
                         Post-Editing Review of <span><b>English (US)</b> to <b>Italian</b></span> Translation <i />
+                    </div>
+                </div>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div />
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders Translation Proofreading Review", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "TRANSLATION",
+            language: { id: "it-IT", name: "Italian" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+        } as Track;
+        const testingTask = {
+            type: "TASK_PROOF_READING",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM",
+            editDisabled: false
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>
+                        Proofreading Review of <span><b>English (US)</b> to <b>Italian</b></span> Translation <i />
+                    </div>
+                </div>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div />
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
+    it("renders Translation Sign-Off Review", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "TRANSLATION",
+            language: { id: "it-IT", name: "Italian" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+        } as Track;
+        const testingTask = {
+            type: "TASK_SIGN_OFF",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM",
+            editDisabled: false
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>
+                        Sign-Off Review of <span><b>English (US)</b> to <b>Italian</b></span> Translation <i />
                     </div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
