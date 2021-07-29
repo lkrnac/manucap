@@ -14,6 +14,7 @@ import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { reset } from "../edit/editorStatesSlice";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 
 let testingStore = createTestingStore();
 
@@ -327,6 +328,9 @@ describe("SearchReplaceEditor", () => {
         );
         const replaceAllButton = getByText("Replace All");
         const replaceInput = getByPlaceholderText("Replace");
+        testingStore.dispatch(matchedCuesSlice.actions
+            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+        );
 
         // WHEN
         fireEvent.change(replaceInput, { target: { value: "New Line 5" }});
@@ -343,6 +347,32 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().focusedCueIndex).toEqual(0);
         expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
         expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+    });
+
+    it("Update matched cues in Redux when Replace All button is clicked", async () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+        const { getByText, getByPlaceholderText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        );
+        const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
+        testingStore.dispatch(matchedCuesSlice.actions
+            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+        );
+
+        // WHEN
+        fireEvent.change(replaceInput, { target: { value: "New Line 5" }});
+        fireEvent.click(replaceAllButton);
+
+        // THEN
+        expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(4);
     });
 
     it("replaces all matches replace contains find", async () => {
