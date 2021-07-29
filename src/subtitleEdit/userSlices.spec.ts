@@ -19,7 +19,7 @@ describe("userSlices", () => {
         expect(testingStore.getState().currentUser).not.toEqual(testingUser);
 
         // WHEN
-        testingStore.dispatch(userSlice.actions.updateCurrentUser({ currentUser: testingUser }) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ currentUser: testingUser }) as {} as AnyAction);
 
         // THEN
         expect(testingStore.getState().currentUser).toEqual(testingUser);
