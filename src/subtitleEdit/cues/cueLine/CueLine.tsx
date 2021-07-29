@@ -8,7 +8,7 @@ import CueLineFlap from "./CueLineFlap";
 import _ from "lodash";
 import InsertCueButton from "../view/InsertCueButton";
 import ClickCueWrapper from "../view/ClickCueWrapper";
-import CueComments from "./CueComments";
+import CueComments from "../comments/CueComments";
 
 export interface CueLineRowProps {
     playerTime: number;
@@ -113,8 +113,9 @@ const CueLine = (props: CueLineProps): ReactElement => {
         }
     });
 
+    const commentsVisible = useSelector((state: SubtitleEditState) => state.commentsVisible);
     const cueComments = props.data.targetCues?.map(cue => cue.cue.comments ? cue.cue.comments : [] )
-        .reduce((cue1, cue2) => cue1?.concat(...cue2) );
+        .reduce((cue1, cue2) => cue1?.concat(...cue2), []);
 
     return (
         <div style={{ display: "flex", flexDirection: "row" }}>
@@ -132,7 +133,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 />
                 <div
                     className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
-                    style={{ display: "grid", flexDirection:"column", width: "100%" }}
+                    style={{ display: "grid", width: "100%" }}
                 >
                     {
                         props.data.sourceCues && props.data.sourceCues.length > 0
@@ -219,10 +220,11 @@ const CueLine = (props: CueLineProps): ReactElement => {
                     }
                 </div>
             </div>
-            <CueComments
-                rowIndex={props.rowIndex}
-                comments={cueComments}
-            />
+            {
+                commentsVisible
+                    ? <CueComments rowIndex={props.rowIndex} comments={cueComments} />
+                    : null
+            }
         </div>
     );
 };

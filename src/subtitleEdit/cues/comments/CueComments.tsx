@@ -13,8 +13,8 @@ const CueComments = (props: Props): ReactElement => {
             {
                 props.comments?.map((comment: CueComment): ReactElement => (
                     <div className="sbte-cue-comment">
-                        <span className="sbte-cue-comment-user">{comment.user}</span>
-                        <span> {comment.content} </span>
+                        <span className="sbte-cue-comment-user">{comment.userName}</span>
+                        <span> {comment.comment} </span>
                         <span className="sbte-light-gray-text"><i>{comment.date}</i></span>
                     </div>
                 ))

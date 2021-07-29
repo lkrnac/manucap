@@ -138,7 +138,9 @@ export enum CueError {
 }
 
 export interface CueComment {
-    user: string;
-    content: string;
+    id?: string;
+    userId?: string;
+    userName: string;
+    comment: string;
     date: string;
 }
