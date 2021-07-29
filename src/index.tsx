@@ -182,7 +182,7 @@ const TestApp = (): ReactElement => {
             } as User
         };
         setTimeout(
-            () => dispatch(userSlice.actions.updateCurrentUser(userAction)),
+            () => dispatch(userSlice.actions.updateSubtitleUser(userAction)),
             500
         );
     });
