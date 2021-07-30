@@ -5,9 +5,11 @@ import { humanizer } from "humanize-duration";
 import { useSelector } from "react-redux";
 import { hasDataLoaded } from "./utils/subtitleEditUtils";
 
-const REVIEW_TYPE_LABEL_MAP = new Map([
-    ["GENERAL", ""],
-    ["POST_EDITING", "Post-Editing "]
+const REVIEW_LABEL_MAP = new Map([
+    ["TASK_REVIEW", ""],
+    ["TASK_POST_EDITING", "Post-Editing "],
+    ["TASK_PROOF_READING", "Proofreading "],
+    ["TASK_SIGN_OFF", "Sign-Off "],
 ]);
 
 const getTrackType = (track: Track): string => {
@@ -56,10 +58,12 @@ const getChunkReviewType = (task: Task): string => {
     return task.finalChunkReview ? "Final Chunk " : "";
 };
 
-const getReviewType = (task: Task): string | undefined =>
-    task.trackReviewType ?
-        REVIEW_TYPE_LABEL_MAP.get(task.trackReviewType)
-        : "";
+const getReviewHeader = (task: Task, track: Track): ReactElement => (
+    <div>
+        {getChunkReviewType(task)}{REVIEW_LABEL_MAP.get(task.type)}Review of {getLanguageDescription(track)}{" "}
+        {getTrackType(track)} {getTrackLength(track)}
+    </div>
+);
 
 const getTrackDescription = (task: Task, track: Track): ReactElement => {
     if (!task || !task.type || !track) {
@@ -68,11 +72,10 @@ const getTrackDescription = (task: Task, track: Track): ReactElement => {
     const trackDescriptions = {
         TASK_TRANSLATE: <div>Translation from {getLanguageDescription(track)} {getTrackLength(track)}</div>,
         TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}</div>,
-        TASK_REVIEW:
-    <div>
-        {getChunkReviewType(task)}{getReviewType(task)}Review of {getLanguageDescription(track)}{" "}
-        {getTrackType(track)} {getTrackLength(track)}
-    </div>,
+        TASK_REVIEW: getReviewHeader(task, track),
+        TASK_POST_EDITING: getReviewHeader(task, track),
+        TASK_PROOF_READING: getReviewHeader(task, track),
+        TASK_SIGN_OFF: getReviewHeader(task, track),
         TASK_CAPTION: <div>Caption in: {getLanguageDescription(track)} {getTrackLength(track)}</div>
     };
     return trackDescriptions[task.type] ? trackDescriptions[task.type] : <div />;
