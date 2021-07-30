@@ -335,6 +335,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         [ props ]
     );
 
+    // This would work also from previous effect, but it is executed on every save action
+    // That means potentially various times during typing text. As this is expensive action,
+    // it was causing noticeable + annoying lag (frozen cursor) for long tracks during typing.
+    // So effect that executes this only at unmount will remove mentioned lag, but will update matched cues correctly
     useEffect(
         () => (): void => {
             changeVttCueInReduxDebounced.cancel();
