@@ -193,7 +193,7 @@ describe("CuesList", () => {
                 <Provider store={testingStore}>
                     <div style={{ overflow: "auto" }}>
                         {
-                            Array.from({ length: 50 }, (_element, index) => (
+                            Array.from({ length: 55 }, (_element, index) => (
                                 <CueLine
                                     key={index}
                                     data={matchedCues[index]}
@@ -243,7 +243,7 @@ describe("CuesList", () => {
                             Load Previous Cues
                         </button>
                         {
-                            Array.from({ length: 55 }, (_element, index) => (
+                            Array.from({ length: 60 }, (_element, index) => (
                                 <CueLine
                                     key={index + 45}
                                     data={matchedCues[index + 45]}
