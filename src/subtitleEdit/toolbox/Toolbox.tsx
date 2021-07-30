@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
-import CueCommentsToggle from "./CueCommentsButton";
+import CueCommentsToggle from "./CueCommentsToggle";
 
 interface Props {
     handleExportFile: () => void;

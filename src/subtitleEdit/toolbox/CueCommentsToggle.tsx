@@ -15,9 +15,9 @@ export const CueCommentsToggle = (): ReactElement => {
                 dispatch(showComments(!commentsVisible));
             }}
             render={(toggle): ReactElement => (
-                toggle ?
-                    <><i className="fas fa-comment-slash" /> Hide Comments</> :
-                    <><i className="fas fa-comments" /> Show Comments</>
+                toggle
+                    ? <><i className="fas fa-comment-slash" /> Hide Comments</>
+                    : <><i className="fas fa-comments" /> Show Comments</>
             )}
         />
     );
