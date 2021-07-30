@@ -285,7 +285,7 @@ describe("SubtitleSpecificationsButton", () => {
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testingEditingTrack) as {} as AnyAction);
-        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ currentUser: testingUser }) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -317,7 +317,7 @@ describe("SubtitleSpecificationsButton", () => {
 
         testingStore.dispatch(updateEditingTrack(testingEditingTrackByCurrentUser) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ currentUser: testingUser }) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>

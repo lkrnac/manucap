@@ -6,7 +6,7 @@ import { SubtitleEditState } from "../../subtitleEditReducers";
 const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const editingTask = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const currentUser = useSelector((state: SubtitleEditState) => state.currentUser);
+    const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
     const [show, setShow] = useState(false);
 
     const cues = useSelector((state: SubtitleEditState) => state.cues);

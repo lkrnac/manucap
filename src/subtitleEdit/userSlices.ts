@@ -4,7 +4,7 @@ import { SubtitleEditAction, User } from "./model";
 // import { Dispatch } from "react";
 
 export interface UserAction extends SubtitleEditAction {
-    currentUser: User;
+    subtitleUser: User;
 }
 
 export const userSlice = createSlice({
@@ -12,6 +12,6 @@ export const userSlice = createSlice({
     initialState: null as User | null,
     reducers: {
         updateSubtitleUser: (_state, action: PayloadAction<UserAction>): User =>
-            action.payload.currentUser
+            action.payload.subtitleUser
     }
 });

@@ -36,7 +36,7 @@ export const Reducers = {
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,
-    currentUser: userSlice.reducer,
+    subtitleUser: userSlice.reducer,
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
     validationErrors: validationErrorSlice.reducer,

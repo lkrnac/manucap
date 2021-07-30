@@ -172,7 +172,7 @@ const TestApp = (): ReactElement => {
     // ################################## User ###########################################
     useEffect(() => {
         const userAction = {
-            currentUser: {
+            subtitleUser: {
                 displayName: "Jane Doe",
                 email: "jane.doe@dotsub.com",
                 firstname: "Jane",

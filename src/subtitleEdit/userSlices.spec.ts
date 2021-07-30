@@ -16,12 +16,12 @@ const testingStore = createTestingStore();
 
 describe("userSlices", () => {
     it("update currentUser", () => {
-        expect(testingStore.getState().currentUser).not.toEqual(testingUser);
+        expect(testingStore.getState().subtitleUser).not.toEqual(testingUser);
 
         // WHEN
-        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ currentUser: testingUser }) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
 
         // THEN
-        expect(testingStore.getState().currentUser).toEqual(testingUser);
+        expect(testingStore.getState().subtitleUser).toEqual(testingUser);
     });
 });
