@@ -18,5 +18,5 @@ export const userSlice = createSlice({
 
 export const  updateSubtitleUser = (user: User): AppThunk =>
     (dispatch: Dispatch<PayloadAction<UserAction>>): void => {
-        dispatch(userSlice.actions.updateSubtitleUser({subtitleUser: user}));
+        dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: user }));
     };
