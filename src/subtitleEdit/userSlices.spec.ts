@@ -15,7 +15,7 @@ const testingUser = {
 const testingStore = createTestingStore();
 
 describe("userSlices", () => {
-    it("update currentUser", () => {
+    it("update subtitleUser", () => {
         expect(testingStore.getState().subtitleUser).not.toEqual(testingUser);
 
         // WHEN
