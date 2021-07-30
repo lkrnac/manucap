@@ -193,7 +193,7 @@ export const updateVttCue = (
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             updateSearchMatches(dispatch, getState, idx);
             validateCue(dispatch, idx, true);
-            if (!textOnly) {
+            if (!textOnly || editUuid === undefined) {
                 dispatch(updateMatchedCues());
             }
             callSaveTrack(dispatch, getState, multiCuesEdit);

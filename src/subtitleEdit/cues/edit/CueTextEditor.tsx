@@ -329,11 +329,21 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             changeVttCueInReduxDebounced.cancel();
             if (unmountContentRef.current !== null && unmountContentRef.current !== currentContent) {
                 changeVttCueInRedux(unmountContentRef.current, props, dispatch);
-                dispatch(updateMatchedCues());
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [ props ]
+    );
+
+    useEffect(
+        () => (): void => {
+            changeVttCueInReduxDebounced.cancel();
+            if (unmountContentRef.current !== null && unmountContentRef.current !== currentContent) {
+                dispatch(updateMatchedCues());
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
     );
 
     return (
