@@ -8,7 +8,7 @@ export interface UserAction extends SubtitleEditAction {
 }
 
 export const userSlice = createSlice({
-    name: "currentUser",
+    name: "subtitleUser",
     initialState: null as User | null,
     reducers: {
         updateSubtitleUser: (_state, action: PayloadAction<UserAction>): User =>
