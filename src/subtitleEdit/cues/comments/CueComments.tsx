@@ -1,16 +1,23 @@
-import React, { ReactElement } from "react";
-import { CueComment } from "../../model";
+import React, {ReactElement, useState} from "react";
+import { CueComment, CueDto } from "../../model";
+import {useDispatch, useSelector} from "react-redux";
+import { addCueComment } from "../cuesList/cuesListActions";
+import {SubtitleEditState} from "../../subtitleEditReducers";
 
 interface Props {
-    rowIndex: number;
-    comments?: CueComment[] | undefined;
+    index: number;
+    cue: CueDto;
 }
 
 const CueComments = (props: Props): ReactElement => {
+    const dispatch = useDispatch();
+    const [text, setText] = useState("");
+    const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
+
     return (
         <div className="sbte-cue-comments sbte-medium-font">
             {
-                props.comments?.map((comment: CueComment): ReactElement => (
+                props.cue.comments?.map((comment: CueComment): ReactElement => (
                     <div className="sbte-cue-comment">
                         <span className="sbte-cue-comment-user">{comment.userName}</span>
                         <span> {comment.comment} </span>
@@ -31,10 +38,25 @@ const CueComments = (props: Props): ReactElement => {
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                 <input
                     type="text"
+                    value={text}
                     placeholder="Type your comment here"
                     className="sbte-cue-comment-input"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setText(e.target.value)}
                 />
-                <button type="button" className="btn btn-sm btn-outline-secondary" style={{ float: "right" }}>
+                <button
+                    type="button"
+                    className="btn btn-sm btn-outline-secondary"
+                    style={{ float: "right" }}
+                    onClick={(): void => {
+                        const newComment = {
+                            userName: currentUser?.displayName,
+                            comment: text,
+                            date: new Date().toISOString()
+                        };
+                        dispatch(addCueComment(props.index, newComment));
+                        setText("");
+                    }}
+                >
                     Send
                 </button>
             </div>

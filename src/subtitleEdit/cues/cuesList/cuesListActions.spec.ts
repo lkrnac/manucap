@@ -7,6 +7,7 @@ import { act } from "react-dom/test-utils";
 
 import {
     addCue,
+    addCueComment,
     applyShiftTime,
     deleteCue,
     syncCues,
@@ -1600,6 +1601,51 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
+        });
+    });
+
+    describe("addCueComment", () => {
+        it("adds a comment to a cue without comments", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const newComment = {
+                userName: "Username",
+                comment: "This is a comment",
+                date: "2021-08-02T20:47:14.571Z"
+            };
+
+            // WHEN
+            testingStore.dispatch(addCueComment(1, newComment) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].comments).toEqual([newComment]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+        });
+
+        it("adds a comment to a cue with comments", () => {
+            // GIVEN
+            const existingComment = {
+                userName: "Username",
+                comment: "This is an existing comment",
+                date: "2021-09-02T20:10:14.571Z"
+            };
+            const testingCuesWithComments = [
+                { ...testingCues[0], comments: [existingComment]},
+                testingCues[1]
+            ];
+            testingStore.dispatch(updateCues(testingCuesWithComments) as {} as AnyAction);
+            const newComment = {
+                userName: "Username",
+                comment: "This is a comment",
+                date: "2021-08-02T20:47:14.571Z"
+            };
+
+            // WHEN
+            testingStore.dispatch(addCueComment(0, newComment) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].comments).toEqual([existingComment, newComment]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
         });
     });
 

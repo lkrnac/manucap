@@ -2,7 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import React  from "react";
 import { Provider } from "react-redux";
 import testingStore from "../../../testUtils/testingStore";
-import { CueComment } from "../../model";
+import { CueComment, CueDto } from "../../model";
 import { render } from "@testing-library/react";
 import CueComments from "./CueComments";
 
@@ -13,6 +13,11 @@ describe("CueComments", () => {
             { userName: "Reviewer", date: "2010-01-01", comment: "this is the first comment" },
             { userName: "Linguist", date: "2010-01-02", comment: "this is the second comment" }
         ] as CueComment[];
+        const testCue = {
+            vttCue: new VTTCue(1, 3, "some text"),
+            cueCategory: "DIALOGUE",
+            comments
+        } as CueDto;
         const expectedNode = render(
             <div className="sbte-cue-comments sbte-medium-font">
                 <div className="sbte-cue-comment">
@@ -40,6 +45,7 @@ describe("CueComments", () => {
                         type="text"
                         placeholder="Type your comment here"
                         className="sbte-cue-comment-input"
+                        value=""
                     />
                     <button type="button" className="btn btn-sm btn-outline-secondary" style={{ float: "right" }}>
                         Send
@@ -51,7 +57,7 @@ describe("CueComments", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueComments rowIndex={0} comments={comments} />
+                <CueComments index={0} cue={testCue} />
             </Provider>
         );
 
@@ -61,6 +67,11 @@ describe("CueComments", () => {
     it("renders with no comments", () => {
         // GIVEN
         const comments = [] as CueComment[];
+        const testCue = {
+            vttCue: new VTTCue(1, 3, "some text"),
+            cueCategory: "DIALOGUE",
+            comments
+        } as CueDto;
         const expectedNode = render(
             <div className="sbte-cue-comments sbte-medium-font">
                 <hr style={{
@@ -78,6 +89,7 @@ describe("CueComments", () => {
                         type="text"
                         placeholder="Type your comment here"
                         className="sbte-cue-comment-input"
+                        value=""
                     />
                     <button type="button" className="btn btn-sm btn-outline-secondary" style={{ float: "right" }}>
                         Send
@@ -89,7 +101,7 @@ describe("CueComments", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueComments rowIndex={0} comments={comments} />
+                <CueComments index={0} cue={testCue} />
             </Provider>
         );
 

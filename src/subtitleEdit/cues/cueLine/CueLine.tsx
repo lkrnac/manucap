@@ -189,8 +189,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         {
                                             commentsVisible ?
                                                 <CueComments
-                                                    rowIndex={props.rowIndex}
-                                                    comments={targetCue.cue.comments || []}
+                                                    index={props.rowIndex}
+                                                    cue={targetCue.cue}
                                                 />
                                                 : null
                                         }
@@ -214,8 +214,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         {
                                             commentsVisible ?
                                                 <CueComments
-                                                    rowIndex={props.rowIndex}
-                                                    comments={targetCue.cue.comments || []}
+                                                    index={props.rowIndex}
+                                                    cue={targetCue.cue}
                                                 />
                                                 : null
                                         }

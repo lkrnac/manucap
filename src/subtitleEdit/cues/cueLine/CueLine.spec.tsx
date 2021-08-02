@@ -1670,7 +1670,7 @@ describe("CueLine", () => {
                                 playerTime={0}
                                 nextCueLine={matchedCuesWithCommentsCaptioning[1]}
                             />
-                            <CueComments rowIndex={0} comments={targetCuesWithComments[0].comments} />
+                            <CueComments index={0} cue={targetCuesWithComments[0]} />
                         </div>
                     </div>
                 </Provider>
@@ -1747,7 +1747,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
-                            <CueComments rowIndex={0} comments={targetCuesWithComments[0].comments} />
+                            <CueComments index={0} cue={targetCuesWithComments[0]} />
                             <CueView
                                 isTargetCue
                                 targetCueIndex={1}
@@ -1760,7 +1760,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
-                            <CueComments rowIndex={1} comments={targetCuesWithComments[1].comments} />
+                            <CueComments index={1} cue={targetCuesWithComments[1]} />
                             <CueView
                                 isTargetCue
                                 targetCueIndex={2}
@@ -1773,7 +1773,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
-                            <CueComments rowIndex={2} comments={targetCuesWithComments[2].comments} />
+                            <CueComments index={2} cue={targetCuesWithComments[2]} />
                         </div>
                     </div>
                 </Provider>
