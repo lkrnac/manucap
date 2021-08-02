@@ -16,6 +16,8 @@ import { updateEditingTrack, updateTask } from "../../trackSlices";
 import "../edit/CueTextEditor";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateCues } from "../cuesList/cuesListActions";
+import CueComments from "../comments/CueComments";
+import { showComments } from "../comments/commentsSlices";
 
 jest.mock("../edit/CueEdit", () => (props: CueEditProps): ReactElement => <div>CueEdit: {JSON.stringify(props)}</div>);
 jest.mock("../view/CueView", () => (props: CueViewProps): ReactElement => <div>CueView: {JSON.stringify(props)}</div>);
@@ -28,10 +30,28 @@ const targetCues = [
     { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
+const cueComments = [
+    { userName: "username", comment: "this is the first comment ", date: "2019/12/31 10:00AM" },
+    { userName: "username", comment: "this is the second comment ", date: "2019/12/31 11:00AM" },
+    { userName: "username", comment: "this is the third comment ", date: "2019/12/31 11:30AM" }
+];
+
+const targetCuesWithComments = [
+    { ...targetCues[0], comments: [cueComments[0]]} as CueDto,
+    { ...targetCues[1], comments: [cueComments[0], cueComments[1]]} as CueDto,
+    { ...targetCues[2], comments: [cueComments[0], cueComments[1], cueComments[2]]} as CueDto
+];
+
 const targetCuesWithIndexes = [
     { index: 0, cue: targetCues[0] },
     { index: 1, cue: targetCues[1] },
     { index: 2, cue: targetCues[2] }
+];
+
+const targetCuesWithCommentsWithIndexes = [
+    { index: 0, cue: targetCuesWithComments[0] },
+    { index: 1, cue: targetCuesWithComments[1] },
+    { index: 2, cue: targetCuesWithComments[2] }
 ];
 
 const sourceCues = [
@@ -1537,7 +1557,6 @@ describe("CueLine", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
 
-
         it("fires write cue action when empty source cue is clicked", () => {
             // GIVEN
             const testingTrack = {
@@ -1617,5 +1636,171 @@ describe("CueLine", () => {
         // THEN
         const refNode = rowRef.current as HTMLDivElement;
         expect(refNode.outerHTML).toEqual(actualNode.container.innerHTML);
+    });
+
+    describe("cue comments", () => {
+        it("renders caption edit with comments", () => {
+            // GIVEN
+            testingStore.dispatch(showComments(true) as {} as AnyAction);
+            const matchedCuesWithCommentsCaptioning = [
+                { targetCues: [targetCuesWithCommentsWithIndexes[0]], sourceCues: []},
+                { targetCues: [targetCuesWithCommentsWithIndexes[1]], sourceCues: []}
+            ];
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div
+                        className="sbte-cue-line"
+                        style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
+                    >
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <div className="" style={{ display: "grid", width: "100%" }}>
+                            <CueEdit
+                                index={0}
+                                cue={targetCuesWithComments[0]}
+                                playerTime={0}
+                                nextCueLine={matchedCuesWithCommentsCaptioning[1]}
+                            />
+                            <CueComments rowIndex={0} comments={targetCuesWithComments[0].comments} />
+                        </div>
+                    </div>
+                </Provider>
+            );
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 2,
+                matchedCues: matchedCuesWithCommentsCaptioning
+            } as CueLineRowProps;
+
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={0}
+                        data={matchedCuesWithCommentsCaptioning[0]}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        onClick={(): void => undefined}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("renders translation view line with 3 target cues wit comments", () => {
+            // GIVEN
+            testingStore.dispatch(showComments(true) as {} as AnyAction);
+            const testingTrack = {
+                type: "TRANSLATION",
+                sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const cueLine = { targetCues: targetCuesWithCommentsWithIndexes, sourceCues: [sourceCuesWithIndexes[0]]};
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div
+                        className="sbte-cue-line"
+                        style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
+                    >
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <div className="" style={{ display: "grid", width: "100%" }}>
+                            <CueView
+                                isTargetCue={false}
+                                targetCueIndex={0}
+                                cue={sourceCues[0]}
+                                targetCuesLength={3}
+                                playerTime={0}
+                                className="sbte-gray-100-background sbte-source-cue"
+                                showGlossaryTerms={false}
+                                languageDirection="LTR"
+                                sourceCuesIndexes={[0]}
+                                nextTargetCueIndex={0}
+                            />
+                            <div className="sbte-cue-divider-good" />
+                            <CueView
+                                isTargetCue
+                                targetCueIndex={0}
+                                cue={targetCuesWithComments[0]}
+                                targetCuesLength={3}
+                                playerTime={0}
+                                className="sbte-gray-100-background sbte-target-cue"
+                                showGlossaryTerms={false}
+                                languageDirection="RTL"
+                                sourceCuesIndexes={[0]}
+                                nextTargetCueIndex={0}
+                            />
+                            <CueComments rowIndex={0} comments={targetCuesWithComments[0].comments} />
+                            <CueView
+                                isTargetCue
+                                targetCueIndex={1}
+                                cue={targetCuesWithComments[1]}
+                                targetCuesLength={3}
+                                playerTime={0}
+                                className="sbte-gray-100-background sbte-target-cue"
+                                showGlossaryTerms={false}
+                                languageDirection="RTL"
+                                sourceCuesIndexes={[0]}
+                                nextTargetCueIndex={0}
+                            />
+                            <CueComments rowIndex={1} comments={targetCuesWithComments[1].comments} />
+                            <CueView
+                                isTargetCue
+                                targetCueIndex={2}
+                                cue={targetCuesWithComments[2]}
+                                targetCuesLength={3}
+                                playerTime={0}
+                                className="sbte-gray-100-background sbte-target-cue"
+                                showGlossaryTerms={false}
+                                languageDirection="RTL"
+                                sourceCuesIndexes={[0]}
+                                nextTargetCueIndex={0}
+                            />
+                            <CueComments rowIndex={2} comments={targetCuesWithComments[2].comments} />
+                        </div>
+                    </div>
+                </Provider>
+            );
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: false,
+                targetCuesLength: 3,
+                matchedCues: [cueLine]
+            } as CueLineRowProps;
+
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={0}
+                        data={cueLine}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        onClick={(): void => undefined}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
     });
 });

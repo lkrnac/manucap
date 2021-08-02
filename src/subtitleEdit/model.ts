@@ -37,7 +37,7 @@ export interface CueDto {
     searchReplaceMatches?: SearchReplaceMatches;
     glossaryMatches?: GlossaryMatchDto[];
     errors?: CueError[] | null;
-    comments?: CueComment[] | null;
+    comments?: CueComment[];
 }
 
 export interface CueDtoWithIndex {
