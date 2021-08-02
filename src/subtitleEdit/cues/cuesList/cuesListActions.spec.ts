@@ -1313,10 +1313,12 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationErrors).toEqual([]);
             });
 
-            it("doesn't update matched cues for textOnly update", () => {
+            it("doesn't update matched cues for textOnly update and not undefined editUuid", () => {
                 // GIVEN
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
                 testingStore.dispatch(matchedCuesSlice.actions
                     .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
@@ -1328,6 +1330,41 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(0);
+            });
+
+            it("updates matched cues for non textOnly update", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+                );
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), editUuid, false) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
+            });
+
+            it("updates matched cues for undefined editUuid", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+                );
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
             });
         });
     });
