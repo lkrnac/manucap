@@ -67,6 +67,7 @@ export interface Track {
     readonly progress: number;
     overlapEnabled?: boolean;
     id?: string;
+    createdBy: User;
 }
 
 export interface SpellcheckerSettings {
@@ -81,6 +82,15 @@ export interface Task {
     readonly dueDate: string;
     readonly editDisabled: boolean;
     readonly finalChunkReview?: boolean;
+}
+
+export interface User {
+    userId: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    systemAdmin: string;
+    displayName: string;
 }
 
 /**
