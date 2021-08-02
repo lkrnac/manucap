@@ -3,11 +3,10 @@ import { CueComment } from "../../model";
 
 interface Props {
     rowIndex: number;
-    comments?: CueComment[];
+    comments?: CueComment[] | undefined;
 }
 
 const CueComments = (props: Props): ReactElement => {
-    console.log(props.comments);
     return (
         <div className="sbte-cue-comments sbte-medium-font">
             {

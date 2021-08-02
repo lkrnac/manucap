@@ -114,73 +114,71 @@ const CueLine = (props: CueLineProps): ReactElement => {
     });
 
     const commentsVisible = useSelector((state: SubtitleEditState) => state.commentsVisible);
-    const cueComments = props.data.targetCues?.map(cue => cue.cue.comments ? cue.cue.comments : [] )
-        .reduce((cue1, cue2) => cue1?.concat(...cue2), []);
 
     return (
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div
+            className="sbte-cue-line"
+            ref={props.rowRef}
+            style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
+        >
+            <CueLineFlap
+                rowIndex={props.rowIndex}
+                cueLineState={cueLineState}
+                cuesErrors={cuesErrors}
+                showErrors={showGlossaryTermsAndErrors}
+                editDisabled={cueLineEditDisabled}
+            />
             <div
-                className="sbte-cue-line"
-                ref={props.rowRef}
-                style={{ display: "flex", flex: "2", paddingBottom: "5px", width: "100%" }}
+                className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
+                style={{ display: "grid", width: "100%" }}
             >
-                <CueLineFlap
-                    rowIndex={props.rowIndex}
-                    cueLineState={cueLineState}
-                    cuesErrors={cuesErrors}
-                    showErrors={showGlossaryTermsAndErrors}
-                    editDisabled={cueLineEditDisabled}
-                />
-                <div
-                    className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
-                    style={{ display: "grid", width: "100%" }}
-                >
-                    {
-                        props.data.sourceCues && props.data.sourceCues.length > 0
-                            ? props.data.sourceCues.map(sourceCue => {
-                                return (
-                                    <CueView
-                                        key={sourceCue.index}
-                                        isTargetCue={false}
-                                        targetCueIndex={firstTargetCueIndex}
-                                        cue={sourceCue.cue}
-                                        targetCuesLength={props.rowProps.targetCuesLength}
-                                        playerTime={props.rowProps.playerTime}
-                                        className={`${captionClassName} sbte-source-cue`}
-                                        showGlossaryTerms={showGlossaryTermsAndErrors}
-                                        languageDirection={editingTrack?.sourceLanguage?.direction}
-                                        sourceCuesIndexes={sourceCuesIndexes}
-                                        nextTargetCueIndex={nextTargetCueIndex}
-                                    />
-                                );
-                            })
+                {
+                    props.data.sourceCues && props.data.sourceCues.length > 0
+                        ? props.data.sourceCues.map(sourceCue => {
+                            return (
+                                <CueView
+                                    key={sourceCue.index}
+                                    isTargetCue={false}
+                                    targetCueIndex={firstTargetCueIndex}
+                                    cue={sourceCue.cue}
+                                    targetCuesLength={props.rowProps.targetCuesLength}
+                                    playerTime={props.rowProps.playerTime}
+                                    className={`${captionClassName} sbte-source-cue`}
+                                    showGlossaryTerms={showGlossaryTermsAndErrors}
+                                    languageDirection={editingTrack?.sourceLanguage?.direction}
+                                    sourceCuesIndexes={sourceCuesIndexes}
+                                    nextTargetCueIndex={nextTargetCueIndex}
+                                />
+                            );
+                        })
+                        : (
+                            props.rowProps.withoutSourceCues
+                            ? null
                             : (
-                                props.rowProps.withoutSourceCues
-                                ? null
-                                : (
-                                    <ClickCueWrapper
-                                        targetCueIndex={firstTargetCueIndex}
-                                        targetCuesLength={props.rowProps.targetCuesLength}
-                                        className={translationCueClassName}
-                                        sourceCuesIndexes={sourceCuesIndexes}
-                                        nextTargetCueIndex={nextTargetCueIndex}
-                                    >
-                                        <div style={{ width: "100%", minHeight: "78px" }} />
-                                    </ClickCueWrapper>
-                                )
+                                <ClickCueWrapper
+                                    targetCueIndex={firstTargetCueIndex}
+                                    targetCuesLength={props.rowProps.targetCuesLength}
+                                    className={translationCueClassName}
+                                    sourceCuesIndexes={sourceCuesIndexes}
+                                    nextTargetCueIndex={nextTargetCueIndex}
+                                >
+                                    <div style={{ width: "100%", minHeight: "78px" }} />
+                                </ClickCueWrapper>
                             )
-                    }
-                    {
-                        (props.data.targetCues?.length && props.data.targetCues?.length > 1)
-                        || (props.data.sourceCues?.length && props.data.sourceCues?.length > 1)
-                            ? <div className={dividerClass} />
-                            : null
-                    }
-                    {
-                        props.data.targetCues && props.data.targetCues.length > 0
-                            ? props.data.targetCues.map(targetCue => {
-                                return editingCueIndex === targetCue.index
-                                    ? (
+                        )
+                }
+                {
+                    (props.data.targetCues?.length && props.data.targetCues?.length > 1)
+                    || (props.data.sourceCues?.length && props.data.sourceCues?.length > 1)
+                        ? <div className={dividerClass} />
+                        : null
+                }
+                {
+                    props.data.targetCues && props.data.targetCues.length > 0
+                        ? props.data.targetCues.map(targetCue => {
+                            return editingCueIndex === targetCue.index
+                                ? (
+                                    <>
                                         <CueEdit
                                             key={targetCue.index}
                                             index={targetCue.index}
@@ -188,8 +186,18 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             playerTime={props.rowProps.playerTime}
                                             nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
                                         />
-                                    )
-                                    : (
+                                        {
+                                            commentsVisible ?
+                                                <CueComments
+                                                    rowIndex={props.rowIndex}
+                                                    comments={targetCue.cue.comments || []}
+                                                />
+                                                : null
+                                        }
+                                    </>
+                                )
+                                : (
+                                    <>
                                         <CueView
                                             key={targetCue.index}
                                             isTargetCue
@@ -203,28 +211,31 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             sourceCuesIndexes={sourceCuesIndexes}
                                             nextTargetCueIndex={nextTargetCueIndex}
                                         />
-                                    );
-                            })
-                            : (
+                                        {
+                                            commentsVisible ?
+                                                <CueComments
+                                                    rowIndex={props.rowIndex}
+                                                    comments={targetCue.cue.comments || []}
+                                                />
+                                                : null
+                                        }
+                                    </>
+                                );
+                        })
+                        : (
 
-                                <ClickCueWrapper
-                                    targetCueIndex={firstTargetCueIndex}
-                                    targetCuesLength={props.rowProps.targetCuesLength}
-                                    className={"sbte-gray-200-background"}
-                                    sourceCuesIndexes={sourceCuesIndexes}
-                                    nextTargetCueIndex={nextTargetCueIndex}
-                                >
-                                    <InsertCueButton />
-                                </ClickCueWrapper>
-                            )
-                    }
-                </div>
+                            <ClickCueWrapper
+                                targetCueIndex={firstTargetCueIndex}
+                                targetCuesLength={props.rowProps.targetCuesLength}
+                                className={"sbte-gray-200-background"}
+                                sourceCuesIndexes={sourceCuesIndexes}
+                                nextTargetCueIndex={nextTargetCueIndex}
+                            >
+                                <InsertCueButton />
+                            </ClickCueWrapper>
+                        )
+                }
             </div>
-            {
-                commentsVisible
-                    ? <CueComments rowIndex={props.rowIndex} comments={cueComments} />
-                    : null
-            }
         </div>
     );
 };
