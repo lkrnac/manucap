@@ -1,8 +1,8 @@
-import React, {ReactElement, useState} from "react";
+import React, { ReactElement, useState } from "react";
 import { CueComment, CueDto } from "../../model";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCueComment } from "../cuesList/cuesListActions";
-import {SubtitleEditState} from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../subtitleEditReducers";
 
 interface Props {
     index: number;
@@ -13,6 +13,8 @@ const CueComments = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const [text, setText] = useState("");
     const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
+    const task = useSelector((state: SubtitleEditState) => state.cuesTask);
+    const commentType = task?.type === "TASK_REVIEW" ? "Reviewer" : "Linguist";
 
     return (
         <div className="sbte-cue-comments sbte-medium-font">
@@ -21,7 +23,7 @@ const CueComments = (props: Props): ReactElement => {
                     <div className="sbte-cue-comment">
                         <span className="sbte-cue-comment-user">{comment.userName}</span>
                         <span> {comment.comment} </span>
-                        <span className="sbte-light-gray-text"><i>{comment.date}</i></span>
+                        <span className="sbte-cue-comment-date sbte-light-gray-text"><i>{comment.date}</i></span>
                     </div>
                 ))
             }
@@ -49,13 +51,14 @@ const CueComments = (props: Props): ReactElement => {
                     style={{ float: "right" }}
                     onClick={(): void => {
                         const newComment = {
-                            userName: currentUser?.displayName,
+                            userName: currentUser?.systemAdmin ? "Admin" : commentType,
                             comment: text,
-                            date: new Date().toISOString()
+                            date: new Date().toLocaleString()
                         };
                         dispatch(addCueComment(props.index, newComment));
                         setText("");
                     }}
+                    disabled={!text}
                 >
                     Send
                 </button>
