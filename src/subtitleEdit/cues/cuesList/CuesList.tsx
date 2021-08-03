@@ -84,12 +84,6 @@ const CuesList = (props: Props): ReactElement => {
                     } else {
                         dispatch(changeScrollPosition(ScrollPosition.NONE));
                     }
-                    if (cuesList.scrollHeight - cuesList.scrollTop === cuesList.clientHeight) {
-                        dispatch(changeScrollPosition(
-                            ScrollPosition.NEXT_PAGE,
-                            previousNonNullFocusedCueIndex.current
-                        ));
-                    }
                 };
                 cuesList.addEventListener("scroll", onScroll);
             }
