@@ -1,8 +1,8 @@
 import React, { ReactElement, useState } from "react";
 import { CueComment, CueDto } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
-import { addCueComment } from "../cuesList/cuesListActions";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 
 interface Props {
     index: number;
@@ -17,13 +17,28 @@ const CueComments = (props: Props): ReactElement => {
     const isReviewTask = task?.type === "TASK_REVIEW";
     const commentType = isReviewTask ? "Reviewer" : "Linguist";
 
+    const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
+        <button
+            style={{ float: "right", marginLeft: "10px" }}
+            className="btn btn-outline-secondary sbte-btn-xs"
+            onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
+        >
+            <i className="fa fa-trash" />
+        </button>
+    );
+
     return (
         <div className="sbte-cue-comments sbte-medium-font">
             {
-                props.cue.comments?.map((comment: CueComment): ReactElement => (
+                props.cue.comments?.map((comment: CueComment, index: number): ReactElement => (
                     <div className="sbte-cue-comment">
                         <span className="sbte-cue-comment-user">{comment.userName}</span>
                         <span> {comment.comment} </span>
+                        {
+                            currentUser?.userId === comment.userId
+                                ? getDeleteButton(props.index, index)
+                                : null
+                        }
                         <span className="sbte-cue-comment-date sbte-light-gray-text"><i>{comment.date}</i></span>
                     </div>
                 ))

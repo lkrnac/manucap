@@ -25,11 +25,23 @@ describe("CueComments", () => {
                 <div className="sbte-cue-comment">
                     <span className="sbte-cue-comment-user">Reviewer</span>
                     <span> this is the first comment </span>
+                    <button
+                        style={{ float: "right", marginLeft: "10px" }}
+                        className="btn btn-outline-secondary sbte-btn-xs"
+                    >
+                        <i className="fa fa-trash" />
+                    </button>
                     <span className="sbte-cue-comment-date sbte-light-gray-text"><i>2010-01-01</i></span>
                 </div>
                 <div className="sbte-cue-comment">
                     <span className="sbte-cue-comment-user">Linguist</span>
                     <span> this is the second comment </span>
+                    <button
+                        style={{ float: "right", marginLeft: "10px" }}
+                        className="btn btn-outline-secondary sbte-btn-xs"
+                    >
+                        <i className="fa fa-trash" />
+                    </button>
                     <span className="sbte-cue-comment-date sbte-light-gray-text"><i>2010-01-02</i></span>
                 </div>
                 <hr style={{

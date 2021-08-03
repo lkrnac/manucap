@@ -10,6 +10,7 @@ import {
     addCueComment,
     applyShiftTime,
     deleteCue,
+    deleteCueComment,
     syncCues,
     updateCueCategory,
     updateCues,
@@ -1645,6 +1646,30 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].comments).toEqual([existingComment, newComment]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+        });
+    });
+
+    describe("deleteCueComment", () => {
+        it("deletes a comment on a cue", () => {
+            // GIVEN
+            const existingComment = {
+                userId: "jane.doe",
+                userName: "Username",
+                comment: "This is an existing comment",
+                date: "2021-09-02T20:10:14.571Z"
+            };
+            const testingCuesWithComments = [
+                { ...testingCues[0], comments: [existingComment]},
+                testingCues[1]
+            ];
+            testingStore.dispatch(updateCues(testingCuesWithComments) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(deleteCueComment(0, 0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].comments).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
         });
     });

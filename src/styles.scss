@@ -108,6 +108,12 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     white-space: nowrap;
 }
 
+.sbte-btn-xs {
+    padding: 1px 5px !important;
+    font-size: $font-size-small !important;
+    line-height: 1.5 !important;
+}
+
 // ----- Modal ------
 
 .sbte-medium-modal {

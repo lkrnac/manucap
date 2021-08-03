@@ -232,6 +232,12 @@ export const addCueComment = (idx: number, cueComment: CueComment): AppThunk =>
         callSaveTrack(dispatch, getState);
     };
 
+export const deleteCueComment = (idx: number, cueCommentIndex: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+        dispatch(cuesSlice.actions.deleteCueComment({ idx, cueCommentIndex }));
+        callSaveTrack(dispatch, getState);
+    };
+
 export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | null>>, getState): void => {
         const state: SubtitleEditState = getState();

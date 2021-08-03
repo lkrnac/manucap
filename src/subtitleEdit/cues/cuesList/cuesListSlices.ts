@@ -21,7 +21,8 @@ export interface CueCategoryAction extends CueIndexAction {
 }
 
 export interface CueCommentAction extends CueIndexAction {
-    cueComment: CueComment;
+    cueCommentIndex?: number;
+    cueComment?: CueComment;
 }
 
 export interface CueAction extends CueIndexAction {
@@ -63,11 +64,16 @@ export const cuesSlice = createSlice({
             }
         },
         addCueComment: (state, action: PayloadAction<CueCommentAction>): void => {
-            if (state[action.payload.idx]) {
+            if (state[action.payload.idx] && action.payload.cueComment) {
                 state[action.payload.idx].comments = [
                     ...state[action.payload.idx].comments || [],
                     action.payload.cueComment
                 ];
+            }
+        },
+        deleteCueComment: (state, action: PayloadAction<CueCommentAction>): void => {
+            if (state[action.payload.idx] && action.payload.cueCommentIndex !== undefined) {
+                state[action.payload.idx].comments?.splice(action.payload.cueCommentIndex, 1);
             }
         },
         addSpellCheck: (state, action: PayloadAction<SpellCheckAction>): void => {
