@@ -76,15 +76,22 @@ const CuesList = (props: Props): ReactElement => {
 
     useEffect(
         () => {
-            if (scrollRef.current) {
+            const cuesList = scrollRef.current;
+            if (cuesList) {
                 const onScroll = (): void => {
                     if (preventScroll.current) {
                         preventScroll.current = false;
                     } else {
                         dispatch(changeScrollPosition(ScrollPosition.NONE));
                     }
+                    if (cuesList.scrollHeight - cuesList.scrollTop === cuesList.clientHeight) {
+                        dispatch(changeScrollPosition(
+                            ScrollPosition.NEXT_PAGE,
+                            previousNonNullFocusedCueIndex.current
+                        ));
+                    }
                 };
-                scrollRef.current.addEventListener("scroll", onScroll);
+                cuesList.addEventListener("scroll", onScroll);
             }
         },
         [dispatch, scrollRef]
