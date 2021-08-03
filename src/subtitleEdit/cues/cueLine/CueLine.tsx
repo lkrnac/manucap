@@ -114,6 +114,12 @@ const CueLine = (props: CueLineProps): ReactElement => {
     });
 
     const commentsVisible = useSelector((state: SubtitleEditState) => state.commentsVisible);
+    let cueCommentsCount = 0;
+    props.data.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
+        if (targetCue.cue.comments) {
+            cueCommentsCount += targetCue.cue.comments.length;
+        }
+    });
 
     return (
         <div
@@ -127,6 +133,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 cuesErrors={cuesErrors}
                 showErrors={showGlossaryTermsAndErrors}
                 editDisabled={cueLineEditDisabled}
+                cueCommentsCount={cueCommentsCount}
             />
             <div
                 className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}

@@ -1662,7 +1662,7 @@ describe("CueLine", () => {
                         className="sbte-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} cueCommentsCount={3} />
                         <div className="" style={{ display: "grid", width: "100%" }}>
                             <CueEdit
                                 index={0}
@@ -1720,7 +1720,7 @@ describe("CueLine", () => {
                         className="sbte-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
-                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} />
+                        <CueLineFlap rowIndex={0} cueLineState={CueLineState.GOOD} cueCommentsCount={6} />
                         <div className="" style={{ display: "grid", width: "100%" }}>
                             <CueView
                                 isTargetCue={false}
