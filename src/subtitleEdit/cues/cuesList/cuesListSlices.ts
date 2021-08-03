@@ -136,12 +136,26 @@ interface MatchCuesAction {
     editingCueIndex: number;
 }
 
+interface MatchedCueAction {
+    cue: CueDto;
+    editingIndexMatchedCues: number;
+    targetCuesIndex: number;
+}
+
 export const matchedCuesSlice = createSlice({
     name: "matchedCues",
     initialState: { matchedCues: [], editingFocusIndex: 0 } as MatchedCuesWithEditingFocus,
     reducers: {
         matchCuesByTime: (_state, action: PayloadAction<MatchCuesAction>): MatchedCuesWithEditingFocus => {
             return matchCuesByTime(action.payload.cues, action.payload.sourceCues, action.payload.editingCueIndex);
+        },
+        updateMatchedCue: (state, action: PayloadAction<MatchedCueAction>): MatchedCuesWithEditingFocus => {
+            const targetCues = state.matchedCues[action.payload.editingIndexMatchedCues].targetCues;
+            if (targetCues && targetCues[action.payload.targetCuesIndex]) {
+                targetCues[action.payload.targetCuesIndex].cue = action.payload.cue;
+            }
+            state.matchedCues[action.payload.editingIndexMatchedCues].targetCues = targetCues;
+            return state;
         }
     },
 });

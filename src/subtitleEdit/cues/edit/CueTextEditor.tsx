@@ -23,7 +23,7 @@ import { convertVttToHtml, getVttText } from "./cueTextConverter";
 import CueLineCounts from "../cueLine/CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
-import { applySpellcheckerOnCue, updateMatchedCues, updateVttCue } from "../cuesList/cuesListActions";
+import { applySpellcheckerOnCue, updateVttCue } from "../cuesList/cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
@@ -333,21 +333,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [ props ]
-    );
-
-    // This would work also from previous effect, but it is executed on every save action
-    // That means potentially various times during typing text. As this is expensive action,
-    // it was causing noticeable + annoying lag (frozen cursor) for long tracks during typing.
-    // So effect that executes this only at unmount will remove mentioned lag, but will update matched cues correctly
-    useEffect(
-        () => (): void => {
-            changeVttCueInReduxDebounced.cancel();
-            if (unmountContentRef.current !== null && unmountContentRef.current !== currentContent) {
-                dispatch(updateMatchedCues());
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
     );
 
     return (

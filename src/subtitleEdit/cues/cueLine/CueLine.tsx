@@ -170,7 +170,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 {
                     props.data.targetCues && props.data.targetCues.length > 0
                         ? props.data.targetCues.map(targetCue => {
-                            console.log("CueLine" + targetCue.cue.editUuid);
                             return editingCueIndex === targetCue.index
                                 ? (
                                     <CueEdit
