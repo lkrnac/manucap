@@ -81,6 +81,7 @@ describe("CueComments", () => {
         } as CueDto;
         const expectedNode = render(
             <div className="sbte-cue-comments sbte-medium-font">
+                <div className="sbte-cue-comment">No comments</div>
                 <hr style={{
                     borderTop: "2px solid lightgray",
                     width: "100%",

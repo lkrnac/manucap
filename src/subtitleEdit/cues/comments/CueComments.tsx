@@ -14,7 +14,8 @@ const CueComments = (props: Props): ReactElement => {
     const [text, setText] = useState("");
     const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
     const task = useSelector((state: SubtitleEditState) => state.cuesTask);
-    const commentType = task?.type === "TASK_REVIEW" ? "Reviewer" : "Linguist";
+    const isReviewTask = task?.type === "TASK_REVIEW";
+    const commentType = isReviewTask ? "Reviewer" : "Linguist";
 
     return (
         <div className="sbte-cue-comments sbte-medium-font">
@@ -26,6 +27,11 @@ const CueComments = (props: Props): ReactElement => {
                         <span className="sbte-cue-comment-date sbte-light-gray-text"><i>{comment.date}</i></span>
                     </div>
                 ))
+            }
+            {
+                !props.cue.comments || props.cue.comments.length < 1
+                    ? <div className="sbte-cue-comment">No comments</div>
+                    : null
             }
             <hr style={{
                 borderTop: "2px solid lightgray",
