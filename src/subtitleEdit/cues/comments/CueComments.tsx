@@ -39,7 +39,7 @@ const CueComments = (props: Props): ReactElement => {
 
     const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
         <button
-            style={{ float: "right", marginLeft: "10px" }}
+            style={{ float: "right" }}
             className="btn btn-outline-secondary sbte-btn-xs"
             onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
         >
@@ -59,7 +59,16 @@ const CueComments = (props: Props): ReactElement => {
                                 ? getDeleteButton(props.index, index)
                                 : null
                         }
-                        <span className="sbte-light-gray-text" style={{ float: "right" }}><i>{comment.date}</i></span>
+                        <span
+                            className="sbte-light-gray-text"
+                            style={{
+                                float: "right",
+                                position: "absolute",
+                                right: "40px"
+                            }}
+                        >
+                            <i>{comment.date}</i>
+                        </span>
                     </div>
                 ))
             }

@@ -26,23 +26,41 @@ describe("CueComments", () => {
                     <span className="sbte-cue-comment-user">Reviewer</span>
                     <span> this is the first comment </span>
                     <button
-                        style={{ float: "right", marginLeft: "10px" }}
+                        style={{ float: "right" }}
                         className="btn btn-outline-secondary sbte-btn-xs"
                     >
                         <i className="fa fa-trash" />
                     </button>
-                    <span className="sbte-light-gray-text" style={{ float: "right" }}><i>2010-01-01</i></span>
+                    <span
+                        className="sbte-light-gray-text"
+                        style={{
+                            float: "right",
+                            position: "absolute",
+                            right: "40px"
+                        }}
+                    >
+                        <i>2010-01-01</i>
+                    </span>
                 </div>
                 <div className="sbte-cue-comment">
                     <span className="sbte-cue-comment-user">Linguist</span>
                     <span> this is the second comment </span>
                     <button
-                        style={{ float: "right", marginLeft: "10px" }}
+                        style={{ float: "right" }}
                         className="btn btn-outline-secondary sbte-btn-xs"
                     >
                         <i className="fa fa-trash" />
                     </button>
-                    <span className="sbte-light-gray-text" style={{ float: "right" }}><i>2010-01-02</i></span>
+                    <span
+                        className="sbte-light-gray-text"
+                        style={{
+                            float: "right",
+                            position: "absolute",
+                            right: "40px"
+                        }}
+                    >
+                        <i>2010-01-02</i>
+                    </span>
                 </div>
                 <hr style={{
                     borderTop: "2px solid lightgray",
