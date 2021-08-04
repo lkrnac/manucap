@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
+import { CUE_LINE_STATE_CLASSES, CueDto, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
 import CueEdit from "../edit/CueEdit";
 import CueView from "../view/CueView";
 import { SubtitleEditState } from "../../subtitleEditReducers";
@@ -8,6 +8,7 @@ import CueLineFlap from "./CueLineFlap";
 import _ from "lodash";
 import InsertCueButton from "../view/InsertCueButton";
 import ClickCueWrapper from "../view/ClickCueWrapper";
+import CueErrorLine from "../CueErrorLine";
 
 export interface CueLineRowProps {
     targetCuesLength: number;
@@ -85,6 +86,30 @@ const findNextTargetCueIndex = (props: CueLineProps): number => {
 const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
     ? cues.map(sourceCue => sourceCue.index)
     : [];
+
+interface CueErrorsListProps {
+    cue: CueDto;
+}
+
+const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => (
+    props.cue.errors && props.cue.errors.length > 0
+        ? (
+            <div className="sbte-cues-errors">
+                {
+                    props.cue.errors.map(
+                        (cueError: CueError, index: number): ReactElement => (
+                            <CueErrorLine
+                                key={`cueError-${index}`}
+                                cueIndex={index}
+                                cueError={cueError}
+                            />
+                        )
+                    )
+                }
+            </div>
+        )
+        : null
+);
 
 const CueLine = (props: CueLineProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
@@ -172,12 +197,15 @@ const CueLine = (props: CueLineProps): ReactElement => {
                         ? props.data.targetCues.map(targetCue => {
                             return editingCueIndex === targetCue.index
                                 ? (
-                                    <CueEdit
-                                        key={targetCue.index}
-                                        index={targetCue.index}
-                                        cue={targetCue.cue}
-                                        nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
-                                    />
+                                    <>
+                                        <CueEdit
+                                            key={targetCue.index}
+                                            index={targetCue.index}
+                                            cue={targetCue.cue}
+                                            nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
+                                        />
+                                        <CueErrorsList cue={targetCue.cue} />
+                                    </>
                                 )
                                 : (
                                     <CueView

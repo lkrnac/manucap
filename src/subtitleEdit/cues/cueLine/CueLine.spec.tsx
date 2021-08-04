@@ -111,7 +111,7 @@ describe("CueLine", () => {
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
 
-        it("renders edit line with errors in captioning mode", () => {
+        it("renders edit line with single error in captioning mode", () => {
             // GIVEN
             const testingTrack = {
                 type: "CAPTION",
@@ -143,6 +143,74 @@ describe("CueLine", () => {
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
                             />
+                            <div className="sbte-cues-errors">• Spelling Error(s)<br /></div>
+                        </div>
+                    </div>
+                </Provider>
+            );
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 3,
+                matchedCues: matchedCuesCaptioning
+            } as CueLineRowProps;
+
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={0}
+                        data={{ targetCues: [{ index: 0, cue: corruptedCue }], sourceCues: []}}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        });
+
+        it("renders edit line with multiple errors in captioning mode", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+            const corruptedCue = {
+                ...targetCues[0],
+                errors: [CueError.SPELLCHECK_ERROR, CueError.LINE_COUNT_EXCEEDED, CueError.TIME_GAP_OVERLAP]
+            } as CueDto;
+
+            const expectedNode = render(
+                <Provider store={testingStore}>
+                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
+                        <CueLineFlap
+                            rowIndex={0}
+                            cueLineState={CueLineState.GOOD}
+                            cuesErrors={[CueError.SPELLCHECK_ERROR]}
+                            showErrors
+                        />
+                        <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                            <CueEdit
+                                index={0}
+                                cue={corruptedCue}
+                                nextCueLine={matchedCuesCaptioning[1]}
+                            />
+                            <div className="sbte-cues-errors">
+                                {/*eslint-disable-next-line react/jsx-child-element-spacing */}
+                                • Spelling Error(s)<br />
+                                {/*eslint-disable-next-line react/jsx-child-element-spacing */}
+                                • Max Lines Per Caption Exceeded<br />
+                                • Cue Overlap<br />
+                            </div>
                         </div>
                     </div>
                 </Provider>
@@ -1294,6 +1362,7 @@ describe("CueLine", () => {
                                 index={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                             />
+                            <div className="sbte-cues-errors">• Spelling Error(s)<br /></div>
                         </div>
                     </div>
                 </Provider>
