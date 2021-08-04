@@ -1,8 +1,10 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { CueComment, CueDto } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import Mousetrap from "mousetrap";
+import { KeyCombination } from "../../utils/shortcutConstants";
 
 interface Props {
     index: number;
@@ -14,6 +16,26 @@ const CueComments = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const [text, setText] = useState("");
     const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
+
+    const addNewComment = (): void => {
+        if (text) {
+            const newComment = {
+                userId: currentUser?.userId,
+                userName: props.commentAuthor || "N/A",
+                comment: text,
+                date: new Date().toLocaleString()
+            };
+            dispatch(addCueComment(props.index, newComment));
+            setText("");
+        }
+    };
+
+    useEffect(
+        () => {
+            Mousetrap.bind([KeyCombination.ENTER], addNewComment);
+        },
+        [addNewComment, text]
+    );
 
     const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
         <button
@@ -61,23 +83,14 @@ const CueComments = (props: Props): ReactElement => {
                     type="text"
                     value={text}
                     placeholder="Type your comment here"
-                    className="sbte-cue-comment-input"
+                    className="sbte-cue-comment-input mousetrap"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setText(e.target.value)}
                 />
                 <button
                     type="button"
                     className="btn btn-sm btn-outline-secondary"
                     style={{ float: "right" }}
-                    onClick={(): void => {
-                        const newComment = {
-                            userId: currentUser?.userId,
-                            userName: props.commentAuthor,
-                            comment: text,
-                            date: new Date().toLocaleString()
-                        };
-                        dispatch(addCueComment(props.index, newComment));
-                        setText("");
-                    }}
+                    onClick={addNewComment}
                     disabled={!text}
                 >
                     Send

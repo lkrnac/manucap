@@ -168,7 +168,8 @@ describe("SubtitleEdit", () => {
                                             playerTime: 0,
                                             targetCuesLength: 2,
                                             withoutSourceCues: true,
-                                            matchedCues
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
                                         }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
@@ -180,7 +181,8 @@ describe("SubtitleEdit", () => {
                                             playerTime: 0,
                                             targetCuesLength: 2,
                                             withoutSourceCues: true,
-                                            matchedCues
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
                                         }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
@@ -598,7 +600,8 @@ describe("SubtitleEdit", () => {
                                             playerTime: 0,
                                             targetCuesLength: 2,
                                             withoutSourceCues: true,
-                                            matchedCues
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
                                         }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
@@ -610,7 +613,8 @@ describe("SubtitleEdit", () => {
                                             playerTime: 0,
                                             targetCuesLength: 2,
                                             withoutSourceCues: true,
-                                            matchedCues
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
                                         }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
@@ -780,7 +784,8 @@ describe("SubtitleEdit", () => {
                                             playerTime: 0,
                                             targetCuesLength: 2,
                                             withoutSourceCues: true,
-                                            matchedCues
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
                                         }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}
@@ -792,7 +797,8 @@ describe("SubtitleEdit", () => {
                                             playerTime: 0,
                                             targetCuesLength: 2,
                                             withoutSourceCues: true,
-                                            matchedCues
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
                                         }}
                                         rowRef={React.createRef()}
                                         onClick={(): void => undefined}

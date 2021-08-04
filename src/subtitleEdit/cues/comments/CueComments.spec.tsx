@@ -58,7 +58,7 @@ describe("CueComments", () => {
                     <input
                         type="text"
                         placeholder="Type your comment here"
-                        className="sbte-cue-comment-input"
+                        className="sbte-cue-comment-input mousetrap"
                         value=""
                     />
                     <button
@@ -108,7 +108,7 @@ describe("CueComments", () => {
                     <input
                         type="text"
                         placeholder="Type your comment here"
-                        className="sbte-cue-comment-input"
+                        className="sbte-cue-comment-input mousetrap"
                         value=""
                     />
                     <button
