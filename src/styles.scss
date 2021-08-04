@@ -322,16 +322,14 @@ div[id^=cueErrorTooltip-] .arrow:after {
     background-color: darkcyan;
     color: white;
     border-radius: 5px;
-    padding: 1px 0;
+    padding: 1px 3px;
     white-space: nowrap;
     width: 80px;
     margin-right: 5px;
     float: left;
     text-align: center;
-}
-
-.sbte-cue-comment-date {
-    float: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .sbte-cue-comment-input {

@@ -31,7 +31,7 @@ describe("CueComments", () => {
                     >
                         <i className="fa fa-trash" />
                     </button>
-                    <span className="sbte-cue-comment-date sbte-light-gray-text"><i>2010-01-01</i></span>
+                    <span className="sbte-light-gray-text" style={{ float: "right" }}><i>2010-01-01</i></span>
                 </div>
                 <div className="sbte-cue-comment">
                     <span className="sbte-cue-comment-user">Linguist</span>
@@ -42,7 +42,7 @@ describe("CueComments", () => {
                     >
                         <i className="fa fa-trash" />
                     </button>
-                    <span className="sbte-cue-comment-date sbte-light-gray-text"><i>2010-01-02</i></span>
+                    <span className="sbte-light-gray-text" style={{ float: "right" }}><i>2010-01-02</i></span>
                 </div>
                 <hr style={{
                     borderTop: "2px solid lightgray",
@@ -76,7 +76,7 @@ describe("CueComments", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueComments index={0} cue={testCue} />
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
             </Provider>
         );
 
@@ -126,7 +126,7 @@ describe("CueComments", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueComments index={0} cue={testCue} />
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
             </Provider>
         );
 
@@ -137,7 +137,7 @@ describe("CueComments", () => {
         // GIVEN
         const { getByText, getByPlaceholderText } = render(
             <Provider store={testingStore}>
-                <CueComments index={0} cue={testCue} />
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
             </Provider>
         );
         const textInput = getByPlaceholderText("Type your comment here");

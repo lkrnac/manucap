@@ -125,14 +125,26 @@ const TestApp = (): ReactElement => {
             if (language.id === "ar-SA") {
                 text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
             }
-            const randomStart = (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
-            const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
+            const randomStart = (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 1.5);
+            const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 1.5;
             const withinChunkRange = inChunkRange(randomStart, randomEnd);
+            const comments = [];
+            const randomComments = Math.random() * 4;
+            for (let i = 1; i <= randomComments; i++) {
+                const isLinguist = Math.random() < 0.5;
+                comments.push({
+                    userId: isLinguist ? "jane.doe" : "other.user",
+                    userName: isLinguist ? "Reviewer": "Linguist",
+                    comment: "this is a comment " + i,
+                    date: "2019/12/30 10:00AM"
+                });
+            }
             targetCues.push({
                 vttCue: new VTTCue(randomStart, randomEnd, text),
                 cueCategory: "DIALOGUE",
                 editDisabled: !withinChunkRange,
-                errors: null
+                errors: null,
+                comments
             });
         }
 
@@ -240,6 +252,7 @@ const TestApp = (): ReactElement => {
             onExportFile={(): void => undefined}
             onImportFile={(): void => undefined}
             spellCheckerDomain="dev-spell-checker.videotms.com"
+            commentAuthor="Linguist"
         />
     );
 };

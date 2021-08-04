@@ -17,6 +17,7 @@ import { matchCuesByTime, matchCueTimeIndex } from "./cuesListTimeMatching";
 interface Props {
     editingTrack: Track | null;
     currentPlayerTime: number;
+    commentAuthor?: string;
 }
 const getScrollCueIndex = (
     matchedCuesSize: number,
@@ -100,7 +101,8 @@ const CuesList = (props: Props): ReactElement => {
                     playerTime: props.currentPlayerTime,
                     targetCuesLength: targetCuesArray.length,
                     withoutSourceCues,
-                    matchedCues
+                    matchedCues,
+                    commentAuthor: props.commentAuthor
                 }}
                 rowHeight={rowHeight}
                 startAt={startAt}

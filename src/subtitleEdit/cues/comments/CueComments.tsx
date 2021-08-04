@@ -7,15 +7,13 @@ import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 interface Props {
     index: number;
     cue: CueDto;
+    commentAuthor: string;
 }
 
 const CueComments = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const [text, setText] = useState("");
     const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
-    const task = useSelector((state: SubtitleEditState) => state.cuesTask);
-    const isReviewTask = task?.type === "TASK_REVIEW";
-    const commentType = isReviewTask ? "Reviewer" : "Linguist";
 
     const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
         <button
@@ -39,7 +37,7 @@ const CueComments = (props: Props): ReactElement => {
                                 ? getDeleteButton(props.index, index)
                                 : null
                         }
-                        <span className="sbte-cue-comment-date sbte-light-gray-text"><i>{comment.date}</i></span>
+                        <span className="sbte-light-gray-text" style={{ float: "right" }}><i>{comment.date}</i></span>
                     </div>
                 ))
             }
@@ -72,7 +70,8 @@ const CueComments = (props: Props): ReactElement => {
                     style={{ float: "right" }}
                     onClick={(): void => {
                         const newComment = {
-                            userName: currentUser?.systemAdmin ? "Admin" : commentType,
+                            userId: currentUser?.userId,
+                            userName: props.commentAuthor,
                             comment: text,
                             date: new Date().toLocaleString()
                         };

@@ -34,6 +34,7 @@ export interface SubtitleEditProps {
     onExportSourceFile: () => void;
     onImportFile: () => void;
     spellCheckerDomain?: string;
+    commentAuthor?: string;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -117,7 +118,11 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             }}
                         >
                             <SearchReplaceEditor />
-                            <CuesList editingTrack={editingTrack} currentPlayerTime={currentPlayerTime} />
+                            <CuesList
+                                editingTrack={editingTrack}
+                                currentPlayerTime={currentPlayerTime}
+                                commentAuthor={props.commentAuthor}
+                            />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
                                     className="btn btn-primary sbte-view-all-tracks-btn"

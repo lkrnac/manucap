@@ -17,6 +17,7 @@ export interface CueLineRowProps {
     // because empty/undefined props.data.sourceCues might indicate that there is no time match in translation mode
     withoutSourceCues: boolean;
     matchedCues: CueLineDto[];
+    commentAuthor: string;
 }
 
 export interface CueLineProps {
@@ -199,6 +200,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                                     key={`cueComments-${targetCue.index}`}
                                                     index={props.rowIndex}
                                                     cue={targetCue.cue}
+                                                    commentAuthor={props.rowProps.commentAuthor}
                                                 />
                                                 : null
                                         }
@@ -225,6 +227,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                                     key={`cueComments-${targetCue.index}`}
                                                     index={props.rowIndex}
                                                     cue={targetCue.cue}
+                                                    commentAuthor={props.rowProps.commentAuthor}
                                                 />
                                                 : null
                                         }
