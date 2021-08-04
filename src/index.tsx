@@ -125,8 +125,8 @@ const TestApp = (): ReactElement => {
             if (language.id === "ar-SA") {
                 text = `<b>مرحبًا</b> أيها العالم ${idx + 1}.`;
             }
-            const randomStart = (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 1.5);
-            const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 1.5;
+            const randomStart = (TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3);
+            const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
             const withinChunkRange = inChunkRange(randomStart, randomEnd);
             const comments = [];
             const randomComments = Math.random() * 4;
