@@ -31,7 +31,7 @@ const CueComments = (props: Props): ReactElement => {
         <div className="sbte-cue-comments sbte-medium-font">
             {
                 props.cue.comments?.map((comment: CueComment, index: number): ReactElement => (
-                    <div className="sbte-cue-comment">
+                    <div className="sbte-cue-comment" key={`cueComment-${props.index}-${index}`}>
                         <span className="sbte-cue-comment-user">{comment.userName}</span>
                         <span> {comment.comment} </span>
                         {
