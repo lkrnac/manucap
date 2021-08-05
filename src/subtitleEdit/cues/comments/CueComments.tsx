@@ -39,6 +39,7 @@ const CueComments = (props: Props): ReactElement => {
 
     const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
         <button
+            data-testid="sbte-delete-cue-comment-button"
             style={{ float: "right" }}
             className="btn btn-outline-secondary sbte-btn-xs"
             onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
@@ -83,7 +84,7 @@ const CueComments = (props: Props): ReactElement => {
                         </span>
                         <span> {comment.comment} </span>
                         {
-                            currentUser?.userId === comment.userId
+                            comment.userId === currentUser?.userId
                                 ? getDeleteButton(props.index, index)
                                 : null
                         }

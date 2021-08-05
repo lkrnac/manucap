@@ -2,13 +2,16 @@ import "../../../testUtils/initBrowserEnvironment";
 import React  from "react";
 import { Provider } from "react-redux";
 import testingStore from "../../../testUtils/testingStore";
-import { CueComment, CueDto } from "../../model";
+import { CueComment, CueDto, User } from "../../model";
 import { fireEvent, render } from "@testing-library/react";
 import CueComments from "./CueComments";
+import { AnyAction } from "redux";
+import { updateCues } from "../cuesList/cuesListActions";
+import { userSlice } from "../../userSlices";
 
 const testComments = [
-    { userName: "Reviewer", date: "2010-01-01", comment: "this is the first comment" },
-    { userName: "Linguist", date: "2010-01-02", comment: "this is the second comment" }
+    { userId: "rev.test", userName: "Reviewer", date: "2010-01-01", comment: "this is the first comment" },
+    { userId: "test", userName: "Linguist", date: "2010-01-02", comment: "this is the second comment" }
 ] as CueComment[];
 
 const testCue = {
@@ -17,9 +20,19 @@ const testCue = {
     comments: testComments
 } as CueDto;
 
+const testingUser = {
+    displayName: "Test User",
+    email: "test@dotsub.com",
+    firstname: "Test",
+    lastname: "User",
+    systemAdmin: "",
+    userId: "test"
+} as User;
+
 describe("CueComments", () => {
     it("renders", () => {
         // GIVEN
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
         const expectedNode = render(
             <div
                 className="sbte-medium-font sbte-white-background"
@@ -53,12 +66,6 @@ describe("CueComments", () => {
                         Reviewer
                     </span>
                     <span> this is the first comment </span>
-                    <button
-                        style={{ float: "right" }}
-                        className="btn btn-outline-secondary sbte-btn-xs"
-                    >
-                        <i className="fa fa-trash" />
-                    </button>
                     <span
                         className="sbte-light-gray-text"
                         style={{
@@ -89,6 +96,7 @@ describe("CueComments", () => {
                     </span>
                     <span> this is the second comment </span>
                     <button
+                        data-testid="sbte-delete-cue-comment-button"
                         style={{ float: "right" }}
                         className="btn btn-outline-secondary sbte-btn-xs"
                     >
@@ -215,6 +223,41 @@ describe("CueComments", () => {
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
+    it("renders delete comment button when user is author", () => {
+        // GIVEN
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
+            </Provider>
+        );
+
+        // WHEN
+        const deleteButton = actualNode.queryByTestId("sbte-delete-cue-comment-button");
+
+        // THEN
+        expect(deleteButton).toBeInTheDocument();
+    });
+    it("doesn't render delete comment button when user isn't author of any comment", () => {
+        // GIVEN
+        const testCue = {
+            vttCue: new VTTCue(1, 3, "some text"),
+            cueCategory: "DIALOGUE",
+            comments: [testComments[0]]
+        } as CueDto;
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
+            </Provider>
+        );
+
+        // WHEN
+        const deleteButton = actualNode.queryByTestId("sbte-delete-cue-comment-button");
+
+        // THEN
+        expect(deleteButton).not.toBeInTheDocument();
+    });
     it("enables send button when comment is typed", () => {
         // GIVEN
         const { getByText, getByPlaceholderText } = render(
@@ -230,5 +273,30 @@ describe("CueComments", () => {
 
         // THEN
         expect(sendButton).toBeEnabled();
+    });
+    it("saves a new comment with text when send button is clicked", () => {
+        // GIVEN
+        const testingCues = [{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
+        const { getByText, getByPlaceholderText } = render(
+            <Provider store={testingStore}>
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
+            </Provider>
+        );
+        const textInput = getByPlaceholderText("Type your comment here");
+        const sendButton = getByText("Send");
+
+        // WHEN
+        fireEvent.change(textInput, { target: { value: "test comment" }});
+        fireEvent.click(sendButton);
+
+        // THEN
+        expect(testingStore.getState().cues[0].comments).toEqual([
+            expect.objectContaining({
+                comment: "test comment",
+                userId: "test",
+                userName: "Linguist",
+        })]);
     });
 });
