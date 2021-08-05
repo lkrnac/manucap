@@ -60,6 +60,10 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     font-size: $font-size-medium;
 }
 
+.sbte-white-background {
+    background-color: white;
+}
+
 .sbte-gray-100-background {
   background-color: $gray-100;
 }
@@ -300,39 +304,7 @@ div[id^=cueErrorTooltip-] .arrow:after {
 
 // ------ Cue Comments --------
 
-
-.sbte-cue-comments {
-    position: relative;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 5px;
-    padding: 10px 10px 5px 10px;
-    margin-bottom: 2px;
-    margin-left: 2px;
-    margin-right: 2px;
-}
-
-.sbte-cue-comment {
-    margin-bottom: 8px;
-}
-
 .sbte-cue-comment-user {
     background-color: darkcyan;
     color: white;
-    border-radius: 5px;
-    padding: 1px 3px;
-    white-space: nowrap;
-    width: 80px;
-    margin-right: 5px;
-    float: left;
-    text-align: center;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-.sbte-cue-comment-input {
-    border-style: none;
-    width: 100%;
 }

@@ -21,9 +21,37 @@ describe("CueComments", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <div className="sbte-cue-comments sbte-medium-font">
-                <div className="sbte-cue-comment">
-                    <span className="sbte-cue-comment-user">Reviewer</span>
+            <div
+                className="sbte-medium-font sbte-white-background"
+                style={{
+                    position: "relative",
+                    flex: "1",
+                    display: "flex",
+                    flexDirection: "column",
+                    borderRadius: "5px",
+                    padding: "10px 10px 5px 10px",
+                    marginBottom: "2px",
+                    marginLeft: "2px",
+                    marginRight: "2px",
+                }}
+            >
+                <div style={{ marginBottom: "8px" }}>
+                    <span
+                        className="sbte-cue-comment-user"
+                        style={{
+                            borderRadius: "5px",
+                            padding: "1px 3px",
+                            whiteSpace: "nowrap",
+                            width: "80px",
+                            marginRight: "5px",
+                            float: "left",
+                            textAlign: "center",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden"
+                        }}
+                    >
+                        Reviewer
+                    </span>
                     <span> this is the first comment </span>
                     <button
                         style={{ float: "right" }}
@@ -42,8 +70,23 @@ describe("CueComments", () => {
                         <i>2010-01-01</i>
                     </span>
                 </div>
-                <div className="sbte-cue-comment">
-                    <span className="sbte-cue-comment-user">Linguist</span>
+                <div style={{ marginBottom: "8px" }}>
+                    <span
+                        className="sbte-cue-comment-user"
+                        style={{
+                            borderRadius: "5px",
+                            padding: "1px 3px",
+                            whiteSpace: "nowrap",
+                            width: "80px",
+                            marginRight: "5px",
+                            float: "left",
+                            textAlign: "center",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden"
+                        }}
+                    >
+                        Linguist
+                    </span>
                     <span> this is the second comment </span>
                     <button
                         style={{ float: "right" }}
@@ -76,7 +119,11 @@ describe("CueComments", () => {
                     <input
                         type="text"
                         placeholder="Type your comment here"
-                        className="sbte-cue-comment-input mousetrap"
+                        className="mousetrap"
+                        style={{
+                            borderStyle: "none",
+                            width: "100%"
+                        }}
                         value=""
                     />
                     <button
@@ -110,8 +157,21 @@ describe("CueComments", () => {
             comments
         } as CueDto;
         const expectedNode = render(
-            <div className="sbte-cue-comments sbte-medium-font">
-                <div className="sbte-cue-comment">No comments</div>
+            <div
+                className="sbte-medium-font sbte-white-background"
+                style={{
+                    position: "relative",
+                    flex: "1",
+                    display: "flex",
+                    flexDirection: "column",
+                    borderRadius: "5px",
+                    padding: "10px 10px 5px 10px",
+                    marginBottom: "2px",
+                    marginLeft: "2px",
+                    marginRight: "2px",
+                }}
+            >
+                <div style={{ marginBottom: "8px" }}>No comments</div>
                 <hr style={{
                     borderTop: "2px solid lightgray",
                     width: "100%",
@@ -126,7 +186,11 @@ describe("CueComments", () => {
                     <input
                         type="text"
                         placeholder="Type your comment here"
-                        className="sbte-cue-comment-input mousetrap"
+                        className="mousetrap"
+                        style={{
+                            borderStyle: "none",
+                            width: "100%"
+                        }}
                         value=""
                     />
                     <button

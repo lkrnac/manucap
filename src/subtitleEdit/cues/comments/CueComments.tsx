@@ -48,11 +48,39 @@ const CueComments = (props: Props): ReactElement => {
     );
 
     return (
-        <div className="sbte-cue-comments sbte-medium-font">
+        <div
+            className="sbte-medium-font sbte-white-background"
+            style={{
+                position: "relative",
+                flex: "1",
+                display: "flex",
+                flexDirection: "column",
+                borderRadius: "5px",
+                padding: "10px 10px 5px 10px",
+                marginBottom: "2px",
+                marginLeft: "2px",
+                marginRight: "2px",
+            }}
+        >
             {
                 props.cue.comments?.map((comment: CueComment, index: number): ReactElement => (
-                    <div className="sbte-cue-comment" key={`cueComment-${props.index}-${index}`}>
-                        <span className="sbte-cue-comment-user">{comment.userName}</span>
+                    <div style={{ marginBottom: "8px" }} key={`cueComment-${props.index}-${index}`}>
+                        <span
+                            className="sbte-cue-comment-user"
+                            style={{
+                                borderRadius: "5px",
+                                padding: "1px 3px",
+                                whiteSpace: "nowrap",
+                                width: "80px",
+                                marginRight: "5px",
+                                float: "left",
+                                textAlign: "center",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden"
+                            }}
+                        >
+                            {comment.userName}
+                        </span>
                         <span> {comment.comment} </span>
                         {
                             currentUser?.userId === comment.userId
@@ -74,7 +102,7 @@ const CueComments = (props: Props): ReactElement => {
             }
             {
                 !props.cue.comments || props.cue.comments.length < 1
-                    ? <div className="sbte-cue-comment">No comments</div>
+                    ? <div style={{ marginBottom: "8px" }}>No comments</div>
                     : null
             }
             <hr style={{
@@ -92,7 +120,11 @@ const CueComments = (props: Props): ReactElement => {
                     type="text"
                     value={text}
                     placeholder="Type your comment here"
-                    className="sbte-cue-comment-input mousetrap"
+                    className="mousetrap"
+                    style={{
+                        borderStyle: "none",
+                        width: "100%"
+                    }}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setText(e.target.value)}
                 />
                 <button
