@@ -150,11 +150,13 @@ export const matchedCuesSlice = createSlice({
             return matchCuesByTime(action.payload.cues, action.payload.sourceCues, action.payload.editingCueIndex);
         },
         updateMatchedCue: (state, action: PayloadAction<MatchedCueAction>): MatchedCuesWithEditingFocus => {
-            const targetCues = state.matchedCues[action.payload.editingIndexMatchedCues].targetCues;
-            if (targetCues && targetCues[action.payload.targetCuesIndex]) {
-                targetCues[action.payload.targetCuesIndex].cue = action.payload.cue;
+            if (action.payload.editingIndexMatchedCues >= 0) {
+                const targetCues = state.matchedCues[action.payload.editingIndexMatchedCues].targetCues;
+                if (targetCues && targetCues[action.payload.targetCuesIndex]) {
+                    targetCues[action.payload.targetCuesIndex].cue = action.payload.cue;
+                }
+                state.matchedCues[action.payload.editingIndexMatchedCues].targetCues = targetCues;
             }
-            state.matchedCues[action.payload.editingIndexMatchedCues].targetCues = targetCues;
             return state;
         }
     },

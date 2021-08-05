@@ -200,14 +200,13 @@ export const updateVttCue = (
                 dispatch(updateMatchedCues());
             } else {
                 // TODO: Remove following ugly code when we implement https://dotsub.atlassian.net/browse/VTMS-3304
-                const editingCuesIndex = getState().editingCueIndex;
                 let targetCuesIndex = 0;
                 const editingIndexMatchedCues = getState().matchedCues.matchedCues.findIndex(
                     (cueLineDto: CueLineDto): boolean => cueLineDto.targetCues
                         ? cueLineDto.targetCues?.some(
                             (targetCue, nestedIndex) => {
                                 targetCuesIndex = nestedIndex;
-                                return targetCue.index === editingCuesIndex;
+                                return targetCue.index === idx;
                             }
                         )
                         : false

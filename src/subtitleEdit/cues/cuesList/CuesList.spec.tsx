@@ -23,6 +23,7 @@ import { act } from "react-dom/test-utils";
 import CueLine from "../cueLine/CueLine";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";
+import { matchedCuesSlice } from "./cuesListSlices";
 
 const scrollIntoViewCallsTracker = jest.fn();
 
@@ -888,6 +889,76 @@ describe("CuesList", () => {
             expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
                 .toEqual("Target Line 0 edited Paste text to end");
             expect(actualNode.container.outerHTML).toContain("Target Line 0 edited Paste text to end");
+        });
+
+        it("renders changed value if user edits and quickly navigates away for newly created caption cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
+
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+            const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+            fireEvent.paste(editor, {
+                clipboardData: {
+                    types: ["text/plain"],
+                    getData: (): string => " Paste text to end",
+                }
+            });
+            testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual(" Paste text to end");
+            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                .toEqual(" Paste text to end");
+            expect(actualNode.container.outerHTML).toContain(" Paste text to end");
+        });
+
+        it("renders changed value if user edits and quickly navigates away for newly created translated cue", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(1, 2, "Target Line 1"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Line 0"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(matchedCuesSlice.actions.matchCuesByTime(
+                { cues: targetCues, sourceCues, editingCueIndex: -1 }
+            ) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
+
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+            const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+            fireEvent.paste(editor, {
+                clipboardData: {
+                    types: ["text/plain"],
+                    getData: (): string => " Paste text to end",
+                }
+            });
+            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual(" Paste text to end");
+            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                .toEqual(" Paste text to end");
+            expect(actualNode.container.outerHTML).toContain(" Paste text to end");
         });
     });
 });
