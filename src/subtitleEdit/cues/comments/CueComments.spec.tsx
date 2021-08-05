@@ -274,10 +274,9 @@ describe("CueComments", () => {
         // THEN
         expect(sendButton).toBeEnabled();
     });
-    it("saves a new comment with text when send button is clicked", () => {
+    it("adds a new comment with text when send button is clicked", () => {
         // GIVEN
-        const testingCues = [{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(updateCues([testCue]) as {} as AnyAction);
         testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
         const { getByText, getByPlaceholderText } = render(
             <Provider store={testingStore}>
@@ -292,11 +291,54 @@ describe("CueComments", () => {
         fireEvent.click(sendButton);
 
         // THEN
+        expect(testingStore.getState().cues[0].comments.length).toEqual(3);
         expect(testingStore.getState().cues[0].comments).toEqual([
+            expect.anything(),
+            expect.anything(),
             expect.objectContaining({
                 comment: "test comment",
                 userId: "test",
                 userName: "Linguist",
         })]);
+    });
+    it("doesn't add a new comment without text when send button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues([testCue]) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
+        const { getByText } = render(
+            <Provider store={testingStore}>
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
+            </Provider>
+        );
+        const sendButton = getByText("Send");
+
+        // WHEN
+        fireEvent.click(sendButton);
+
+        // THEN
+        expect(testingStore.getState().cues[0].comments.length).toEqual(2);
+        expect(testingStore.getState().cues[0].comments).toEqual(testCue.comments);
+    });
+    it("deletes a comment when delete button is clicked", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues([testCue]) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
+        const { getByTestId } = render(
+            <Provider store={testingStore}>
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
+            </Provider>
+        );
+        const deleteButton = getByTestId("sbte-delete-cue-comment-button");
+
+        // WHEN
+        fireEvent.click(deleteButton);
+
+        // THEN
+        expect(testingStore.getState().cues[0].comments.length).toEqual(1);
+        expect(testingStore.getState().cues[0].comments).toEqual([
+            expect.objectContaining({
+                userId: "rev.test",
+                userName: "Reviewer"
+            })]);
     });
 });
