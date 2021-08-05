@@ -132,11 +132,14 @@ const TestApp = (): ReactElement => {
             const randomComments = Math.random() * 4;
             for (let i = 1; i <= randomComments; i++) {
                 const isLinguist = Math.random() < 0.5;
+                const commentDate = new Date();
+                commentDate.setDate(commentDate.getDate() - i);
+                commentDate.setHours(commentDate.getHours() - i * 2);
                 comments.push({
                     userId: isLinguist ? "jane.doe" : "other.user",
                     userName: isLinguist ? "Reviewer": "Linguist",
                     comment: "this is a comment " + i,
-                    date: "2019/12/30 10:00AM"
+                    date: commentDate
                 });
             }
             targetCues.push({

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import { CueComment, CueDto } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
@@ -17,18 +17,18 @@ const CueComments = (props: Props): ReactElement => {
     const [text, setText] = useState("");
     const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
 
-    const addNewComment = (): void => {
+    const addNewComment = useCallback(() => {
         if (text) {
             const newComment = {
                 userId: currentUser?.userId,
                 userName: props.commentAuthor || "N/A",
                 comment: text,
-                date: new Date().toLocaleString()
+                date: new Date()
             };
             dispatch(addCueComment(props.index, newComment));
             setText("");
         }
-    };
+    }, [currentUser, dispatch, props.commentAuthor, props.index, text]);
 
     useEffect(
         () => {
@@ -96,7 +96,7 @@ const CueComments = (props: Props): ReactElement => {
                                 right: "40px"
                             }}
                         >
-                            <i>{comment.date}</i>
+                            <i>{comment.date.toLocaleString()}</i>
                         </span>
                     </div>
                 ))
