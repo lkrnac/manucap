@@ -31,9 +31,9 @@ const targetCues = [
 ];
 
 const cueComments = [
-    { userName: "username", comment: "this is the first comment ", date: "2019/12/31 10:00AM" },
-    { userName: "username", comment: "this is the second comment ", date: "2019/12/31 11:00AM" },
-    { userName: "username", comment: "this is the third comment ", date: "2019/12/31 11:30AM" }
+    { userName: "username", comment: "this is the first comment", date: new Date("2021-01-01T11:00:00") },
+    { userName: "username", comment: "this is the second comment", date: new Date("2021-01-01T11:0:00") },
+    { userName: "username", comment: "this is the third comment", date: new Date("2021-01-01T12:00:00") }
 ];
 
 const targetCuesWithComments = [
@@ -115,7 +115,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: true,
                 targetCuesLength: 3,
-                matchedCues: matchedCuesCaptioning
+                matchedCues: matchedCuesCaptioning,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -180,7 +181,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: true,
                 targetCuesLength: 3,
-                matchedCues: matchedCuesCaptioning
+                matchedCues: matchedCuesCaptioning,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -240,7 +242,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: true,
                 targetCuesLength: 3,
-                matchedCues: matchedCuesCaptioning
+                matchedCues: matchedCuesCaptioning,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -308,7 +311,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: true,
                 targetCuesLength: 3,
-                matchedCues: matchedCuesCaptioningEditDisabled
+                matchedCues: matchedCuesCaptioningEditDisabled,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -377,7 +381,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: matchedCuesTranslation
+                matchedCues: matchedCuesTranslation,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -521,7 +526,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 1,
-                matchedCues: matchedCuesTranslationEditDisabled
+                matchedCues: matchedCuesTranslationEditDisabled,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -608,7 +614,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: matchedCues
+                matchedCues: matchedCues,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -693,7 +700,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: matchedCues
+                matchedCues: matchedCues,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -763,7 +771,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 0,
-                matchedCues: [cueWithSource]
+                matchedCues: [cueWithSource],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -830,7 +839,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 1,
-                matchedCues: [cueLine]
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -929,7 +939,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 1,
-                matchedCues: [cueLine]
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -1028,7 +1039,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: [cueLine]
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -1116,7 +1128,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 1,
-                matchedCues: [cueLine]
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -1204,7 +1217,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: [cueLine]
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -1315,7 +1329,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: [cueLine]
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -1424,7 +1439,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: [cueLine]
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -1456,7 +1472,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 1,
-                matchedCues: matchedCuesTranslation
+                matchedCues: matchedCuesTranslation,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
             const onClickStub = jest.fn();
             const actualNode = render(
@@ -1496,7 +1513,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 0,
-                matchedCues: matchedCuesTranslation
+                matchedCues: matchedCuesTranslation,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
             testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
             const actualNode = render(
@@ -1535,7 +1553,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 0,
-                matchedCues: matchedCuesTranslation
+                matchedCues: matchedCuesTranslation,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
             testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
             const actualNode = render(
@@ -1574,7 +1593,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: matchedCuesCaptioning
+                matchedCues: matchedCuesCaptioning,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
             testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
 
@@ -1616,7 +1636,8 @@ describe("CueLine", () => {
             playerTime: 0,
             withoutSourceCues: true,
             targetCuesLength: 1,
-            matchedCues
+            matchedCues,
+            commentAuthor: "Linguist"
         } as CueLineRowProps;
         const rowRef = React.createRef() as React.RefObject<HTMLDivElement>;
 
@@ -1670,7 +1691,7 @@ describe("CueLine", () => {
                                 playerTime={0}
                                 nextCueLine={matchedCuesWithCommentsCaptioning[1]}
                             />
-                            <CueComments index={0} cue={targetCuesWithComments[0]} />
+                            <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
                         </div>
                     </div>
                 </Provider>
@@ -1679,7 +1700,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: true,
                 targetCuesLength: 2,
-                matchedCues: matchedCuesWithCommentsCaptioning
+                matchedCues: matchedCuesWithCommentsCaptioning,
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN
@@ -1747,7 +1769,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
-                            <CueComments index={0} cue={targetCuesWithComments[0]} />
+                            <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
                             <CueView
                                 isTargetCue
                                 targetCueIndex={1}
@@ -1760,7 +1782,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
-                            <CueComments index={1} cue={targetCuesWithComments[1]} />
+                            <CueComments index={1} cue={targetCuesWithComments[1]} commentAuthor="Linguist" />
                             <CueView
                                 isTargetCue
                                 targetCueIndex={2}
@@ -1773,7 +1795,7 @@ describe("CueLine", () => {
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                             />
-                            <CueComments index={2} cue={targetCuesWithComments[2]} />
+                            <CueComments index={2} cue={targetCuesWithComments[2]} commentAuthor="Linguist" />
                         </div>
                     </div>
                 </Provider>
@@ -1782,7 +1804,8 @@ describe("CueLine", () => {
                 playerTime: 0,
                 withoutSourceCues: false,
                 targetCuesLength: 3,
-                matchedCues: [cueLine]
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
             } as CueLineRowProps;
 
             // WHEN

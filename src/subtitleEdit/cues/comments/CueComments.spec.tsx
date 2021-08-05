@@ -10,8 +10,18 @@ import { updateCues } from "../cuesList/cuesListActions";
 import { userSlice } from "../../userSlices";
 
 const testComments = [
-    { userId: "rev.test", userName: "Reviewer", date: "2010-01-01", comment: "this is the first comment" },
-    { userId: "test", userName: "Linguist", date: "2010-01-02", comment: "this is the second comment" }
+    {
+        userId: "rev.test",
+        userName: "Reviewer",
+        date: new Date("2021-01-01T03:24:00"),
+        comment: "this is the first comment"
+    },
+    {
+        userId: "test",
+        userName: "Linguist",
+        date: new Date("2021-02-01T03:06:00"),
+        comment: "this is the second comment"
+    }
 ] as CueComment[];
 
 const testCue = {
@@ -74,7 +84,7 @@ describe("CueComments", () => {
                             right: "40px"
                         }}
                     >
-                        <i>2010-01-01</i>
+                        <i>1/1/2021, 3:24:00 AM</i>
                     </span>
                 </div>
                 <div style={{ marginBottom: "8px" }}>
@@ -110,7 +120,7 @@ describe("CueComments", () => {
                             right: "40px"
                         }}
                     >
-                        <i>2010-01-02</i>
+                        <i>2/1/2021, 3:06:00 AM</i>
                     </span>
                 </div>
                 <hr style={{

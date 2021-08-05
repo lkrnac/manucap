@@ -96,14 +96,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: true,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: true,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -115,7 +127,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -151,14 +163,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: true,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: true,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -167,7 +191,13 @@ describe("CuesList", () => {
                                 height={81}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: true,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -179,7 +209,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -218,14 +248,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: true,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: true,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -234,7 +276,13 @@ describe("CuesList", () => {
                                 height={81}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: true,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -246,7 +294,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
+                    <CuesList
+                        editingTrack={testingDirectTranslationTrack}
+                        currentPlayerTime={0}
+                        commentAuthor="Linguist"
+                    />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -300,14 +352,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -316,7 +380,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -328,7 +398,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -367,14 +437,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 0,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 0,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -383,7 +465,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 0,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -395,7 +483,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -443,14 +531,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -459,7 +559,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -471,7 +577,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -520,14 +626,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -536,7 +654,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -545,7 +669,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={3}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -557,7 +687,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -605,14 +735,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 1,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 1,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -621,7 +763,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 1,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -633,7 +781,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -682,14 +830,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 1,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 1,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -698,7 +858,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 1,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -707,7 +873,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={3}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 1,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -719,7 +891,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -761,7 +933,13 @@ describe("CuesList", () => {
                                 data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -773,7 +951,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -817,7 +995,13 @@ describe("CuesList", () => {
                                 data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 1,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -829,7 +1013,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -881,14 +1065,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -897,7 +1093,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -909,7 +1111,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -961,14 +1163,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
@@ -977,7 +1191,13 @@ describe("CuesList", () => {
                                 height={180}
                                 rowIndex={2}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -989,7 +1209,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -1036,14 +1256,26 @@ describe("CuesList", () => {
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 2,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                                 rowIndex={1}
                                 rowRef={React.createRef()}
-                                rowProps={{ playerTime: 0, targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
+                                rowProps={{
+                                    playerTime: 0,
+                                    targetCuesLength: 2,
+                                    withoutSourceCues: false,
+                                    matchedCues,
+                                    commentAuthor: "Linguist"
+                                }}
                                 onClick={(): void => undefined}
                             />
                         </div >
@@ -1055,7 +1287,7 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} />
+                    <CuesList editingTrack={testingTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
                 </Provider >
             );
             simulateEnoughSpaceForCues(actualNode);
@@ -1069,7 +1301,7 @@ describe("CuesList", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
             </Provider >
         );
         await act(async () => {
@@ -1093,7 +1325,7 @@ describe("CuesList", () => {
         ] as CueDto[];
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} commentAuthor="Linguist" />
             </Provider >
         );
         simulateEnoughSpaceForCues(actualNode, 100);
@@ -1124,7 +1356,7 @@ describe("CuesList", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} commentAuthor="Linguist" />
             </Provider >
         );
         simulateEnoughSpaceForCues(actualNode, 100);
@@ -1158,7 +1390,7 @@ describe("CuesList", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingCaptionTrack} currentPlayerTime={0} commentAuthor="Linguist" />
             </Provider >
         );
         simulateEnoughSpaceForCues(actualNode, 100);
@@ -1193,7 +1425,7 @@ describe("CuesList", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} />
+                <CuesList editingTrack={testingDirectTranslationTrack} currentPlayerTime={0} commentAuthor="Linguist" />
             </Provider >
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
