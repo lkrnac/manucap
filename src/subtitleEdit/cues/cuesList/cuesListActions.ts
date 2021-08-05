@@ -138,7 +138,10 @@ export const updateVttCue = (
         const cues = getState().cues;
         const originalCue = cues[idx];
         const cueErrors = [] as CueError[];
-        if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed/changed in the meantime
+
+        if (originalCue && editUuid === originalCue.editUuid
+            && getState().lastCueChange?.changeType !== "REMOVE"
+        ) { // cue wasn't removed/changed in the meantime
             let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
             if (textOnly) {
                 newVttCue = new VTTCue(originalCue.vttCue.startTime, originalCue.vttCue.endTime, vttCue.text);
@@ -191,7 +194,6 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
-            dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             updateSearchMatches(dispatch, getState, idx);
             validateCue(dispatch, idx, true);
             if (!textOnly || editUuid === undefined) {
@@ -214,6 +216,7 @@ export const updateVttCue = (
                     { cue: newCue, targetCuesIndex, editingIndexMatchedCues }
                 ));
             }
+            dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             callSaveTrack(dispatch, getState, multiCuesEdit);
         }
     };

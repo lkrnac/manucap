@@ -11,13 +11,13 @@ import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "../../model";
-import { updateCues } from "./cuesListActions";
+import { updateCues, updateVttCue } from "./cuesListActions";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import CuesList from "./CuesList";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "../edit/editorStatesSlice";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { updateTask } from "../../trackSlices";
+import { updateEditingTrack, updateTask } from "../../trackSlices";
 import { changeScrollPosition, scrollPositionSlice } from "./cuesListScrollSlice";
 import { act } from "react-dom/test-utils";
 import CueLine from "../cueLine/CueLine";
@@ -816,6 +816,78 @@ describe("CuesList", () => {
             expect(testingStore.getState().focusedCueIndex).toEqual(null);
             expect(actualNode.container.querySelector("div")?.outerHTML).toContain("Caption Line 119");
             expect(actualNode.container.querySelector("div")?.outerHTML).toContain("Caption Line 100");
+        });
+    });
+
+    describe("handles correctly complicated edge cases", () => {
+        it("doesn't save editor change to next cue when cue is quickly deleted after text updates", () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(0, 1, "Target Line 0"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Target Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
+
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+            fireEvent.paste(editor, {
+                clipboardData: {
+                    types: ["text/plain"],
+                    getData: (): string => " Paste text to end",
+                }
+            });
+            fireEvent.click(actualNode.container.querySelector(".sbte-delete-cue-button") as Element);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Target Line 1");
+            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                .toEqual("Target Line 1");
+        });
+
+        it("does save editor change if text is being written and user quickly hits Enter", async () => {
+            // GIVEN
+            const targetCues = [
+                { vttCue: new VTTCue(0, 1, "Target Line 0"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Target Line 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Target Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
+            testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Target Line 0 edited")) as {} as AnyAction);
+
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingCaptionTrack} />
+                </Provider>
+            );
+
+            // WHEN
+            const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+            fireEvent.paste(editor, {
+                clipboardData: {
+                    types: ["text/plain"],
+                    getData: (): string => " Paste text to end",
+                }
+            });
+            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Target Line 0 edited Paste text to end");
+            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                .toEqual("Target Line 0 edited Paste text to end");
+            expect(actualNode.container.outerHTML).toContain("Target Line 0 edited Paste text to end");
         });
     });
 });
