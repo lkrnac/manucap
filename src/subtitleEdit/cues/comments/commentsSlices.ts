@@ -17,6 +17,6 @@ export const commentsVisibleSlice = createSlice({
 });
 
 export const showComments = (visible: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean | SubtitleEditAction>>, _getState): void => {
+    (dispatch: Dispatch<PayloadAction<boolean | SubtitleEditAction>>): void => {
         dispatch(commentsVisibleSlice.actions.setCommentsVisible(visible));
     };
