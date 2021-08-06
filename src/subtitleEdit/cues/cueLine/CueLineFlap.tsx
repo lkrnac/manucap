@@ -20,7 +20,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                 width: "30px",
                 color: "white",
                 position: "relative",
-                minHeight: props.editDisabled && showCommentsIcon ? "100px" : "unset"
+                minHeight: props.editDisabled && showCommentsIcon ? "100px" : "80px"
             }}
         >
             <div style={{ paddingTop: "10px", fontSize: "11px", fontWeight: "bold" }}>

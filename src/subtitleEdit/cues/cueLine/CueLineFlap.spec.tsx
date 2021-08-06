@@ -17,7 +17,7 @@ describe("CueLineFlap", () => {
                     width: "30px",
                     color: "white",
                     position: "relative",
-                    minHeight: "unset"
+                    minHeight: "80px"
                 }}
             >
                 <div
@@ -87,7 +87,7 @@ describe("CueLineFlap", () => {
                     width: "30px",
                     color: "white",
                     position: "relative",
-                    minHeight: "unset"
+                    minHeight: "80px"
                 }}
             >
                 <div
@@ -158,7 +158,7 @@ describe("CueLineFlap", () => {
                     width: "30px",
                     color: "white",
                     position: "relative",
-                    minHeight: "unset"
+                    minHeight: "80px"
                 }}
             >
                 <div
@@ -231,7 +231,7 @@ describe("CueLineFlap", () => {
                     width: "30px",
                     color: "white",
                     position: "relative",
-                    minHeight: "unset"
+                    minHeight: "80px"
                 }}
             >
                 <div
@@ -302,7 +302,7 @@ describe("CueLineFlap", () => {
                     width: "30px",
                     color: "white",
                     position: "relative",
-                    minHeight: "unset"
+                    minHeight: "80px"
                 }}
             >
                 <div
@@ -375,7 +375,7 @@ describe("CueLineFlap", () => {
                     width: "30px",
                     color: "white",
                     position: "relative",
-                    minHeight: "unset"
+                    minHeight: "80px"
                 }}
             >
                 <div
@@ -446,7 +446,7 @@ describe("CueLineFlap", () => {
                     width: "30px",
                     color: "white",
                     position: "relative",
-                    minHeight: "unset"
+                    minHeight: "80px"
                 }}
             >
                 <div
