@@ -17,7 +17,7 @@ import "../edit/CueTextEditor";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 import CueComments from "../comments/CueComments";
-import { showComments } from "../comments/commentsSlices";
+import { commentsVisibleSlice } from "../comments/commentsSlices";
 
 jest.mock("../edit/CueEdit", () => (props: CueEditProps): ReactElement => <div>CueEdit: {JSON.stringify(props)}</div>);
 jest.mock("../view/CueView", () => (props: CueViewProps): ReactElement => <div>CueView: {JSON.stringify(props)}</div>);
@@ -1662,7 +1662,7 @@ describe("CueLine", () => {
     describe("cue comments", () => {
         it("renders caption edit with comments", () => {
             // GIVEN
-            testingStore.dispatch(showComments(true) as {} as AnyAction);
+            testingStore.dispatch(commentsVisibleSlice.actions.setCommentsVisible(true));
             const matchedCuesWithCommentsCaptioning = [
                 { targetCues: [targetCuesWithCommentsWithIndexes[0]], sourceCues: []},
                 { targetCues: [targetCuesWithCommentsWithIndexes[1]], sourceCues: []}
@@ -1724,7 +1724,7 @@ describe("CueLine", () => {
 
         it("renders translation view line with 3 target cues wit comments", () => {
             // GIVEN
-            testingStore.dispatch(showComments(true) as {} as AnyAction);
+            testingStore.dispatch(commentsVisibleSlice.actions.setCommentsVisible(true));
             const testingTrack = {
                 type: "TRANSLATION",
                 sourceLanguage: { id: "en-US", name: "English", direction: "LTR" } as Language,

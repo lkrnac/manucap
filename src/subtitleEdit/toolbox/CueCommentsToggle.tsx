@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import ToggleButton from "./ToggleButton";
-import { showComments } from "../cues/comments/commentsSlices";
+import { commentsVisibleSlice } from "../cues/comments/commentsSlices";
 
 export const CueCommentsToggle = (): ReactElement => {
     const dispatch = useDispatch();
@@ -12,7 +12,7 @@ export const CueCommentsToggle = (): ReactElement => {
             className="btn btn-secondary"
             toggled={commentsVisible}
             onClick={(): void => {
-                dispatch(showComments(!commentsVisible));
+                dispatch(commentsVisibleSlice.actions.setCommentsVisible(!commentsVisible));
             }}
             render={(toggle): ReactElement => (
                 toggle
