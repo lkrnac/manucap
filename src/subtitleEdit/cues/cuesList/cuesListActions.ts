@@ -255,15 +255,17 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     };
 
 export const addCueComment = (idx: number, cueComment: CueComment): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         dispatch(cuesSlice.actions.addCueComment({ idx, cueComment }));
         callSaveTrack(dispatch, getState);
+        dispatch(updateMatchedCues());
     };
 
 export const deleteCueComment = (idx: number, cueCommentIndex: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         dispatch(cuesSlice.actions.deleteCueComment({ idx, cueCommentIndex }));
         callSaveTrack(dispatch, getState);
+        dispatch(updateMatchedCues());
     };
 
 export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
