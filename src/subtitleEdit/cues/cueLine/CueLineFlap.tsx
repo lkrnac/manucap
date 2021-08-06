@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import { CUE_LINE_STATE_CLASSES, CueError, CueLineState } from "../../model";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
     rowIndex: number;
@@ -9,6 +10,16 @@ interface Props {
     editDisabled?: boolean;
     cueCommentsCount?: number;
 }
+
+const getCommentIcon = (index: number): ReactElement => (
+    <TooltipWrapper
+        tooltipId={`cueCommentTooltip-${index}`}
+        text="Subtitle(s) has comments"
+        placement="right"
+    >
+        <i className="fa fa-comments" />
+    </TooltipWrapper>
+);
 
 const CueLineFlap = (props: Props): ReactElement => {
     const showCommentsIcon = props.cueCommentsCount && props.cueCommentsCount > 0;
@@ -56,7 +67,7 @@ const CueLineFlap = (props: Props): ReactElement => {
             >
                 {
                     showCommentsIcon
-                        ? <i className="fa fa-comments" />
+                        ? getCommentIcon(props.rowIndex)
                         : null
                 }
             </div>
