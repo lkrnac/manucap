@@ -1696,7 +1696,7 @@ describe("cueSlices", () => {
             const newComment = {
                 userName: "Username",
                 comment: "This is a comment",
-                date: new Date("2021-01-01T03:24:00")
+                date: "2021-01-01T09:24:00.000Z"
             };
 
             // WHEN
@@ -1712,7 +1712,7 @@ describe("cueSlices", () => {
             const existingComment = {
                 userName: "Username",
                 comment: "This is an existing comment",
-                date: new Date("2021-01-01T03:24:00")
+                date: "2021-01-01T09:24:00.000Z"
             };
             const testingCuesWithComments = [
                 { ...testingCues[0], comments: [existingComment]},
@@ -1722,7 +1722,7 @@ describe("cueSlices", () => {
             const newComment = {
                 userName: "Username",
                 comment: "This is a comment",
-                date: new Date("2021-01-01T03:24:00")
+                date: "2021-01-01T09:24:00.000Z"
             };
 
             // WHEN
@@ -1741,7 +1741,7 @@ describe("cueSlices", () => {
                 userId: "jane.doe",
                 userName: "Username",
                 comment: "This is an existing comment",
-                date: new Date("2021-01-01T03:24:00")
+                date: "2021-01-01T09:24:00.000Z"
             };
             const testingCuesWithComments = [
                 { ...testingCues[0], comments: [existingComment]},

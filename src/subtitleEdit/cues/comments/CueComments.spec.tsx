@@ -13,13 +13,13 @@ const testComments = [
     {
         userId: "rev.test",
         userName: "Reviewer",
-        date: new Date("2021-01-01T03:24:00"),
+        date: "2021-01-01T09:24:00.000Z",
         comment: "this is the first comment"
     },
     {
         userId: "test",
         userName: "Linguist",
-        date: new Date("2021-02-01T03:06:00"),
+        date: "2021-02-01T09:06:00.000Z",
         comment: "this is the second comment"
     }
 ] as CueComment[];

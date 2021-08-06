@@ -24,7 +24,7 @@ const CueComments = (props: Props): ReactElement => {
                 userId: currentUser?.userId,
                 userName: props.commentAuthor || "N/A",
                 comment: text,
-                date: new Date()
+                date: new Date().toISOString()
             };
             dispatch(addCueComment(props.index, newComment));
             setText("");
@@ -103,7 +103,7 @@ const CueComments = (props: Props): ReactElement => {
                                 right: "40px"
                             }}
                         >
-                            <i>{comment.date.toLocaleString()}</i>
+                            <i>{new Date(comment.date).toLocaleString()}</i>
                         </span>
                     </div>
                 ))

@@ -132,9 +132,7 @@ const TestApp = (): ReactElement => {
             const randomComments = Math.random() * 4;
             for (let i = 1; i <= randomComments; i++) {
                 const isLinguist = Math.random() < 0.5;
-                const commentDate = new Date();
-                commentDate.setDate(commentDate.getDate() - i);
-                commentDate.setHours(commentDate.getHours() - i * 2);
+                const commentDate = isLinguist ? "2021-08-06T19:49:44.493Z" : "2021-08-08T14:02:20.100Z";
                 comments.push({
                     userId: isLinguist ? "jane.doe" : "other.user",
                     userName: isLinguist ? "Reviewer": "Linguist",

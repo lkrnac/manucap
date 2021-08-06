@@ -154,5 +154,5 @@ export interface CueComment {
     userId?: string;
     userName?: string;
     comment: string;
-    date: Date;
+    date: string;
 }
