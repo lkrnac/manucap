@@ -138,7 +138,7 @@ const CueComments = (props: Props): ReactElement => {
                 <button
                     type="button"
                     className="btn btn-sm btn-outline-secondary"
-                    style={{ float: "right" }}
+                    style={{ float: "right", marginLeft: "5px" }}
                     onClick={addNewComment}
                     disabled={!text}
                 >
