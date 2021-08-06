@@ -218,14 +218,14 @@ describe("CueLine", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex", paddingBottom: "5px", width: "100%" }} className="sbte-cue-line">
+                    <div className="sbte-cue-line" style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
                             cuesErrors={[CueError.SPELLCHECK_ERROR]}
                             showErrors
                         />
-                        <div className="" style={{ display: "flex", flexDirection:"column", width: "100%" }}>
+                        <div className="" style={{ display: "grid", width: "100%" }}>
                             <CueEdit
                                 index={0}
                                 cue={corruptedCue}

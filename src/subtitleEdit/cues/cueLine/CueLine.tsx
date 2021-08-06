@@ -147,9 +147,9 @@ const CueLine = (props: CueLineProps): ReactElement => {
 
     return (
         <div
+            className="sbte-cue-line"
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
-            className="sbte-cue-line"
         >
             <CueLineFlap
                 rowIndex={props.rowIndex}
