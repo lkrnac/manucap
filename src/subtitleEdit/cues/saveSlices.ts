@@ -91,7 +91,7 @@ const saveTrackCurrent = (
 const saveTrackDebounced = debounce(saveTrackCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
 export const callSaveTrack = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function,
     multiCuesEdit?: boolean
 ): void => {

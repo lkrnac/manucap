@@ -77,7 +77,6 @@ describe("CueView", () => {
                     isTargetCue={false}
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     className="testingClassName"
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -147,7 +146,6 @@ describe("CueView", () => {
                     isTargetCue={false}
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -216,7 +214,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -268,7 +265,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     languageDirection={testingTrack.language.direction}
                     targetCuesLength={0}
@@ -310,7 +306,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -354,7 +349,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -398,7 +392,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -442,7 +435,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -484,7 +476,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     hideText
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -522,7 +513,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -557,7 +547,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -591,7 +580,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms={false}
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -621,7 +609,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -653,7 +640,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -691,7 +677,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -728,7 +713,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -754,7 +738,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={6}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={8}
                     sourceCuesIndexes={[]}
@@ -791,7 +774,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -836,7 +818,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms={false}
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -881,7 +862,6 @@ describe("CueView", () => {
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms={false}
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -926,7 +906,6 @@ describe("CueView", () => {
                     isTargetCue={false}
                     targetCueIndex={0}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms={false}
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
@@ -969,7 +948,6 @@ describe("CueView", () => {
                     isTargetCue={false}
                     targetCueIndex={0}
                     cue={cue}
-                    playerTime={1}
                     showGlossaryTerms={false}
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}

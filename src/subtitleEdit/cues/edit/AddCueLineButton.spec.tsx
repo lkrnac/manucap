@@ -32,7 +32,7 @@ describe("AddCueLineButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                style={{ maxHeight: "38px", margin: "5px" }}
+                style={{ maxHeight: "38px", margin: "5px", height: "100%" }}
                 className="btn btn-outline-secondary sbte-add-cue-button"
             >
                 <b>+</b>
@@ -54,7 +54,7 @@ describe("AddCueLineButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                style={{ maxHeight: "38px", margin: "5px" }}
+                style={{ maxHeight: "38px", margin: "5px", height: "100%" }}
                 className="btn btn-outline-secondary sbte-add-cue-button"
             >
                 <span>Add Cue Line</span>

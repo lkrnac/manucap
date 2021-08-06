@@ -17,7 +17,6 @@ import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 export interface CueEditProps {
     index: number;
     cue: CueDto;
-    playerTime: number;
     nextCueLine?: CueLineDto;
 }
 
@@ -35,6 +34,7 @@ const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
     const validationErrors = useSelector((state: SubtitleEditState) => state.validationErrors);
+    const currentPlayerTime = useSelector((state: SubtitleEditState) => state.currentPlayerTime);
     const nextSourceCuesIndexes = props.nextCueLine
         ? getCueIndexes(props.nextCueLine.sourceCues)
         : [];
@@ -78,14 +78,20 @@ const CueEdit = (props: CueEditProps): ReactElement => {
 
     useEffect(() => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
-            updateCueAndCopyProperties(dispatch, props, props.playerTime, props.cue.vttCue.endTime, props.cue.editUuid);
+            updateCueAndCopyProperties(
+                dispatch,
+                props,
+                currentPlayerTime,
+                props.cue.vttCue.endTime,
+                props.cue.editUuid
+            );
         });
         Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
             updateCueAndCopyProperties(
-                dispatch, props, props.cue.vttCue.startTime, props.playerTime, props.cue.editUuid
+                dispatch, props, props.cue.vttCue.startTime, currentPlayerTime, props.cue.editUuid
             );
         });
-    }, [ dispatch, props ]);
+    }, [ dispatch, props, currentPlayerTime ]);
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {

@@ -9,7 +9,7 @@ import {
     showSearchReplace
 } from "./searchReplaceSlices";
 import { updateCues } from "../cuesList/cuesListActions";
-import { CueDto, ScrollPosition } from "../../model";
+import { CueDto } from "../../model";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 
 const testingCues = [
@@ -119,7 +119,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().searchReplace.find).toEqual("line 2");
             expect(testingStore.getState().searchReplace.direction).toEqual("NEXT");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("searches for find term in next cue match case - no match", () => {
@@ -134,7 +134,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("line 2");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("searches for find term in next cue match case - with match", () => {
@@ -149,7 +149,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("searches for find term in cue with many matches next", () => {
@@ -186,7 +186,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().cues[0].searchReplaceMatches.matchLength).toEqual(3);
             expect(testingStore.getState().cues[1].searchReplaceMatches).toBeUndefined();
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("sets editing cue index to next when current cue is end of matches", () => {
@@ -218,7 +218,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
         it("wraps search to first when current cue is last", () => {
@@ -250,7 +250,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("stops search if last cue match is last in whole track - next", () => {
@@ -282,7 +282,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
         });
 
         it("sets editing cue index to next and first offsetIndex for cue", () => {
@@ -326,7 +326,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(1);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8, 16]);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("handles cues with empty cleansed vtt text", () => {
@@ -351,7 +351,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
         it("skips cues with editDisabled when searches for find term in next cue", () => {
@@ -366,7 +366,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
             expect(testingStore.getState().searchReplace.direction).toEqual("NEXT");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
         it("skips cues with editDisabled when wrapping searches for find term in next cue", () => {
@@ -382,7 +382,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
             expect(testingStore.getState().searchReplace.direction).toEqual("NEXT");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
         it("does not search if find is empty string", () => {
@@ -425,7 +425,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
             expect(testingStore.getState().searchReplace.direction).toEqual("PREVIOUS");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
         it("searches for find term in cue with many matches previous", () => {
@@ -461,7 +461,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().cues[0].searchReplaceMatches.matchLength).toEqual(3);
             expect(testingStore.getState().cues[1].searchReplaceMatches).toBeUndefined();
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("wraps search to last cue when current cue is first", () => {
@@ -493,7 +493,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
         it("stops search if last cue match is last in whole track - next", () => {
@@ -528,7 +528,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
         it("wraps search to last cue when current cue is last on top", () => {
@@ -563,7 +563,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(2);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
         });
 
         it("sets editing cue index to previous when current cue is end of matches", () => {
@@ -598,7 +598,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("sets editing cue index to previous and last offsetIndex for cue", () => {
@@ -642,7 +642,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
             expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8]);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("skips cues with editDisabled when searches for find term in previous cue", () => {
@@ -657,7 +657,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
             expect(testingStore.getState().searchReplace.direction).toEqual("PREVIOUS");
             expect(testingStore.getState().editingCueIndex).toEqual(2);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
         });
 
         it("skips cues with editDisabled when wrapping searches for find term in previous cue", () => {
@@ -673,7 +673,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
             expect(testingStore.getState().searchReplace.direction).toEqual("PREVIOUS");
             expect(testingStore.getState().editingCueIndex).toEqual(2);
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
         });
 
         it("does not search if find is empty string", () => {
