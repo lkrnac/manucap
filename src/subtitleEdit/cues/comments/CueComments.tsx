@@ -5,6 +5,7 @@ import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
     index: number;
@@ -38,14 +39,20 @@ const CueComments = (props: Props): ReactElement => {
     );
 
     const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
-        <button
-            data-testid="sbte-delete-cue-comment-button"
-            style={{ float: "right" }}
-            className="btn btn-outline-secondary sbte-btn-xs"
-            onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
+        <TooltipWrapper
+            tooltipId={`deleteCueCommentBtnTooltip-${cueIndex}-${commentIndex}`}
+            text="Delete comment"
+            placement="top"
         >
-            <i className="fa fa-trash" />
-        </button>
+            <button
+                data-testid="sbte-delete-cue-comment-button"
+                style={{ float: "right" }}
+                className="btn btn-outline-secondary sbte-btn-xs"
+                onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
+            >
+                <i className="fa fa-trash" />
+            </button>
+        </TooltipWrapper>
     );
 
     return (
