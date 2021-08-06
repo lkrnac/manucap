@@ -1,10 +1,10 @@
 import "../styles.scss";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import SubtitleEditHeader from "./SubtitleEditHeader";
-import { SubtitleEditState } from "./subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
 import { hasDataLoaded } from "./utils/subtitleEditUtils";
@@ -12,7 +12,7 @@ import CuesList from "./cues/cuesList/CuesList";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
-import { changeScrollPosition } from "./cues/cuesList/cuesListScrollSlice";
+import { changeScrollPosition, setCurrentPlayerTime } from "./cues/cuesList/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
 import CompleteButton from "./CompleteButton";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
@@ -42,8 +42,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
-    const [currentPlayerTime, setCurrentPlayerTime] = useState(0);
-    const handleTimeChange = (time: number): void => setCurrentPlayerTime(time);
+    const handleTimeChange = (time: number): AppThunk => dispatch(setCurrentPlayerTime(time));
     const cuesLoadingCounter = useSelector((state: SubtitleEditState) => state.cuesLoadingCounter);
 
     useEffect(
@@ -118,11 +117,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             }}
                         >
                             <SearchReplaceEditor />
-                            <CuesList
-                                editingTrack={editingTrack}
-                                currentPlayerTime={currentPlayerTime}
-                                commentAuthor={props.commentAuthor}
-                            />
+                            <CuesList editingTrack={editingTrack} commentAuthor={props.commentAuthor} />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button
                                     className="btn btn-primary sbte-view-all-tracks-btn"

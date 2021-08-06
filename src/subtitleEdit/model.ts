@@ -132,7 +132,9 @@ export enum ScrollPosition {
     LAST,
     CURRENT,
     PLAYBACK,
-    LAST_TRANSLATED
+    LAST_TRANSLATED,
+    NEXT_PAGE,
+    PREVIOUS_PAGE
 }
 
 export enum CueError {

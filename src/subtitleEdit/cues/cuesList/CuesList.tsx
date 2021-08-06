@@ -1,81 +1,56 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { createRef, ReactElement, RefObject, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// @ts-ignore It doesn't have TS type module
-import ReactSmartScroll from "@dotsub/react-smart-scroll";
 
 import { isDirectTranslationTrack } from "../../utils/subtitleEditUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";
-import { ScrollPosition, Track } from "../../model";
+import { CueLineDto, ScrollPosition, Track } from "../../model";
 import CueLine from "../cueLine/CueLine";
 import { addCue } from "./cuesListActions";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
 import { changeScrollPosition } from "./cuesListScrollSlice";
-import { matchCuesByTime, matchCueTimeIndex } from "./cuesListTimeMatching";
+
+const DEFAULT_PAGE_SIZE = 50;
 
 interface Props {
     editingTrack: Track | null;
-    currentPlayerTime: number;
     commentAuthor?: string;
 }
-const getScrollCueIndex = (
-    matchedCuesSize: number,
-    editingFocusInMap: number,
-    currentPlayerCueIndex: number,
-    lastTranslatedIndex: number,
-    scrollPosition?: ScrollPosition
-): number | undefined => {
-    if (scrollPosition === ScrollPosition.FIRST) {
-        return 0;
-    }
-    if (scrollPosition === ScrollPosition.LAST) {
-        return matchedCuesSize - 1;
-    }
-    if (scrollPosition === ScrollPosition.CURRENT) {
-        return editingFocusInMap;
-    }
-    if (scrollPosition === ScrollPosition.PLAYBACK) {
-        return currentPlayerCueIndex;
-    }
-    if (scrollPosition === ScrollPosition.LAST_TRANSLATED) {
-        return lastTranslatedIndex - 1;
-    }
-    return undefined; // out of range value, because need to trigger change of ReactSmartScroll.startAt
-};
 
 const CuesList = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const targetCuesArray = useSelector((state: SubtitleEditState) => state.cues);
-    const sourceCuesArray = useSelector((state: SubtitleEditState) => state.sourceCues);
-    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const { editingFocusIndex, matchedCues } = matchCuesByTime(targetCuesArray, sourceCuesArray, editingCueIndex);
-    const currentPlayerCueIndex = matchCueTimeIndex(targetCuesArray, props.currentPlayerTime);
-    const scrollPosition = useSelector((state: SubtitleEditState) => state.scrollPosition);
-    const startAt = getScrollCueIndex(
-        matchedCues.length,
-        editingFocusIndex,
-        currentPlayerCueIndex,
-        targetCuesArray.length,
-        scrollPosition
-    );
-    const rowHeight = sourceCuesArray.length > 0
-        ? 180 // This is bigger than real translation view cue, because if there is at least one
-              // editing cue, bigger rowHeight scrolls properly to bottom
-        : 81; // Value is taken from Elements > Computed from browser DEV tools
-              // yes, we don't use bigger value as in translation mode,
-              // because we needed to properly scroll to added cue
-              // -> yes, there is glitch where if there is some editing cue on top, jump to bottom
-              // does not scroll so that last cue is in view port. I didn't figure out fix for this issue so far.
-    useEffect(
-        () => {
-            dispatch(changeScrollPosition(ScrollPosition.NONE));
-        }
-    );
+    const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues);
+    const previousNonNullFocusedCueIndex = useRef(-1);
+    const startAt = useSelector((state: SubtitleEditState) => state.focusedCueIndex);
+    if (startAt !== null) {
+        previousNonNullFocusedCueIndex.current = startAt;
+    }
+    const scrollRef = useRef(null as HTMLDivElement | null);
+    const preventScroll = useRef(false);
+
     const withoutSourceCues = props.editingTrack?.type === "CAPTION" || isDirectTranslationTrack(props.editingTrack);
-    const showStartCaptioning = matchedCues.length === 0;
+    const showStartCaptioning = matchedCues.matchedCues.length === 0;
+    const pageIndex = previousNonNullFocusedCueIndex.current > 0
+        ? Math.floor(previousNonNullFocusedCueIndex.current / DEFAULT_PAGE_SIZE)
+        : 0;
+    const lastPageIndex = Math.floor(matchedCues.matchedCues.length / DEFAULT_PAGE_SIZE);
+    const startIndex = pageIndex === 0
+        ? 0
+        : pageIndex * DEFAULT_PAGE_SIZE - 5;
+    const endIndex = pageIndex === lastPageIndex
+        ? (pageIndex + 1) * DEFAULT_PAGE_SIZE
+        : (pageIndex + 1) * DEFAULT_PAGE_SIZE + 5;
+    const [refs, setRefs] = useState([] as RefObject<HTMLDivElement>[]);
+
     useEffect(
         () => {
+            setRefs(
+                Array(matchedCues.matchedCues.length)
+                    .fill(undefined)
+                    .map(() => createRef())
+            );
             Mousetrap.bind([KeyCombination.ENTER], () => {
                 if (showStartCaptioning) {
                     dispatch(addCue(0, []));
@@ -86,6 +61,37 @@ const CuesList = (props: Props): ReactElement => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once -> mount
     );
+
+    useEffect(
+        () => {
+            if (startAt !== null
+                && refs[startAt] !== undefined
+                && refs[startAt].current !== null
+            ) {
+                const ref = refs[startAt];
+                preventScroll.current = true;
+                ref?.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
+            }
+        }
+    );
+
+    useEffect(
+        () => {
+            const cuesList = scrollRef.current;
+            if (cuesList) {
+                const onScroll = (): void => {
+                    if (preventScroll.current) {
+                        preventScroll.current = false;
+                    } else {
+                        dispatch(changeScrollPosition(ScrollPosition.NONE));
+                    }
+                };
+                cuesList.addEventListener("scroll", onScroll);
+            }
+        },
+        [dispatch, scrollRef]
+    );
+
     return (
         <>
             {
@@ -93,20 +99,63 @@ const CuesList = (props: Props): ReactElement => {
                     ? <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
                     : null
             }
-            <ReactSmartScroll
-                className="sbte-smart-scroll"
-                data={matchedCues}
-                row={CueLine}
-                rowProps={{
-                    playerTime: props.currentPlayerTime,
-                    targetCuesLength: targetCuesArray.length,
-                    withoutSourceCues,
-                    matchedCues,
-                    commentAuthor: props.commentAuthor
-                }}
-                rowHeight={rowHeight}
-                startAt={startAt}
-            />
+            <div ref={scrollRef} style={{ overflow: "auto" }}>
+                {
+                    startIndex > 0
+                        ? (
+                            <button
+                                style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
+                                className="btn btn-outline-secondary sbte-previous-button shadow-none"
+                                onClick={(): void => {
+                                    dispatch(changeScrollPosition(
+                                        ScrollPosition.PREVIOUS_PAGE,
+                                        previousNonNullFocusedCueIndex.current
+                                    ));
+                                }}
+                            >
+                                Load Previous Cues
+                            </button>
+                        )
+                        : null
+                }
+                {
+                    matchedCues.matchedCues.slice(startIndex, endIndex)
+                        .map((item: CueLineDto, i) => {
+                            return (
+                                <CueLine
+                                    key={startIndex + i}
+                                    data={item}
+                                    rowIndex={startIndex + i}
+                                    rowProps={{
+                                        targetCuesLength: targetCuesArray.length,
+                                        withoutSourceCues,
+                                        matchedCues: matchedCues.matchedCues,
+                                        commentAuthor: props.commentAuthor
+                                    }}
+                                    rowRef={refs[startIndex + i]}
+                                />
+                            );
+                        })
+                }
+                {
+                    endIndex < matchedCues.matchedCues.length
+                        ? (
+                            <button
+                                style={{ width: "100%", paddingTop: "5px" }}
+                                className="btn btn-outline-secondary sbte-next-button shadow-none"
+                                onClick={(): void => {
+                                    dispatch(changeScrollPosition(
+                                        ScrollPosition.NEXT_PAGE,
+                                        previousNonNullFocusedCueIndex.current
+                                    ));
+                                }}
+                            >
+                                Load Next Cues
+                            </button>
+                        )
+                        : null
+                }
+            </div>
         </>
     );
 };

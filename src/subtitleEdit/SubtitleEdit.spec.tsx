@@ -13,7 +13,6 @@ import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
 import {
     removeDraftJsDynamicValues,
     removeVideoPlayerDynamicValue,
-    simulateEnoughSpaceForCues
 } from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesList/cuesListActions";
 import { updateEditingTrack, updateTask } from "./trackSlices";
@@ -48,6 +47,8 @@ jest.mock("lodash", () => ({
 }));
 
 jest.mock("./cues/CueErrorAlert", () => (): ReactElement => <div>CueErrorAlert</div>);
+
+Element.prototype.scrollIntoView = jest.fn();
 
 let testingStore = createTestingStore();
 
@@ -159,35 +160,29 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowIndex={0}
-                                        rowProps={{
-                                            playerTime: 0,
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={React.createRef()}
-                                        onClick={(): void => undefined}
-                                    />
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowIndex={1}
-                                        rowProps={{
-                                            playerTime: 0,
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={React.createRef()}
-                                        onClick={(): void => undefined}
-                                    />
-                                </div>
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={React.createRef()}
+                                />
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={React.createRef()}
+                                />
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
@@ -331,10 +326,7 @@ describe("SubtitleEdit", () => {
                                 cueIndex={-1}
                                 sourceCueIndexes={[]}
                             />
-                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                                </div>
-                            </div>
+                            <div style={{ overflow: "auto" }} />
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
@@ -591,35 +583,29 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <SearchReplaceEditor />
-                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                                    <CueLine
-                                        rowIndex={0}
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowProps={{
-                                            playerTime: 0,
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={React.createRef()}
-                                        onClick={(): void => undefined}
-                                    />
-                                    <CueLine
-                                        rowIndex={1}
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowProps={{
-                                            playerTime: 0,
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={React.createRef()}
-                                        onClick={(): void => undefined}
-                                    />
-                                </div>
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    rowIndex={0}
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={React.createRef()}
+                                />
+                                <CueLine
+                                    rowIndex={1}
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={React.createRef()}
+                                />
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
@@ -775,35 +761,29 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                                    <CueLine
-                                        rowIndex={0}
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowProps={{
-                                            playerTime: 0,
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={React.createRef()}
-                                        onClick={(): void => undefined}
-                                    />
-                                    <CueLine
-                                        rowIndex={1}
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowProps={{
-                                            playerTime: 0,
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={React.createRef()}
-                                        onClick={(): void => undefined}
-                                    />
-                                </div>
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    rowIndex={0}
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={React.createRef()}
+                                />
+                                <CueLine
+                                    rowIndex={1}
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={React.createRef()}
+                                />
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
@@ -1090,10 +1070,8 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jump to last cue in translation mode", () => {
@@ -1132,10 +1110,8 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-last-button").simulate("click");
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to first cue when button is clicked", () => {
@@ -1160,6 +1136,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        actualNode.find(".sbte-jump-to-last-button").simulate("click");
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
@@ -1167,10 +1144,8 @@ describe("SubtitleEdit", () => {
         actualNode.find(".sbte-jump-to-first-button").simulate("click");
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.FIRST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to first cue on first render", () => {
@@ -1201,11 +1176,8 @@ describe("SubtitleEdit", () => {
         );
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(4);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.FIRST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.FIRST);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to current edit cue when button is clicked", () => {
@@ -1230,6 +1202,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        fireEvent.click(actualNode.container.querySelector(".sbte-jump-to-last-button") as HTMLElement);
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
@@ -1237,11 +1210,8 @@ describe("SubtitleEdit", () => {
         fireEvent.click(actualNode.getByTestId("sbte-jump-to-edit-cue-button"));
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.CURRENT);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.CURRENT);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jumps to playback cue when button is clicked", () => {
@@ -1266,17 +1236,15 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+        fireEvent.click(actualNode.container.querySelector(".sbte-jump-to-last-button") as HTMLElement);
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
         fireEvent.click(actualNode.getByTestId("sbte-jump-to-playback-cue-button"));
 
         // THEN
-        expect(changeScrollPositionSpy).toBeCalledTimes(3);
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.PLAYBACK);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.PLAYBACK);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
-        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.NONE);
     });
 
     it("jump to last translated subtitle button clicked", async () => {
@@ -1303,16 +1271,12 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
-        simulateEnoughSpaceForCues(actualNode, 100);
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
         //WHEN
         await act(async () => {
             fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
-        });
-        await act(async () => {
-            actualNode.container.querySelector(".sbte-smart-scroll")?.dispatchEvent(new Event("scroll"));
         });
 
         expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize}`);

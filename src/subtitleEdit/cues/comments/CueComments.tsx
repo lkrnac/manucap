@@ -9,7 +9,7 @@ import { KeyCombination } from "../../utils/shortcutConstants";
 interface Props {
     index: number;
     cue: CueDto;
-    commentAuthor: string;
+    commentAuthor?: string;
 }
 
 const CueComments = (props: Props): ReactElement => {
