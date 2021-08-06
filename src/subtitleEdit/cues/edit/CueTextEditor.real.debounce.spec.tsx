@@ -1,8 +1,8 @@
 /**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import React from "react";
-import { AnyAction } from "@reduxjs/toolkit";
+import React, { ReactElement } from "react";
+import { AnyAction, Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
 import { mount, ReactWrapper } from "enzyme";
@@ -12,7 +12,7 @@ import { reset } from "./editorStatesSlice";
 import { CueDto, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues } from "../cuesList/cuesListActions";
-import CueTextEditor from "./CueTextEditor";
+import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { fireEvent, render } from "@testing-library/react";
@@ -56,6 +56,22 @@ const createEditorNode = (text = "someText", index?: number): ReactWrapper => {
 const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
 
 jest.setTimeout(8000);
+
+interface ReduxTestWrapperProps {
+    store: Store;
+    props: CueTextEditorProps;
+}
+const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
+    <Provider store={props.store}>
+        <CueTextEditor
+            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+            unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+            index={props.props.index}
+            vttCue={props.props.vttCue}
+            editUuid={props.props.editUuid}
+        />
+    </Provider>
+);
 
 describe("CueTextEditor", () => {
     beforeEach(() => {
@@ -141,6 +157,58 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
             .toEqual("someText Paste text to end");
         expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
+    });
+
+    it("update cue in redux when unmounted after cue update and editUuid changes, before debounce timeout",
+        async () => {
+        // GIVEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const vttCue = new VTTCue(0, 1, "someText");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={
+                        { index: 0, vttCue, editUuid,
+                            bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                            unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        }
+                    }
+                />);
+            const editor = actualNode.find(".public-DraftEditor-content");
+            editor.simulate("paste", {
+                clipboardData: {
+                    types: ["text/plain"],
+                    getData: (): string => " Paste text to end",
+                }
+            });
+            await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
+            // Update of vtt cue generates new editUuid in slice which would be passed from CueEdit parent.
+            // These calls be simulate the prop update from parent.
+            const updatedVttCue = testingStore.getState().cues[0].vttCue;
+            const updatedEditUuid = testingStore.getState().cues[0].editUuid;
+            actualNode.setProps({ props: { index: 0, vttCue: updatedVttCue, editUuid: updatedEditUuid }});
+
+            editor.simulate("paste", {
+                clipboardData: {
+                    types: ["text/plain"],
+                    getData: (): string => " Paste text to end",
+                }
+            });
+            testingStore.dispatch(matchedCuesSlice.actions
+                .matchCuesByTime({ cues, sourceCues: [], editingCueIndex: 0 })
+            );
+
+            // WHEN
+            actualNode.unmount();
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text)
+                .toEqual("someText Paste text to end Paste text to end");
+            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                .toEqual("someText Paste text to end Paste text to end");
+            expect(testingStore.getState().cues[0].editUuid).not.toEqual("1");
+            expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
     });
 
     it("updates cue in redux for single match/replace when unmounted for next match - single", (done) => {
