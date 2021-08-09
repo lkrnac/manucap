@@ -11,6 +11,7 @@ import { editingTrackSlice } from "../../trackSlices";
 import { Match, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
+import { matchCuesByTime, MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -143,4 +144,36 @@ export const cuesSlice = createSlice({
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): CueDto[] => [],
     }
+});
+
+interface MatchCuesAction {
+    cues: CueDto[];
+    sourceCues: CueDto[];
+    editingCueIndex: number;
+}
+
+interface MatchedCueAction {
+    cue: CueDto;
+    editingIndexMatchedCues: number;
+    targetCuesIndex: number;
+}
+
+export const matchedCuesSlice = createSlice({
+    name: "matchedCues",
+    initialState: { matchedCues: [], editingFocusIndex: 0 } as MatchedCuesWithEditingFocus,
+    reducers: {
+        matchCuesByTime: (_state, action: PayloadAction<MatchCuesAction>): MatchedCuesWithEditingFocus => {
+            return matchCuesByTime(action.payload.cues, action.payload.sourceCues, action.payload.editingCueIndex);
+        },
+        updateMatchedCue: (state, action: PayloadAction<MatchedCueAction>): MatchedCuesWithEditingFocus => {
+            if (action.payload.editingIndexMatchedCues >= 0) {
+                const targetCues = state.matchedCues[action.payload.editingIndexMatchedCues].targetCues;
+                if (targetCues && targetCues[action.payload.targetCuesIndex]) {
+                    targetCues[action.payload.targetCuesIndex].cue = action.payload.cue;
+                }
+                state.matchedCues[action.payload.editingIndexMatchedCues].targetCues = targetCues;
+            }
+            return state;
+        }
+    },
 });

@@ -6,6 +6,7 @@ import {
     CueCategory,
     CueDto,
     CueError,
+    CueLineDto,
     ScrollPosition,
     SpellcheckerSettings,
     SubtitleEditAction,
@@ -28,7 +29,7 @@ import {
     getTimeGapLimits,
     verifyCueDuration
 } from "../cueVerifications";
-import { scrollPositionSlice } from "./cuesListScrollSlice";
+import { changeScrollPosition } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import {
     editingCueIndexSlice,
@@ -38,15 +39,33 @@ import {
 } from "../edit/cueEditorSlices";
 import _ from "lodash";
 import { rowsToMergeSlice } from "../merge/mergeSlices";
-import { CueErrorsPayload, cuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
+import { CueErrorsPayload, cuesSlice, matchedCuesSlice, SpellCheckRemovalAction } from "./cuesListSlices";
 import { callSaveTrack } from "../saveSlices";
-
-interface CuesAction extends SubtitleEditAction {
-    cues: CueDto[];
-}
 
 const NEW_ADDED_CUE_DEFAULT_STEP = 3;
 const DEFAULT_CUE = { vttCue: new VTTCue(0, 0, ""), cueCategory: "DIALOGUE" };
+
+interface MatchedCueIndexes {
+    targetCuesIndex: number;
+    editingIndexMatchedCues: number;
+}
+
+const findMatchedIndexes = (state: SubtitleEditState, index: number): MatchedCueIndexes => {
+    // TODO: Remove following ugly code when we implement
+    //  https://dotsub.atlassian.net/browse/VTMS-3304
+    let targetCuesIndex = 0;
+    const editingIndexMatchedCues = state.matchedCues.matchedCues.findIndex(
+        (cueLineDto: CueLineDto): boolean => cueLineDto.targetCues
+            ? cueLineDto.targetCues?.some(
+                (targetCue, nestedIndex) => {
+                    targetCuesIndex = nestedIndex;
+                    return targetCue.index === index;
+                }
+            )
+            : false
+    );
+    return { targetCuesIndex, editingIndexMatchedCues };
+};
 
 const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
     return textOnly ?
@@ -73,7 +92,6 @@ const validateShiftWithinChunkRange = (shiftTime: number, track: Track | null, c
         }
     }
 };
-
 export const applySpellcheckerOnCue = createAsyncThunk(
     "spellchecker/applySpellcheckerOnCue",
     async (index: number, thunkAPI) => {
@@ -86,9 +104,13 @@ export const applySpellcheckerOnCue = createAsyncThunk(
             if (track && track.language?.id && spellCheckerSettings.enabled) {
                 return fetchSpellCheck(text, spellCheckerSettings, track.language.id)
                     .then(spellCheck => {
-                            addSpellCheck(thunkAPI.dispatch, index, spellCheck, track.id);
-                        }
-                    );
+                        addSpellCheck(thunkAPI.dispatch, index, spellCheck, track.id);
+                        const freshState: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
+                        const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(freshState, index);
+                        thunkAPI.dispatch(matchedCuesSlice.actions.updateMatchedCue(
+                            { cue: freshState.cues[index], targetCuesIndex, editingIndexMatchedCues }
+                        ));
+                    });
             }
         }
     }
@@ -132,6 +154,14 @@ const validateCue = (
     dispatch(checkErrors({ index: index + 1, shouldSpellCheck: false }));
 };
 
+export const updateMatchedCues = (): AppThunk =>
+    (dispatch: Dispatch<SubtitleEditAction>, getState: Function): void => {
+        const lastState = getState();
+        dispatch(matchedCuesSlice.actions.matchCuesByTime(
+            { cues: lastState.cues, sourceCues: lastState.sourceCues, editingCueIndex: lastState.editingCueIndex }
+        ));
+    };
+
 export const updateVttCue = (
     idx: number,
     vttCue: VTTCue,
@@ -143,7 +173,10 @@ export const updateVttCue = (
         const cues = getState().cues;
         const originalCue = cues[idx];
         const cueErrors = [] as CueError[];
-        if (originalCue && editUuid === originalCue.editUuid) { // cue wasn't removed/changed in the meantime
+
+        if (originalCue && editUuid === originalCue.editUuid
+            && getState().lastCueChange?.changeType !== "REMOVE"
+        ) { // cue wasn't removed/changed in the meantime
             let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
             if (textOnly) {
                 newVttCue = new VTTCue(originalCue.vttCue.startTime, originalCue.vttCue.endTime, vttCue.text);
@@ -158,7 +191,7 @@ export const updateVttCue = (
             const track = getState().editingTrack as Track;
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
-            // TODO: Uff, this is book example of unmaintainable code. We have to remove such ugly if/elses.
+            // TODO: Uff, this is book example of unmaintainable code. We have to remove such ugly if/Nelses.
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 if (!overlapCaptionsAllowed) {
                     if (applyOverlapPreventionStart(newVttCue, previousCue)) {
@@ -196,9 +229,17 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
-            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
             updateSearchMatches(dispatch, getState, idx);
             validateCue(dispatch, idx, true);
+            if (!textOnly || editUuid === undefined) {
+                dispatch(updateMatchedCues());
+            } else {
+                const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(getState(), idx);
+                dispatch(matchedCuesSlice.actions.updateMatchedCue(
+                    { cue: newCue, targetCuesIndex, editingIndexMatchedCues }
+                ));
+            }
+            dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             callSaveTrack(dispatch, getState, multiCuesEdit);
         }
     };
@@ -230,13 +271,14 @@ export const validateCorruptedCues = createAsyncThunk(
     });
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
         callSaveTrack(dispatch, getState);
+        dispatch(updateMatchedCues());
     };
 
 export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | null>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         const state: SubtitleEditState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
@@ -266,14 +308,15 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
-            dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
+            dispatch(updateMatchedCues());
+            dispatch(changeScrollPosition(ScrollPosition.CURRENT));
         } else {
             dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_OVERLAP]));
         }
     };
 
 export const splitCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         const state: SubtitleEditState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
@@ -293,6 +336,7 @@ export const splitCue = (idx: number): AppThunk =>
             const updatedCue = { ...originalCue, idx, vttCue: updatedVttCue, editUuid: originalCue.editUuid };
             dispatch(cuesSlice.actions.updateVttCue(updatedCue));
             dispatch(cuesSlice.actions.addCue({ idx: idx + 1, cue: splitCue }));
+            dispatch(updateMatchedCues());
             dispatch(lastCueChangeSlice.actions.recordCueChange(
                 { changeType: "SPLIT", index: idx, vttCue: originalCue.vttCue }));
             callSaveTrack(dispatch, getState, true);
@@ -302,32 +346,36 @@ export const splitCue = (idx: number): AppThunk =>
     };
 
 export const deleteCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | null>, getState): void => {
         dispatch(cuesSlice.actions.deleteCue({ idx }));
         dispatch(lastCueChangeSlice.actions
             .recordCueChange({ changeType: "REMOVE", index: idx, vttCue: new VTTCue(0, 0, "") }));
         callSaveTrack(dispatch, getState);
+        dispatch(updateMatchedCues());
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
+    (dispatch: Dispatch<SubtitleEditAction>): void => {
         dispatch(cuesSlice.actions.updateCues({ cues }));
+        dispatch(updateMatchedCues());
     };
 
 export const applyShiftTime = (shiftTime: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         const editingTrack = getState().editingTrack;
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
         callSaveTrack(dispatch, getState, true);
+        dispatch(updateMatchedCues());
     };
 
 export const syncCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         const cues = getState().sourceCues;
         if (cues && cues.length > 0) {
             dispatch(cuesSlice.actions.syncCues({ cues }));
             callSaveTrack(dispatch, getState, true);
+            dispatch(updateMatchedCues());
         }
     };
 
@@ -340,7 +388,7 @@ export const removeCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
         dispatch(rowsToMergeSlice.actions.removeRowCues(row));
 
 export const mergeCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         let mergeSuccess = false;
         const rowsToMerge = _.sortBy(getState().rowsToMerge, row => row.index);
         if (rowsToMerge && rowsToMerge.length > 0) {
@@ -393,7 +441,8 @@ export const mergeCues = (): AppThunk =>
                     dispatch(cuesSlice.actions.mergeCues(
                         { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
                     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: firstCue.index }));
-                    dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
+                    dispatch(updateMatchedCues());
+                    dispatch(changeScrollPosition(ScrollPosition.CURRENT));
                     dispatch(lastCueChangeSlice.actions.recordCueChange(
                         { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
                     callSaveTrack(dispatch, getState, true);

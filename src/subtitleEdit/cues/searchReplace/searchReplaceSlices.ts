@@ -9,6 +9,7 @@ import { cuesSlice } from "../cuesList/cuesListSlices";
 import { SearchDirection, SearchReplace } from "./model";
 import { searchCueText, updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
 import { mergeVisibleSlice } from "../merge/mergeSlices";
+import { updateMatchedCues } from "../cuesList/cuesListActions";
 
 const updateCueMatchesIfNeeded = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
@@ -101,7 +102,7 @@ export const showSearchReplace = (visible: boolean): AppThunk =>
     };
 
 export const searchNextCues = (replacement: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const find = getState().searchReplace.find;
         if (find === "") {
             return;
@@ -124,6 +125,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
                         searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex + offsetShift }
                     }
                 ));
+                dispatch(updateMatchedCues());
                 return;
             } else {
                 fromIndex += 1;
@@ -146,7 +148,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
     };
 
 export const searchPreviousCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const find = getState().searchReplace.find;
         if (find === "") {
             return;
@@ -165,6 +167,7 @@ export const searchPreviousCues = (): AppThunk =>
                 dispatch(cuesSlice.actions.addSearchMatches(
                     { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex - 1 }}
                 ));
+                dispatch(updateMatchedCues());
                 return;
             } else {
                 fromIndex -= 1;

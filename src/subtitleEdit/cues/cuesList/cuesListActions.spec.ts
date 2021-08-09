@@ -20,7 +20,7 @@ import {
     validateCorruptedCues,
     validateVttCue,
 } from "./cuesListActions";
-import { CueDto, CueError, ScrollPosition, Track } from "../../model";
+import { CueDto, CueError, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditorState } from "../edit/editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
@@ -32,6 +32,7 @@ import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
+import { matchedCuesSlice } from "./cuesListSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -100,9 +101,9 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
         });
 
         it("stores multi cues flag if defined", () => {
@@ -239,13 +240,17 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             });
 
-            it("marks cue as corrupted if there are spell check problems", () => {
+            it("marks cue as corrupted if there are spell check problems", async () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: testingCues, sourceCues: [], editingCueIndex: 2 })
+                );
 
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
@@ -258,6 +263,8 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().cues[2].errors).toEqual(
+                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
+                expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual(
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
             });
 
@@ -428,6 +435,9 @@ describe("cueSlices", () => {
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
                 testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: testingCues, sourceCues: [], editingCueIndex: 0 })
+                );
 
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
@@ -460,6 +470,7 @@ describe("cueSlices", () => {
                 );
                 expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
                 expect(testingStore.getState().cues[0].errors).toEqual([]);
+                expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.errors).toEqual([]);
             });
 
             it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
@@ -1316,6 +1327,89 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line X");
                 expect(testingStore.getState().validationErrors).toEqual([]);
             });
+
+            it("updates single matched cue for textOnly update and defined editUuid for cue line multi-match", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: testingCues, sourceCues: [], editingCueIndex: 1 })
+                );
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
+                expect(testingStore.getState().matchedCues.matchedCues[1].targetCues[0].cue.vttCue.text)
+                    .toEqual("Caption Line X updated");
+            });
+
+            it("updates single matched cue for textOnly update and defined editUuid for cue line multi-match", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({
+                        cues: testingCues,
+                        sourceCues: [{ vttCue: new VTTCue(0, 6, "Source Line 1"), cueCategory: "DIALOGUE" }],
+                        editingCueIndex: 1
+                    })
+                );
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(1);
+                expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[1].cue.vttCue.text)
+                    .toEqual("Caption Line X updated");
+            });
+
+            it("updates matched cues for non textOnly update", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[0].editUuid;
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+                );
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), editUuid, false) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
+            });
+
+            it("updates matched cues for undefined editUuid", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+                );
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
+            });
         });
     });
 
@@ -1627,15 +1721,15 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editorStates.size).toEqual(0);
         });
 
-        it("scrolls to bottom", () => {
+        it("scrolls to added cue", () => {
             // GIVEN
-            testingStore.dispatch(updateCues([]) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(addCue(0, []) as {} as AnyAction);
+            testingStore.dispatch(addCue(3, []) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+            expect(testingStore.getState().focusedCueIndex).toEqual(3);
         });
 
         describe("without source cues", () => {

@@ -169,15 +169,6 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     }
 }
 
-// ------ Cues List ------
-
-.sbte-smart-scroll {
-  position: relative;
-  width: 100%;
-  height: calc(100vh - 150px);
-  overflow-y: scroll;
-}
-
 // ------ Toolbox --------
 
 .sbte-button-toolbar {
@@ -269,17 +260,11 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     margin-right: unset !important;
 }
 
-div[id^=cueErrorTooltip-] {
+.sbte-cues-errors {
     background-color: #f8d7da;
     border-color: #f8d7da;
-}
-
-div[id^=cueErrorTooltip-] .arrow:after {
-    border-left-color: #f8d7da;
-}
-
-.sbte-cues-errors {
     color: #721c24;
+    padding: 10px;
 }
 
 .sbte-cues-errors-popover {

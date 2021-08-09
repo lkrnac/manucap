@@ -1,6 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineState, CuesWithRowIndex } from "../../model";
-import CueErrorsIcon from "../CueErrorsIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { addCuesToMergeList, removeCuesToMergeList } from "../cuesList/cuesListActions";
@@ -102,13 +101,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                 >
                     {
                         props.cueLineState === CueLineState.ERROR
-                            ? (
-                                <CueErrorsIcon
-                                    cueIndex={props.rowIndex}
-                                    cuesErrors={props.cuesErrors || []}
-                                    showErrors={props.showErrors || false}
-                                />
-                            )
+                            ? <i className="fas fa-exclamation-triangle" />
                             : null
                     }
                     {

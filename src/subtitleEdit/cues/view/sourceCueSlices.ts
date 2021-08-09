@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CueDto, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
+import { updateMatchedCues } from "../cuesList/cuesListActions";
 
 interface CuesAction extends SubtitleEditAction {
     cues: CueDto[];
@@ -21,6 +22,7 @@ export const sourceCuesSlice = createSlice({
 });
 
 export const updateSourceCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<CuesAction>>): void => {
+    (dispatch: Dispatch<SubtitleEditAction>): void => {
         dispatch(sourceCuesSlice.actions.updateSourceCues({ cues }));
+        dispatch(updateMatchedCues());
     };

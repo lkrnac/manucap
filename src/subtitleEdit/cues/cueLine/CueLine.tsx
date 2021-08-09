@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
+import { CUE_LINE_STATE_CLASSES, CueDto, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
 import CueEdit from "../edit/CueEdit";
 import CueView from "../view/CueView";
 import { SubtitleEditState } from "../../subtitleEditReducers";
@@ -8,9 +8,9 @@ import CueLineFlap from "./CueLineFlap";
 import _ from "lodash";
 import InsertCueButton from "../view/InsertCueButton";
 import ClickCueWrapper from "../view/ClickCueWrapper";
+import CueErrorLine from "../CueErrorLine";
 
 export interface CueLineRowProps {
-    playerTime: number;
     targetCuesLength: number;
     // Following parameter is needed,
     // because empty/undefined props.data.sourceCues might indicate that there is no time match in translation mode
@@ -23,7 +23,6 @@ export interface CueLineProps {
     data: CueLineDto;
     rowProps: CueLineRowProps;
     rowRef: React.RefObject<HTMLDivElement>;
-    onClick: (idx: number) => void;
 }
 
 const hasTargetText = (cueLine?: CueLineDto): boolean => {
@@ -88,6 +87,30 @@ const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
     ? cues.map(sourceCue => sourceCue.index)
     : [];
 
+interface CueErrorsListProps {
+    cue: CueDto;
+}
+
+const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => (
+    props.cue.errors && props.cue.errors.length > 0
+        ? (
+            <div className="sbte-cues-errors">
+                {
+                    props.cue.errors.map(
+                        (cueError: CueError, index: number): ReactElement => (
+                            <CueErrorLine
+                                key={`cueError-${index}`}
+                                cueIndex={index}
+                                cueError={cueError}
+                            />
+                        )
+                    )
+                }
+            </div>
+        )
+        : null
+);
+
 const CueLine = (props: CueLineProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
@@ -116,6 +139,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
         <div
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
+            className="sbte-cue-line"
         >
             <CueLineFlap
                 rowIndex={props.rowIndex}
@@ -139,7 +163,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
-                                    playerTime={props.rowProps.playerTime}
                                     className={`${captionClassName} sbte-source-cue`}
                                     showGlossaryTerms={showGlossaryTermsAndErrors}
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
@@ -175,13 +198,15 @@ const CueLine = (props: CueLineProps): ReactElement => {
                         ? props.data.targetCues.map(targetCue => {
                             return editingCueIndex === targetCue.index
                                 ? (
-                                    <CueEdit
-                                        key={targetCue.index}
-                                        index={targetCue.index}
-                                        cue={targetCue.cue}
-                                        playerTime={props.rowProps.playerTime}
-                                        nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
-                                    />
+                                    <>
+                                        <CueEdit
+                                            key={targetCue.index}
+                                            index={targetCue.index}
+                                            cue={targetCue.cue}
+                                            nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
+                                        />
+                                        <CueErrorsList cue={targetCue.cue} />
+                                    </>
                                 )
                                 : (
                                     <CueView
@@ -190,7 +215,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                         targetCueIndex={targetCue.index}
                                         cue={targetCue.cue}
                                         targetCuesLength={props.rowProps.targetCuesLength}
-                                        playerTime={props.rowProps.playerTime}
                                         className={`${captionClassName} sbte-target-cue`}
                                         showGlossaryTerms={false}
                                         languageDirection={editingTrack?.language.direction}

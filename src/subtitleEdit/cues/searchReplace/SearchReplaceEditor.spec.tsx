@@ -7,13 +7,14 @@ import { Provider } from "react-redux";
 import { setFind, setReplacement, showSearchReplace } from "./searchReplaceSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import { CueDto, ScrollPosition, Track } from "../../model";
+import { CueDto, Track } from "../../model";
 import { updateCues } from "../cuesList/cuesListActions";
 import { SaveState, setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { reset } from "../edit/editorStatesSlice";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 
 let testingStore = createTestingStore();
 
@@ -229,7 +230,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
         expect(testingStore.getState().editingCueIndex).toEqual(0);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
     it("searches for previous match when Previous button is clicked", () => {
@@ -250,7 +251,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
         expect(testingStore.getState().editingCueIndex).toEqual(1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(1);
     });
 
     it("searches for next match with regex special chars when Next button is clicked", () => {
@@ -285,7 +286,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
         expect(testingStore.getState().editingCueIndex).toEqual(0);
         expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8]);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
     it("invokes replace current match when Replace button is clicked", () => {
@@ -310,7 +311,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
         expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 2");
         expect(testingStore.getState().editingCueIndex).toEqual(0);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
     it("replaces all matches and save when Replace All button is clicked", async () => {
@@ -327,6 +328,9 @@ describe("SearchReplaceEditor", () => {
         );
         const replaceAllButton = getByText("Replace All");
         const replaceInput = getByPlaceholderText("Replace");
+        testingStore.dispatch(matchedCuesSlice.actions
+            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+        );
 
         // WHEN
         fireEvent.change(replaceInput, { target: { value: "New Line 5" }});
@@ -340,9 +344,35 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 5");
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
         expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
         expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+    });
+
+    it("Update matched cues in Redux when Replace All button is clicked", async () => {
+        // GIVEN
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
+        const { getByText, getByPlaceholderText } = render(
+            <Provider store={testingStore}>
+                <SearchReplaceEditor />
+            </Provider>
+        );
+        const replaceAllButton = getByText("Replace All");
+        const replaceInput = getByPlaceholderText("Replace");
+        testingStore.dispatch(matchedCuesSlice.actions
+            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
+        );
+
+        // WHEN
+        fireEvent.change(replaceInput, { target: { value: "New Line 5" }});
+        fireEvent.click(replaceAllButton);
+
+        // THEN
+        expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(4);
     });
 
     it("replaces all matches replace contains find", async () => {
@@ -389,7 +419,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>New Line 2</b> and New Line 2");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption New Line 2");
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
     it("replaces all matches replace shorter than find", async () => {
@@ -436,7 +466,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>test</b> and test");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption test");
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
     it("replaces all matches replace is empty string", async () => {
@@ -484,7 +514,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption ");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
     it("replaces all matches with regex special chars when Replace button is clicked", async () => {
@@ -532,7 +562,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption [LINE 2]");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
     it("does not replace all match when Replace All button is clicked and find is empty", async () => {
@@ -563,7 +593,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption Line 2");
         expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.NONE);
+        expect(testingStore.getState().focusedCueIndex).toEqual(null);
     });
 
     it("replaces all matches and skips editDisabled and save when Replace All button is clicked",
@@ -595,6 +625,6 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("New Text Update 2");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("New Text Update 3");
         expect(testingStore.getState().cues[3].vttCue.text).toEqual("Caption Line 4");
-        expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+        expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 });

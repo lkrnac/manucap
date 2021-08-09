@@ -1,13 +1,14 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
-import { cuesSlice } from "./cues/cuesList/cuesListSlices";
+import { cuesSlice, matchedCuesSlice } from "./cues/cuesList/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
+import { userSlice } from "./userSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
 import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 import { saveActionSlice, saveTrackSlice } from "./cues/saveSlices";
-import { scrollPositionSlice } from "./cues/cuesList/cuesListScrollSlice";
+import { currentPlayerTimeSlice, scrollPositionSlice } from "./cues/cuesList/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 import { mergeVisibleSlice, rowsToMergeSlice } from "./cues/merge/mergeSlices";
@@ -31,18 +32,20 @@ export const Reducers = {
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
     saveAction: saveActionSlice.reducer,
-    scrollPosition: scrollPositionSlice.reducer,
     cuesLoadingCounter: cuesLoadingCounterSlice.reducer,
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,
     mergeVisible: mergeVisibleSlice.reducer,
     rowsToMerge: rowsToMergeSlice.reducer,
-
+    subtitleUser: userSlice.reducer,
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
     validationErrors: validationErrorSlice.reducer,
     glossaryTerm: glossaryTermSlice.reducer,
+    focusedCueIndex: scrollPositionSlice.reducer,
+    matchedCues: matchedCuesSlice.reducer,
+    currentPlayerTime: currentPlayerTimeSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);
