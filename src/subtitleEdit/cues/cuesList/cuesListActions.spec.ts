@@ -235,13 +235,17 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             });
 
-            it("marks cue as corrupted if there are spell check problems", () => {
+            it("marks cue as corrupted if there are spell check problems", async () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: testingCues, sourceCues: [], editingCueIndex: 2 })
+                );
 
                 const editUuid = testingStore.getState().cues[2].editUuid;
                 // @ts-ignore modern browsers does have it
@@ -254,6 +258,8 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().cues[2].errors).toEqual(
+                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
+                expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual(
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
             });
 
@@ -424,6 +430,9 @@ describe("cueSlices", () => {
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
                 testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({ cues: testingCues, sourceCues: [], editingCueIndex: 0 })
+                );
 
                 // @ts-ignore modern browsers does have it
                 global.fetch = jest.fn()
@@ -456,6 +465,7 @@ describe("cueSlices", () => {
                 );
                 expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
                 expect(testingStore.getState().cues[0].errors).toEqual([]);
+                expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual([]);
             });
 
             it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
