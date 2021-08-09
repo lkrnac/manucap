@@ -465,7 +465,7 @@ describe("cueSlices", () => {
                 );
                 expect(testingStore.getState().cues[0].spellCheck).toEqual({ "matches": []});
                 expect(testingStore.getState().cues[0].errors).toEqual([]);
-                expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual([]);
+                expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.errors).toEqual([]);
             });
 
             it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
