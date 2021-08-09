@@ -84,7 +84,7 @@ describe("CueComments", () => {
                             right: "40px"
                         }}
                     >
-                        <i>1/1/2021, 3:24:00 AM</i>
+                        <i>{new Date("2021-01-01T09:24:00.000Z").toLocaleString()}</i>
                     </span>
                 </div>
                 <div style={{ marginBottom: "8px" }}>
@@ -120,7 +120,7 @@ describe("CueComments", () => {
                             right: "40px"
                         }}
                     >
-                        <i>2/1/2021, 3:06:00 AM</i>
+                        <i>{new Date("2021-02-01T09:06:00.000Z").toLocaleString()}</i>
                     </span>
                 </div>
                 <hr style={{
