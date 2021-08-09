@@ -36,6 +36,28 @@ import { callSaveTrack } from "../saveSlices";
 const NEW_ADDED_CUE_DEFAULT_STEP = 3;
 const DEFAULT_CUE = { vttCue: new VTTCue(0, 0, ""), cueCategory: "DIALOGUE" };
 
+interface MatchedCueIndexes {
+    targetCuesIndex: number;
+    editingIndexMatchedCues: number;
+}
+
+const findMatchedIndexes = (state: SubtitleEditState, index: number): MatchedCueIndexes => {
+    // TODO: Remove following ugly code when we implement
+    //  https://dotsub.atlassian.net/browse/VTMS-3304
+    let targetCuesIndex = 0;
+    const editingIndexMatchedCues = state.matchedCues.matchedCues.findIndex(
+        (cueLineDto: CueLineDto): boolean => cueLineDto.targetCues
+            ? cueLineDto.targetCues?.some(
+                (targetCue, nestedIndex) => {
+                    targetCuesIndex = nestedIndex;
+                    return targetCue.index === index;
+                }
+            )
+            : false
+    );
+    return { targetCuesIndex, editingIndexMatchedCues };
+};
+
 const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
     return textOnly ?
         x.text !== y.text :
@@ -61,7 +83,6 @@ const validateShiftWithinChunkRange = (shiftTime: number, track: Track | null, c
         }
     }
 };
-
 export const applySpellcheckerOnCue = createAsyncThunk(
     "spellchecker/applySpellcheckerOnCue",
     async (index: number, thunkAPI) => {
@@ -74,9 +95,13 @@ export const applySpellcheckerOnCue = createAsyncThunk(
             if (track && track.language?.id && spellCheckerSettings.enabled) {
                 return fetchSpellCheck(text, spellCheckerSettings, track.language.id)
                     .then(spellCheck => {
-                            addSpellCheck(thunkAPI.dispatch, index, spellCheck, track.id);
-                        }
-                    );
+                        addSpellCheck(thunkAPI.dispatch, index, spellCheck, track.id);
+                        const freshState: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
+                        const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(freshState, index);
+                        thunkAPI.dispatch(matchedCuesSlice.actions.updateMatchedCue(
+                            { cue: freshState.cues[index], targetCuesIndex, editingIndexMatchedCues }
+                        ));
+                    });
             }
         }
     }
@@ -157,7 +182,7 @@ export const updateVttCue = (
             const track = getState().editingTrack as Track;
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
-            // TODO: Uff, this is book example of unmaintainable code. We have to remove such ugly if/elses.
+            // TODO: Uff, this is book example of unmaintainable code. We have to remove such ugly if/Nelses.
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 if (!overlapCaptionsAllowed) {
                     if (applyOverlapPreventionStart(newVttCue, previousCue)) {
@@ -200,18 +225,7 @@ export const updateVttCue = (
             if (!textOnly || editUuid === undefined) {
                 dispatch(updateMatchedCues());
             } else {
-                // TODO: Remove following ugly code when we implement https://dotsub.atlassian.net/browse/VTMS-3304
-                let targetCuesIndex = 0;
-                const editingIndexMatchedCues = getState().matchedCues.matchedCues.findIndex(
-                    (cueLineDto: CueLineDto): boolean => cueLineDto.targetCues
-                        ? cueLineDto.targetCues?.some(
-                            (targetCue, nestedIndex) => {
-                                targetCuesIndex = nestedIndex;
-                                return targetCue.index === idx;
-                            }
-                        )
-                        : false
-                );
+                const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(getState(), idx);
                 dispatch(matchedCuesSlice.actions.updateMatchedCue(
                     { cue: newCue, targetCuesIndex, editingIndexMatchedCues }
                 ));
