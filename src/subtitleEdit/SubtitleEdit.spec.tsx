@@ -743,33 +743,27 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <MergeEditor />
-                            <div className="sbte-smart-scroll" style={{ overflow: "auto" }}>
-                                <div style={{ paddingBottom: "0px", paddingTop: "0px" }}>
-                                    <CueLine
-                                        rowIndex={0}
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowProps={{
-                                            playerTime: 0,
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues
-                                        }}
-                                        rowRef={React.createRef()}
-                                        onClick={(): void => undefined}
-                                    />
-                                    <CueLine
-                                        rowIndex={1}
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowProps={{
-                                            playerTime: 0,
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues
-                                        }}
-                                        rowRef={React.createRef()}
-                                        onClick={(): void => undefined}
-                                    />
-                                </div>
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    rowIndex={0}
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues
+                                    }}
+                                    rowRef={React.createRef()}
+                                />
+                                <CueLine
+                                    rowIndex={1}
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues
+                                    }}
+                                    rowRef={React.createRef()}
+                                />
                             </div>
                             <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">

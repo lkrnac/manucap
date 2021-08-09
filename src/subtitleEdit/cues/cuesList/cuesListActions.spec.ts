@@ -2648,7 +2648,7 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
-                expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.CURRENT);
+                expect(testingStore.getState().focusedCueIndex).toEqual(0);
             });
 
             it("merges 2 single cue lines with errors", () => {
