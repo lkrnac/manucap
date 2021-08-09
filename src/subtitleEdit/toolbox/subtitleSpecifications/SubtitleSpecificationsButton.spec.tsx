@@ -278,7 +278,7 @@ describe("SubtitleSpecificationsButton", () => {
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
     });
 
-    it("Show subtitle specification pop up when user opening track is different from createdBy", () => {
+    it.skip("Show subtitle specification pop up when user opening track is different from createdBy", () => {
         // GIVEN
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
@@ -296,6 +296,7 @@ describe("SubtitleSpecificationsButton", () => {
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
     });
+
     it("Hide subtitle specification pop up when user opening track is the same from createdBy", () => {
         // GIVEN
         testingStore.dispatch(
