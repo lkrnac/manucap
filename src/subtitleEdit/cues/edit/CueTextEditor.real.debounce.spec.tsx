@@ -473,11 +473,11 @@ describe("CueTextEditor", () => {
                 expect(saveTrack).not.toBeCalled();
                 done();
             },
-            2600
+            6000
         );
     });
 
-    it("updates matched cues during ignores all action", () => {
+    it("updates matched cues during ignores all action", (done) => {
         // GIVEN
         const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
         const saveTrack = jest.fn();
@@ -551,6 +551,13 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.errors).toEqual([]);
         expect(testingStore.getState().matchedCues.matchedCues[1].targetCues[0].cue.errors).toEqual([]);
         expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual([]);
-        expect(saveTrack).toBeCalled();
+
+        setTimeout(
+            () => {
+                expect(saveTrack).toBeCalled();
+                done();
+            },
+            6000
+        );
     });
 });
