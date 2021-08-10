@@ -19,7 +19,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
             placement="left"
         >
             <button
-                style={{ maxHeight: "38px", margin: "5px" }}
+                style={{ maxHeight: "38px", margin: "5px", height: "100%" }}
                 className="btn btn-outline-secondary sbte-add-cue-button"
                 onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1, props.sourceCueIndexes))}
             >

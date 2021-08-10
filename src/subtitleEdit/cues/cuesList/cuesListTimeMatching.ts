@@ -2,7 +2,7 @@ import { CueDto, CueLineDto } from "../../model";
 
 const OVERLAP_RATIO = 0.65;
 
-interface MatchedCuesWithEditingFocus {
+export interface MatchedCuesWithEditingFocus {
     matchedCues: CueLineDto[];
     editingFocusIndex: number;
 }
@@ -101,11 +101,6 @@ const pushBoth = (
     pushTargetWithoutMatchedIndex(indexes, cue, editingCueIndex, cuesMapValue);
     pushSourceWithoutMatchedIndex(indexes, sourceCue, cuesMapValue);
     indexes.cuesMap++;
-};
-
-export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
-    const cueIndex = cues.findIndex(cue => cue.vttCue.startTime >= trackTime);
-    return cueIndex <= 0 ? 0 : cueIndex - 1;
 };
 
 export const matchCuesByTime = (

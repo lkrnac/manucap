@@ -3,11 +3,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { CueChange, CueDto, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
-import { scrollPositionSlice } from "../cuesList/cuesListScrollSlice";
+import { changeScrollPosition } from "../cuesList/cuesListScrollSlice";
 import { cuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
 import sanitizeHtml from "sanitize-html";
 import { SearchDirection } from "../searchReplace/model";
+import { updateMatchedCues } from "../cuesList/cuesListActions";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -83,19 +84,20 @@ export const updateSearchMatches = (
 };
 
 export const updateEditingCueIndexNoThunk = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
+    dispatch: Dispatch<SubtitleEditAction>,
     getState: Function,
     idx: number
 ): void => {
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
-        dispatch(scrollPositionSlice.actions.changeScrollPosition(ScrollPosition.CURRENT));
         updateSearchMatches(dispatch, getState, idx);
+        dispatch(updateMatchedCues());
+        dispatch(changeScrollPosition(ScrollPosition.CURRENT));
     }
 };
 
 export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         updateEditingCueIndexNoThunk(dispatch, getState, idx);
     };
 

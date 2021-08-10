@@ -171,6 +171,24 @@ describe("SubtitleSpecificationsButton", () => {
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
     });
 
+    it.skip("Does not auto show subtitle specification if cues are not empty", () => {
+        // WHEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+        );
+        // @ts-ignore passing empty
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+    });
+
     it("Does not auto show subtitle specification if subtitle specification is null", () => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -223,6 +241,58 @@ describe("SubtitleSpecificationsButton", () => {
 
         //WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+    });
+
+    it.skip("Show subtitle specification pop up when user opening track is different from createdBy", () => {
+        // GIVEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack(testingEditingTrack) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+    });
+
+    it("Hide subtitle specification pop up when user opening track is the same from createdBy", () => {
+        // GIVEN
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+        );
+        const testingEditingTrackByCurrentUser = {
+            type: testingEditingTrack.type,
+            language: testingEditingTrack.language,
+            sourceLanguage: testingEditingTrack.language,
+            default: testingEditingTrack.default,
+            mediaTitle: testingEditingTrack.mediaTitle,
+            mediaLength: testingEditingTrack.mediaLength,
+            mediaChunkStart: testingEditingTrack.mediaChunkStart,
+            mediaChunkEnd: testingEditingTrack.mediaChunkEnd,
+            progress: testingEditingTrack.progress,
+            id: testingEditingTrack.id,
+            createdBy: testingUser
+        } as Track;
+
+        testingStore.dispatch(updateEditingTrack(testingEditingTrackByCurrentUser) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
+
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsButton />
+            </Provider>
+        );
 
         // THEN
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);

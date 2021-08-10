@@ -1,16 +1,92 @@
-import testingStore from "../../../testUtils/testingStore";
+import { createTestingStore } from "../../../testUtils/testingStore";
 import { changeScrollPosition } from "./cuesListScrollSlice";
-import { ScrollPosition } from "../../model";
+import { CueDto, ScrollPosition } from "../../model";
 import { AnyAction } from "@reduxjs/toolkit";
+import each from "jest-each";
+import { MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
+import deepFreeze from "deep-freeze";
+
+const testingMatchedCues = { matchedCues: [], editingFocusIndex: 58 } as MatchedCuesWithEditingFocus;
+testingMatchedCues.matchedCues = Array.from({ length: 120 }, () => ({}));
+
+const testingSourceCues = Array.from({ length: 120 }, (_element, index) => (
+    { vttCue: new VTTCue(index, index + 1, "Source Line " + index), cueCategory: "DIALOGUE" } as CueDto
+));
+
+const testingTargetCues = Array.from({ length: 70 },(_element, index) => (
+    { vttCue: new VTTCue(index, index + 1, "Target Line " + index), cueCategory: "DIALOGUE" } as CueDto
+));
+
+let testingStore = createTestingStore();
+deepFreeze(testingStore.getState());
 
 describe("cuesListScrollSlice", () => {
-    describe("changeScrollPosition", () => {
-        it("updates scroll position in Redux store", () => {
+    describe("changeScrollPosition with not null previous focused index", () => {
+        beforeEach(() => {
+            testingStore = createTestingStore({
+                matchedCues: testingMatchedCues,
+                cues: testingTargetCues,
+                sourceCues: testingSourceCues,
+                editingCueIndex: 58,
+                currentPlayerTime: 65,
+                focusedCueIndex: 60
+            });
+        });
+
+        each([
+            [ScrollPosition.NONE, null],
+            [ScrollPosition.FIRST, 0],
+            [ScrollPosition.LAST, 119],
+            [ScrollPosition.CURRENT, 58],
+            [ScrollPosition.PLAYBACK, 64],
+            [ScrollPosition.NEXT_PAGE, 100],
+            [ScrollPosition.PREVIOUS_PAGE, 49],
+            [ScrollPosition.LAST_TRANSLATED, 69],
+            [undefined, null],
+        ])
+        .it("updates scroll position focused cue index in Redux store for scroll position %s", (
+            scrollPosition: ScrollPosition,
+            expectedFocusedCueIndex: number
+        ) => {
             // WHEN
-            testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
+            testingStore.dispatch(changeScrollPosition(scrollPosition) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().scrollPosition).toEqual(ScrollPosition.LAST);
+            expect(testingStore.getState().focusedCueIndex).toEqual(expectedFocusedCueIndex);
         });
+    });
+
+    describe("changeScrollPosition with not null previous focused index", () => {
+        beforeEach(() => {
+            testingStore = createTestingStore({
+                matchedCues: testingMatchedCues,
+                cues: testingTargetCues,
+                sourceCues: testingSourceCues,
+                editingCueIndex: 58,
+                currentPlayerTime: 65,
+            });
+        });
+
+        each([
+            [ScrollPosition.NONE, null],
+            [ScrollPosition.FIRST, 0],
+            [ScrollPosition.LAST, 119],
+            [ScrollPosition.CURRENT, 58],
+            [ScrollPosition.PLAYBACK, 64],
+            [ScrollPosition.NEXT_PAGE, 50],
+            [ScrollPosition.PREVIOUS_PAGE, -1],
+            [ScrollPosition.LAST_TRANSLATED, 69],
+            [undefined, null],
+        ])
+            .it("updates scroll position focused cue index in Redux store for scroll position %s", (
+                scrollPosition: ScrollPosition,
+                expectedFocusedCueIndex: number
+            ) => {
+                // WHEN
+                testingStore.dispatch(changeScrollPosition(scrollPosition) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().focusedCueIndex).toEqual(expectedFocusedCueIndex);
+            });
     });
 });

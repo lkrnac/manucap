@@ -1,5 +1,5 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
-import { cuesSlice } from "./cues/cuesList/cuesListSlices";
+import { cuesSlice, matchedCuesSlice } from "./cues/cuesList/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { userSlice } from "./userSlices";
 import { ThunkAction } from "redux-thunk";
@@ -8,7 +8,7 @@ import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 import { saveActionSlice, saveTrackSlice } from "./cues/saveSlices";
-import { scrollPositionSlice } from "./cues/cuesList/cuesListScrollSlice";
+import { currentPlayerTimeSlice, scrollPositionSlice } from "./cues/cuesList/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 import { spellcheckerSettingsSlice } from "./spellcheckerSettingsSlice";
@@ -31,7 +31,6 @@ export const Reducers = {
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
     saveAction: saveActionSlice.reducer,
-    scrollPosition: scrollPositionSlice.reducer,
     cuesLoadingCounter: cuesLoadingCounterSlice.reducer,
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
@@ -41,6 +40,9 @@ export const Reducers = {
     lastCueChange: lastCueChangeSlice.reducer,
     validationErrors: validationErrorSlice.reducer,
     glossaryTerm: glossaryTermSlice.reducer,
+    focusedCueIndex: scrollPositionSlice.reducer,
+    matchedCues: matchedCuesSlice.reducer,
+    currentPlayerTime: currentPlayerTimeSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

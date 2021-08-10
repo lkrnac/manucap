@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.14.5",
+  "version": "2.15.2",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -32,7 +32,6 @@
     "redux": "^4.0.5"
   },
   "dependencies": {
-    "@dotsub/react-smart-scroll": "2.0.2",
     "@fortawesome/fontawesome-free": "^5.14.0",
     "@types/crypto-js": "^3.1.47",
     "@types/lodash": "^4.14.164",
