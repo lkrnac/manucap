@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { CSSProperties, ReactElement } from "react";
 import { CUE_LINE_STATE_CLASSES, CueError, CueLineState } from "../../model";
 import { TooltipWrapper } from "../../TooltipWrapper";
 
@@ -21,6 +21,18 @@ const getCommentIcon = (index: number): ReactElement => (
     </TooltipWrapper>
 );
 
+const getIconStyle = (bottom: string): CSSProperties => {
+    return {
+        position: "absolute",
+        marginLeft: "auto",
+        marginRight: "auto",
+        left: "0",
+        right: "0",
+        bottom: bottom,
+        fontSize: "14px"
+    };
+};
+
 const CueLineFlap = (props: Props): ReactElement => {
     const showCommentsIcon = props.cueCommentsCount && props.cueCommentsCount > 0;
     return (
@@ -38,15 +50,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                 {props.rowIndex + 1}
             </div>
             <div
-                style={{
-                    position: "absolute",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    left: "0",
-                    right: "0",
-                    bottom: showCommentsIcon ? "50px" : "30px",
-                    fontSize: "14px"
-                }}
+                style={getIconStyle(showCommentsIcon ? "50px" : "30px")}
             >
                 {
                     props.editDisabled
@@ -55,15 +59,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                 }
             </div>
             <div
-                style={{
-                    position: "absolute",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    left: "0",
-                    right: "0",
-                    bottom: "30px",
-                    fontSize: "14px"
-                }}
+                style={getIconStyle("30px")}
             >
                 {
                     showCommentsIcon
@@ -72,15 +68,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                 }
             </div>
             <div
-                style={{
-                    position: "absolute",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    left: "0",
-                    right: "0",
-                    bottom: "10px",
-                    fontSize: "14px"
-                }}
+                style={getIconStyle("10px")}
             >
                 {
                     props.cueLineState === CueLineState.ERROR
