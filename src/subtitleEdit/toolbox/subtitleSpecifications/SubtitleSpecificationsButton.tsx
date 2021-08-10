@@ -5,16 +5,10 @@ import { SubtitleEditState } from "../../subtitleEditReducers";
 
 const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
-    const editingTask = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
     const [show, setShow] = useState(false);
-
-    const cues = useSelector((state: SubtitleEditState) => state.cues);
     useEffect(
         () => {
-            setShow(subtitleSpecifications != null
-                && subtitleSpecifications.enabled
-                && (cues.length === 0 || editingTask?.createdBy.userId !== currentUser?.userId));
+            setShow(subtitleSpecifications != null && subtitleSpecifications.enabled);
             // ESLint suppress: because we want to show modal only for first render
             // and subtitle specs is loaded
             // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,7 +16,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     );
 
     const handleClose = (): void => setShow(false);
-    const handleShow = (): void => setShow(true);
+    const handleShow  = (): void => setShow(true);
     return (
         <>
             <button
