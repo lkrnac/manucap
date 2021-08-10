@@ -1,10 +1,9 @@
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import React, { ReactElement, useCallback, useState } from "react";
 import { CueComment, CueDto } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import Mousetrap from "mousetrap";
-import { KeyCombination } from "../../utils/shortcutConstants";
+import { Character } from "../../utils/shortcutConstants";
 import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
@@ -30,13 +29,6 @@ const CueComments = (props: Props): ReactElement => {
             setText("");
         }
     }, [currentUser, dispatch, props.commentAuthor, props.index, text]);
-
-    useEffect(
-        () => {
-            Mousetrap.bind([KeyCombination.ENTER], addNewComment);
-        },
-        [addNewComment, text]
-    );
 
     const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
         <TooltipWrapper
@@ -128,12 +120,16 @@ const CueComments = (props: Props): ReactElement => {
                     type="text"
                     value={text}
                     placeholder="Type your comment here"
-                    className="mousetrap"
                     style={{
                         borderStyle: "none",
                         width: "100%"
                     }}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setText(e.target.value)}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
+                        if (e.keyCode === Character.ENTER) {
+                            addNewComment();
+                        }
+                    }}
                 />
                 <button
                     type="button"

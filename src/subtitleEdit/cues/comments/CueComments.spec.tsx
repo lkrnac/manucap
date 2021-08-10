@@ -8,6 +8,7 @@ import CueComments from "./CueComments";
 import { AnyAction } from "redux";
 import { updateCues } from "../cuesList/cuesListActions";
 import { userSlice } from "../../userSlices";
+import { Character } from "../../utils/shortcutConstants";
 
 const testComments = [
     {
@@ -310,6 +311,32 @@ describe("CueComments", () => {
                 userId: "test",
                 author: "Linguist",
         })]);
+    });
+    it("adds a new comment with text when enter key is typed", () => {
+        // GIVEN
+        testingStore.dispatch(updateCues([testCue]) as {} as AnyAction);
+        testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
+        const { getByPlaceholderText } = render(
+            <Provider store={testingStore}>
+                <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
+            </Provider>
+        );
+        const textInput = getByPlaceholderText("Type your comment here");
+
+        // WHEN
+        fireEvent.change(textInput, { target: { value: "test comment" }});
+        fireEvent.keyDown(textInput, { keyCode: Character.ENTER });
+
+        // THEN
+        expect(testingStore.getState().cues[0].comments.length).toEqual(3);
+        expect(testingStore.getState().cues[0].comments).toEqual([
+            expect.anything(),
+            expect.anything(),
+            expect.objectContaining({
+                comment: "test comment",
+                userId: "test",
+                author: "Linguist",
+            })]);
     });
     it("doesn't add a new comment without text when send button is clicked", () => {
         // GIVEN
