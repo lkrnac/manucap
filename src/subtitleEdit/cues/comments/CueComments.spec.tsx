@@ -79,11 +79,7 @@ describe("CueComments", () => {
                     <span> this is the first comment </span>
                     <span
                         className="sbte-light-gray-text"
-                        style={{
-                            float: "right",
-                            position: "absolute",
-                            right: "40px"
-                        }}
+                        style={{ float: "right", marginRight: "30px" }}
                     >
                         <i>{new Date("2021-01-01T09:24:00.000Z").toLocaleString()}</i>
                     </span>
@@ -108,18 +104,14 @@ describe("CueComments", () => {
                     <span> this is the second comment </span>
                     <button
                         data-testid="sbte-delete-cue-comment-button"
-                        style={{ float: "right" }}
+                        style={{ float: "right", marginLeft: "-30px" }}
                         className="btn btn-outline-secondary sbte-btn-xs"
                     >
                         <i className="fa fa-trash" />
                     </button>
                     <span
                         className="sbte-light-gray-text"
-                        style={{
-                            float: "right",
-                            position: "absolute",
-                            right: "40px"
-                        }}
+                        style={{ float: "right", marginRight: "30px" }}
                     >
                         <i>{new Date("2021-02-01T09:06:00.000Z").toLocaleString()}</i>
                     </span>
@@ -138,7 +130,6 @@ describe("CueComments", () => {
                     <input
                         type="text"
                         placeholder="Type your comment here"
-                        className="mousetrap"
                         style={{
                             borderStyle: "none",
                             width: "100%"
@@ -205,7 +196,6 @@ describe("CueComments", () => {
                     <input
                         type="text"
                         placeholder="Type your comment here"
-                        className="mousetrap"
                         style={{
                             borderStyle: "none",
                             width: "100%"

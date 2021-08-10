@@ -38,7 +38,7 @@ const CueComments = (props: Props): ReactElement => {
         >
             <button
                 data-testid="sbte-delete-cue-comment-button"
-                style={{ float: "right" }}
+                style={{ float: "right", marginLeft: "-30px" }}
                 className="btn btn-outline-secondary sbte-btn-xs"
                 onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
             >
@@ -89,11 +89,7 @@ const CueComments = (props: Props): ReactElement => {
                         }
                         <span
                             className="sbte-light-gray-text"
-                            style={{
-                                float: "right",
-                                position: "absolute",
-                                right: "40px"
-                            }}
+                            style={{ float: "right", marginRight: "30px" }}
                         >
                             <i>{new Date(comment.date).toLocaleString()}</i>
                         </span>
