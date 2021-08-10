@@ -152,7 +152,7 @@ export enum CueError {
 export interface CueComment {
     id?: string;
     userId?: string;
-    userName?: string;
+    author?: string;
     comment: string;
     date: string;
 }

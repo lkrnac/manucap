@@ -1704,7 +1704,7 @@ describe("cueSlices", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const newComment = {
-                userName: "Username",
+                author: "Username",
                 comment: "This is a comment",
                 date: "2021-01-01T09:24:00.000Z"
             };
@@ -1720,7 +1720,7 @@ describe("cueSlices", () => {
         it("adds a comment to a cue with comments", () => {
             // GIVEN
             const existingComment = {
-                userName: "Username",
+                author: "Username",
                 comment: "This is an existing comment",
                 date: "2021-01-01T09:24:00.000Z"
             };
@@ -1730,7 +1730,7 @@ describe("cueSlices", () => {
             ];
             testingStore.dispatch(updateCues(testingCuesWithComments) as {} as AnyAction);
             const newComment = {
-                userName: "Username",
+                author: "Username",
                 comment: "This is a comment",
                 date: "2021-01-01T09:24:00.000Z"
             };
@@ -1749,7 +1749,7 @@ describe("cueSlices", () => {
             // GIVEN
             const existingComment = {
                 userId: "jane.doe",
-                userName: "Username",
+                author: "Username",
                 comment: "This is an existing comment",
                 date: "2021-01-01T09:24:00.000Z"
             };

@@ -31,9 +31,9 @@ const targetCues = [
 ];
 
 const cueComments = [
-    { userName: "username", comment: "this is the first comment", date: "2021-01-01T11:00:00.000Z" },
-    { userName: "username", comment: "this is the second comment", date: "2021-01-01T11:00:00.000Z" },
-    { userName: "username", comment: "this is the third comment", date: "2021-01-01T11:00:00.000Z" }
+    { author: "username", comment: "this is the first comment", date: "2021-01-01T11:00:00.000Z" },
+    { author: "username", comment: "this is the second comment", date: "2021-01-01T11:00:00.000Z" },
+    { author: "username", comment: "this is the third comment", date: "2021-01-01T11:00:00.000Z" }
 ];
 
 const targetCuesWithComments = [

@@ -22,7 +22,7 @@ const CueComments = (props: Props): ReactElement => {
         if (text) {
             const newComment = {
                 userId: currentUser?.userId,
-                userName: props.commentAuthor || "N/A",
+                author: props.commentAuthor || "N/A",
                 comment: text,
                 date: new Date().toISOString()
             };
@@ -87,7 +87,7 @@ const CueComments = (props: Props): ReactElement => {
                                 overflow: "hidden"
                             }}
                         >
-                            {comment.userName}
+                            {comment.author}
                         </span>
                         <span> {comment.comment} </span>
                         {

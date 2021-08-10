@@ -12,13 +12,13 @@ import { userSlice } from "../../userSlices";
 const testComments = [
     {
         userId: "rev.test",
-        userName: "Reviewer",
+        author: "Reviewer",
         date: "2021-01-01T09:24:00.000Z",
         comment: "this is the first comment"
     },
     {
         userId: "test",
-        userName: "Linguist",
+        author: "Linguist",
         date: "2021-02-01T09:06:00.000Z",
         comment: "this is the second comment"
     }
@@ -308,7 +308,7 @@ describe("CueComments", () => {
             expect.objectContaining({
                 comment: "test comment",
                 userId: "test",
-                userName: "Linguist",
+                author: "Linguist",
         })]);
     });
     it("doesn't add a new comment without text when send button is clicked", () => {
@@ -348,7 +348,7 @@ describe("CueComments", () => {
         expect(testingStore.getState().cues[0].comments).toEqual([
             expect.objectContaining({
                 userId: "rev.test",
-                userName: "Reviewer"
+                author: "Reviewer"
             })]);
     });
 });

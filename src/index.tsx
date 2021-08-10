@@ -135,7 +135,7 @@ const TestApp = (): ReactElement => {
                 const commentDate = isLinguist ? "2021-08-06T19:49:44.493Z" : "2021-08-08T14:02:20.100Z";
                 comments.push({
                     userId: isLinguist ? "jane.doe" : "other.user",
-                    userName: isLinguist ? "Reviewer": "Linguist",
+                    author: isLinguist ? "Reviewer": "Linguist",
                     comment: "this is a comment " + i,
                     date: commentDate
                 });
