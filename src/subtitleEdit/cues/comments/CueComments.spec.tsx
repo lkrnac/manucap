@@ -9,6 +9,7 @@ import { AnyAction } from "redux";
 import { updateCues } from "../cuesList/cuesListActions";
 import { userSlice } from "../../userSlices";
 import { Character } from "../../utils/shortcutConstants";
+import DateTime from "../../common/DateTime";
 
 const testComments = [
     {
@@ -81,7 +82,7 @@ describe("CueComments", () => {
                         className="sbte-light-gray-text"
                         style={{ float: "right", marginRight: "30px" }}
                     >
-                        <i>{new Date("2021-01-01T09:24:00.000Z").toLocaleString()}</i>
+                        <i><DateTime value="2021-01-01T09:24:00.000Z" /></i>
                     </span>
                 </div>
                 <div style={{ marginBottom: "8px" }}>
@@ -113,7 +114,7 @@ describe("CueComments", () => {
                         className="sbte-light-gray-text"
                         style={{ float: "right", marginRight: "30px" }}
                     >
-                        <i>{new Date("2021-02-01T09:06:00.000Z").toLocaleString()}</i>
+                        <i><DateTime value="2021-02-01T09:06:00.000Z" /></i>
                     </span>
                 </div>
                 <hr style={{
