@@ -5,6 +5,7 @@ import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { Character } from "../../utils/shortcutConstants";
 import { TooltipWrapper } from "../../TooltipWrapper";
+import DateTime from "../../common/DateTime";
 
 interface Props {
     index: number;
@@ -91,7 +92,7 @@ const CueComments = (props: Props): ReactElement => {
                             className="sbte-light-gray-text"
                             style={{ float: "right", marginRight: "30px" }}
                         >
-                            <i>{new Date(comment.date).toLocaleString()}</i>
+                            <i><DateTime value={comment.date} /></i>
                         </span>
                     </div>
                 ))
