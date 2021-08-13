@@ -19,7 +19,7 @@ const renderDateTime = (value: string): ReactElement => {
 };
 
 interface Props {
-    value: string;
+    value?: string;
 }
 
 const DateTime = (props: Props): ReactElement =>
