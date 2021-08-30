@@ -39,6 +39,7 @@ import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 import { act } from "react-dom/test-utils";
+import CueCommentsToggle from "./toolbox/CueCommentsToggle";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -166,7 +167,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -176,7 +178,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -587,7 +590,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -597,7 +601,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -739,6 +744,7 @@ describe("SubtitleEdit", () => {
                                                 <ExportTrackCuesButton handleExport={jest.fn()} />
                                                 <ImportTrackCuesButton handleImport={jest.fn()} disabled />
                                                 <SearchReplaceButton />
+                                                <CueCommentsToggle />
                                             </ButtonToolbar>
                                         </Card.Body>
                                     </Accordion.Collapse>
@@ -762,7 +768,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -772,7 +779,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
