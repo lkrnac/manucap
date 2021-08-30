@@ -1,12 +1,12 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { SpellcheckerSettings } from "./model";
-import { AppThunk, SubtitleEditState } from "./subtitleEditReducers";
+import { AppThunk } from "./subtitleEditReducers";
 import { Dispatch } from "react";
 import { applySpellcheckerOnCue } from "./cues/cuesList/cuesListActions";
 
-export const spellcheckerSettingsSlice = createSlice({
+export const spellcheckerSettingsSlice: Slice = createSlice({
     name: "spellcheckerSettings",
-    initialState: { enabled: false, domain: null  } as  SpellcheckerSettings,
+    initialState: { enabled: false, domain: null  } as SpellcheckerSettings,
     reducers: {
         setSpellCheckDomain: (state, action: PayloadAction<string | null | undefined>): SpellcheckerSettings => {
             state.domain = action.payload;
@@ -16,7 +16,7 @@ export const spellcheckerSettingsSlice = createSlice({
     }, extraReducers: {
         // @ts-ignore: This is standard redux-toolkit construct
         [applySpellcheckerOnCue.rejected]:
-            (state: SubtitleEditState): void => {
+            (state: SpellcheckerSettings): void => {
                 state.enabled = false;
             }
     }
