@@ -18,6 +18,7 @@ import {
     lastCueChangeSlice,
     validationErrorSlice
 } from "./cues/edit/cueEditorSlices";
+import { commentsVisibleSlice } from "./cues/comments/commentsSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -40,7 +41,8 @@ export const Reducers = {
     glossaryTerm: glossaryTermSlice.reducer,
     focusedCueIndex: scrollPositionSlice.reducer,
     matchedCues: matchedCuesSlice.reducer,
-    currentPlayerTime: currentPlayerTimeSlice.reducer
+    currentPlayerTime: currentPlayerTimeSlice.reducer,
+    commentsVisible: commentsVisibleSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

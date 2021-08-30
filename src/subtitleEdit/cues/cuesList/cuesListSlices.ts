@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueCategory, CueDto, CueError, SubtitleEditAction } from "../../model";
+import { CueCategory, CueComment, CueDto, CueError, SubtitleEditAction } from "../../model";
 import { copyNonConstructorProperties } from "../cueUtils";
 import { editingTrackSlice } from "../../trackSlices";
 import { Match, SpellCheck } from "../spellCheck/model";
@@ -19,6 +19,11 @@ export interface VttCueAction extends CueIndexAction {
 
 export interface CueCategoryAction extends CueIndexAction {
     cueCategory: CueCategory;
+}
+
+export interface CueCommentAction extends CueIndexAction {
+    cueCommentIndex?: number;
+    cueComment?: CueComment;
 }
 
 export interface CueAction extends CueIndexAction {
@@ -57,6 +62,19 @@ export const cuesSlice = createSlice({
         updateCueCategory: (state, action: PayloadAction<CueCategoryAction>): void => {
             if (state[action.payload.idx]) {
                 state[action.payload.idx].cueCategory = action.payload.cueCategory;
+            }
+        },
+        addCueComment: (state, action: PayloadAction<CueCommentAction>): void => {
+            if (state[action.payload.idx] && action.payload.cueComment) {
+                state[action.payload.idx].comments = [
+                    ...state[action.payload.idx].comments || [],
+                    action.payload.cueComment
+                ];
+            }
+        },
+        deleteCueComment: (state, action: PayloadAction<CueCommentAction>): void => {
+            if (state[action.payload.idx] && action.payload.cueCommentIndex !== undefined) {
+                state[action.payload.idx].comments?.splice(action.payload.cueCommentIndex, 1);
             }
         },
         addSpellCheck: (state, action: PayloadAction<SpellCheckAction>): void => {

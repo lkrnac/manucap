@@ -37,6 +37,7 @@ export interface CueDto {
     searchReplaceMatches?: SearchReplaceMatches;
     glossaryMatches?: GlossaryMatchDto[];
     errors?: CueError[] | null;
+    comments?: CueComment[];
 }
 
 export interface CueDtoWithIndex {
@@ -146,4 +147,12 @@ export enum CueError {
     INVALID_RANGE_END = "Invalid End Time",
     OUT_OF_CHUNK_RAGE = "Out of Chunk Range",
     CHARS_PER_SECOND_EXCEEDED = "Max Characters Per Second Exceeded"
+}
+
+export interface CueComment {
+    id?: string;
+    userId?: string;
+    author?: string;
+    comment: string;
+    date: string;
 }
