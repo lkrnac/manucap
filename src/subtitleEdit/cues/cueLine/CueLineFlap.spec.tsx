@@ -28,7 +28,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -40,6 +41,17 @@ describe("CueLineFlap", () => {
                     >
                         1
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -96,7 +108,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -108,6 +121,17 @@ describe("CueLineFlap", () => {
                     >
                         1
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -165,7 +189,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -190,6 +215,17 @@ describe("CueLineFlap", () => {
                     >
                         <i className="fa fa-lock" />
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -237,7 +273,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -249,6 +286,17 @@ describe("CueLineFlap", () => {
                     >
                         1
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -307,7 +355,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -332,6 +381,17 @@ describe("CueLineFlap", () => {
                     >
                         <i className="fa fa-lock" />
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -384,7 +444,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -396,6 +457,17 @@ describe("CueLineFlap", () => {
                     >
                         1
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -459,7 +531,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -484,6 +557,17 @@ describe("CueLineFlap", () => {
                     >
                         <i className="fa fa-lock" />
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -538,7 +622,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -562,6 +647,17 @@ describe("CueLineFlap", () => {
                         }}
                     >
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -614,7 +710,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -638,6 +735,17 @@ describe("CueLineFlap", () => {
                         }}
                     >
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -691,7 +799,8 @@ describe("CueLineFlap", () => {
                         color: "white",
                         position: "relative",
                         display: "flex",
-                        flexDirection: "column"
+                        flexDirection: "column",
+                        minHeight: "80px"
                     }}
                 >
                     <div
@@ -715,6 +824,17 @@ describe("CueLineFlap", () => {
                         }}
                     >
                     </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    />
                     <div
                         style={{
                             position: "absolute",
@@ -786,5 +906,369 @@ describe("CueLineFlap", () => {
 
         // THEN
         expect(testingStore.getState().rowsToMerge).toEqual([]);
+    });
+
+    it("renders good enabled cue with 0 comments", () => {
+        // GIVEN
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
+        const expectedNode = render(
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <input
+                        type="checkbox"
+                        className="sbte-cue-line-flap-checkbox"
+                    />
+                </div>
+                <div
+                    className="sbte-cue-line-flap-good"
+                    style={{
+                        textAlign: "center",
+                        width: "30px",
+                        color: "white",
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                        minHeight: "80px"
+                    }}
+                >
+                    <div
+                        style={{
+                            paddingTop: "10px",
+                            fontSize: "11px",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        1
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    >
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    >
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "10px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fa fa-check" />
+                    </div>
+                </div>
+            </div>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    cues={testingStore.getState().cues[0]}
+                    cueCommentsCount={0}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders good enabled cue with 1 comment", () => {
+        // GIVEN
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
+        const expectedNode = render(
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <input
+                        type="checkbox"
+                        className="sbte-cue-line-flap-checkbox"
+                    />
+                </div>
+                <div
+                    className="sbte-cue-line-flap-good"
+                    style={{
+                        textAlign: "center",
+                        width: "30px",
+                        color: "white",
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                        minHeight: "80px"
+                    }}
+                >
+                    <div
+                        style={{
+                            paddingTop: "10px",
+                            fontSize: "11px",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        1
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "50px",
+                            fontSize: "14px"
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fa fa-comments" />
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "10px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fa fa-check" />
+                    </div>
+                </div>
+            </div>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    cues={testingStore.getState().cues[0]}
+                    cueCommentsCount={1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders good disabled cue with 1 comment", () => {
+        // GIVEN
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
+        const expectedNode = render(
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <input
+                        type="checkbox"
+                        className="sbte-cue-line-flap-checkbox"
+                        disabled
+                    />
+                </div>
+                <div
+                    className="sbte-cue-line-flap-good"
+                    style={{
+                        textAlign: "center",
+                        width: "30px",
+                        color: "white",
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                        minHeight: "100px"
+                    }}
+                >
+                    <div
+                        style={{
+                            paddingTop: "10px",
+                            fontSize: "11px",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        1
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "50px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fa fa-lock" />
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fa fa-comments" />
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "10px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fa fa-check" />
+                    </div>
+                </div>
+            </div>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.GOOD}
+                    cues={testingStore.getState().cues[0]}
+                    editDisabled
+                    cueCommentsCount={1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders corrupted disabled cue with 3 comments", () => {
+        // GIVEN
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
+        const expectedNode = render(
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <input
+                        type="checkbox"
+                        className="sbte-cue-line-flap-checkbox"
+                        disabled
+                    />
+                </div>
+                <div
+                    className="sbte-cue-line-flap-error"
+                    style={{
+                        textAlign: "center",
+                        width: "30px",
+                        color: "white",
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                        minHeight: "100px"
+                    }}
+                >
+                    <div
+                        style={{
+                            paddingTop: "10px",
+                            fontSize: "11px",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        1
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "50px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fa fa-lock" />
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "30px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fa fa-comments" />
+                    </div>
+                    <div
+                        style={{
+                            position: "absolute",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            left: "0",
+                            right: "0",
+                            bottom: "10px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <i className="fas fa-exclamation-triangle" />
+                    </div>
+                </div>
+            </div>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueLineFlap
+                    rowIndex={0}
+                    cueLineState={CueLineState.ERROR}
+                    cues={testingStore.getState().cues[0]}
+                    editDisabled
+                    cueCommentsCount={3}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 });

@@ -37,6 +37,7 @@ export interface CueDto {
     searchReplaceMatches?: SearchReplaceMatches;
     glossaryMatches?: GlossaryMatchDto[];
     errors?: CueError[] | null;
+    comments?: CueComment[];
 }
 
 export interface CueDtoWithIndex {
@@ -153,4 +154,12 @@ export enum CueError {
     MERGE_ERROR = "Merged subtitle is too long/Not enough subtitles selected",
     SPLIT_ERROR = "Subtitle is too short to split",
     CHARS_PER_SECOND_EXCEEDED = "Max Characters Per Second Exceeded"
+}
+
+export interface CueComment {
+    id?: string;
+    userId?: string;
+    author?: string;
+    comment: string;
+    date: string;
 }

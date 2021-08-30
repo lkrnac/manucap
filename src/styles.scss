@@ -2,6 +2,7 @@
 // Override bootstrap defaults
 // ##############################
 $font-size-small: 0.75rem; // 12px
+$font-size-medium: 0.875rem; // 14px
 
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
@@ -38,6 +39,11 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     border-bottom: 2px solid $border-color;
 }
 
+.sbte-cue-line {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
 .sbte-green-text {
     color: $green;
 }
@@ -48,6 +54,14 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 
 .sbte-small-font {
   font-size: $font-size-small;
+}
+
+.sbte-medium-font {
+    font-size: $font-size-medium;
+}
+
+.sbte-white-background {
+    background-color: white;
 }
 
 .sbte-gray-100-background {
@@ -96,6 +110,12 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     padding: 2px 4px;
     margin-left: 2px;
     white-space: nowrap;
+}
+
+.sbte-btn-xs {
+    padding: 1px 5px !important;
+    font-size: $font-size-small !important;
+    line-height: 1.5 !important;
 }
 
 // ----- Modal ------
@@ -260,6 +280,8 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     margin-right: unset !important;
 }
 
+// ------ Cue Errors --------
+
 .sbte-cues-errors {
     background-color: #f8d7da;
     border-color: #f8d7da;
@@ -269,4 +291,11 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 
 .sbte-cues-errors-popover {
     z-index: 1 !important;
+}
+
+// ------ Cue Comments --------
+
+.sbte-cue-comment-user {
+    background-color: darkcyan;
+    color: white;
 }

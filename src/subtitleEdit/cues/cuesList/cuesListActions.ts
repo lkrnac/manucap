@@ -4,6 +4,7 @@ import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import {
     CueCategory,
+    CueComment,
     CueDto,
     CueError,
     CueLineDto,
@@ -273,6 +274,20 @@ export const validateCorruptedCues = createAsyncThunk(
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
+        callSaveTrack(dispatch, getState);
+        dispatch(updateMatchedCues());
+    };
+
+export const addCueComment = (idx: number, cueComment: CueComment): AppThunk =>
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+        dispatch(cuesSlice.actions.addCueComment({ idx, cueComment }));
+        callSaveTrack(dispatch, getState);
+        dispatch(updateMatchedCues());
+    };
+
+export const deleteCueComment = (idx: number, cueCommentIndex: number): AppThunk =>
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+        dispatch(cuesSlice.actions.deleteCueComment({ idx, cueCommentIndex }));
         callSaveTrack(dispatch, getState);
         dispatch(updateMatchedCues());
     };

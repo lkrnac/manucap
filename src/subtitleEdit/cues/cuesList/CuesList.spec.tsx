@@ -113,7 +113,7 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -151,21 +151,36 @@ describe("CuesList", () => {
                             key={0}
                             data={matchedCuesShort[0]}
                             rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues: matchedCuesShort }}
+                            rowProps={{
+                                targetCuesLength: 3,
+                                withoutSourceCues: false,
+                                matchedCues: matchedCuesShort,
+                                commentAuthor: "Linguist"
+                            }}
                             rowRef={createRef()}
                         />
                         <CueLine
                             key={1}
                             data={matchedCuesShort[1]}
                             rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues: matchedCuesShort }}
+                            rowProps={{
+                                targetCuesLength: 3,
+                                withoutSourceCues: false,
+                                matchedCues: matchedCuesShort,
+                                commentAuthor: "Linguist"
+                            }}
                             rowRef={createRef()}
                         />
                         <CueLine
                             key={2}
                             data={matchedCuesShort[2]}
                             rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues: matchedCuesShort }}
+                            rowProps={{
+                                targetCuesLength: 3,
+                                withoutSourceCues: false,
+                                matchedCues: matchedCuesShort,
+                                commentAuthor: "Linguist"
+                            }}
                             rowRef={createRef()}
                         />
                     </div>
@@ -175,7 +190,7 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -199,7 +214,12 @@ describe("CuesList", () => {
                                     key={index}
                                     data={matchedCues[index]}
                                     rowIndex={index}
-                                    rowProps={{ targetCuesLength: 120, withoutSourceCues: false, matchedCues }}
+                                    rowProps={{
+                                        targetCuesLength: 120,
+                                        withoutSourceCues: false,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
                                     rowRef={createRef()}
                                 />
                             ))
@@ -218,7 +238,7 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -249,7 +269,12 @@ describe("CuesList", () => {
                                     key={index + 45}
                                     data={matchedCues[index + 45]}
                                     rowIndex={index + 45}
-                                    rowProps={{ targetCuesLength: 120, withoutSourceCues: false, matchedCues }}
+                                    rowProps={{
+                                        targetCuesLength: 120,
+                                        withoutSourceCues: false,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
                                     rowRef={createRef()}
                                 />
                             ))
@@ -268,7 +293,7 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -299,7 +324,12 @@ describe("CuesList", () => {
                                     key={index + 95}
                                     data={matchedCues[index + 95]}
                                     rowIndex={index + 95}
-                                    rowProps={{ targetCuesLength: 120, withoutSourceCues: false, matchedCues }}
+                                    rowProps={{
+                                        targetCuesLength: 120,
+                                        withoutSourceCues: false,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
                                     rowRef={createRef()}
                                 />
                             ))
@@ -311,7 +341,7 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -329,7 +359,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -347,7 +377,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
             await act(async () => {
@@ -373,7 +403,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -391,7 +421,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
             await act(async () => {
@@ -432,7 +462,7 @@ describe("CuesList", () => {
             // WHEN
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -465,7 +495,7 @@ describe("CuesList", () => {
             // WHEN
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -489,7 +519,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -511,7 +541,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -533,7 +563,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -555,7 +585,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -579,7 +609,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -601,7 +631,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -623,7 +653,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -645,7 +675,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider >
             );
 
@@ -672,7 +702,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -700,7 +730,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -728,7 +758,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -762,7 +792,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(testingSourceCuesForPagination) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -798,7 +828,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(testingSourceCuesForPagination) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -835,7 +865,7 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -870,7 +900,7 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -897,7 +927,7 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 
@@ -938,7 +968,7 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
                 </Provider>
             );
 

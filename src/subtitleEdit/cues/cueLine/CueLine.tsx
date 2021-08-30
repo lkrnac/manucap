@@ -9,6 +9,7 @@ import _ from "lodash";
 import InsertCueButton from "../view/InsertCueButton";
 import ClickCueWrapper from "../view/ClickCueWrapper";
 import CueErrorLine from "../CueErrorLine";
+import CueComments from "../comments/CueComments";
 
 export interface CueLineRowProps {
     targetCuesLength: number;
@@ -16,6 +17,7 @@ export interface CueLineRowProps {
     // because empty/undefined props.data.sourceCues might indicate that there is no time match in translation mode
     withoutSourceCues: boolean;
     matchedCues: CueLineDto[];
+    commentAuthor?: string;
 }
 
 export interface CueLineProps {
@@ -135,11 +137,19 @@ const CueLine = (props: CueLineProps): ReactElement => {
         }
     });
 
+    const commentsVisible = useSelector((state: SubtitleEditState) => state.commentsVisible);
+    let cueCommentsCount = 0;
+    props.data.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
+        if (targetCue.cue.comments) {
+            cueCommentsCount += targetCue.cue.comments.length;
+        }
+    });
+
     return (
         <div
+            className="sbte-cue-line"
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
-            className="sbte-cue-line"
         >
             <CueLineFlap
                 rowIndex={props.rowIndex}
@@ -148,10 +158,11 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 showErrors={showGlossaryTermsAndErrors}
                 editDisabled={cueLineEditDisabled}
                 cues={props.data.targetCues}
+                cueCommentsCount={cueCommentsCount}
             />
             <div
                 className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
-                style={{ display: "flex", flexDirection:"column", width: "100%" }}
+                style={{ display: "grid", width: "100%" }}
             >
                 {
                     props.data.sourceCues && props.data.sourceCues.length > 0
@@ -205,22 +216,44 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             cue={targetCue.cue}
                                             nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
                                         />
+                                        {
+                                            commentsVisible ?
+                                                <CueComments
+                                                    key={`cueComments-${targetCue.index}`}
+                                                    index={targetCue.index}
+                                                    cue={targetCue.cue}
+                                                    commentAuthor={props.rowProps.commentAuthor}
+                                                />
+                                                : null
+                                        }
                                         <CueErrorsList cue={targetCue.cue} />
                                     </>
                                 )
                                 : (
-                                    <CueView
-                                        key={targetCue.index}
-                                        isTargetCue
-                                        targetCueIndex={targetCue.index}
-                                        cue={targetCue.cue}
-                                        targetCuesLength={props.rowProps.targetCuesLength}
-                                        className={`${captionClassName} sbte-target-cue`}
-                                        showGlossaryTerms={false}
-                                        languageDirection={editingTrack?.language.direction}
-                                        sourceCuesIndexes={sourceCuesIndexes}
-                                        nextTargetCueIndex={nextTargetCueIndex}
-                                    />
+                                    <>
+                                        <CueView
+                                            key={targetCue.index}
+                                            isTargetCue
+                                            targetCueIndex={targetCue.index}
+                                            cue={targetCue.cue}
+                                            targetCuesLength={props.rowProps.targetCuesLength}
+                                            className={`${captionClassName} sbte-target-cue`}
+                                            showGlossaryTerms={false}
+                                            languageDirection={editingTrack?.language.direction}
+                                            sourceCuesIndexes={sourceCuesIndexes}
+                                            nextTargetCueIndex={nextTargetCueIndex}
+                                        />
+                                        {
+                                            commentsVisible ?
+                                                <CueComments
+                                                    key={`cueComments-${targetCue.index}`}
+                                                    index={targetCue.index}
+                                                    cue={targetCue.cue}
+                                                    commentAuthor={props.rowProps.commentAuthor}
+                                                />
+                                                : null
+                                        }
+                                    </>
                                 );
                         })
                         : (
@@ -235,7 +268,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 <InsertCueButton />
                             </ClickCueWrapper>
                         )
-
                 }
             </div>
         </div>

@@ -42,6 +42,7 @@ import MergeCuesButton from "./toolbox/MergeCuesButton";
 import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { act } from "react-dom/test-utils";
+import CueCommentsToggle from "./toolbox/CueCommentsToggle";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -168,7 +169,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -178,7 +180,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -589,7 +592,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -599,7 +603,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -903,6 +908,7 @@ describe("SubtitleEdit", () => {
                                                 <ImportTrackCuesButton handleImport={jest.fn()} disabled />
                                                 <SearchReplaceButton />
                                                 <MergeCuesButton />
+                                                <CueCommentsToggle />
                                             </ButtonToolbar>
                                         </Card.Body>
                                     </Accordion.Collapse>
@@ -926,7 +932,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />
@@ -936,7 +943,8 @@ describe("SubtitleEdit", () => {
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={React.createRef()}
                                 />

@@ -7,9 +7,11 @@ import { act } from "react-dom/test-utils";
 
 import {
     addCue,
+    addCueComment,
     addCuesToMergeList,
     applyShiftTime,
     deleteCue,
+    deleteCueComment,
     mergeCues,
     removeCuesToMergeList,
     splitCue,
@@ -1699,6 +1701,75 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
+        });
+    });
+
+    describe("addCueComment", () => {
+        it("adds a comment to a cue without comments", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            const newComment = {
+                author: "Username",
+                comment: "This is a comment",
+                date: "2021-01-01T09:24:00.000Z"
+            };
+
+            // WHEN
+            testingStore.dispatch(addCueComment(1, newComment) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].comments).toEqual([newComment]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+        });
+
+        it("adds a comment to a cue with comments", () => {
+            // GIVEN
+            const existingComment = {
+                author: "Username",
+                comment: "This is an existing comment",
+                date: "2021-01-01T09:24:00.000Z"
+            };
+            const testingCuesWithComments = [
+                { ...testingCues[0], comments: [existingComment]},
+                testingCues[1]
+            ];
+            testingStore.dispatch(updateCues(testingCuesWithComments) as {} as AnyAction);
+            const newComment = {
+                author: "Username",
+                comment: "This is a comment",
+                date: "2021-01-01T09:24:00.000Z"
+            };
+
+            // WHEN
+            testingStore.dispatch(addCueComment(0, newComment) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].comments).toEqual([existingComment, newComment]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+        });
+    });
+
+    describe("deleteCueComment", () => {
+        it("deletes a comment on a cue", () => {
+            // GIVEN
+            const existingComment = {
+                userId: "jane.doe",
+                author: "Username",
+                comment: "This is an existing comment",
+                date: "2021-01-01T09:24:00.000Z"
+            };
+            const testingCuesWithComments = [
+                { ...testingCues[0], comments: [existingComment]},
+                testingCues[1]
+            ];
+            testingStore.dispatch(updateCues(testingCuesWithComments) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(deleteCueComment(0, 0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].comments).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
         });
     });
 
