@@ -29,6 +29,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
         try {
             dispatch(applyShiftTime(shiftValue));
         } catch (e) {
+            // @ts-ignore
             setErrorMessage(e.message);
             return;
         }
