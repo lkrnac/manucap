@@ -15,6 +15,7 @@ const DEFAULT_PAGE_SIZE = 50;
 
 interface Props {
     editingTrack: Track | null;
+    commentAuthor?: string;
 }
 
 const CuesList = (props: Props): ReactElement => {
@@ -128,7 +129,8 @@ const CuesList = (props: Props): ReactElement => {
                                     rowProps={{
                                         targetCuesLength: targetCuesArray.length,
                                         withoutSourceCues,
-                                        matchedCues: matchedCues.matchedCues
+                                        matchedCues: matchedCues.matchedCues,
+                                        commentAuthor: props.commentAuthor
                                     }}
                                     rowRef={refs[startIndex + i]}
                                 />
