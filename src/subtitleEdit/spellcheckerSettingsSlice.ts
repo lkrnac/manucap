@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SpellcheckerSettings } from "./model";
-import { AppThunk } from "./subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "./subtitleEditReducers";
 import { Dispatch } from "react";
 import { applySpellcheckerOnCue } from "./cues/cuesList/cuesListActions";
 
@@ -16,7 +16,7 @@ export const spellcheckerSettingsSlice = createSlice({
     }, extraReducers: {
         // @ts-ignore: This is standard redux-toolkit construct
         [applySpellcheckerOnCue.rejected]:
-            (state): void => {
+            (state: SubtitleEditState): void => {
                 state.enabled = false;
             }
     }
