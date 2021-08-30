@@ -2,7 +2,8 @@ import { Provider, useDispatch } from "react-redux";
 import React, { ReactElement, useEffect } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
-import { CueDto, Language } from "./subtitleEdit/model";
+import { updateSubtitleUser } from "./subtitleEdit/userSlices";
+import { CueDto, Language, User } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
@@ -177,6 +178,22 @@ const TestApp = (): ReactElement => {
                     userId: "john.doe"
                 }
             })),
+            500
+        );
+    });
+
+    // ################################## User ###########################################
+    useEffect(() => {
+        const subtitleUser = {
+            displayName: "Jane Doe",
+            email: "jane.doe@dotsub.com",
+            firstname: "Jane",
+            lastname: "Doe",
+            systemAdmin: "",
+            userId: "jane.doe"
+        } as User;
+        setTimeout(
+            () => dispatch(updateSubtitleUser(subtitleUser)),
             500
         );
     });
