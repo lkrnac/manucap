@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.16.0",
+  "version": "2.16.1",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -112,12 +112,12 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^2.9.0",
-    "rollup-plugin-typescript3": "^1.1.2",
+    "rollup-plugin-typescript3": "1.1.2",
     "rollup-plugin-url": "^3.0.0",
     "simulant": "^0.2.2",
     "sinon": "^9.0.2",
     "tslint": "^6.1.2",
-    "typescript": "^3.9.7"
+    "typescript": "3.9.7"
   },
   "files": [
     "dist"

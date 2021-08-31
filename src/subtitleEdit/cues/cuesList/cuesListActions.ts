@@ -1,6 +1,6 @@
 import "video.js";
 import { Dispatch } from "react";
-import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import {
     CueCategory,
@@ -242,7 +242,7 @@ export const validateVttCue = (idx: number): AppThunk =>
     };
 
 export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         const trackId = getState().editingTrack?.id;
         if (trackId) {
             dispatch(cuesSlice.actions

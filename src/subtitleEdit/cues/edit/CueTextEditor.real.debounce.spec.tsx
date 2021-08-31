@@ -9,9 +9,9 @@ import { mount, ReactWrapper } from "enzyme";
 
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "./editorStatesSlice";
-import { CueDto, Track } from "../../model";
+import { CueDto, CueError, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues } from "../cuesList/cuesListActions";
+import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -21,6 +21,7 @@ import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
+import { Replacement, SpellCheck } from "../spellCheck/model";
 
 let testingStore = createTestingStore();
 
@@ -472,7 +473,91 @@ describe("CueTextEditor", () => {
                 expect(saveTrack).not.toBeCalled();
                 done();
             },
-            2600
+            6000
+        );
+    });
+
+    it("updates matched cues during ignores all action", (done) => {
+        // GIVEN
+        const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(reset() as {} as AnyAction);
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            mediaLength: 4000,
+            progress: 50,
+            id: trackId
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const spellCheck = {
+            matches: [
+                { offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
+                    context: { text: "Caption Linex 1", offset: 8, length: 5 },
+                    rule: { id: ruleId }
+                }
+            ]
+        } as SpellCheck;
+
+        const cues = [
+            { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                errors: [CueError.SPELLCHECK_ERROR]},
+            { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
+                cueCategory: "DIALOGUE", spellCheck: spellCheck,
+                errors: [CueError.SPELLCHECK_ERROR]},
+            { vttCue: new VTTCue(4, 6, "Caption Linex 2"),
+                cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR]}
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        testingStore.dispatch(updateMatchedCues() as {} as AnyAction);
+
+        // @ts-ignore modern browsers does have it
+        global.fetch = jest.fn()
+            .mockImplementationOnce(() => new Promise((resolve) =>
+                resolve({ json: () => spellCheck })));
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const { container } = render(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={testingStore.getState().cues[0].vttCue}
+                    editUuid={editUuid}
+                    spellCheck={spellCheck}
+                />
+            </Provider>
+        );
+        const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+        fireEvent.click(errorSpan);
+
+        //WHEN
+        const ignoreOption = document.querySelectorAll(".spellcheck__option")[0] as Element;
+        fireEvent.click(ignoreOption);
+
+        // THEN
+        //@ts-ignore value should not be null
+        const ignores = JSON.parse(localStorage.getItem("SpellcheckerIgnores"));
+        expect(ignores[trackId]).not.toBeNull();
+        expect(testingStore.getState().cues[0].errors).toEqual([]);
+        expect(testingStore.getState().cues[1].errors).toEqual([]);
+        expect(testingStore.getState().cues[2].errors).toEqual([]);
+        expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.errors).toEqual([]);
+        expect(testingStore.getState().matchedCues.matchedCues[1].targetCues[0].cue.errors).toEqual([]);
+        expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual([]);
+
+        setTimeout(
+            () => {
+                expect(saveTrack).toBeCalled();
+                done();
+            },
+            6000
         );
     });
 });
