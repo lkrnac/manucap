@@ -9,9 +9,6 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     useEffect(
         () => {
             setShow(subtitleSpecifications != null && subtitleSpecifications.enabled);
-            // ESLint suppress: because we want to show modal only for first render
-            // and subtitle specs is loaded
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [subtitleSpecifications]
     );
 

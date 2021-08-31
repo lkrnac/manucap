@@ -171,7 +171,7 @@ describe("SubtitleSpecificationsButton", () => {
         expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
     });
 
-    it.skip("Does not auto show subtitle specification if cues are not empty", () => {
+    it("Does auto show subtitle specification if cues are not empty", () => {
         // WHEN
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
@@ -186,7 +186,7 @@ describe("SubtitleSpecificationsButton", () => {
         );
 
         // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
     });
 
     it("Does not auto show subtitle specification if subtitle specification is null", () => {
