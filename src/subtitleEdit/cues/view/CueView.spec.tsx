@@ -502,9 +502,9 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
-            "style=\"background-color: #D9E9FF;\">Line</span></b></i> <br>Wrapped " +
+            "style=\"background-color: #DBB7FF;\">Line</span></b></i> <br>Wrapped " +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
-            "style=\"background-color: #D9E9FF;\">text</span>";
+            "style=\"background-color: #DBB7FF;\">text</span>";
 
         // WHEN
         const actualNode = render(
@@ -538,7 +538,7 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "This is <span onclick=\"pickSetGlossaryTerm('qualche')\" " +
-            "style=\"background-color: #D9E9FF;\">some</span> sample text";
+            "style=\"background-color: #DBB7FF;\">some</span> sample text";
 
         // WHEN
         const actualNode = render(
@@ -666,9 +666,9 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('replacement')\" " +
-            "style=\"background-color: #D9E9FF;\">Line</span></b></i> <br>Wrapped text " +
+            "style=\"background-color: #DBB7FF;\">Line</span></b></i> <br>Wrapped text " +
             "<span onclick=\"pickSetGlossaryTerm('replacement')\" " +
-            "style=\"background-color: #D9E9FF;\">LINE</span>";
+            "style=\"background-color: #DBB7FF;\">LINE</span>";
 
         // WHEN
         const actualNode = render(
@@ -702,9 +702,9 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
-            "style=\"background-color: #D9E9FF;\">Source Line</span></i> <br>" +
+            "style=\"background-color: #DBB7FF;\">Source Line</span></i> <br>" +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
-            "style=\"background-color: #D9E9FF;\">Wrapped text</span>";
+            "style=\"background-color: #DBB7FF;\">Wrapped text</span>";
 
         // WHEN
         const actualNode = render(
