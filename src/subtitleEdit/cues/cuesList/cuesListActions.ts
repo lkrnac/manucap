@@ -412,6 +412,7 @@ export const mergeCues = (): AppThunk =>
                 let mergedContent = "";
                 const mergedErrors = [] as CueError[];
                 const mergedGlossaryMatches = [] as GlossaryMatchDto[];
+                const mergedComments = [] as CueComment[];
                 let rowStartTime = 0;
                 let rowEndTime = 0;
                 let firstCue = {} as CueDtoWithIndex;
@@ -434,6 +435,9 @@ export const mergeCues = (): AppThunk =>
                         rowEndTime = cue.cue.vttCue.endTime;
                     }
                     mergedContent += cue.cue.vttCue.text;
+                    if (cue.cue.comments && cue.cue.comments.length > 0) {
+                        mergedComments.push(...cue.cue.comments);
+                    }
                 });
                 const mergedVttCue = new VTTCue(rowStartTime, rowEndTime, mergedContent);
                 copyNonConstructorProperties(mergedVttCue, firstCue.cue.vttCue);
@@ -443,7 +447,8 @@ export const mergeCues = (): AppThunk =>
                     glossaryMatches: mergedGlossaryMatches,
                     searchReplaceMatches: undefined,
                     editUuid: firstCue.cue.editUuid,
-                    cueCategory: firstCue.cue.cueCategory
+                    cueCategory: firstCue.cue.cueCategory,
+                    comments: mergedComments
                 } as CueDto;
 
                 const state: SubtitleEditState = getState();
