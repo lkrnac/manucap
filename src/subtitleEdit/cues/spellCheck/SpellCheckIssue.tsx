@@ -5,7 +5,11 @@ import { Match, SpellCheck } from "./model";
 import { Character } from "../../utils/shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { addIgnoredKeyword, getMatchText } from "./spellCheckerUtils";
-import { removeIgnoredSpellcheckedMatchesFromAllCues, validateCorruptedCues } from "../cuesList/cuesListActions";
+import {
+    removeIgnoredSpellcheckedMatchesFromAllCues,
+    updateMatchedCues,
+    validateCorruptedCues
+} from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 
 
@@ -52,6 +56,7 @@ const ignoreKeyword = (props: Props, matchText: string, spellCheckMatch: Match, 
     addIgnoredKeyword(props.trackId, matchText, spellCheckMatch.rule.id);
     dispatch(removeIgnoredSpellcheckedMatchesFromAllCues());
     dispatch(validateCorruptedCues(matchText));
+    dispatch(updateMatchedCues());
 };
 
 const onOptionSelected = (props: Props, spellCheckMatch: Match, matchText: string , dispatch: Dispatch<AppThunk>) =>

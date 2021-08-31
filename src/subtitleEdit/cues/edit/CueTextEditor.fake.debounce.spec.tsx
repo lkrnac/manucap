@@ -22,7 +22,7 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { CueDto, CueError, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues } from "../cuesList/cuesListActions";
+import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -1220,6 +1220,7 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(updateMatchedCues() as {} as AnyAction);
 
             // @ts-ignore modern browsers does have it
             global.fetch = jest.fn()
@@ -1239,21 +1240,11 @@ describe("CueTextEditor", () => {
                 </Provider>
             );
             const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
-            fireEvent(errorSpan,
-                new MouseEvent("click", {
-                    bubbles: true,
-                    cancelable: true,
-                })
-            );
+            fireEvent.click(errorSpan);
 
             //WHEN
             const ignoreOption = document.querySelectorAll(".spellcheck__option")[0] as Element;
-            fireEvent(ignoreOption,
-                new MouseEvent("click", {
-                    bubbles: true,
-                    cancelable: true,
-                })
-            );
+            fireEvent.click(ignoreOption);
 
             // THEN
             //@ts-ignore value should not be null
@@ -1262,6 +1253,9 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues[1].targetCues[0].cue.errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual([]);
             expect(saveTrack).toBeCalled();
         });
 
