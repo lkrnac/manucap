@@ -58,8 +58,7 @@ const CuesList = (props: Props): ReactElement => {
                 return false;
             });
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [] // Run only once -> mount
+        [dispatch, matchedCues.matchedCues.length, showStartCaptioning]
     );
 
     useEffect(
