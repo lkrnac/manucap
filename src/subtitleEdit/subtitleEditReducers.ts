@@ -20,6 +20,7 @@ import {
     validationErrorSlice
 } from "./cues/edit/cueEditorSlices";
 import { commentsVisibleSlice } from "./cues/comments/commentsSlices";
+import { timecodesLockSlice } from "./cues/timecodesSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -44,7 +45,8 @@ export const Reducers = {
     focusedCueIndex: scrollPositionSlice.reducer,
     matchedCues: matchedCuesSlice.reducer,
     currentPlayerTime: currentPlayerTimeSlice.reducer,
-    commentsVisible: commentsVisibleSlice.reducer
+    commentsVisible: commentsVisibleSlice.reducer,
+    timecodesUnlocked: timecodesLockSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);
