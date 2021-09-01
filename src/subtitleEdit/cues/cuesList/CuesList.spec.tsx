@@ -990,5 +990,29 @@ describe("CuesList", () => {
                 .toEqual(" Paste text to end");
             expect(actualNode.container.outerHTML).toContain(" Paste text to end");
         });
+
+        it("remains scroll into view working if cues are imported", async () => {
+            // GIVEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                </Provider>
+            );
+
+            // WHEN
+            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+            await act(async () => {
+                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+            });
+
+            // THEN
+            expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
+            const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
+            expect(scrolledElement.outerHTML).toContain("Target Line 50");
+        });
     });
 });
