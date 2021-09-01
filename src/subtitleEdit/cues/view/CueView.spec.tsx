@@ -502,9 +502,9 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
-            "style=\"background-color: #DBB7FF;\">Line</span></b></i> <br>Wrapped " +
+            "class=\"sbte-glossary-match\">Line</span></b></i> <br>Wrapped " +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
-            "style=\"background-color: #DBB7FF;\">text</span>";
+            "class=\"sbte-glossary-match\">text</span>";
 
         // WHEN
         const actualNode = render(
@@ -538,7 +538,7 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "This is <span onclick=\"pickSetGlossaryTerm('qualche')\" " +
-            "style=\"background-color: #DBB7FF;\">some</span> sample text";
+            "class=\"sbte-glossary-match\">some</span> sample text";
 
         // WHEN
         const actualNode = render(
@@ -666,9 +666,9 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('replacement')\" " +
-            "style=\"background-color: #DBB7FF;\">Line</span></b></i> <br>Wrapped text " +
+            "class=\"sbte-glossary-match\">Line</span></b></i> <br>Wrapped text " +
             "<span onclick=\"pickSetGlossaryTerm('replacement')\" " +
-            "style=\"background-color: #DBB7FF;\">LINE</span>";
+            "class=\"sbte-glossary-match\">LINE</span>";
 
         // WHEN
         const actualNode = render(
@@ -702,9 +702,9 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
-            "style=\"background-color: #DBB7FF;\">Source Line</span></i> <br>" +
+            "class=\"sbte-glossary-match\">Source Line</span></i> <br>" +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
-            "style=\"background-color: #DBB7FF;\">Wrapped text</span>";
+            "class=\"sbte-glossary-match\">Wrapped text</span>";
 
         // WHEN
         const actualNode = render(

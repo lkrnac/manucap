@@ -38,7 +38,7 @@ const replaceForInsensitiveMatches = (
                 sanitizedHtml = sanitizedHtml.replace(
                     caseInsensitiveMatch,
                     `<span onClick="pickSetGlossaryTerm('${compositeValue}')" ` +
-                    `style="background-color: #DBB7FF;">${caseInsensitiveMatch}</span>`
+                    `class="sbte-glossary-match">${caseInsensitiveMatch}</span>`
                 );
             }
         }
