@@ -5,6 +5,7 @@ import ShiftTimeButton from "./ShiftTimeButton";
 import ShiftTimeModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
+import { timecodesLockSlice } from "../../cues/timecodesSlices";
 
 jest.mock("./ShiftTimeModal");
 
@@ -99,5 +100,36 @@ describe("ShiftTimeButton", () => {
 
         // THEN
         expect(actualNode.find(ShiftTimeModal).props().show).toEqual(false);
+    });
+
+    it("renders disabled if timecodes are locked", () => {
+        // GIVEN
+        testingStore.dispatch(timecodesLockSlice.actions.setTimecodesLock(false));
+
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <>
+                    <button
+                        type="button"
+                        className="btn btn-secondary dotsub-shift-time-button"
+                        disabled
+                    >
+                        <i className="fas fa-angle-double-right" /> Shift All Tracks Time
+                    </button>
+
+                    <div />
+                </>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <ShiftTimeButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 });
