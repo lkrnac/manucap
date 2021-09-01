@@ -14,6 +14,7 @@ import { SubtitleEditState } from "../subtitleEditReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
+import TimecodesLockToggle from "./TimecodesLockToggle";
 
 interface Props {
     handleExportFile: () => void;
@@ -50,6 +51,7 @@ const Toolbox = (props: Props): ReactElement => {
                             <SearchReplaceButton />
                             { isTranslation ? <SyncCuesButton /> : null }
                             <CueCommentsToggle />
+                            <TimecodesLockToggle />
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>
