@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { playVideoSection } from "../../player/playbackSlices";
 import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
+import { getTimeString } from "../../utils/timeUtils";
 
 export interface CueEditProps {
     index: number;
@@ -100,6 +101,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
     const className = (validationErrors && validationErrors.length) > 0 ? "blink-error-bg" : "bg-white";
+    const timecodesUnlocked = useSelector((state: SubtitleEditState) => state.timecodesUnlocked);
 
     return (
         <div style={{ display: "flex" }} className={"sbte-bottom-border " + className}>
@@ -114,20 +116,33 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 }}
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
-                    <TimeEditor
-                        time={props.cue.vttCue.startTime}
-                        onChange={(startTime: number): void =>
-                            updateCueAndCopyProperties(
-                                dispatch, props, startTime, props.cue.vttCue.endTime, props.cue.editUuid
-                            )}
-                    />
-                    <TimeEditor
-                        time={props.cue.vttCue.endTime}
-                        onChange={(endTime: number): void =>
-                            updateCueAndCopyProperties(
-                                dispatch, props, props.cue.vttCue.startTime, endTime, props.cue.editUuid
-                            )}
-                    />
+                    {
+                        timecodesUnlocked
+                        ? (
+                            <>
+                                <TimeEditor
+                                    time={props.cue.vttCue.startTime}
+                                    onChange={(startTime: number): void =>
+                                updateCueAndCopyProperties(
+                                    dispatch, props, startTime, props.cue.vttCue.endTime, props.cue.editUuid
+                                )}
+                                />
+                                <TimeEditor
+                                    time={props.cue.vttCue.endTime}
+                                    onChange={(endTime: number): void =>
+                                updateCueAndCopyProperties(
+                                    dispatch, props, props.cue.vttCue.startTime, endTime, props.cue.editUuid
+                                )}
+                                />
+                            </>
+                        )
+                        : (
+                            <>
+                                <div>{getTimeString(props.cue.vttCue.startTime)}</div>
+                                <div>{getTimeString(props.cue.vttCue.endTime)}</div>
+                            </>
+                        )
+                    }
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <CueCategoryButton
