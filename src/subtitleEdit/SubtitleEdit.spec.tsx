@@ -40,7 +40,6 @@ import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 import { act } from "react-dom/test-utils";
 import CueCommentsToggle from "./toolbox/CueCommentsToggle";
-import TimecodesLockToggle from "./toolbox/TimecodesLockToggle";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
