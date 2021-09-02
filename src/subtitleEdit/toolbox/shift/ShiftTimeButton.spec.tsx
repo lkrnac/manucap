@@ -15,6 +15,8 @@ ShiftTimeModal.mockImplementation(({ show }): ReactElement => show ? <div>shown<
 describe("ShiftTimeButton", () => {
     it("renders with shown modal", () => {
         // GIVEN
+        testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
@@ -44,6 +46,8 @@ describe("ShiftTimeButton", () => {
 
     it("renders with hidden modal", () => {
         // GIVEN
+        testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
@@ -72,6 +76,8 @@ describe("ShiftTimeButton", () => {
 
     it("opens shift time modal when button is clicked", () => {
         // GIVEN
+        testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+
         const actualNode = mount(
             <Provider store={testingStore}>
                 <ShiftTimeButton />
@@ -104,7 +110,7 @@ describe("ShiftTimeButton", () => {
 
     it("renders disabled if timecodes are locked", () => {
         // GIVEN
-        testingStore.dispatch(timecodesLockSlice.actions.setTimecodesLock(false));
+        testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(false));
 
         const expectedNode = mount(
             <Provider store={testingStore}>

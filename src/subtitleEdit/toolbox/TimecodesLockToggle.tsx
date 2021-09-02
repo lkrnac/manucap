@@ -12,7 +12,7 @@ export const TimecodesLockToggle = (): ReactElement => {
             className="btn btn-secondary"
             toggled={timecodesUnlocked}
             onClick={(): void => {
-                dispatch(timecodesLockSlice.actions.setTimecodesLock(!timecodesUnlocked));
+                dispatch(timecodesLockSlice.actions.unlockTimecodes(!timecodesUnlocked));
             }}
             render={(toggle): ReactElement => (
                 toggle
