@@ -51,7 +51,7 @@ const Toolbox = (props: Props): ReactElement => {
                             <SearchReplaceButton />
                             { isTranslation ? <SyncCuesButton /> : null }
                             <CueCommentsToggle />
-                            <TimecodesLockToggle />
+                            { isTranslation ? <TimecodesLockToggle /> : null }
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>

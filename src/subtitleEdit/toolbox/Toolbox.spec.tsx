@@ -45,7 +45,6 @@ describe("Toolbox", () => {
                                     <ImportTrackCuesButton handleImport={jest.fn()} />
                                     <SearchReplaceButton />
                                     <CueCommentsToggle />
-                                    <TimecodesLockToggle />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>

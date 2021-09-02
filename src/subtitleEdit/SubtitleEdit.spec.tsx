@@ -746,7 +746,6 @@ describe("SubtitleEdit", () => {
                                                 <ImportTrackCuesButton handleImport={jest.fn()} disabled />
                                                 <SearchReplaceButton />
                                                 <CueCommentsToggle />
-                                                <TimecodesLockToggle />
                                             </ButtonToolbar>
                                         </Card.Body>
                                     </Accordion.Collapse>
