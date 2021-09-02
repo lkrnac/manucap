@@ -101,6 +101,8 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
     const className = (validationErrors && validationErrors.length) > 0 ? "blink-error-bg" : "bg-white";
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const isTranslation = editingTrack?.type === "TRANSLATION";
     const timecodesUnlocked = useSelector((state: SubtitleEditState) => state.timecodesUnlocked);
 
     return (
@@ -117,29 +119,29 @@ const CueEdit = (props: CueEditProps): ReactElement => {
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
                     {
-                        timecodesUnlocked
+                        isTranslation && !timecodesUnlocked
                         ? (
                             <>
-                                <TimeEditor
-                                    time={props.cue.vttCue.startTime}
-                                    onChange={(startTime: number): void =>
-                                updateCueAndCopyProperties(
-                                    dispatch, props, startTime, props.cue.vttCue.endTime, props.cue.editUuid
-                                )}
-                                />
-                                <TimeEditor
-                                    time={props.cue.vttCue.endTime}
-                                    onChange={(endTime: number): void =>
-                                updateCueAndCopyProperties(
-                                    dispatch, props, props.cue.vttCue.startTime, endTime, props.cue.editUuid
-                                )}
-                                />
+                                <div>{getTimeString(props.cue.vttCue.startTime)}</div>
+                                <div>{getTimeString(props.cue.vttCue.endTime)}</div>
                             </>
                         )
                         : (
                             <>
-                                <div>{getTimeString(props.cue.vttCue.startTime)}</div>
-                                <div>{getTimeString(props.cue.vttCue.endTime)}</div>
+                                <TimeEditor
+                                    time={props.cue.vttCue.startTime}
+                                    onChange={(startTime: number): void =>
+                                        updateCueAndCopyProperties(
+                                            dispatch, props, startTime, props.cue.vttCue.endTime, props.cue.editUuid
+                                        )}
+                                />
+                                <TimeEditor
+                                    time={props.cue.vttCue.endTime}
+                                    onChange={(endTime: number): void =>
+                                        updateCueAndCopyProperties(
+                                            dispatch, props, props.cue.vttCue.startTime, endTime, props.cue.editUuid
+                                        )}
+                                />
                             </>
                         )
                     }
