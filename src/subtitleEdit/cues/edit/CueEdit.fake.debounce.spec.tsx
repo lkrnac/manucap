@@ -314,8 +314,32 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div>00:00:00.000</div>
-                                <div>00:00:02.000</div>
+                                <div style={{
+                                    border: "1px solid",
+                                    borderRadius: "4px",
+                                    width: "110px",
+                                    textAlign: "center",
+                                    padding: "5px",
+                                    backgroundColor: "rgb(224,224,224)",
+                                    marginTop: "5px",
+                                    cursor: "not-allowed"
+                                }}
+                                >
+                                    00:00:00.000
+                                </div>
+                                <div style={{
+                                    border: "1px solid",
+                                    borderRadius: "4px",
+                                    width: "110px",
+                                    textAlign: "center",
+                                    padding: "5px",
+                                    backgroundColor: "rgb(224,224,224)",
+                                    marginTop: "5px",
+                                    cursor: "not-allowed"
+                                }}
+                                >
+                                    00:00:02.000
+                                </div>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <div className="dropdown">

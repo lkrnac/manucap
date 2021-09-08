@@ -1,6 +1,6 @@
 import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
-import React, { Dispatch, ReactElement, useEffect } from "react";
+import React, { CSSProperties, Dispatch, ReactElement, useEffect } from "react";
 import { addCue, updateCueCategory, updateVttCue } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
@@ -14,6 +14,7 @@ import { playVideoSection } from "../../player/playbackSlices";
 import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { getTimeString } from "../../utils/timeUtils";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 export interface CueEditProps {
     index: number;
@@ -31,6 +32,19 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEdi
 const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
     ? cues.map(sourceCue => sourceCue.index)
     : [];
+
+const getLockedTimecodeStyle = (): CSSProperties => {
+    return {
+        border: "1px solid",
+        borderRadius: "4px",
+        width: "110px",
+        textAlign: "center",
+        padding: "5px",
+        backgroundColor: "rgb(224,224,224)",
+        marginTop: "5px",
+        cursor: "not-allowed"
+    };
+};
 
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
@@ -122,8 +136,24 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                         isTranslation && !timecodesUnlocked
                         ? (
                             <>
-                                <div>{getTimeString(props.cue.vttCue.startTime)}</div>
-                                <div>{getTimeString(props.cue.vttCue.endTime)}</div>
+                                <TooltipWrapper
+                                    tooltipId="disabledTimecodeTooltip"
+                                    text="Timecodes are locked"
+                                    placement="right"
+                                >
+                                    <div style={getLockedTimecodeStyle()}>
+                                        {getTimeString(props.cue.vttCue.startTime)}
+                                    </div>
+                                </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="disabledTimecodeTooltip"
+                                    text="Timecodes are locked"
+                                    placement="right"
+                                >
+                                    <div style={getLockedTimecodeStyle()}>
+                                        {getTimeString(props.cue.vttCue.endTime)}
+                                    </div>
+                                </TooltipWrapper>
                             </>
                         )
                         : (
