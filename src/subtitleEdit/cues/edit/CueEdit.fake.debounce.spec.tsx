@@ -27,7 +27,7 @@ import { updateCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
-import { updateEditingTrack } from "../../trackSlices";
+import { timecodesLockSlice, updateEditingTrack } from "../../trackSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
@@ -36,7 +36,6 @@ import { updateSourceCues } from "../view/sourceCueSlices";
 import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { setCurrentPlayerTime } from "../cuesList/cuesListScrollSlice";
-import { timecodesLockSlice } from "../timecodesSlices";
 
 jest.mock("lodash", () => (
     {

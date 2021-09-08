@@ -5,7 +5,7 @@ import ShiftTimeButton from "./ShiftTimeButton";
 import ShiftTimeModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
-import { timecodesLockSlice } from "../../cues/timecodesSlices";
+import { timecodesLockSlice } from "../../trackSlices";
 
 jest.mock("./ShiftTimeModal");
 

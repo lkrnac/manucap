@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import ToggleButton from "./ToggleButton";
-import { timecodesLockSlice } from "../cues/timecodesSlices";
+import { timecodesLockSlice } from "../trackSlices";
 
 export const TimecodesLockToggle = (): ReactElement => {
     const dispatch = useDispatch();
