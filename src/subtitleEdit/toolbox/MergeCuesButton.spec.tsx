@@ -17,7 +17,7 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn btn-secondary sbte-merge-cues-button">
-                <i className="fas fa-cut" /> Merge Cues
+                <i className="fas fa-compress-alt" /> Merge Cues
             </button>
         );
 

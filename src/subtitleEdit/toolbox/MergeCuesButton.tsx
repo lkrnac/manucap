@@ -14,7 +14,7 @@ const MergeCuesButton = (): ReactElement => {
                 dispatch(showMerge(true));
             }}
         >
-            <i className="fas fa-cut" /> Merge Cues
+            <i className="fas fa-compress-alt" /> Merge Cues
         </button>
     );
 };
