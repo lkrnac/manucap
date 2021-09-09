@@ -18,7 +18,11 @@ import { updateEditingTrack } from "../../trackSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 
 let testingStore = createTestingStore();
-const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
+const testTrack = {
+    mediaTitle: "testingTrack",
+    language: { id: "en-US", name: "English", direction: "LTR" },
+    timecodesUnlocked: true
+};
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -27,6 +31,7 @@ const testingCues = [
 describe("SplitCueLineButton", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
     });
 
     it("renders", () => {
@@ -35,6 +40,31 @@ describe("SplitCueLineButton", () => {
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-split-cue-button"
+            >
+                <i className="fas fa-cut" />
+            </button>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <SplitCueLineButton cueIndex={0} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders disabled if timecodes are locked", () => {
+        // GIVEN
+        testingStore.dispatch(
+            updateEditingTrack( { ...testTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
+        const expectedNode = render(
+            <button
+                style={{ maxHeight: "38px", margin: "5px" }}
+                className="btn btn-outline-secondary sbte-split-cue-button"
+                disabled
             >
                 <i className="fas fa-cut" />
             </button>

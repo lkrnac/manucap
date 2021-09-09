@@ -1,14 +1,18 @@
 import React, { ReactElement } from "react";
 import { showMerge } from "../cues/merge/mergeSlices";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showSearchReplace } from "../cues/searchReplace/searchReplaceSlices";
+import { SubtitleEditState } from "../subtitleEditReducers";
 
 const MergeCuesButton = (): ReactElement => {
     const dispatch = useDispatch();
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button
             type="button"
             className="btn btn-secondary sbte-merge-cues-button"
+            disabled={!timecodesUnlocked}
             onClick={(): void => {
                 dispatch(showSearchReplace(false));
                 dispatch(showMerge(true));
