@@ -4,6 +4,9 @@ import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
 import { createTestingStore } from "../../testUtils/testingStore";
 import TimecodesLockToggle from "./TimecodesLockToggle";
+import { Track } from "../model";
+import { updateEditingTrack } from "../trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -57,6 +60,13 @@ describe("TimecodesLockToggle", () => {
 
     it("toggles timecodes lock in store on toggle", () => {
         // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US" },
+            default: true,
+            timecodesUnlocked: false
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <TimecodesLockToggle />
@@ -67,6 +77,6 @@ describe("TimecodesLockToggle", () => {
         fireEvent.click(actualNode.container.querySelector(".btn") as Element);
 
         // THEN
-        expect(testingStore.getState().timecodesUnlocked).toEqual(true);
+        expect(testingStore.getState().editingTrack.timecodesUnlocked).toEqual(true);
     });
 });

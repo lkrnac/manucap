@@ -28,17 +28,6 @@ export const taskSlice = createSlice({
     }
 });
 
-export const timecodesLockSlice = createSlice({
-    name: "timecodesUnlocked",
-    initialState: false,
-    reducers: {
-        unlockTimecodes: (_state, action: PayloadAction<boolean>): boolean => action.payload
-    },
-    extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
-    }
-});
-
 export const updateEditingTrack = (track: Track): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(editingTrackSlice.actions.updateEditingTrack({ editingTrack: track }));

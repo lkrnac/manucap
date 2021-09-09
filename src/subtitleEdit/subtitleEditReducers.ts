@@ -1,6 +1,6 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
 import { cuesSlice, matchedCuesSlice } from "./cues/cuesList/cuesListSlices";
-import { editingTrackSlice, taskSlice, timecodesLockSlice } from "./trackSlices";
+import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { userSlice } from "./userSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
@@ -45,7 +45,6 @@ export const Reducers = {
     matchedCues: matchedCuesSlice.reducer,
     currentPlayerTime: currentPlayerTimeSlice.reducer,
     commentsVisible: commentsVisibleSlice.reducer,
-    timecodesUnlocked: timecodesLockSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

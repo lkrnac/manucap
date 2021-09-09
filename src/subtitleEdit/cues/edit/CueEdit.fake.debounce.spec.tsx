@@ -27,7 +27,7 @@ import { updateCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
-import { timecodesLockSlice, updateEditingTrack } from "../../trackSlices";
+import { updateEditingTrack } from "../../trackSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
@@ -397,8 +397,8 @@ describe("CueEdit", () => {
 
         it("renders for translation task with timecodes unlocked", () => {
             // GIVEN
-            testingStore.dispatch(updateEditingTrack(testTranslationTrack as Track) as {} as AnyAction);
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack({ ...testTranslationTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
 
             const expectedNode = mount(
                 <Provider store={testingStore}>
@@ -503,7 +503,8 @@ describe("CueEdit", () => {
 
         it("updates cue in redux store when start time minutes changed", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[1];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -522,7 +523,8 @@ describe("CueEdit", () => {
 
         it("updates cue in redux store when start time seconds changed", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[1];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -541,7 +543,8 @@ describe("CueEdit", () => {
 
         it("updates cue in redux store when start time millis changed", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -560,7 +563,8 @@ describe("CueEdit", () => {
 
         it("calls saveTrack in redux store when start time changes", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const cue = {
@@ -586,7 +590,8 @@ describe("CueEdit", () => {
 
         it("updates cue in redux store when end time changed", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -605,7 +610,8 @@ describe("CueEdit", () => {
 
         it("calls saveTrack in redux store when end time changes", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const cue = {
@@ -631,7 +637,8 @@ describe("CueEdit", () => {
 
         it("maintains cue styling when start time changes", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.position = 60;
             vttCue.align = "end";
@@ -658,7 +665,8 @@ describe("CueEdit", () => {
 
         it("maintains cue styling when end time changes", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.position = 60;
             vttCue.align = "end";
@@ -969,7 +977,8 @@ describe("CueEdit", () => {
 
         it("Force set startTime to max value if passed invalid startTime range value", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -988,7 +997,8 @@ describe("CueEdit", () => {
 
         it("Force set endtime to lowest value if passed invalid endtime range value", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -1007,7 +1017,8 @@ describe("CueEdit", () => {
 
         it("Force set endtime to lowest value if passed endtime value equals to startime", () => {
             // GIVEN
-            testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(

@@ -117,7 +117,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     const className = (validationErrors && validationErrors.length) > 0 ? "blink-error-bg" : "bg-white";
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const isTranslation = editingTrack?.type === "TRANSLATION";
-    const timecodesUnlocked = useSelector((state: SubtitleEditState) => state.timecodesUnlocked);
+    const timecodesUnlocked = editingTrack?.timecodesUnlocked;
 
     return (
         <div style={{ display: "flex" }} className={"sbte-bottom-border " + className}>

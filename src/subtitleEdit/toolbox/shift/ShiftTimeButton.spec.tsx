@@ -5,18 +5,27 @@ import ShiftTimeButton from "./ShiftTimeButton";
 import ShiftTimeModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
-import { timecodesLockSlice } from "../../trackSlices";
+import { updateEditingTrack } from "../../trackSlices";
+import { Track } from "../../model";
+import { AnyAction } from "redux";
 
 jest.mock("./ShiftTimeModal");
 
 // @ts-ignore We are mocking module
 ShiftTimeModal.mockImplementation(({ show }): ReactElement => show ? <div>shown</div> : <div />);
 
+const testTrack = {
+    mediaTitle: "testingTrack",
+    language: { id: "en-US", name: "English", direction: "LTR" },
+    timecodesUnlocked: true
+};
+
 describe("ShiftTimeButton", () => {
+    beforeEach(() => {
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+    });
     it("renders with shown modal", () => {
         // GIVEN
-        testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
-
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
@@ -46,8 +55,6 @@ describe("ShiftTimeButton", () => {
 
     it("renders with hidden modal", () => {
         // GIVEN
-        testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
-
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
@@ -76,8 +83,6 @@ describe("ShiftTimeButton", () => {
 
     it("opens shift time modal when button is clicked", () => {
         // GIVEN
-        testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(true));
-
         const actualNode = mount(
             <Provider store={testingStore}>
                 <ShiftTimeButton />
@@ -110,8 +115,8 @@ describe("ShiftTimeButton", () => {
 
     it("renders disabled if timecodes are locked", () => {
         // GIVEN
-        testingStore.dispatch(timecodesLockSlice.actions.unlockTimecodes(false));
-
+        testingStore.dispatch(
+            updateEditingTrack( { ...testTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
