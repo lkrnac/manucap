@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { useDispatch } from "react-redux";
 import { showSearchReplace } from "../cues/searchReplace/searchReplaceSlices";
+import { showMerge } from "../cues/merge/mergeSlices";
 
 const SearchReplaceButton = (): ReactElement => {
     const dispatch = useDispatch();
@@ -9,6 +10,7 @@ const SearchReplaceButton = (): ReactElement => {
             type="button"
             className="sbte-search-replace-button btn btn-secondary"
             onClick={(): void => {
+                dispatch(showMerge(false));
                 dispatch(showSearchReplace(true));
             }}
         >
