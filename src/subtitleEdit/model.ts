@@ -50,6 +50,11 @@ export interface CueLineDto {
     targetCues?: CueDtoWithIndex[];
 }
 
+export interface CuesWithRowIndex {
+    index: number;
+    cues?: CueDtoWithIndex[];
+}
+
 export interface LanguageCues {
     readonly languageId: string;
     readonly cues: CueDto[];
@@ -111,7 +116,7 @@ export interface LoadingIndicator {
 }
 
 export interface CueChange {
-    changeType: "ADD" | "EDIT" | "REMOVE";
+    changeType: "ADD" | "EDIT" | "REMOVE" | "SPLIT" | "MERGE";
     index: number;
     vttCue: VTTCue;
 }
@@ -146,6 +151,8 @@ export enum CueError {
     INVALID_RANGE_START = "Invalid Start Time",
     INVALID_RANGE_END = "Invalid End Time",
     OUT_OF_CHUNK_RAGE = "Out of Chunk Range",
+    MERGE_ERROR = "Merged subtitle is too long/Not enough subtitles selected",
+    SPLIT_ERROR = "Subtitle is too short to split",
     CHARS_PER_SECOND_EXCEEDED = "Max Characters Per Second Exceeded"
 }
 

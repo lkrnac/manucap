@@ -38,7 +38,8 @@ export const editorStatesSlice: Slice<
         [cuesSlice.actions.deleteCue.type]:
             (state, action: PayloadAction<CueIndexAction>): void => {
                 state.delete(action.payload.idx);
-            }
+            },
+        [cuesSlice.actions.mergeCues.type]: (): Map<number, EditorState> => new Map<number, EditorState>(),
     }
 });
 /* eslint-enable @typescript-eslint/no-explicit-any */

@@ -157,6 +157,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 cuesErrors={cuesErrors}
                 showErrors={showGlossaryTermsAndErrors}
                 editDisabled={cueLineEditDisabled}
+                cues={props.data.targetCues}
                 cueCommentsCount={cueCommentsCount}
             />
             <div

@@ -2,13 +2,13 @@ import "../../testUtils/initBrowserEnvironment";
 import React from "react";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
-import SearchReplaceButton from "./SearchReplaceButton";
 import { fireEvent, render } from "@testing-library/react";
 import MergeCuesButton from "./MergeCuesButton";
+import SearchReplaceButton from "./SearchReplaceButton";
 
 let testingStore = createTestingStore();
 
-describe("SeachReplaceButton", () => {
+describe("MergeCuesButton", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
     });
@@ -16,15 +16,15 @@ describe("SeachReplaceButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="sbte-search-replace-button btn btn-secondary">
-                <i className="fas fa-search-plus" /> Search/Replace
+            <button type="button" className="btn btn-secondary sbte-merge-cues-button">
+                <i className="fas fa-cut" /> Merge Cues
             </button>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SearchReplaceButton />
+                <MergeCuesButton />
             </Provider>
         );
 
@@ -32,23 +32,23 @@ describe("SeachReplaceButton", () => {
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("sets search replace visible on button click", () => {
+    it("sets merge visible on button click", () => {
         // GIVEN
         const { getByText } = render(
             <Provider store={testingStore}>
-                <SearchReplaceButton />
+                <MergeCuesButton />
             </Provider>
         );
-        const searchButton = getByText("Search/Replace");
+        const mergeButton = getByText("Merge Cues");
 
         // WHEN
-        fireEvent.click(searchButton);
+        fireEvent.click(mergeButton);
 
         // THEN
-        expect(testingStore.getState().searchReplaceVisible).toBeTruthy();
+        expect(testingStore.getState().mergeVisible).toBeTruthy();
     });
 
-    it("hides merge on button click", () => {
+    it("hides search/replace on button click", () => {
         // GIVEN
         const { getByText } = render(
             <Provider store={testingStore}>
@@ -56,14 +56,14 @@ describe("SeachReplaceButton", () => {
                 <MergeCuesButton />
             </Provider>
         );
-        const mergeButton = getByText("Merge Cues");
         const searchButton = getByText("Search/Replace");
+        const mergeButton = getByText("Merge Cues");
 
         // WHEN
-        fireEvent.click(mergeButton);
         fireEvent.click(searchButton);
+        fireEvent.click(mergeButton);
 
         // THEN
-        expect(testingStore.getState().mergeVisible).toBeFalsy();
+        expect(testingStore.getState().searchReplaceVisible).toBeFalsy();
     });
 });
