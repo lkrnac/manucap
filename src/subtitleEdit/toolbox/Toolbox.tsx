@@ -12,6 +12,7 @@ import SyncCuesButton from "./SyncCuesButton";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
+import MergeCuesButton from "./MergeCuesButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
 
@@ -49,6 +50,7 @@ const Toolbox = (props: Props): ReactElement => {
                             />
                             <SearchReplaceButton />
                             { isTranslation ? <SyncCuesButton /> : null }
+                            <MergeCuesButton />
                             <CueCommentsToggle />
                         </ButtonToolbar>
                     </Card.Body>

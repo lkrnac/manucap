@@ -1,10 +1,14 @@
-import React, { CSSProperties, ReactElement } from "react";
-import { CUE_LINE_STATE_CLASSES, CueError, CueLineState } from "../../model";
+import React, { CSSProperties, ReactElement, useEffect, useState } from "react";
+import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineState, CuesWithRowIndex } from "../../model";
+import { useDispatch, useSelector } from "react-redux";
+import { SubtitleEditState } from "../../subtitleEditReducers";
+import { addCuesToMergeList, removeCuesToMergeList } from "../cuesList/cuesListActions";
 import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
     rowIndex: number;
     cueLineState: CueLineState;
+    cues: CueDtoWithIndex[] | undefined;
     cuesErrors?: CueError[];
     showErrors?: boolean;
     editDisabled?: boolean;
@@ -34,56 +38,94 @@ const getIconStyle = (bottom: string): CSSProperties => {
 };
 
 const CueLineFlap = (props: Props): ReactElement => {
+    const dispatch = useDispatch();
+    const mergeVisible = useSelector((state: SubtitleEditState) => state.mergeVisible);
+    const rowsToMerge = useSelector((state: SubtitleEditState) => state.rowsToMerge);
+    const [checked, setChecked] = useState(false);
     const showCommentsIcon = props.cueCommentsCount && props.cueCommentsCount > 0;
+
+    useEffect(() => {
+        setChecked(rowsToMerge.find(row => row.index === props.rowIndex) !== undefined);
+    }, [props.rowIndex, rowsToMerge]);
+
+    const isContiguousToSelected = (): boolean => {
+        if (rowsToMerge && rowsToMerge.length > 0) {
+            const validIndices = [props.rowIndex - 1, props.rowIndex, props.rowIndex + 1];
+            return rowsToMerge
+                .map((selectedRow: CuesWithRowIndex): boolean => validIndices.indexOf(selectedRow.index) > -1)
+                .reduce((selectedRow1: boolean, selectedRow2: boolean): boolean => selectedRow1 || selectedRow2);
+        }
+        return true;
+    };
+
     return (
-        <div
-            className={CUE_LINE_STATE_CLASSES.get(props.cueLineState)?.flapClass}
-            style={{
-                textAlign: "center",
-                width: "30px",
-                color: "white",
-                position: "relative",
-                minHeight: props.editDisabled && showCommentsIcon ? "100px" : "80px"
-            }}
-        >
-            <div style={{ paddingTop: "10px", fontSize: "11px", fontWeight: "bold" }}>
-                {props.rowIndex + 1}
-            </div>
-            <div
-                style={getIconStyle(showCommentsIcon ? "50px" : "30px")}
-            >
+        <div style={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 {
-                    props.editDisabled
-                        ? <i className="fa fa-lock" />
+                    mergeVisible
+                        ? <input
+                            type="checkbox"
+                            className="sbte-cue-line-flap-checkbox"
+                            disabled={props.editDisabled || !isContiguousToSelected()}
+                            checked={checked}
+                            onChange={(): void => {
+                                const cuesWithIndex = {
+                                    index: props.rowIndex,
+                                    cues: props.cues
+                                };
+                                dispatch(checked
+                                    ? removeCuesToMergeList(cuesWithIndex)
+                                    : addCuesToMergeList(cuesWithIndex));
+                                setChecked(!checked);
+                            }}
+                          />
                         : null
                 }
             </div>
             <div
-                style={getIconStyle("30px")}
+                className={CUE_LINE_STATE_CLASSES.get(props.cueLineState)?.flapClass}
+                style={{
+                    textAlign: "center",
+                    width: "30px",
+                    color: "white",
+                    position: "relative",
+                    display: "flex",
+                    flexDirection: "column",
+                    minHeight: props.editDisabled && showCommentsIcon ? "100px" : "80px"
+                }}
             >
-                {
-                    showCommentsIcon
-                        ? getCommentIcon(props.rowIndex)
-                        : null
-                }
-            </div>
-            <div
-                style={getIconStyle("10px")}
-            >
-                {
-                    props.cueLineState === CueLineState.ERROR
-                        ? <i className="fas fa-exclamation-triangle" />
-                        : null
-                }
-                {
-                    props.cueLineState === CueLineState.GOOD
-                        ? <i className="fa fa-check" />
-                        : null
-                }
+                <div style={{ paddingTop: "10px", fontSize: "11px", fontWeight: "bold" }}>
+                    {props.rowIndex + 1}
+                </div>
+                <div style={getIconStyle(showCommentsIcon ? "50px" : "30px")}>
+                    {
+                        props.editDisabled
+                            ? <i className="fa fa-lock" />
+                            : null
+                    }
+                </div>
+                <div style={getIconStyle("30px")}>
+                    {
+                        showCommentsIcon
+                            ? getCommentIcon(props.rowIndex)
+                            : null
+                    }
+                </div>
+                <div style={getIconStyle("10px")}>
+                    {
+                        props.cueLineState === CueLineState.ERROR
+                            ? <i className="fas fa-exclamation-triangle" />
+                            : null
+                    }
+                    {
+                        props.cueLineState === CueLineState.GOOD
+                            ? <i className="fa fa-check" />
+                            : null
+                    }
+                </div>
             </div>
         </div>
     );
 };
 
 export default CueLineFlap;
-

@@ -3,6 +3,7 @@ import AddCueLineButton from "../edit/AddCueLineButton";
 import { CueDto } from "../../model";
 import DeleteCueLineButton from "../edit/DeleteCueLineButton";
 import PlayCueButton from "./PlayCueButton";
+import SplitCueLineButton from "../edit/SplitCueLineButton";
 
 interface Props {
     index: number;
@@ -24,6 +25,11 @@ export const CueActionsPanel = (props: Props): ReactElement => {
                     : <div />
             }
             <PlayCueButton cue={props.cue} />
+            {
+                props.isEdit
+                    ? <SplitCueLineButton cueIndex={props.index} />
+                    : <div />
+            }
             {
                 props.isEdit
                     ? <AddCueLineButton cueIndex={props.index} sourceCueIndexes={props.sourceCueIndexes} />

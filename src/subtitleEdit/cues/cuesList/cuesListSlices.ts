@@ -51,6 +51,12 @@ export interface SpellCheckRemovalAction extends CueIndexAction {
     trackId: string;
 }
 
+export interface MergeAction {
+    mergedCue: CueDto;
+    startIndex: number;
+    endIndex: number;
+}
+
 export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
@@ -141,6 +147,11 @@ export const cuesSlice = createSlice({
                 copyNonConstructorProperties(newCue, vttCue);
                 return ({ ...cue, vttCue: newCue } as CueDto);
             });
+        },
+        mergeCues: (state, action: PayloadAction<MergeAction>): CueDto[] => {
+            state[action.payload.startIndex] = action.payload.mergedCue;
+            state.splice(action.payload.startIndex + 1, action.payload.endIndex - action.payload.startIndex);
+            return state;
         }
     },
     extraReducers: {
