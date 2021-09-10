@@ -186,7 +186,7 @@ describe("SubtitleEdit", () => {
                                     rowRef={React.createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
@@ -329,7 +329,7 @@ describe("SubtitleEdit", () => {
                                 sourceCueIndexes={[]}
                             />
                             <div style={{ overflow: "auto" }} />
-                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
@@ -609,7 +609,7 @@ describe("SubtitleEdit", () => {
                                     rowRef={React.createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
@@ -770,7 +770,7 @@ describe("SubtitleEdit", () => {
                                     rowRef={React.createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
@@ -949,7 +949,7 @@ describe("SubtitleEdit", () => {
                                     rowRef={React.createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
