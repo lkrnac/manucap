@@ -40,6 +40,7 @@ describe("SplitCueLineButton", () => {
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-split-cue-button"
+                title="Unlock timecodes to enable"
             >
                 <i className="fas fa-cut" />
             </button>
@@ -65,6 +66,7 @@ describe("SplitCueLineButton", () => {
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-split-cue-button"
                 disabled
+                title="Unlock timecodes to enable"
             >
                 <i className="fas fa-cut" />
             </button>

@@ -32,6 +32,7 @@ describe("ShiftTimeButton", () => {
                     <button
                         type="button"
                         className="btn btn-secondary dotsub-shift-time-button"
+                        title="Unlock timecodes to enable"
                     >
                         <i className="fas fa-angle-double-right" /> Shift All Tracks Time
                     </button>
@@ -61,6 +62,7 @@ describe("ShiftTimeButton", () => {
                     <button
                         type="button"
                         className="btn btn-secondary dotsub-shift-time-button"
+                        title="Unlock timecodes to enable"
                     >
                         <i className="fas fa-angle-double-right" /> Shift All Tracks Time
                     </button>
@@ -124,6 +126,7 @@ describe("ShiftTimeButton", () => {
                         type="button"
                         className="btn btn-secondary dotsub-shift-time-button"
                         disabled
+                        title="Unlock timecodes to enable"
                     >
                         <i className="fas fa-angle-double-right" /> Shift All Tracks Time
                     </button>

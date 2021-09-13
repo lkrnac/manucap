@@ -26,7 +26,11 @@ describe("MergeCuesButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary sbte-merge-cues-button">
+            <button
+                type="button"
+                className="btn btn-secondary sbte-merge-cues-button"
+                title="Unlock timecodes to enable"
+            >
                 <i className="fas fa-compress-alt" /> Merge Cues
             </button>
         );
@@ -47,7 +51,12 @@ describe("MergeCuesButton", () => {
         testingStore.dispatch(
             updateEditingTrack( { ...testTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary sbte-merge-cues-button" disabled>
+            <button
+                type="button"
+                className="btn btn-secondary sbte-merge-cues-button"
+                disabled
+                title="Unlock timecodes to enable"
+            >
                 <i className="fas fa-compress-alt" /> Merge Cues
             </button>
         );
