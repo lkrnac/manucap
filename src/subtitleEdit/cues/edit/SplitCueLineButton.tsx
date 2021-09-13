@@ -22,6 +22,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-split-cue-button"
                 disabled={!timecodesUnlocked}
+                title="Unlock timecodes to enable"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}
             >
                 <i className="fas fa-cut" />

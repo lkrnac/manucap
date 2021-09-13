@@ -13,6 +13,7 @@ const MergeCuesButton = (): ReactElement => {
             type="button"
             className="btn btn-secondary sbte-merge-cues-button"
             disabled={!timecodesUnlocked}
+            title="Unlock timecodes to enable"
             onClick={(): void => {
                 dispatch(showSearchReplace(false));
                 dispatch(showMerge(true));
