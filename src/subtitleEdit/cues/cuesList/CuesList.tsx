@@ -9,9 +9,7 @@ import { addCue } from "./cuesListActions";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
-import { changeScrollPosition } from "./cuesListScrollSlice";
-
-const DEFAULT_PAGE_SIZE = 50;
+import { changeScrollPosition, DEFAULT_PAGE_SIZE } from "./cuesListScrollSlice";
 
 interface Props {
     editingTrack: Track | null;

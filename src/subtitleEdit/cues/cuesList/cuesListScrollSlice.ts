@@ -2,7 +2,7 @@ import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { CueDto, ScrollPosition } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 
-export const DEFAULT_PAGE_SIZE = 50;
+export const DEFAULT_PAGE_SIZE = 100;
 
 export const currentPlayerTimeSlice = createSlice({
     name: "currentPlayerTime",
