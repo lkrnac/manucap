@@ -1,6 +1,6 @@
 import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
-import React, { Dispatch, ReactElement, useEffect } from "react";
+import React, { CSSProperties, Dispatch, ReactElement, useEffect } from "react";
 import { addCue, updateCueCategory, updateVttCue } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { playVideoSection } from "../../player/playbackSlices";
 import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
+import { getTimeString } from "../../utils/timeUtils";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 export interface CueEditProps {
     index: number;
@@ -30,6 +32,19 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEdi
 const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
     ? cues.map(sourceCue => sourceCue.index)
     : [];
+
+const getLockedTimecodeStyle = (): CSSProperties => {
+    return {
+        border: "1px solid",
+        borderRadius: "4px",
+        width: "110px",
+        textAlign: "center",
+        padding: "5px",
+        backgroundColor: "rgb(224,224,224)",
+        marginTop: "5px",
+        cursor: "not-allowed"
+    };
+};
 
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
@@ -100,6 +115,9 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
     const className = (validationErrors && validationErrors.length) > 0 ? "blink-error-bg" : "bg-white";
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const isTranslation = editingTrack?.type === "TRANSLATION";
+    const timecodesUnlocked = editingTrack?.timecodesUnlocked;
 
     return (
         <div style={{ display: "flex" }} className={"sbte-bottom-border " + className}>
@@ -114,20 +132,49 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 }}
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
-                    <TimeEditor
-                        time={props.cue.vttCue.startTime}
-                        onChange={(startTime: number): void =>
-                            updateCueAndCopyProperties(
-                                dispatch, props, startTime, props.cue.vttCue.endTime, props.cue.editUuid
-                            )}
-                    />
-                    <TimeEditor
-                        time={props.cue.vttCue.endTime}
-                        onChange={(endTime: number): void =>
-                            updateCueAndCopyProperties(
-                                dispatch, props, props.cue.vttCue.startTime, endTime, props.cue.editUuid
-                            )}
-                    />
+                    {
+                        isTranslation && !timecodesUnlocked
+                        ? (
+                            <>
+                                <TooltipWrapper
+                                    tooltipId="disabledTimecodeTooltip"
+                                    text="Timecodes are locked"
+                                    placement="right"
+                                >
+                                    <div style={getLockedTimecodeStyle()}>
+                                        {getTimeString(props.cue.vttCue.startTime)}
+                                    </div>
+                                </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="disabledTimecodeTooltip"
+                                    text="Timecodes are locked"
+                                    placement="right"
+                                >
+                                    <div style={getLockedTimecodeStyle()}>
+                                        {getTimeString(props.cue.vttCue.endTime)}
+                                    </div>
+                                </TooltipWrapper>
+                            </>
+                        )
+                        : (
+                            <>
+                                <TimeEditor
+                                    time={props.cue.vttCue.startTime}
+                                    onChange={(startTime: number): void =>
+                                        updateCueAndCopyProperties(
+                                            dispatch, props, startTime, props.cue.vttCue.endTime, props.cue.editUuid
+                                        )}
+                                />
+                                <TimeEditor
+                                    time={props.cue.vttCue.endTime}
+                                    onChange={(endTime: number): void =>
+                                        updateCueAndCopyProperties(
+                                            dispatch, props, props.cue.vttCue.startTime, endTime, props.cue.editUuid
+                                        )}
+                                />
+                            </>
+                        )
+                    }
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <CueCategoryButton

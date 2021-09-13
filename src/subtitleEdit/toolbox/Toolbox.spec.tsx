@@ -23,6 +23,7 @@ import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import { fireEvent, render } from "@testing-library/react";
 import MergeCuesButton from "./MergeCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
+import TimecodesLockToggle from "./TimecodesLockToggle";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -101,6 +102,7 @@ describe("Toolbox", () => {
                                     <SyncCuesButton />
                                     <MergeCuesButton />
                                     <CueCommentsToggle />
+                                    <TimecodesLockToggle />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>

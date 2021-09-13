@@ -1,7 +1,7 @@
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import React, { ReactElement } from "react";
 import { splitCue } from "../cuesList/cuesListActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
@@ -10,6 +10,8 @@ interface Props {
 
 const SplitCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <TooltipWrapper
             tooltipId="splitCueBtnTooltip"
@@ -19,6 +21,8 @@ const SplitCueLineButton = (props: Props): ReactElement => {
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-split-cue-button"
+                disabled={!timecodesUnlocked}
+                title="Unlock timecodes to enable"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}
             >
                 <i className="fas fa-cut" />

@@ -34,7 +34,7 @@ describe("CueActionsPanel", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
+        testingStore.dispatch(updateEditingTrack({ timecodesUnlocked: true } as Track) as {} as AnyAction);
     });
 
     it("renders for caption cue in edit mode", () => {

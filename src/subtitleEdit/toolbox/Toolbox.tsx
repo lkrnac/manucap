@@ -15,6 +15,7 @@ import SearchReplaceButton from "./SearchReplaceButton";
 import MergeCuesButton from "./MergeCuesButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
+import TimecodesLockToggle from "./TimecodesLockToggle";
 
 interface Props {
     handleExportFile: () => void;
@@ -52,6 +53,7 @@ const Toolbox = (props: Props): ReactElement => {
                             { isTranslation ? <SyncCuesButton /> : null }
                             <MergeCuesButton />
                             <CueCommentsToggle />
+                            { isTranslation ? <TimecodesLockToggle /> : null }
                         </ButtonToolbar>
                     </Card.Body>
                 </Accordion.Collapse>

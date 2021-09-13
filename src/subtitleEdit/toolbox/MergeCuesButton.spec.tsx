@@ -5,19 +5,59 @@ import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
 import MergeCuesButton from "./MergeCuesButton";
 import SearchReplaceButton from "./SearchReplaceButton";
+import { updateEditingTrack } from "../trackSlices";
+import { AnyAction } from "@reduxjs/toolkit";
+import { Track } from "../model";
 
 let testingStore = createTestingStore();
+
+const testTrack = {
+    mediaTitle: "testingTrack",
+    language: { id: "en-US", name: "English", direction: "LTR" },
+    timecodesUnlocked: true
+};
 
 describe("MergeCuesButton", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
     });
 
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary sbte-merge-cues-button">
-                <i className="fas fa-cut" /> Merge Cues
+            <button
+                type="button"
+                className="btn btn-secondary sbte-merge-cues-button"
+                title="Unlock timecodes to enable"
+            >
+                <i className="fas fa-compress-alt" /> Merge Cues
+            </button>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <MergeCuesButton />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders disabled if timecodes are locked", () => {
+        // GIVEN
+        testingStore.dispatch(
+            updateEditingTrack( { ...testTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
+        const expectedNode = render(
+            <button
+                type="button"
+                className="btn btn-secondary sbte-merge-cues-button"
+                disabled
+                title="Unlock timecodes to enable"
+            >
+                <i className="fas fa-compress-alt" /> Merge Cues
             </button>
         );
 

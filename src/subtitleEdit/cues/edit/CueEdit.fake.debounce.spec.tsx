@@ -57,6 +57,14 @@ const cues = [
 ];
 
 const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
+const testTranslationTrack = {
+    type: "TRANSLATION",
+    language: { id: "fr-FR", name: "French (France)" } as Language,
+    sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+    default: true,
+    mediaTitle: "This is the video title",
+    mediaLength: 4000,
+} as Track;
 
 describe("CueEdit", () => {
     beforeEach(() => {
@@ -77,8 +85,321 @@ describe("CueEdit", () => {
 
     describe("major use cases", () => {
 
-        it("renders", () => {
+        it("renders for caption task", () => {
             // GIVEN
+            const expectedNode = mount(
+                <Provider store={testingStore}>
+                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
+                        <div
+                            style={{
+                                flex: "1 1 300px",
+                                display: "flex",
+                                flexDirection: "column",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <div style={{
+                                display: "flex",
+                                flexDirection:"column",
+                                paddingBottom: "15px"
+                            }}
+                            >
+                                <input
+                                    type="text"
+                                    className="sbte-time-input mousetrap"
+                                    style={{
+                                        marginBottom: "5px",
+                                        width: "110px",
+                                        maxWidth: "200px",
+                                        padding: "5px",
+                                        textAlign: "center"
+                                    }}
+                                    value="00:00:00.000"
+                                    onChange={(): void => undefined}
+                                />
+                                <input
+                                    type="text"
+                                    className="sbte-time-input mousetrap"
+                                    style={{
+                                        marginBottom: "5px",
+                                        width: "110px",
+                                        maxWidth: "200px",
+                                        padding: "5px",
+                                        textAlign: "center"
+                                    }}
+                                    value="00:00:02.000"
+                                    onChange={(): void => undefined}
+                                />
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }} >
+                                <div className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="cue-line-category"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        Dialogue
+                                    </button>
+                                </div>
+                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="dropdown-basic"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        ↓↓ <span className="caret" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                            <CueTextEditor
+                                key={1}
+                                index={0}
+                                vttCue={cues[0].vttCue}
+                                bindCueViewModeKeyboardShortcut={jest.fn()}
+                                unbindCueViewModeKeyboardShortcut={jest.fn()}
+                            />
+                        </div>
+                        <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
+                    </div>
+                </Provider>
+            );
+            testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueEdit
+                        index={0}
+                        cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html()))
+                .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        });
+
+        it("renders for caption task", () => {
+            // GIVEN
+            const expectedNode = mount(
+                <Provider store={testingStore}>
+                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
+                        <div
+                            style={{
+                                flex: "1 1 300px",
+                                display: "flex",
+                                flexDirection: "column",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <div style={{
+                                display: "flex",
+                                flexDirection:"column",
+                                paddingBottom: "15px"
+                            }}
+                            >
+                                <input
+                                    type="text"
+                                    className="sbte-time-input mousetrap"
+                                    style={{
+                                        marginBottom: "5px",
+                                        width: "110px",
+                                        maxWidth: "200px",
+                                        padding: "5px",
+                                        textAlign: "center"
+                                    }}
+                                    value="00:00:00.000"
+                                    onChange={(): void => undefined}
+                                />
+                                <input
+                                    type="text"
+                                    className="sbte-time-input mousetrap"
+                                    style={{
+                                        marginBottom: "5px",
+                                        width: "110px",
+                                        maxWidth: "200px",
+                                        padding: "5px",
+                                        textAlign: "center"
+                                    }}
+                                    value="00:00:02.000"
+                                    onChange={(): void => undefined}
+                                />
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }} >
+                                <div className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="cue-line-category"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        Dialogue
+                                    </button>
+                                </div>
+                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="dropdown-basic"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        ↓↓ <span className="caret" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                            <CueTextEditor
+                                key={1}
+                                index={0}
+                                vttCue={cues[0].vttCue}
+                                bindCueViewModeKeyboardShortcut={jest.fn()}
+                                unbindCueViewModeKeyboardShortcut={jest.fn()}
+                            />
+                        </div>
+                        <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
+                    </div>
+                </Provider>
+            );
+            testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueEdit
+                        index={0}
+                        cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html()))
+                .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        });
+
+        it("renders for translation task", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingTrack(testTranslationTrack as Track) as {} as AnyAction);
+            const expectedNode = mount(
+                <Provider store={testingStore}>
+                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
+                        <div
+                            style={{
+                                flex: "1 1 300px",
+                                display: "flex",
+                                flexDirection: "column",
+                                paddingLeft: "10px",
+                                paddingTop: "5px",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <div style={{
+                                display: "flex",
+                                flexDirection:"column",
+                                paddingBottom: "15px"
+                            }}
+                            >
+                                <div style={{
+                                    border: "1px solid",
+                                    borderRadius: "4px",
+                                    width: "110px",
+                                    textAlign: "center",
+                                    padding: "5px",
+                                    backgroundColor: "rgb(224,224,224)",
+                                    marginTop: "5px",
+                                    cursor: "not-allowed"
+                                }}
+                                >
+                                    00:00:00.000
+                                </div>
+                                <div style={{
+                                    border: "1px solid",
+                                    borderRadius: "4px",
+                                    width: "110px",
+                                    textAlign: "center",
+                                    padding: "5px",
+                                    backgroundColor: "rgb(224,224,224)",
+                                    marginTop: "5px",
+                                    cursor: "not-allowed"
+                                }}
+                                >
+                                    00:00:02.000
+                                </div>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }} >
+                                <div className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="cue-line-category"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        Dialogue
+                                    </button>
+                                </div>
+                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
+                                    <button
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        id="dropdown-basic"
+                                        type="button"
+                                        className="dropdown-toggle btn btn-outline-secondary"
+                                    >
+                                        ↓↓ <span className="caret" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                            <CueTextEditor
+                                key={1}
+                                index={0}
+                                vttCue={cues[0].vttCue}
+                                bindCueViewModeKeyboardShortcut={jest.fn()}
+                                unbindCueViewModeKeyboardShortcut={jest.fn()}
+                            />
+                        </div>
+                        <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
+                    </div>
+                </Provider>
+            );
+            testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueEdit
+                        index={0}
+                        cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html()))
+                .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+        });
+
+        it("renders for translation task with timecodes unlocked", () => {
+            // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack({ ...testTranslationTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
+
             const expectedNode = mount(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
@@ -182,6 +503,8 @@ describe("CueEdit", () => {
 
         it("updates cue in redux store when start time minutes changed", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[1];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -200,6 +523,8 @@ describe("CueEdit", () => {
 
         it("updates cue in redux store when start time seconds changed", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[1];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -218,6 +543,8 @@ describe("CueEdit", () => {
 
         it("updates cue in redux store when start time millis changed", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -236,6 +563,8 @@ describe("CueEdit", () => {
 
         it("calls saveTrack in redux store when start time changes", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const cue = {
@@ -261,6 +590,8 @@ describe("CueEdit", () => {
 
         it("updates cue in redux store when end time changed", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -279,6 +610,8 @@ describe("CueEdit", () => {
 
         it("calls saveTrack in redux store when end time changes", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const cue = {
@@ -304,6 +637,8 @@ describe("CueEdit", () => {
 
         it("maintains cue styling when start time changes", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.position = 60;
             vttCue.align = "end";
@@ -330,6 +665,8 @@ describe("CueEdit", () => {
 
         it("maintains cue styling when end time changes", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.position = 60;
             vttCue.align = "end";
@@ -640,6 +977,8 @@ describe("CueEdit", () => {
 
         it("Force set startTime to max value if passed invalid startTime range value", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -658,6 +997,8 @@ describe("CueEdit", () => {
 
         it("Force set endtime to lowest value if passed invalid endtime range value", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
@@ -676,6 +1017,8 @@ describe("CueEdit", () => {
 
         it("Force set endtime to lowest value if passed endtime value equals to startime", () => {
             // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const cue = testingStore.getState().cues[0];
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(

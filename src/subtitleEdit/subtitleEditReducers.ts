@@ -47,7 +47,7 @@ export const Reducers = {
     focusedCueIndex: scrollPositionSlice.reducer,
     matchedCues: matchedCuesSlice.reducer,
     currentPlayerTime: currentPlayerTimeSlice.reducer,
-    commentsVisible: commentsVisibleSlice.reducer
+    commentsVisible: commentsVisibleSlice.reducer,
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

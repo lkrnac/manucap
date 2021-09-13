@@ -71,6 +71,7 @@ export interface Track {
     readonly sourceLanguage?: Language;
     readonly progress: number;
     overlapEnabled?: boolean;
+    timecodesUnlocked?: boolean;
     id?: string;
     createdBy: User;
 }
