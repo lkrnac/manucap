@@ -44,19 +44,22 @@ const CuesList = (props: Props): ReactElement => {
 
     useEffect(
         () => {
+            if (showStartCaptioning) {
+                Mousetrap.bind([KeyCombination.ENTER], () => dispatch(addCue(0, [])));
+            }
+        },
+        [dispatch, showStartCaptioning]
+    );
+
+    useEffect(
+        () => {
             setRefs(
                 Array(matchedCues.matchedCues.length)
                     .fill(undefined)
                     .map(() => createRef())
             );
-            Mousetrap.bind([KeyCombination.ENTER], () => {
-                if (showStartCaptioning) {
-                    dispatch(addCue(0, []));
-                }
-                return false;
-            });
         },
-        [dispatch, matchedCues.matchedCues.length, showStartCaptioning]
+        [dispatch, matchedCues.matchedCues.length]
     );
 
     useEffect(

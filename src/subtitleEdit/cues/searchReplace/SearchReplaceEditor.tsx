@@ -98,7 +98,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 />
             </div>
             <button
-                className="btn btn-secondary btn-sm"
+                className="btn btn-secondary btn-sm sbte-search-next"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-next"
@@ -109,7 +109,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 <i className="fa fa-arrow-down" />
             </button>
             <button
-                className="btn btn-secondary btn-sm"
+                className="btn btn-secondary btn-sm sbte-search-prev"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-prev"
