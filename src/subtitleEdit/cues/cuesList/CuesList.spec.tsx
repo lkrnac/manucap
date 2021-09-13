@@ -62,7 +62,7 @@ const testingTranslationTrack = {
 
 let testingStore = createTestingStore();
 
-const matchedCues = Array.from({ length: 120 }, (_element, index) => (
+const matchedCues = Array.from({ length: 220 }, (_element, index) => (
     {
         sourceCues: [
             {
@@ -209,7 +209,7 @@ describe("CuesList", () => {
                 <Provider store={testingStore}>
                     <div style={{ overflow: "auto" }}>
                         {
-                            Array.from({ length: 55 }, (_element, index) => (
+                            Array.from({ length: 105 }, (_element, index) => (
                                 <CueLine
                                     key={index}
                                     data={matchedCues[index]}
@@ -251,7 +251,7 @@ describe("CuesList", () => {
             // GIVEN
             testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
             testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -264,11 +264,11 @@ describe("CuesList", () => {
                             Load Previous Cues
                         </button>
                         {
-                            Array.from({ length: 60 }, (_element, index) => (
+                            Array.from({ length: 110 }, (_element, index) => (
                                 <CueLine
-                                    key={index + 45}
-                                    data={matchedCues[index + 45]}
-                                    rowIndex={index + 45}
+                                    key={index + 95}
+                                    data={matchedCues[index + 95]}
+                                    rowIndex={index + 95}
                                     rowProps={{
                                         targetCuesLength: 120,
                                         withoutSourceCues: false,
@@ -306,7 +306,7 @@ describe("CuesList", () => {
             // GIVEN
             testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
             testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(202) as {} as AnyAction);
 
             const expectedNode = render(
                 <Provider store={testingStore}>
@@ -321,9 +321,9 @@ describe("CuesList", () => {
                         {
                             Array.from({ length: 25 }, (_element, index) => (
                                 <CueLine
-                                    key={index + 95}
-                                    data={matchedCues[index + 95]}
-                                    rowIndex={index + 95}
+                                    key={index + 195}
+                                    data={matchedCues[index + 195]}
+                                    rowIndex={index + 195}
                                     rowProps={{
                                         targetCuesLength: 120,
                                         withoutSourceCues: false,
@@ -374,7 +374,7 @@ describe("CuesList", () => {
             // GIVEN
             testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
             testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(202) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
@@ -393,7 +393,7 @@ describe("CuesList", () => {
             });
 
             // THEN
-            expect(testingStore.getState().focusedCueIndex).toEqual(99);
+            expect(testingStore.getState().focusedCueIndex).toEqual(199);
         });
 
         it("'Load Next Cues' scrolls to next page", () => {
