@@ -27,9 +27,9 @@ describe("cuesListScrollSlice", () => {
                 matchedCues: testingMatchedCues,
                 cues: testingTargetCues,
                 sourceCues: testingSourceCues,
-                editingCueIndex: 58,
+                editingCueIndex: 108,
                 currentPlayerTime: 65,
-                focusedCueIndex: 60
+                focusedCueIndex: 110
             });
         });
 
@@ -39,8 +39,8 @@ describe("cuesListScrollSlice", () => {
             [ScrollPosition.LAST, 119],
             [ScrollPosition.CURRENT, 58],
             [ScrollPosition.PLAYBACK, 64],
-            [ScrollPosition.NEXT_PAGE, 100],
-            [ScrollPosition.PREVIOUS_PAGE, 49],
+            [ScrollPosition.NEXT_PAGE, 200],
+            [ScrollPosition.PREVIOUS_PAGE, 99],
             [ScrollPosition.LAST_TRANSLATED, 69],
             [undefined, null],
         ])
@@ -62,7 +62,7 @@ describe("cuesListScrollSlice", () => {
                 matchedCues: testingMatchedCues,
                 cues: testingTargetCues,
                 sourceCues: testingSourceCues,
-                editingCueIndex: 58,
+                editingCueIndex: 108,
                 currentPlayerTime: 65,
             });
         });
@@ -73,7 +73,7 @@ describe("cuesListScrollSlice", () => {
             [ScrollPosition.LAST, 119],
             [ScrollPosition.CURRENT, 58],
             [ScrollPosition.PLAYBACK, 64],
-            [ScrollPosition.NEXT_PAGE, 50],
+            [ScrollPosition.NEXT_PAGE, 100],
             [ScrollPosition.PREVIOUS_PAGE, -1],
             [ScrollPosition.LAST_TRANSLATED, 69],
             [undefined, null],
