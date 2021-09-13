@@ -120,7 +120,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             <SearchReplaceEditor />
                             <MergeEditor />
                             <CuesList editingTrack={editingTrack} commentAuthor={props.commentAuthor} />
-                            <div style={{ marginTop: "15px", display: "flex", justifyContent: "flex-end" }}>
+                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
                                 <button
                                     className="btn btn-primary sbte-view-all-tracks-btn"
                                     type="button"
