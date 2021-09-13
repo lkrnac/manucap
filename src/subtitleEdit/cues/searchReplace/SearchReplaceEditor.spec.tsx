@@ -72,7 +72,7 @@ describe("SearchReplaceEditor", () => {
                     />
                 </div>
                 <button
-                    className="btn btn-secondary btn-sm"
+                    className="btn btn-secondary btn-sm sbte-search-next"
                     type="button"
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-next"
@@ -80,7 +80,7 @@ describe("SearchReplaceEditor", () => {
                     <i className="fa fa-arrow-down" />
                 </button>
                 <button
-                    className="btn btn-secondary btn-sm"
+                    className="btn btn-secondary btn-sm sbte-search-prev"
                     type="button"
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-prev"

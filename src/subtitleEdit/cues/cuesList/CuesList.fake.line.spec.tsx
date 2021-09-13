@@ -15,7 +15,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { reset } from "../edit/editorStatesSlice";
 import { act } from "react-dom/test-utils";
 import { changeScrollPosition } from "./cuesListScrollSlice";
-import { Character } from "../../utils/shortcutConstants";
+import { Character, KeyCombination } from "../../utils/shortcutConstants";
 import { updateSourceCues } from "../view/sourceCueSlices";
 
 jest.mock(
@@ -943,5 +943,49 @@ describe("CuesList", () => {
         // THEN
         expect(testingStore.getState().cues.length).toEqual(1);
         expect(testingStore.getState().editingCueIndex).toEqual(0);
+    });
+
+    it("doesn't rebind enter key binding when cues are added", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+            default: true,
+            mediaTitle: "Sample Polish",
+            mediaLength: 4000,
+            progress: 50
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        render(
+            <Provider store={testingStore}>
+                <CuesList editingTrack={testingDirectTranslationTrack} />
+            </Provider >
+        );
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+        // WHEN
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+        // THEN
+        expect(testingStore.getState().cues.length).toEqual(1);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
+
+        // WHEN
+        const testEnterBinding = jest.fn();
+        Mousetrap.bind([KeyCombination.ENTER], testEnterBinding);
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        simulant.fire(
+            document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+        // THEN
+        expect(testEnterBinding).toHaveBeenCalled();
+        expect(testingStore.getState().cues.length).toEqual(3);
+        expect(testingStore.getState().editingCueIndex).toEqual(-1);
     });
 });
