@@ -12,6 +12,7 @@ import { Language, Track } from "../model";
 let testingStore = createTestingStore();
 
 const testTrack = {
+    type: "CAPTION",
     mediaTitle: "testingTrack",
     language: { id: "en-US", name: "English", direction: "LTR" },
     timecodesUnlocked: true

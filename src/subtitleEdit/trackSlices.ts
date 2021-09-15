@@ -16,7 +16,7 @@ export const editingTrackSlice = createSlice({
     initialState: null as Track | null,
     reducers: {
         updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track =>
-            action.payload.editingTrack.type !== "TRANSLATION"
+            action.payload.editingTrack.type === "CAPTION"
                 ? { ...action.payload.editingTrack, timecodesUnlocked: true }
                 : action.payload.editingTrack,
         resetEditingTrack: (): Track | null => null

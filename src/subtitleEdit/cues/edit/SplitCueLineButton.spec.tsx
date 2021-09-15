@@ -19,6 +19,7 @@ import { updateCues } from "../cuesList/cuesListActions";
 
 let testingStore = createTestingStore();
 const testTrack = {
+    type: "CAPTION",
     mediaTitle: "testingTrack",
     language: { id: "en-US", name: "English", direction: "LTR" },
     timecodesUnlocked: true

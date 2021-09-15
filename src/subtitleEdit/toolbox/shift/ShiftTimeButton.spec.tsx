@@ -15,6 +15,7 @@ jest.mock("./ShiftTimeModal");
 ShiftTimeModal.mockImplementation(({ show }): ReactElement => show ? <div>shown</div> : <div />);
 
 const testTrack = {
+    type: "CAPTION",
     mediaTitle: "testingTrack",
     language: { id: "en-US", name: "English", direction: "LTR" },
     timecodesUnlocked: true
