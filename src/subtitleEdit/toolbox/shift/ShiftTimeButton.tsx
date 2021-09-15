@@ -8,6 +8,7 @@ const ShiftTimeButton = (): ReactElement => {
     const handleClose = (): void => setShow(false);
     const handleShow = (): void => setShow(true);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const isTranslation = editingTrack?.type === "TRANSLATION";
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <>
@@ -15,7 +16,7 @@ const ShiftTimeButton = (): ReactElement => {
                 onClick={handleShow}
                 type="button"
                 className="btn btn-secondary dotsub-shift-time-button"
-                disabled={!timecodesUnlocked}
+                disabled={isTranslation && !timecodesUnlocked}
                 title="Unlock timecodes to enable"
             >
                 <i className="fas fa-angle-double-right" /> Shift All Tracks Time

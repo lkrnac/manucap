@@ -7,12 +7,13 @@ import { SubtitleEditState } from "../subtitleEditReducers";
 const MergeCuesButton = (): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const isTranslation = editingTrack?.type === "TRANSLATION";
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button
             type="button"
             className="btn btn-secondary sbte-merge-cues-button"
-            disabled={!timecodesUnlocked}
+            disabled={isTranslation && !timecodesUnlocked}
             title="Unlock timecodes to enable"
             onClick={(): void => {
                 dispatch(showSearchReplace(false));

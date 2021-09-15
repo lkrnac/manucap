@@ -12,7 +12,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
 
 import SplitCueLineButton from "./SplitCueLineButton";
-import { CueDto, Track } from "../../model";
+import { CueDto, Language, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
 import { updateCues } from "../cuesList/cuesListActions";
@@ -23,6 +23,14 @@ const testTrack = {
     language: { id: "en-US", name: "English", direction: "LTR" },
     timecodesUnlocked: true
 };
+const testTranslationTrack = {
+    type: "TRANSLATION",
+    language: { id: "fr-FR", name: "French (France)" } as Language,
+    sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+    default: true,
+    mediaTitle: "This is the video title",
+    mediaLength: 4000,
+} as Track;
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -57,10 +65,35 @@ describe("SplitCueLineButton", () => {
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("renders disabled if timecodes are locked", () => {
+    it("renders enabled if timecodes are locked but track is caption", () => {
         // GIVEN
         testingStore.dispatch(
             updateEditingTrack( { ...testTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
+        const expectedNode = render(
+            <button
+                style={{ maxHeight: "38px", margin: "5px" }}
+                className="btn btn-outline-secondary sbte-split-cue-button"
+                title="Unlock timecodes to enable"
+            >
+                <i className="fas fa-cut" />
+            </button>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <SplitCueLineButton cueIndex={0} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders disabled if timecodes are locked and track is translation", () => {
+        // GIVEN
+        testingStore.dispatch(
+            updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
