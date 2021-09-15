@@ -15,7 +15,10 @@ export const editingTrackSlice = createSlice({
     name: "editingTrack",
     initialState: null as Track | null,
     reducers: {
-        updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track => action.payload.editingTrack,
+        updateEditingTrack: (_state, action: PayloadAction<EditingTrackAction>): Track =>
+            action.payload.editingTrack.type != "TRANSLATION"
+                ? { ...action.payload.editingTrack, timecodesUnlocked: true }
+                : action.payload.editingTrack,
         resetEditingTrack: (): Track | null => null
     }
 });

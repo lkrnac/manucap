@@ -21,7 +21,7 @@ jest.mock("lodash", () => ({
 }));
 
 const saveTrack = jest.fn();
-const testingTrack = { mediaTitle: "testingTrack" } as Track;
+const testingTrack = { mediaTitle: "testingTrack", timecodesUnlocked: true } as Track;
 const testingCues = [
     { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS" }
 ] as CueDto[];

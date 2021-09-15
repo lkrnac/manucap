@@ -9,6 +9,7 @@ const testingTrack = {
     language: { id: "en-US" },
     default: true,
     mediaTitle: "This is the video title",
+    timecodesUnlocked: true
 } as Track;
 
 const testingTask = {
