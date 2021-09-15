@@ -12,6 +12,7 @@ const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US" },
     default: true,
+    timecodesUnlocked: true
 } as Track;
 
 let testingStore = createTestingStore();
