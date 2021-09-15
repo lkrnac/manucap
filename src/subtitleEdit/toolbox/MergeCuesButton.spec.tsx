@@ -57,8 +57,6 @@ describe("MergeCuesButton", () => {
 
     it("renders enabled if timecodes are locked but track is caption", () => {
         // GIVEN
-        testingStore.dispatch(
-            updateEditingTrack( { ...testTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
             <button
                 type="button"
