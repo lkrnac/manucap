@@ -11,7 +11,6 @@ interface Props {
 const SplitCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const isTranslation = editingTrack?.type === "TRANSLATION";
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <TooltipWrapper
@@ -22,7 +21,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
                 className="btn btn-outline-secondary sbte-split-cue-button"
-                disabled={isTranslation && !timecodesUnlocked}
+                disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}
             >
