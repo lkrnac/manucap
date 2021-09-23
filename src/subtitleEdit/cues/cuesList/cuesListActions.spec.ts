@@ -496,25 +496,26 @@ describe("cueSlices", () => {
             });
 
             it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
+                // GIVEN
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() => new Promise((resolve) =>
+                        resolve({ status: 400, ok: false })));
+
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
                 testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[2].editUuid;
-
-                // @ts-ignore modern browsers does have it
-                global.fetch = jest.fn()
-                    .mockImplementation(() => new Promise((resolve) =>
-                        resolve({ status: 400, ok: false })));
 
                 //WHEN
                 for (let i = 0; i < 10; i++) {
                     await act(async () => {
+                        const editUuid = testingStore.getState().cues[2].editUuid;
                         testingStore.dispatch(
-                            updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
-                                editUuid) as {} as AnyAction);
+                            updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"), editUuid) as {} as AnyAction
+                        );
                     });
                 }
 
