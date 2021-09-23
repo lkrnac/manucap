@@ -93,17 +93,6 @@ const CueEdit = (props: CueEditProps): ReactElement => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        if (props.nextCueLine === undefined) {
-            updateCueAndCopyProperties(
-                dispatch,
-                props,
-                props.cue.vttCue.startTime + 3,
-                props.cue.vttCue.endTime + 3,
-                props.cue.editUuid
-            );
-        }
-    },[props.index]);
 
     useEffect(() => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
@@ -120,6 +109,15 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 dispatch, props, props.cue.vttCue.startTime, currentPlayerTime, props.cue.editUuid
             );
         });
+        if (props.nextCueLine === undefined) {
+            updateCueAndCopyProperties(
+                dispatch,
+                props,
+                props.cue.vttCue.startTime + 3,
+                props.cue.vttCue.endTime + 3,
+                props.cue.editUuid
+            );
+        }
     }, [ dispatch, props, currentPlayerTime ]);
 
     useEffect(() => {
