@@ -256,18 +256,19 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     </>
                                 );
                         })
-                        : (
-
-                            <ClickCueWrapper
-                                targetCueIndex={firstTargetCueIndex}
-                                targetCuesLength={props.rowProps.targetCuesLength}
-                                className={"sbte-gray-200-background"}
-                                sourceCuesIndexes={sourceCuesIndexes}
-                                nextTargetCueIndex={nextTargetCueIndex}
-                            >
-                                <InsertCueButton />
-                            </ClickCueWrapper>
-                        )
+                        : cueLineEditDisabled
+                            ? null
+                            : (
+                                <ClickCueWrapper
+                                    targetCueIndex={firstTargetCueIndex}
+                                    targetCuesLength={props.rowProps.targetCuesLength}
+                                    className={"sbte-gray-200-background"}
+                                    sourceCuesIndexes={sourceCuesIndexes}
+                                    nextTargetCueIndex={nextTargetCueIndex}
+                                >
+                                    <InsertCueButton />
+                                </ClickCueWrapper>
+                            )
                 }
             </div>
         </div>
