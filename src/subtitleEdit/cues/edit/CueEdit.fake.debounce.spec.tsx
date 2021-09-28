@@ -1521,7 +1521,7 @@ describe("CueEdit", () => {
             // THEN
             const editingCueIndex =  testingStore.getState().editingCueIndex;
             const lastCueIndex = testingStore.getState().cues.length - 1;
-            expect(editingCueIndex).toEqual(lastCueIndex);
+            expect(editingCueIndex).toEqual(2);
             expect(testingStore.getState().cues[lastCueIndex].vttCue.startTime).toEqual(currentPlayer);
             expect(testingStore.getState().cues[lastCueIndex].vttCue.endTime).toEqual(currentPlayer + 3);
         });

@@ -122,7 +122,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
             );
         });
 
-    }, [ dispatch, props, currentPlayerTime ]);
+    }, [ dispatch, props, currentPlayerTime, cuesCount ]);
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {
