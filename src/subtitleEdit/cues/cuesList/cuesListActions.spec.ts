@@ -495,26 +495,92 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.errors).toEqual([]);
             });
 
-            it("disable calls to spellchecker when if language tool responds with 400 error", async () => {
+            it("doesn't disable calls to spellchecker when if language tool responds with random error", async () => {
+                // GIVEN
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() => new Promise((resolve) =>
+                        resolve({ status: 400, ok: false })));
+
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(
                     { language: { id: "en-US" }, id: trackId } as Track
                 ) as {} as AnyAction);
                 testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[2].editUuid;
-
-                // @ts-ignore modern browsers does have it
-                global.fetch = jest.fn()
-                    .mockImplementation(() => new Promise((resolve) =>
-                        resolve({ status: 400, ok: false })));
 
                 //WHEN
                 for (let i = 0; i < 10; i++) {
                     await act(async () => {
+                        const editUuid = testingStore.getState().cues[2].editUuid;
                         testingStore.dispatch(
-                            updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"),
-                                editUuid) as {} as AnyAction);
+                            updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"), editUuid) as {} as AnyAction
+                        );
+                    });
+                }
+
+                //THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledTimes(10);
+            });
+
+            it("doesn't disable calls to spellchecker when if spell checker fetch promise is rejected", async () => {
+                // GIVEN
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() => new Promise((_resolve, reject) => reject()));
+
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: trackId } as Track
+                ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+                //WHEN
+                for (let i = 0; i < 10; i++) {
+                    await act(async () => {
+                        const editUuid = testingStore.getState().cues[2].editUuid;
+                        testingStore.dispatch(
+                            updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"), editUuid) as {} as AnyAction
+                        );
+                    });
+                }
+
+                //THEN
+                // @ts-ignore modern browsers does have it
+                expect(global.fetch).toBeCalledTimes(10);
+            });
+
+            it("disable calls to spellchecker when if language tool responds no language supported error", async () => {
+                // GIVEN
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn().mockImplementation(() => new Promise((resolve) => resolve({
+                    status: 400,
+                    ok: false,
+                    text: () => Promise.resolve("Error: 'gg' is not a language code known to LanguageTool. " +
+                        "Supported language codes are: ar, ar-DZ, ast-ES, be-BY, br-FR, ca-ES, ca-ES-valencia, " +
+                        "da-DK, de, de-AT, de-CH, de-DE, de-DE-x-simple-language, el-GR, en, en-AU, en-CA, en-GB, " +
+                        "en-NZ, en-US, en-ZA, eo, es, fa, fr, ga-IE, gl-ES, it, ja-JP, km-KH, nl, pl-PL, pt, pt-AO, " +
+                        "pt-BR, pt-MZ, pt-PT, ro-RO, ru-RU, sk-SK, sl-SI, sv, ta-IN, tl-PH, uk-UA, zh-CN. " +
+                        "The list of languages is read from META-INF/org/languagetool/language-module.properties " +
+                        "in the Java classpath. See http://wiki.languagetool.org/java-api for details.")
+                })));
+
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "gg" }, id: trackId } as Track
+                ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+                //WHEN
+                for (let i = 0; i < 10; i++) {
+                    await act(async () => {
+                        const editUuid = testingStore.getState().cues[2].editUuid;
+                        testingStore.dispatch(
+                            updateVttCue(2, new VTTCue(2, 2.5, "Dummyx Cue"), editUuid) as {} as AnyAction
+                        );
                     });
                 }
 

@@ -16,8 +16,10 @@ export const spellcheckerSettingsSlice: Slice = createSlice({
     }, extraReducers: {
         // @ts-ignore: This is standard redux-toolkit construct
         [applySpellcheckerOnCue.rejected]:
-            (state: SpellcheckerSettings): void => {
-                state.enabled = false;
+            (state: SpellcheckerSettings, action: PayloadAction<void, string, never, { message: string }>): void => {
+                if (action.error && action.error.message.includes("is not a language code known to LanguageTool")) {
+                    state.enabled = false;
+                }
             }
     }
 });

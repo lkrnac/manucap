@@ -37,11 +37,13 @@ export const fetchSpellCheck = (
         body: `language=${submittedLanguageCode}&text=${plainText}&disabledRules=${SPELLCHECKER_EXCLUDED_RULES}`
     };
     return fetch(`https://${spellCheckerSettings.domain}/v2/check`, requestBody)
-        .then((response: Response) => {
+        .then(async (response: Response) => {
             if (response.ok) {
                 return response.json();
             } else {
-                throw response.status;
+                throw response.text
+                    ? await response.text()
+                    : "random error";
             }
         });
 };
