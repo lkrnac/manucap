@@ -1593,6 +1593,45 @@ describe("CueLine", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
+        it("does not show insert cue button when editDisabled and there's no target cue", () => {
+            // GIVEN
+            const sourceCuesDisabled = [
+                {
+                    vttCue: new VTTCue(0, 1, "Source Line 1"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: true
+                } as CueDto,
+            ];
+            const sourceCuesDisabledWithIndexes = [
+                { index: 0, cue: sourceCuesDisabled[0] },
+            ];
+            const cueLine = { targetCues: [], sourceCues: sourceCuesDisabledWithIndexes };
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: false,
+                targetCuesLength: 0,
+                matchedCues: [cueLine],
+                commentAuthor: "Linguist"
+            } as CueLineRowProps;
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={0}
+                        data={cueLine}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            const insertCueButton = actualNode.container.querySelector(".sbte-add-cue-button") as Element;
+            expect(insertCueButton).toBeNull();
+        });
+
         it("fires write cue action when empty target cue is clicked", () => {
             // GIVEN
             const testingTrack = {
