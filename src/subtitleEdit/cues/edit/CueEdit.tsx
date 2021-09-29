@@ -96,25 +96,16 @@ const CueEdit = (props: CueEditProps): ReactElement => {
 
     useEffect(() => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
-            if (props.index === (cuesCount - 1)) {
-                // increase cue endTime by 3 seconds for
-                // last cue to resolve Invalid Start time issue
-                updateCueAndCopyProperties(
-                    dispatch,
-                    props,
-                    currentPlayerTime,
-                    currentPlayerTime + 3,
-                    props.cue.editUuid
-                );
-            } else {
-                updateCueAndCopyProperties(
-                    dispatch,
-                    props,
-                    currentPlayerTime,
-                    props.cue.vttCue.endTime,
-                    props.cue.editUuid
-                );
-            }
+            const endTime = props.index === (cuesCount - 1)
+                ? currentPlayerTime + 3
+                : props.cue.vttCue.endTime;
+            updateCueAndCopyProperties(
+                dispatch,
+                props,
+                currentPlayerTime,
+                endTime,
+                props.cue.editUuid
+            );
         });
         Mousetrap.bind([KeyCombination.MOD_SHIFT_DOWN, KeyCombination.ALT_SHIFT_DOWN], () => {
             updateCueAndCopyProperties(
