@@ -22,12 +22,13 @@ const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Lang
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
+const TIME_MATCH_TESTING = false;
+
 // const mediaChunkStart = undefined;
 // const mediaChunkEnd = undefined;
-const mediaChunkStart = 13000;
+const mediaChunkStart = TIME_MATCH_TESTING ? 0 : 13000;
 const mediaChunkEnd = 305000;
 
-const TIME_MATCH_TESTING = false;
 // ################## TESTING DATA TWEAKS - END ########################
 
 const sourceLanguage = { id: "sk", name: "Slovak", direction: "LTR" } as Language;
@@ -56,20 +57,68 @@ const TestApp = (): ReactElement => {
             const sourceCues = [] as CueDto[];
 
             if (TIME_MATCH_TESTING) {
-                sourceCues.push({ vttCue: new VTTCue(0, 1, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(1, 2, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(2, 3, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(3, 6, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({
+                    vttCue: new VTTCue(0, 1, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(0, 1)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(1, 2, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(1, 2)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(2, 3, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(2, 3)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(3, 6, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(3, 6)
+                });
 
-                sourceCues.push({ vttCue: new VTTCue(7.673, 10.208, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(10.746, 11.782, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(12.504, 14.768, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(15.169, 17.110, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({
+                    vttCue: new VTTCue(7.673, 10.208, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(7.673, 10.208)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(10.746, 11.782, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(10.746, 11.782)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(12.504, 14.768, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(12.504, 14.768)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(15.169, 17.110, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(15.169, 17.110)
+                });
 
-                sourceCues.push({ vttCue: new VTTCue(18.954, 20.838, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(21.674, 23.656, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(24.024, 24.504, "text"), cueCategory: "DIALOGUE" });
-                sourceCues.push({ vttCue: new VTTCue(25.383, 28.115, "text"), cueCategory: "DIALOGUE" });
+                sourceCues.push({
+                    vttCue: new VTTCue(18.954, 20.838, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(18.954, 20.838)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(21.674, 23.656, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(21.674, 23.656)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(24.024, 24.504, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(24.024, 24.504)
+                });
+                sourceCues.push({
+                    vttCue: new VTTCue(25.383, 28.115, "text"),
+                    cueCategory: "DIALOGUE",
+                    editDisabled: !inChunkRange(25.383, 28.115)
+                });
             }
 
             let endTime = START_SHIFT;
@@ -101,20 +150,68 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         const targetCues = [] as CueDto[];
         if (TIME_MATCH_TESTING) {
-            targetCues.push({ vttCue: new VTTCue(0, 3, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(3, 4, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(4, 5, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(5, 6, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({
+                vttCue: new VTTCue(0, 3, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(0, 3)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(3, 4, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(3, 4)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(4, 5, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(4, 5)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(5, 6, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(5, 6)
+            });
 
-            targetCues.push({ vttCue: new VTTCue(7.087, 10.048, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(10.411, 11.231, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(11.240, 13.985, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(14.380, 16.998, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({
+                vttCue: new VTTCue(7.087, 10.048, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(7.087, 10.048)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(10.411, 11.231, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(10.411, 11.231)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(11.240, 13.985, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(11.240, 13.985)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(14.380, 16.998, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(14.380, 16.998)
+            });
 
-            targetCues.push({ vttCue: new VTTCue(20.140, 21.494, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(21.979, 22.055, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(22.414, 25.209, "text"), cueCategory: "DIALOGUE" });
-            targetCues.push({ vttCue: new VTTCue(26.198, 27.412, "text"), cueCategory: "DIALOGUE" });
+            targetCues.push({
+                vttCue: new VTTCue(20.140, 21.494, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(20.140, 21.494)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(21.979, 22.055, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(21.979, 22.055)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(22.414, 25.209, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(22.414, 25.209)
+            });
+            targetCues.push({
+                vttCue: new VTTCue(26.198, 27.412, "text"),
+                cueCategory: "DIALOGUE",
+                editDisabled: !inChunkRange(26.198, 27.412)
+            });
         }
 
         let endTime = START_SHIFT;
