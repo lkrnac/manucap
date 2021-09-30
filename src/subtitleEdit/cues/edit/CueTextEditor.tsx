@@ -36,16 +36,19 @@ import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { Track } from "../../model";
 import { setGlossaryTerm } from "./cueEditorSlices";
+import debounce from "lodash.debounce";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
-        if (props.spellCheck && props.spellCheck.matches  && spellcheckerEnabled) {
-            props.spellCheck.matches.forEach(match => {
-                if (!hasIgnoredKeyword(match, editingTrack?.id)) {
-                    callback(match.offset, match.offset + match.length);
-                }
-            });
-        }
+         debounce(() => {
+             if (props.spellCheck && props.spellCheck.matches  && spellcheckerEnabled) {
+                 props.spellCheck.matches.forEach(match => {
+                     if (!hasIgnoredKeyword(match, editingTrack?.id)) {
+                         callback(match.offset, match.offset + match.length);
+                     }
+                 });
+             }
+         }, 300);
     };
 
 const findSearchReplaceMatch =
