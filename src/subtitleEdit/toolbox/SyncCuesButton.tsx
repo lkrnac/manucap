@@ -8,10 +8,12 @@ import { SubtitleEditState } from "../subtitleEditReducers";
 const SyncCuesButton = (): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button
             type="button"
             className="sbte-sync-cues-button btn btn-secondary"
+            disabled={!timecodesUnlocked}
             onClick={(): void => {
                 dispatch(syncCues());
                 // unset the track's id to force creating a new version
