@@ -64,6 +64,7 @@ const testTranslationTrack = {
     default: true,
     mediaTitle: "This is the video title",
     mediaLength: 4000,
+    timecodesUnlocked: false
 } as Track;
 
 describe("CueEdit", () => {
