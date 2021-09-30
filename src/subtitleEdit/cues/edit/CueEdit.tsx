@@ -69,6 +69,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
         Mousetrap.unbind([KeyCombination.ESCAPE, KeyCombination.ENTER]);
     };
 
+
     const bindCueViewModeKeyboardShortcut =(): void => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
         Mousetrap.bind([KeyCombination.ENTER], () => {
@@ -87,17 +88,22 @@ const CueEdit = (props: CueEditProps): ReactElement => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_ESCAPE, KeyCombination.ALT_SHIFT_ESCAPE],
             () => dispatch(updateEditingCueIndex(props.index - 1))
         );
+
         // no need for dependencies here since binding kb shortcuts should be done once
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
     useEffect(() => {
         Mousetrap.bind([KeyCombination.MOD_SHIFT_UP, KeyCombination.ALT_SHIFT_UP], () => {
+            const endTime = props.index === (cuesCount - 1)
+                ? currentPlayerTime + 3
+                : props.cue.vttCue.endTime;
             updateCueAndCopyProperties(
                 dispatch,
                 props,
                 currentPlayerTime,
-                props.cue.vttCue.endTime,
+                endTime,
                 props.cue.editUuid
             );
         });
@@ -106,7 +112,8 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 dispatch, props, props.cue.vttCue.startTime, currentPlayerTime, props.cue.editUuid
             );
         });
-    }, [ dispatch, props, currentPlayerTime ]);
+
+    }, [ dispatch, props, currentPlayerTime, cuesCount ]);
 
     useEffect(() => {
         Mousetrap.bind([ KeyCombination.MOD_SHIFT_K, KeyCombination.ALT_SHIFT_K ], () => {
