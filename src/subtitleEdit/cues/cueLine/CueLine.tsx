@@ -110,7 +110,9 @@ const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => (
                 }
             </div>
         )
-        : null
+        : (
+            <div className="sbte-cues-no-errors">No errors</div>
+        )
 );
 
 const CueLine = (props: CueLineProps): ReactElement => {
