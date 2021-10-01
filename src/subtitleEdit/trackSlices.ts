@@ -17,11 +17,10 @@ export const editingTrackSlice = createSlice({
     reducers: {
         updateEditingTrack: (state, action: PayloadAction<EditingTrackAction>): Track => {
             const track = action.payload.editingTrack;
-            const timecodesUnlocked = track.type === "TRANSLATION"
-                ? track.timecodesUnlocked !== undefined
+            const currentTimecodesUnlocked = track.timecodesUnlocked !== undefined
                     ? track.timecodesUnlocked
-                    : state?.timecodesUnlocked
-                : true;
+                    : state?.timecodesUnlocked;
+            const timecodesUnlocked = track.type === "TRANSLATION" ? currentTimecodesUnlocked : true;
             return { ...track, timecodesUnlocked };
         },
         resetEditingTrack: (): Track | null => null
