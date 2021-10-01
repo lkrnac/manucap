@@ -110,6 +110,7 @@ describe("CueLine", () => {
                                 cue={targetCues[0]}
                                 nextCueLine={matchedCuesCaptioning[1]}
                             />
+                            <div className="sbte-cues-no-errors">No errors</div>
                         </div>
                     </div>
                 </Provider>
@@ -450,6 +451,7 @@ describe("CueLine", () => {
                                 cue={targetCues[1]}
                                 nextCueLine={matchedCuesTranslation[2]}
                             />
+                            <div className="sbte-cues-no-errors">No errors</div>
                         </div>
                     </div>
                 </Provider>
@@ -516,6 +518,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={2}
                             />
                             <CueEdit index={2} cue={targetCues[2]} />
+                            <div className="sbte-cues-no-errors">No errors</div>
                         </div>
                     </div>
                 </Provider>
@@ -1211,6 +1214,7 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueEdit index={0} cue={targetCues[0]} />
+                            <div className="sbte-cues-no-errors">No errors</div>
                         </div>
                     </div>
                 </Provider>
@@ -1293,6 +1297,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={0}
                             />
                             <CueEdit index={1} cue={targetCues[1]}  />
+                            <div className="sbte-cues-no-errors">No errors</div>
                             <CueView
                                 isTargetCue
                                 targetCueIndex={2}
@@ -1828,6 +1833,7 @@ describe("CueLine", () => {
                                 nextCueLine={matchedCuesWithCommentsCaptioning[1]}
                             />
                             <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
+                            <div className="sbte-cues-no-errors">No errors</div>
                         </div>
                     </div>
                 </Provider>
