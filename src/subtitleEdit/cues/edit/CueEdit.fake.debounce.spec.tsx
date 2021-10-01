@@ -1388,7 +1388,6 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
 
-
         it("closes cue editing mode when ESCAPE is pressed", () => {
             // GIVEN
             const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
@@ -1495,6 +1494,36 @@ describe("CueEdit", () => {
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(1);
+        });
+
+        it("edits last cue startTime(currentPlayerTime) and endTime(currentPlayerTime + 3) on ALT+SHIFT+UP", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Cue 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const currentPlayer = 2.345;
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+            testingStore.dispatch(setCurrentPlayerTime(currentPlayer) as {} as AnyAction);
+            mount(
+                <Provider store={testingStore} >
+                    <CueEdit index={2} cue={cues[2]} />
+                </Provider>
+            );
+
+            // WHEN
+            simulant.fire(
+                document.documentElement, "keydown", { keyCode: Character.ARROW_UP, shiftKey: true, altKey: true }
+            );
+
+            // THEN
+            const editingCueIndex =  testingStore.getState().editingCueIndex;
+            const lastCueIndex = testingStore.getState().cues.length - 1;
+            expect(editingCueIndex).toEqual(2);
+            expect(testingStore.getState().cues[lastCueIndex].vttCue.startTime).toEqual(currentPlayer);
+            expect(testingStore.getState().cues[lastCueIndex].vttCue.endTime).toEqual(currentPlayer + 3);
         });
 
         it("blinks background when when validation error occurs", () => {
