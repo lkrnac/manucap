@@ -5,7 +5,7 @@ import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, Track } from "../model";
 import { editingTrackSlice } from "../trackSlices";
 
-const DEBOUNCE_TIMEOUT = 2500;
+const DEBOUNCE_TIMEOUT = 10_000;
 interface SaveActionWithPayload extends SubtitleEditAction {
     cues: CueDto[];
     editingTrack: Track | null;
