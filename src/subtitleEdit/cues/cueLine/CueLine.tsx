@@ -93,25 +93,25 @@ interface CueErrorsListProps {
     cue: CueDto;
 }
 
-const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => (
-    props.cue.errors && props.cue.errors.length > 0
+const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => {
+    const filteredCueErrors = props.cue.errors?.filter(error => error !== CueError.SPELLCHECK_ERROR);
+    return filteredCueErrors && filteredCueErrors.length > 0
         ? (
             <div className="sbte-cues-errors">
                 {
-                    props.cue.errors.map(
-                        (cueError: CueError, index: number): ReactElement => (
+                    filteredCueErrors
+                        .map((cueError: CueError, index: number): ReactElement => (
                             <CueErrorLine
                                 key={`cueError-${index}`}
                                 cueIndex={index}
                                 cueError={cueError}
                             />
+                            )
                         )
-                    )
                 }
             </div>
-        )
-        : null
-);
+        ) : null;
+};
 
 const CueLine = (props: CueLineProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
