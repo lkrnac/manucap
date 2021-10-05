@@ -8,8 +8,10 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const [show, setShow] = useState(false);
     useEffect(
         () => {
-            setShow(subtitleSpecifications != null && subtitleSpecifications.enabled);
-        }, [subtitleSpecifications]
+            if (!show && subtitleSpecifications != null && subtitleSpecifications.enabled) {
+                setShow(true);
+            }
+        }, [show, subtitleSpecifications]
     );
 
     const handleClose = (): void => setShow(false);
