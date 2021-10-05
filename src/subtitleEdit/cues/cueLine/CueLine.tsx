@@ -94,7 +94,7 @@ interface CueErrorsListProps {
 }
 
 const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => {
-    const filteredCueErrors = props.cue.errors?.filter(errors => errors !== CueError.SPELLCHECK_ERROR);
+    const filteredCueErrors = props.cue.errors?.filter(error => error !== CueError.SPELLCHECK_ERROR);
     return filteredCueErrors && filteredCueErrors.length > 0
         ? (
             <div className="sbte-cues-errors">
