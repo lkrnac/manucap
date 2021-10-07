@@ -56,7 +56,7 @@ const createEditorNode = (text = "someText", index?: number): ReactWrapper => {
 
 const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
 
-jest.setTimeout(20000);
+jest.setTimeout(8000);
 
 interface ReduxTestWrapperProps {
     store: Store;
@@ -257,7 +257,7 @@ describe("CueTextEditor", () => {
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
                 done();
             },
-            12000
+            3000
         );
     });
 
@@ -304,7 +304,7 @@ describe("CueTextEditor", () => {
                 expect(saveTrack).toBeCalledTimes(1);
                 done();
             },
-            15000
+            6000
         );
     });
 
@@ -557,7 +557,7 @@ describe("CueTextEditor", () => {
                 expect(saveTrack).toBeCalled();
                 done();
             },
-            15000
+            6000
         );
     });
 });
