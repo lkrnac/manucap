@@ -13,8 +13,6 @@ import { reset } from "../edit/editorStatesSlice";
 import { showMerge } from "./mergeSlices";
 import MergeEditor from "./MergeEditor";
 
-jest.setTimeout(20000);
-
 let testingStore = createTestingStore();
 
 const testingCues = [
@@ -123,7 +121,7 @@ describe("MergeEditor", () => {
         fireEvent.click(mergeButton);
 
         // THEN
-        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 12000 });
+        await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().cues.length).toEqual(2);
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 3");
