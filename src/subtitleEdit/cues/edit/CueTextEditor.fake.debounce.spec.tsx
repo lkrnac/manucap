@@ -2031,4 +2031,35 @@ describe("CueTextEditor", () => {
         const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
         expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200F");
     });
+
+    it("replaces cue text if apply-entity bug happens", () => {
+        // GIVEN
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const testTrack = { mediaTitle: "testingTrack",
+            language: { id: "ar-AR", name: "Arabic", direction: "RTL" }};
+        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+
+        const vttCue = new VTTCue(0, 1, "some text");
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={testingStore.getState().cues[0].editUuid}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        const contentState = ContentState.createFromText("some te");
+        const editorState = EditorState.createEmpty();
+        const newState = EditorState.push(editorState, contentState, "apply-entity");
+        actualNode.find(Editor).props().onChange(newState);
+
+        // THEN
+        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual("some text");
+    });
 });
