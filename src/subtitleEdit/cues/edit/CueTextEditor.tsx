@@ -372,7 +372,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                                 imeCompositionRef.current = null;
                             }
 
-                            // https://dotsub.atlassian.net/browse/DSD-787
+                            // This code reverts an undesired change in editor that causes text to be lost on Firefox
                             let newUpdatedState = newEditorState;
                             const oldVttText = getVttText(editorState.getCurrentContent());
                             const newVttText = getVttText(newEditorState.getCurrentContent());
