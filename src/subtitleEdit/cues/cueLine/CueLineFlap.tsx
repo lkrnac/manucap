@@ -64,11 +64,11 @@ const CueLineFlap = (props: Props): ReactElement => {
                 {
                     mergeVisible
                         ? <input
-                            type="checkbox"
-                            className="sbte-cue-line-flap-checkbox"
-                            disabled={props.editDisabled || !isContiguousToSelected()}
-                            checked={checked}
-                            onChange={(): void => {
+                                type="checkbox"
+                                className="sbte-cue-line-flap-checkbox"
+                                disabled={props.editDisabled || !isContiguousToSelected()}
+                                checked={checked}
+                                onChange={(): void => {
                                 const cuesWithIndex = {
                                     index: props.rowIndex,
                                     cues: props.cues

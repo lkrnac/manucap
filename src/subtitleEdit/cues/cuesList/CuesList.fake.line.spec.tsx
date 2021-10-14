@@ -21,6 +21,7 @@ import { updateSourceCues } from "../view/sourceCueSlices";
 
 jest.mock(
     "../cueLine/CueLine",
+    // eslint-disable-next-line react/display-name
     () => (props: CueLineProps): ReactElement => <div>CueLine: {JSON.stringify(props)}</div>
 );
 

@@ -49,6 +49,7 @@ jest.mock("lodash", () => ({
     isEmpty: jest.requireActual("lodash/isEmpty")
 }));
 
+// eslint-disable-next-line react/display-name
 jest.mock("./cues/CueErrorAlert", () => (): ReactElement => <div>CueErrorAlert</div>);
 
 Element.prototype.scrollIntoView = jest.fn();

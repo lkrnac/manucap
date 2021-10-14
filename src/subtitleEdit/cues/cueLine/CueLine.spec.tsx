@@ -19,7 +19,9 @@ import { updateCues } from "../cuesList/cuesListActions";
 import CueComments from "../comments/CueComments";
 import { commentsVisibleSlice } from "../comments/commentsSlices";
 
+// eslint-disable-next-line react/display-name
 jest.mock("../edit/CueEdit", () => (props: CueEditProps): ReactElement => <div>CueEdit: {JSON.stringify(props)}</div>);
+// eslint-disable-next-line react/display-name
 jest.mock("../view/CueView", () => (props: CueViewProps): ReactElement => <div>CueView: {JSON.stringify(props)}</div>);
 
 let testingStore = createTestingStore();
