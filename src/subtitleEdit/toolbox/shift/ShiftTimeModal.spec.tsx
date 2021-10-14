@@ -98,7 +98,7 @@ const expectedNodeWithErrorMsg = mount(
 
 describe("ShiftTimesModal", () => {
     const saveTrack = jest.fn();
-
+    saveTrack.mockReturnValue({ value: "dummy" });
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -374,7 +374,7 @@ describe("ShiftTimesModal", () => {
                 <ShiftTimesModal show onClose={jest.fn()} />
             </Provider >
         );
-        saveTrack.mockReset();
+        saveTrack.mockClear();
 
         // WHEN
         actualNode.find("input[type='number']").simulate("change", { target: { value: 1 }});

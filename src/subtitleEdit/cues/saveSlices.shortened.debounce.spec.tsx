@@ -112,7 +112,7 @@ describe("saveSlices", () => {
         it("doesn't send request to server when previous request is still ongoing", (done) => {
             // GIVEN
             callSaveTrack(testingStore.dispatch, testingStore.getState);
-            setTimeout(() => saveTrack.mockReset(), 60);
+            setTimeout(() => saveTrack.mockClear(), 60);
 
             // WHEN
             setTimeout(
@@ -227,7 +227,7 @@ describe("saveSlices", () => {
     describe("setAutoSaveSuccess", () => {
         beforeEach(() => {
             testingStore = createTestingStore();
-            saveTrack.mockReset();
+            saveTrack.mockClear();
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         });
