@@ -26,7 +26,7 @@ describe("KeyboardShortcuts", () => {
                     tabIndex={-1}
                     style={{ display: "block" }}
                 >
-                    <div role="document" className="modal-dialog sbte-medium-modal modal-dialog-centered">
+                    <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <div className="modal-title h4">Keyboard Shortcuts</div>
