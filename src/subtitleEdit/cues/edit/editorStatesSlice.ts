@@ -28,6 +28,7 @@ export const editorStatesSlice: Slice<
     initialState: new Map<number, EditorState>(),
     reducers: {
         updateEditorState: (state, action: PayloadAction<EditorStateAction>): void => {
+            // @ts-ignore update to immutable 4.0.0 caused this, was able to figure out the error
             state.set(action.payload.editorId, action.payload.editorState);
         },
         reset: (): Map<number, EditorState> => new Map<number, EditorState>()
