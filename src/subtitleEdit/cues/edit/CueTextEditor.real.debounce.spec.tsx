@@ -216,6 +216,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const searchReplaceMatches = {
             offsets: [10],
@@ -287,6 +288,7 @@ describe("CueTextEditor", () => {
     it("triggers autosave only once immediately after text change", (done) => {
         // GIVEN
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const editor = createEditorNode();
 
@@ -481,6 +483,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(reset() as {} as AnyAction);
         const testingTrack = {

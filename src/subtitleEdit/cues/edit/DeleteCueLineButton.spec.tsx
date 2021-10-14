@@ -19,7 +19,7 @@ let testingStore = createTestingStore();
 
 describe("DeleteCueLineButton", () => {
     const saveTrack = jest.fn();
-
+    saveTrack.mockReturnValue({ value: "dummy" });
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -83,7 +83,7 @@ describe("DeleteCueLineButton", () => {
                 <DeleteCueLineButton cueIndex={0} />
             </Provider>
         );
-        saveTrack.mockReset();
+        saveTrack.mockClear();
 
         // WHEN
         actualNode.find(".sbte-delete-cue-button").simulate("click");

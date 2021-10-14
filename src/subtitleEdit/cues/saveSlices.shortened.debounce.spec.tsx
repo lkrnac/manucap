@@ -21,6 +21,7 @@ jest.mock("lodash", () => ({
 }));
 
 const saveTrack = jest.fn();
+saveTrack.mockReturnValue({ value: "dummy" });
 const testingTrack = { mediaTitle: "testingTrack", timecodesUnlocked: true } as Track;
 const testingCues = [
     { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS" }
@@ -30,7 +31,7 @@ describe("saveSlices", () => {
     describe("saveTrack", () => {
         beforeEach(() => {
             testingStore = createTestingStore();
-            saveTrack.mockReset();
+            saveTrack.mockClear();
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -202,7 +203,7 @@ describe("saveSlices", () => {
             callSaveTrack(testingStore.dispatch, testingStore.getState);
             callSaveTrack(testingStore.dispatch, testingStore.getState, true);
             callSaveTrack(testingStore.dispatch, testingStore.getState);
-            setTimeout(() => saveTrack.mockReset(), 60);
+            setTimeout(() => saveTrack.mockClear(), 60);
 
             // WHEN
             setTimeout(

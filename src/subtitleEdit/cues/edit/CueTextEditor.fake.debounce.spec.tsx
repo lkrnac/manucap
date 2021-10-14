@@ -311,6 +311,7 @@ describe("CueTextEditor", () => {
     it("triggers autosave and when changed", () => {
         // GIVEN
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
 
@@ -331,6 +332,7 @@ describe("CueTextEditor", () => {
     it("doesn't trigger autosave when user selects text", () => {
         // GIVEN
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
@@ -1011,6 +1013,7 @@ describe("CueTextEditor", () => {
         it("replaces incorrectly spelled text with replacement when user picks one", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
@@ -1187,6 +1190,7 @@ describe("CueTextEditor", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(reset() as {} as AnyAction);
             const testingTrack = {
@@ -1450,6 +1454,7 @@ describe("CueTextEditor", () => {
         it("replace first occurrence for 3 matches per cue", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(setFind("text") as {} as AnyAction);
             const searchReplaceMatches = {
@@ -1500,6 +1505,7 @@ describe("CueTextEditor", () => {
         it("replace second occurrence for 3 matches per cue", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             const searchReplaceMatches = {
@@ -1550,6 +1556,7 @@ describe("CueTextEditor", () => {
         it("replace third occurrence for 3 matches per cue", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             const searchReplaceMatches = {
@@ -1600,6 +1607,7 @@ describe("CueTextEditor", () => {
         it("replace match with regex special chars", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const testTrack = { mediaTitle: "testingTrack",
                 language: { id: "1", name: "English", direction: "LTR" }};
@@ -1915,6 +1923,7 @@ describe("CueTextEditor", () => {
     it("appends glossary term at the end of content and resets it in redux to null", () => {
         // GIVEN
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
@@ -1944,6 +1953,7 @@ describe("CueTextEditor", () => {
     it("inserts glossary term into the middle of content and resets it in redux to null", () => {
         // GIVEN
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
@@ -1977,6 +1987,7 @@ describe("CueTextEditor", () => {
     it("inserts &lrm; bidi control character at cursor position for LTR language", () => {
         // GIVEN
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const vttCue = new VTTCue(0, 1, "some text");
@@ -2005,6 +2016,8 @@ describe("CueTextEditor", () => {
     it("inserts &rlm; bidi control character at cursor position for RTL language", () => {
         // GIVEN
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testTrack = { mediaTitle: "testingTrack",
             language: { id: "ar-AR", name: "Arabic", direction: "RTL" }};

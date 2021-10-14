@@ -318,6 +318,7 @@ describe("SearchReplaceEditor", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
@@ -394,6 +395,7 @@ describe("SearchReplaceEditor", () => {
         ] as CueDto[];
 
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
@@ -441,6 +443,7 @@ describe("SearchReplaceEditor", () => {
         ] as CueDto[];
 
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
@@ -488,6 +491,7 @@ describe("SearchReplaceEditor", () => {
         ] as CueDto[];
 
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
@@ -536,6 +540,7 @@ describe("SearchReplaceEditor", () => {
         ] as CueDto[];
 
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
@@ -601,6 +606,7 @@ describe("SearchReplaceEditor", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         const saveTrack = jest.fn();
+        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(setFind("Caption Line") as {} as AnyAction);

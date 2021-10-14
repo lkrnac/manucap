@@ -16,11 +16,12 @@ jest.mock("lodash", () => ({
 describe("saveSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
     const saveTrack = jest.fn();
+    saveTrack.mockReturnValue({ value: "dummy" });
     const testingTrack = { mediaTitle: "testingTrack", timecodesUnlocked: true } as Track;
 
     beforeEach(() => {
         // GIVEN
-        saveTrack.mockReset();
+        saveTrack.mockClear();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
     });

@@ -21,10 +21,10 @@ describe("CaptionOverlapToggle", () => {
         testingStore = createTestingStore();
     });
     const saveTrack = jest.fn();
-
+    saveTrack.mockReturnValue({ value: "dummy" });
     beforeEach(() => {
         // GIVEN
-        saveTrack.mockReset();
+        saveTrack.mockClear();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
     });
 

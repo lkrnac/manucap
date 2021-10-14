@@ -579,6 +579,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(
                 updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const cue = {
                 vttCue: new VTTCue(0, 2, "Caption Line 1"),
@@ -626,6 +627,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(
                 updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const cue = {
                 vttCue: new VTTCue(3, 7, "Caption Line 2"),
@@ -732,6 +734,7 @@ describe("CueEdit", () => {
         it("calls saveTrack in redux store when cue position changes", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
             const vttCue = new VTTCue(0, 1, "someText");
@@ -776,6 +779,7 @@ describe("CueEdit", () => {
         it("calls saveTrack in redux store when line category changes", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            saveTrack.mockReturnValue({ value: "dummy" });
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
             const vttCue = new VTTCue(0, 1, "someText");
