@@ -2,6 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import React, { ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
+import Mousetrap from "mousetrap";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import { render } from "@testing-library/react";
