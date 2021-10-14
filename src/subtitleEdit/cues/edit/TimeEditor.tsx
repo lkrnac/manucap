@@ -1,4 +1,5 @@
 import React, { ReactElement, SyntheticEvent } from "react";
+// @ts-ignore no types for react-advanced-timefield
 import TimeField from "react-advanced-timefield";
 
 import { getTimeFromString, getTimeString } from "../../utils/timeUtils";
