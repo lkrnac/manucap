@@ -19,6 +19,7 @@ let testingStore = createTestingStore();
 
 describe("DeleteCueLineButton", () => {
     const saveTrack = jest.fn();
+
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
