@@ -1451,7 +1451,6 @@ describe("SubtitleEdit", () => {
     it("calls onSave callback on auto save", () => {
         // GIVEN
         const saveTrack = jest.fn();
-        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 

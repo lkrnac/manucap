@@ -74,7 +74,6 @@ describe("SyncCuesButton", () => {
     it("syncs ues when button is clicked", () => {
         // GIVEN
         const saveTrack = jest.fn();
-        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testingCues = [{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
         testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);

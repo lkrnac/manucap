@@ -160,7 +160,6 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
     it("select an option using enter shortcut", () => {
         //GIVEN
         const saveTrack = jest.fn();
-        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
         const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches));

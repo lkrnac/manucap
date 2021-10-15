@@ -16,7 +16,6 @@ jest.mock("lodash", () => ({
 describe("saveSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
     const saveTrack = jest.fn();
-    saveTrack.mockReturnValue({ value: "dummy" });
     const testingTrack = { mediaTitle: "testingTrack", timecodesUnlocked: true } as Track;
 
     beforeEach(() => {

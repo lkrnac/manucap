@@ -30,7 +30,6 @@ let testingStore = createTestingStore();
 
 describe("CueActionsPanel", () => {
     const saveTrack = jest.fn();
-    saveTrack.mockReturnValue({ value: "dummy" });
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);

@@ -103,7 +103,6 @@ describe("MergeEditor", () => {
         // GIVEN
         testingStore.dispatch(showMerge(true) as {} as AnyAction);
         const saveTrack = jest.fn();
-        saveTrack.mockReturnValue({ value: "dummy" });
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({ mediaTitle: "testingTrack" } as Track) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);

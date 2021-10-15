@@ -7,6 +7,9 @@ import { getVttText } from "./cueTextConverter";
 import { checkLineLimitation } from "../cueVerifications";
 import { validationErrorSlice } from "./cueEditorSlices";
 import { CueError } from "../../model";
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 interface EditorStateAction {
     editorId: number;
