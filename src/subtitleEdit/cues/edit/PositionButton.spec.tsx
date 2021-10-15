@@ -47,6 +47,8 @@ describe("PositionButton", () => {
                     ↓↓ <span className="caret" />
                 </button>
                 <div
+                    x-placement="bottom-start"
+                    aria-labelledby="dropdown-basic"
                     style={{
                         position: "absolute",
                         top: "0px",
@@ -55,8 +57,6 @@ describe("PositionButton", () => {
                         pointerEvents: "none",
                         margin: "0px"
                     }}
-                    x-placement="bottom-start"
-                    aria-labelledby="dropdown-basic"
                     className="dropdown-menu show"
                 >
                     <div style={{ minWidth: "210px", width: "210px", display: "flex", flexFlow: "row wrap" }}>

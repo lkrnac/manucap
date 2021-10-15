@@ -47,7 +47,7 @@ const expectedNodeWithErrorMsg = mount(
     <Provider store={testingStore}>
         <div className="fade modal-backdrop show" />
         <div role="dialog" aria-modal="true" className="fade modal show" tabIndex={-1} style={{ display: "block" }}>
-            <div role="document" className="modal-dialog sbte-medium-modal modal-dialog-centered">
+            <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
                         <div className="modal-title h4">Shift All Track Lines Time</div >
@@ -98,7 +98,6 @@ const expectedNodeWithErrorMsg = mount(
 
 describe("ShiftTimesModal", () => {
     const saveTrack = jest.fn();
-
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -117,7 +116,7 @@ describe("ShiftTimesModal", () => {
                     tabIndex={-1}
                     style={{ display: "block" }}
                 >
-                    <div role="document" className="modal-dialog sbte-medium-modal modal-dialog-centered">
+                    <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <div className="modal-title h4">Shift All Track Lines Time</div >
@@ -203,7 +202,7 @@ describe("ShiftTimesModal", () => {
                     tabIndex={-1}
                     style={{ display: "block" }}
                 >
-                    <div role="document" className="modal-dialog sbte-medium-modal modal-dialog-centered">
+                    <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <div className="modal-title h4">Shift All Track Lines Time</div >

@@ -73,6 +73,7 @@ describe("TooltipWrapper", () => {
 
         // THEN
         const tooltip = await actualNode.findByText((_content, node) =>
+            // @ts-ignore we can ignore the fact that node may be null for findByTextIgnoreTags is only used in tests
             findByTextIgnoreTags("Tooltip with bold text", node));
         expect(tooltip).toBeInTheDocument();
     });

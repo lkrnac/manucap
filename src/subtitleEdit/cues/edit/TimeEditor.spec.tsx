@@ -9,6 +9,8 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
+                // @ts-ignore custom attribute added by react-advanced-timefield
+                colon=":"
                 className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
@@ -36,6 +38,8 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
+                // @ts-ignore custom attribute added by react-advanced-timefield
+                colon=":"
                 className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
@@ -63,6 +67,8 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
+                // @ts-ignore custom attribute added by react-advanced-timefield
+                colon=":"
                 className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
@@ -90,6 +96,8 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
+                // @ts-ignore custom attribute added by react-advanced-timefield
+                colon=":"
                 className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
@@ -117,6 +125,8 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
+                // @ts-ignore custom attribute added by react-advanced-timefield
+                colon=":"
                 className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",
@@ -144,6 +154,8 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
+                // @ts-ignore custom attribute added by react-advanced-timefield
+                colon=":"
                 className="sbte-time-input mousetrap"
                 style={{
                     marginBottom: "5px",

@@ -6,6 +6,7 @@ import { AnyAction, Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import Draft, { ContentState, convertFromHTML, Editor, EditorState, SelectionState } from "draft-js";
 import { Options, stateToHTML } from "draft-js-export-html";
+import Mousetrap from "mousetrap";
 
 import { mount, ReactWrapper } from "enzyme";
 import each from "jest-each";
