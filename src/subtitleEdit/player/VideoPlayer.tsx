@@ -125,7 +125,7 @@ class VideoPlayer extends React.Component<Props> {
             };
         }
 
-        this.player = videojs(this.videoNode, options) as VideoJsPlayer;
+        this.player = videojs(this.videoNode as Element, options) as VideoJsPlayer;
         this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
             updateCuesForVideoJsTrack(this.props, videoJsTrack, this.props.trackFontSizePercent);

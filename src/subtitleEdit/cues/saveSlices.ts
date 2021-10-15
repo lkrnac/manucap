@@ -36,8 +36,12 @@ export const saveTrackSlice = createSlice({
     initialState: null as Function | null,
     reducers: {
         set: (_state, action: PayloadAction<Function>): Function => action.payload,
-        call: (state, action: PayloadAction<SaveActionWithPayload>): void =>
-            state ? state(action.payload) : null,
+        call: (state, action: PayloadAction<SaveActionWithPayload>): Function | null => {
+            if (state) {
+                state(action.payload);
+            }
+            return state;
+        }
     },
     extraReducers: {
         [editingTrackSlice.actions.resetEditingTrack.type]: (): null => null
