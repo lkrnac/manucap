@@ -38,7 +38,7 @@ export const saveTrackSlice = createSlice({
         set: (_state, action: PayloadAction<Function>): Function => action.payload,
         call: (state, action: PayloadAction<SaveActionWithPayload>): Function | null => {
             if (state) {
-                state(action.payload)
+                state(action.payload);
             }
             return state;
         }
