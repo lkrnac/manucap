@@ -82,7 +82,7 @@ describe("DeleteCueLineButton", () => {
                 <DeleteCueLineButton cueIndex={0} />
             </Provider>
         );
-        saveTrack.mockClear();
+        saveTrack.mockReset();
 
         // WHEN
         actualNode.find(".sbte-delete-cue-button").simulate("click");

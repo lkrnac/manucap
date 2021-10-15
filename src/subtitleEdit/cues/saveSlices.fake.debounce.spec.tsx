@@ -20,7 +20,7 @@ describe("saveSlices", () => {
 
     beforeEach(() => {
         // GIVEN
-        saveTrack.mockClear();
+        saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
     });

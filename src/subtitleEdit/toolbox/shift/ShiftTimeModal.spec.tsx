@@ -373,7 +373,7 @@ describe("ShiftTimesModal", () => {
                 <ShiftTimesModal show onClose={jest.fn()} />
             </Provider >
         );
-        saveTrack.mockClear();
+        saveTrack.mockReset();
 
         // WHEN
         actualNode.find("input[type='number']").simulate("change", { target: { value: 1 }});

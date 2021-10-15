@@ -30,6 +30,7 @@ let testingStore = createTestingStore();
 
 describe("CueActionsPanel", () => {
     const saveTrack = jest.fn();
+
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -141,7 +142,7 @@ describe("CueActionsPanel", () => {
                 <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
-        saveTrack.mockClear();
+        saveTrack.mockReset();
 
         // WHEN
         fireEvent.click(actualNode.container.querySelector(".sbte-delete-cue-button") as Element);
