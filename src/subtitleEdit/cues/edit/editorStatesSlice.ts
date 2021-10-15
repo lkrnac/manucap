@@ -9,6 +9,7 @@ import { validationErrorSlice } from "./cueEditorSlices";
 import { CueError } from "../../model";
 import { enableMapSet } from 'immer';
 
+// Needed because Map is used in editorStatesSlice state
 enableMapSet();
 
 interface EditorStateAction {
@@ -31,7 +32,7 @@ export const editorStatesSlice: Slice<
     initialState: new Map<number, EditorState>(),
     reducers: {
         updateEditorState: (state, action: PayloadAction<EditorStateAction>): void => {
-            // @ts-ignore update to immutable 4.0.0 caused this, was able to figure out the error
+            // @ts-ignore update to immutable 4.0.0 caused this, was not able to figure out the fix
             state.set(action.payload.editorId, action.payload.editorState);
         },
         reset: (): Map<number, EditorState> => new Map<number, EditorState>()
