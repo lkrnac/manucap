@@ -1,4 +1,4 @@
-import React, { Dispatch, MutableRefObject, ReactElement, RefObject, useEffect, useRef } from "react";
+import React, { CSSProperties, Dispatch, MutableRefObject, ReactElement, RefObject, useEffect, useRef } from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { Match, SpellCheck } from "./model";
@@ -60,7 +60,7 @@ const ignoreKeyword = (props: Props, matchText: string, spellCheckMatch: Match, 
 };
 
 const onOptionSelected = (props: Props, spellCheckMatch: Match, matchText: string , dispatch: Dispatch<AppThunk>) =>
-    (optionValueType: ValueType<Option>): void => {
+    (optionValueType: ValueType<Option, false>): void => {
     const option = optionValueType as Option;
     if(option.value === matchText) {
         ignoreKeyword(props, matchText, spellCheckMatch, dispatch);
@@ -115,10 +115,10 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
 
     const customStyles = {
         control: () => ({ visibility: "hidden", height: "0px" }),
-        container: (provided) => ({ ...provided, height: "100%" }),
-        menu: (provided) => ({ ...provided, position: "static", height: "100%", margin: 0 }),
-        menuList: (provided) => ({ ...provided, height: "200px" })
-    } as Styles;
+        container: (provided: CSSProperties) => ({ ...provided, height: "100%" }),
+        menu: (provided: CSSProperties) => ({ ...provided, position: "static", height: "100%", margin: 0 }),
+        menuList: (provided: CSSProperties) => ({ ...provided, height: "200px" })
+    } as Styles<Option, false>;
 
     return (
         <span
