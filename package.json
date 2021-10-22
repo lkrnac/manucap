@@ -64,7 +64,6 @@
     "@types/deep-freeze": "^0.1.2",
     "@types/draft-js": "^0.11.6",
     "@types/enzyme": "^3.10.9",
-    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/humanize-duration": "^3.25.1",
     "@types/jest": "^27.0.2",
     "@types/jest-each": "^24.3.0",
