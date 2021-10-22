@@ -371,7 +371,20 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                             if (imeCompositionRef.current === "end") {
                                 imeCompositionRef.current = null;
                             }
-                            return dispatch(updateEditorState(props.index, newEditorState));
+
+                            // This code reverts an undesired change in editor that causes text to be lost on Firefox
+                            let newUpdatedState = newEditorState;
+                            const oldVttText = getVttText(editorState.getCurrentContent());
+                            const newVttText = getVttText(newEditorState.getCurrentContent());
+                            if (newEditorState.getLastChangeType() === "apply-entity" && oldVttText !== newVttText) {
+                                const processedHTML = convertFromHTML(convertVttToHtml(oldVttText));
+                                const initialContentState =
+                                    ContentState.createFromBlockArray(processedHTML.contentBlocks);
+                                newUpdatedState = EditorState.createWithContent(initialContentState);
+                                newUpdatedState = EditorState.moveFocusToEnd(newUpdatedState);
+                            }
+
+                            return dispatch(updateEditorState(props.index, newUpdatedState));
                         }}
                         ref={editorRef}
                         spellCheck={false}
