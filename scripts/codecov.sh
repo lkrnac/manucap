@@ -16,4 +16,4 @@ shasum -a 256 -c codecov.SHA256SUM
 chmod +x codecov
 
 # run uploader
-./codecov -t $CODECOV_TOKEN -F $1 -v -s ./coverage/
+./codecov -t $CODECOV_TOKEN -v -s ./coverage/
