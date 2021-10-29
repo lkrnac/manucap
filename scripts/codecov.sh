@@ -1,4 +1,5 @@
 #!/bin/bash
+$TOKEN=$CODECOV_TOKEN
 
 # One-time step
 curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
@@ -16,4 +17,6 @@ shasum -a 256 -c codecov.SHA256SUM
 chmod +x codecov
 
 # run uploader
-./codecov -t $CODECOV_TOKEN -v -s ./coverage/
+echo "Running codecov!";
+./codecov -t $TOKEN -v -s ./coverage/
+echo "Done!";
