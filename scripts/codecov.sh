@@ -18,5 +18,5 @@ chmod +x codecov
 
 # run uploader
 echo "Running codecov!";
-./codecov -v -t $TOKEN -s ./coverage/
+./codecov -v -t 123123123123 -s ./coverage/
 echo "Done!";
