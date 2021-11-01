@@ -18,5 +18,5 @@ chmod +x codecov
 
 # run uploader
 echo "Running codecov!";
-./codecov -v -t 123123123123 -s ./coverage/
+./codecov -v -t cb5f35fb-cad9-43a0-b845-3dad0945c899 -s ./coverage/
 echo "Done!";
