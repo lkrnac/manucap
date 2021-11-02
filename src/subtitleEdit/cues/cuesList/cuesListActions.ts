@@ -329,9 +329,10 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             dispatch(updateMatchedCues());
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
         } else {
-            !verifyTimeGapLimit(cue.vttCue, timeGapLimit) ?
-            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_LIMIT_EXCEEDED])) :
-            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_OVERLAP]));
+            const error = !verifyTimeGapLimit(cue.vttCue, timeGapLimit)
+                ? CueError.TIME_GAP_LIMIT_EXCEEDED
+                : CueError.TIME_GAP_OVERLAP;
+            dispatch(validationErrorSlice.actions.setValidationErrors([error]));
         }
     };
 
