@@ -1,5 +1,5 @@
 #!/bin/bash
-UPLOADER_VERSION=v0.1.8
+UPLOADER_VERSION=v0.1.10
 
 # One-time step
 curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
