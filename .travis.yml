@@ -17,8 +17,8 @@ script:
 
 after_success:
   - npm run lint
-  - ./scripts/codecov.sh
   - ./scripts/post-build.sh
+  - if [[ ("$TRAVIS_BRANCH" != "master" && "$TRAVIS_BRANCH" != "release") || ("$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_BRANCH" = "master") ]] ; then ./scripts/codecov.sh ; fi
 
 deploy:
   provider: npm
