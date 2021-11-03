@@ -1974,7 +1974,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
             });
 
             it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
@@ -2169,6 +2169,36 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationErrors).toEqual([]);
             });
 
+            it("cue is not added when minimum time gap is exceeded", () => {
+                // GIVEN
+                const testingStore = createTestingStore();
+                testingStore.dispatch(
+                    readSubtitleSpecification({
+                        minCaptionDurationInMillis: 3000,
+                        enabled: true
+                    } as SubtitleSpecification) as {} as AnyAction
+                );
+                testingStore.dispatch(updateCues([
+                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(3, 4, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+                testingStore.dispatch(updateSourceCues([
+                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(2, 3.1, "Source Line 3"), cueCategory: "DIALOGUE" },
+                    { vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
+                ] as CueDto[]) as {} as AnyAction);
+
+                // WHEN
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
+                testingStore.dispatch(addCue(1, [1, 2]) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
+            });
+
             it("uses source cues times for target cue with index 0", () => {
                 // GIVEN
                 testingStore.dispatch(updateSourceCues([
@@ -2216,6 +2246,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
             });
+
 
             it("adds cue to the end of the cue array if in chunk range", () => {
                 // GIVEN
@@ -2284,7 +2315,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(3);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
             });
 
             it("picks default step if it less than max gap limit provided by subtitle specs", () => {
