@@ -14,11 +14,11 @@ script:
   - npm run build
   - npm run test
   - npx react-scripts build # tests if local development browser build is working
+  - ./scripts/codecov.sh
 
 after_success:
   - npm run lint
   - ./scripts/post-build.sh
-  - if [[ ("$TRAVIS_BRANCH" != "master" && "$TRAVIS_BRANCH" != "release") || ("$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_BRANCH" = "master") ]] ; then ./scripts/codecov.sh ; fi
 
 deploy:
   provider: npm
