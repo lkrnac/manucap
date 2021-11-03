@@ -6,15 +6,15 @@ import {
     CueCategory,
     CueComment,
     CueDto,
+    CueDtoWithIndex,
     CueError,
     CueLineDto,
-    ScrollPosition,
-    SpellcheckerSettings,
-    SubtitleEditAction,
-    Track,
     CuesWithRowIndex,
     GlossaryMatchDto,
-    CueDtoWithIndex
+    ScrollPosition,
+    SpellcheckerSettings,
+    SubtitleEditAction, TimeGapLimit,
+    Track
 } from "../../model";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
@@ -292,6 +292,10 @@ export const deleteCueComment = (idx: number, cueCommentIndex: number): AppThunk
         dispatch(updateMatchedCues());
     };
 
+const verifyTimeGapLimit = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
+    (vttCue.endTime - vttCue.startTime) >= timeGapLimit.minGap &&
+    (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
+
 export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         const state: SubtitleEditState = getState();
@@ -319,16 +323,19 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
 
         const editingTrack = state.editingTrack;
         const validCueDuration = editingTrack && verifyCueDuration(cue.vttCue, editingTrack, timeGapLimit);
-
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
             dispatch(updateMatchedCues());
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
         } else {
-            dispatch(validationErrorSlice.actions.setValidationErrors([CueError.TIME_GAP_OVERLAP]));
+            const error = !verifyTimeGapLimit(cue.vttCue, timeGapLimit)
+                ? CueError.TIME_GAP_LIMIT_EXCEEDED
+                : CueError.TIME_GAP_OVERLAP;
+            dispatch(validationErrorSlice.actions.setValidationErrors([error]));
         }
     };
+
 
 export const splitCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
