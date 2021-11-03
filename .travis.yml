@@ -14,10 +14,10 @@ script:
   - npm run build
   - npm run test
   - npx react-scripts build # tests if local development browser build is working
-  - ./scripts/codecov.sh
 
 after_success:
   - npm run lint
+  - ./scripts/codecov.sh
   - ./scripts/post-build.sh
 
 deploy:
