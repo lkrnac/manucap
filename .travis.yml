@@ -1,12 +1,9 @@
-dist: focal
 language: node_js
 node_js:
   - 14
-jdk:
-  - openjdk11
 cache: npm
-env:
-  - NODE_OPTIONS=--max_old_space_size=8192
+#env:
+#  - NODE_OPTIONS=--max_old_space_size=8192
 
 notifications:
   slack:
