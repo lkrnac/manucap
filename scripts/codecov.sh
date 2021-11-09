@@ -16,5 +16,8 @@ shasum -a 256 -c codecov.SHA256SUM
 # make uploader executable
 chmod +x codecov
 
+# this is necessary due to a bug: https://github.com/codecov/uploader/issues/475#issuecomment-961209942
+unset NODE_OPTIONS
+
 # run uploader
 ./codecov -t $CODECOV_TOKEN -v -s ./coverage/
