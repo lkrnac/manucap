@@ -8,6 +8,7 @@ import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { getTimeString } from "../utils/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
+import WaveformView from "../waveform/WaveformView";
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -204,16 +205,25 @@ class VideoPlayer extends React.Component<Props> {
 
     public render(): ReactElement {
         return (
-            <video
-                id="video-player"
-                ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
-                style={{ margin: "auto" }}
-                className="video-js vjs-default-skin vjs-big-play-centered"
-                poster={this.props.poster}
-                controls
-                preload="none"
-                data-setup="{}"
-            />
+            <>
+                <video
+                    id="video-player"
+                    ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
+                    style={{ margin: "auto" }}
+                    className="video-js vjs-default-skin vjs-big-play-centered"
+                    poster={this.props.poster}
+                    controls
+                    preload="none"
+                    data-setup="{}"
+                />
+                <WaveformView
+                    audioUrl={"07030039.mp3"}
+                    audioContentType={"audio/mpeg"}
+                    waveformDataUrl={"07030039.dat"}
+                    setSegments={(): void => { console.log("setSegments"); }}
+                    setPoints={(): void => { console.log("setPoints"); }}
+                />
+            </>
         );
     }
 }
