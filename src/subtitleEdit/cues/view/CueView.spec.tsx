@@ -726,6 +726,82 @@ describe("CueView", () => {
             .toEqual(expectedSourceCueContent);
     });
 
+    it("handles glossary for overlapping sources, long first", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "Networking and Advanced Security Business Group"),
+            cueCategory: "DIALOGUE",
+            glossaryMatches: [
+                { source: "advanced security", replacements: ["sometext moretext"]},
+                { source: "advanced", replacements: ["sometext"]},
+                { source: "security", replacements: ["moretext"]}
+            ]
+        } as CueDto;
+
+        const expectedSourceCueContent =
+            "Networking and <span onclick=\"pickSetGlossaryTerm('sometext')\" " +
+            "class=\"sbte-glossary-match\">Advanced</span> " +
+            "<span onclick=\"pickSetGlossaryTerm('moretext')\" " +
+            "class=\"sbte-glossary-match\">Security</span> Business Group";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    isTargetCue
+                    targetCueIndex={1}
+                    cue={cue}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
+    it("handles glossary for overlapping sources, long last", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "Networking and Advanced Security Business Group"),
+            cueCategory: "DIALOGUE",
+            glossaryMatches: [
+                { source: "advanced", replacements: ["sometext"]},
+                { source: "security", replacements: ["moretext"]},
+                { source: "advanced security", replacements: ["sometext moretext"]}
+            ]
+        } as CueDto;
+
+        const expectedSourceCueContent =
+            "Networking and <span onclick=\"pickSetGlossaryTerm('sometext')\" " +
+            "class=\"sbte-glossary-match\">Advanced</span> " +
+            "<span onclick=\"pickSetGlossaryTerm('moretext')\" " +
+            "class=\"sbte-glossary-match\">Security</span> Business Group";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    isTargetCue
+                    targetCueIndex={1}
+                    cue={cue}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
     it("open cue for editing if clicked for existing one", async () => {
         // GIVEN
         const cue = {

@@ -47,12 +47,16 @@ const replaceForInsensitiveMatches = (
 };
 
 const injectGlossaryTerms = (plainText: string, props: CueViewProps, sanitizedHtml: string): string => {
-    props.cue.glossaryMatches?.forEach(
-        (match) => {
-            const caseInsensitiveMatches = plainText.match(new RegExp("\\b" + match.source + "\\b","gi"));
-            sanitizedHtml = replaceForInsensitiveMatches(caseInsensitiveMatches, plainText, match, sanitizedHtml);
-        }
-    );
+    if (props.cue.glossaryMatches) {
+        const matches = [ ...props.cue.glossaryMatches ];
+        matches.sort((first, second) => first.source.length - second.source.length)
+            .forEach(
+                (match) => {
+                    const caseInsensitiveMatches = plainText.match(new RegExp("\\b" + match.source + "\\b","gi"));
+                    sanitizedHtml = replaceForInsensitiveMatches(caseInsensitiveMatches, plainText, match, sanitizedHtml);
+                }
+            );
+    }
     return sanitizedHtml;
 };
 
