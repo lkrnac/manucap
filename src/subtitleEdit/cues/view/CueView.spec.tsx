@@ -729,20 +729,22 @@ describe("CueView", () => {
     it("handles glossary for overlapping sources, long first", () => {
         // GIVEN
         const cue = {
-            vttCue: new VTTCue(1, 2, "Networking and Advanced Security Business Group"),
+            vttCue: new VTTCue(1, 2, "Networking and Advanced Security Extra Business Group"),
             cueCategory: "DIALOGUE",
             glossaryMatches: [
-                { source: "advanced security", replacements: ["sometext moretext"]},
+                { source: "advanced security extra", replacements: ["extra different moretext"]},
+                { source: "advanced security", replacements: ["sometext different moretext"]},
                 { source: "advanced", replacements: ["sometext"]},
+                { source: "networking", replacements: ["connection;connecting"]},
                 { source: "security", replacements: ["moretext"]}
             ]
         } as CueDto;
 
         const expectedSourceCueContent =
-            "Networking and <span onclick=\"pickSetGlossaryTerm('sometext')\" " +
-            "class=\"sbte-glossary-match\">Advanced</span> " +
-            "<span onclick=\"pickSetGlossaryTerm('moretext')\" " +
-            "class=\"sbte-glossary-match\">Security</span> Business Group";
+            "<span onclick=\"pickSetGlossaryTerm('connection;connecting')\" " +
+            "class=\"sbte-glossary-match\">Networking</span> and " +
+            "<span onclick=\"pickSetGlossaryTerm('extra different moretext')\" " +
+            "class=\"sbte-glossary-match\">Advanced Security Extra</span> Business Group";
 
         // WHEN
         const actualNode = render(
@@ -767,20 +769,22 @@ describe("CueView", () => {
     it("handles glossary for overlapping sources, long last", () => {
         // GIVEN
         const cue = {
-            vttCue: new VTTCue(1, 2, "Networking and Advanced Security Business Group"),
+            vttCue: new VTTCue(1, 2, "Networking and Advanced Security Extra Business Group"),
             cueCategory: "DIALOGUE",
             glossaryMatches: [
                 { source: "advanced", replacements: ["sometext"]},
-                { source: "security", replacements: ["moretext"]},
-                { source: "advanced security", replacements: ["sometext moretext"]}
+                { source: "networking", replacements: ["connection;connecting"]},
+                { source: "advanced security extra", replacements: ["extra different moretext"]},
+                { source: "advanced security", replacements: ["sometext different moretext"]},
+                { source: "security", replacements: ["moretext"]}
             ]
         } as CueDto;
 
         const expectedSourceCueContent =
-            "Networking and <span onclick=\"pickSetGlossaryTerm('sometext')\" " +
-            "class=\"sbte-glossary-match\">Advanced</span> " +
-            "<span onclick=\"pickSetGlossaryTerm('moretext')\" " +
-            "class=\"sbte-glossary-match\">Security</span> Business Group";
+            "<span onclick=\"pickSetGlossaryTerm('connection;connecting')\" " +
+            "class=\"sbte-glossary-match\">Networking</span> and " +
+            "<span onclick=\"pickSetGlossaryTerm('extra different moretext')\" " +
+            "class=\"sbte-glossary-match\">Advanced Security Extra</span> Business Group";
 
         // WHEN
         const actualNode = render(
