@@ -65,8 +65,7 @@ const getScrollCueIndex = (
 };
 
 const getErrorCueIndex = (cues: CueDto[]): number => {
-    // @ts-ignore
-    return cues.findIndex(cue => cue.errors?.length > 0);
+    return cues.findIndex(cue => cue.errors && cue.errors?.length > 0);
 };
 
 export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
