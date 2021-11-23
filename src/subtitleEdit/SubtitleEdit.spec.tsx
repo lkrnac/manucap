@@ -235,6 +235,15 @@ describe("SubtitleEdit", () => {
                                 >
                                     <i className="fa fa-language" />
                                 </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -377,6 +386,15 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -658,6 +676,15 @@ describe("SubtitleEdit", () => {
                                 >
                                     <i className="fa fa-language" />
                                 </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -818,6 +845,15 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -998,6 +1034,15 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
