@@ -9,7 +9,7 @@ import { mount } from "enzyme";
 import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
-import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
+import { CueDto, Language, ScrollPosition, Task, Track, CueError } from "./model";
 import {
     removeDraftJsDynamicValues,
     removeVideoPlayerDynamicValue,
@@ -1491,6 +1491,46 @@ describe("SubtitleEdit", () => {
 
         expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize}`);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
+    });
+
+    it("jumps to error cue when button is clicked", async () => {
+        // GIVEN
+        const cueError = [
+            CueError.TIME_GAP_LIMIT_EXCEEDED,
+            CueError.TIME_GAP_OVERLAP
+        ];
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE", errors: cueError },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
+
+        //WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.ERROR);
     });
 
     it("calls onSave callback on auto save", () => {
