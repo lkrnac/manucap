@@ -47,12 +47,19 @@ const replaceForInsensitiveMatches = (
 };
 
 const injectGlossaryTerms = (plainText: string, props: CueViewProps, sanitizedHtml: string): string => {
-    props.cue.glossaryMatches?.forEach(
-        (match) => {
-            const caseInsensitiveMatches = plainText.match(new RegExp("\\b" + match.source + "\\b","gi"));
-            sanitizedHtml = replaceForInsensitiveMatches(caseInsensitiveMatches, plainText, match, sanitizedHtml);
-        }
-    );
+    if (props.cue.glossaryMatches) {
+        const deduplicatedMatches = [ ...props.cue.glossaryMatches ].sort(
+            (first, second) => second.source.length - first.source.length
+        ).reduce((result: GlossaryMatchDto[], match: GlossaryMatchDto) => {
+            return result.findIndex(ele => ele.source.includes(match.source)) !== -1 ? result : [...result, match];
+        }, []);
+        deduplicatedMatches.forEach(
+            (match) => {
+                const caseInsensitiveMatches = plainText.match(new RegExp("\\b" + match.source + "\\b","gi"));
+                sanitizedHtml = replaceForInsensitiveMatches(caseInsensitiveMatches, plainText, match, sanitizedHtml);
+            }
+        );
+    }
     return sanitizedHtml;
 };
 
