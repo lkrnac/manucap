@@ -1495,14 +1495,9 @@ describe("SubtitleEdit", () => {
 
     it("jumps to error cue when button is clicked", async () => {
         // GIVEN
-        const cueError = [
-            CueError.TIME_GAP_LIMIT_EXCEEDED,
-            CueError.TIME_GAP_OVERLAP
-        ];
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE", errors: cueError },
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -1531,6 +1526,45 @@ describe("SubtitleEdit", () => {
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.ERROR);
+    });
+
+    it("cycles through error cues when button is clicked", async () => {
+        // GIVEN
+        const cueError = [
+            CueError.TIME_GAP_LIMIT_EXCEEDED,
+            CueError.TIME_GAP_OVERLAP
+        ];
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(3, 4, "Editing Line 3"), cueCategory: "DIALOGUE", errors: cueError },
+            { vttCue: new VTTCue(5, 6, "Editing Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(7, 8, "Editing Line 5"), cueCategory: "DIALOGUE", errors: cueError },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+        //WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(testingStore.getState().currentCueErrorIndex).toEqual(2);
     });
 
     it("calls onSave callback on auto save", () => {
