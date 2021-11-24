@@ -8,7 +8,11 @@ import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 import { saveActionSlice, saveTrackSlice } from "./cues/saveSlices";
-import { currentPlayerTimeSlice, scrollPositionSlice } from "./cues/cuesList/cuesListScrollSlice";
+import {
+    currentPlayerTimeSlice,
+    scrollPositionSlice,
+    currentCueErrorIndexSlice
+} from "./cues/cuesList/cuesListScrollSlice";
 import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 import { mergeVisibleSlice, rowsToMergeSlice } from "./cues/merge/mergeSlices";
@@ -48,6 +52,7 @@ export const Reducers = {
     matchedCues: matchedCuesSlice.reducer,
     currentPlayerTime: currentPlayerTimeSlice.reducer,
     commentsVisible: commentsVisibleSlice.reducer,
+    currentCueErrorIndex: currentCueErrorIndexSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

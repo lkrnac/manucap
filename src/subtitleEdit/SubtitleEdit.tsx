@@ -214,7 +214,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 </TooltipWrapper>
                                 <TooltipWrapper
                                     tooltipId="scrollToErrorCueToolTip"
-                                    text="Scroll to error subtitle"
+                                    text="Scroll to next subtitle error"
                                     placement="top"
                                 >
                                     <button

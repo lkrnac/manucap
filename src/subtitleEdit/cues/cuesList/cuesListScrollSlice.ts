@@ -26,6 +26,15 @@ export const scrollPositionSlice = createSlice({
     }
 });
 
+export const currentCueErrorIndexSlice = createSlice({
+    name: "currentCueErrorIndex",
+    initialState: -1,
+    reducers: {
+        changeCurrentCueErrorPosition: (_state, action: PayloadAction<number>): number =>
+            action.payload
+    }
+});
+
 const getScrollCueIndex = (
     matchedCuesSize: number,
     editingFocusInMap: number,
@@ -64,8 +73,9 @@ const getScrollCueIndex = (
     return null; // out of range value, because need to trigger change of CueList.startAt
 };
 
-const getErrorCueIndex = (cues: CueDto[]): number => {
-    return cues.findIndex(cue => cue.errors && cue.errors?.length > 0);
+const getErrorCueIndex = (cues: CueDto[], currentIndex: number): number => {
+    return cues.findIndex((cue, index) =>
+        (cue.errors && cue.errors?.length > 0) && index !== currentIndex);
 };
 
 export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
@@ -81,7 +91,7 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
             : getState().focusedCueIndex;
         const currentPlayerTime = getState().currentPlayerTime;
         const currentPlayerCueIndex = matchCueTimeIndex(state.cues, currentPlayerTime);
-        const errorCueIndex = getErrorCueIndex(state.cues);
+        const errorCueIndex = getErrorCueIndex(state.cues, state.currentCueErrorIndex);
         const focusedCueIndex = getScrollCueIndex(
             state.matchedCues.matchedCues.length,
             state.matchedCues.editingFocusIndex,
@@ -92,4 +102,7 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
             scrollPosition
         );
         dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
+        if (errorCueIndex !== state.currentCueErrorIndex) {
+            dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
+        }
     };
