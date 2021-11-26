@@ -75,7 +75,7 @@ const getScrollCueIndex = (
 
 const getErrorCueIndex = (cues: CueDto[], currentIndex: number): number => {
     const errorIndex = cues.findIndex((cue, index) =>
-        (cue.errors && cue.errors?.length > 0) && index > currentIndex);
+        (cue.errors && cue.errors?.length > 0) && index !== currentIndex);
     return errorIndex;
 };
 
@@ -93,6 +93,7 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         const currentPlayerTime = getState().currentPlayerTime;
         const currentPlayerCueIndex = matchCueTimeIndex(state.cues, currentPlayerTime);
         const errorCueIndex = getErrorCueIndex(state.cues, state.currentCueErrorIndex);
+        console.log(errorCueIndex);
         const focusedCueIndex = getScrollCueIndex(
             state.matchedCues.matchedCues.length,
             state.matchedCues.editingFocusIndex,
