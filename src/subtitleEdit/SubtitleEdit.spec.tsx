@@ -1540,6 +1540,10 @@ describe("SubtitleEdit", () => {
             { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE", errors: cueError },
             { vttCue: new VTTCue(3, 4, "Editing Line 4"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(4, 5, "Editing Line 5"), cueCategory: "DIALOGUE", errors: cueError },
+            { vttCue: new VTTCue(5, 6, "Editing Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(6, 7, "Editing Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(7, 8, "Editing Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(8, 10, "Editing Line 4"), cueCategory: "DIALOGUE", errors: cueError },
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
@@ -1582,6 +1586,15 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(testingStore.getState().currentCueErrorIndex).toEqual(4);
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(testingStore.getState().currentCueErrorIndex).toEqual(8);
 
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
