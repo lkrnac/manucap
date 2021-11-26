@@ -26,12 +26,22 @@ export const scrollPositionSlice = createSlice({
     }
 });
 
+export const currentCueErrorIndexSlice = createSlice({
+    name: "currentCueErrorIndex",
+    initialState: -1,
+    reducers: {
+        changeCurrentCueErrorPosition: (_state, action: PayloadAction<number>): number =>
+            action.payload
+    }
+});
+
 const getScrollCueIndex = (
     matchedCuesSize: number,
     editingFocusInMap: number,
     currentPlayerCueIndex: number,
     lastTranslatedIndex: number,
     previousFocusedCueIndex: number | null,
+    errorCueIndex: number,
     scrollPosition?: ScrollPosition
 ): number | null => {
     if (scrollPosition === ScrollPosition.FIRST) {
@@ -49,6 +59,9 @@ const getScrollCueIndex = (
     if (scrollPosition === ScrollPosition.LAST_TRANSLATED) {
         return lastTranslatedIndex - 1;
     }
+    if(scrollPosition === ScrollPosition.ERROR && errorCueIndex !== -1) {
+        return errorCueIndex;
+    }
     const previousFocusedCueIndexNullSafe = previousFocusedCueIndex === null ? 0 : previousFocusedCueIndex;
     const currentPageIndex = Math.floor(previousFocusedCueIndexNullSafe / DEFAULT_PAGE_SIZE);
     if (scrollPosition === ScrollPosition.NEXT_PAGE) {
@@ -58,6 +71,13 @@ const getScrollCueIndex = (
         return currentPageIndex * DEFAULT_PAGE_SIZE - 1;
     }
     return null; // out of range value, because need to trigger change of CueList.startAt
+};
+
+const getErrorCueIndex = (cues: CueDto[], currentIndex: number): number => {
+    const errorIndex = cues.findIndex((cue, index) =>
+        (cue.errors && cue.errors?.length > 0) && index > currentIndex);
+    return errorIndex === -1 ? cues.findIndex((cue, index) =>
+        (cue.errors && cue.errors?.length > 0) && index < currentIndex) : errorIndex;
 };
 
 export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
@@ -73,13 +93,16 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
             : getState().focusedCueIndex;
         const currentPlayerTime = getState().currentPlayerTime;
         const currentPlayerCueIndex = matchCueTimeIndex(state.cues, currentPlayerTime);
+        const errorCueIndex = getErrorCueIndex(state.cues, state.currentCueErrorIndex);
         const focusedCueIndex = getScrollCueIndex(
             state.matchedCues.matchedCues.length,
             state.matchedCues.editingFocusIndex,
             currentPlayerCueIndex,
             state.cues.length,
             previousFocusedCueIndexInitiated,
+            errorCueIndex,
             scrollPosition
         );
         dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
+        dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
     };

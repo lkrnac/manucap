@@ -212,6 +212,23 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         <i className="fa fa-language" />
                                     </button>
                                 </TooltipWrapper>
+                                <TooltipWrapper
+                                    tooltipId="scrollToErrorCueToolTip"
+                                    text="Scroll to next subtitle error"
+                                    placement="top"
+                                >
+                                    <button
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        style={{ marginLeft: "10px" }}
+                                        onClick={(): void => {
+                                            dispatch(changeScrollPosition(ScrollPosition.ERROR));
+                                        }}
+                                    >
+                                        <i className="fa fa-bug" />
+                                    </button>
+                                </TooltipWrapper>
                                 <span style={{ flexGrow: 2 }} />
                                 <CompleteButton onComplete={props.onComplete} disabled={editingTask?.editDisabled} />
                             </div>

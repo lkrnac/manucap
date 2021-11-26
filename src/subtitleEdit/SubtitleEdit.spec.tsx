@@ -9,7 +9,7 @@ import { mount } from "enzyme";
 import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
-import { CueDto, Language, ScrollPosition, Task, Track } from "./model";
+import { CueDto, Language, ScrollPosition, Task, Track, CueError } from "./model";
 import {
     removeDraftJsDynamicValues,
     removeVideoPlayerDynamicValue,
@@ -235,6 +235,15 @@ describe("SubtitleEdit", () => {
                                 >
                                     <i className="fa fa-language" />
                                 </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -377,6 +386,15 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -658,6 +676,15 @@ describe("SubtitleEdit", () => {
                                 >
                                     <i className="fa fa-language" />
                                 </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -818,6 +845,15 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -998,6 +1034,15 @@ describe("SubtitleEdit", () => {
                                     onClick={(): void => undefined}
                                 >
                                     <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
@@ -1447,6 +1492,121 @@ describe("SubtitleEdit", () => {
         expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize}`);
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
     });
+
+    it("jumps to error cue when button is clicked", async () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
+
+        //WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(changeScrollPositionSpy).toBeCalledTimes(1);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.ERROR);
+    });
+
+    it("cycles through error cues when button is clicked", async () => {
+        // GIVEN
+        const cueError = [
+            CueError.TIME_GAP_LIMIT_EXCEEDED,
+            CueError.TIME_GAP_OVERLAP
+        ];
+        const cues = [
+            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE", errors: cueError },
+            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "Editing Line 3"), cueCategory: "DIALOGUE", errors: cueError },
+            { vttCue: new VTTCue(3, 4, "Editing Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(4, 5, "Editing Line 5"), cueCategory: "DIALOGUE", errors: cueError },
+            { vttCue: new VTTCue(5, 6, "Editing Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(6, 7, "Editing Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(7, 8, "Editing Line 4"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(8, 10, "Editing Line 4"), cueCategory: "DIALOGUE", errors: cueError },
+        ] as CueDto[];
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewAllTracks={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(testingStore.getState().currentCueErrorIndex).toEqual(0);
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(testingStore.getState().currentCueErrorIndex).toEqual(2);
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(testingStore.getState().currentCueErrorIndex).toEqual(4);
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(testingStore.getState().currentCueErrorIndex).toEqual(8);
+
+        // WHEN
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+        });
+
+        // THEN
+        expect(testingStore.getState().currentCueErrorIndex).toEqual(0);
+    });
+
+
 
     it("calls onSave callback on auto save", () => {
         // GIVEN
