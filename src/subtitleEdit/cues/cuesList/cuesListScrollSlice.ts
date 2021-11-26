@@ -74,8 +74,9 @@ const getScrollCueIndex = (
 };
 
 const getErrorCueIndex = (cues: CueDto[], currentIndex: number): number => {
-    return cues.findIndex((cue, index) =>
-        (cue.errors && cue.errors?.length > 0) && index !== currentIndex);
+    const errorIndex = cues.findIndex((cue, index) =>
+        (cue.errors && cue.errors?.length > 0) && index > currentIndex);
+    return errorIndex;
 };
 
 export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => {
@@ -102,7 +103,5 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
             scrollPosition
         );
         dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
-        if (errorCueIndex !== state.currentCueErrorIndex) {
-            dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
-        }
+        dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
     };
