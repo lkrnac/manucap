@@ -98,6 +98,7 @@ class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
     private videoNode?: Node;
     playSegmentPauseTimeout?: number;
+    private playPromise: Promise<void> | undefined;
 
     constructor(props: Props) {
         super(props);
@@ -171,12 +172,12 @@ class VideoPlayer extends React.Component<Props> {
             const startTime = this.props.playSection.startTime + ONE_MILLISECOND;
             const endTime = this.props.playSection.endTime;
             this.player.currentTime(startTime);
-            this.player.play();
+            this.playPromise = this.player.play();
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
                 this.playSegmentPauseTimeout = window.setTimeout(() => {
-                    this.player.pause();
+                    this.pauseVideo();
                     // avoid showing 2 captions lines at the same time
                     this.player.currentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
@@ -196,7 +197,17 @@ class VideoPlayer extends React.Component<Props> {
 
     public playPause(): void {
         if (this.player.paused()) {
-            this.player.play();
+            this.playPromise = this.player.play();
+        } else {
+            this.pauseVideo();
+        }
+    }
+
+    private pauseVideo(): void {
+        if (this.playPromise !== undefined) {
+            this.playPromise.then(_ => {
+                this.player.pause();
+            });
         } else {
             this.player.pause();
         }
