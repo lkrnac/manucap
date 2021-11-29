@@ -205,7 +205,7 @@ class VideoPlayer extends React.Component<Props> {
 
     private pauseVideo(): void {
         if (this.playPromise !== undefined) {
-            this.playPromise.then(_ => {
+            this.playPromise.then(() => {
                 this.player.pause();
             });
         } else {
