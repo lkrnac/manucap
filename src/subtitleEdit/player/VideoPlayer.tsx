@@ -98,7 +98,7 @@ class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
     private videoNode?: Node;
     playSegmentPauseTimeout?: number;
-    private playPromise: Promise<void> | undefined;
+    playPromise: Promise<void> | undefined;
 
     constructor(props: Props) {
         super(props);
