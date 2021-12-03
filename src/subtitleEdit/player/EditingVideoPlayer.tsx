@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { clearLastCueChange } from "../cues/edit/cueEditorSlices";
+import Waveform from "../waveform/Waveform";
 
 interface Props {
     mp4: string;
     poster: string;
+    waveform?: string;
     onTimeChange?: (time: number) => void;
 }
 
@@ -33,17 +35,24 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
 
     return editingTrack
         ? (
-            <VideoPlayer
-                mp4={props.mp4}
-                poster={props.poster}
-                tracks={tracks}
-                onTimeChange={props.onTimeChange}
-                languageCuesArray={languageCuesArray}
-                playSection={videoSectionToPlay}
-                lastCueChange={lastCueChange}
-                resetPlayerTimeChange={(): AppThunk => dispatch(playVideoSection(-1))}
-                trackFontSizePercent={1.25}
-            />
+            <>
+                <VideoPlayer
+                    mp4={props.mp4}
+                    poster={props.poster}
+                    tracks={tracks}
+                    onTimeChange={props.onTimeChange}
+                    languageCuesArray={languageCuesArray}
+                    playSection={videoSectionToPlay}
+                    lastCueChange={lastCueChange}
+                    resetPlayerTimeChange={(): AppThunk => dispatch(playVideoSection(-1))}
+                    trackFontSizePercent={1.25}
+                />
+                {
+                    props.waveform
+                        ? <Waveform mp4={props.mp4} waveform={props.waveform} />
+                        : null
+                }
+            </>
         )
         : <p>Editing track not available!</p>;
 };
