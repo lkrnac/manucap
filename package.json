@@ -121,6 +121,13 @@
   "files": [
     "dist"
   ],
+  "jest": {
+    "collectCoverageFrom": [
+        "src/**/*.{js,jsx,ts,tsx}",
+        "!node_modules/**"
+    ],
+    "resetMocks": false
+  },
   "browserslist": {
     "production": [
       ">0.2%",
