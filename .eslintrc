@@ -40,7 +40,26 @@
         "react/jsx-fragments": "error",
         "react/jsx-props-no-multi-spaces": "error",
         "react/jsx-tag-spacing": "error",
-        "react/jsx-wrap-multilines": "error"
+        "react/jsx-wrap-multilines": "error",
+
+        // No longer needed because of new JSX transform
+        // https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off",
+
+        "@typescript-eslint/ban-ts-comment": "off",
+        // TODO: Review disabled types below to eventually better type system
+        "@typescript-eslint/ban-types": ["error",
+            {
+                "types": {
+                    "Function": false,
+                    "object": false,
+                    "Object": false,
+                    "{}": false
+                },
+                "extendDefaults": true
+            }
+        ]
     },
     "settings": {
       "react": {
