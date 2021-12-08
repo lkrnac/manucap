@@ -1,5 +1,5 @@
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
-import React, { ReactElement, useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";

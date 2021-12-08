@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Mousetrap from "mousetrap";
 import { os } from "platform";
 

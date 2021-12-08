@@ -8,7 +8,7 @@ import {
 } from "./shortcutConstants";
 import Mousetrap from "mousetrap";
 import { os } from "platform";
-import React from "react";
+import * as React from "react";
 
 
 describe("shortcutConstants.spec", () => {

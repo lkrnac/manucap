@@ -5,7 +5,6 @@ import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from "react-bootstrap/Card";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import { Provider } from "react-redux";
-import React from "react";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";

@@ -1,5 +1,4 @@
 import "../../../testUtils/initBrowserEnvironment";
-import React  from "react";
 import { Provider } from "react-redux";
 import testingStore from "../../../testUtils/testingStore";
 import { CueComment, CueDto, User } from "../../model";

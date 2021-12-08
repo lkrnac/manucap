@@ -1,4 +1,5 @@
-import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
+import { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
+import * as React from "react";
 import {
     CompositeDecorator,
     ContentBlock,

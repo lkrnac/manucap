@@ -1,4 +1,14 @@
-import React, { CSSProperties, Dispatch, MutableRefObject, ReactElement, RefObject, useEffect, useRef } from "react";
+import {
+    CSSProperties,
+    Dispatch,
+    MutableRefObject,
+    ReactElement,
+    RefObject,
+    useEffect,
+    useRef,
+} from "react";
+
+import * as React from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { Match, SpellCheck } from "./model";

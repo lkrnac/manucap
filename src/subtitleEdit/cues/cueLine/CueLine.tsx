@@ -1,4 +1,5 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
+import * as React from "react";
 import { CUE_LINE_STATE_CLASSES, CueDto, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
 import CueEdit from "../edit/CueEdit";
 import CueView from "../view/CueView";

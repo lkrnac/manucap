@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from "react-bootstrap/Card";
