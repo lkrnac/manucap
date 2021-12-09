@@ -26,8 +26,8 @@ const millisToSeconds = (millis: number | null): string => millis ? "" + (millis
 
 // Disable following rule because if returned HtmlAnchorElement it requires to initialize all element props
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const LinkNewTabRenderer = (props: HTMLLinkElement): any =>
-    <a href={props.href} rel="noopener noreferrer" target="_blank">{props.children}</a>;
+const LinkNewTabRenderer = (href: string | undefined, children: {} | null | undefined): any =>
+    <a href={href} rel="noopener noreferrer" target="_blank">{children}</a>;
 
 const SubtitleSpecificationsForm = (props: Props): ReactElement => (
     <>
@@ -111,20 +111,22 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
                 <ReactMarkdown
-                    renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
-                    source={props.subTitleSpecifications.comments}
-                    disallowedTypes={["html", "virtualHtml"]}
+                    components={{ a: ({ href, children }) =>  LinkNewTabRenderer(href, children) }}
+                    skipHtml
+                    unwrapDisallowed
                     className="sbte-subspec-freeform-text sbte-subspec-comments"
-                />
+                >{props.subTitleSpecifications.comments}
+                </ReactMarkdown>
                 <br />
                 <label><strong>Media Notes:&nbsp;</strong></label>
 
                 <ReactMarkdown
-                    renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
-                    source={props.subTitleSpecifications.mediaNotes}
-                    disallowedTypes={["html", "virtualHtml"]}
+                    components={{ a: ({ href, children }) =>  LinkNewTabRenderer(href, children) }}
+                    skipHtml
+                    unwrapDisallowed
                     className="sbte-subspec-freeform-text sbte-media-notes"
-                />
+                >{(props.subTitleSpecifications.mediaNotes) ? props.subTitleSpecifications.mediaNotes : ""}
+                </ReactMarkdown>
             </>
         ) : null}
     </>
