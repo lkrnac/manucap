@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { SubtitleSpecification } from "../model";
 
 export interface Props {
@@ -29,6 +30,9 @@ const millisToSeconds = (millis: number | null): string => millis ? "" + (millis
 const LinkNewTabRenderer = (href: string | undefined, children: {} | null | undefined): any =>
     <a href={href} rel="noopener noreferrer" target="_blank">{children}</a>;
 
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 const SubtitleSpecificationsForm = (props: Props): ReactElement => (
     <>
         <label><strong>Enabled:&nbsp;</strong></label>
@@ -114,6 +118,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                     components={{ a: ({ href, children }) =>  LinkNewTabRenderer(href, children) }}
                     skipHtml
                     unwrapDisallowed
+                    remarkPlugins={[remarkGfm]}
                     className="sbte-subspec-freeform-text sbte-subspec-comments"
                 >{props.subTitleSpecifications.comments}
                 </ReactMarkdown>
@@ -124,6 +129,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                     components={{ a: ({ href, children }) =>  LinkNewTabRenderer(href, children) }}
                     skipHtml
                     unwrapDisallowed
+                    remarkPlugins={[remarkGfm]}
                     className="sbte-subspec-freeform-text sbte-media-notes"
                 >{(props.subTitleSpecifications.mediaNotes) ? props.subTitleSpecifications.mediaNotes : ""}
                 </ReactMarkdown>
