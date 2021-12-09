@@ -115,7 +115,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 <hr />
                 <label><strong>Comments:&nbsp;</strong></label>
                 <ReactMarkdown
-                    components={{ a: ({ href, children }) =>  LinkNewTabRenderer(href, children) }}
+                    components={{ a: ({ href, children }): ReactElement =>  LinkNewTabRenderer(href, children) }}
                     skipHtml
                     unwrapDisallowed
                     remarkPlugins={[remarkGfm]}
@@ -126,7 +126,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 <label><strong>Media Notes:&nbsp;</strong></label>
 
                 <ReactMarkdown
-                    components={{ a: ({ href, children }) =>  LinkNewTabRenderer(href, children) }}
+                    components={{ a: ({ href, children }): ReactElement =>  LinkNewTabRenderer(href, children) }}
                     skipHtml
                     unwrapDisallowed
                     remarkPlugins={[remarkGfm]}
