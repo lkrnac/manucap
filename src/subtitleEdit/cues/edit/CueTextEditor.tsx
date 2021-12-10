@@ -145,7 +145,7 @@ const createCorrectSpellingHandler = (
 };
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
-    (e: React.KeyboardEvent<{}>): string | null => {
+    (e: React.KeyboardEvent<Record<string, unknown>>): string | null => {
     const action = getActionByKeyboardEvent(e);
     if (action) {
         return action;

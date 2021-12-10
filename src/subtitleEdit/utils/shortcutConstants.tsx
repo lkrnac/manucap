@@ -61,7 +61,7 @@ characterBindings.set(Character.ARROW_DOWN, "setEndTime");
 characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
 characterBindings.set(Character.ESCAPE, "editPrevious");
 
-export const getActionByKeyboardEvent = (e: React.KeyboardEvent<{}>): string | undefined => {
+export const getActionByKeyboardEvent = (e: React.KeyboardEvent<Record<string, unknown>>): string | undefined => {
     const action = characterBindings.get(e.keyCode);
     if (e.shiftKey && (e.metaKey || e.altKey || e.ctrlKey) && action) {
         return action;
@@ -69,7 +69,7 @@ export const getActionByKeyboardEvent = (e: React.KeyboardEvent<{}>): string | u
     return undefined;
 };
 
-export const triggerMouseTrapAction = (e: React.KeyboardEvent<{}>): void => {
+export const triggerMouseTrapAction = (e: React.KeyboardEvent<Record<string, unknown>>): void => {
     const action = getActionByKeyboardEvent(e);
     if (action) {
         const mouseTrapAction = mousetrapBindings.get(action);

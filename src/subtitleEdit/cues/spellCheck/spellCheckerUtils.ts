@@ -10,7 +10,7 @@ export const getMatchText = (match: Match): string => {
     return context.text.slice(context.offset, endOffset);
 };
 
-const getSpellcheckIgnores = (): {} => {
+const getSpellcheckIgnores = (): Record<string, unknown> => {
     const localStorageIgnoredSpellchecks = localStorage.getItem(SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY);
     return localStorageIgnoredSpellchecks == null ? {} : JSON.parse(localStorageIgnoredSpellchecks);
 };

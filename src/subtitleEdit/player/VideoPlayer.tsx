@@ -142,7 +142,7 @@ class VideoPlayer extends React.Component<Props> {
 
         // @ts-ignore @types/video.js is missing this function rom video.js signature check
         // https://www.npmjs.com/package/@types/video.js for updates
-        this.player.handleKeyDown = (event: React.KeyboardEvent<{}>): void => {
+        this.player.handleKeyDown = (event: React.KeyboardEvent<Record<string, unknown>>): void => {
             triggerMouseTrapAction(event);
         };
 
