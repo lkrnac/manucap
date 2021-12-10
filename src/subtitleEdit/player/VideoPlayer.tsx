@@ -3,7 +3,7 @@ import { CueChange, CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../utils/shortcutConstants";
-import { ReactElement } from "react";
+import { KeyboardEventHandler, ReactElement } from "react";
 import * as React from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
@@ -142,7 +142,7 @@ class VideoPlayer extends React.Component<Props> {
 
         // @ts-ignore @types/video.js is missing this function rom video.js signature check
         // https://www.npmjs.com/package/@types/video.js for updates
-        this.player.handleKeyDown = (event: React.KeyboardEvent<Record<string, unknown>>): void => {
+        this.player.handleKeyDown = (event: React.KeyboardEvent<KeyboardEventHandler>): void => {
             triggerMouseTrapAction(event);
         };
 

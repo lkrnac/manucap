@@ -1,6 +1,7 @@
 import * as React from "react";
 import Mousetrap from "mousetrap";
 import { os } from "platform";
+import { KeyboardEventHandler } from "react";
 
 export enum Character {
     O_CHAR = 79,
@@ -61,7 +62,7 @@ characterBindings.set(Character.ARROW_DOWN, "setEndTime");
 characterBindings.set(Character.SLASH_CHAR, "toggleShortcutPopup");
 characterBindings.set(Character.ESCAPE, "editPrevious");
 
-export const getActionByKeyboardEvent = (e: React.KeyboardEvent<Record<string, unknown>>): string | undefined => {
+export const getActionByKeyboardEvent = (e: React.KeyboardEvent<KeyboardEventHandler>): string | undefined => {
     const action = characterBindings.get(e.keyCode);
     if (e.shiftKey && (e.metaKey || e.altKey || e.ctrlKey) && action) {
         return action;
@@ -69,7 +70,7 @@ export const getActionByKeyboardEvent = (e: React.KeyboardEvent<Record<string, u
     return undefined;
 };
 
-export const triggerMouseTrapAction = (e: React.KeyboardEvent<Record<string, unknown>>): void => {
+export const triggerMouseTrapAction = (e: React.KeyboardEvent<KeyboardEventHandler>): void => {
     const action = getActionByKeyboardEvent(e);
     if (action) {
         const mouseTrapAction = mousetrapBindings.get(action);

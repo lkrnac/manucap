@@ -9,6 +9,7 @@ import {
 import Mousetrap from "mousetrap";
 import { os } from "platform";
 import * as React from "react";
+import { KeyboardEventHandler } from "react";
 
 
 describe("shortcutConstants.spec", () => {
@@ -33,7 +34,8 @@ describe("shortcutConstants.spec", () => {
             "gets action from getActionByKeyboardEvent when the input is %s",
             (char: Character | string) => {
                 //GIVEN
-                const event = { shiftKey: true, metaKey: true, keyCode: char } as React.KeyboardEvent<{}>;
+                const event =
+                    { shiftKey: true, metaKey: true, keyCode: char } as React.KeyboardEvent<KeyboardEventHandler>;
 
                 //WHEN
                 const action = getActionByKeyboardEvent(event);
@@ -45,7 +47,8 @@ describe("shortcutConstants.spec", () => {
 
         it("returns undefined if one of the action keys is not clicked", () => {
             //GIVEN
-            const event = { shiftKey: true, metaKey: true, keyCode: Character.O_CHAR } as React.KeyboardEvent<{}>;
+            const event = { shiftKey: true, metaKey: true,
+                keyCode: Character.O_CHAR } as React.KeyboardEvent<KeyboardEventHandler>;
 
             //WHEN
             event.shiftKey = false;
@@ -57,7 +60,8 @@ describe("shortcutConstants.spec", () => {
 
         it("returns undefined if keycode is not defined by characterBindings", () => {
             //GIVEN
-            const event = { shiftKey: true, metaKey: true, keyCode: Character.O_CHAR } as React.KeyboardEvent<{}>;
+            const event = { shiftKey: true, metaKey: true,
+                keyCode: Character.O_CHAR } as React.KeyboardEvent<KeyboardEventHandler>;
 
             //WHEN
             event.keyCode = 33;
@@ -102,7 +106,8 @@ describe("shortcutConstants.spec", () => {
             (expectedKeyCombination: string, char: Character | string,
              metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean ) => {
                 //GIVEN
-                const event = { shiftKey, metaKey, ctrlKey, altKey, keyCode: char } as React.KeyboardEvent<{}>;
+                const event = { shiftKey, metaKey, ctrlKey, altKey,
+                    keyCode: char } as React.KeyboardEvent<KeyboardEventHandler>;
 
                 //WHEN
                 triggerMouseTrapAction(event);
@@ -114,7 +119,8 @@ describe("shortcutConstants.spec", () => {
 
         it("does not trigger mousetrap action if one of the action keys is not clicked", () => {
             //GIVEN
-            const event = { shiftKey: true, metaKey: true, keyCode: Character.O_CHAR } as React.KeyboardEvent<{}>;
+            const event = { shiftKey: true, metaKey: true,
+                keyCode: Character.O_CHAR } as React.KeyboardEvent<KeyboardEventHandler>;
 
             //WHEN
             event.shiftKey = false;
@@ -126,7 +132,8 @@ describe("shortcutConstants.spec", () => {
 
         it("does not trigger mousetrap action if keycode is not defined by characterBindings", () => {
             //GIVEN
-            const event = { shiftKey: true, metaKey: true, keyCode: Character.O_CHAR } as React.KeyboardEvent<{}>;
+            const event = { shiftKey: true, metaKey: true,
+                keyCode: Character.O_CHAR } as React.KeyboardEvent<KeyboardEventHandler>;
 
             //WHEN
             event.keyCode = 33;
