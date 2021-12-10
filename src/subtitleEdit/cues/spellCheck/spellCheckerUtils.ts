@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Match, SpellCheckHash } from "./model";
+import { Match, SpellCheckHash, SpellCheckIgnoreStorage } from "./model";
 import CryptoJS from "crypto-js";
 
 const SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY = "SpellcheckerIgnores";
@@ -10,7 +10,7 @@ export const getMatchText = (match: Match): string => {
     return context.text.slice(context.offset, endOffset);
 };
 
-const getSpellcheckIgnores = (): Record<string, unknown> => {
+const getSpellcheckIgnores = (): SpellCheckIgnoreStorage => {
     const localStorageIgnoredSpellchecks = localStorage.getItem(SPELLCHECKER_IGNORES_LOCAL_STORAGE_KEY);
     return localStorageIgnoredSpellchecks == null ? {} : JSON.parse(localStorageIgnoredSpellchecks);
 };
