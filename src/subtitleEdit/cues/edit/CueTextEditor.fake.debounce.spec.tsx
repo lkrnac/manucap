@@ -764,46 +764,6 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.pauseOnExit).toEqual(true);
     });
 
-    it("hides add cue button", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.find(".sbte-add-cue-button")).toEqual({});
-    });
-
-    it("hides delete cue button", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                />
-            </Provider>
-        );
-
-        // THEN
-        expect(actualNode.find(".sbte-delete-cue-button")).toEqual({});
-    });
-
     it("doesn't updates cue in redux store if new text doesn't conform to subtitle specification", () => {
         // GIVEN
         const editor = mountEditorNode();
