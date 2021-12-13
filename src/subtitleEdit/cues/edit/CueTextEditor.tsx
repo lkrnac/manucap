@@ -23,7 +23,7 @@ import { convertVttToHtml, getVttText } from "./cueTextConverter";
 import CueLineCounts from "../cueLine/CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
-import { applySpellcheckerOnCue, updateVttCue } from "../cuesList/cuesListActions";
+import { applySpellcheckerOnCue, checkErrors, updateVttCue } from "../cuesList/cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
@@ -281,6 +281,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         () => {
             if (!props.spellCheck) {
                 dispatch(applySpellcheckerOnCue(props.index));
+                dispatch(checkErrors({ index: props.index, shouldSpellCheck: false }));
             }
         },
         // needed to call the effect only once
