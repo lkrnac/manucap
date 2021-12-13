@@ -253,538 +253,539 @@ describe("CueTextEditor", () => {
         fetchSpellCheck.mockReset();
     });
 
-    it("renders empty", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "");
-        const contentState = ContentState.createFromText("");
-
-        // NOTE: Following latest expectation is not configurable nature of draft-js-export-html.
-        // See following line in their code
-        // eslint-disable-next-line max-len
-        // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
-        testForContentState(contentState, vttCue, "<br>", 1, [0], [0], [0]);
-    });
-
-    it("renders with text", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        const contentState = ContentState.createFromText(vttCue.text);
-
-        testForContentState(contentState, vttCue, "someText", 1, [8], [1], [8]);
-    });
-
-    it("renders with html", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
-        const processedHTML = convertFromHTML(vttCue.text);
-        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
-
-        testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample", 1, [21], [4], [21]);
-    });
-
-    it("renders with multiple lines", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "some <i>HTML</i>\n <b>Text</b> sample");
-        const processedHTML = convertFromHTML(convertVttToHtml(vttCue.text));
-        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
-
-        testForContentState(
-            contentState, vttCue, "some <i>HTML</i><br>\n <b>Text</b> sample", 1, [9,12], [2,2], [9,12]);
-    });
-
-    it("updates cue in redux store when changed", () => {
-        // GIVEN
-        const editor = mountEditorNode();
-
-        // WHEN
-        editor.simulate("paste", {
-            clipboardData: {
-                types: ["text/plain"],
-                getData: (): string => " Paste text to end",
-            }
-        });
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
-    });
-
-    it("triggers autosave and when changed", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
-
-        const editor = mountEditorNode();
-
-        // WHEN
-        editor.simulate("paste", {
-            clipboardData: {
-                types: ["text/plain"],
-                getData: (): string => " Paste text to end",
-            }
-        });
-
-        // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(1);
-    });
-
-    it("doesn't trigger autosave when user selects text", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-        const vttCue = new VTTCue(0, 1, "some text");
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                />
-            </Provider>
-        );
-        const editorState = actualNode.find(Editor).props().editorState;
-        const selectionState = editorState.getSelection();
-
-        // WHEN
-        // select first 5 characters
-        const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
-        actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
-
-        // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(0);
-    });
-
-    /**
-     * This is needed because of VTT vs HTML differences (HTML is native format of draft-js).
-     * Currently this includes only line wrappings ('\n' vs '<br>').
-     */
-    it("does the VTT <-> HTML conversion", () => {
-        // GIVEN
-        const editor = mountEditorNode("some\nwrapped\ntext");
-
-        // WHEN
-        editor.simulate("paste", {
-            clipboardData: {
-                types: ["text/plain"],
-                getData: (): string => " lala",
-            }
-        });
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some\nwrapped\ntext lala");
-    });
-
-    it("updated cue when bold inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 0, "<b>someT</b>ext");
-    });
-
-    it("updated cue when italic inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<i>someT</i>ext");
-    });
-
-    it("updated cue when underline inline style is used", () => {
-        testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
-    });
-
-    it.skip("maintain cue styles when cue text changes", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.position = 60;
-        vttCue.align = "end";
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={editUuid}
-                />
-            </Provider>
-        );
-        const editor = actualNode.find(".public-DraftEditor-content");
-
-        // WHEN
-        editor.simulate("paste", {
-            clipboardData: {
-                types: ["text/plain"],
-                getData: (): string => "Paste text to start: ",
-            }
-        });
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
-        expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
-    });
-
-    each([
-        [KeyCombination.MOD_SHIFT_O, Character.O_CHAR, true, true, false, false],
-        [KeyCombination.MOD_SHIFT_O, Character.O_CHAR, false, true, true, false],
-        [KeyCombination.MOD_SHIFT_O, Character.O_CHAR, false, true, false, true],
-        [KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, true, true, false, false],
-        [KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, false, true, true, false],
-        [KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, false, true, false, true],
-        [KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, true, true, false, false],
-        [KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, false, true, true, false],
-        [KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, false, true, false, true],
-        [KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, true, true, false, false],
-        [KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, false, true, true, false],
-        [KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, false, true, false, true],
-        [KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, true, true, false, false],
-        [KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, false, true, true, false],
-        [KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, false, true, false, true],
-        [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, true, true, false, false],
-        [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, false, true, true, false],
-        [KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, false, true, false, true],
-        [KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, true, true, false, false],
-        [KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, false, true, true, false],
-        [KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, false, true, false, true],
-    ])
-        .it("should handle '%s' keyboard shortcut", (
-            expectedKeyCombination: KeyCombination,
-            character: Character, metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
-        ) => {
+    describe("rendering", () => {
+        it("renders empty", () => {
             // GIVEN
-            const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-            mousetrapSpy.mockReset();
+            const vttCue = new VTTCue(0, 1, "");
+            const contentState = ContentState.createFromText("");
+
+            // NOTE: Following latest expectation is not configurable nature of draft-js-export-html.
+            // See following line in their code
+            // eslint-disable-next-line max-len
+            // https://github.com/sstur/draft-js-utils/blob/fe6eb9853679e2040ca3ac7bf270156079ab35db/packages/draft-js-export-html/src/stateToHTML.js#L366
+            testForContentState(contentState, vttCue, "<br>", 1, [ 0 ], [ 0 ], [ 0 ]);
+        });
+
+        it("renders with text", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            const contentState = ContentState.createFromText(vttCue.text);
+
+            testForContentState(contentState, vttCue, "someText", 1, [ 8 ], [ 1 ], [ 8 ]);
+        });
+
+        it("renders with html", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+            const processedHTML = convertFromHTML(vttCue.text);
+            const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+
+            testForContentState(contentState, vttCue, "some <i>HTML</i> <b>Text</b> sample", 1, [ 21 ], [ 4 ], [ 21 ]);
+        });
+
+        it("renders with multiple lines", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i>\n <b>Text</b> sample");
+            const processedHTML = convertFromHTML(convertVttToHtml(vttCue.text));
+            const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+
+            testForContentState(
+                contentState, vttCue, "some <i>HTML</i><br>\n <b>Text</b> sample", 1, [ 9, 12 ], [ 2, 2 ], [ 9, 12 ]);
+        });
+    });
+
+    describe("autosave", () => {
+        it("triggers autosave and when changed", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
+
             const editor = mountEditorNode();
 
             // WHEN
-            editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
-
-            // THEN
-            expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
-        });
-
-    each([
-        [KeyCombination.ENTER, Character.ENTER],
-        [KeyCombination.ESCAPE, Character.ESCAPE],
-    ])
-        .it("should handle '%s' keyboard shortcut", (expectedKeyCombination: KeyCombination, character: Character) => {
-            // GIVEN
-            const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-            const editor = mountEditorNode();
-
-            // WHEN
-            editor.simulate("keyDown", { keyCode: character });
-
-            // THEN
-            expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
-        });
-
-
-    each([
-        [KeyCombination.ENTER, Character.ENTER],
-        [KeyCombination.ESCAPE, Character.ESCAPE],
-    ])
-        .it("should handle '%s' popover keyboard shortcut",
-            (expectedKeyCombination: KeyCombination, character: Character) => {
-            // GIVEN
-            const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-            const editor = mountEditorNode();
-
-            // WHEN
-            editor.simulate("keyDown", { keyCode: character });
-
-            // THEN
-            expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
-        });
-
-    each([
-        [KeyCombination.ESCAPE, Character.ESCAPE, true, false, false, false],
-        [KeyCombination.ESCAPE, Character.ESCAPE, false, true, false, false],
-        [KeyCombination.ESCAPE, Character.ESCAPE, false, false, true, false],
-        [KeyCombination.ESCAPE, Character.ESCAPE, false, false, false, true],
-        [KeyCombination.ENTER, Character.ENTER, true, false, false, false],
-        [KeyCombination.ENTER, Character.ENTER, false, true, false, false],
-        [KeyCombination.ENTER, Character.ENTER, false, false, true, false],
-        [KeyCombination.ENTER, Character.ENTER, false, false, false, true],
-    ])
-        .it("doesn't handle '%s' keypress if modifier keys are pressed", (
-            _expectedKeyCombination: KeyCombination, character: Character,
-            metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
-        ) => {
-            // GIVEN
-            const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
-            mousetrapSpy.mockReset();
-            const editor = mountEditorNode();
-
-            // WHEN
-            editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
-
-            // THEN
-            expect(mousetrapSpy).not.toBeCalled();
-        });
-
-    it("should handle unbound key shortcuts", () => {
-        // GIVEN
-        const defaultKeyBinding = jest.spyOn(Draft, "getDefaultKeyBinding");
-        const editor = mountEditorNode();
-
-        // WHEN
-        editor.simulate("keyDown", {
-            keyCode: 8, // backspace
-            metaKey: false,
-            shiftKey: true,
-            altKey: true,
-        });
-
-        // THEN
-        expect(defaultKeyBinding).toBeCalled();
-    });
-
-    it.skip("updates cue in Redux if position property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.position = 3;
-        const editUuid = testingStore.getState().cues[0].editUuid;
-
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={
-                    { index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                    }
+            editor.simulate("paste", {
+                clipboardData: {
+                    types: [ "text/plain" ],
+                    getData: (): string => " Paste text to end",
                 }
-            />);
+            });
 
-        // WHEN
-        vttCue.position = 6;
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.position).toEqual(6);
-    });
-
-    it.skip("updates cue in Redux if align property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.align = "left";
-        const editUuid = testingStore.getState().cues[0].editUuid;
-
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-
-                }}
-            />);
-
-        // WHEN
-        vttCue.align = "right";
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.align).toEqual("right");
-    });
-
-    it.skip("updates cue in Redux if lineAlign property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.lineAlign = "start";
-        const editUuid = testingStore.getState().cues[0].editUuid;
-
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                }}
-            />);
-
-        // WHEN
-        vttCue.lineAlign = "end";
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.lineAlign).toEqual("end");
-    });
-
-    it.skip("updates cue in Redux if positionAlign property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.positionAlign = "line-left";
-        const editUuid = testingStore.getState().cues[0].editUuid;
-
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                }}
-            />);
-
-        // WHEN
-        vttCue.positionAlign = "line-right";
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("line-right");
-    });
-
-    it("updates cue in Redux if snapToLines property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.snapToLines = false;
-        const editUuid = testingStore.getState().cues[0].editUuid;
-
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                }}
-            />);
-
-        // WHEN
-        vttCue.snapToLines = true;
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.snapToLines).toEqual(true);
-    });
-
-    it.skip("updates cue in Redux if size property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.size = 80;
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                }}
-            />);
-
-        // WHEN
-        vttCue.size = 30;
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.size).toEqual(30);
-    });
-
-    it.skip("updates cue in Redux if line property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.line = 3;
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                }}
-            />);
-
-        // WHEN
-        vttCue.line = 6;
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.line).toEqual(6);
-    });
-
-    it.skip("updates cue in Redux if vertical property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.vertical = "rl";
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                }}
-            />);
-
-        // WHEN
-        vttCue.vertical = "lr";
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.vertical).toEqual("lr");
-    });
-
-    it.skip("updates cue in Redux if ID property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.id = "id";
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                }}
-            />);
-
-        // WHEN
-        vttCue.id = "differentId";
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.id).toEqual("differentId");
-    });
-
-    it.skip("updates cue in Redux if pauseOnExit property is changed", () => {
-        // GIVEN
-        const vttCue = new VTTCue(0, 1, "someText");
-        vttCue.pauseOnExit = false;
-        const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
-            <ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-                }}
-            />);
-
-        // WHEN
-        vttCue.pauseOnExit = true;
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
-
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.pauseOnExit).toEqual(true);
-    });
-
-    it("doesn't updates cue in redux store if new text doesn't conform to subtitle specification", () => {
-        // GIVEN
-        const editor = mountEditorNode();
-        const testingSubtitleSpecification = {
-            enabled: true,
-            maxLinesPerCaption: 2,
-            maxCharactersPerLine: 30,
-        } as SubtitleSpecification;
-        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-        // WHEN
-        editor.simulate("paste", {
-            clipboardData: {
-                types: ["text/plain"],
-                getData: (): string => "\n Paste text \n with few lines",
-            }
+            // THEN
+            expect(saveTrack).toHaveBeenCalledTimes(1);
         });
 
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
-        expect(testingStore.getState().editorStates[0]).toBeUndefined();
+        it("doesn't trigger autosave when user selects text", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
+            const vttCue = new VTTCue(0, 1, "some text");
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                    />
+                </Provider>
+            );
+            const editorState = actualNode.find(Editor).props().editorState;
+            const selectionState = editorState.getSelection();
+
+            // WHEN
+            // select first 5 characters
+            const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
+            actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
+
+            // THEN
+            expect(saveTrack).toHaveBeenCalledTimes(0);
+        });
+    });
+
+    describe("keyboard shortcuts", () => {
+        each([
+            [ KeyCombination.MOD_SHIFT_O, Character.O_CHAR, true, true, false, false ],
+            [ KeyCombination.MOD_SHIFT_O, Character.O_CHAR, false, true, true, false ],
+            [ KeyCombination.MOD_SHIFT_O, Character.O_CHAR, false, true, false, true ],
+            [ KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, true, true, false, false ],
+            [ KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, false, true, true, false ],
+            [ KeyCombination.MOD_SHIFT_LEFT, Character.ARROW_LEFT, false, true, false, true ],
+            [ KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, true, true, false, false ],
+            [ KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, false, true, true, false ],
+            [ KeyCombination.MOD_SHIFT_RIGHT, Character.ARROW_RIGHT, false, true, false, true ],
+            [ KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, true, true, false, false ],
+            [ KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, false, true, true, false ],
+            [ KeyCombination.MOD_SHIFT_UP, Character.ARROW_UP, false, true, false, true ],
+            [ KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, true, true, false, false ],
+            [ KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, false, true, true, false ],
+            [ KeyCombination.MOD_SHIFT_DOWN, Character.ARROW_DOWN, false, true, false, true ],
+            [ KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, true, true, false, false ],
+            [ KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, false, true, true, false ],
+            [ KeyCombination.MOD_SHIFT_SLASH, Character.SLASH_CHAR, false, true, false, true ],
+            [ KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, true, true, false, false ],
+            [ KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, false, true, true, false ],
+            [ KeyCombination.MOD_SHIFT_ESCAPE, Character.ESCAPE, false, true, false, true ],
+        ])
+            .it("should handle '%s' keyboard shortcut", (
+                expectedKeyCombination: KeyCombination,
+                character: Character, metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
+            ) => {
+                // GIVEN
+                const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+                mousetrapSpy.mockReset();
+                const editor = mountEditorNode();
+
+                // WHEN
+                editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+
+                // THEN
+                expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
+            });
+
+        each([
+            [ KeyCombination.ENTER, Character.ENTER ],
+            [ KeyCombination.ESCAPE, Character.ESCAPE ],
+        ])
+            .it(
+                "should handle '%s' keyboard shortcut",
+                (expectedKeyCombination: KeyCombination, character: Character) => {
+                    // GIVEN
+                    const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+                    const editor = mountEditorNode();
+
+                    // WHEN
+                    editor.simulate("keyDown", { keyCode: character });
+
+                    // THEN
+                    expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
+                }
+            );
+
+
+        each([
+            [ KeyCombination.ENTER, Character.ENTER ],
+            [ KeyCombination.ESCAPE, Character.ESCAPE ],
+        ])
+            .it("should handle '%s' popover keyboard shortcut",
+                (expectedKeyCombination: KeyCombination, character: Character) => {
+                    // GIVEN
+                    const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+                    const editor = mountEditorNode();
+
+                    // WHEN
+                    editor.simulate("keyDown", { keyCode: character });
+
+                    // THEN
+                    expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
+                });
+
+        each([
+            [ KeyCombination.ESCAPE, Character.ESCAPE, true, false, false, false ],
+            [ KeyCombination.ESCAPE, Character.ESCAPE, false, true, false, false ],
+            [ KeyCombination.ESCAPE, Character.ESCAPE, false, false, true, false ],
+            [ KeyCombination.ESCAPE, Character.ESCAPE, false, false, false, true ],
+            [ KeyCombination.ENTER, Character.ENTER, true, false, false, false ],
+            [ KeyCombination.ENTER, Character.ENTER, false, true, false, false ],
+            [ KeyCombination.ENTER, Character.ENTER, false, false, true, false ],
+            [ KeyCombination.ENTER, Character.ENTER, false, false, false, true ],
+        ])
+            .it("doesn't handle '%s' keypress if modifier keys are pressed", (
+                _expectedKeyCombination: KeyCombination, character: Character,
+                metaKey: boolean, shiftKey: boolean, altKey: boolean, ctrlKey: boolean
+            ) => {
+                // GIVEN
+                const mousetrapSpy = jest.spyOn(Mousetrap, "trigger");
+                mousetrapSpy.mockReset();
+                const editor = mountEditorNode();
+
+                // WHEN
+                editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+
+                // THEN
+                expect(mousetrapSpy).not.toBeCalled();
+            });
+
+        it("should handle unbound key shortcuts", () => {
+            // GIVEN
+            const defaultKeyBinding = jest.spyOn(Draft, "getDefaultKeyBinding");
+            const editor = mountEditorNode();
+
+            // WHEN
+            editor.simulate("keyDown", {
+                keyCode: 8, // backspace
+                metaKey: false,
+                shiftKey: true,
+                altKey: true,
+            });
+
+            // THEN
+            expect(defaultKeyBinding).toBeCalled();
+        });
+    });
+
+    describe("cue updates", () => {
+        it("updated cue when bold inline style is used", () => {
+            testInlineStyle(new VTTCue(0, 1, "someText"), 0, "<b>someT</b>ext");
+        });
+
+        it("updated cue when italic inline style is used", () => {
+            testInlineStyle(new VTTCue(0, 1, "someText"), 1, "<i>someT</i>ext");
+        });
+
+        it("updated cue when underline inline style is used", () => {
+            testInlineStyle(new VTTCue(0, 1, "someText"), 2, "<u>someT</u>ext");
+        });
+
+        it.skip("maintain cue styles when cue text changes", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.position = 60;
+            vttCue.align = "end";
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                    />
+                </Provider>
+            );
+            const editor = actualNode.find(".public-DraftEditor-content");
+
+            // WHEN
+            editor.simulate("paste", {
+                clipboardData: {
+                    types: [ "text/plain" ],
+                    getData: (): string => "Paste text to start: ",
+                }
+            });
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.position).toEqual(60);
+            expect(testingStore.getState().cues[0].vttCue.align).toEqual("end");
+        });
+
+        it("updates cue in redux store when changed", () => {
+            // GIVEN
+            const editor = mountEditorNode();
+
+            // WHEN
+            editor.simulate("paste", {
+                clipboardData: {
+                    types: [ "text/plain" ],
+                    getData: (): string => " Paste text to end",
+                }
+            });
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
+        });
+
+        it.skip("updates cue in Redux if position property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.position = 3;
+            const editUuid = testingStore.getState().cues[0].editUuid;
+
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={
+                        {
+                            index: 0, vttCue, editUuid,
+                            bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                            unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        }
+                    }
+                />);
+
+            // WHEN
+            vttCue.position = 6;
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.position).toEqual(6);
+        });
+
+        it.skip("updates cue in Redux if align property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.align = "left";
+            const editUuid = testingStore.getState().cues[0].editUuid;
+
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+
+                    }}
+                />);
+
+            // WHEN
+            vttCue.align = "right";
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.align).toEqual("right");
+        });
+
+        it.skip("updates cue in Redux if lineAlign property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.lineAlign = "start";
+            const editUuid = testingStore.getState().cues[0].editUuid;
+
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }}
+                />);
+
+            // WHEN
+            vttCue.lineAlign = "end";
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.lineAlign).toEqual("end");
+        });
+
+        it.skip("updates cue in Redux if positionAlign property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.positionAlign = "line-left";
+            const editUuid = testingStore.getState().cues[0].editUuid;
+
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }}
+                />);
+
+            // WHEN
+            vttCue.positionAlign = "line-right";
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("line-right");
+        });
+
+        it("updates cue in Redux if snapToLines property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.snapToLines = false;
+            const editUuid = testingStore.getState().cues[0].editUuid;
+
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }}
+                />);
+
+            // WHEN
+            vttCue.snapToLines = true;
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.snapToLines).toEqual(true);
+        });
+
+        it.skip("updates cue in Redux if size property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.size = 80;
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }}
+                />);
+
+            // WHEN
+            vttCue.size = 30;
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.size).toEqual(30);
+        });
+
+        it.skip("updates cue in Redux if line property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.line = 3;
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }}
+                />);
+
+            // WHEN
+            vttCue.line = 6;
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.line).toEqual(6);
+        });
+
+        it.skip("updates cue in Redux if vertical property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.vertical = "rl";
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }}
+                />);
+
+            // WHEN
+            vttCue.vertical = "lr";
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.vertical).toEqual("lr");
+        });
+
+        it.skip("updates cue in Redux if ID property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.id = "id";
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }}
+                />);
+
+            // WHEN
+            vttCue.id = "differentId";
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.id).toEqual("differentId");
+        });
+
+        it.skip("updates cue in Redux if pauseOnExit property is changed", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 1, "someText");
+            vttCue.pauseOnExit = false;
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const actualNode = mount(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }}
+                />);
+
+            // WHEN
+            vttCue.pauseOnExit = true;
+            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.pauseOnExit).toEqual(true);
+        });
+
+        it("doesn't updates cue in redux store if new text doesn't conform to subtitle specification", () => {
+            // GIVEN
+            const editor = mountEditorNode();
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            editor.simulate("paste", {
+                clipboardData: {
+                    types: [ "text/plain" ],
+                    getData: (): string => "\n Paste text \n with few lines",
+                }
+            });
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
+            expect(testingStore.getState().editorStates[0]).toBeUndefined();
+        });
     });
 
     describe("spell checking", () => {
@@ -1872,155 +1873,183 @@ describe("CueTextEditor", () => {
         });
     });
 
-    it("appends glossary term at the end of content and resets it in redux to null", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+    describe("glossary", () => {
+        it("appends glossary term at the end of content and resets it in redux to null", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
-        const vttCue = new VTTCue(0, 1, "some text");
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={testingStore.getState().cues[0].editUuid}
-                />
-            </Provider>
-        );
+            const vttCue = new VTTCue(0, 1, "some text");
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={testingStore.getState().cues[0].editUuid}
+                    />
+                </Provider>
+            );
 
-        // WHEN
-        testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
-        actualNode.setProps({});
+            // WHEN
+            testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
+            actualNode.setProps({});
 
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some textreplacement");
-        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some textreplacement");
-        expect(testingStore.getState().glossaryTerm).toEqual(null);
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some textreplacement");
+            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+            expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some textreplacement");
+            expect(testingStore.getState().glossaryTerm).toEqual(null);
+        });
+
+        it("inserts glossary term into the middle of content and resets it in redux to null", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+
+            const vttCue = new VTTCue(0, 1, "some text");
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={testingStore.getState().cues[0].editUuid}
+                    />
+                </Provider>
+            );
+            const editorState = actualNode.find(Editor).props().editorState;
+            const selectionState = editorState.getSelection();
+
+            // WHEN
+            const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
+            actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
+            testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
+            actualNode.setProps({});
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some replacementtext");
+            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+            expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some replacementtext");
+            expect(testingStore.getState().glossaryTerm).toEqual(null);
+        });
     });
 
-    it("inserts glossary term into the middle of content and resets it in redux to null", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+    describe("special use cases", () => {
+        it("inserts &lrm; bidi control character at cursor position for LTR language", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
-        const vttCue = new VTTCue(0, 1, "some text");
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={testingStore.getState().cues[0].editUuid}
-                />
-            </Provider>
-        );
-        const editorState = actualNode.find(Editor).props().editorState;
-        const selectionState = editorState.getSelection();
+            const vttCue = new VTTCue(0, 1, "some text");
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={testingStore.getState().cues[0].editUuid}
+                    />
+                </Provider>
+            );
+            const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
 
-        // WHEN
-        const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
-        actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
-        testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
-        actualNode.setProps({});
+            // WHEN
+            fireEvent.keyDown(editor, { keyCode: Character.B_CHAR, shiftKey: true, ctrlKey: true, metaKey: true });
 
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some replacementtext");
-        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some replacementtext");
-        expect(testingStore.getState().glossaryTerm).toEqual(null);
-    });
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200E");
+            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+            expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200E");
+        });
 
-    it("inserts &lrm; bidi control character at cursor position for LTR language", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        it("inserts &rlm; bidi control character at cursor position for RTL language", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            const testTrack = {
+                mediaTitle: "testingTrack",
+                language: { id: "ar-AR", name: "Arabic", direction: "RTL" }
+            };
+            testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
-        const vttCue = new VTTCue(0, 1, "some text");
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={testingStore.getState().cues[0].editUuid}
-                />
-            </Provider>
-        );
-        const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+            const vttCue = new VTTCue(0, 1, "some text");
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={testingStore.getState().cues[0].editUuid}
+                    />
+                </Provider>
+            );
+            const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
 
-        // WHEN
-        fireEvent.keyDown(editor, { keyCode: Character.B_CHAR, shiftKey: true, ctrlKey: true, metaKey: true });
+            // WHEN
+            fireEvent.keyDown(editor, { keyCode: Character.B_CHAR, shiftKey: true, ctrlKey: true, metaKey: true });
 
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200E");
-        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200E");
-    });
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200F");
+            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+            expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200F");
+        });
 
-    it("inserts &rlm; bidi control character at cursor position for RTL language", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "ar-AR", name: "Arabic", direction: "RTL" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+        it("replaces cue text if apply-entity bug happens", () => {
+            // GIVEN
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            const testTrack = {
+                mediaTitle: "testingTrack",
+                language: { id: "ar-AR", name: "Arabic", direction: "RTL" }
+            };
+            testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
-        const vttCue = new VTTCue(0, 1, "some text");
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={testingStore.getState().cues[0].editUuid}
-                />
-            </Provider>
-        );
-        const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+            const vttCue = new VTTCue(0, 1, "some text");
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={testingStore.getState().cues[0].editUuid}
+                    />
+                </Provider>
+            );
 
-        // WHEN
-        fireEvent.keyDown(editor, { keyCode: Character.B_CHAR, shiftKey: true, ctrlKey: true, metaKey: true });
+            // WHEN
+            const contentState = ContentState.createFromText("some te");
+            const editorState = EditorState.createEmpty();
+            const newState = EditorState.push(editorState, contentState, "apply-entity");
+            actualNode.find(Editor).props().onChange(newState);
 
-        // THEN
-        expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200F");
-        const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-        expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200F");
-    });
+            // THEN
+            expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual("some text");
+        });
 
-    it("replaces cue text if apply-entity bug happens", () => {
-        // GIVEN
-        const saveTrack = jest.fn();
-        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const testTrack = { mediaTitle: "testingTrack",
-            language: { id: "ar-AR", name: "Arabic", direction: "RTL" }};
-        testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+        /**
+         * This is needed because of VTT vs HTML differences (HTML is native format of draft-js).
+         * Currently this includes only line wrappings ('\n' vs '<br>').
+         */
+        it("does the VTT <-> HTML conversion", () => {
+            // GIVEN
+            const editor = mountEditorNode("some\nwrapped\ntext");
 
-        const vttCue = new VTTCue(0, 1, "some text");
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <CueTextEditor
-                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    index={0}
-                    vttCue={vttCue}
-                    editUuid={testingStore.getState().cues[0].editUuid}
-                />
-            </Provider>
-        );
+            // WHEN
+            editor.simulate("paste", {
+                clipboardData: {
+                    types: ["text/plain"],
+                    getData: (): string => " lala",
+                }
+            });
 
-        // WHEN
-        const contentState = ContentState.createFromText("some te");
-        const editorState = EditorState.createEmpty();
-        const newState = EditorState.push(editorState, contentState, "apply-entity");
-        actualNode.find(Editor).props().onChange(newState);
-
-        // THEN
-        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual("some text");
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some\nwrapped\ntext lala");
+        });
     });
 });
