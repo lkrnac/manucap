@@ -34,7 +34,7 @@ import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
-import { matchedCuesSlice } from "./cuesListSlices";
+import { cuesSlice, matchedCuesSlice } from "./cuesListSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -1516,7 +1516,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
@@ -1551,7 +1551,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
@@ -1561,10 +1561,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
-            expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
@@ -1583,7 +1580,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
@@ -1593,10 +1590,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
-            expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
@@ -1615,17 +1609,17 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].errors).toBeUndefined();
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
-            expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
@@ -1641,7 +1635,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1665,7 +1659,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1690,7 +1684,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1716,7 +1710,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1742,14 +1736,14 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
@@ -1765,14 +1759,14 @@ describe("cueSlices", () => {
                 maxCharactersPerSecondPerCaption: null,
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
@@ -1788,14 +1782,14 @@ describe("cueSlices", () => {
                 maxCharactersPerSecondPerCaption: 15,
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
@@ -1812,14 +1806,14 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
@@ -2620,26 +2614,28 @@ describe("cueSlices", () => {
         });
     });
 
-    it("Resets cues on resetEditingTrack", () => {
-        //GIVEN
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+    describe("resetEditingTrack", () => {
+        it("Resets cues on resetEditingTrack", () => {
+            //GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
-        //WHEN
-        testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+            //WHEN
+            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
 
-        // THEN
-        expect(testingStore.getState().cues.length).toEqual(0);
-    });
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(0);
+        });
 
-    it("Resets source cues on resetEditingTrack", () => {
-        //GIVEN
-        testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
+        it("Resets source cues on resetEditingTrack", () => {
+            //GIVEN
+            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
 
-        //WHEN
-        testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+            //WHEN
+            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
 
-        // THEN
-        expect(testingStore.getState().sourceCues.length).toEqual(0);
+            // THEN
+            expect(testingStore.getState().sourceCues.length).toEqual(0);
+        });
     });
 
     describe("syncCues", () => {
