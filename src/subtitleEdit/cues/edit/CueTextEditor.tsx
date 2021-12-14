@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
+import React, { Dispatch, KeyboardEventHandler, MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
 import {
     CompositeDecorator,
     ContentBlock,
@@ -144,7 +144,7 @@ const createCorrectSpellingHandler = (
 };
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
-    (e: React.KeyboardEvent<{}>): string | null => {
+    (e: React.KeyboardEvent<KeyboardEventHandler>): string | null => {
     const action = getActionByKeyboardEvent(e);
     if (action) {
         return action;
@@ -212,6 +212,35 @@ const replaceIfNeeded = (
     return editorState;
 };
 
+const revertEntityState = (
+    prevVttText: string,
+    editorOnChangeTextRef: MutableRefObject<string | null>
+): EditorState => {
+    const processedHTML = convertFromHTML(convertVttToHtml(prevVttText));
+    const initialContentState =
+        ContentState.createFromBlockArray(processedHTML.contentBlocks);
+    let newUpdatedState = EditorState.createWithContent(initialContentState);
+    newUpdatedState = EditorState.moveFocusToEnd(newUpdatedState);
+    editorOnChangeTextRef.current = prevVttText;
+    return newUpdatedState;
+};
+
+const handleApplyEntityIfNeeded = (
+    newEditorState: EditorState,
+    editorOnChangeTextRef: MutableRefObject<string | null>
+): EditorState => {
+    // This code reverts an undesired change in editor that causes text to be lost on Firefox
+    const newVttText = getVttText(newEditorState.getCurrentContent());
+    if (newEditorState.getLastChangeType() === "apply-entity") {
+        const prevVttText = editorOnChangeTextRef.current || "";
+        if (prevVttText !== newVttText) {
+            return revertEntityState(prevVttText, editorOnChangeTextRef);
+        }
+    }
+    editorOnChangeTextRef.current = newVttText;
+    return newEditorState;
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
@@ -230,6 +259,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     const unmountContentRef = useRef<ContentState | null>(null);
     const imeCompositionRef = useRef<string | null>(null);
+    const editorOnChangeTextRef = useRef<string | null>(null);
 
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -371,19 +401,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                             if (imeCompositionRef.current === "end") {
                                 imeCompositionRef.current = null;
                             }
-
-                            // This code reverts an undesired change in editor that causes text to be lost on Firefox
-                            let newUpdatedState = newEditorState;
-                            const oldVttText = getVttText(editorState.getCurrentContent());
-                            const newVttText = getVttText(newEditorState.getCurrentContent());
-                            if (newEditorState.getLastChangeType() === "apply-entity" && oldVttText !== newVttText) {
-                                const processedHTML = convertFromHTML(convertVttToHtml(oldVttText));
-                                const initialContentState =
-                                    ContentState.createFromBlockArray(processedHTML.contentBlocks);
-                                newUpdatedState = EditorState.createWithContent(initialContentState);
-                                newUpdatedState = EditorState.moveFocusToEnd(newUpdatedState);
-                            }
-
+                            const newUpdatedState = handleApplyEntityIfNeeded(newEditorState, editorOnChangeTextRef);
                             return dispatch(updateEditorState(props.index, newUpdatedState));
                         }}
                         ref={editorRef}
