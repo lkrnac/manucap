@@ -9,7 +9,7 @@ import {
     addCue,
     addCueComment,
     addCuesToMergeList,
-    applyShiftTime,
+    applyShiftTime, checkErrors,
     deleteCue,
     deleteCueComment,
     mergeCues,
@@ -1816,6 +1816,37 @@ describe("cueSlices", () => {
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+        });
+    });
+
+    describe("checkErrors", () => {
+        it("does not trigger autosave if error count is the same", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+
+            // WHEN
+            testingStore.dispatch(checkErrors({ index: 2, shouldSpellCheck: false }) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
     });
 
