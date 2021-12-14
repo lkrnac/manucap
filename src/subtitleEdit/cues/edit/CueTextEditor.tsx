@@ -216,30 +216,29 @@ const replaceIfNeeded = (
 
 const revertEntityState = (
     prevVttText: string,
-    editorOnChangeTextRef: MutableRefObject<string | null>
+    editorPreviousTextRef: MutableRefObject<string | null>
 ): EditorState => {
     const processedHTML = convertFromHTML(convertVttToHtml(prevVttText));
-    const initialContentState =
-        ContentState.createFromBlockArray(processedHTML.contentBlocks);
+    const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
     let newUpdatedState = EditorState.createWithContent(initialContentState);
     newUpdatedState = EditorState.moveFocusToEnd(newUpdatedState);
-    editorOnChangeTextRef.current = prevVttText;
+    editorPreviousTextRef.current = prevVttText;
     return newUpdatedState;
 };
 
 const handleApplyEntityIfNeeded = (
     newEditorState: EditorState,
-    editorOnChangeTextRef: MutableRefObject<string | null>
+    editorPreviousTextRef: MutableRefObject<string | null>
 ): EditorState => {
     // This code reverts an undesired change in editor that causes text to be lost on Firefox
     const newVttText = getVttText(newEditorState.getCurrentContent());
     if (newEditorState.getLastChangeType() === "apply-entity") {
-        const prevVttText = editorOnChangeTextRef.current || "";
+        const prevVttText = editorPreviousTextRef.current || "";
         if (prevVttText !== newVttText) {
-            return revertEntityState(prevVttText, editorOnChangeTextRef);
+            return revertEntityState(prevVttText, editorPreviousTextRef);
         }
     }
-    editorOnChangeTextRef.current = newVttText;
+    editorPreviousTextRef.current = newVttText;
     return newEditorState;
 };
 
@@ -261,7 +260,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     const unmountContentRef = useRef<ContentState | null>(null);
     const imeCompositionRef = useRef<string | null>(null);
-    const editorOnChangeTextRef = useRef<string | null>(null);
+    const editorPreviousTextRef = useRef<string | null>(null);
 
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -354,6 +353,16 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
     );
 
+    useEffect(
+        () => {
+            editorPreviousTextRef.current = getVttText(currentContent);
+        },
+        // Leaving currentContent out of deps because we only want to initialize the editorOnChangeTextRef
+        // when the cue index changes
+        // eslint-disable-next-line
+        [ props.index ]
+    );
+
     // Fire update VTTCue action when component is unmounted.
     // So content is not lost when unmounted before next debounce.
     useEffect(
@@ -403,7 +412,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                             if (imeCompositionRef.current === "end") {
                                 imeCompositionRef.current = null;
                             }
-                            const newUpdatedState = handleApplyEntityIfNeeded(newEditorState, editorOnChangeTextRef);
+                            const newUpdatedState = handleApplyEntityIfNeeded(newEditorState, editorPreviousTextRef);
                             return dispatch(updateEditorState(props.index, newUpdatedState));
                         }}
                         ref={editorRef}
