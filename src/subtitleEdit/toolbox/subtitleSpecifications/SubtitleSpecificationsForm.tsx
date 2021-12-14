@@ -26,8 +26,7 @@ const dialogueStyleValues = {
 const millisToSeconds = (millis: number | null): string => millis ? "" + (millis / 1000) : "n/a";
 
 // Disable following rule because if returned HtmlAnchorElement it requires to initialize all element props
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const LinkNewTabRenderer = (href: string | undefined, children: {} | null | undefined): any =>
+const LinkNewTabRenderer = (href: string | undefined, children: {} | null | undefined): ReactElement =>
     <a href={href} rel="noopener noreferrer" target="_blank">{children}</a>;
 
 const SubtitleSpecificationsForm = (props: Props): ReactElement => (
