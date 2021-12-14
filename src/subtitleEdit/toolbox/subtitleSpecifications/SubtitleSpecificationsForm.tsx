@@ -30,9 +30,6 @@ const millisToSeconds = (millis: number | null): string => millis ? "" + (millis
 const LinkNewTabRenderer = (href: string | undefined, children: {} | null | undefined): any =>
     <a href={href} rel="noopener noreferrer" target="_blank">{children}</a>;
 
-// @ts-ignore
-// @ts-ignore
-// @ts-ignore
 const SubtitleSpecificationsForm = (props: Props): ReactElement => (
     <>
         <label><strong>Enabled:&nbsp;</strong></label>
