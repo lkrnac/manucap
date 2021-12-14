@@ -127,7 +127,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                     unwrapDisallowed
                     remarkPlugins={[remarkGfm]}
                     className="sbte-subspec-freeform-text sbte-media-notes"
-                >{(props.subTitleSpecifications.mediaNotes) ? props.subTitleSpecifications.mediaNotes : ""}
+                >{props.subTitleSpecifications.mediaNotes ? props.subTitleSpecifications.mediaNotes : ""}
                 </ReactMarkdown>
             </>
         ) : null}
