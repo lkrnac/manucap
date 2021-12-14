@@ -357,7 +357,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         () => {
             editorPreviousTextRef.current = getVttText(currentContent);
         },
-        // Leaving currentContent out of deps because we only want to initialize the editorOnChangeTextRef
+        // Leaving currentContent out of deps because we only want to initialize the editorPreviousTextRef
         // when the cue index changes
         // eslint-disable-next-line
         [ props.index ]
