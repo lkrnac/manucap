@@ -1,4 +1,6 @@
-import React, { Dispatch, KeyboardEventHandler, MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
+import React, {
+    Dispatch, KeyboardEventHandler, MutableRefObject, ReactElement, useEffect, useRef, useState
+} from "react";
 import {
     CompositeDecorator,
     ContentBlock,
