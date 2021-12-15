@@ -5,7 +5,6 @@
 // https://stackoverflow.com/questions/61036156/react-typescript-testing-typeerror-mutationobserver-is-not-a-constructor#comment110029314_61039444
 
 import "../testUtils/initBrowserEnvironment";
-import React from "react";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { fireEvent, render } from "@testing-library/react";
 import { findByTextIgnoreTags } from "../testUtils/testUtils";

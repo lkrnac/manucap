@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { CueCategory } from "../../model";
 import { Dropdown } from "react-bootstrap";
 import { cueCategoryToPrettyName } from "../cueUtils";

@@ -1,5 +1,5 @@
 import { findPositionIcon, Position, PositionIcon, positionIcons } from "../cueUtils";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { Dropdown } from "react-bootstrap";
 import { TooltipWrapper } from "../../TooltipWrapper";
 

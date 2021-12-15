@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { EditorState } from "draft-js";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { useSelector } from "react-redux";

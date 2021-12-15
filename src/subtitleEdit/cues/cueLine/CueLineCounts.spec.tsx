@@ -4,7 +4,6 @@ import { ContentState, EditorState, convertFromHTML } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import CueLineCounts from "./CueLineCounts";
 import { Provider } from "react-redux";
-import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "../edit/editorStatesSlice";

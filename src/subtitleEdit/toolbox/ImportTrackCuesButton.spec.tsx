@@ -1,5 +1,4 @@
 import "../../testUtils/initBrowserEnvironment";
-import React from "react";
 import { mount, shallow } from "enzyme";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { createTestingStore } from "../../testUtils/testingStore";

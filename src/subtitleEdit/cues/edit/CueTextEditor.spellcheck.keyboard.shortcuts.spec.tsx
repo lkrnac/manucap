@@ -6,7 +6,7 @@
 
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import React from "react";
+import * as React from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { createTestingStore } from "../../../testUtils/testingStore";

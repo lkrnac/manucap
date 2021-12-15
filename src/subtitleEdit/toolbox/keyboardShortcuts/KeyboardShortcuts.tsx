@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { KeyCombination } from "../../utils/shortcutConstants";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";

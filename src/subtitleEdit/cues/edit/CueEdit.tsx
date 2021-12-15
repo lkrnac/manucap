@@ -1,6 +1,6 @@
 import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
-import React, { CSSProperties, Dispatch, ReactElement, useEffect } from "react";
+import { CSSProperties, Dispatch, ReactElement, useEffect } from "react";
 import { addCue, updateCueCategory, updateVttCue } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";

@@ -9,7 +9,6 @@ import "video.js"; // VTTCue definition
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 import { Provider } from "react-redux";
-import React from "react";
 import { mount } from "enzyme";
 import { AnyAction } from "redux";
 import { fireEvent, render } from "@testing-library/react";

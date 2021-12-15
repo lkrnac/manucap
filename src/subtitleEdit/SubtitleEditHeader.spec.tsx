@@ -4,7 +4,6 @@ import { CueDto, Language, Task, Track } from "./model";
 import { updateEditingTrack, updateTask } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import React from "react";
 import SubtitleEditHeader from "./SubtitleEditHeader";
 import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
