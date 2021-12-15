@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { useDispatch } from "react-redux";
 import { showSearchReplace } from "../cues/searchReplace/searchReplaceSlices";
 import { showMerge } from "../cues/merge/mergeSlices";

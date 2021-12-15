@@ -1,6 +1,6 @@
 /**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import SearchReplaceEditor from "./SearchReplaceEditor";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";

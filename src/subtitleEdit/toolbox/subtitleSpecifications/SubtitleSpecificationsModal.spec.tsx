@@ -1,7 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import React from "react";
 import { SubtitleSpecification } from "../model";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount } from "enzyme";

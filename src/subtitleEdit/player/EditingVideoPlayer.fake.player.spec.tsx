@@ -1,7 +1,6 @@
 import "../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 
 import EditingVideoPlayer from "./EditingVideoPlayer";

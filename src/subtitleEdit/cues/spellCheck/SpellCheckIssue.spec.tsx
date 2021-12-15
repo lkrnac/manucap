@@ -1,6 +1,6 @@
 /**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
-import React, { RefObject } from "react";
+import { RefObject } from "react";
 import { mount } from "enzyme";
 import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";

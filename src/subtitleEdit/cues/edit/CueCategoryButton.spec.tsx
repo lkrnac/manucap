@@ -1,6 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
 import CueCategoryButton from "./CueCategoryButton";
-import React from "react";
 import each from "jest-each";
 import { mount } from "enzyme";
 

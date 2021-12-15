@@ -1,5 +1,5 @@
 import "../testUtils/initBrowserEnvironment";
-import React, { ReactElement } from "react";
+import { createRef, ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import Card from "react-bootstrap/Card";
@@ -173,7 +173,7 @@ describe("SubtitleEdit", () => {
                                         matchedCues,
                                         commentAuthor: "Linguist"
                                     }}
-                                    rowRef={React.createRef()}
+                                    rowRef={createRef()}
                                 />
                                 <CueLine
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
@@ -184,7 +184,7 @@ describe("SubtitleEdit", () => {
                                         matchedCues,
                                         commentAuthor: "Linguist"
                                     }}
-                                    rowRef={React.createRef()}
+                                    rowRef={createRef()}
                                 />
                             </div>
                             <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
@@ -614,7 +614,7 @@ describe("SubtitleEdit", () => {
                                         matchedCues,
                                         commentAuthor: "Linguist"
                                     }}
-                                    rowRef={React.createRef()}
+                                    rowRef={createRef()}
                                 />
                                 <CueLine
                                     rowIndex={1}
@@ -625,7 +625,7 @@ describe("SubtitleEdit", () => {
                                         matchedCues,
                                         commentAuthor: "Linguist"
                                     }}
-                                    rowRef={React.createRef()}
+                                    rowRef={createRef()}
                                 />
                             </div>
                             <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
@@ -785,7 +785,7 @@ describe("SubtitleEdit", () => {
                                         withoutSourceCues: true,
                                         matchedCues
                                     }}
-                                    rowRef={React.createRef()}
+                                    rowRef={createRef()}
                                 />
                                 <CueLine
                                     rowIndex={1}
@@ -795,7 +795,7 @@ describe("SubtitleEdit", () => {
                                         withoutSourceCues: true,
                                         matchedCues
                                     }}
-                                    rowRef={React.createRef()}
+                                    rowRef={createRef()}
                                 />
                             </div>
                             <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
@@ -972,7 +972,7 @@ describe("SubtitleEdit", () => {
                                         matchedCues,
                                         commentAuthor: "Linguist"
                                     }}
-                                    rowRef={React.createRef()}
+                                    rowRef={createRef()}
                                 />
                                 <CueLine
                                     rowIndex={1}
@@ -983,7 +983,7 @@ describe("SubtitleEdit", () => {
                                         matchedCues,
                                         commentAuthor: "Linguist"
                                     }}
-                                    rowRef={React.createRef()}
+                                    rowRef={createRef()}
                                 />
                             </div>
                             <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
