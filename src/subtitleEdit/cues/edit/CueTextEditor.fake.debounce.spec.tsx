@@ -2053,4 +2053,86 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("some\nwrapped\ntext lala");
         });
     });
+
+    it("handles soft new line and text properly", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        const vttCue = new VTTCue(0, 1, "initial text");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={
+                    { index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }
+                }
+            />);
+        const editor = actualNode.find(".public-DraftEditor-content");
+        editor.simulate("keyDown", { keyCode: Character.ENTER, shiftKey: true });
+        // Update of vtt cue generates new editUuid in slice which would be passed from CueEdit parent.
+        // These calls be simulate the prop update from parent.
+        const updatedVttCue = testingStore.getState().cues[0].vttCue;
+        const updatedEditUuid = testingStore.getState().cues[0].editUuid;
+        actualNode.setProps({ props: { index: 0, vttCue: updatedVttCue, editUuid: updatedEditUuid }});
+
+        // WHEN
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => "Paste text",
+            }
+        });
+
+        // THEN
+        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText())
+            .toEqual("initial text\nPaste text");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("initial text\nPaste text");
+    });
+
+    it("doesn't change cue text if apply-entity bug happens with same text as previous call", () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        const vttCue = new VTTCue(0, 1, "initial text");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = mount(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={
+                    { index: 0, vttCue, editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                    }
+                }
+            />);
+        const editor = actualNode.find(".public-DraftEditor-content");
+        editor.simulate("keyDown", { keyCode: Character.ENTER, shiftKey: true });
+        // Update of vtt cue generates new editUuid in slice which would be passed from CueEdit parent.
+        // These calls be simulate the prop update from parent.
+        const updatedVttCue = testingStore.getState().cues[0].vttCue;
+        const updatedEditUuid = testingStore.getState().cues[0].editUuid;
+        actualNode.setProps({ props: { index: 0, vttCue: updatedVttCue, editUuid: updatedEditUuid }});
+
+        // WHEN
+        editor.simulate("paste", {
+            clipboardData: {
+                types: ["text/plain"],
+                getData: (): string => "Paste text",
+            }
+        });
+
+        // WHEN
+        const editorState = testingStore.getState().editorStates.get(0);
+        const contentState = editorState.getCurrentContent();
+        const newState = EditorState.push(editorState, contentState, "apply-entity");
+        actualNode.find(Editor).props().onChange(newState);
+
+        // THEN
+        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText())
+            .toEqual("initial text\nPaste text");
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("initial text\nPaste text");
+    });
+
+
 });
