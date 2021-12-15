@@ -1,4 +1,3 @@
-import React from "react";
 import moment from "moment";
 import DateTime from "./DateTime";
 import { render } from "@testing-library/react";

@@ -3,7 +3,6 @@ import "video.js"; // VTTCue definition
 import { CueDto } from "../../model";
 import PlayCueButton from "./PlayCueButton";
 import { Provider } from "react-redux";
-import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 

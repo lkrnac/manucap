@@ -1,5 +1,4 @@
 import "../../testUtils/initBrowserEnvironment";
-import React from "react";
 import { render } from "@testing-library/react";
 import { CueError } from "../model";
 import { Provider } from "react-redux";

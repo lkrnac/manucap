@@ -1,5 +1,4 @@
 import "../../testUtils/initBrowserEnvironment";
-import React from "react";
 import { mount, shallow } from "enzyme";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";

@@ -1,5 +1,5 @@
 import { Task, Track } from "./model";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { SubtitleEditState } from "./subtitleEditReducers";
 import { humanizer } from "humanize-duration";
 import { useSelector } from "react-redux";

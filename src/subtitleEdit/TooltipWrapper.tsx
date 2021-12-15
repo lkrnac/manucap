@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { OverlayTrigger, Tooltip, Popover } from "react-bootstrap";
 
 interface Props {

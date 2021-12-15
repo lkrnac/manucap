@@ -1,5 +1,4 @@
 import "../../../testUtils/initBrowserEnvironment";
-import React from "react";
 import { SearchReplaceMatch } from "./SearchReplaceMatch";
 import testingStore from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";

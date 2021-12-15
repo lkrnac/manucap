@@ -1,5 +1,5 @@
 import { CueError } from "../model";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 
 interface Props {
     cueIndex: number;

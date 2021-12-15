@@ -1,4 +1,4 @@
-import React, { createRef, ReactElement, RefObject, useEffect, useRef, useState } from "react";
+import { createRef, ReactElement, RefObject, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { isDirectTranslationTrack } from "../../utils/subtitleEditUtils";
