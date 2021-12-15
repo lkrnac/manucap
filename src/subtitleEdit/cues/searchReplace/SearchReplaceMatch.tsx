@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 
 const BLUE_BACKGROUND_COLOR = "#D9E9FF";
 

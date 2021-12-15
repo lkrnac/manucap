@@ -1,6 +1,7 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
+import * as React from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
 import { Provider } from "react-redux";

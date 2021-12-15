@@ -1,5 +1,4 @@
 import "../testUtils/initBrowserEnvironment";
-import React from "react";
 import { mount } from "enzyme";
 import CompleteButton from "./CompleteButton";
 import { createTestingStore } from "../testUtils/testingStore";

@@ -1,4 +1,14 @@
-import React, { CSSProperties, Dispatch, MutableRefObject, ReactElement, RefObject, useEffect, useRef } from "react";
+import {
+    CSSProperties,
+    Dispatch, KeyboardEventHandler,
+    MutableRefObject,
+    ReactElement,
+    RefObject,
+    useEffect,
+    useRef,
+} from "react";
+
+import * as React from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import Select, { Styles, ValueType } from "react-select";
 import { Match, SpellCheck } from "./model";
@@ -69,7 +79,8 @@ const onOptionSelected = (props: Props, spellCheckMatch: Match, matchText: strin
     props.setSpellCheckerMatchingOffset(null);
 };
 
-const onkeydown = (setSpellCheckerMatchingOffset: Function) => (e: React.KeyboardEvent<{}>): void => {
+const onkeydown = (setSpellCheckerMatchingOffset: Function): KeyboardEventHandler =>
+    (e: React.KeyboardEvent): void => {
     if (e.keyCode === Character.TAB || ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode === Character.SPACE)) {
         e.preventDefault();
     }

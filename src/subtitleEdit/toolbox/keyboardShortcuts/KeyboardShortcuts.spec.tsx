@@ -5,7 +5,6 @@ import { Character } from "../../utils/shortcutConstants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import Modal from "react-bootstrap/Modal";
 import { Provider } from "react-redux";
-import React from "react";
 import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";

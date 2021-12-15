@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement, useEffect } from "react";
+import { Dispatch, ReactElement, useEffect } from "react";
 import { CueDto, GlossaryMatchDto, LanguageDirection } from "../../model";
 import { convertVttToHtml } from "../edit/cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";

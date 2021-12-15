@@ -1,4 +1,5 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
+import * as React from "react";
 import AddCueLineButton from "../edit/AddCueLineButton";
 import { CueDto } from "../../model";
 import DeleteCueLineButton from "../edit/DeleteCueLineButton";

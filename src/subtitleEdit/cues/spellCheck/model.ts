@@ -28,3 +28,12 @@ export interface Match {
 export interface SpellCheck {
     matches: Match[];
 }
+
+export interface SpellCheckIgnore {
+    hashes: Array<string>;
+    creationDate: Date;
+}
+
+export interface SpellCheckIgnoreStorage {
+    trackId: SpellCheckIgnore;
+}

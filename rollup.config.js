@@ -1,12 +1,12 @@
 import json from "@rollup/plugin-json";
 import svgr from "@svgr/rollup";
-import commonjs from "rollup-plugin-commonjs";
-import resolve from "rollup-plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 //import postcss from 'rollup-plugin-postcss-modules'
 import postcss from "rollup-plugin-postcss";
-import typescript from "rollup-plugin-typescript3";
-import url from "rollup-plugin-url";
+import typescript from "@rollup/plugin-typescript";
+import url from "@rollup/plugin-url";
 
 import pkg from "./package.json";
 
@@ -27,9 +27,7 @@ export default {
     json(),
     svgr(),
     resolve(),
-    typescript({
-      clean: true
-    }),
+    typescript(),
     commonjs({
         namedExports: {
             'node_modules/humanize-duration/humanize-duration.js': ['humanizer'],

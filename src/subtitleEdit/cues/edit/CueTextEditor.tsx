@@ -1,4 +1,5 @@
-import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
+import { Dispatch, KeyboardEventHandler, ReactElement, useEffect, useRef, useState } from "react";
+import * as React from "react";
 import {
     CompositeDecorator,
     ContentBlock,
@@ -144,7 +145,7 @@ const createCorrectSpellingHandler = (
 };
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
-    (e: React.KeyboardEvent<{}>): string | null => {
+    (e: React.KeyboardEvent<KeyboardEventHandler>): string | null => {
     const action = getActionByKeyboardEvent(e);
     if (action) {
         return action;

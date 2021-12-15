@@ -1,5 +1,4 @@
 import "../../testUtils/initBrowserEnvironment";
-import React from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
