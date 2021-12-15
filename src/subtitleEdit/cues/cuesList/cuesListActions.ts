@@ -141,7 +141,7 @@ export const checkErrors = createAsyncThunk(
             const previousCue = cues[index - 1];
             const currentCue = cues[index];
             const followingCue = cues[index + 1];
-            const oldErrorsCount = currentCue.errors?.length ? currentCue.errors?.length : 0;
+            const oldErrorsCount = currentCue.errors?.length || 0;
             if (currentCue != null) {
                 if (shouldSpellCheck) {
                     thunkApi.dispatch(applySpellcheckerOnCue(index));
