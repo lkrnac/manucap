@@ -24,7 +24,7 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { CueDto, CueError, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
-import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
+import * as cueListActions from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -49,6 +49,7 @@ jest.mock("lodash", () => (
         findLastIndex: jest.requireActual("lodash/findLastIndex")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
+
 // @ts-ignore we are mocking this function
 fetchSpellCheck.mockImplementation(() => jest.fn());
 
@@ -248,7 +249,7 @@ describe("CueTextEditor", () => {
         document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
         testingStore.dispatch(reset() as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         // @ts-ignore we are mocking this function
         fetchSpellCheck.mockReset();
@@ -342,6 +343,18 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(0);
+        });
+
+        it("checks errors and autosave when errors count is different", () => {
+            // GIVEN
+            const checkErrorsSpy = jest.spyOn(cueListActions, "checkErrors");
+
+            // WHEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            renderEditorNode();
+
+            // THEN
+            expect(checkErrorsSpy).toBeCalledTimes(1);
         });
     });
 
@@ -1116,7 +1129,7 @@ describe("CueTextEditor", () => {
                 { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck }
             ] as CueDto[];
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
@@ -1180,10 +1193,10 @@ describe("CueTextEditor", () => {
                 { vttCue: new VTTCue(4, 6, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR]}
             ] as CueDto[];
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
-            testingStore.dispatch(updateMatchedCues() as {} as AnyAction);
+            testingStore.dispatch(cueListActions.updateMatchedCues() as {} as AnyAction);
 
             // @ts-ignore modern browsers does have it
             global.fetch = jest.fn()
@@ -1255,7 +1268,7 @@ describe("CueTextEditor", () => {
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
                     errors: [CueError.SPELLCHECK_ERROR]}
             ] as CueDto[];
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
@@ -1428,7 +1441,7 @@ describe("CueTextEditor", () => {
                 { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
             render(
@@ -1478,7 +1491,7 @@ describe("CueTextEditor", () => {
                 { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
             render(
@@ -1528,7 +1541,7 @@ describe("CueTextEditor", () => {
                 { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
             render(
@@ -1581,7 +1594,7 @@ describe("CueTextEditor", () => {
                 { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>[Text]</b>");
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
             render(
