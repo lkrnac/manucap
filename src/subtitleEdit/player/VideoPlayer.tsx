@@ -53,56 +53,56 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack, trackF
         });
 };
 
-// const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
-//     if (lastCueChange.changeType === "EDIT" && vttCue) {
-//         vttCue.text = lastCueChange.vttCue.text;
-//         vttCue.startTime = lastCueChange.vttCue.startTime;
-//         vttCue.endTime = lastCueChange.vttCue.endTime;
-//         copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
-//         customizeLinePosition(vttCue, trackFontSizePercent);
-//     }
-// };
+const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
+    if (lastCueChange.changeType === "EDIT" && vttCue) {
+        vttCue.text = lastCueChange.vttCue.text;
+        vttCue.startTime = lastCueChange.vttCue.startTime;
+        vttCue.endTime = lastCueChange.vttCue.endTime;
+        copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
+        customizeLinePosition(vttCue, trackFontSizePercent);
+    }
+};
 
-// const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
-//                               trackFontSizePercent?: number): void => {
-//     if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
-//         const cuesTail = [];
-//         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
-//             cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
-//             videoJsTrack.removeCue(videoJsTrack.cues[idx]);
-//         }
-//         videoJsTrack.addCue(lastCueChange.vttCue);
-//         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
-//         customizeLinePosition(videoJsTrack.cues[lastCueChange.index] as VTTCue, trackFontSizePercent);
-//     }
-// };
+const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
+                              trackFontSizePercent?: number): void => {
+    if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
+        const cuesTail = [];
+        for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
+            cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
+            videoJsTrack.removeCue(videoJsTrack.cues[idx]);
+        }
+        videoJsTrack.addCue(lastCueChange.vttCue);
+        cuesTail.forEach(cue => videoJsTrack.addCue(cue));
+        customizeLinePosition(videoJsTrack.cues[lastCueChange.index] as VTTCue, trackFontSizePercent);
+    }
+};
 
 const VideoPlayer = (props: Props): ReactElement => {
-    let player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
+    const player = useRef({} as VideoJsPlayer);
     const videoNode = useRef(null as HTMLVideoElement | null);
-    let playSegmentPauseTimeout: number;
-    let playPromise: Promise<void> | undefined;
+    const playSegmentPauseTimeout = useRef(0);
+    const playPromise = useRef(undefined as Promise<void> | undefined);
 
     // const getTime = (): number => player.currentTime() * SECOND;
 
     const shiftTime = (delta: number): void => {
         const deltaInSeconds = delta / SECOND;
-        player.currentTime(player.currentTime() + deltaInSeconds);
+        player.current.currentTime(player.current.currentTime() + deltaInSeconds);
     };
 
     const pauseVideo = (): void => {
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                player.pause();
+        if (playPromise.current !== undefined) {
+            playPromise.current.then(() => {
+                player.current.pause();
             });
         } else {
-            player.pause();
+            player.current.pause();
         }
     };
 
     const playPause = (): void => {
-        if (player.paused()) {
-            playPromise = player.play();
+        if (player.current.paused()) {
+            playPromise.current = player.current.play();
         } else {
             pauseVideo();
         }
@@ -128,36 +128,36 @@ const VideoPlayer = (props: Props): ReactElement => {
             };
         }
 
-        player = videojs(videoNode.current as Element, options) as VideoJsPlayer;
-        player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
+        player.current = videojs(videoNode.current as Element, options) as VideoJsPlayer;
+        player.current.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
             updateCuesForVideoJsTrack(props, videoJsTrack, props.trackFontSizePercent);
         });
-        player.on("timeupdate", (): void => {
+        player.current.on("timeupdate", (): void => {
             if (props.onTimeChange) {
-                props.onTimeChange(player.currentTime());
+                props.onTimeChange(player.current.currentTime());
             }
         });
 
         Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
-            clearTimeout(playSegmentPauseTimeout);
+            clearTimeout(playSegmentPauseTimeout.current);
             playPause();
             return false;
         });
         Mousetrap.bind([KeyCombination.MOD_SHIFT_LEFT, KeyCombination.ALT_SHIFT_LEFT], () => {
-            clearTimeout(playSegmentPauseTimeout);
+            clearTimeout(playSegmentPauseTimeout.current);
             shiftTime(-SECOND);
             return false;
         });
         Mousetrap.bind([KeyCombination.MOD_SHIFT_RIGHT, KeyCombination.ALT_SHIFT_RIGHT], () => {
-            clearTimeout(playSegmentPauseTimeout);
+            clearTimeout(playSegmentPauseTimeout.current);
             shiftTime(SECOND);
             return false;
         });
 
         // @ts-ignore @types/video.js is missing this function rom video.js signature check
         // https://www.npmjs.com/package/@types/video.js for updates
-        player.handleKeyDown = (event: React.KeyboardEvent<{}>): void => {
+        player.current.handleKeyDown = (event: React.KeyboardEvent<{}>): void => {
             triggerMouseTrapAction(event);
         };
 
@@ -169,12 +169,11 @@ const VideoPlayer = (props: Props): ReactElement => {
 
     useEffect(() => {
         const lastCueChange = props.lastCueChange;
-        const videoJsTrack = (player.textTracks())[0];
+        const videoJsTrack = player.current.textTracks()[0];
         if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
-            // TODO: uncomment
-            // handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
-            //     prevProps.trackFontSizePercent);
-            // handleCueAddIfNeeded(lastCueChange, videoJsTrack, prevProps.trackFontSizePercent);
+            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
+                props.trackFontSizePercent);
+            handleCueAddIfNeeded(lastCueChange, videoJsTrack, props.trackFontSizePercent);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
@@ -187,15 +186,15 @@ const VideoPlayer = (props: Props): ReactElement => {
             // avoid showing 2 captions lines at the same time
             const startTime = props.playSection.startTime + ONE_MILLISECOND;
             const endTime = props.playSection.endTime;
-            player.currentTime(startTime);
-            playPromise = player.play();
+            player.current.currentTime(startTime);
+            playPromise.current = player.current.play();
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
-                playSegmentPauseTimeout = window.setTimeout(() => {
+                playSegmentPauseTimeout.current = window.setTimeout(() => {
                     pauseVideo();
                     // avoid showing 2 captions lines at the same time
-                    player.currentTime(endTime - ONE_MILLISECOND);
+                    player.current.currentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
             }
             props.resetPlayerTimeChange();
