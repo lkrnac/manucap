@@ -10,7 +10,7 @@ import {
 
 import * as React from "react";
 import { Overlay, Popover } from "react-bootstrap";
-import Select, { Styles, ValueType } from "react-select";
+import Select, {OnChangeValue} from "react-select";
 import { Match, SpellCheck } from "./model";
 import { Character } from "../../utils/shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,7 @@ import {
     validateCorruptedCues
 } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import {StylesConfig} from "react-select/dist/declarations/src/styles";
 
 
 interface Props {
@@ -70,7 +71,7 @@ const ignoreKeyword = (props: Props, matchText: string, spellCheckMatch: Match, 
 };
 
 const onOptionSelected = (props: Props, spellCheckMatch: Match, matchText: string , dispatch: Dispatch<AppThunk>) =>
-    (optionValueType: ValueType<Option, false>): void => {
+    (optionValueType: OnChangeValue<Option, false>): void => {
     const option = optionValueType as Option;
     if(option.value === matchText) {
         ignoreKeyword(props, matchText, spellCheckMatch, dispatch);
@@ -92,7 +93,7 @@ const onkeydown = (setSpellCheckerMatchingOffset: Function): KeyboardEventHandle
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const dispatch = useDispatch();
     const target = useRef(null);
-    const selectRef = useRef<Select>(null);
+    const selectRef = useRef(null);
     const showAtBottom = popupPlacement(target);
     const searchReplaceFind = useSelector((state: SubtitleEditState) => state.searchReplace.find);
 
@@ -129,7 +130,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         container: (provided: CSSProperties) => ({ ...provided, height: "100%" }),
         menu: (provided: CSSProperties) => ({ ...provided, position: "static", height: "100%", margin: 0 }),
         menuList: (provided: CSSProperties) => ({ ...provided, height: "200px" })
-    } as Styles<Option, false>;
+    } as StylesConfig<Option, false>;
 
     return (
         <span
