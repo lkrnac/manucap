@@ -3,11 +3,12 @@ import { CueChange, CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../utils/shortcutConstants";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect, useRef } from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { getTimeString } from "../utils/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
+
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -16,24 +17,6 @@ const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): v
     if (vttCue.line !== "auto" && trackFontSizePercent) {
         vttCue.line = Math.round(vttCue.line / trackFontSizePercent);
     }
-};
-
-const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
-    Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
-        clearTimeout(videoPlayer.playSegmentPauseTimeout);
-        videoPlayer.playPause();
-        return false;
-    });
-    Mousetrap.bind([KeyCombination.MOD_SHIFT_LEFT, KeyCombination.ALT_SHIFT_LEFT], () => {
-        clearTimeout(videoPlayer.playSegmentPauseTimeout);
-        videoPlayer.shiftTime(-SECOND);
-        return false;
-    });
-    Mousetrap.bind([KeyCombination.MOD_SHIFT_RIGHT, KeyCombination.ALT_SHIFT_RIGHT], () => {
-        clearTimeout(videoPlayer.playSegmentPauseTimeout);
-        videoPlayer.shiftTime(SECOND);
-        return false;
-    });
 };
 
 export interface Props {
@@ -70,48 +53,67 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack, trackF
         });
 };
 
-const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
-    if (lastCueChange.changeType === "EDIT" && vttCue) {
-        vttCue.text = lastCueChange.vttCue.text;
-        vttCue.startTime = lastCueChange.vttCue.startTime;
-        vttCue.endTime = lastCueChange.vttCue.endTime;
-        copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
-        customizeLinePosition(vttCue, trackFontSizePercent);
-    }
-};
+// const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
+//     if (lastCueChange.changeType === "EDIT" && vttCue) {
+//         vttCue.text = lastCueChange.vttCue.text;
+//         vttCue.startTime = lastCueChange.vttCue.startTime;
+//         vttCue.endTime = lastCueChange.vttCue.endTime;
+//         copyNonConstructorProperties(vttCue, lastCueChange.vttCue);
+//         customizeLinePosition(vttCue, trackFontSizePercent);
+//     }
+// };
 
-const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
-                              trackFontSizePercent?: number): void => {
-    if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
-        const cuesTail = [];
-        for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
-            cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
-            videoJsTrack.removeCue(videoJsTrack.cues[idx]);
+// const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
+//                               trackFontSizePercent?: number): void => {
+//     if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
+//         const cuesTail = [];
+//         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
+//             cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
+//             videoJsTrack.removeCue(videoJsTrack.cues[idx]);
+//         }
+//         videoJsTrack.addCue(lastCueChange.vttCue);
+//         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
+//         customizeLinePosition(videoJsTrack.cues[lastCueChange.index] as VTTCue, trackFontSizePercent);
+//     }
+// };
+
+const VideoPlayer = (props: Props): ReactElement => {
+    let player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
+    const videoNode = useRef(null as HTMLVideoElement | null);
+    let playSegmentPauseTimeout: number;
+    let playPromise: Promise<void> | undefined;
+
+    // const getTime = (): number => player.currentTime() * SECOND;
+
+    const shiftTime = (delta: number): void => {
+        const deltaInSeconds = delta / SECOND;
+        player.currentTime(player.currentTime() + deltaInSeconds);
+    };
+
+    const pauseVideo = (): void => {
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                player.pause();
+            });
+        } else {
+            player.pause();
         }
-        videoJsTrack.addCue(lastCueChange.vttCue);
-        cuesTail.forEach(cue => videoJsTrack.addCue(cue));
-        customizeLinePosition(videoJsTrack.cues[lastCueChange.index] as VTTCue, trackFontSizePercent);
-    }
-};
+    };
 
-class VideoPlayer extends React.Component<Props> {
-    public player: VideoJsPlayer;
-    private videoNode?: Node;
-    playSegmentPauseTimeout?: number;
-    playPromise: Promise<void> | undefined;
+    const playPause = (): void => {
+        if (player.paused()) {
+            playPromise = player.play();
+        } else {
+            pauseVideo();
+        }
+    };
 
-    constructor(props: Props) {
-        super(props);
-
-        this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
-    }
-
-    public componentDidMount(): void {
-        const textTrackOptions = this.props.tracks.map(convertToTextTrackOptions);
+    useEffect(() => {
+        const textTrackOptions = props.tracks.map(convertToTextTrackOptions);
         const options = {
             playbackRates: PLAYBACK_RATES,
-            sources: [{ src: this.props.mp4, type: "video/mp4" }],
-            poster: this.props.poster,
+            sources: [{ src: props.mp4, type: "video/mp4" }],
+            poster: props.poster,
             tracks: textTrackOptions,
             fluid: true,
             aspectRatio: "16:9",
@@ -126,107 +128,92 @@ class VideoPlayer extends React.Component<Props> {
             };
         }
 
-        this.player = videojs(this.videoNode as Element, options) as VideoJsPlayer;
-        this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
+        player = videojs(videoNode.current as Element, options) as VideoJsPlayer;
+        player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
-            updateCuesForVideoJsTrack(this.props, videoJsTrack, this.props.trackFontSizePercent);
+            updateCuesForVideoJsTrack(props, videoJsTrack, props.trackFontSizePercent);
         });
-        this.player.on("timeupdate", (): void => {
-            if (this.props.onTimeChange) {
-                this.props.onTimeChange(this.player.currentTime());
+        player.on("timeupdate", (): void => {
+            if (props.onTimeChange) {
+                props.onTimeChange(player.currentTime());
             }
         });
 
-        registerPlayerShortcuts(this);
+        Mousetrap.bind([KeyCombination.MOD_SHIFT_O, KeyCombination.ALT_SHIFT_O], () => {
+            clearTimeout(playSegmentPauseTimeout);
+            playPause();
+            return false;
+        });
+        Mousetrap.bind([KeyCombination.MOD_SHIFT_LEFT, KeyCombination.ALT_SHIFT_LEFT], () => {
+            clearTimeout(playSegmentPauseTimeout);
+            shiftTime(-SECOND);
+            return false;
+        });
+        Mousetrap.bind([KeyCombination.MOD_SHIFT_RIGHT, KeyCombination.ALT_SHIFT_RIGHT], () => {
+            clearTimeout(playSegmentPauseTimeout);
+            shiftTime(SECOND);
+            return false;
+        });
 
         // @ts-ignore @types/video.js is missing this function rom video.js signature check
         // https://www.npmjs.com/package/@types/video.js for updates
-        this.player.handleKeyDown = (event: React.KeyboardEvent<{}>): void => {
+        player.handleKeyDown = (event: React.KeyboardEvent<{}>): void => {
             triggerMouseTrapAction(event);
         };
 
         videojs.setFormatTime((x: number): string =>
             getTimeString(x, (hours: number): boolean => hours === 0)
         );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // need to run only once on mount
 
-    }
-
-    componentDidUpdate(prevProps: Props): void {
-        const lastCueChange = this.props.lastCueChange;
-        const videoJsTrack = (this.player.textTracks())[0];
+    useEffect(() => {
+        const lastCueChange = props.lastCueChange;
+        const videoJsTrack = (player.textTracks())[0];
         if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
-            handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
-                prevProps.trackFontSizePercent);
-            handleCueAddIfNeeded(lastCueChange, videoJsTrack, prevProps.trackFontSizePercent);
+            // TODO: uncomment
+            // handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
+            //     prevProps.trackFontSizePercent);
+            // handleCueAddIfNeeded(lastCueChange, videoJsTrack, prevProps.trackFontSizePercent);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
 
-        if (this.props.playSection !== undefined
-            && this.props.resetPlayerTimeChange
-            && this.props.playSection.startTime >= 0
-            && prevProps.playSection !== this.props.playSection) {
+        if (props.playSection !== undefined
+            && props.resetPlayerTimeChange
+            && props.playSection.startTime >= 0) {
             // avoid showing 2 captions lines at the same time
-            const startTime = this.props.playSection.startTime + ONE_MILLISECOND;
-            const endTime = this.props.playSection.endTime;
-            this.player.currentTime(startTime);
-            this.playPromise = this.player.play();
+            const startTime = props.playSection.startTime + ONE_MILLISECOND;
+            const endTime = props.playSection.endTime;
+            player.currentTime(startTime);
+            playPromise = player.play();
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
-                this.playSegmentPauseTimeout = window.setTimeout(() => {
-                    this.pauseVideo();
+                playSegmentPauseTimeout = window.setTimeout(() => {
+                    pauseVideo();
                     // avoid showing 2 captions lines at the same time
-                    this.player.currentTime(endTime - ONE_MILLISECOND);
+                    player.currentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
             }
-            this.props.resetPlayerTimeChange();
+            props.resetPlayerTimeChange();
         }
-    }
+    }, [props.lastCueChange, props.playSection]);
 
-    public getTime(): number {
-        return this.player.currentTime() * SECOND;
-    }
-
-    public shiftTime(delta: number): void {
-        const deltaInSeconds = delta / SECOND;
-        this.player.currentTime(this.player.currentTime() + deltaInSeconds);
-    }
-
-    public playPause(): void {
-        if (this.player.paused()) {
-            this.playPromise = this.player.play();
-        } else {
-            this.pauseVideo();
-        }
-    }
-
-    private pauseVideo(): void {
-        if (this.playPromise !== undefined) {
-            this.playPromise.then(() => {
-                this.player.pause();
-            });
-        } else {
-            this.player.pause();
-        }
-    }
-
-    public render(): ReactElement {
-        return (
-            <video
-                id="video-player"
-                ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
-                style={{ margin: "auto" }}
-                className="video-js vjs-default-skin vjs-big-play-centered"
-                poster={this.props.poster}
-                controls
-                preload="none"
-                data-setup="{}"
-            />
-        );
-    }
-}
+    return (
+        <video
+            id="video-player"
+            ref={videoNode}
+            style={{ margin: "auto" }}
+            className="video-js vjs-default-skin vjs-big-play-centered"
+            poster={props.poster}
+            controls
+            preload="none"
+            data-setup="{}"
+        />
+    );
+};
 
 export default VideoPlayer;
