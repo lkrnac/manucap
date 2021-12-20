@@ -55,7 +55,7 @@ interface Option {
 const onEnterPopover = (props: Props, selectRef: RefObject<Select>): void => {
     props.unbindCueViewModeKeyboardShortcut();
     // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
-    selectRef?.current?.select.menuListRef?.firstElementChild?.focus();
+    selectRef?.current?.menuListRef?.firstElementChild?.focus();
 };
 
 const onExitPopover = (props: Props): void => {
