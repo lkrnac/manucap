@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import ShiftTimeModal from "./ShiftTimeModal";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";

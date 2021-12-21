@@ -4,7 +4,6 @@ import { AnyAction } from "redux";
 import { CueDto, Track } from "../../model";
 import DeleteCueLineButton from "./DeleteCueLineButton";
 import { Provider } from "react-redux";
-import React from "react";
 import { mount } from "enzyme";
 import { updateCues } from "../cuesList/cuesListActions";
 import { setSaveTrack } from "../saveSlices";

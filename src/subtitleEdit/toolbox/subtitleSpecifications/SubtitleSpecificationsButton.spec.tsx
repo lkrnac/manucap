@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { SubtitleSpecification } from "../model";

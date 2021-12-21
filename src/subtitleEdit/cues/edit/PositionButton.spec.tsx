@@ -3,7 +3,6 @@ import "video.js"; // VTTCue type
 import { Dropdown } from "react-bootstrap";
 import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
-import React from "react";
 import { mount } from "enzyme";
 
 describe("PositionButton", () => {

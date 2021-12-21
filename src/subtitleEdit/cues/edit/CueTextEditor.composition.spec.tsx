@@ -1,7 +1,7 @@
 /**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { AnyAction, Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { mount, ReactWrapper } from "enzyme";

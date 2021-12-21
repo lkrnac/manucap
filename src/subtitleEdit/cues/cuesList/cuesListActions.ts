@@ -111,12 +111,23 @@ export const applySpellcheckerOnCue = createAsyncThunk(
                         thunkAPI.dispatch(matchedCuesSlice.actions.updateMatchedCue(
                             { cue: freshState.cues[index], targetCuesIndex, editingIndexMatchedCues }
                         ));
+                        callSaveTrack(thunkAPI.dispatch, thunkAPI.getState);
                     });
             }
         }
     }
 );
 
+export const updateMatchedCuesWithLastState =
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): void => {
+        const lastState = getState();
+        dispatch(matchedCuesSlice.actions.matchCuesByTime(
+            { cues: lastState.cues, sourceCues: lastState.sourceCues, editingCueIndex: lastState.editingCueIndex }
+        ));
+    };
+
+
+export const updateMatchedCues = (): AppThunk => updateMatchedCuesWithLastState;
 
 export const checkErrors = createAsyncThunk(
     "validations/checkErrors",
@@ -130,6 +141,7 @@ export const checkErrors = createAsyncThunk(
             const previousCue = cues[index - 1];
             const currentCue = cues[index];
             const followingCue = cues[index + 1];
+            const oldErrorsCount = currentCue.errors?.length || 0;
             if (currentCue != null) {
                 if (shouldSpellCheck) {
                     thunkApi.dispatch(applySpellcheckerOnCue(index));
@@ -140,12 +152,15 @@ export const checkErrors = createAsyncThunk(
                 );
                 thunkApi.dispatch(cuesSlice.actions.setErrors(
                     { index: index, errors: cueErrors } as CueErrorsPayload));
+                if (cueErrors.length !== oldErrorsCount) {
+                    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
+                    updateMatchedCuesWithLastState(thunkApi.dispatch, thunkApi.getState);
+                }
             }
         }
     });
 
-
-const validateCue = (
+export const validateCue = (
     dispatch: Dispatch<SubtitleEditAction | void>,
     index: number,
     shouldSpellCheck: boolean
@@ -154,14 +169,6 @@ const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
     dispatch(checkErrors({ index: index + 1, shouldSpellCheck: false }));
 };
-
-export const updateMatchedCues = (): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState: Function): void => {
-        const lastState = getState();
-        dispatch(matchedCuesSlice.actions.matchCuesByTime(
-            { cues: lastState.cues, sourceCues: lastState.sourceCues, editingCueIndex: lastState.editingCueIndex }
-        ));
-    };
 
 export const updateVttCue = (
     idx: number,

@@ -3,7 +3,6 @@ import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import InlineStyleButton from "./InlineStyleButton";
 import { Provider } from "react-redux";
-import React from "react";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditorState } from "./editorStatesSlice";

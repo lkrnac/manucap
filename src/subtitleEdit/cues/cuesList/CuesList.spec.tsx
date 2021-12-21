@@ -5,7 +5,7 @@
 // https://stackoverflow.com/questions/61036156/react-typescript-testing-typeerror-mutationobserver-is-not-a-constructor#comment110029314_61039444
 
 import "../../../testUtils/initBrowserEnvironment";
-import React, { createRef } from "react";
+import { createRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";

@@ -1,4 +1,5 @@
-import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
+import { Dispatch, KeyboardEventHandler, MutableRefObject, ReactElement, useEffect, useRef, useState } from "react";
+import * as React from "react";
 import {
     CompositeDecorator,
     ContentBlock,
@@ -23,7 +24,7 @@ import { convertVttToHtml, getVttText } from "./cueTextConverter";
 import CueLineCounts from "../cueLine/CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
 import { updateEditorState } from "./editorStatesSlice";
-import { applySpellcheckerOnCue, updateVttCue } from "../cuesList/cuesListActions";
+import { applySpellcheckerOnCue, checkErrors, updateVttCue } from "../cuesList/cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
@@ -144,7 +145,7 @@ const createCorrectSpellingHandler = (
 };
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
-    (e: React.KeyboardEvent<{}>): string | null => {
+    (e: React.KeyboardEvent<KeyboardEventHandler>): string | null => {
     const action = getActionByKeyboardEvent(e);
     if (action) {
         return action;
@@ -212,6 +213,34 @@ const replaceIfNeeded = (
     return editorState;
 };
 
+const revertEntityState = (
+    prevVttText: string,
+    editorPreviousTextRef: MutableRefObject<string | null>
+): EditorState => {
+    const processedHTML = convertFromHTML(convertVttToHtml(prevVttText));
+    const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+    let newUpdatedState = EditorState.createWithContent(initialContentState);
+    newUpdatedState = EditorState.moveFocusToEnd(newUpdatedState);
+    editorPreviousTextRef.current = prevVttText;
+    return newUpdatedState;
+};
+
+const handleApplyEntityIfNeeded = (
+    newEditorState: EditorState,
+    editorPreviousTextRef: MutableRefObject<string | null>
+): EditorState => {
+    // This code reverts an undesired change in editor that causes text to be lost on Firefox
+    const newVttText = getVttText(newEditorState.getCurrentContent());
+    if (newEditorState.getLastChangeType() === "apply-entity") {
+        const prevVttText = editorPreviousTextRef.current || "";
+        if (prevVttText !== newVttText) {
+            return revertEntityState(prevVttText, editorPreviousTextRef);
+        }
+    }
+    editorPreviousTextRef.current = newVttText;
+    return newEditorState;
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
@@ -230,6 +259,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     const unmountContentRef = useRef<ContentState | null>(null);
     const imeCompositionRef = useRef<string | null>(null);
+    const editorPreviousTextRef = useRef<string | null>(null);
 
     if (!editorState) {
         const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -281,6 +311,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         () => {
             if (!props.spellCheck) {
                 dispatch(applySpellcheckerOnCue(props.index));
+                dispatch(checkErrors({ index: props.index, shouldSpellCheck: false }));
             }
         },
         // needed to call the effect only once
@@ -320,6 +351,16 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         //  - spread operator for cue values is used so that all the VTTCue properties code can be in single file.
         // eslint-disable-next-line
         [ currentContent, currentInlineStyle, dispatch, props.index, ...constructCueValuesArray(props.vttCue) ]
+    );
+
+    useEffect(
+        () => {
+            editorPreviousTextRef.current = getVttText(currentContent);
+        },
+        // Leaving currentContent out of deps because we only want to initialize the editorPreviousTextRef
+        // when the cue index changes
+        // eslint-disable-next-line
+        [ props.index ]
     );
 
     // Fire update VTTCue action when component is unmounted.
@@ -371,19 +412,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                             if (imeCompositionRef.current === "end") {
                                 imeCompositionRef.current = null;
                             }
-
-                            // This code reverts an undesired change in editor that causes text to be lost on Firefox
-                            let newUpdatedState = newEditorState;
-                            const oldVttText = getVttText(editorState.getCurrentContent());
-                            const newVttText = getVttText(newEditorState.getCurrentContent());
-                            if (newEditorState.getLastChangeType() === "apply-entity" && oldVttText !== newVttText) {
-                                const processedHTML = convertFromHTML(convertVttToHtml(oldVttText));
-                                const initialContentState =
-                                    ContentState.createFromBlockArray(processedHTML.contentBlocks);
-                                newUpdatedState = EditorState.createWithContent(initialContentState);
-                                newUpdatedState = EditorState.moveFocusToEnd(newUpdatedState);
-                            }
-
+                            const newUpdatedState = handleApplyEntityIfNeeded(newEditorState, editorPreviousTextRef);
                             return dispatch(updateEditorState(props.index, newUpdatedState));
                         }}
                         ref={editorRef}

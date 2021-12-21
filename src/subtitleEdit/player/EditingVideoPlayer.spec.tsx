@@ -1,7 +1,6 @@
 import "../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import React from "react";
 import { mount } from "enzyme";
 
 import EditingVideoPlayer from "./EditingVideoPlayer";

@@ -4,7 +4,6 @@ import { applyShiftTime, updateCues } from "../../cues/cuesList/cuesListActions"
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Language, Track } from "../../model";
 import { Provider } from "react-redux";
-import React from "react";
 import ShiftTimesModal from "./ShiftTimeModal";
 import { mount } from "enzyme";
 import sinon from "sinon";

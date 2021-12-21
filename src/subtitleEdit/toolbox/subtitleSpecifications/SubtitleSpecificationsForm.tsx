@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import ReactMarkdown from "react-markdown";
 import { SubtitleSpecification } from "../model";
 

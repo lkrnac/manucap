@@ -1,4 +1,5 @@
-import React, { ReactElement, useCallback, useState } from "react";
+import { ReactElement, useCallback, useState } from "react";
+import * as React from "react";
 import { CueComment, CueDto } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";

@@ -1,6 +1,6 @@
 import "../../testUtils/initBrowserEnvironment";
 import { mount, shallow } from "enzyme";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import ToggleButton from "./ToggleButton";
 import { render } from "@testing-library/react";
 

@@ -1,5 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { Provider } from "react-redux";
 import ShiftTimeButton from "./ShiftTimeButton";
 import ShiftTimeModal from "./ShiftTimeModal";

@@ -1,5 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
-import React, { ReactElement } from "react";
+import { createRef, ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import Mousetrap from "mousetrap";
@@ -87,19 +87,19 @@ describe("CuesList", () => {
                             data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -146,19 +146,19 @@ describe("CuesList", () => {
                             data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -220,19 +220,19 @@ describe("CuesList", () => {
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -279,19 +279,19 @@ describe("CuesList", () => {
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -347,19 +347,19 @@ describe("CuesList", () => {
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -416,25 +416,25 @@ describe("CuesList", () => {
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: []}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
                             rowIndex={3}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -490,19 +490,19 @@ describe("CuesList", () => {
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -559,25 +559,25 @@ describe("CuesList", () => {
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={3}
                             rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -627,7 +627,7 @@ describe("CuesList", () => {
                             data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -679,7 +679,7 @@ describe("CuesList", () => {
                             data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -739,19 +739,19 @@ describe("CuesList", () => {
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -811,19 +811,19 @@ describe("CuesList", () => {
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
                             rowIndex={2}
                             rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >
@@ -878,13 +878,13 @@ describe("CuesList", () => {
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
                             rowProps={{ targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
                             rowIndex={1}
                             rowProps={{ targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
-                            rowRef={React.createRef()}
+                            rowRef={createRef()}
                         />
                     </div >
                 </Provider >

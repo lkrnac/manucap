@@ -9,7 +9,7 @@ import {
     addCue,
     addCueComment,
     addCuesToMergeList,
-    applyShiftTime,
+    applyShiftTime, checkErrors,
     deleteCue,
     deleteCueComment,
     mergeCues,
@@ -34,7 +34,7 @@ import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
-import { matchedCuesSlice } from "./cuesListSlices";
+import { cuesSlice, matchedCuesSlice } from "./cuesListSlices";
 
 const testingTrack = {
     type: "CAPTION",
@@ -1516,7 +1516,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
@@ -1529,6 +1529,12 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toEqual(
+                [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
+            expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors)
+                .toEqual([CueError.TIME_GAP_OVERLAP]);
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
@@ -1545,7 +1551,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
@@ -1555,6 +1561,9 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
@@ -1571,7 +1580,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
@@ -1581,6 +1590,38 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+        });
+
+        it("does trigger autosave if errors count is different", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 0,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+
+            // WHEN
+            testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("marks cue as corrupted if chars per second max is exceeded", () => {
@@ -1594,13 +1635,17 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
+                .toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("marks cue as corrupted if chars per second max is exceeded in multiple lines", () => {
@@ -1614,13 +1659,17 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
+                .toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("marks cue as corrupted if chars per second max and chars per line are exceeded", () => {
@@ -1635,7 +1684,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1643,6 +1692,10 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
+            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
+                .toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("marks cue as corrupted if chars per second max and lines per caption are exceeded", () => {
@@ -1657,7 +1710,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1666,6 +1719,10 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("line with\ntoo many\ncharacters per second.");
             expect(testingStore.getState().cues[1].errors).toEqual(
                 [CueError.LINE_COUNT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
+            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
+                .toEqual([CueError.LINE_COUNT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("doesn't mark cue as corrupted if chars per second max is not exceeded", () => {
@@ -1679,13 +1736,16 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("ignores max chars per second if null in subtitle specs", () => {
@@ -1699,13 +1759,16 @@ describe("cueSlices", () => {
                 maxCharactersPerSecondPerCaption: null,
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("ignores max chars per second if subtitle specs are disabled", () => {
@@ -1719,13 +1782,16 @@ describe("cueSlices", () => {
                 maxCharactersPerSecondPerCaption: 15,
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
         });
 
         it("do not count HTML tags into max chars per second limitation", () => {
@@ -1740,13 +1806,47 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+        });
+    });
+
+    describe("checkErrors", () => {
+        it("does not trigger autosave if error count is the same", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+
+            // WHEN
+            testingStore.dispatch(checkErrors({ index: 2, shouldSpellCheck: false }) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
     });
 
@@ -2545,26 +2645,28 @@ describe("cueSlices", () => {
         });
     });
 
-    it("Resets cues on resetEditingTrack", () => {
-        //GIVEN
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+    describe("resetEditingTrack", () => {
+        it("Resets cues on resetEditingTrack", () => {
+            //GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
-        //WHEN
-        testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+            //WHEN
+            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
 
-        // THEN
-        expect(testingStore.getState().cues.length).toEqual(0);
-    });
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(0);
+        });
 
-    it("Resets source cues on resetEditingTrack", () => {
-        //GIVEN
-        testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
+        it("Resets source cues on resetEditingTrack", () => {
+            //GIVEN
+            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
 
-        //WHEN
-        testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+            //WHEN
+            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
 
-        // THEN
-        expect(testingStore.getState().sourceCues.length).toEqual(0);
+            // THEN
+            expect(testingStore.getState().sourceCues.length).toEqual(0);
+        });
     });
 
     describe("syncCues", () => {

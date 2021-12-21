@@ -1,6 +1,5 @@
 import "../../../testUtils/initBrowserEnvironment";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
-import React from "react";
 import { mount } from "enzyme";
 import { os } from "platform";
 import { Provider } from "react-redux";

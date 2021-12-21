@@ -1,5 +1,5 @@
 import { Provider, useDispatch } from "react-redux";
-import React, { ReactElement, useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
 import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
 import { updateSubtitleUser } from "./subtitleEdit/userSlices";

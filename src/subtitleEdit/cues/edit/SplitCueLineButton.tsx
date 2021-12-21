@@ -1,5 +1,5 @@
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { splitCue } from "../cuesList/cuesListActions";
 import { useDispatch, useSelector } from "react-redux";
 import { TooltipWrapper } from "../../TooltipWrapper";
