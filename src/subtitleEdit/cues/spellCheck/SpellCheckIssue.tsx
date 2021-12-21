@@ -10,7 +10,7 @@ import {
 
 import * as React from "react";
 import { Overlay, Popover } from "react-bootstrap";
-import Select, {OnChangeValue} from "react-select";
+import Select, { OnChangeValue } from "react-select";
 import { Match, SpellCheck } from "./model";
 import { Character } from "../../utils/shortcutConstants";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +21,7 @@ import {
     validateCorruptedCues
 } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import {StylesConfig} from "react-select/dist/declarations/src/styles";
+import { StylesConfig } from "react-select/dist/declarations/src/styles";
 
 
 interface Props {

@@ -1,11 +1,13 @@
 /**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
-import { RefObject } from "react";
+import { CSSProperties, RefObject } from "react";
 import { mount } from "enzyme";
 import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";
 import { Overlay } from "react-bootstrap";
 import { spellCheckOptionPredicate } from "../../../testUtils/testUtils";
+import Select from "react-select";
+import { StylesConfig } from "react-select/dist/declarations/src/styles";
 
 jest.mock("react-redux");
 const removeSelectCssClass = (htmlString: string): string =>
@@ -30,6 +32,12 @@ describe("SpellCheckerIssue", () => {
             }
         ]
     } as SpellCheck;
+    const customStyles = {
+        control: () => ({ visibility: "hidden", height: "0px" }),
+        container: (provided: CSSProperties) => ({ ...provided, height: "100%" }),
+        menu: (provided: CSSProperties) => ({ ...provided, position: "static", height: "100%", margin: 0 }),
+        menuList: (provided: CSSProperties) => ({ ...provided, height: "200px" })
+    } as StylesConfig;
 
     it("renders without popup", () => {
         // GIVEN
@@ -133,112 +141,17 @@ describe("SpellCheckerIssue", () => {
                 <div className="arrow" style={{ margin: "0px" }} />
                 <div className="popover-header">There is error</div>
                 <div style={{ padding: "0px" }} className="popover-body">
-                    <div className=" css-6iiga6-container">
-                        <div className="spellcheck__control spellcheck__control--menu-is-open css-1rdv9e-Control">
-                            <div className="spellcheck__value-container css-g1d714-ValueContainer">
-                                <div className="spellcheck__placeholder css-1wa3eu0-placeholder">Select...</div>
-                                <div className="css-b8ldur-Input">
-                                    <div
-                                        className="spellcheck__input"
-                                        style={{ display: "inline-block" }}
-                                    >
-                                        <input
-                                            autoCapitalize="none"
-                                            autoComplete="off"
-                                            autoCorrect="off"
-                                            id="react-select-2-input"
-                                            spellCheck="false"
-                                            tabIndex={0}
-                                            type="text"
-                                            aria-autocomplete="list"
-                                            style={{
-                                                boxSizing: "content-box",
-                                                width: "2px",
-                                                border: "0px",
-                                                fontSize: "inherit",
-                                                opacity: 1,
-                                                outline: 0,
-                                                padding: "0px"
-                                            }}
-                                            value=""
-                                            onChange={jest.fn()}
-                                        />
-                                        <div
-                                            style={{
-                                                position: "absolute",
-                                                top: "0px",
-                                                left: "0px",
-                                                visibility: "hidden",
-                                                height: "0px",
-                                                overflow: "scroll",
-                                                whiteSpace: "pre",
-                                                fontSize: "inherit",
-                                                fontFamily: "-webkit-small-control",
-                                                letterSpacing: "normal",
-                                                textTransform: "none"
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="spellcheck__indicators css-1hb7zxy-IndicatorsContainer">
-                                <span className="spellcheck__indicator-separator css-1okebmr-indicatorSeparator" />
-                                <div
-                                    aria-hidden="true"
-                                    className="spellcheck__indicator
-                                 spellcheck__dropdown-indicator css-tlfecz-indicatorContainer"
-                                >
-                                    <svg
-                                        height="20"
-                                        width="20"
-                                        viewBox="0 0 20 20"
-                                        aria-hidden="true"
-                                        focusable="false"
-                                        className="css-6q0nyr-Svg"
-                                    >
-                                        <path
-                                            d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747
-                                            3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0
-                                            1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787
-                                            0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17
-                                            0-1.615z"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="spellcheck__menu css-13tc85z-menu">
-                            <div className="spellcheck__menu-list css-1n56l4k-MenuList">
-                                <div
-                                    className="spellcheck__option css-yt9ioa-option"
-                                    id="react-select-2-option-0"
-                                    tabIndex={-1}
-                                >Ignore all in this track
-                                </div>
-                                <div
-                                    className="spellcheck__option css-yt9ioa-option"
-                                    id="react-select-2-option-1"
-                                    tabIndex={-1}
-                                >
-                                    repl1
-                                </div>
-                                <div
-                                    className="spellcheck__option css-yt9ioa-option"
-                                    id="react-select-2-option-2"
-                                    tabIndex={-1}
-                                >
-                                    repl2
-                                </div>
-                                <div
-                                    className="spellcheck__option css-yt9ioa-option"
-                                    id="react-select-2-option-3"
-                                    tabIndex={-1}
-                                >
-                                    repl3
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <Select
+                        menuIsOpen
+                        styles={customStyles}
+                        options={[
+                            { value: "", label: "Ignore all in this track" },
+                            { value: "repl1", label: "repl1" },
+                            { value: "repl2", label: "repl2" },
+                            { value: "repl3", label: "repl3" }
+                        ]}
+                        classNamePrefix="spellcheck"
+                    />
                 </div>
             </div>
         );
@@ -277,7 +190,8 @@ describe("SpellCheckerIssue", () => {
         actualNode.find(".sbte-text-with-error").simulate("click");
 
         // THEN
-        expect(actualNode.find("#sbte-spell-check-popover").at(0).html()).toEqual(expectedNode.html());
+        expect(removeSelectCssClass(actualNode.find("#sbte-spell-check-popover").at(0).html()))
+            .toEqual(removeSelectCssClass(expectedNode.html()));
     });
 
     it("renders popup without options when clicked", () => {
@@ -300,94 +214,15 @@ describe("SpellCheckerIssue", () => {
                 <div className="arrow" style={{ margin: "0px" }} />
                 <div className="popover-header">There is error</div>
                 <div style={{ padding: "0px" }} className="popover-body">
-                    <div className=" css-6iiga6-container">
-                        <div className="spellcheck__control spellcheck__control--menu-is-open css-1rdv9e-Control">
-                            <div className="spellcheck__value-container css-g1d714-ValueContainer">
-                                <div className="spellcheck__placeholder css-1wa3eu0-placeholder">Select...</div>
-                                <div className="css-b8ldur-Input">
-                                    <div className="spellcheck__input" style={{ display: "inline-block" }}>
-                                        <input
-                                            autoCapitalize="none"
-                                            autoComplete="off"
-                                            autoCorrect="off"
-                                            id="react-select-2-input"
-                                            spellCheck="false"
-                                            tabIndex={0}
-                                            type="text"
-                                            aria-autocomplete="list"
-                                            style={{
-                                                boxSizing: "content-box",
-                                                width: "2px",
-                                                border: "0px",
-                                                fontSize: "inherit",
-                                                opacity: 1,
-                                                outline: 0,
-                                                padding: "0px"
-                                            }}
-                                            value=""
-                                            onChange={jest.fn()}
-                                        />
-                                        <div
-                                            style={{
-                                                position: "absolute",
-                                                top: "0px",
-                                                left: "0px",
-                                                visibility: "hidden",
-                                                height: "0px",
-                                                overflow: "scroll",
-                                                whiteSpace: "pre",
-                                                fontSize: "inherit",
-                                                fontFamily: "-webkit-small-control",
-                                                letterSpacing: "normal",
-                                                textTransform: "none"
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="spellcheck__indicators css-1hb7zxy-IndicatorsContainer">
-                                <span className="spellcheck__indicator-separator css-1okebmr-indicatorSeparator" />
-                                <div
-                                    aria-hidden="true"
-                                    className="spellcheck__indicator
-                                 spellcheck__dropdown-indicator css-tlfecz-indicatorContainer"
-                                >
-                                    <svg
-                                        height="20"
-                                        width="20"
-                                        viewBox="0 0 20 20"
-                                        aria-hidden="true"
-                                        focusable="false"
-                                        className="css-6q0nyr-Svg"
-                                    >
-                                        <path
-                                            d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747
-                                            3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0
-                                            1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787
-                                            0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17
-                                            0-1.615z"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="spellcheck__menu css-13tc85z-menu">
-                            <div className="spellcheck__menu-list css-1n56l4k-MenuList">
-                                <div
-                                    className="spellcheck__option css-yt9ioa-option"
-                                    id="react-select-2-option-0"
-                                    tabIndex={-1}
-                                >Ignore all in this track
-                                </div>
-                                <div
-                                    className="spellcheck__option css-yt9ioa-option"
-                                    id="react-select-2-option-1"
-                                    tabIndex={-1}
-                                >error
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <Select
+                        menuIsOpen
+                        styles={customStyles}
+                        options={[
+                            { value: "", label: "Ignore all in this track" },
+                            { value: "error", label: "error" }
+                        ]}
+                        classNamePrefix="spellcheck"
+                    />
                 </div>
             </div>
         );
