@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.19.0",
+  "version": "2.19.1",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -50,7 +50,7 @@
     "react-bootstrap": "1.6.4",
     "react-final-form": "^6.5.7",
     "react-markdown": "4.3.1",
-    "react-select": "^3.1.0",
+    "react-select": "^5.2.1",
     "sanitize-html": "^2.5.2",
     "uuid": "^8.3.2",
     "video.js": "7.15.4"
@@ -80,7 +80,6 @@
     "@types/react-bootstrap": "^1.0.1",
     "@types/react-dom": "^17.0.9",
     "@types/react-redux": "^7.1.19",
-    "@types/react-select": "^3.0.14",
     "@types/redux-logger": "^3.0.9",
     "@types/sanitize-html": "^2.3.2",
     "@types/sinon": "^10.0.4",
