@@ -105,7 +105,7 @@ class VideoPlayer extends React.Component<Props> {
     playSegmentPauseTimeout?: number;
     playPromise: Promise<void> | undefined;
     public wavesurfer: WaveSurfer;
-    private waveformRef?: RefObject<HTMLDivElement>;
+    private readonly waveformRef?: RefObject<HTMLDivElement>;
 
     constructor(props: Props) {
         super(props);
@@ -143,6 +143,7 @@ class VideoPlayer extends React.Component<Props> {
             if (this.props.onTimeChange) {
                 this.props.onTimeChange(this.player.currentTime());
             }
+            this.wavesurfer.setCurrentTime(this.player.currentTime());
         });
 
         registerPlayerShortcuts(this);
@@ -173,6 +174,8 @@ class VideoPlayer extends React.Component<Props> {
                             this.props.mp4,
                             peaksData.data
                         );
+
+                        this.wavesurfer.setMute(true);
                     }
                 });
         }
@@ -200,6 +203,8 @@ class VideoPlayer extends React.Component<Props> {
             const endTime = this.props.playSection.endTime;
             this.player.currentTime(startTime);
             this.playPromise = this.player.play();
+            this.wavesurfer.setCurrentTime(startTime);
+            this.wavesurfer.playPause();
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
@@ -207,6 +212,7 @@ class VideoPlayer extends React.Component<Props> {
                     this.pauseVideo();
                     // avoid showing 2 captions lines at the same time
                     this.player.currentTime(endTime - ONE_MILLISECOND);
+                    this.wavesurfer.setCurrentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
             }
             this.props.resetPlayerTimeChange();
@@ -219,7 +225,9 @@ class VideoPlayer extends React.Component<Props> {
 
     public shiftTime(delta: number): void {
         const deltaInSeconds = delta / SECOND;
-        this.player.currentTime(this.player.currentTime() + deltaInSeconds);
+        const newTimeInSeconds = this.player.currentTime() + deltaInSeconds;
+        this.player.currentTime(newTimeInSeconds);
+        this.wavesurfer.setCurrentTime(newTimeInSeconds);
     }
 
     public playPause(): void {
@@ -228,6 +236,7 @@ class VideoPlayer extends React.Component<Props> {
         } else {
             this.pauseVideo();
         }
+        this.wavesurfer.playPause();
     }
 
     private pauseVideo(): void {
@@ -238,6 +247,7 @@ class VideoPlayer extends React.Component<Props> {
         } else {
             this.player.pause();
         }
+        this.wavesurfer.playPause();
     }
 
     public render(): ReactElement {
