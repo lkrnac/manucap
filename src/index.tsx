@@ -334,8 +334,9 @@ const TestApp = (): ReactElement => {
 
     return (
         <SubtitleEdit
-            poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
-            mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+            poster="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.jpeg"
+            mp4="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.mp4"
+            waveform="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.json"
             onViewAllTracks={(): void => undefined}
             onSave={(): void => {
                 setTimeout(

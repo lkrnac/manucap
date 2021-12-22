@@ -28,6 +28,7 @@ enableMapSet();
 export interface SubtitleEditProps {
     mp4: string;
     poster: string;
+    waveform?: string;
     onViewAllTracks: () => void;
     onSave: () => void;
     onComplete: () => void;
@@ -98,6 +99,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <EditingVideoPlayer
                                     mp4={props.mp4}
                                     poster={props.poster}
+                                    waveform={props.waveform}
                                     onTimeChange={handleTimeChange}
                                 />
                             </div>
