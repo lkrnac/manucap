@@ -104,13 +104,13 @@ describe("VideoPlayer tested with fake player", () => {
 
     it("executes pause via keyboard shortcut with playPromise present", async () => {
         // GIVEN
-        jest.spyOn(React, "useRef").mockReturnValueOnce({ current: {} as VideoJsPlayer });
-        jest.spyOn(React, "useRef").mockReturnValueOnce({ current: null });
-        jest.spyOn(React, "useRef").mockReturnValueOnce({ current: Promise.resolve() });
         const pause = jest.fn();
+        const paused = jest.fn();
+        paused.mockReturnValueOnce(true).mockReturnValue(false);
         const playerMock = {
             pause,
-            paused: (): boolean => false,
+            play: () => Promise.resolve(),
+            paused,
             textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
             on: jest.fn()
         };
@@ -127,6 +127,7 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
+        await simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
         await simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
 
         // THEN
