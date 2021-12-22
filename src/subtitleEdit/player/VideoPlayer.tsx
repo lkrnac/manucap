@@ -3,12 +3,15 @@ import { CueChange, CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../utils/shortcutConstants";
-import { KeyboardEventHandler, ReactElement } from "react";
+import { KeyboardEventHandler, ReactElement, RefObject } from "react";
 import * as React from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { getTimeString } from "../utils/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
+// @ts-ignore no types for wavesurfer
+import WaveSurfer from "wavesurfer.js";
+
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -40,6 +43,7 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
 export interface Props {
     mp4: string;
     poster: string;
+    waveform?: string;
     tracks: Track[];
     onTimeChange?: (time: number) => void;
     languageCuesArray: LanguageCues[];
@@ -100,11 +104,14 @@ class VideoPlayer extends React.Component<Props> {
     private videoNode?: Node;
     playSegmentPauseTimeout?: number;
     playPromise: Promise<void> | undefined;
+    public wavesurfer: WaveSurfer;
+    private waveformRef?: RefObject<HTMLDivElement>;
 
     constructor(props: Props) {
         super(props);
 
         this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
+        this.waveformRef = React.createRef();
     }
 
     public componentDidMount(): void {
@@ -150,6 +157,25 @@ class VideoPlayer extends React.Component<Props> {
             getTimeString(x, (hours: number): boolean => hours === 0)
         );
 
+        if (this.props.waveform) {
+            fetch(this.props.waveform,
+                { headers: { "Content-Type": "application/json", "Accept": "application/json" }})
+                .then((response) => response.json())
+                .then((peaksData) => {
+                    if (this.waveformRef?.current) {
+                        this.wavesurfer = WaveSurfer.create({
+                            container: this.waveformRef.current,
+                            responsive: true,
+                            normalize: true,
+                        });
+
+                        this.wavesurfer.load(
+                            this.props.mp4,
+                            peaksData.data
+                        );
+                    }
+                });
+        }
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -216,16 +242,19 @@ class VideoPlayer extends React.Component<Props> {
 
     public render(): ReactElement {
         return (
-            <video
-                id="video-player"
-                ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
-                style={{ margin: "auto" }}
-                className="video-js vjs-default-skin vjs-big-play-centered"
-                poster={this.props.poster}
-                controls
-                preload="none"
-                data-setup="{}"
-            />
+            <>
+                <video
+                    id="video-player"
+                    ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
+                    style={{ margin: "auto" }}
+                    className="video-js vjs-default-skin vjs-big-play-centered"
+                    poster={this.props.poster}
+                    controls
+                    preload="none"
+                    data-setup="{}"
+                />
+                <div ref={this.waveformRef}  />
+            </>
         );
     }
 }
