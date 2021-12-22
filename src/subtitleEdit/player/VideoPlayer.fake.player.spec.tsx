@@ -4,9 +4,8 @@ import * as simulant from "simulant";
 import { LanguageCues, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
-import videojs, { VideoJsPlayer } from "video.js";
+import videojs  from "video.js";
 import * as shortcutConstants from "../utils/shortcutConstants";
-import React from "react";
 
 jest.useFakeTimers();
 jest.mock("video.js");
