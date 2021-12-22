@@ -83,8 +83,6 @@ const VideoPlayer = (props: Props): ReactElement => {
     const playSegmentPauseTimeout = useRef(0);
     const playPromise = useRef(undefined as Promise<void> | undefined);
 
-    // const getTime = (): number => player.currentTime() * SECOND;
-
     const shiftTime = (delta: number): void => {
         const deltaInSeconds = delta / SECOND;
         player.current.currentTime(player.current.currentTime() + deltaInSeconds);

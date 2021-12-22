@@ -4,8 +4,9 @@ import * as simulant from "simulant";
 import { LanguageCues, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
-import videojs from "video.js";
+import videojs, { VideoJsPlayer } from "video.js";
 import * as shortcutConstants from "../utils/shortcutConstants";
+import React from "react";
 
 jest.useFakeTimers();
 jest.mock("video.js");
@@ -103,6 +104,9 @@ describe("VideoPlayer tested with fake player", () => {
 
     it("executes pause via keyboard shortcut with playPromise present", async () => {
         // GIVEN
+        jest.spyOn(React, "useRef").mockReturnValueOnce({ current: {} as VideoJsPlayer });
+        jest.spyOn(React, "useRef").mockReturnValueOnce({ current: null });
+        jest.spyOn(React, "useRef").mockReturnValueOnce({ current: Promise.resolve() });
         const pause = jest.fn();
         const playerMock = {
             pause,
@@ -112,7 +116,7 @@ describe("VideoPlayer tested with fake player", () => {
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = mount(
+        mount(
             <VideoPlayer
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
@@ -121,8 +125,6 @@ describe("VideoPlayer tested with fake player", () => {
                 lastCueChange={null}
             />
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
-        actualComponent.playPromise = Promise.resolve();
 
         // WHEN
         await simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
@@ -187,34 +189,6 @@ describe("VideoPlayer tested with fake player", () => {
 
         // THEN
         expect(currentTime).toBeCalledWith(4);
-    });
-
-    it("returns currentTime", () => {
-        // GIVEN
-        const playerMock = {
-            currentTime: (): number => 5,
-            textTracks: (): FakeTextTrackList => ({ addEventListener: jest.fn() }),
-            on: jest.fn()
-        };
-
-        // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => playerMock);
-        const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
-        );
-        const component = actualNode.instance() as VideoPlayer;
-
-        // WHEN
-        const actualTime = component.getTime();
-
-        // THEN
-        expect(actualTime).toEqual(5000);
     });
 
     it("plays video section from cue start time", () => {
