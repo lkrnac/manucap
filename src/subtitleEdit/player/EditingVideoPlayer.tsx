@@ -45,6 +45,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 lastCueChange={lastCueChange}
                 resetPlayerTimeChange={(): AppThunk => dispatch(playVideoSection(-1))}
                 trackFontSizePercent={1.25}
+                cues={editingCues}
             />
         )
         : <p>Editing track not available!</p>;

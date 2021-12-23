@@ -310,3 +310,13 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     padding: 0px 3px;
     cursor: pointer;
 }
+
+// ------ Waveform --------
+
+region.wavesurfer-region:before {
+    content: attr(data-region-label);
+    position: absolute;
+    text-align: center;
+    margin-left: 5px;
+    margin-right: 5px;
+}
