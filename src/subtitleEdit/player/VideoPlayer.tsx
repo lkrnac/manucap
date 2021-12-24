@@ -19,6 +19,11 @@ import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
 import { connect } from "react-redux";
 import { updateEditingCueIndex } from "../cues/edit/cueEditorSlices";
+import { updateVttCue } from "../cues/cuesList/cuesListActions";
+import { debounce } from "lodash";
+import { conformToRules } from "../cues/cueVerifications";
+import { SubtitleEditState } from "../subtitleEditReducers";
+import { SubtitleSpecification } from "../toolbox/model";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -77,6 +82,8 @@ export interface Props {
     trackFontSizePercent?: number;
     cues: CueDto[];
     updateEditingCueIndex?: (cueIndex: number) => void;
+    updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
+    subtitleSpecifications?: SubtitleSpecification;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -133,11 +140,10 @@ class VideoPlayer extends React.Component<Props> {
     public wavesurfer: WaveSurfer;
     private readonly waveformRef?: RefObject<HTMLDivElement>;
     private readonly waveformTimelineRef?: RefObject<HTMLDivElement>;
+    private updateCueDebounced = debounce(this.updateCue, 1000);
 
     constructor(props: Props) {
         super(props);
-
-        // this.state = { wavesurferEvent: false };
 
         this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
         this.waveformRef = React.createRef();
@@ -226,10 +232,7 @@ class VideoPlayer extends React.Component<Props> {
 
                         // this.wavesurfer.on("interaction", (data: any) => {
                         //     console.log(data);
-                        //     this.setState({ wavesurferEvent: true });
-                            // if (this.state["wavesurferEvent"]) {
-                            //     this.player.currentTime(this.wavesurfer.getCurrentTime());
-                            // }
+                        //     this.player.currentTime(this.wavesurfer.getCurrentTime());
                         // });
 
                         this.wavesurfer.on("ready", () => {
@@ -243,6 +246,11 @@ class VideoPlayer extends React.Component<Props> {
                             if (this.props.updateEditingCueIndex) {
                                 this.props.updateEditingCueIndex(region.id);
                             }
+                        });
+
+                        // @ts-ignore no types for wavesurfer
+                        this.wavesurfer.on("region-updated", (region) => {
+                            this.updateCueDebounced(region.id, region.start, region.end, region.attributes.label);
                         });
 
                         this.props.cues.forEach((cue: CueDto, cueIndex: number) => {
@@ -273,16 +281,8 @@ class VideoPlayer extends React.Component<Props> {
             videoJsTrack.dispatchEvent(new Event("cuechange"));
 
             if (lastCueChange.changeType === "EDIT") {
-                const regionColor = this.wavesurfer.regions.list[lastCueChange.index].color;
-                this.wavesurfer.regions.list[lastCueChange.index].remove();
-                this.wavesurfer?.addRegion({
-                    id: lastCueChange.index,
-                    start: lastCueChange.vttCue.startTime,
-                    end: lastCueChange.vttCue.endTime,
-                    loop: false,
-                    color: regionColor,
-                    attributes: { label: lastCueChange.vttCue.text.replace(/<[^>]*>/g, "") }
-                });
+                this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
+                    lastCueChange.vttCue.text);
             }
         }
 
@@ -308,6 +308,43 @@ class VideoPlayer extends React.Component<Props> {
                 }, waitTime);
             }
             this.props.resetPlayerTimeChange();
+        }
+    }
+
+    private updateRegion(index: number, start: number, end: number, text: string) {
+        console.log("updateRegion");
+        console.log("index: " + index + ", start: " + start + ", end: " + end);
+        const regionColor = this.wavesurfer.regions.list[index].color;
+        this.wavesurfer.regions.list[index].remove();
+        this.wavesurfer?.addRegion({
+            id: index,
+            start,
+            end,
+            loop: false,
+            color: regionColor,
+            attributes: { label: text.replace(/<[^>]*>/g, "") }
+        });
+    }
+
+    private updateCue(index: number, start: number, end: number, text: string) {
+        if (this.props.updateVttCue) {
+            const newCue = new VTTCue(start, end, text);
+            const originalCue = this.props.cues[index];
+            copyNonConstructorProperties(newCue, originalCue.vttCue);
+
+            const updatedCue = { vttCue: newCue, cueCategory: originalCue.cueCategory, editUuid: originalCue.editUuid };
+            const previousCue = this.props.cues[index - 1];
+            const followingCue = this.props.cues[index + 1];
+            const cueErrors = conformToRules(
+                updatedCue, this.props.subtitleSpecifications || null, previousCue, followingCue);
+
+            console.log(cueErrors);
+            if (!cueErrors.length) {
+                this.props.updateVttCue(index, newCue, originalCue.editUuid);
+            } else {
+                this.updateRegion(index, originalCue.vttCue.startTime, originalCue.vttCue.endTime,
+                    originalCue.vttCue.text);
+            }
         }
     }
 
@@ -362,9 +399,12 @@ class VideoPlayer extends React.Component<Props> {
     }
 }
 
+const mapStateToProps = (state: SubtitleEditState) => ({ subtitleSpecifications: state.subtitleSpecifications });
+
 const mapDispatchToProps = (dispatch: Dispatch<SubtitleEditAction>) => ({
-    updateEditingCueIndex: (cueIndex: number) => dispatch(updateEditingCueIndex(cueIndex))
+    updateEditingCueIndex: (cueIndex: number) => dispatch(updateEditingCueIndex(cueIndex)),
+    updateVttCue: (idx: number, vttCue: VTTCue, editUuid?: string) => dispatch(updateVttCue(idx, vttCue, editUuid))
 });
 
 // @ts-ignore this won't accept any type
-export default connect(null, mapDispatchToProps)(VideoPlayer);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayer);
