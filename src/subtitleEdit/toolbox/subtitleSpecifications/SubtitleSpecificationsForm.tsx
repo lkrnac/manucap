@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { SubtitleSpecification } from "../model";
 
 export interface Props {
@@ -113,7 +114,8 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 <ReactMarkdown
                     renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
                     source={props.subTitleSpecifications.comments}
-                    disallowedTypes={["html", "virtualHtml"]}
+                    disallowedTypes={["html"]}
+                    plugins={[remarkGfm]}
                     className="sbte-subspec-freeform-text sbte-subspec-comments"
                 />
                 <br />
@@ -121,8 +123,9 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
 
                 <ReactMarkdown
                     renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
-                    source={props.subTitleSpecifications.mediaNotes}
-                    disallowedTypes={["html", "virtualHtml"]}
+                    source={props.subTitleSpecifications.mediaNotes ? props.subTitleSpecifications.mediaNotes : ""}
+                    disallowedTypes={["html"]}
+                    plugins={[remarkGfm]}
                     className="sbte-subspec-freeform-text sbte-media-notes"
                 />
             </>

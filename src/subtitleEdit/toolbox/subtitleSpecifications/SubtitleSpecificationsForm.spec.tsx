@@ -299,7 +299,7 @@ describe("SubtitleSpecificationsForm", () => {
             // GIVEN
             const expectedMediaNotes = "<a href=\"https://dotsub.com/images/bootstrap/logo.png\"" +
                 " rel=\"noopener noreferrer\" target=\"_blank\">" +
-                "<img alt=\"test\" src=\"https://dotsub.com/images/bootstrap/logo.png\"></a>";
+                "<img src=\"https://dotsub.com/images/bootstrap/logo.png\" alt=\"test\"></a>";
             subTitleSpecifications.mediaNotes = "[![test](https://dotsub.com/images/bootstrap/logo.png)]" +
                     "(https://dotsub.com/images/bootstrap/logo.png)";
 
@@ -381,7 +381,7 @@ describe("SubtitleSpecificationsForm", () => {
             // GIVEN
             const expectedMediaNotes = "<a href=\"https://dotsub.com/images/bootstrap/logo.png\"" +
                 " rel=\"noopener noreferrer\" target=\"_blank\">" +
-                "<img alt=\"test\" src=\"https://dotsub.com/images/bootstrap/logo.png\"></a>";
+                "<img src=\"https://dotsub.com/images/bootstrap/logo.png\" alt=\"test\"></a>";
             subTitleSpecifications.comments = "[![test](https://dotsub.com/images/bootstrap/logo.png)]" +
                     "(https://dotsub.com/images/bootstrap/logo.png)";
 
