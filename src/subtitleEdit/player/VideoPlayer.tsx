@@ -234,8 +234,9 @@ class VideoPlayer extends React.Component<Props> {
                             this.wavesurfer.setCurrentTime(0);
                         });
 
-                        this.props.cues.forEach((cue: CueDto) => {
+                        this.props.cues.forEach((cue: CueDto, cueIndex: number) => {
                             this.wavesurfer?.addRegion({
+                                id: cueIndex,
                                 start: cue.vttCue.startTime,
                                 end: cue.vttCue.endTime,
                                 loop: false,
@@ -259,6 +260,18 @@ class VideoPlayer extends React.Component<Props> {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
+
+            if (lastCueChange.changeType === "EDIT") {
+                this.wavesurfer.regions.list[lastCueChange.index].remove();
+                this.wavesurfer?.addRegion({
+                    id: lastCueChange.index,
+                    start: lastCueChange.vttCue.startTime,
+                    end: lastCueChange.vttCue.endTime,
+                    loop: false,
+                    color: randomColor(0.1),
+                    attributes: { label: lastCueChange.vttCue.text.replace(/<[^>]*>/g, "") }
+                });
+            }
         }
 
         if (this.props.playSection !== undefined
