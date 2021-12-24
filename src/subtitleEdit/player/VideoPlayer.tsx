@@ -1,9 +1,9 @@
 import "video.js/dist/video-js.css";
-import { CueChange, CueDto, LanguageCues, Track } from "../model";
+import { CueChange, CueDto, LanguageCues, SubtitleEditAction, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../utils/shortcutConstants";
-import { KeyboardEventHandler, ReactElement, RefObject } from "react";
+import { Dispatch, KeyboardEventHandler, ReactElement, RefObject } from "react";
 import * as React from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
@@ -17,6 +17,8 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 // @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
+import { connect } from "react-redux";
+import { updateEditingCueIndex } from "../cues/edit/cueEditorSlices";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -74,6 +76,7 @@ export interface Props {
     lastCueChange: CueChange | null;
     trackFontSizePercent?: number;
     cues: CueDto[];
+    updateEditingCueIndex?: (cueIndex: number) => void;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -234,6 +237,14 @@ class VideoPlayer extends React.Component<Props> {
                             this.wavesurfer.setCurrentTime(0);
                         });
 
+                        // @ts-ignore no types for wavesurfer
+                        this.wavesurfer.on("region-click", (region) => {
+                            // TODO: should only call if cue is in chunk
+                            if (this.props.updateEditingCueIndex) {
+                                this.props.updateEditingCueIndex(region.id);
+                            }
+                        });
+
                         this.props.cues.forEach((cue: CueDto, cueIndex: number) => {
                             this.wavesurfer?.addRegion({
                                 id: cueIndex,
@@ -262,13 +273,14 @@ class VideoPlayer extends React.Component<Props> {
             videoJsTrack.dispatchEvent(new Event("cuechange"));
 
             if (lastCueChange.changeType === "EDIT") {
+                const regionColor = this.wavesurfer.regions.list[lastCueChange.index].color;
                 this.wavesurfer.regions.list[lastCueChange.index].remove();
                 this.wavesurfer?.addRegion({
                     id: lastCueChange.index,
                     start: lastCueChange.vttCue.startTime,
                     end: lastCueChange.vttCue.endTime,
                     loop: false,
-                    color: randomColor(0.1),
+                    color: regionColor,
                     attributes: { label: lastCueChange.vttCue.text.replace(/<[^>]*>/g, "") }
                 });
             }
@@ -350,4 +362,9 @@ class VideoPlayer extends React.Component<Props> {
     }
 }
 
-export default VideoPlayer;
+const mapDispatchToProps = (dispatch: Dispatch<SubtitleEditAction>) => ({
+    updateEditingCueIndex: (cueIndex: number) => dispatch(updateEditingCueIndex(cueIndex))
+});
+
+// @ts-ignore this won't accept any type
+export default connect(null, mapDispatchToProps)(VideoPlayer);
