@@ -10,6 +10,7 @@ interface Props {
     poster: string;
     waveform?: string;
     onTimeChange?: (time: number) => void;
+    duration: number;
 }
 
 const EditingVideoPlayer = (props: Props): ReactElement => {
@@ -46,6 +47,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 resetPlayerTimeChange={(): AppThunk => dispatch(playVideoSection(-1))}
                 trackFontSizePercent={1.25}
                 cues={editingCues}
+                duration={props.duration}
             />
         )
         : <p>Editing track not available!</p>;

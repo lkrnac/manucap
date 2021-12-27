@@ -20,8 +20,6 @@ import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
 import { connect } from "react-redux";
 import { updateEditingCueIndex } from "../cues/edit/cueEditorSlices";
 import { updateVttCue } from "../cues/cuesList/cuesListActions";
-import { debounce } from "lodash";
-import { conformToRules } from "../cues/cueVerifications";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { SubtitleSpecification } from "../toolbox/model";
 
@@ -84,6 +82,8 @@ export interface Props {
     updateEditingCueIndex?: (cueIndex: number) => void;
     updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
     subtitleSpecifications?: SubtitleSpecification;
+    editingCueIndex?: number;
+    duration: number;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -134,18 +134,18 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
 
 class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
-    private videoNode?: Node;
+    private readonly videoNode?: RefObject<HTMLVideoElement>;
     playSegmentPauseTimeout?: number;
     playPromise: Promise<void> | undefined;
     public wavesurfer: WaveSurfer;
     private readonly waveformRef?: RefObject<HTMLDivElement>;
     private readonly waveformTimelineRef?: RefObject<HTMLDivElement>;
-    private updateCueDebounced = debounce(this.updateCue, 1000);
 
     constructor(props: Props) {
         super(props);
 
         this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
+        this.videoNode = React.createRef();
         this.waveformRef = React.createRef();
         this.waveformTimelineRef = React.createRef();
     }
@@ -170,7 +170,7 @@ class VideoPlayer extends React.Component<Props> {
             };
         }
 
-        this.player = videojs(this.videoNode as Element, options) as VideoJsPlayer;
+        this.player = videojs(this.videoNode?.current as Element, options) as VideoJsPlayer;
         this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
             updateCuesForVideoJsTrack(this.props, videoJsTrack, this.props.trackFontSizePercent);
@@ -179,7 +179,7 @@ class VideoPlayer extends React.Component<Props> {
             if (this.props.onTimeChange) {
                 this.props.onTimeChange(this.player.currentTime());
             }
-            this.wavesurfer?.setCurrentTime(this.player.currentTime());
+            // this.wavesurfer?.setCurrentTime(this.player.currentTime());
         });
 
         registerPlayerShortcuts(this);
@@ -202,20 +202,19 @@ class VideoPlayer extends React.Component<Props> {
                     if (this.waveformRef?.current) {
                         this.wavesurfer = WaveSurfer.create({
                             container: this.waveformRef.current,
-                            // responsive: true,
                             normalize: true,
                             scrollParent: true,
                             minimap: true,
+                            backend: "MediaElement",
                             height: 200,
                             pixelRatio: 1,
-                            barHeight: 0.5,
+                            barHeight: 0.4,
                             plugins: [
-                                RegionsPlugin.create({}),
+                                RegionsPlugin.create({
+                                    dragSelection: false
+                                }),
                                 MinimapPlugin.create({
-                                    height: 30,
-                                    waveColor: "#ddd",
-                                    progressColor: "#999",
-                                    cursorColor: "#999"
+                                    height: 50,
                                 }),
                                 TimelinePlugin.create({
                                     container: this.waveformTimelineRef?.current
@@ -225,43 +224,21 @@ class VideoPlayer extends React.Component<Props> {
 
                         this.wavesurfer.zoom(80);
 
+                        // console.log(peaksData);
                         this.wavesurfer.load(
-                            this.props.mp4,
-                            peaksData.data
+                            this.videoNode?.current,
+                            peaksData.data,
+                            "auto",
+                            this.props.duration
                         );
 
-                        // this.wavesurfer.on("interaction", (data: any) => {
-                        //     console.log(data);
-                        //     this.player.currentTime(this.wavesurfer.getCurrentTime());
-                        // });
-
                         this.wavesurfer.on("ready", () => {
-                            this.wavesurfer.setMute(true);
-                            this.wavesurfer.setCurrentTime(0);
-                        });
-
-                        // @ts-ignore no types for wavesurfer
-                        this.wavesurfer.on("region-click", (region) => {
-                            // TODO: should only call if cue is in chunk
-                            if (this.props.updateEditingCueIndex) {
-                                this.props.updateEditingCueIndex(region.id);
-                            }
-                        });
-
-                        // @ts-ignore no types for wavesurfer
-                        this.wavesurfer.on("region-updated", (region) => {
-                            this.updateCueDebounced(region.id, region.start, region.end, region.attributes.label);
+                            // this.wavesurfer.setCurrentTime(0);
                         });
 
                         this.props.cues.forEach((cue: CueDto, cueIndex: number) => {
-                            this.wavesurfer?.addRegion({
-                                id: cueIndex,
-                                start: cue.vttCue.startTime,
-                                end: cue.vttCue.endTime,
-                                loop: false,
-                                color: randomColor(0.1),
-                                attributes: { label: cue.vttCue.text.replace(/<[^>]*>/g, "") }
-                            });
+                            this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
+                                randomColor(0.1));
                         });
                     }
                 });
@@ -295,8 +272,8 @@ class VideoPlayer extends React.Component<Props> {
             const endTime = this.props.playSection.endTime;
             this.player.currentTime(startTime);
             this.playPromise = this.player.play();
-            this.wavesurfer?.setCurrentTime(startTime);
-            this.wavesurfer?.playPause();
+            // this.wavesurfer?.setCurrentTime(startTime);
+            // this.wavesurfer?.playPause();
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
@@ -309,43 +286,33 @@ class VideoPlayer extends React.Component<Props> {
             }
             this.props.resetPlayerTimeChange();
         }
+
+        if (this.props.editingCueIndex) {
+            const start = this.props.cues[this.props.editingCueIndex]?.vttCue.startTime;
+            if (start) {
+                this.wavesurfer?.setCurrentTime(start);
+            }
+        }
     }
 
-    private updateRegion(index: number, start: number, end: number, text: string) {
-        console.log("updateRegion");
-        console.log("index: " + index + ", start: " + start + ", end: " + end);
-        const regionColor = this.wavesurfer.regions.list[index].color;
-        this.wavesurfer.regions.list[index].remove();
+    private addRegion(index: number, start: number, end: number, text: string, color: string) {
         this.wavesurfer?.addRegion({
             id: index,
             start,
             end,
+            color,
+            attributes: { label: text.replace(/<[^>]*>/g, "") },
             loop: false,
-            color: regionColor,
-            attributes: { label: text.replace(/<[^>]*>/g, "") }
+            drag: false,
+            resize: false,
+            showTooltip: false
         });
     }
 
-    private updateCue(index: number, start: number, end: number, text: string) {
-        if (this.props.updateVttCue) {
-            const newCue = new VTTCue(start, end, text);
-            const originalCue = this.props.cues[index];
-            copyNonConstructorProperties(newCue, originalCue.vttCue);
-
-            const updatedCue = { vttCue: newCue, cueCategory: originalCue.cueCategory, editUuid: originalCue.editUuid };
-            const previousCue = this.props.cues[index - 1];
-            const followingCue = this.props.cues[index + 1];
-            const cueErrors = conformToRules(
-                updatedCue, this.props.subtitleSpecifications || null, previousCue, followingCue);
-
-            console.log(cueErrors);
-            if (!cueErrors.length) {
-                this.props.updateVttCue(index, newCue, originalCue.editUuid);
-            } else {
-                this.updateRegion(index, originalCue.vttCue.startTime, originalCue.vttCue.endTime,
-                    originalCue.vttCue.text);
-            }
-        }
+    private updateRegion(index: number, start: number, end: number, text: string) {
+        const regionColor = this.wavesurfer.regions.list[index].color;
+        this.wavesurfer.regions.list[index].remove();
+        this.addRegion(index, start, end, text, regionColor);
     }
 
     public getTime(): number {
@@ -362,7 +329,7 @@ class VideoPlayer extends React.Component<Props> {
     public playPause(): void {
         if (this.player.paused()) {
             this.playPromise = this.player.play();
-            this.wavesurfer?.playPause();
+            // this.wavesurfer?.playPause();
         } else {
             this.pauseVideo();
         }
@@ -376,15 +343,15 @@ class VideoPlayer extends React.Component<Props> {
         } else {
             this.player.pause();
         }
-        this.wavesurfer?.playPause();
+        // this.wavesurfer?.playPause();
     }
 
     public render(): ReactElement {
         return (
-            <>
+            <div>
                 <video
                     id="video-player"
-                    ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
+                    ref={this.videoNode}
                     style={{ margin: "auto" }}
                     className="video-js vjs-default-skin vjs-big-play-centered"
                     poster={this.props.poster}
@@ -394,12 +361,15 @@ class VideoPlayer extends React.Component<Props> {
                 />
                 <div ref={this.waveformRef} />
                 <div ref={this.waveformTimelineRef} />
-            </>
+            </div>
         );
     }
 }
 
-const mapStateToProps = (state: SubtitleEditState) => ({ subtitleSpecifications: state.subtitleSpecifications });
+const mapStateToProps = (state: SubtitleEditState) => ({
+    subtitleSpecifications: state.subtitleSpecifications,
+    editingCueIndex: state.editingCueIndex
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<SubtitleEditAction>) => ({
     updateEditingCueIndex: (cueIndex: number) => dispatch(updateEditingCueIndex(cueIndex)),

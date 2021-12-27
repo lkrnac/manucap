@@ -37,6 +37,7 @@ export interface SubtitleEditProps {
     onImportFile: () => void;
     spellCheckerDomain?: string;
     commentAuthor?: string;
+    duration: number;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -101,6 +102,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     poster={props.poster}
                                     waveform={props.waveform}
                                     onTimeChange={handleTimeChange}
+                                    duration={props.duration}
                                 />
                             </div>
                             <Toolbox

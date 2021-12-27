@@ -352,6 +352,7 @@ const TestApp = (): ReactElement => {
             onImportFile={(): void => undefined}
             spellCheckerDomain="dev-spell-checker.videotms.com"
             commentAuthor="Linguist"
+            duration={126}
         />
     );
 };
