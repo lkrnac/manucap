@@ -10,8 +10,13 @@ import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import sinon from "sinon";
+import { createTestingStore } from "../../testUtils/testingStore";
+import { Provider } from "react-redux";
+import * as React from "react";
 
 jest.mock("../cues/cueUtils");
+
+let testingStore = createTestingStore();
 
 interface FakeTrack {
     language: string;
@@ -27,6 +32,10 @@ const dispatchEventForTrack = (player: VideoJsPlayer, textTrack: FakeTrack): voi
 };
 
 describe("VideoPlayer", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+    });
+
     it("renders", () => {
         // GIVEN
         // noinspection HtmlUnknownTarget Dummy URL is OK for testing
@@ -44,17 +53,20 @@ describe("VideoPlayer", () => {
 
         // WHEN
         const actualVideoView = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
+        const videoNode = actualVideoView.find("video");
 
         // THEN
-        expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
+        expect(removeVideoPlayerDynamicValue(videoNode.html()))
             .toEqual(removeVideoPlayerDynamicValue(expectedVideoView.html()));
     });
 
@@ -71,17 +83,20 @@ describe("VideoPlayer", () => {
 
         // WHEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={tracks}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={tracks}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
+        const videoNode = actualNode.find("VideoPlayer");
 
         // THEN
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const actualComponent = videoNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.html5.nativeTextTracks).toBeUndefined();
