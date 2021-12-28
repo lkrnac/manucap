@@ -9,8 +9,8 @@ interface Props {
     mp4: string;
     poster: string;
     waveform?: string;
+    duration?: number;
     onTimeChange?: (time: number) => void;
-    duration: number;
 }
 
 const EditingVideoPlayer = (props: Props): ReactElement => {
@@ -39,6 +39,8 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 mp4={props.mp4}
                 poster={props.poster}
                 waveform={props.waveform}
+                duration={props.duration}
+                cues={editingCues}
                 tracks={tracks}
                 onTimeChange={props.onTimeChange}
                 languageCuesArray={languageCuesArray}
@@ -46,8 +48,6 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 lastCueChange={lastCueChange}
                 resetPlayerTimeChange={(): AppThunk => dispatch(playVideoSection(-1))}
                 trackFontSizePercent={1.25}
-                cues={editingCues}
-                duration={props.duration}
             />
         )
         : <p>Editing track not available!</p>;

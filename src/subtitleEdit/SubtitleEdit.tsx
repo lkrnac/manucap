@@ -29,6 +29,7 @@ export interface SubtitleEditProps {
     mp4: string;
     poster: string;
     waveform?: string;
+    duration?: number;
     onViewAllTracks: () => void;
     onSave: () => void;
     onComplete: () => void;
@@ -37,7 +38,6 @@ export interface SubtitleEditProps {
     onImportFile: () => void;
     spellCheckerDomain?: string;
     commentAuthor?: string;
-    duration: number;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -101,8 +101,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     mp4={props.mp4}
                                     poster={props.poster}
                                     waveform={props.waveform}
-                                    onTimeChange={handleTimeChange}
                                     duration={props.duration}
+                                    onTimeChange={handleTimeChange}
                                 />
                             </div>
                             <Toolbox
