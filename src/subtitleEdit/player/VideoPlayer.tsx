@@ -71,6 +71,8 @@ export interface Props {
     mp4: string;
     poster: string;
     waveform?: string;
+    duration?: number;
+    cues?: CueDto[];
     tracks: Track[];
     onTimeChange?: (time: number) => void;
     languageCuesArray: LanguageCues[];
@@ -78,12 +80,10 @@ export interface Props {
     resetPlayerTimeChange?: () => void;
     lastCueChange: CueChange | null;
     trackFontSizePercent?: number;
-    cues: CueDto[];
     updateEditingCueIndex?: (cueIndex: number) => void;
     updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
     subtitleSpecifications?: SubtitleSpecification;
     editingCueIndex?: number;
-    duration: number;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -179,7 +179,6 @@ class VideoPlayer extends React.Component<Props> {
             if (this.props.onTimeChange) {
                 this.props.onTimeChange(this.player.currentTime());
             }
-            // this.wavesurfer?.setCurrentTime(this.player.currentTime());
         });
 
         registerPlayerShortcuts(this);
@@ -194,7 +193,7 @@ class VideoPlayer extends React.Component<Props> {
             getTimeString(x, (hours: number): boolean => hours === 0)
         );
 
-        if (this.props.waveform) {
+        if (this.props.waveform && this.props.duration) {
             fetch(this.props.waveform,
                 { headers: { "Content-Type": "application/json", "Accept": "application/json" }})
                 .then((response) => response.json())
@@ -224,7 +223,6 @@ class VideoPlayer extends React.Component<Props> {
 
                         this.wavesurfer.zoom(80);
 
-                        // console.log(peaksData);
                         this.wavesurfer.load(
                             this.videoNode?.current,
                             peaksData.data,
@@ -232,11 +230,7 @@ class VideoPlayer extends React.Component<Props> {
                             this.props.duration
                         );
 
-                        this.wavesurfer.on("ready", () => {
-                            // this.wavesurfer.setCurrentTime(0);
-                        });
-
-                        this.props.cues.forEach((cue: CueDto, cueIndex: number) => {
+                        this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
                             this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
                                 randomColor(0.1));
                         });
@@ -272,8 +266,6 @@ class VideoPlayer extends React.Component<Props> {
             const endTime = this.props.playSection.endTime;
             this.player.currentTime(startTime);
             this.playPromise = this.player.play();
-            // this.wavesurfer?.setCurrentTime(startTime);
-            // this.wavesurfer?.playPause();
             if (endTime) {
                 // for some reason it was stopping around 100ms short
                 const waitTime = ((endTime - startTime) * 1000) + 100;
@@ -281,13 +273,12 @@ class VideoPlayer extends React.Component<Props> {
                     this.pauseVideo();
                     // avoid showing 2 captions lines at the same time
                     this.player.currentTime(endTime - ONE_MILLISECOND);
-                    this.wavesurfer?.setCurrentTime(endTime - ONE_MILLISECOND);
                 }, waitTime);
             }
             this.props.resetPlayerTimeChange();
         }
 
-        if (this.props.editingCueIndex) {
+        if (this.props.editingCueIndex && this.props.cues) {
             const start = this.props.cues[this.props.editingCueIndex]?.vttCue.startTime;
             if (start) {
                 this.wavesurfer?.setCurrentTime(start);
@@ -323,13 +314,11 @@ class VideoPlayer extends React.Component<Props> {
         const deltaInSeconds = delta / SECOND;
         const newTimeInSeconds = this.player.currentTime() + deltaInSeconds;
         this.player.currentTime(newTimeInSeconds);
-        this.wavesurfer?.setCurrentTime(newTimeInSeconds);
     }
 
     public playPause(): void {
         if (this.player.paused()) {
             this.playPromise = this.player.play();
-            // this.wavesurfer?.playPause();
         } else {
             this.pauseVideo();
         }
@@ -343,7 +332,6 @@ class VideoPlayer extends React.Component<Props> {
         } else {
             this.player.pause();
         }
-        // this.wavesurfer?.playPause();
     }
 
     public render(): ReactElement {
