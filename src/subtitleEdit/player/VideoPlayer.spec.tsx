@@ -2,7 +2,7 @@ import "../../testUtils/initBrowserEnvironment";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 
-import { LanguageCues, Track } from "../model";
+import { CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer } from "video.js";
 import { Character } from "../utils/shortcutConstants";
 import VideoPlayer from "./VideoPlayer";
@@ -17,6 +17,16 @@ import { act } from "react-dom/test-utils";
 jest.mock("../cues/cueUtils");
 
 let testingStore = createTestingStore();
+
+const cues = [
+    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+] as CueDto[];
+
+const tracks = [
+    { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
+    { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
+];
 
 interface FakeTrack {
     language: string;
@@ -72,10 +82,6 @@ describe("VideoPlayer", () => {
 
     it("initializes videoJs with correct options (non safari)", () => {
         // GIVEN
-        const tracks = [
-            { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
-            { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
-        ];
         const expectedTextTrackOptions = [
             { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
             { kind: "subtitles", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
@@ -109,11 +115,6 @@ describe("VideoPlayer", () => {
         // GIVEN
         // @ts-ignore
         isSafari.mockImplementationOnce(() => true);
-
-        const tracks = [
-            { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
-            { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
-        ];
         const expectedTextTrackOptions = [
             { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
             { kind: "subtitles", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
@@ -222,11 +223,6 @@ describe("VideoPlayer", () => {
             })
         });
 
-        const tracks = [
-            { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
-            { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
-        ];
-
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
@@ -263,6 +259,45 @@ describe("VideoPlayer", () => {
             { regions: true, minimap: true, timeline: true });
         expect(actualComponent.wavesurfer.regions.params).toEqual({ dragSelection: false });
         expect(actualComponent.wavesurfer.minimap.params.height).toEqual(50);
+    });
+
+    it("initializes wavesurfer with regions", async () => {
+        // GIVEN
+        // @ts-ignore we are just mocking
+        jest.spyOn(global, "fetch").mockResolvedValue({
+            json: jest.fn().mockResolvedValue({
+                data: [0,-1,0,-1,4,-6,4,-3,4,-1,3,-3,3,-5,4,-1,6,-8,1,0,5,-3,0,-2,1,0,4]
+            })
+        });
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    waveform="dummyWaveform"
+                    duration={20}
+                    cues={cues}
+                    tracks={tracks}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Caption Line 1");
+        expect(actualComponent.wavesurfer.regions.list[1].start).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[1].end).toEqual(4);
+        expect(actualComponent.wavesurfer.regions.list[1].attributes.label).toEqual("Caption Line 2");
     });
 
     it("maintains cue styles when tracks are initialized", () => {
