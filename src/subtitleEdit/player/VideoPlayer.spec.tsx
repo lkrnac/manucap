@@ -12,7 +12,6 @@ import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import sinon from "sinon";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
-import * as React from "react";
 
 jest.mock("../cues/cueUtils");
 
@@ -93,9 +92,10 @@ describe("VideoPlayer", () => {
                 />
             </Provider>
         );
-        const videoNode = actualNode.find("VideoPlayer");
 
         // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
         const actualComponent = videoNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
@@ -120,17 +120,21 @@ describe("VideoPlayer", () => {
 
         // WHEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={tracks}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={tracks}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // THEN
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.html5.nativeTextTracks).toBeFalsy();
@@ -141,17 +145,21 @@ describe("VideoPlayer", () => {
     it("initializes videoJs with mp4 and poster URLs", () => {
         // WHEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // THEN
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         expect(actualComponent.player.src()).toEqual("dummyMp4Url");
         expect(actualComponent.player.poster()).toEqual("dummyPosterUrl");
     });
@@ -179,15 +187,19 @@ describe("VideoPlayer", () => {
             { language: "es-ES", addCue: jest.fn(), cues: translationCues }
         ];
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={languageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={languageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const component = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const component = videoNode.instance() as VideoPlayer;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);
@@ -223,15 +235,19 @@ describe("VideoPlayer", () => {
             { language: "en-CA", addCue: jest.fn(), cues: [new VTTCue(0, 1, "Caption Line 1")]},
         ];
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={languageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={languageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const component = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const component = videoNode.instance() as VideoPlayer;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);
@@ -243,15 +259,19 @@ describe("VideoPlayer", () => {
     it("should toggle play/pause with key shortcut", () => {
         // GIVEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         const playPauseSpy = sinon.spy();
         actualComponent.playPause = playPauseSpy;
 
@@ -266,15 +286,19 @@ describe("VideoPlayer", () => {
     it("should shiftTime -1 second with key shortcut", () => {
         // GIVEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         const shiftTimeSpy = sinon.spy();
         actualComponent.shiftTime = shiftTimeSpy;
 
@@ -289,15 +313,19 @@ describe("VideoPlayer", () => {
     it("should call shiftTime 1 second with key shortcut", () => {
         // GIVEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         const shiftTimeSpy = sinon.spy();
         actualComponent.shiftTime = shiftTimeSpy;
 
@@ -313,16 +341,20 @@ describe("VideoPlayer", () => {
         // GIVEN
         const onTimeChange = sinon.spy();
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                onTimeChange={onTimeChange}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    onTimeChange={onTimeChange}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
 
         // WHEN
         actualComponent.player.trigger("timeupdate");
@@ -334,15 +366,19 @@ describe("VideoPlayer", () => {
     it("should work correctly after player timeupdate event when no onTimeChange prop is provided", () => {
         // GIVEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         const playPauseSpy = sinon.spy();
         actualComponent.playPause = playPauseSpy;
 
@@ -371,16 +407,20 @@ describe("VideoPlayer", () => {
             { language: "en-CA", addCue: jest.fn(), cues: [vttCue]},
         ];
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={languageCuesArray}
-                lastCueChange={null}
-                trackFontSizePercent={1.25}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={languageCuesArray}
+                    lastCueChange={null}
+                    trackFontSizePercent={1.25}
+                />
+            </Provider>
         );
-        const component = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const component = videoNode.instance() as VideoPlayer;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);

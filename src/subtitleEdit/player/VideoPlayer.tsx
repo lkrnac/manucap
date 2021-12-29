@@ -164,7 +164,7 @@ class VideoPlayer extends React.Component<Props> {
             }
         } as VideoJsPlayerOptions;
 
-        if(isSafari()){
+        if (isSafari()) {
             options.html5 = {
                 nativeTextTracks: false
             };
