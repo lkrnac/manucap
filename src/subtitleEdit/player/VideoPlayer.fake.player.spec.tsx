@@ -6,9 +6,13 @@ import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
 import videojs from "video.js";
 import * as shortcutConstants from "../utils/shortcutConstants";
+import { createTestingStore } from "../../testUtils/testingStore";
+import { Provider } from "react-redux";
 
 jest.useFakeTimers();
 jest.mock("video.js");
+
+let testingStore = createTestingStore();
 
 const O_CHAR = 79;
 const LEFT = 37;
@@ -45,6 +49,10 @@ const initialTestingLanguageCuesArray = [
 ] as LanguageCues[];
 
 describe("VideoPlayer tested with fake player", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+    });
+
     it("executes play via keyboard shortcut", () => {
         // GIVEN
         const play = jest.fn();
@@ -57,13 +65,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -85,13 +95,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -113,15 +125,19 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         actualComponent.playPromise = Promise.resolve();
 
         // WHEN
@@ -144,13 +160,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -173,13 +191,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -200,15 +220,19 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
-        const component = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const component = videoNode.instance() as VideoPlayer;
 
         // WHEN
         const actualTime = component.getTime();
@@ -234,13 +258,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -271,13 +297,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -311,13 +339,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -354,13 +384,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -397,13 +429,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -437,13 +471,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -472,13 +508,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -513,13 +551,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -559,13 +599,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -604,13 +646,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -647,13 +691,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -695,13 +741,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -738,13 +786,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -784,13 +834,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -826,13 +878,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
-                poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+                    poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -870,13 +924,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const actualNode = mount(
-            <VideoPlayer
-                mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
-                poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+                    poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
+                    tracks={initialTestingTracks}
+                    languageCuesArray={initialTestingLanguageCuesArray}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
