@@ -628,8 +628,8 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        // @ts-ignore I only need to update these props
         actualNode.setProps(
+            // @ts-ignore I only need to update these props
             { lastCueChange: { changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 1, "Updated Caption") }}
         );
 
@@ -682,8 +682,8 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        // @ts-ignore I only need to update these props
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "ADD", index: 1, vttCue: new VTTCue(0, 1, "Updated Caption") }
         });
 
@@ -735,8 +735,8 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        // @ts-ignore I only need to update these props
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "ADD", index: 2, vttCue: new VTTCue(0, 1, "Updated Caption") }
         });
 
@@ -786,8 +786,8 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        // @ts-ignore I only need to update these props
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "ADD", index: 0, vttCue: new VTTCue(0, 1, "Updated Caption") }
         });
 
@@ -842,8 +842,8 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        // @ts-ignore I only need to update these props
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "REMOVE", index: 1, vttCue: new VTTCue(0, 0, "") }
         });
 
@@ -893,8 +893,8 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        // @ts-ignore I only need to update these props
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "EDIT", index: 3, vttCue: new VTTCue(0, 1, "Updated Caption") }
         });
 
@@ -947,8 +947,8 @@ describe("VideoPlayer tested with fake player", () => {
         );
 
         // WHEN
-        // @ts-ignore I only need to update these props
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "EDIT", index: 0, vttCue: updatedVttCue }
         });
 
@@ -1105,6 +1105,7 @@ describe("VideoPlayer tested with fake player", () => {
             // WHEN
             vttCue.line = testingLine;
             actualNode.setProps(
+                // @ts-ignore I only need to update these props
                 { lastCueChange: { changeType: "EDIT", index: 0, vttCue: vttCue }}
             );
 
@@ -1158,6 +1159,7 @@ describe("VideoPlayer tested with fake player", () => {
             const editingCue = new VTTCue(1, 2, "");
             editingCue.line = 12;
             const lastCueChange = { changeType: "EDIT", index: 0, vttCue: editingCue };
+            // @ts-ignore I only need to update these props
             actualNode.setProps({ lastCueChange: lastCueChange });
 
             // THEN
@@ -1213,6 +1215,7 @@ describe("VideoPlayer tested with fake player", () => {
             const lastCueChange = { changeType: "ADD", index: 0, vttCue: addedCue };
             addedCue.line = 12;
             actualNode.setProps(
+                // @ts-ignore I only need to update these props
                 { lastCueChange: { changeType: "ADD", index: 0, vttCue: lastCueChange }}
             );
 

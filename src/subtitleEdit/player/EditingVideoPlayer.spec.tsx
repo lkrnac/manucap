@@ -66,9 +66,10 @@ describe("EditingVideoPlayer", () => {
         // WHEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         actualNode.update();
+        const videoNode = actualNode.find("video");
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(videoNode.html()).toEqual(expectedNode.html());
     });
 
     it("passes down cues array with correct language when first rendered", () => {
