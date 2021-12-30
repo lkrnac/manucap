@@ -251,7 +251,7 @@ class VideoPlayer extends React.Component<Props> {
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
 
-            if (lastCueChange.changeType === "EDIT") {
+            if (lastCueChange.changeType === "EDIT" && this.wavesurfer) {
                 this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
                     lastCueChange.vttCue.text);
             }
