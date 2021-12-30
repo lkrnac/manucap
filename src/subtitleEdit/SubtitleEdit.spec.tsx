@@ -11,6 +11,8 @@ import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Task, Track, CueError } from "./model";
 import {
+    fixVideoPlayerInvalidTime,
+    removeBackgroundColorStyle,
     removeDraftJsDynamicValues,
     removeVideoPlayerDynamicValue,
 } from "../testUtils/testUtils";
@@ -1085,6 +1087,193 @@ describe("SubtitleEdit", () => {
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
             .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+    });
+
+    it("renders with waveform", async () => {
+        // GIVEN
+        // @ts-ignore we are just mocking
+        jest.spyOn(global, "fetch").mockResolvedValue({
+            json: jest.fn().mockResolvedValue({
+                data: [0,-1,0,-1,4,-6,4,-3,4,-1,3,-3,3,-5,4,-1,6,-8,1,0,5,-3,0,-2,1,0,4]
+            })
+        });
+        const expectedNode = render(
+            <Provider store={testingStore} >
+                <div
+                    className="sbte-subtitle-edit"
+                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                >
+                    <div>CueErrorAlert</div>
+                    <header style={{ display: "flex", paddingBottom: "10px" }}>
+                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
+                            <div><b>This is the video title</b> <i>Project One</i></div>
+                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                        </div>
+                        <div style={{ display: "flex", flexFlow: "column" }}>
+                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Completed: <b>50%</b></div>
+                        </div>
+                    </header>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                            <div className="video-player-wrapper">
+                                <VideoPlayer
+                                    mp4="dummyMp4"
+                                    poster="dummyPoster"
+                                    waveform="dummyWaveform"
+                                    duration={20}
+                                    cues={cues}
+                                    tracks={[testingTrack]}
+                                    languageCuesArray={[]}
+                                    lastCueChange={null}
+                                    playSection={{ startTime: 0 }}
+                                />
+                            </div>
+                            <Toolbox
+                                handleImportFile={jest.fn()}
+                                handleExportSourceFile={jest.fn()}
+                                handleExportFile={jest.fn()}
+                            />
+                        </div>
+                        <div
+                            style={{
+                                flex: "1 1 60%",
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
+                            </div>
+                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                    View All Tracks
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    hidden={testingTrack.type !== "TRANSLATION"}
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={(): void => undefined}
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
+                                <span style={{ flexGrow: 2 }} />
+                                <div
+                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
+                                >
+                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                </div>
+                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                    Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore} >
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    waveform="dummyWaveform"
+                    duration={20}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+        testingStore.dispatch(
+            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        expectedNode.container.click();
+
+        await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
+
+        // THEN
+        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(removeBackgroundColorStyle(
+            actualNode.container.outerHTML))))
+            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(removeBackgroundColorStyle(
+                fixVideoPlayerInvalidTime(expectedNode.container.outerHTML)))));
     });
 
     it("calls onViewAllTrack callback when button is clicked", () => {
