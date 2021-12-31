@@ -2,7 +2,7 @@ import "../../testUtils/initBrowserEnvironment";
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
 
-import { CueDto, LanguageCues, Track } from "../model";
+import { LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer } from "video.js";
 import { Character } from "../utils/shortcutConstants";
 import VideoPlayer from "./VideoPlayer";
@@ -12,16 +12,10 @@ import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
 import sinon from "sinon";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
-import { act } from "react-dom/test-utils";
 
 jest.mock("../cues/cueUtils");
 
 let testingStore = createTestingStore();
-
-const cues = [
-    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
-    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
-] as CueDto[];
 
 const tracks = [
     { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
@@ -212,92 +206,6 @@ describe("VideoPlayer", () => {
         expect(textTracks[0].addCue).nthCalledWith(2, new VTTCue(1, 2, "Caption Line 2"));
         expect(textTracks[1].addCue).nthCalledWith(1, new VTTCue(0, 1, "Translation Line 1"));
         expect(textTracks[1].addCue).nthCalledWith(2, new VTTCue(1, 2, "Translation Line 2"));
-    });
-
-    it("initializes wavesurfer with correct options", async () => {
-        // GIVEN
-        // @ts-ignore we are just mocking
-        jest.spyOn(global, "fetch").mockResolvedValue({
-            json: jest.fn().mockResolvedValue({
-                data: [0,-1,0,-1,4,-6,4,-3,4,-1,3,-3,3,-5,4,-1,6,-8,1,0,5,-3,0,-2,1,0,4]
-            })
-        });
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <VideoPlayer
-                    poster="dummyPosterUrl"
-                    mp4="dummyMp4Url"
-                    waveform="dummyWaveform"
-                    duration={20}
-                    tracks={tracks}
-                    languageCuesArray={[]}
-                    lastCueChange={null}
-                />
-            </Provider>
-        );
-        await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
-
-        // THEN
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
-
-        expect(actualComponent.wavesurfer.params.normalize).toBeTruthy();
-        expect(actualComponent.wavesurfer.params.scrollParent).toBeTruthy();
-        expect(actualComponent.wavesurfer.params.minimap).toBeTruthy();
-        expect(actualComponent.wavesurfer.params.backend).toEqual("MediaElement");
-        expect(actualComponent.wavesurfer.params.height).toEqual(200);
-        expect(actualComponent.wavesurfer.params.pixelRatio).toEqual(1);
-        expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.4);
-        expect(actualComponent.wavesurfer.params.plugins.length).toEqual(3);
-        expect(actualComponent.wavesurfer.params.plugins[0].name).toEqual("regions");
-        expect(actualComponent.wavesurfer.params.plugins[1].name).toEqual("minimap");
-        expect(actualComponent.wavesurfer.params.plugins[2].name).toEqual("timeline");
-        expect(actualComponent.wavesurfer.initialisedPluginList).toEqual(
-            { regions: true, minimap: true, timeline: true });
-        expect(actualComponent.wavesurfer.regions.params).toEqual({ dragSelection: false });
-        expect(actualComponent.wavesurfer.minimap.params.height).toEqual(50);
-    });
-
-    it("initializes wavesurfer with regions", async () => {
-        // GIVEN
-        // @ts-ignore we are just mocking
-        jest.spyOn(global, "fetch").mockResolvedValue({
-            json: jest.fn().mockResolvedValue({
-                data: [0,-1,0,-1,4,-6,4,-3,4,-1,3,-3,3,-5,4,-1,6,-8,1,0,5,-3,0,-2,1,0,4]
-            })
-        });
-
-        // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <VideoPlayer
-                    poster="dummyPosterUrl"
-                    mp4="dummyMp4Url"
-                    waveform="dummyWaveform"
-                    duration={20}
-                    cues={cues}
-                    tracks={tracks}
-                    languageCuesArray={[]}
-                    lastCueChange={null}
-                />
-            </Provider>
-        );
-        await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
-
-        // THEN
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
-
-        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
-        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(2);
-        expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Caption Line 1");
-        expect(actualComponent.wavesurfer.regions.list[1].start).toEqual(2);
-        expect(actualComponent.wavesurfer.regions.list[1].end).toEqual(4);
-        expect(actualComponent.wavesurfer.regions.list[1].attributes.label).toEqual("Caption Line 2");
     });
 
     it("maintains cue styles when tracks are initialized", () => {

@@ -1265,9 +1265,8 @@ describe("SubtitleEdit", () => {
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        expectedNode.container.click();
 
-        await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // THEN
         expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(removeBackgroundColorStyle(

@@ -250,11 +250,11 @@ class VideoPlayer extends React.Component<Props> {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
+        }
 
-            if (lastCueChange.changeType === "EDIT" && this.wavesurfer) {
-                this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
-                    lastCueChange.vttCue.text);
-            }
+        if (lastCueChange && lastCueChange.changeType === "EDIT" && this.wavesurfer) {
+            this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
+                lastCueChange.vttCue.text);
         }
 
         if (this.props.playSection !== undefined
