@@ -18,7 +18,7 @@ const ShiftTimeButton = (): ReactElement => {
                 disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
             >
-                <i className="fas fa-angle-double-right" /> Shift All Tracks Time
+                <i className="fas fa-angle-double-right" /> Shift Track Time
             </button>
 
             <ShiftTimeModal show={show} onClose={handleClose} />
