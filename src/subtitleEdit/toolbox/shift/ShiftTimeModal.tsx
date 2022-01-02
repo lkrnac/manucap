@@ -2,9 +2,8 @@ import { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import { applyShiftTime } from "../../cues/cuesList/cuesListActions";
+import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { Field, Form } from "react-final-form";
-
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
 const isShiftTimeValid = (value: string, firstTrackTime: number, isMediaChunk: boolean): boolean =>
@@ -22,12 +21,13 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
     const mediaChunkStart = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaChunkStart);
+    const editCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const isMediaChunk = !!mediaChunkStart || mediaChunkStart === 0;
 
-    const handleApplyShift = (shift: string): void => {
-        const shiftValue = parseFloat(shift);
+    const handleApplyShift = (shiftPosition: string, shiftTime: string): void => {
+        const shiftValue = parseFloat(shiftTime);
         try {
-            dispatch(applyShiftTime(shiftValue));
+            dispatch(applyShiftTimeByPosition(shiftPosition, editCueIndex, shiftValue));
         } catch (e) {
             // @ts-ignore
             setErrorMessage(e.message);
@@ -44,17 +44,17 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     return (
         <Modal show={props.show} onHide={handleCancelShift} centered dialogClassName="sbte-medium-modal">
             <Modal.Header closeButton>
-                <Modal.Title>Shift All Track Lines Time</Modal.Title>
+                <Modal.Title>Shift Track Lines Time</Modal.Title>
             </Modal.Header>
             <Form
-                onSubmit={(values): void => handleApplyShift(values.shift)}
+                onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
                 render={({ handleSubmit, values }): ReactElement => (
                     <form onSubmit={handleSubmit}>
                         <Modal.Body>
                             <div className="form-group">
                                 <label>Time Shift in Seconds.Milliseconds</label>
                                 <Field
-                                    name="shift"
+                                    name="shiftTime"
                                     component="input"
                                     parse={normalizeValue}
                                     className="form-control dotsub-track-line-shift margin-right-10"
@@ -64,8 +64,41 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                     step={"0.100"}
                                 />
                             </div>
+                            <div className="form-check">
+                                <label>
+                                    <Field
+                                        name="shiftPosition"
+                                        component="input"
+                                        type="radio"
+                                        value="all"
+                                        className="form-check-input"
+                                    /> Shift all
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <Field
+                                        component="input"
+                                        type="radio"
+                                        name="shiftPosition"
+                                        value="before"
+                                        className="form-check-input"
+                                    /> Shift all before editing cue
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <Field
+                                        component="input"
+                                        type="radio"
+                                        name="shiftPosition"
+                                        value="after"
+                                        className="form-check-input"
+                                    /> Shift all after editing cue
+                                </label>
+                            </div>
                             {
-                                errorMessage || isShiftTimeValid(values.shift, firstTrackTime, isMediaChunk) ? (
+                                errorMessage || isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ? (
                                     <span className="alert alert-danger" style={{ display: "block" }}>
                                         {errorMessage || INVALID_SHIFT_MSG}
                                     </span>
@@ -75,7 +108,10 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                         <Modal.Footer>
                             <button
                                 type="submit"
-                                disabled={isShiftTimeValid(values.shift, firstTrackTime, isMediaChunk)}
+                                disabled={
+                                    isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
+                                    values.shiftPosition === undefined
+                                }
                                 className="dotsub-shift-modal-apply-button btn btn-primary"
                             >
                                 Apply
