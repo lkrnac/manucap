@@ -405,15 +405,6 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
         dispatch(updateMatchedCues());
     };
 
-export const applyShiftTime = (shiftTime: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
-        const editingTrack = getState().editingTrack;
-        validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
-        dispatch(cuesSlice.actions.applyShiftTime(shiftTime));
-        callSaveTrack(dispatch, getState, true);
-        dispatch(updateMatchedCues());
-    };
-
 export const applyShiftTimeByPosition = (position: string, cueIndex: number, shiftTime: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         const editingTrack = getState().editingTrack;

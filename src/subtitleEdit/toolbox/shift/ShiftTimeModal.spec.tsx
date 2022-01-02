@@ -1,6 +1,6 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
-import { applyShiftTime, updateCues } from "../../cues/cuesList/cuesListActions";
+import { updateCues } from "../../cues/cuesList/cuesListActions";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Language, Track } from "../../model";
 import { Provider } from "react-redux";
@@ -49,7 +49,7 @@ const expectedNodeWithErrorMsg = mount(
             <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <div className="modal-title h4">Shift All Track Lines Time</div >
+                        <div className="modal-title h4">Shift Track Lines Time</div >
                         <button type="button" className="close">
                             <span aria-hidden="true">×</span >
                             <span className="sr-only">Close</span >
@@ -59,7 +59,7 @@ const expectedNodeWithErrorMsg = mount(
                         <div className="modal-body">
                             <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
                                 <input
-                                    name="shift"
+                                    name="shiftTime"
                                     type="number"
                                     className="form-control dotsub-track-line-shift margin-right-10"
                                     style={{ width: "120px" }}
@@ -68,7 +68,37 @@ const expectedNodeWithErrorMsg = mount(
                                     value="-1.000"
                                     onChange={jest.fn()}
                                 />
-                            </div >
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="all"
+                                    /> Shift all
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="before"
+                                    /> Shift all before editing cue
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="after"
+                                    /> Shift all after editing cue
+                                </label>
+                            </div>
                             <span className="alert alert-danger" style={{ display: "block" }}>
                                 The start time of the first cue plus the shift value must be greater or equal to 0
                             </span >
@@ -76,8 +106,8 @@ const expectedNodeWithErrorMsg = mount(
                         <div className="modal-footer">
                             <button
                                 type="submit"
-                                className="dotsub-shift-modal-apply-button btn btn-primary"
                                 disabled
+                                className="dotsub-shift-modal-apply-button btn btn-primary"
                             >
                                 Apply
                             </button >
@@ -118,7 +148,7 @@ describe("ShiftTimesModal", () => {
                     <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <div className="modal-title h4">Shift All Track Lines Time</div >
+                                <div className="modal-title h4">Shift Track Lines Time</div >
                                 <button type="button" className="close">
                                     <span aria-hidden="true">×</span >
                                     <span className="sr-only">Close</span >
@@ -128,7 +158,7 @@ describe("ShiftTimesModal", () => {
                                 <div className="modal-body">
                                     <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
                                         <input
-                                            name="shift"
+                                            name="shiftTime"
                                             type="number"
                                             className="form-control dotsub-track-line-shift margin-right-10"
                                             style={{ width: "120px" }}
@@ -138,6 +168,36 @@ describe("ShiftTimesModal", () => {
                                             onChange={jest.fn()}
                                         />
                                     </div >
+                                    <div className="form-check">
+                                        <label>
+                                            <input
+                                                name="shiftPosition"
+                                                type="radio"
+                                                className="form-check-input"
+                                                value="all"
+                                            /> Shift all
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <label>
+                                            <input
+                                                name="shiftPosition"
+                                                type="radio"
+                                                className="form-check-input"
+                                                value="before"
+                                            /> Shift all before editing cue
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <label>
+                                            <input
+                                                name="shiftPosition"
+                                                type="radio"
+                                                className="form-check-input"
+                                                value="after"
+                                            /> Shift all after editing cue
+                                        </label>
+                                    </div>
                                 </div >
                                 <div className="modal-footer">
                                     <button
@@ -159,12 +219,13 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        testingStore.dispatch(applyShiftTime(1.1 as number) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
                 <ShiftTimesModal show onClose={(): void => undefined} />
             </Provider >
         );
+
+        actualNode.find(".form-check input[value='all']").simulate("change", { target: { value: "all" }});
 
         // THEN
         expect(actualNode.html())
@@ -182,6 +243,7 @@ describe("ShiftTimesModal", () => {
             </Provider >
         );
         actualNode.find("input[type='number']").simulate("change", { target: { value: -1 }});
+        actualNode.find(".form-check input[value='all']").simulate("change", { target: { value: "all" }});
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNodeWithErrorMsg.html());
@@ -204,7 +266,7 @@ describe("ShiftTimesModal", () => {
                     <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <div className="modal-title h4">Shift All Track Lines Time</div >
+                                <div className="modal-title h4">Shift Track Lines Time</div >
                                 <button type="button" className="close">
                                     <span aria-hidden="true">×</span >
                                     <span className="sr-only">Close</span >
@@ -214,7 +276,7 @@ describe("ShiftTimesModal", () => {
                                 <div className="modal-body">
                                     <div className="form-group"><label >Time Shift in Seconds.Milliseconds</label >
                                         <input
-                                            name="shift"
+                                            name="shiftTime"
                                             type="number"
                                             className="form-control dotsub-track-line-shift margin-right-10"
                                             style={{ width: "120px" }}
@@ -224,6 +286,36 @@ describe("ShiftTimesModal", () => {
                                             onChange={jest.fn()}
                                         />
                                     </div >
+                                    <div className="form-check">
+                                        <label>
+                                            <input
+                                                name="shiftPosition"
+                                                type="radio"
+                                                className="form-check-input"
+                                                value="all"
+                                            /> Shift all
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <label>
+                                            <input
+                                                name="shiftPosition"
+                                                type="radio"
+                                                className="form-check-input"
+                                                value="before"
+                                            /> Shift all before editing cue
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <label>
+                                            <input
+                                                name="shiftPosition"
+                                                type="radio"
+                                                className="form-check-input"
+                                                value="after"
+                                            /> Shift all after editing cue
+                                        </label>
+                                    </div>
                                 </div >
                                 <div className="modal-footer">
                                     <button
@@ -251,6 +343,7 @@ describe("ShiftTimesModal", () => {
             </Provider >
         );
         actualNode.find("input[type='number']").simulate("change", { target: { value: -1 }});
+        actualNode.find(".form-check input[value='all']").simulate("change", { target: { value: "all" }});
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
@@ -266,7 +359,8 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        actualNode.find("input[type='number']").simulate("change", { target: { value: 1 }});
+        actualNode.find("input[name='shiftTime']").simulate("change", { target: { value: 1 }});
+        actualNode.find(".form-check input[value='all']").simulate("change", { target: { value: "all" }});
         actualNode.find("form").simulate("submit");
 
         // THEN
@@ -285,7 +379,8 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        actualNode.find("input[type='number']").simulate("change", { target: { value: -.5 }});
+        actualNode.find("input[name='shiftTime']").simulate("change", { target: { value: -.5 }});
+        actualNode.find(".form-check input[value='all']").simulate("change", { target: { value: "all" }});
         actualNode.find("form").simulate("submit");
 
         // THEN
@@ -308,7 +403,8 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        actualNode.find("input[type='number']").simulate("change", { target: { value: .6 }});
+        actualNode.find("input[name='shiftTime']").simulate("change", { target: { value: .6 }});
+        actualNode.find(".form-check input[value='all']").simulate("change", { target: { value: "all" }});
         actualNode.find("form").simulate("submit");
 
         // THEN
@@ -332,7 +428,8 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        actualNode.find("input[type='number']").simulate("change", { target: { value: .25 }});
+        actualNode.find("input[name='shiftTime']").simulate("change", { target: { value: .25 }});
+        actualNode.find(".form-check input[value='all']").simulate("change", { target: { value: "all" }});
         actualNode.find("form").simulate("submit");
 
         // THEN
@@ -375,7 +472,8 @@ describe("ShiftTimesModal", () => {
         saveTrack.mockReset();
 
         // WHEN
-        actualNode.find("input[type='number']").simulate("change", { target: { value: 1 }});
+        actualNode.find("input[name='shiftTime']").simulate("change", { target: { value: 1 }});
+        actualNode.find(".form-check input[value='all']").simulate("change", { target: { value: "all" }});
         actualNode.find("form").simulate("submit");
 
         // THEN

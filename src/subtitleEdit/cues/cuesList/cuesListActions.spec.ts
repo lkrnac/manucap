@@ -9,7 +9,8 @@ import {
     addCue,
     addCueComment,
     addCuesToMergeList,
-    applyShiftTime, checkErrors,
+    applyShiftTimeByPosition,
+    checkErrors,
     deleteCue,
     deleteCueComment,
     mergeCues,
@@ -2629,13 +2630,13 @@ describe("cueSlices", () => {
         });
     });
 
-    describe("applyShiftTime", () => {
-        it("apply shift time", () => {
+    describe("applyShiftTimeByPosition", () => {
+        it("apply shift time to all cues", () => {
             //GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(applyShiftTime(2.123) as {} as AnyAction);
+            testingStore.dispatch(applyShiftTimeByPosition("all", -1, 2.123) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
