@@ -2,12 +2,8 @@ import "../../testUtils/initBrowserEnvironment";
 import { CueDto, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
-import { createTestingStore } from "../../testUtils/testingStore";
-import { Provider } from "react-redux";
 import { act } from "react-dom/test-utils";
 import React from "react";
-
-let testingStore = createTestingStore();
 
 const cues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
@@ -27,25 +23,19 @@ jest.spyOn(global, "fetch").mockResolvedValue({
 });
 
 describe("VideoPlayer with waveform", () => {
-    beforeEach(() => {
-        testingStore = createTestingStore();
-    });
-
     it("initializes wavesurfer with correct options", async () => {
         // GIVEN
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <VideoPlayer
-                    poster="dummyPosterUrl"
-                    mp4="dummyMp4Url"
-                    waveform="dummyWaveform"
-                    duration={20}
-                    tracks={tracks}
-                    languageCuesArray={[]}
-                    lastCueChange={null}
-                />
-            </Provider>
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                waveform="dummyWaveform"
+                duration={20}
+                tracks={tracks}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
@@ -75,18 +65,16 @@ describe("VideoPlayer with waveform", () => {
         // GIVEN
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore}>
-                <VideoPlayer
-                    poster="dummyPosterUrl"
-                    mp4="dummyMp4Url"
-                    waveform="dummyWaveform"
-                    duration={20}
-                    cues={cues}
-                    tracks={tracks}
-                    languageCuesArray={[]}
-                    lastCueChange={null}
-                />
-            </Provider>
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                waveform="dummyWaveform"
+                duration={20}
+                cues={cues}
+                tracks={tracks}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
         );
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
@@ -116,13 +104,7 @@ describe("VideoPlayer with waveform", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(
-                props => (
-                    <Provider store={testingStore}>
-                        <VideoPlayer {...props} />
-                    </Provider>
-                ),
-                properties)
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 

@@ -1,9 +1,9 @@
 import "video.js/dist/video-js.css";
-import { CueChange, CueDto, LanguageCues, SubtitleEditAction, Track } from "../model";
+import { CueChange, CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../utils/shortcutConstants";
-import { Dispatch, KeyboardEventHandler, ReactElement, RefObject } from "react";
+import { KeyboardEventHandler, ReactElement, RefObject } from "react";
 import * as React from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
@@ -17,11 +17,6 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 // @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
-import { connect } from "react-redux";
-import { updateEditingCueIndex } from "../cues/edit/cueEditorSlices";
-import { updateVttCue } from "../cues/cuesList/cuesListActions";
-import { SubtitleEditState } from "../subtitleEditReducers";
-import { SubtitleSpecification } from "../toolbox/model";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -51,21 +46,8 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     });
 };
 
-/**
- * Random RGBA color.
- */
-const randomColor = (alpha: number) => {
-    return (
-        "rgba(" +
-        [
-            ~~(Math.random() * 255),
-            ~~(Math.random() * 255),
-            ~~(Math.random() * 255),
-            alpha || 1
-        ] +
-        ")"
-    );
-};
+const randomColor = (alpha: number) =>
+    "rgba(" + [~~(Math.random() * 255), ~~(Math.random() * 255), ~~(Math.random() * 255), alpha || 1] + ")";
 
 export interface Props {
     mp4: string;
@@ -80,10 +62,7 @@ export interface Props {
     resetPlayerTimeChange?: () => void;
     lastCueChange: CueChange | null;
     trackFontSizePercent?: number;
-    updateEditingCueIndex?: (cueIndex: number) => void;
     updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
-    subtitleSpecifications?: SubtitleSpecification;
-    editingCueIndex?: number;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -277,13 +256,6 @@ class VideoPlayer extends React.Component<Props> {
             }
             this.props.resetPlayerTimeChange();
         }
-
-        if (this.props.editingCueIndex && this.props.cues) {
-            const start = this.props.cues[this.props.editingCueIndex]?.vttCue.startTime;
-            if (start) {
-                this.wavesurfer?.setCurrentTime(start);
-            }
-        }
     }
 
     private addRegion(index: number, start: number, end: number, text: string, color: string) {
@@ -354,15 +326,4 @@ class VideoPlayer extends React.Component<Props> {
     }
 }
 
-const mapStateToProps = (state: SubtitleEditState) => ({
-    subtitleSpecifications: state.subtitleSpecifications,
-    editingCueIndex: state.editingCueIndex
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<SubtitleEditAction>) => ({
-    updateEditingCueIndex: (cueIndex: number) => dispatch(updateEditingCueIndex(cueIndex)),
-    updateVttCue: (idx: number, vttCue: VTTCue, editUuid?: string) => dispatch(updateVttCue(idx, vttCue, editUuid))
-});
-
-// @ts-ignore this won't accept any type
-export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayer);
+export default VideoPlayer;
