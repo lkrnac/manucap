@@ -184,7 +184,7 @@ class VideoPlayer extends React.Component<Props> {
                             scrollParent: true,
                             minimap: true,
                             backend: "MediaElement",
-                            height: 200,
+                            height: 150,
                             pixelRatio: 1,
                             barHeight: 0.4,
                             plugins: [

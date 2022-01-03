@@ -48,7 +48,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.scrollParent).toBeTruthy();
         expect(actualComponent.wavesurfer.params.minimap).toBeTruthy();
         expect(actualComponent.wavesurfer.params.backend).toEqual("MediaElement");
-        expect(actualComponent.wavesurfer.params.height).toEqual(200);
+        expect(actualComponent.wavesurfer.params.height).toEqual(150);
         expect(actualComponent.wavesurfer.params.pixelRatio).toEqual(1);
         expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.4);
         expect(actualComponent.wavesurfer.params.plugins.length).toEqual(3);
