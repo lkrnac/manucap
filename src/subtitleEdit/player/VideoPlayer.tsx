@@ -231,9 +231,14 @@ class VideoPlayer extends React.Component<Props> {
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
 
-        if (lastCueChange && lastCueChange.changeType === "EDIT" && this.wavesurfer) {
-            this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
-                lastCueChange.vttCue.text);
+        if (lastCueChange && this.wavesurfer) {
+            if (lastCueChange.changeType === "EDIT") {
+                this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
+                    lastCueChange.vttCue.text);
+            }
+            if (lastCueChange.changeType === "REMOVE") {
+                this.removeRegion(lastCueChange.index);
+            }
         }
 
         if (this.props.playSection !== undefined
@@ -272,10 +277,18 @@ class VideoPlayer extends React.Component<Props> {
         });
     }
 
-    private updateRegion(index: number, start: number, end: number, text: string) {
-        const regionColor = this.wavesurfer.regions.list[index].color;
+    private removeRegion(index: number): void {
         this.wavesurfer.regions.list[index].remove();
-        this.addRegion(index, start, end, text, regionColor);
+    }
+
+    private updateRegion(index: number, start: number, end: number, text: string): void {
+        const region = this.wavesurfer.regions.list[index];
+        let regionColor = randomColor();
+        if (region) {
+            regionColor = region.color;
+            region.remove();
+        }
+        this.addRegion(index, start, end, text, regionColor || randomColor());
     }
 
     public getTime(): number {
