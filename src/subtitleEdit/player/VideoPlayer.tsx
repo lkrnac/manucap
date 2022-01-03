@@ -46,8 +46,8 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     });
 };
 
-const randomColor = (alpha: number) =>
-    "rgba(" + [~~(Math.random() * 255), ~~(Math.random() * 255), ~~(Math.random() * 255), alpha || 1] + ")";
+const randomColor = () =>
+    "rgba(" + [~~(Math.random() * 255), ~~(Math.random() * 255), ~~(Math.random() * 255), 0.1] + ")";
 
 export interface Props {
     mp4: string;
@@ -211,7 +211,7 @@ class VideoPlayer extends React.Component<Props> {
 
                         this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
                             this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
-                                randomColor(0.1));
+                                randomColor());
                         });
                     }
                 });
