@@ -91,6 +91,39 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[1].attributes.label).toEqual("Caption Line 2");
     });
 
+    it("creates wavesurfer region when cue is added", async () => {
+        // GIVEN
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            cues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        actualNode.setProps(
+            // @ts-ignore I only need to update these props
+            { lastCueChange: { changeType: "ADD", index: 2, vttCue: new VTTCue(4, 6, "Added Caption") }}
+        );
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[2].attributes.label).toEqual("Added Caption");
+        expect(actualComponent.wavesurfer.regions.list[2].start).toEqual(4);
+        expect(actualComponent.wavesurfer.regions.list[2].end).toEqual(6);
+    });
+
     it("updates wavesurfer region when cue is edited", async () => {
         // GIVEN
         const properties = {
@@ -120,5 +153,38 @@ describe("VideoPlayer with waveform", () => {
         const actualComponent = videoNode.instance() as VideoPlayer;
 
         expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Updated Caption");
+        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(1);
+    });
+
+    it("removes wavesurfer region when cue is deleted", async () => {
+        // GIVEN
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            cues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        actualNode.setProps(
+            // @ts-ignore I only need to update these props
+            { lastCueChange: { changeType: "REMOVE", index: 0, vttCue: new VTTCue(0, 0, "") }}
+        );
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[0]).toBeUndefined();
     });
 });

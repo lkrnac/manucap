@@ -232,6 +232,10 @@ class VideoPlayer extends React.Component<Props> {
         }
 
         if (lastCueChange && this.wavesurfer) {
+            if (lastCueChange.changeType === "ADD") {
+                this.addRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
+                    lastCueChange.vttCue.text, randomColor());
+            }
             if (lastCueChange.changeType === "EDIT") {
                 this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
                     lastCueChange.vttCue.text);
@@ -283,12 +287,8 @@ class VideoPlayer extends React.Component<Props> {
 
     private updateRegion(index: number, start: number, end: number, text: string): void {
         const region = this.wavesurfer.regions.list[index];
-        let regionColor = randomColor();
-        if (region) {
-            regionColor = region.color;
-            region.remove();
-        }
-        this.addRegion(index, start, end, text, regionColor || randomColor());
+        region.remove();
+        this.addRegion(index, start, end, text, region.color);
     }
 
     public getTime(): number {
