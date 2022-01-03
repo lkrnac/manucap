@@ -2632,7 +2632,7 @@ describe("cueSlices", () => {
 
     describe("applyShiftTimeByPosition", () => {
         it("apply shift time to all cues", () => {
-            //GIVEN
+            // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
@@ -2641,6 +2641,42 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+        });
+
+        it("apply shift time after cue index", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(applyShiftTimeByPosition("after", 0, 2.123) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+        });
+
+        it("apply shift time before cue index", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(applyShiftTimeByPosition("before", 2, 2.123) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });

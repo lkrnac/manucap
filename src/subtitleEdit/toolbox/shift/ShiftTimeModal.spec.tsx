@@ -349,7 +349,7 @@ describe("ShiftTimesModal", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("Applies the shift time on form submit with a valid shift value", () => {
+    it("applies the shift time on form submit with a valid shift value", () => {
         // // GIVEN
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
         const actualNode = mount(
@@ -444,7 +444,7 @@ describe("ShiftTimesModal", () => {
         expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
     });
 
-    it("Calls cancel when click apply", () => {
+    it("calls cancel when click apply", () => {
         // GIVEN
         const onClose = sinon.spy();
         const actualNode = mount(
