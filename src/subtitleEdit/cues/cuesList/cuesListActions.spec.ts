@@ -2643,6 +2643,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6.123);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(8.123);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
@@ -2715,6 +2717,18 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("Cannot shift before first cue");
+        });
+
+        it("validate shift position provided", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            const error = () => {
+                testingStore.dispatch(applyShiftTimeByPosition("end", 0, 2.123) as {} as AnyAction);
+            };
+            // THEN
+            expect(error).toThrow("Invalid position provided, all, before or after expected");
         });
     });
 

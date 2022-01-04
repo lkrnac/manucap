@@ -100,7 +100,10 @@ const validateShiftWithinChunkRange = (shiftTime: number, track: Track | null, c
     }
 };
 
-const validateShiftIndex = (position: ShiftPosition, cueIndex: number): void => {
+const validateShift = (position: ShiftPosition, cueIndex: number): void => {
+    if(position === undefined) {
+        throw new Error("Invalid position provided, all, before or after expected");
+    }
     if (ShiftPosition.BEFORE === position && cueIndex === 0) {
         throw new Error("Cannot shift before first cue");
     }
@@ -409,7 +412,7 @@ export const applyShiftTimeByPosition = (position: string, cueIndex: number, shi
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         const editingTrack = getState().editingTrack;
         const shiftPosition = ShiftPosition[position.toLocaleUpperCase()];
-        validateShiftIndex(shiftPosition, cueIndex);
+        validateShift(shiftPosition, cueIndex);
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTimeByPosition({ cueIndex, shiftTime, shiftPosition }));
         callSaveTrack(dispatch, getState, true);
