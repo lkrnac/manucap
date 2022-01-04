@@ -243,6 +243,13 @@ class VideoPlayer extends React.Component<Props> {
             if (lastCueChange.changeType === "REMOVE") {
                 this.removeRegion(lastCueChange.index);
             }
+            if (lastCueChange.changeType === "SPLIT" || lastCueChange.changeType === "MERGE") {
+                this.removeAllRegions();
+                this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
+                    this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
+                        randomColor());
+                });
+            }
         }
 
         if (this.props.playSection !== undefined
@@ -289,6 +296,10 @@ class VideoPlayer extends React.Component<Props> {
         const region = this.wavesurfer.regions.list[index];
         region.remove();
         this.addRegion(index, start, end, text, region.color);
+    }
+
+    private removeAllRegions(): void {
+        this.wavesurfer.regions.clear();
     }
 
     public getTime(): number {

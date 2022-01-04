@@ -1,6 +1,6 @@
 import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
 import { ReactElement, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { clearLastCueChange } from "../cues/edit/cueEditorSlices";
@@ -19,11 +19,9 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
 
     /**
      * This expects that EditingVideoPlayer would be rendered with cues initialized in Redux.
-     * It is not updated (hence () => true) when cues are updated,
-     * because replacing all the cues was not performant.
-     * We instead use lastCueUpdate property to change cues in already rendered player.
+     * It uses shallowEqual as the equalityFn because replacing all the cues was not performant.
      */
-    const editingCues = useSelector((state: SubtitleEditState) => state.cues, () => true);
+    const editingCues = useSelector((state: SubtitleEditState) => state.cues, shallowEqual);
     const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange);
     const videoSectionToPlay = useSelector((state: SubtitleEditState) => state.videoSectionToPlay);
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];

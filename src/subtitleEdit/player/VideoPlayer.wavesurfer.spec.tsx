@@ -187,4 +187,89 @@ describe("VideoPlayer with waveform", () => {
 
         expect(actualComponent.wavesurfer.regions.list[0]).toBeUndefined();
     });
+
+    it("updates wavesurfer region when cue is split", async () => {
+        // GIVEN
+        const splitCues = [
+            { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+            { vttCue: new VTTCue(1, 2, ""), cueCategory: "DIALOGUE", errors: []},
+            { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+        ] as CueDto[];
+
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            cues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        actualNode.setProps(
+            // @ts-ignore I only need to update these props
+            { lastCueChange: { changeType: "SPLIT", index: 0, vttCue: new VTTCue(0, 2, "Caption Line 1") },
+                cues: splitCues }
+        );
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Caption Line 1");
+        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(1);
+        expect(actualComponent.wavesurfer.regions.list[1].attributes.label).toEqual("");
+        expect(actualComponent.wavesurfer.regions.list[1].start).toEqual(1);
+        expect(actualComponent.wavesurfer.regions.list[1].end).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[2].attributes.label).toEqual("Caption Line 2");
+        expect(actualComponent.wavesurfer.regions.list[2].start).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[2].end).toEqual(4);
+    });
+
+    it("updates wavesurfer region when cues are merged", async () => {
+        // GIVEN
+        const mergedCues = [
+            { vttCue: new VTTCue(0, 4, "Caption Line 1 Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+        ] as CueDto[];
+
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            cues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        actualNode.setProps(
+            // @ts-ignore I only need to update these props
+            { lastCueChange: { changeType: "MERGE", index: 0, vttCue: new VTTCue(0, 2, "Caption Line 1") },
+                cues: mergedCues }
+        );
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Caption Line 1 Caption Line 2");
+        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(4);
+        expect(actualComponent.wavesurfer.regions.list[1]).toBeUndefined();
+    });
 });
