@@ -2643,8 +2643,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
-            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6.123);
-            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(8.123);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
