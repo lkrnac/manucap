@@ -3,12 +3,23 @@ import { CueChange, CueDto, LanguageCues, Track } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../utils/shortcutConstants";
-import { KeyboardEventHandler, ReactElement } from "react";
+import { KeyboardEventHandler, ReactElement, RefObject } from "react";
 import * as React from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { getTimeString } from "../utils/timeUtils";
 import { PlayVideoAction } from "./playbackSlices";
+// @ts-ignore no types for wavesurfer
+import WaveSurfer from "wavesurfer.js";
+// @ts-ignore no types for wavesurfer
+import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
+// @ts-ignore no types for wavesurfer
+import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
+// @ts-ignore no types for wavesurfer
+import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
+import Accordion from "react-bootstrap/Accordion";
+import Card from "react-bootstrap/Card";
+
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
@@ -37,9 +48,15 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
     });
 };
 
+const randomColor = () =>
+    "rgba(" + [~~(Math.random() * 255), ~~(Math.random() * 255), ~~(Math.random() * 255), 0.1] + ")";
+
 export interface Props {
     mp4: string;
     poster: string;
+    waveform?: string;
+    duration?: number;
+    cues?: CueDto[];
     tracks: Track[];
     onTimeChange?: (time: number) => void;
     languageCuesArray: LanguageCues[];
@@ -47,6 +64,7 @@ export interface Props {
     resetPlayerTimeChange?: () => void;
     lastCueChange: CueChange | null;
     trackFontSizePercent?: number;
+    updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -97,14 +115,20 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
 
 class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
-    private videoNode?: Node;
+    private readonly videoNode?: RefObject<HTMLVideoElement>;
     playSegmentPauseTimeout?: number;
     playPromise: Promise<void> | undefined;
+    public wavesurfer: WaveSurfer;
+    private readonly waveformRef?: RefObject<HTMLDivElement>;
+    private readonly waveformTimelineRef?: RefObject<HTMLDivElement>;
 
     constructor(props: Props) {
         super(props);
 
         this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
+        this.videoNode = React.createRef();
+        this.waveformRef = React.createRef();
+        this.waveformTimelineRef = React.createRef();
     }
 
     public componentDidMount(): void {
@@ -121,13 +145,13 @@ class VideoPlayer extends React.Component<Props> {
             }
         } as VideoJsPlayerOptions;
 
-        if(isSafari()){
+        if (isSafari()) {
             options.html5 = {
                 nativeTextTracks: false
             };
         }
 
-        this.player = videojs(this.videoNode as Element, options) as VideoJsPlayer;
+        this.player = videojs(this.videoNode?.current as Element, options) as VideoJsPlayer;
         this.player.textTracks().addEventListener("addtrack", (event: TrackEvent) => {
             const videoJsTrack = event.track as TextTrack;
             updateCuesForVideoJsTrack(this.props, videoJsTrack, this.props.trackFontSizePercent);
@@ -150,6 +174,50 @@ class VideoPlayer extends React.Component<Props> {
             getTimeString(x, (hours: number): boolean => hours === 0)
         );
 
+        if (this.props.waveform && this.props.duration) {
+            fetch(this.props.waveform,
+                { headers: { "Content-Type": "application/json", "Accept": "application/json" }})
+                .then((response) => response.json())
+                .then((peaksData) => {
+                    if (this.waveformRef?.current) {
+                        this.wavesurfer = WaveSurfer.create({
+                            container: this.waveformRef.current,
+                            normalize: true,
+                            scrollParent: true,
+                            minimap: true,
+                            backend: "MediaElement",
+                            height: 150,
+                            pixelRatio: 1,
+                            barHeight: 0.4,
+                            plugins: [
+                                RegionsPlugin.create({
+                                    dragSelection: false
+                                }),
+                                MinimapPlugin.create({
+                                    height: 50,
+                                }),
+                                TimelinePlugin.create({
+                                    container: this.waveformTimelineRef?.current
+                                })
+                            ]
+                        });
+
+                        this.wavesurfer.zoom(80);
+
+                        this.wavesurfer.load(
+                            this.videoNode?.current,
+                            peaksData.data,
+                            "auto",
+                            this.props.duration
+                        );
+
+                        this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
+                            this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
+                                randomColor());
+                        });
+                    }
+                });
+        }
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -163,6 +231,27 @@ class VideoPlayer extends React.Component<Props> {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
+        }
+
+        if (lastCueChange && this.wavesurfer) {
+            if (lastCueChange.changeType === "ADD") {
+                this.addRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
+                    lastCueChange.vttCue.text, randomColor());
+            }
+            if (lastCueChange.changeType === "EDIT") {
+                this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
+                    lastCueChange.vttCue.text);
+            }
+            if (lastCueChange.changeType === "REMOVE") {
+                this.removeRegion(lastCueChange.index);
+            }
+            if (lastCueChange.changeType === "SPLIT" || lastCueChange.changeType === "MERGE") {
+                this.removeAllRegions();
+                this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
+                    this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
+                        randomColor());
+                });
+            }
         }
 
         if (this.props.playSection !== undefined
@@ -187,13 +276,44 @@ class VideoPlayer extends React.Component<Props> {
         }
     }
 
+    private addRegion(index: number, start: number, end: number, text: string, color: string) {
+        if (this.props.duration && start <= this.props.duration) {
+            this.wavesurfer?.addRegion({
+                id: index,
+                start,
+                end,
+                color,
+                attributes: { label: text.replace(/<[^>]*>/g, "") },
+                loop: false,
+                drag: false,
+                resize: false,
+                showTooltip: false
+            });
+        }
+    }
+
+    private removeRegion(index: number): void {
+        this.wavesurfer.regions.list[index].remove();
+    }
+
+    private updateRegion(index: number, start: number, end: number, text: string): void {
+        const region = this.wavesurfer.regions.list[index];
+        region.remove();
+        this.addRegion(index, start, end, text, region.color);
+    }
+
+    private removeAllRegions(): void {
+        this.wavesurfer.regions.clear();
+    }
+
     public getTime(): number {
         return this.player.currentTime() * SECOND;
     }
 
     public shiftTime(delta: number): void {
         const deltaInSeconds = delta / SECOND;
-        this.player.currentTime(this.player.currentTime() + deltaInSeconds);
+        const newTimeInSeconds = this.player.currentTime() + deltaInSeconds;
+        this.player.currentTime(newTimeInSeconds);
     }
 
     public playPause(): void {
@@ -216,16 +336,31 @@ class VideoPlayer extends React.Component<Props> {
 
     public render(): ReactElement {
         return (
-            <video
-                id="video-player"
-                ref={(node: HTMLVideoElement): HTMLVideoElement => this.videoNode = node}
-                style={{ margin: "auto" }}
-                className="video-js vjs-default-skin vjs-big-play-centered"
-                poster={this.props.poster}
-                controls
-                preload="none"
-                data-setup="{}"
-            />
+            <div>
+                <video
+                    id="video-player"
+                    ref={this.videoNode}
+                    style={{ margin: "auto" }}
+                    className="video-js vjs-default-skin vjs-big-play-centered"
+                    poster={this.props.poster}
+                    controls
+                    preload="none"
+                    data-setup="{}"
+                />
+                <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-waveform">
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
+                            Waveform
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body>
+                                <div ref={this.waveformRef} />
+                                <div ref={this.waveformTimelineRef} />
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion>
+            </div>
         );
     }
 }

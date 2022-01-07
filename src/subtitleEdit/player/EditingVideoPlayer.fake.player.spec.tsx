@@ -13,11 +13,10 @@ import { updateEditingTrack } from "../trackSlices";
 import { updateCues, updateVttCue, } from "../cues/cuesList/cuesListActions";
 import { render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
+import { ReactElement } from "react";
 
-jest.mock("./VideoPlayer");
-
-// @ts-ignore We are mocking module
-VideoPlayer.mockClear();
+// eslint-disable-next-line react/display-name
+jest.mock("./VideoPlayer", () => (): ReactElement => <div>VideoPlayer</div>);
 
 let testingStore = createTestingStore();
 
@@ -35,6 +34,9 @@ const testingCues = [
 describe("EditingVideoPlayer", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+    });
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     it("passes down new video section to play", () => {

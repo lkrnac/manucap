@@ -276,4 +276,4 @@ const CueLine = (props: CueLineProps): ReactElement => {
     );
 };
 
-export default CueLine;
+export default React.memo(CueLine);
