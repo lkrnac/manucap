@@ -384,10 +384,10 @@ export const splitCue = (idx: number): AppThunk =>
             const updatedCue = { ...originalCue, idx, vttCue: updatedVttCue, editUuid: originalCue.editUuid };
             dispatch(cuesSlice.actions.updateVttCue(updatedCue));
             dispatch(cuesSlice.actions.addCue({ idx: idx + 1, cue: splitCue }));
-            dispatch(updateMatchedCues());
             dispatch(lastCueChangeSlice.actions.recordCueChange(
                 { changeType: "SPLIT", index: idx, vttCue: originalCue.vttCue }));
             callSaveTrack(dispatch, getState, true);
+            dispatch(updateMatchedCues());
         } else {
             dispatch(validationErrorSlice.actions.setValidationErrors([CueError.SPLIT_ERROR]));
         }
@@ -496,11 +496,11 @@ export const mergeCues = (): AppThunk =>
                     dispatch(cuesSlice.actions.mergeCues(
                         { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
                     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: firstCue.index }));
-                    dispatch(updateMatchedCues());
                     dispatch(changeScrollPosition(ScrollPosition.CURRENT));
                     dispatch(lastCueChangeSlice.actions.recordCueChange(
                         { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
                     callSaveTrack(dispatch, getState, true);
+                    dispatch(updateMatchedCues());
                     mergeSuccess = true;
                 }
             }

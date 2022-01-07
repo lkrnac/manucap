@@ -310,3 +310,31 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     padding: 0px 3px;
     cursor: pointer;
 }
+
+// ------ Waveform --------
+
+.sbte-waveform .card-header {
+    color: white;
+    background-color: $secondary;
+}
+
+.sbte-waveform .card {
+    border-radius: 0;
+    border: 0;
+}
+
+.sbte-waveform .card-body {
+    padding: .5rem;
+}
+
+region.wavesurfer-region:before {
+    content: attr(data-region-label);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 95%;
+    position: absolute;
+    text-align: center;
+    margin-left: 10px;
+    margin-top: 5px;
+}

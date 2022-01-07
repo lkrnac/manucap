@@ -66,9 +66,10 @@ describe("EditingVideoPlayer", () => {
         // WHEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         actualNode.update();
+        const videoNode = actualNode.find("video");
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(videoNode.html()).toEqual(expectedNode.html());
     });
 
     it("passes down cues array with correct language when first rendered", () => {
@@ -119,31 +120,6 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().tracks.length).toEqual(1);
         expect(actualNode.find(VideoPlayer).props().onTimeChange).toEqual(handleTimeChange);
     });
-
-    /**
-     * This test cases expects that EditingVideoPlayer would be rendered with cues initialized in Redux.
-     * It is not updated when cues are updated, because replacing all the cues was not performant.
-     * We instead use lastCueUpdate property to change cues in already rendered player.
-     */
-    it("update of cues in redux doesn't initialize cues", () => {
-        // GIVEN
-        const handleTimeChange = jest.fn();
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
-            </Provider>
-        );
-
-        // WHEN
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-        actualNode.setProps({}); // trigger update + re-render
-
-        // THEN
-        expect(actualNode.find(VideoPlayer).props().languageCuesArray)
-            .toEqual([{ "cues": [], "languageId": "en-US" }]);
-    });
-
 
     it("adjust new player time to negative value so that it can be changed to same value again", () => {
         // GIVEN
