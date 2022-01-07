@@ -91,6 +91,37 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[1].attributes.label).toEqual("Caption Line 2");
     });
 
+    it("initializes wavesurfer with regions and ignores cues out of video time", async () => {
+        // GIVEN
+        const cues = [
+            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+            { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+            { vttCue: new VTTCue(21, 23, "Caption Line 3"), cueCategory: "DIALOGUE", errors: []},
+        ] as CueDto[];
+
+        // WHEN
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                waveform="dummyWaveform"
+                duration={20}
+                cues={cues}
+                tracks={tracks}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[2]).toBeUndefined();
+    });
+
     it("creates wavesurfer region when cue is added", async () => {
         // GIVEN
         const properties = {

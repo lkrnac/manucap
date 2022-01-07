@@ -17,6 +17,8 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 // @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
+import Accordion from "react-bootstrap/Accordion";
+import Card from "react-bootstrap/Card";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -275,17 +277,19 @@ class VideoPlayer extends React.Component<Props> {
     }
 
     private addRegion(index: number, start: number, end: number, text: string, color: string) {
-        this.wavesurfer?.addRegion({
-            id: index,
-            start,
-            end,
-            color,
-            attributes: { label: text.replace(/<[^>]*>/g, "") },
-            loop: false,
-            drag: false,
-            resize: false,
-            showTooltip: false
-        });
+        if (this.props.duration && start <= this.props.duration) {
+            this.wavesurfer?.addRegion({
+                id: index,
+                start,
+                end,
+                color,
+                attributes: { label: text.replace(/<[^>]*>/g, "") },
+                loop: false,
+                drag: false,
+                resize: false,
+                showTooltip: false
+            });
+        }
     }
 
     private removeRegion(index: number): void {
@@ -343,8 +347,19 @@ class VideoPlayer extends React.Component<Props> {
                     preload="none"
                     data-setup="{}"
                 />
-                <div ref={this.waveformRef} />
-                <div ref={this.waveformTimelineRef} />
+                <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-waveform">
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
+                            Waveform
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body>
+                                <div ref={this.waveformRef} />
+                                <div ref={this.waveformTimelineRef} />
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion>
             </div>
         );
     }
