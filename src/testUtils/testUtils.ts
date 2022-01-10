@@ -9,6 +9,12 @@ export const removeDraftJsDynamicValues = (htmlString: string): string => {
         .replace(/(data-offset-key="[\S]*")/g, "data-offset-key=\"\"");
 };
 
+export const fixVideoPlayerInvalidTime =
+    (htmlString: string): string => htmlString.replace(/(>0:00<)/g, ">00:00.000<");
+
+export const removeBackgroundColorStyle =
+    (htmlString: string): string => htmlString.replace(/(background-color: rgba\(.*\));/g, "");
+
 export const spellCheckOptionPredicate = (optionIndex: number) => (wrapper: ReactWrapper): boolean =>
     wrapper.hasClass(/css-[\s\S]*?-option/)
     // @ts-ignore Couldn't figure this out, there would need to be a lot of additional null checks

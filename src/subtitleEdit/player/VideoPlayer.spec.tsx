@@ -13,6 +13,11 @@ import sinon from "sinon";
 
 jest.mock("../cues/cueUtils");
 
+const tracks = [
+    { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
+    { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
+];
+
 interface FakeTrack {
     language: string;
     addCue(vttCue: TextTrackCue): void;
@@ -52,18 +57,15 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
+        const videoNode = actualVideoView.find("video");
 
         // THEN
-        expect(removeVideoPlayerDynamicValue(actualVideoView.html()))
+        expect(removeVideoPlayerDynamicValue(videoNode.html()))
             .toEqual(removeVideoPlayerDynamicValue(expectedVideoView.html()));
     });
 
     it("initializes videoJs with correct options (non safari)", () => {
         // GIVEN
-        const tracks = [
-            { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
-            { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
-        ];
         const expectedTextTrackOptions = [
             { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
             { kind: "subtitles", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
@@ -81,7 +83,9 @@ describe("VideoPlayer", () => {
         );
 
         // THEN
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.html5.nativeTextTracks).toBeUndefined();
@@ -93,11 +97,6 @@ describe("VideoPlayer", () => {
         // GIVEN
         // @ts-ignore
         isSafari.mockImplementationOnce(() => true);
-
-        const tracks = [
-            { type: "CAPTION", language: { id: "en-US" }, default: true } as Track,
-            { type: "TRANSLATION", language: { id: "es-ES" }, default: false } as Track
-        ];
         const expectedTextTrackOptions = [
             { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
             { kind: "subtitles", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
@@ -115,7 +114,9 @@ describe("VideoPlayer", () => {
         );
 
         // THEN
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.html5.nativeTextTracks).toBeFalsy();
@@ -136,7 +137,9 @@ describe("VideoPlayer", () => {
         );
 
         // THEN
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         expect(actualComponent.player.src()).toEqual("dummyMp4Url");
         expect(actualComponent.player.poster()).toEqual("dummyPosterUrl");
     });
@@ -172,7 +175,9 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const component = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const component = videoNode.instance() as VideoPlayer;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);
@@ -216,7 +221,9 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const component = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const component = videoNode.instance() as VideoPlayer;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);
@@ -236,7 +243,9 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         const playPauseSpy = sinon.spy();
         actualComponent.playPause = playPauseSpy;
 
@@ -259,7 +268,9 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         const shiftTimeSpy = sinon.spy();
         actualComponent.shiftTime = shiftTimeSpy;
 
@@ -282,7 +293,9 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         const shiftTimeSpy = sinon.spy();
         actualComponent.shiftTime = shiftTimeSpy;
 
@@ -307,7 +320,9 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
 
         // WHEN
         actualComponent.player.trigger("timeupdate");
@@ -327,7 +342,9 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         const playPauseSpy = sinon.spy();
         actualComponent.playPause = playPauseSpy;
 
@@ -365,7 +382,9 @@ describe("VideoPlayer", () => {
                 trackFontSizePercent={1.25}
             />
         );
-        const component = actualNode.instance() as VideoPlayer;
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const component = videoNode.instance() as VideoPlayer;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);

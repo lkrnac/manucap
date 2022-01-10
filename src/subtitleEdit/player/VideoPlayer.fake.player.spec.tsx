@@ -6,6 +6,7 @@ import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
 import videojs from "video.js";
 import * as shortcutConstants from "../utils/shortcutConstants";
+import React from "react";
 
 jest.useFakeTimers();
 jest.mock("video.js");
@@ -112,16 +113,20 @@ describe("VideoPlayer tested with fake player", () => {
         };
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
-        const actualComponent = actualNode.instance() as VideoPlayer;
+
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
         actualComponent.playPromise = Promise.resolve();
 
         // WHEN
@@ -199,16 +204,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
-        const component = actualNode.instance() as VideoPlayer;
+
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const component = videoNode.instance() as VideoPlayer;
 
         // WHEN
         const actualTime = component.getTime();
@@ -233,17 +242,19 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({ playSection: { startTime: 1 }, resetPlayerTimeChange });
 
         // THEN
@@ -270,17 +281,19 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({ playSection: { startTime: 1, endTime: 1.2 }, resetPlayerTimeChange });
         jest.runAllTimers();
 
@@ -310,17 +323,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
+
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({ playSection: { startTime: 1, endTime: 1.2 }, resetPlayerTimeChange });
         simulant.fire(document.documentElement, "keydown", { keyCode: O_CHAR, shiftKey: true, altKey: true });
         jest.runAllTimers();
@@ -353,17 +369,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
+
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({ playSection: { startTime: 1, endTime: 3.2 }, resetPlayerTimeChange });
         simulant.fire(document.documentElement, "keydown", { keyCode: RIGHT, shiftKey: true, altKey: true });
         jest.runAllTimers();
@@ -396,17 +415,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
+
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({ playSection: { startTime: 1, endTime: 3.2 }, resetPlayerTimeChange });
         simulant.fire(document.documentElement, "keydown", { keyCode: LEFT, shiftKey: true, altKey: true });
         jest.runAllTimers();
@@ -436,17 +458,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
+
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({ playSection: { startTime: -1 }, resetPlayerTimeChange });
 
         // THEN
@@ -471,17 +496,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: [],
+            languageCuesArray: [],
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
+
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({ playSection: { startTime: 1 }});
 
         // THEN
@@ -512,18 +540,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
         actualNode.setProps(
+            // @ts-ignore I only need to update these props
             { lastCueChange: { changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 1, "Updated Caption") }}
         );
 
@@ -558,18 +588,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "ADD", index: 1, vttCue: new VTTCue(0, 1, "Updated Caption") }
         });
 
@@ -603,18 +635,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "ADD", index: 2, vttCue: new VTTCue(0, 1, "Updated Caption") }
         });
 
@@ -646,18 +680,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "ADD", index: 0, vttCue: new VTTCue(0, 1, "Updated Caption") }
         });
 
@@ -694,18 +730,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "REMOVE", index: 1, vttCue: new VTTCue(0, 0, "") }
         });
 
@@ -737,18 +775,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "EDIT", index: 3, vttCue: new VTTCue(0, 1, "Updated Caption") }
         });
 
@@ -783,18 +823,20 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
         actualNode.setProps({
+            // @ts-ignore I only need to update these props
             lastCueChange: { changeType: "EDIT", index: 0, vttCue: updatedVttCue }
         });
 
@@ -825,17 +867,19 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg",
+            mp4: "http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
-                poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({});
 
 
@@ -869,17 +913,19 @@ describe("VideoPlayer tested with fake player", () => {
 
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg",
+            mp4: "http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
         const actualNode = mount(
-            <VideoPlayer
-                mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
-                poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
-                tracks={initialTestingTracks}
-                languageCuesArray={initialTestingLanguageCuesArray}
-                lastCueChange={null}
-            />
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
 
         // WHEN
+        // @ts-ignore I only need to update these props
         actualNode.setProps({});
         // @ts-ignore @types/video.js is missing this function rom video.js signature check
         // https://www.npmjs.com/package/@types/video.js for updates
@@ -914,21 +960,22 @@ describe("VideoPlayer tested with fake player", () => {
 
             // @ts-ignore - we are mocking the module
             videojs.mockImplementationOnce(() => playerMock);
-            // @ts-ignore - we are mocking the module
+            const properties = {
+                poster: "dummyPosterUrl",
+                mp4: "dummyMp4Url",
+                tracks: initialTestingTracks,
+                languageCuesArray: initialTestingLanguageCuesArray,
+                lastCueChange: null,
+                trackFontSizePercent: 0.5
+            };
             const actualNode = mount(
-                <VideoPlayer
-                    poster="dummyPosterUrl"
-                    mp4="dummyMp4Url"
-                    tracks={initialTestingTracks}
-                    languageCuesArray={initialTestingLanguageCuesArray}
-                    lastCueChange={null}
-                    trackFontSizePercent={0.5}
-                />
+                React.createElement(props => (<VideoPlayer {...props} />), properties)
             );
 
             // WHEN
             vttCue.line = testingLine;
             actualNode.setProps(
+                // @ts-ignore I only need to update these props
                 { lastCueChange: { changeType: "EDIT", index: 0, vttCue: vttCue }}
             );
 
@@ -960,21 +1007,23 @@ describe("VideoPlayer tested with fake player", () => {
 
             // @ts-ignore - we are mocking the module
             videojs.mockImplementationOnce(() => playerMock);
+            const properties = {
+                poster: "dummyPosterUrl",
+                mp4: "dummyMp4Url",
+                tracks: initialTestingTracks,
+                languageCuesArray: initialTestingLanguageCuesArray,
+                lastCueChange: null,
+                trackFontSizePercent: fontPercent
+            };
             const actualNode = mount(
-                <VideoPlayer
-                    poster="dummyPosterUrl"
-                    mp4="dummyMp4Url"
-                    tracks={initialTestingTracks}
-                    languageCuesArray={initialTestingLanguageCuesArray}
-                    lastCueChange={null}
-                    trackFontSizePercent={fontPercent}
-                />
+                React.createElement(props => (<VideoPlayer {...props} />), properties)
             );
 
             // WHEN
             const editingCue = new VTTCue(1, 2, "");
             editingCue.line = 12;
             const lastCueChange = { changeType: "EDIT", index: 0, vttCue: editingCue };
+            // @ts-ignore I only need to update these props
             actualNode.setProps({ lastCueChange: lastCueChange });
 
             // THEN
@@ -1007,15 +1056,16 @@ describe("VideoPlayer tested with fake player", () => {
 
             // @ts-ignore - we are mocking the module
             videojs.mockImplementationOnce(() => playerMock);
+            const properties = {
+                poster: "dummyPosterUrl",
+                mp4: "dummyMp4Url",
+                tracks: initialTestingTracks,
+                languageCuesArray: initialTestingLanguageCuesArray,
+                lastCueChange: null,
+                trackFontSizePercent: fontPercent
+            };
             const actualNode = mount(
-                <VideoPlayer
-                    poster="dummyPosterUrl"
-                    mp4="dummyMp4Url"
-                    tracks={initialTestingTracks}
-                    languageCuesArray={initialTestingLanguageCuesArray}
-                    lastCueChange={null}
-                    trackFontSizePercent={fontPercent}
-                />
+                React.createElement(props => (<VideoPlayer {...props} />), properties)
             );
 
             // WHEN
@@ -1023,6 +1073,7 @@ describe("VideoPlayer tested with fake player", () => {
             const lastCueChange = { changeType: "ADD", index: 0, vttCue: addedCue };
             addedCue.line = 12;
             actualNode.setProps(
+                // @ts-ignore I only need to update these props
                 { lastCueChange: { changeType: "ADD", index: 0, vttCue: lastCueChange }}
             );
 
