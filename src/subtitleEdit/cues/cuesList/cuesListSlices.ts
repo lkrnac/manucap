@@ -57,6 +57,15 @@ export interface MergeAction {
     endIndex: number;
 }
 
+export interface ShiftAction {
+    shiftTime: number
+    cueIndex: number,
+    shiftPosition: ShiftPosition
+}
+
+export enum ShiftPosition {
+    ALL, BEFORE, AFTER
+}
 export const cuesSlice = createSlice({
     name: "cues",
     initialState: [] as CueDto[],
@@ -117,15 +126,23 @@ export const cuesSlice = createSlice({
             }
         },
         updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
-        applyShiftTime: (state, action: PayloadAction<number>): CueDto[] => {
-            const shift = action.payload;
-            return state.map((cue: CueDto) => {
-                if (cue.editDisabled) {
+        applyShiftTimeByPosition: (state, action: PayloadAction<ShiftAction>): CueDto[] => {
+            const shiftAction = action.payload;
+            return state.map((cue: CueDto, index: number) => {
+                if (shiftAction.shiftPosition === ShiftPosition.AFTER &&
+                    (index <= shiftAction.cueIndex || cue.editDisabled)) {
+                    return cue;
+                }
+                if (shiftAction.shiftPosition === ShiftPosition.BEFORE &&
+                    (index >= shiftAction.cueIndex || cue.editDisabled)) {
+                    return cue;
+                }
+                if (shiftAction.shiftPosition === ShiftPosition.ALL && cue.editDisabled) {
                     return cue;
                 }
                 const vttCue = cue.vttCue;
-                const startTime = vttCue.startTime + shift;
-                const endTime = vttCue.endTime + shift;
+                const startTime = vttCue.startTime + shiftAction.shiftTime;
+                const endTime = vttCue.endTime + shiftAction.shiftTime;
                 const newCue = new VTTCue(startTime, endTime, vttCue.text);
                 copyNonConstructorProperties(newCue, vttCue);
                 return ({ ...cue, vttCue: newCue } as CueDto);

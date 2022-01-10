@@ -9,7 +9,8 @@ import {
     addCue,
     addCueComment,
     addCuesToMergeList,
-    applyShiftTime, checkErrors,
+    applyShiftTimeByPosition,
+    checkErrors,
     deleteCue,
     deleteCueComment,
     mergeCues,
@@ -2629,19 +2630,103 @@ describe("cueSlices", () => {
         });
     });
 
-    describe("applyShiftTime", () => {
-        it("apply shift time", () => {
-            //GIVEN
+    describe("applyShiftTimeByPosition", () => {
+        it("apply shift time to all cues", () => {
+            // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(applyShiftTime(2.123) as {} as AnyAction);
+            testingStore.dispatch(applyShiftTimeByPosition("all", -1, 2.123) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+        });
+
+        it("apply shift time after cue index", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(applyShiftTimeByPosition("after", 0, 2.123) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+        });
+
+        it("apply shift time before cue index", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(applyShiftTimeByPosition("before", 2, 2.123) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+        });
+
+        it("validate start cue index for shift position BEFORE", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            const error = () => {
+                testingStore.dispatch(applyShiftTimeByPosition("before", -1, 2.123) as {} as AnyAction);
+            };
+            // THEN
+            expect(error).toThrow("No editing cue selected to begin shifting");
+        });
+
+        it("validate start cue index for shift position AFTER", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            const error = () => {
+                testingStore.dispatch(applyShiftTimeByPosition("after", -1, 2.123) as {} as AnyAction);
+            };
+            // THEN
+            expect(error).toThrow("No editing cue selected to begin shifting");
+        });
+
+        it("validate shift not possible before first cue", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            const error = () => {
+                testingStore.dispatch(applyShiftTimeByPosition("before", 0, 2.123) as {} as AnyAction);
+            };
+            // THEN
+            expect(error).toThrow("Cannot shift before first cue");
+        });
+
+        it("validate shift position provided", () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+
+            // WHEN
+            const error = () => {
+                testingStore.dispatch(applyShiftTimeByPosition("end", 0, 2.123) as {} as AnyAction);
+            };
+            // THEN
+            expect(error).toThrow("Invalid position provided, all, before or after expected");
         });
     });
 
