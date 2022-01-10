@@ -347,19 +347,23 @@ class VideoPlayer extends React.Component<Props> {
                     preload="none"
                     data-setup="{}"
                 />
-                <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-waveform">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                            Waveform
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                                <div ref={this.waveformRef} />
-                                <div ref={this.waveformTimelineRef} />
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                </Accordion>
+                {
+                    this.props.waveform && this.props.duration ?
+                        <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-waveform">
+                            <Card>
+                                <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
+                                    Waveform
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <Card.Body>
+                                        <div ref={this.waveformRef} />
+                                        <div ref={this.waveformTimelineRef} />
+                                    </Card.Body>
+                                </Accordion.Collapse>
+                            </Card>
+                        </Accordion>
+                        : null
+                }
             </div>
         );
     }

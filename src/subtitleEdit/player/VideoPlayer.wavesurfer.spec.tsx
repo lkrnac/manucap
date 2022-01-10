@@ -303,4 +303,26 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(4);
         expect(actualComponent.wavesurfer.regions.list[1]).toBeUndefined();
     });
+
+    it("hides waveform accordion if no waveform is present", async () => {
+        // GIVEN
+        // WHEN
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                waveform=""
+                duration={20}
+                tracks={tracks}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // THEN
+        const accordionNode = actualNode.find("Accordion");
+
+        expect(accordionNode.get(0)).toBeUndefined();
+    });
 });
