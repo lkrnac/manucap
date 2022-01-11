@@ -186,7 +186,7 @@ class VideoPlayer extends React.Component<Props> {
                             scrollParent: true,
                             minimap: true,
                             backend: "MediaElement",
-                            height: 150,
+                            height: 100,
                             pixelRatio: 1,
                             barHeight: 0.4,
                             plugins: [
@@ -194,7 +194,7 @@ class VideoPlayer extends React.Component<Props> {
                                     dragSelection: false
                                 }),
                                 MinimapPlugin.create({
-                                    height: 50,
+                                    height: 30,
                                 }),
                                 TimelinePlugin.create({
                                     container: this.waveformTimelineRef?.current

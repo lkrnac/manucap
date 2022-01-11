@@ -48,7 +48,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.scrollParent).toBeTruthy();
         expect(actualComponent.wavesurfer.params.minimap).toBeTruthy();
         expect(actualComponent.wavesurfer.params.backend).toEqual("MediaElement");
-        expect(actualComponent.wavesurfer.params.height).toEqual(150);
+        expect(actualComponent.wavesurfer.params.height).toEqual(100);
         expect(actualComponent.wavesurfer.params.pixelRatio).toEqual(1);
         expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.4);
         expect(actualComponent.wavesurfer.params.plugins.length).toEqual(3);
@@ -58,23 +58,25 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.initialisedPluginList).toEqual(
             { regions: true, minimap: true, timeline: true });
         expect(actualComponent.wavesurfer.regions.params).toEqual({ dragSelection: false });
-        expect(actualComponent.wavesurfer.minimap.params.height).toEqual(50);
+        expect(actualComponent.wavesurfer.minimap.params.height).toEqual(30);
     });
 
     it("initializes wavesurfer with regions", async () => {
         // GIVEN
         // WHEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                waveform="dummyWaveform"
-                duration={20}
-                cues={cues}
-                tracks={tracks}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    waveform="dummyWaveform"
+                    duration={20}
+                    cues={cues}
+                    tracks={tracks}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
