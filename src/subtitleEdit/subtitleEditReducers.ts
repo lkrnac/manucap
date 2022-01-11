@@ -25,6 +25,7 @@ import {
     validationErrorSlice
 } from "./cues/edit/cueEditorSlices";
 import { commentsVisibleSlice } from "./cues/comments/commentsSlices";
+import { waveformVisibleSlice } from "./player/waveformSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -52,6 +53,7 @@ export const Reducers = {
     matchedCues: matchedCuesSlice.reducer,
     currentPlayerTime: currentPlayerTimeSlice.reducer,
     commentsVisible: commentsVisibleSlice.reducer,
+    waveformVisible: waveformVisibleSlice.reducer,
     currentCueErrorIndex: currentCueErrorIndexSlice.reducer
 };
 

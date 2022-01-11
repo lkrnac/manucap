@@ -17,8 +17,8 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 // @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
-import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
+import { SubtitleEditState } from "../subtitleEditReducers";
+import { connect } from "react-redux";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -65,6 +65,7 @@ export interface Props {
     lastCueChange: CueChange | null;
     trackFontSizePercent?: number;
     updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
+    waveformVisible?: boolean; // injected from state
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -348,20 +349,11 @@ class VideoPlayer extends React.Component<Props> {
                     data-setup="{}"
                 />
                 {
-                    this.props.waveform && this.props.duration ?
-                        <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-waveform">
-                            <Card>
-                                <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                                    Waveform
-                                </Accordion.Toggle>
-                                <Accordion.Collapse eventKey="0">
-                                    <Card.Body>
-                                        <div ref={this.waveformRef} />
-                                        <div ref={this.waveformTimelineRef} />
-                                    </Card.Body>
-                                </Accordion.Collapse>
-                            </Card>
-                        </Accordion>
+                     this.props.waveform && this.props.duration ?
+                         <div hidden={!this.props.waveformVisible}>
+                             <div ref={this.waveformRef} />
+                             <div ref={this.waveformTimelineRef} />
+                         </div>
                         : null
                 }
             </div>
@@ -369,4 +361,8 @@ class VideoPlayer extends React.Component<Props> {
     }
 }
 
-export default VideoPlayer;
+const mapStateToProps = (state: SubtitleEditState) => ({
+    waveformVisible: state.waveformVisible
+});
+
+export default connect(mapStateToProps, null)(VideoPlayer);

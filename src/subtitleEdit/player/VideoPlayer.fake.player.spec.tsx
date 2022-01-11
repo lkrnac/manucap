@@ -6,10 +6,14 @@ import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
 import videojs from "video.js";
 import * as shortcutConstants from "../utils/shortcutConstants";
+import { createTestingStore } from "../../testUtils/testingStore";
+import { Provider } from "react-redux";
 import React from "react";
 
 jest.useFakeTimers();
 jest.mock("video.js");
+
+let testingStore = createTestingStore();
 
 const O_CHAR = 79;
 const LEFT = 37;
@@ -46,6 +50,9 @@ const initialTestingLanguageCuesArray = [
 ] as LanguageCues[];
 
 describe("VideoPlayer tested with fake player", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+    });
     it("executes play via keyboard shortcut", () => {
         // GIVEN
         const play = jest.fn();
@@ -58,13 +65,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -86,13 +95,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -121,7 +132,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         const videoNode = actualNode.find("VideoPlayer");
@@ -149,13 +161,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -178,13 +192,15 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                tracks={[]}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    tracks={[]}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
 
         // WHEN
@@ -212,7 +228,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         const videoNode = actualNode.find("VideoPlayer");
@@ -250,7 +267,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -289,7 +307,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -331,7 +350,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
 
@@ -377,7 +397,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
 
@@ -423,7 +444,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
 
@@ -466,7 +488,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
 
@@ -504,7 +527,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
 
@@ -548,7 +572,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -596,7 +621,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -643,7 +669,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -688,7 +715,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -738,7 +766,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -783,7 +812,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -831,7 +861,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -875,7 +906,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -921,7 +953,8 @@ describe("VideoPlayer tested with fake player", () => {
             lastCueChange: null
         };
         const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
+            React.createElement(props => (
+                <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
         );
 
         // WHEN
@@ -969,7 +1002,8 @@ describe("VideoPlayer tested with fake player", () => {
                 trackFontSizePercent: 0.5
             };
             const actualNode = mount(
-                React.createElement(props => (<VideoPlayer {...props} />), properties)
+                React.createElement(props => (
+                    <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
             );
 
             // WHEN
@@ -1016,7 +1050,8 @@ describe("VideoPlayer tested with fake player", () => {
                 trackFontSizePercent: fontPercent
             };
             const actualNode = mount(
-                React.createElement(props => (<VideoPlayer {...props} />), properties)
+                React.createElement(props => (
+                    <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
             );
 
             // WHEN
@@ -1065,7 +1100,8 @@ describe("VideoPlayer tested with fake player", () => {
                 trackFontSizePercent: fontPercent
             };
             const actualNode = mount(
-                React.createElement(props => (<VideoPlayer {...props} />), properties)
+                React.createElement(props => (
+                    <Provider store={testingStore}><VideoPlayer {...props} /></Provider>), properties)
             );
 
             // WHEN

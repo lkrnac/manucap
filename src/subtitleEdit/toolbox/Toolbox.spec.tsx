@@ -23,6 +23,7 @@ import { fireEvent, render } from "@testing-library/react";
 import MergeCuesButton from "./MergeCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
 import TimecodesLockToggle from "./TimecodesLockToggle";
+import WaveformToggle from "./WaveformToggle";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -46,6 +47,7 @@ describe("Toolbox", () => {
                                     <SearchReplaceButton />
                                     <MergeCuesButton />
                                     <CueCommentsToggle />
+                                    <WaveformToggle />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>
@@ -102,6 +104,7 @@ describe("Toolbox", () => {
                                     <MergeCuesButton />
                                     <CueCommentsToggle />
                                     <TimecodesLockToggle />
+                                    <WaveformToggle />
                                 </ButtonToolbar>
                             </Card.Body>
                         </Accordion.Collapse>
