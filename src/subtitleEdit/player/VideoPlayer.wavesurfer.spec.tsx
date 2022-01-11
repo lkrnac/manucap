@@ -74,16 +74,18 @@ describe("VideoPlayer with waveform", () => {
         // GIVEN
         // WHEN
         const actualNode = mount(
-            <VideoPlayer
-                poster="dummyPosterUrl"
-                mp4="dummyMp4Url"
-                waveform="dummyWaveform"
-                duration={20}
-                cues={cues}
-                tracks={tracks}
-                languageCuesArray={[]}
-                lastCueChange={null}
-            />
+            <Provider store={testingStore}>
+                <VideoPlayer
+                    poster="dummyPosterUrl"
+                    mp4="dummyMp4Url"
+                    waveform="dummyWaveform"
+                    duration={20}
+                    cues={cues}
+                    tracks={tracks}
+                    languageCuesArray={[]}
+                    lastCueChange={null}
+                />
+            </Provider>
         );
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
