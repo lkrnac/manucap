@@ -24,6 +24,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
     const editingCues = useSelector((state: SubtitleEditState) => state.cues, shallowEqual);
     const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange);
     const videoSectionToPlay = useSelector((state: SubtitleEditState) => state.videoSectionToPlay);
+    const waveformVisible = useSelector((state: SubtitleEditState) => state.waveformVisible);
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];
     const tracks = editingTrack ? [editingTrack] : [];
 
@@ -38,6 +39,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 poster={props.poster}
                 waveform={props.waveform}
                 duration={props.duration}
+                waveformVisible={waveformVisible}
                 cues={editingCues}
                 tracks={tracks}
                 onTimeChange={props.onTimeChange}

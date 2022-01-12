@@ -1124,6 +1124,7 @@ describe("SubtitleEdit", () => {
                                     poster="dummyPoster"
                                     waveform="dummyWaveform"
                                     duration={20}
+                                    waveformVisible
                                     cues={cues}
                                     tracks={[testingTrack]}
                                     languageCuesArray={[]}

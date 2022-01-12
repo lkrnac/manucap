@@ -17,8 +17,6 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 // @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
-import { SubtitleEditState } from "../subtitleEditReducers";
-import { connect } from "react-redux";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -56,6 +54,7 @@ export interface Props {
     poster: string;
     waveform?: string;
     duration?: number;
+    waveformVisible?: boolean;
     cues?: CueDto[];
     tracks: Track[];
     onTimeChange?: (time: number) => void;
@@ -65,7 +64,6 @@ export interface Props {
     lastCueChange: CueChange | null;
     trackFontSizePercent?: number;
     updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
-    waveformVisible?: boolean; // injected from state
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -361,8 +359,4 @@ class VideoPlayer extends React.Component<Props> {
     }
 }
 
-const mapStateToProps = (state: SubtitleEditState) => ({
-    waveformVisible: state.waveformVisible
-});
-
-export default connect(mapStateToProps, null)(VideoPlayer);
+export default VideoPlayer;
