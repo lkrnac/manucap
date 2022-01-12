@@ -348,7 +348,7 @@ class VideoPlayer extends React.Component<Props> {
                 />
                 {
                      this.props.waveform && this.props.duration ?
-                         <div hidden={!this.props.waveformVisible}>
+                         <div className="sbte-waveform" hidden={!this.props.waveformVisible}>
                              <div ref={this.waveformRef} />
                              <div ref={this.waveformTimelineRef} />
                          </div>
