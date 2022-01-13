@@ -292,13 +292,18 @@ class VideoPlayer extends React.Component<Props> {
     }
 
     private removeRegion(index: number): void {
-        this.wavesurfer.regions.list[index].remove();
+        const region = this.wavesurfer.regions.list[index];
+        if (region) {
+            this.wavesurfer.regions.list[index].remove();
+        }
     }
 
     private updateRegion(index: number, start: number, end: number, text: string): void {
         const region = this.wavesurfer.regions.list[index];
-        region.remove();
-        this.addRegion(index, start, end, text, region.color);
+        if (region) {
+            region.remove();
+            this.addRegion(index, start, end, text, region.color);
+        }
     }
 
     private removeAllRegions(): void {
