@@ -48,7 +48,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.scrollParent).toBeTruthy();
         expect(actualComponent.wavesurfer.params.minimap).toBeTruthy();
         expect(actualComponent.wavesurfer.params.backend).toEqual("MediaElement");
-        expect(actualComponent.wavesurfer.params.height).toEqual(150);
+        expect(actualComponent.wavesurfer.params.height).toEqual(100);
         expect(actualComponent.wavesurfer.params.pixelRatio).toEqual(1);
         expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.4);
         expect(actualComponent.wavesurfer.params.plugins.length).toEqual(3);
@@ -58,7 +58,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.initialisedPluginList).toEqual(
             { regions: true, minimap: true, timeline: true });
         expect(actualComponent.wavesurfer.regions.params).toEqual({ dragSelection: false });
-        expect(actualComponent.wavesurfer.minimap.params.height).toEqual(50);
+        expect(actualComponent.wavesurfer.minimap.params.height).toEqual(30);
     });
 
     it("initializes wavesurfer with regions", async () => {
@@ -304,7 +304,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[1]).toBeUndefined();
     });
 
-    it("hides waveform accordion if no waveform is present", async () => {
+    it("hides waveform if no waveform url is present", async () => {
         // GIVEN
         // WHEN
         const actualNode = mount(
@@ -313,6 +313,7 @@ describe("VideoPlayer with waveform", () => {
                 mp4="dummyMp4Url"
                 waveform=""
                 duration={20}
+                waveformVisible
                 tracks={tracks}
                 languageCuesArray={[]}
                 lastCueChange={null}
@@ -321,8 +322,53 @@ describe("VideoPlayer with waveform", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // THEN
-        const accordionNode = actualNode.find("Accordion");
+        const waveformNode = actualNode.find(".sbte-waveform");
 
-        expect(accordionNode.get(0)).toBeUndefined();
+        expect(waveformNode.get(0)).toBeUndefined();
+    });
+
+    it("hides waveform if no waveform duration is present", async () => {
+        // GIVEN
+        // WHEN
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                waveform="dymmyWaveform"
+                waveformVisible
+                tracks={tracks}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // THEN
+        const waveformNode = actualNode.find(".sbte-waveform");
+
+        expect(waveformNode.get(0)).toBeUndefined();
+    });
+
+    it("hides waveform if waveform visible flag is false", async () => {
+        // GIVEN
+        // WHEN
+        const actualNode = mount(
+            <VideoPlayer
+                poster="dummyPosterUrl"
+                mp4="dummyMp4Url"
+                waveform="dummyWaveform"
+                duration={20}
+                waveformVisible={false}
+                tracks={tracks}
+                languageCuesArray={[]}
+                lastCueChange={null}
+            />
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // THEN
+        const waveformNode = actualNode.find(".sbte-waveform");
+
+        expect(waveformNode.get(0).props.hidden).toBeTruthy();
     });
 });

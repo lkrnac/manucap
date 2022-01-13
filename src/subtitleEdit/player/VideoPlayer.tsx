@@ -17,8 +17,6 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 // @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
-import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -56,6 +54,7 @@ export interface Props {
     poster: string;
     waveform?: string;
     duration?: number;
+    waveformVisible?: boolean;
     cues?: CueDto[];
     tracks: Track[];
     onTimeChange?: (time: number) => void;
@@ -186,7 +185,7 @@ class VideoPlayer extends React.Component<Props> {
                             scrollParent: true,
                             minimap: true,
                             backend: "MediaElement",
-                            height: 150,
+                            height: 100,
                             pixelRatio: 1,
                             barHeight: 0.4,
                             plugins: [
@@ -194,7 +193,7 @@ class VideoPlayer extends React.Component<Props> {
                                     dragSelection: false
                                 }),
                                 MinimapPlugin.create({
-                                    height: 50,
+                                    height: 30,
                                 }),
                                 TimelinePlugin.create({
                                     container: this.waveformTimelineRef?.current
@@ -293,13 +292,18 @@ class VideoPlayer extends React.Component<Props> {
     }
 
     private removeRegion(index: number): void {
-        this.wavesurfer.regions.list[index].remove();
+        const region = this.wavesurfer.regions.list[index];
+        if (region) {
+            this.wavesurfer.regions.list[index].remove();
+        }
     }
 
     private updateRegion(index: number, start: number, end: number, text: string): void {
         const region = this.wavesurfer.regions.list[index];
-        region.remove();
-        this.addRegion(index, start, end, text, region.color);
+        if (region) {
+            region.remove();
+            this.addRegion(index, start, end, text, region.color);
+        }
     }
 
     private removeAllRegions(): void {
@@ -348,20 +352,11 @@ class VideoPlayer extends React.Component<Props> {
                     data-setup="{}"
                 />
                 {
-                    this.props.waveform && this.props.duration ?
-                        <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-waveform">
-                            <Card>
-                                <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                                    Waveform
-                                </Accordion.Toggle>
-                                <Accordion.Collapse eventKey="0">
-                                    <Card.Body>
-                                        <div ref={this.waveformRef} />
-                                        <div ref={this.waveformTimelineRef} />
-                                    </Card.Body>
-                                </Accordion.Collapse>
-                            </Card>
-                        </Accordion>
+                     this.props.waveform && this.props.duration ?
+                         <div className="sbte-waveform" hidden={!this.props.waveformVisible}>
+                             <div ref={this.waveformRef} />
+                             <div ref={this.waveformTimelineRef} />
+                         </div>
                         : null
                 }
             </div>
