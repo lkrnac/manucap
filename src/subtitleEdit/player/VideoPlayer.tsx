@@ -23,7 +23,7 @@ const ONE_MILLISECOND = 0.001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
 const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
-    if (vttCue.line !== "auto" && trackFontSizePercent) {
+    if (vttCue && vttCue.line !== "auto" && trackFontSizePercent) {
         vttCue.line = Math.round(vttCue.line / trackFontSizePercent);
     }
 };
@@ -241,10 +241,8 @@ class VideoPlayer extends React.Component<Props> {
                 this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
                     lastCueChange.vttCue.text);
             }
-            if (lastCueChange.changeType === "REMOVE") {
-                this.removeRegion(lastCueChange.index);
-            }
-            if (lastCueChange.changeType === "SPLIT" || lastCueChange.changeType === "MERGE") {
+            if (lastCueChange.changeType === "REMOVE" || lastCueChange.changeType === "SPLIT"
+                || lastCueChange.changeType === "MERGE") {
                 this.removeAllRegions();
                 this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
                     this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
@@ -288,13 +286,6 @@ class VideoPlayer extends React.Component<Props> {
                 resize: false,
                 showTooltip: false
             });
-        }
-    }
-
-    private removeRegion(index: number): void {
-        const region = this.wavesurfer.regions.list[index];
-        if (region) {
-            this.wavesurfer.regions.list[index].remove();
         }
     }
 

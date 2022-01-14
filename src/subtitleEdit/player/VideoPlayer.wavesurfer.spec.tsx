@@ -190,6 +190,9 @@ describe("VideoPlayer with waveform", () => {
 
     it("removes wavesurfer region when cue is deleted", async () => {
         // GIVEN
+        const updatedCues = [
+            { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+        ] as CueDto[];
         const properties = {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
@@ -208,7 +211,8 @@ describe("VideoPlayer with waveform", () => {
         // WHEN
         actualNode.setProps(
             // @ts-ignore I only need to update these props
-            { lastCueChange: { changeType: "REMOVE", index: 0, vttCue: new VTTCue(0, 0, "") }}
+            { lastCueChange: { changeType: "REMOVE", index: 0, vttCue: new VTTCue(0, 0, "") },
+            cues: updatedCues }
         );
 
         // THEN
@@ -216,7 +220,10 @@ describe("VideoPlayer with waveform", () => {
         // @ts-ignore can't find the correct syntax
         const actualComponent = videoNode.instance() as VideoPlayer;
 
-        expect(actualComponent.wavesurfer.regions.list[0]).toBeUndefined();
+        expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Caption Line 2");
+        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(4);
+        expect(actualComponent.wavesurfer.regions.list[1]).toBeUndefined();
     });
 
     it("updates wavesurfer region when cue is split", async () => {
