@@ -1091,7 +1091,8 @@ describe("SubtitleEdit", () => {
             .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
     });
 
-    it("renders with waveform", async () => {
+    // TODO: Re-enable after DSD-914
+    it.skip("renders with waveform", async () => {
         // GIVEN
         // @ts-ignore we are just mocking
         jest.spyOn(global, "fetch").mockResolvedValue({
