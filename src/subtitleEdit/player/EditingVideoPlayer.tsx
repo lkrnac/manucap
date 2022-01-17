@@ -37,8 +37,8 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
             <VideoPlayer
                 mp4={props.mp4}
                 poster={props.poster}
-                waveform={props.waveform}
-                duration={props.duration}
+                // waveform={props.waveform} // Disabling waveform until DSD-914 is fixed
+                // duration={props.duration}
                 waveformVisible={waveformVisible}
                 cues={editingCues}
                 tracks={tracks}
