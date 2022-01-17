@@ -19,15 +19,15 @@ import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
 // const language = { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language;
 
-const trackType = "TRANSLATION";
-// const trackType = "CAPTION";
+// const trackType = "TRANSLATION";
+const trackType = "CAPTION";
 
 const TIME_MATCH_TESTING = false;
 
-// const mediaChunkStart = undefined;
-// const mediaChunkEnd = undefined;
-const mediaChunkStart = TIME_MATCH_TESTING ? 0 : 13000;
-const mediaChunkEnd = 305000;
+const mediaChunkStart = undefined;
+const mediaChunkEnd = undefined;
+// const mediaChunkStart = TIME_MATCH_TESTING ? 0 : 13000;
+// const mediaChunkEnd = 305000;
 
 // ################## TESTING DATA TWEAKS - END ########################
 
@@ -122,7 +122,7 @@ const TestApp = (): ReactElement => {
             }
 
             let endTime = START_SHIFT;
-            for (let idx = 0; idx < 9999; idx++) {
+            for (let idx = 1; idx < 9999; idx++) {
                 const randomStart = TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3;
                 const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
                 const withinChunkRange = inChunkRange(randomStart, randomEnd);
@@ -215,7 +215,7 @@ const TestApp = (): ReactElement => {
         }
 
         let endTime = START_SHIFT;
-        for (let idx = 0; idx < 9999; idx++) {
+        for (let idx = 1; idx < 9999; idx++) {
             const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
             let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
             // @ts-ignore since it can be updated manually

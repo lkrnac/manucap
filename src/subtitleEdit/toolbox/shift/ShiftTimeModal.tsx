@@ -9,7 +9,13 @@ const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value 
 const isShiftTimeValid = (value: string, firstTrackTime: number, isMediaChunk: boolean): boolean =>
     !isMediaChunk && (parseFloat(value) + firstTrackTime) < 0;
 
-const normalizeValue = (value: string): string => parseFloat(value).toFixed(3);
+const normalizeValue = (value: string): string => {
+    const parsedValue = parseFloat(value);
+    if (parsedValue === 0 || isNaN(parsedValue)) {
+        return value;
+    }
+    return parsedValue.toFixed(3);
+};
 
 interface Props {
     show: boolean;
