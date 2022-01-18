@@ -9,14 +9,6 @@ const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value 
 const isShiftTimeValid = (value: string, firstTrackTime: number, isMediaChunk: boolean): boolean =>
     !isMediaChunk && (parseFloat(value) + firstTrackTime) < 0;
 
-const normalizeValue = (value: string): string => {
-    const parsedValue = parseFloat(value);
-    if (parsedValue === 0 || isNaN(parsedValue)) {
-        return value;
-    }
-    return parsedValue.toFixed(3);
-};
-
 interface Props {
     show: boolean;
     onClose: () => void;
@@ -31,7 +23,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     const isMediaChunk = !!mediaChunkStart || mediaChunkStart === 0;
 
     const handleApplyShift = (shiftPosition: string, shiftTime: string): void => {
-        const shiftValue = parseFloat(shiftTime);
+        const shiftValue = Number(parseFloat(shiftTime).toFixed(3));
         try {
             dispatch(applyShiftTimeByPosition(shiftPosition, editCueIndex, shiftValue));
         } catch (e) {
@@ -62,7 +54,6 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                 <Field
                                     name="shiftTime"
                                     component="input"
-                                    parse={normalizeValue}
                                     className="form-control dotsub-track-line-shift margin-right-10"
                                     style={{ width: "120px" }}
                                     type="number"
