@@ -173,50 +173,7 @@ class VideoPlayer extends React.Component<Props> {
             getTimeString(x, (hours: number): boolean => hours === 0)
         );
 
-        if (this.props.waveform && this.props.duration) {
-            fetch(this.props.waveform,
-                { headers: { "Content-Type": "application/json", "Accept": "application/json" }})
-                .then((response) => response.json())
-                .then((peaksData) => {
-                    if (this.waveformRef?.current) {
-                        this.wavesurfer = WaveSurfer.create({
-                            container: this.waveformRef.current,
-                            normalize: true,
-                            scrollParent: true,
-                            minimap: true,
-                            backend: "MediaElement",
-                            height: 100,
-                            pixelRatio: 1,
-                            barHeight: 0.4,
-                            plugins: [
-                                RegionsPlugin.create({
-                                    dragSelection: false
-                                }),
-                                MinimapPlugin.create({
-                                    height: 30,
-                                }),
-                                TimelinePlugin.create({
-                                    container: this.waveformTimelineRef?.current
-                                })
-                            ]
-                        });
-
-                        this.wavesurfer.zoom(80);
-
-                        this.wavesurfer.load(
-                            this.videoNode?.current,
-                            peaksData.data,
-                            "auto",
-                            this.props.duration
-                        );
-
-                        this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
-                            this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
-                                randomColor());
-                        });
-                    }
-                });
-        }
+        this.loadWaveform();
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -230,6 +187,14 @@ class VideoPlayer extends React.Component<Props> {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
             videoJsTrack.dispatchEvent(new Event("cuechange"));
+        }
+
+        if (this.props.waveformVisible && !prevProps.waveformVisible) {
+            this.loadWaveform();
+        }
+        if (!this.props.waveformVisible && prevProps.waveformVisible && this.wavesurfer) {
+            this.wavesurfer.destroy();
+            this.wavesurfer = undefined;
         }
 
         if (lastCueChange && this.wavesurfer) {
@@ -270,6 +235,54 @@ class VideoPlayer extends React.Component<Props> {
                 }, waitTime);
             }
             this.props.resetPlayerTimeChange();
+        }
+    }
+
+    private loadWaveform() {
+        if (this.props.waveform && this.props.duration) {
+            fetch(this.props.waveform,
+                { headers: { "Content-Type": "application/json", "Accept": "application/json" }})
+                .then((response) => response.json())
+                .then((peaksData) => {
+                    if (this.waveformRef?.current) {
+                        this.wavesurfer = WaveSurfer.create({
+                            container: this.waveformRef.current,
+                            normalize: true,
+                            scrollParent: true,
+                            minimap: true,
+                            partialRender: true,
+                            backend: "MediaElement",
+                            height: 100,
+                            pixelRatio: 1,
+                            barHeight: 0.4,
+                            plugins: [
+                                RegionsPlugin.create({
+                                    dragSelection: false
+                                }),
+                                MinimapPlugin.create({
+                                    height: 30,
+                                }),
+                                TimelinePlugin.create({
+                                    container: this.waveformTimelineRef?.current
+                                })
+                            ]
+                        });
+
+                        this.wavesurfer.zoom(80);
+
+                        this.wavesurfer.load(
+                            this.videoNode?.current,
+                            peaksData.data,
+                            "auto",
+                            this.props.duration
+                        );
+
+                        this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
+                            this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
+                                randomColor());
+                        });
+                    }
+                });
         }
     }
 

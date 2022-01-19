@@ -129,6 +129,7 @@ describe("VideoPlayer with waveform", () => {
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
             duration: 20,
+            waveformVisible: true,
             cues,
             tracks,
             languageCuesArray: [],
@@ -162,6 +163,7 @@ describe("VideoPlayer with waveform", () => {
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
             duration: 20,
+            waveformVisible: true,
             cues,
             tracks,
             languageCuesArray: [],
@@ -198,6 +200,7 @@ describe("VideoPlayer with waveform", () => {
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
             duration: 20,
+            waveformVisible: true,
             cues,
             tracks,
             languageCuesArray: [],
@@ -239,6 +242,7 @@ describe("VideoPlayer with waveform", () => {
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
             duration: 20,
+            waveformVisible: true,
             cues,
             tracks,
             languageCuesArray: [],
@@ -283,6 +287,7 @@ describe("VideoPlayer with waveform", () => {
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
             duration: 20,
+            waveformVisible: true,
             cues,
             tracks,
             languageCuesArray: [],
@@ -377,5 +382,39 @@ describe("VideoPlayer with waveform", () => {
         const waveformNode = actualNode.find(".sbte-waveform");
 
         expect(waveformNode.get(0).props.hidden).toBeTruthy();
+    });
+
+    it("doesn't update regions when cue is added if waveform is hidden", async () => {
+        // GIVEN
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            waveformVisible: true,
+            cues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        // @ts-ignore I only need to update these props
+        actualNode.setProps({ waveformVisible: false });
+        actualNode.setProps(
+            // @ts-ignore I only need to update these props
+            { lastCueChange: { changeType: "ADD", index: 2, vttCue: new VTTCue(4, 6, "Added Caption") }}
+        );
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer).toBeUndefined();
     });
 });
