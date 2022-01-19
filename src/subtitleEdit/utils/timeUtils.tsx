@@ -36,3 +36,11 @@ export const getTimeFromString = (timeString: string): number => {
     const [hours, minutes, seconds] = firstPart.split(":");
     return (Number(hours) * 3600) + (Number(minutes) * 60) + Number(seconds) + (Number(millis) / 1000);
 };
+
+export const formatStartOrEndTime = (value: string): string => {
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue) && value.includes(".") && value.substring(value.indexOf(".") + 1).length > 3) {
+        return value.slice(0, (value.indexOf(".")) + 4);
+    }
+    return value;
+};
