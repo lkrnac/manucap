@@ -124,6 +124,25 @@ $background-error-text: rgba(255, 0, 0, 0.2);
   max-width: 50% !important;
 }
 
+// ----- Dropdown ------
+
+.sbte-dropdown-item {
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.sbte-dropdown-item:not(:disabled):not(.disabled):active,
+.sbte-dropdown-item:not(:disabled):not(.disabled).active {
+    background: $gray-600;
+    border-color: $gray-600;
+    color: $white;
+}
+
+.sbte-dropdown-item:not(:disabled):not(.disabled):active:focus,
+.sbte-dropdown-item:not(:disabled):not(.disabled).active:focus, {
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+    color: $white;
+}
+
 // ------ Cue -------
 
 .sbte-time-input {

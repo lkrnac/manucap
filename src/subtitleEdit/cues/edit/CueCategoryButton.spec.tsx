@@ -85,7 +85,7 @@ describe("CueCategoryButton", () => {
                     <a
                         style={{ padding: "8px 24px" }}
                         href="#"
-                        className="btn btn-outline-secondary dropdown-item"
+                        className="sbte-dropdown-item dropdown-item"
                         role="button"
                     >
                         Dialogue
@@ -94,7 +94,7 @@ describe("CueCategoryButton", () => {
                     <a
                         style={{ padding: "8px 24px" }}
                         href="#"
-                        className="btn btn-outline-secondary dropdown-item"
+                        className="sbte-dropdown-item dropdown-item"
                         role="button"
                     >
                         On Screen Text
@@ -102,7 +102,7 @@ describe("CueCategoryButton", () => {
                     <a
                         style={{ padding: "8px 24px" }}
                         href="#"
-                        className="btn btn-outline-secondary dropdown-item"
+                        className="sbte-dropdown-item dropdown-item"
                         role="button"
                     >
                         Audio Descriptions
@@ -110,7 +110,7 @@ describe("CueCategoryButton", () => {
                     <a
                         style={{ padding: "8px 24px" }}
                         href="#"
-                        className="btn btn-outline-secondary dropdown-item"
+                        className="sbte-dropdown-item dropdown-item"
                         role="button"
                     >
                         Lyrics
