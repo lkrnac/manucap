@@ -417,4 +417,41 @@ describe("VideoPlayer with waveform", () => {
 
         expect(actualComponent.wavesurfer).toBeUndefined();
     });
+
+    it("updates regions when cue is added if waveform is enabled after being hidden", async () => {
+        // GIVEN
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            waveformVisible: false,
+            cues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        // @ts-ignore I only need to update these props
+        actualNode.setProps({ waveformVisible: true });
+        actualNode.setProps(
+            // @ts-ignore I only need to update these props
+            { lastCueChange: { changeType: "ADD", index: 2, vttCue: new VTTCue(4, 6, "Added Caption") }}
+        );
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer).toBeDefined();
+        expect(actualComponent.wavesurfer.regions.list[2].attributes.label).toEqual("Added Caption");
+        expect(actualComponent.wavesurfer.regions.list[2].start).toEqual(4);
+        expect(actualComponent.wavesurfer.regions.list[2].end).toEqual(6);
+    });
 });
