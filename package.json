@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.21.4",
+  "version": "2.21.5",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -66,8 +66,10 @@
     "@rollup/plugin-typescript": "^8.3.0",
     "@rollup/plugin-url": "^6.1.0",
     "@svgr/rollup": "^6.1.1",
+    "@testing-library/dom": "^8.11.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "@types/deep-freeze": "^0.1.2",
     "@types/draft-js": "^0.11.6",
     "@types/enzyme": "^3.10.9",
