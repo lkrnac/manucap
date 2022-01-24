@@ -26,12 +26,13 @@ const PositionButton = (props: Props): ReactElement => (
                         (
                             <Dropdown.Item
                                 key={index}
-                                className="btn btn-outline-secondary"
+                                className="sbte-dropdown-item"
                                 style={{
                                     lineHeight: "38px",
                                     width: "38px",
                                     margin: "auto",
                                     padding: "0px",
+                                    borderRadius: "3px",
                                     paddingLeft: positionIcon.leftPadding
                                 }}
                                 onClick={(): void => props.changePosition(positionIcon.position)}

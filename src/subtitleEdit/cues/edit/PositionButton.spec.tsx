@@ -60,201 +60,351 @@ describe("PositionButton", () => {
                 >
                     <div style={{ minWidth: "210px", width: "210px", display: "flex", flexFlow: "row wrap" }}>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 6px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↖↖
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 9px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 9px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↖↑
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 13px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↑↑
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 11px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 11px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↑↗
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 6px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↗↗
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 6px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↖←
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 13px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↖
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 16px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 16px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↑
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 13px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↗
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 6px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             →↗
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 5px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 5px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ←←
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 12px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 12px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ←
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 16px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 16px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             •
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 12px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 12px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             →
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 5px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 5px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             →→
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 6px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↙←
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 13px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↙
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 16px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 16px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↓
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 13px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↘
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 6px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             →↘
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 6px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↙↙
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 9px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 9px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↙↓
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 13px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 13px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↓↓
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 11px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 11px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↓↘
                         </a>
                         <a
-                            style={{ lineHeight: "38px", width: "38px", margin: "auto", padding: "0px 0px 0px 6px" }}
+                            style={{
+                                lineHeight: "38px",
+                                width: "38px",
+                                margin: "auto",
+                                padding: "0px 0px 0px 6px",
+                                borderRadius: "3px"
+                            }}
                             href="#"
-                            className="btn btn-outline-secondary dropdown-item"
+                            className="sbte-dropdown-item dropdown-item"
                             role="button"
                         >
                             ↘↘
