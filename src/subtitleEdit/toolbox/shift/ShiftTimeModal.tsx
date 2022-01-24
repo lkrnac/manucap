@@ -4,12 +4,12 @@ import Modal from "react-bootstrap/Modal";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { Field, Form } from "react-final-form";
+import { formatStartOrEndTime } from "../../utils/timeUtils";
+
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
 const isShiftTimeValid = (value: string, firstTrackTime: number, isMediaChunk: boolean): boolean =>
     !isMediaChunk && (parseFloat(value) + firstTrackTime) < 0;
-
-const normalizeValue = (value: string): string => parseFloat(value).toFixed(3);
 
 interface Props {
     show: boolean;
@@ -56,7 +56,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                 <Field
                                     name="shiftTime"
                                     component="input"
-                                    parse={normalizeValue}
+                                    parse={formatStartOrEndTime}
                                     className="form-control dotsub-track-line-shift margin-right-10"
                                     style={{ width: "120px" }}
                                     type="number"
