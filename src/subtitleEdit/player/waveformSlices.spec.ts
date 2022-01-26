@@ -26,6 +26,6 @@ describe("waveformVisibleSlice", () => {
         testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
 
         // THEN
-        expect(testingStore.getState().waveformVisible).toBeTruthy();
+        expect(testingStore.getState().waveformVisible).toBeFalsy();
     });
 });
