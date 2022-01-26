@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { editingTrackSlice } from "../trackSlices";
 
 export const waveformVisibleSlice = createSlice({
     name: "waveformVisible",
@@ -6,5 +7,7 @@ export const waveformVisibleSlice = createSlice({
     reducers: {
         setWaveformVisible: (_state, action: PayloadAction<boolean>): boolean => action.payload
     },
-    extraReducers: {}
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => true
+    }
 });
