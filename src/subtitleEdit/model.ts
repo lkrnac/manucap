@@ -165,3 +165,9 @@ export interface CueComment {
     comment: string;
     date: string;
 }
+
+export interface WaveformRegion {
+    id: number;
+    start: number;
+    end: number;
+}

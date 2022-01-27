@@ -1,5 +1,5 @@
 import "video.js/dist/video-js.css";
-import { CueChange, CueDto, LanguageCues, Track } from "../model";
+import { CueChange, CueDto, LanguageCues, Track, WaveformRegion } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../utils/shortcutConstants";
@@ -55,6 +55,7 @@ export interface Props {
     waveform?: string;
     duration?: number;
     waveformVisible?: boolean;
+    updateCueTimecodes?: (idx: number, start: number, end: number) => void;
     cues?: CueDto[];
     tracks: Track[];
     onTimeChange?: (time: number) => void;
@@ -63,7 +64,6 @@ export interface Props {
     resetPlayerTimeChange?: () => void;
     lastCueChange: CueChange | null;
     trackFontSizePercent?: number;
-    updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -258,9 +258,7 @@ class VideoPlayer extends React.Component<Props> {
                             pixelRatio: 1,
                             barHeight: 0.4,
                             plugins: [
-                                RegionsPlugin.create({
-                                    dragSelection: false
-                                }),
+                                RegionsPlugin.create({}),
                                 MinimapPlugin.create({
                                     height: 30,
                                 }),
@@ -278,6 +276,12 @@ class VideoPlayer extends React.Component<Props> {
                             "auto",
                             this.props.duration
                         );
+
+                        this.wavesurfer.on("region-update-end", (updatedRegion: WaveformRegion) => {
+                            if (this.props.updateCueTimecodes) {
+                                this.props.updateCueTimecodes(updatedRegion.id, updatedRegion.start, updatedRegion.end);
+                            }
+                        });
 
                         this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
                             this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
