@@ -173,7 +173,9 @@ class VideoPlayer extends React.Component<Props> {
             getTimeString(x, (hours: number): boolean => hours === 0)
         );
 
-        this.loadWaveform();
+        if (this.props.waveformVisible) {
+            this.loadWaveform();
+        }
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -189,7 +191,7 @@ class VideoPlayer extends React.Component<Props> {
             videoJsTrack.dispatchEvent(new Event("cuechange"));
         }
 
-        if (this.props.waveformVisible && !prevProps.waveformVisible) {
+        if (this.props.waveformVisible && !prevProps.waveformVisible && !this.wavesurfer) {
             this.loadWaveform();
         }
         if (!this.props.waveformVisible && prevProps.waveformVisible && this.wavesurfer) {

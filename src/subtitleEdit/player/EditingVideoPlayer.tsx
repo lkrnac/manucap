@@ -4,6 +4,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { clearLastCueChange } from "../cues/edit/cueEditorSlices";
+import { waveformVisibleSlice } from "./waveformSlices";
 
 interface Props {
     mp4: string;
@@ -31,6 +32,13 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
     useEffect(() => {
         dispatch(clearLastCueChange());
     }, [dispatch, lastCueChange]);
+
+    useEffect(() => {
+        if (props.duration && props.duration <= 1800) {
+            dispatch(waveformVisibleSlice.actions.setWaveformVisible(true));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Run only once
 
     return editingTrack
         ? (

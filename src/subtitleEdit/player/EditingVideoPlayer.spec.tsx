@@ -137,4 +137,50 @@ describe("EditingVideoPlayer", () => {
         // THEN
         expect(actualNode.find(VideoPlayer).props().playSection).toEqual({ startTime: -1 });
     });
+
+    it("enables waveform for videos shorter or equal than 30 minutes", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    waveform="dummyWaveform"
+                    duration={1800}
+                    onTimeChange={handleTimeChange}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        actualNode.setProps({}); // trigger update + re-render
+
+        // THEN
+        expect(testingStore.getState().waveformVisible).toBeTruthy();
+    });
+
+    it("doesn't enable waveform for videos longer than 30 minutes", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    waveform="dummyWaveform"
+                    duration={1801}
+                    onTimeChange={handleTimeChange}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        actualNode.setProps({}); // trigger update + re-render
+
+        // THEN
+        expect(testingStore.getState().waveformVisible).toBeFalsy();
+    });
 });
