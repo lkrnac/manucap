@@ -6,7 +6,7 @@ import { editingTrackSlice } from "../../trackSlices";
 import { Match, SpellCheck } from "../spellCheck/model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
-import { matchCuesByTime, MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
+import { matchCuesByTime, matchCuesByTimePartially, MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -182,6 +182,11 @@ interface MatchCuesAction {
     editingCueIndex: number;
 }
 
+interface MatchCuesPartiallyAction extends MatchCuesAction {
+    matchedCues: MatchedCuesWithEditingFocus,
+    fromIndex: number,
+}
+
 interface MatchedCueAction {
     cue: CueDto;
     editingIndexMatchedCues: number;
@@ -195,6 +200,16 @@ export const matchedCuesSlice = createSlice({
         matchCuesByTime: (_state, action: PayloadAction<MatchCuesAction>): MatchedCuesWithEditingFocus => {
             return matchCuesByTime(action.payload.cues, action.payload.sourceCues, action.payload.editingCueIndex);
         },
+        matchCuesByTimePartially:
+            (_state, action: PayloadAction<MatchCuesPartiallyAction>): MatchedCuesWithEditingFocus => {
+                return matchCuesByTimePartially(
+                    action.payload.cues,
+                    action.payload.sourceCues,
+                    action.payload.editingCueIndex,
+                    action.payload.fromIndex,
+                    action.payload.matchedCues
+                );
+            },
         updateMatchedCue: (state, action: PayloadAction<MatchedCueAction>): MatchedCuesWithEditingFocus => {
             if (action.payload.editingIndexMatchedCues >= 0) {
                 const targetCues = state.matchedCues[action.payload.editingIndexMatchedCues].targetCues;

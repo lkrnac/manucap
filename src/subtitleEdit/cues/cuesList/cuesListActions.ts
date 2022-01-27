@@ -145,8 +145,29 @@ export const updateMatchedCuesWithLastState =
         ));
     };
 
-
 export const updateMatchedCues = (): AppThunk => updateMatchedCuesWithLastState;
+
+export const updateMatchedCuesPartially = (fromIndex?: number): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): void => {
+        const lastState = getState();
+        const focusedCueIndex = fromIndex
+            ? fromIndex
+            : getState().focusedCueIndex;
+        const fromIndexNullSafe = focusedCueIndex !== null
+            ? focusedCueIndex
+            : 0;
+        const contingencyFromIndex = fromIndexNullSafe > 0
+            ? fromIndexNullSafe - 1
+            : 0;
+        dispatch(matchedCuesSlice.actions.matchCuesByTimePartially({
+            cues: lastState.cues,
+            sourceCues: lastState.sourceCues,
+            editingCueIndex: lastState.editingCueIndex,
+            fromIndex: contingencyFromIndex,
+            matchedCues: lastState.matchedCues
+        }));
+    };
+
 
 export const checkErrors = createAsyncThunk(
     "validations/checkErrors",
@@ -173,6 +194,7 @@ export const checkErrors = createAsyncThunk(
                     { index: index, errors: cueErrors } as CueErrorsPayload));
                 if (cueErrors.length !== oldErrorsCount) {
                     callSaveTrack(thunkApi.dispatch, thunkApi.getState);
+                    // TODO: use updateMatchedCue for single cue
                     updateMatchedCuesWithLastState(thunkApi.dispatch, thunkApi.getState);
                 }
             }
@@ -259,7 +281,7 @@ export const updateVttCue = (
             updateSearchMatches(dispatch, getState, idx);
             validateCue(dispatch, idx, true);
             if (!textOnly || editUuid === undefined) {
-                dispatch(updateMatchedCues());
+                dispatch(updateMatchedCuesPartially());
             } else {
                 const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(getState(), idx);
                 dispatch(matchedCuesSlice.actions.updateMatchedCue(
@@ -301,6 +323,7 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
         callSaveTrack(dispatch, getState);
+        // TODO: use updateMatchedCue for single cue
         dispatch(updateMatchedCues());
     };
 
@@ -308,6 +331,7 @@ export const addCueComment = (idx: number, cueComment: CueComment): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         dispatch(cuesSlice.actions.addCueComment({ idx, cueComment }));
         callSaveTrack(dispatch, getState);
+        // TODO: use updateMatchedCue for single cue
         dispatch(updateMatchedCues());
     };
 
@@ -315,6 +339,7 @@ export const deleteCueComment = (idx: number, cueCommentIndex: number): AppThunk
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         dispatch(cuesSlice.actions.deleteCueComment({ idx, cueCommentIndex }));
         callSaveTrack(dispatch, getState);
+        // TODO: use updateMatchedCue for single cue
         dispatch(updateMatchedCues());
     };
 
@@ -352,7 +377,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
-            dispatch(updateMatchedCues());
+            dispatch(updateMatchedCuesPartially());
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
         } else {
             const error = !verifyTimeGapLimit(cue.vttCue, timeGapLimit)
@@ -387,7 +412,7 @@ export const splitCue = (idx: number): AppThunk =>
             dispatch(lastCueChangeSlice.actions.recordCueChange(
                 { changeType: "SPLIT", index: idx, vttCue: originalCue.vttCue }));
             callSaveTrack(dispatch, getState, true);
-            dispatch(updateMatchedCues());
+            dispatch(updateMatchedCuesPartially());
         } else {
             dispatch(validationErrorSlice.actions.setValidationErrors([CueError.SPLIT_ERROR]));
         }
@@ -399,7 +424,7 @@ export const deleteCue = (idx: number): AppThunk =>
         dispatch(lastCueChangeSlice.actions
             .recordCueChange({ changeType: "REMOVE", index: idx, vttCue: new VTTCue(0, 0, "") }));
         callSaveTrack(dispatch, getState);
-        dispatch(updateMatchedCues());
+        dispatch(updateMatchedCuesPartially());
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
@@ -500,7 +525,7 @@ export const mergeCues = (): AppThunk =>
                     dispatch(lastCueChangeSlice.actions.recordCueChange(
                         { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
                     callSaveTrack(dispatch, getState, true);
-                    dispatch(updateMatchedCues());
+                    dispatch(updateMatchedCuesPartially());
                     mergeSuccess = true;
                 }
             }

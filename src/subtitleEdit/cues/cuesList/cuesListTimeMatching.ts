@@ -17,7 +17,7 @@ interface Times {
 }
 
 interface Indexes {
-    cuesMap: number;
+    matchedCues: number;
     editingFocus: number;
     source: number;
     target: number;
@@ -42,7 +42,7 @@ const pushTargetWithoutMatchedIndex = (
 ): void => {
     cuesMapValue?.targetCues?.push({ index: indexes.target, cue });
     if (indexes.target === editingCueIndex) {
-        indexes.editingFocus = indexes.cuesMap;
+        indexes.editingFocus = indexes.matchedCues;
     }
     indexes.target++;
 };
@@ -65,12 +65,12 @@ const pushTarget = (
 ): void => {
     pushTargetWithoutMatchedIndex(indexes, cue, editingCueIndex, cuesMapValue);
     if (times.targetEnd === undefined || times.sourceStart === undefined) {
-        indexes.cuesMap++;
+        indexes.matchedCues++;
         return;
     }
     const overlapLength = times.targetEnd - times.sourceStart;
     if (overlapLength / times.targetLength <= OVERLAP_RATIO) {
-        indexes.cuesMap++;
+        indexes.matchedCues++;
     }
 };
 
@@ -82,12 +82,12 @@ const pushSource = (
 ): void => {
     pushSourceWithoutMatchedIndex(indexes, sourceCue, cuesMapValue);
     if (times.sourceEnd === undefined || times.targetStart === undefined) {
-        indexes.cuesMap++;
+        indexes.matchedCues++;
         return;
     }
     const overlapLength = times.sourceEnd - times.targetStart;
     if (overlapLength / times.sourceLength <= OVERLAP_RATIO) {
-        indexes.cuesMap++;
+        indexes.matchedCues++;
     }
 };
 
@@ -100,7 +100,7 @@ const pushBoth = (
 ): void => {
     pushTargetWithoutMatchedIndex(indexes, cue, editingCueIndex, cuesMapValue);
     pushSourceWithoutMatchedIndex(indexes, sourceCue, cuesMapValue);
-    indexes.cuesMap++;
+    indexes.matchedCues++;
 };
 
 export const matchCuesByTime = (
@@ -108,18 +108,29 @@ export const matchCuesByTime = (
     sourceCues: CueDto[],
     editingCueIndex: number
 ): MatchedCuesWithEditingFocus => {
-    const cuesMap = new Map<number, CueLineDto>();
+    return matchCuesByTimePartially(targetCues, sourceCues, editingCueIndex, 0);
+};
+
+export const matchCuesByTimePartially = (
+    targetCues: CueDto[],
+    sourceCues: CueDto[],
+    editingCueIndex: number,
+    fromIndex: number,
+    originalMatchedCues?: MatchedCuesWithEditingFocus,
+): MatchedCuesWithEditingFocus => {
+    // TODO: do we need new array?
+    const matchedCues = originalMatchedCues?.matchedCues ? originalMatchedCues?.matchedCues : [];
     const indexes = {
-        cuesMap: 0,
+        matchedCues: fromIndex,
         source: 0, // will not be used for captions only
         target: 0,
         editingFocus: 0,
     };
     while (indexes.target < targetCues.length || indexes.source < sourceCues.length) {
-        if (!cuesMap.get(indexes.cuesMap)) {
-            cuesMap.set(indexes.cuesMap, { targetCues: [], sourceCues: []});
+        if (!matchedCues[indexes.matchedCues]) {
+            matchedCues[indexes.matchedCues] = { targetCues: [], sourceCues: []};
         }
-        const cuesMapValue = cuesMap.get(indexes.cuesMap);
+        const cueLine = matchedCues[indexes.matchedCues];
         const cue = targetCues[indexes.target];
         const sourceCue = sourceCues[indexes.source];
         const times = {
@@ -132,23 +143,22 @@ export const matchCuesByTime = (
         };
 
         if (!sourceCue) {
-            pushTarget(indexes, times, cue, editingCueIndex, cuesMapValue);
+            pushTarget(indexes, times, cue, editingCueIndex, cueLine);
             continue;
         }
         if (!cue) {
-            pushSource(indexes, times, sourceCue, cuesMapValue);
+            pushSource(indexes, times, sourceCue, cueLine);
             continue;
         }
         if (isExactMatch(times)) {
-            pushBoth(indexes, sourceCue, cue, editingCueIndex, cuesMapValue);
+            pushBoth(indexes, sourceCue, cue, editingCueIndex, cueLine);
             continue;
         }
         if (isTargetShorter(times)) {
-            pushTarget(indexes, times, cue, editingCueIndex, cuesMapValue);
+            pushTarget(indexes, times, cue, editingCueIndex, cueLine);
         } else if (isSourceShorter(times)) {
-            pushSource(indexes, times, sourceCue, cuesMapValue);
+            pushSource(indexes, times, sourceCue, cueLine);
         }
     }
-    const matchedCues = Array.from(cuesMap.values());
     return { matchedCues, editingFocusIndex: indexes.editingFocus };
 };
