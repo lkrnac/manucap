@@ -18,8 +18,8 @@ describe("WaveformToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary">
-                <i className="fas fa-wave-square" /> Hide Waveform
+            <button type="button" className="btn btn-secondary sbte-toggled-btn">
+                <i className="fas fa-wave-square" /> Show Waveform
             </button>
         );
 
@@ -37,8 +37,8 @@ describe("WaveformToggle", () => {
     it("changes icon/text on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary sbte-toggled-btn">
-                <i className="fas fa-wave-square" /> Show Waveform
+            <button type="button" className="btn btn-secondary">
+                <i className="fas fa-wave-square" /> Hide Waveform
             </button>
         );
 
@@ -66,6 +66,6 @@ describe("WaveformToggle", () => {
         fireEvent.click(actualNode.container.querySelector(".btn") as Element);
 
         // THEN
-        expect(testingStore.getState().waveformVisible).toEqual(false);
+        expect(testingStore.getState().waveformVisible).toEqual(true);
     });
 });

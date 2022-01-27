@@ -32,6 +32,7 @@ describe("VideoPlayer with waveform", () => {
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
                 duration={20}
+                waveformVisible
                 tracks={tracks}
                 languageCuesArray={[]}
                 lastCueChange={null}
@@ -70,6 +71,7 @@ describe("VideoPlayer with waveform", () => {
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
                 duration={20}
+                waveformVisible
                 cues={cues}
                 tracks={tracks}
                 languageCuesArray={[]}
@@ -106,6 +108,7 @@ describe("VideoPlayer with waveform", () => {
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
                 duration={20}
+                waveformVisible
                 cues={cues}
                 tracks={tracks}
                 languageCuesArray={[]}
@@ -434,11 +437,11 @@ describe("VideoPlayer with waveform", () => {
         const actualNode = mount(
             React.createElement(props => (<VideoPlayer {...props} />), properties)
         );
-        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // WHEN
         // @ts-ignore I only need to update these props
         actualNode.setProps({ waveformVisible: true });
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
         actualNode.setProps(
             // @ts-ignore I only need to update these props
             { lastCueChange: { changeType: "ADD", index: 2, vttCue: new VTTCue(4, 6, "Added Caption") }}
