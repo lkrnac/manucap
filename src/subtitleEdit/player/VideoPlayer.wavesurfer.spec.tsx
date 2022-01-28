@@ -1,5 +1,5 @@
 import "../../testUtils/initBrowserEnvironment";
-import { CueDto, Track } from "../model";
+import { CueDto, Track, WaveformRegion } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
@@ -462,5 +462,39 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[2].attributes.label).toEqual("Added Caption");
         expect(actualComponent.wavesurfer.regions.list[2].start).toEqual(4);
         expect(actualComponent.wavesurfer.regions.list[2].end).toEqual(6);
+    });
+
+    it("updates cue timecodes when modifying waveform region", async () => {
+        // GIVEN
+        const updateCueTimecodes = jest.fn();
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            waveformVisible: false,
+            updateCueTimecodes,
+            cues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+
+        // WHEN
+        // @ts-ignore I only need to update these props
+        actualNode.setProps({ waveformVisible: true });
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+        // @ts-ignore can't find the correct syntax
+        const videoNode = actualNode.find("VideoPlayer");
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        // THEN
+        const regionUpdate = { id: 0, start: 0, end: 2.4567 } as WaveformRegion;
+        actualComponent.wavesurfer.fireEvent("region-update-end", regionUpdate);
+
+        expect(updateCueTimecodes).toHaveBeenCalledWith(0, 0, 2.4567);
     });
 });
