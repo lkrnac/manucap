@@ -33,6 +33,7 @@ describe("VideoPlayer with waveform", () => {
                 waveform="dummyWaveform"
                 duration={20}
                 waveformVisible
+                cues={cues}
                 tracks={tracks}
                 languageCuesArray={[]}
                 lastCueChange={null}
@@ -58,7 +59,11 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.plugins[2].name).toEqual("timeline");
         expect(actualComponent.wavesurfer.initialisedPluginList).toEqual(
             { regions: true, minimap: true, timeline: true });
-        expect(actualComponent.wavesurfer.regions.params).toEqual({ dragSelection: false });
+        expect(actualComponent.wavesurfer.regions.params).toEqual({});
+        expect(actualComponent.wavesurfer.regions.list[0].drag).toBeFalsy();
+        expect(actualComponent.wavesurfer.regions.list[0].loop).toBeFalsy();
+        expect(actualComponent.wavesurfer.regions.list[0].resize).toBeTruthy();
+        expect(actualComponent.wavesurfer.regions.list[0].formatTimeCallback(0, 2)).toEqual("00:00:000-00:02:000");
         expect(actualComponent.wavesurfer.minimap.params.height).toEqual(30);
     });
 
@@ -180,7 +185,7 @@ describe("VideoPlayer with waveform", () => {
         // WHEN
         actualNode.setProps(
             // @ts-ignore I only need to update these props
-            { lastCueChange: { changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 1, "Updated Caption") }}
+            { lastCueChange: { changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 1.123, "Updated Caption") }}
         );
 
         // THEN
@@ -190,7 +195,8 @@ describe("VideoPlayer with waveform", () => {
 
         expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Updated Caption");
         expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
-        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(1);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(1.123);
+        expect(actualComponent.wavesurfer.regions.list[0].formatTimeCallback(0, 1.123)).toEqual("00:00:000-00:01:123");
     });
 
     it("removes wavesurfer region when cue is deleted", async () => {
