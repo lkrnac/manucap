@@ -297,7 +297,7 @@ class VideoPlayer extends React.Component<Props> {
 
     private formatRegionTime = (start: number, end: number) =>
         (start == end ? [start] : [start, end]).map((time: number) =>
-            moment(time * 1000).format("mm:ss:SSS")).join("-");
+            moment(parseFloat(time.toFixed(3)) * 1000).format("mm:ss:SSS")).join("-");
 
     private addRegion(index: number, start: number, end: number, text: string, color: string) {
         if (this.props.duration && start <= this.props.duration) {
