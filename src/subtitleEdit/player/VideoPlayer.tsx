@@ -259,7 +259,9 @@ class VideoPlayer extends React.Component<Props> {
                             pixelRatio: 1,
                             barHeight: 0.4,
                             plugins: [
-                                RegionsPlugin.create({}),
+                                RegionsPlugin.create({
+                                    dragSelection: false
+                                }),
                                 MinimapPlugin.create({
                                     height: 30,
                                 }),

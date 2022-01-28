@@ -59,7 +59,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.plugins[2].name).toEqual("timeline");
         expect(actualComponent.wavesurfer.initialisedPluginList).toEqual(
             { regions: true, minimap: true, timeline: true });
-        expect(actualComponent.wavesurfer.regions.params).toEqual({});
+        expect(actualComponent.wavesurfer.regions.params).toEqual({ dragSelection: false });
         expect(actualComponent.wavesurfer.regions.list[0].drag).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].loop).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].resize).toBeTruthy();
