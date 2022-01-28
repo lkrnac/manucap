@@ -17,6 +17,7 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 // @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
+import moment from "moment";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -292,6 +293,10 @@ class VideoPlayer extends React.Component<Props> {
         }
     }
 
+    private formatRegionTime = (start: number, end: number) =>
+        (start == end ? [start] : [start, end]).map((time: number) =>
+            moment(time * 1000).format("mm:ss:SSS")).join("-");
+
     private addRegion(index: number, start: number, end: number, text: string, color: string) {
         if (this.props.duration && start <= this.props.duration) {
             this.wavesurfer?.addRegion({
@@ -302,8 +307,7 @@ class VideoPlayer extends React.Component<Props> {
                 attributes: { label: text.replace(/<[^>]*>/g, "") },
                 loop: false,
                 drag: false,
-                resize: false,
-                showTooltip: false
+                formatTimeCallback: this.formatRegionTime
             });
         }
     }
