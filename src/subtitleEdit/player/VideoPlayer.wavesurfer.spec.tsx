@@ -49,6 +49,9 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.normalize).toBeTruthy();
         expect(actualComponent.wavesurfer.params.scrollParent).toBeTruthy();
         expect(actualComponent.wavesurfer.params.minimap).toBeTruthy();
+        expect(actualComponent.wavesurfer.params.partialRender).toBeTruthy();
+        expect(actualComponent.wavesurfer.params.cursorColor).toEqual("#007bff");
+        expect(actualComponent.wavesurfer.params.cursorWidth).toBeTruthy();
         expect(actualComponent.wavesurfer.params.backend).toEqual("MediaElement");
         expect(actualComponent.wavesurfer.params.removeMediaElementOnDestroy).toBeFalsy();
         expect(actualComponent.wavesurfer.params.height).toEqual(100);

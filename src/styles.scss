@@ -345,9 +345,9 @@ region.wavesurfer-region:before {
 }
 
 .wavesurfer-handle-end, .wavesurfer-handle-start {
-    background-color: $secondary !important;
+    background-color: #c2c2c3 !important;
 }
 
 .wavesurfer-handle-end:hover, .wavesurfer-handle-start:hover {
-    background-color: $primary !important;
+    background-color: $dark !important;
 }

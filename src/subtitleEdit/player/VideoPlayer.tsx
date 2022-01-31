@@ -254,6 +254,8 @@ class VideoPlayer extends React.Component<Props> {
                             scrollParent: true,
                             minimap: true,
                             partialRender: true,
+                            cursorColor: "#007bff",
+                            cursorWidth: 2,
                             backend: "MediaElement",
                             removeMediaElementOnDestroy: false,
                             height: 100,
