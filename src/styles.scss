@@ -343,3 +343,11 @@ region.wavesurfer-region:before {
     margin-left: 10px;
     margin-top: 5px;
 }
+
+.wavesurfer-handle-end, .wavesurfer-handle-start {
+    background-color: $secondary !important;
+}
+
+.wavesurfer-handle-end:hover, .wavesurfer-handle-start:hover {
+    background-color: $primary !important;
+}
