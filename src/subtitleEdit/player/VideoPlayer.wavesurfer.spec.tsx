@@ -22,7 +22,7 @@ jest.spyOn(global, "fetch").mockResolvedValue({
     })
 });
 
-describe.skip("VideoPlayer with waveform", () => {
+describe("VideoPlayer with waveform", () => {
     it("initializes wavesurfer with correct options", async () => {
         // GIVEN
         // WHEN
@@ -49,6 +49,7 @@ describe.skip("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.scrollParent).toBeTruthy();
         expect(actualComponent.wavesurfer.params.minimap).toBeTruthy();
         expect(actualComponent.wavesurfer.params.backend).toEqual("MediaElement");
+        expect(actualComponent.wavesurfer.params.removeMediaElementOnDestroy).toBeFalsy();
         expect(actualComponent.wavesurfer.params.height).toEqual(100);
         expect(actualComponent.wavesurfer.params.pixelRatio).toEqual(1);
         expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.4);

@@ -45,7 +45,7 @@ import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { act } from "react-dom/test-utils";
 import CueCommentsToggle from "./toolbox/CueCommentsToggle";
-// import WaveformToggle from "./toolbox/WaveformToggle";
+import WaveformToggle from "./toolbox/WaveformToggle";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -949,7 +949,7 @@ describe("SubtitleEdit", () => {
                                                 <SearchReplaceButton />
                                                 <MergeCuesButton />
                                                 <CueCommentsToggle />
-                                                {/*<WaveformToggle />*/}
+                                                <WaveformToggle />
                                             </ButtonToolbar>
                                         </Card.Body>
                                     </Accordion.Collapse>
