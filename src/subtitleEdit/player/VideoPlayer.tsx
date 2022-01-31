@@ -254,6 +254,7 @@ class VideoPlayer extends React.Component<Props> {
                             minimap: true,
                             partialRender: true,
                             backend: "MediaElement",
+                            removeMediaElementOnDestroy: false,
                             height: 100,
                             pixelRatio: 1,
                             barHeight: 0.4,
