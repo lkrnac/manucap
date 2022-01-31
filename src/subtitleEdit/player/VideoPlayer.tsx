@@ -357,14 +357,14 @@ class VideoPlayer extends React.Component<Props> {
                     preload="none"
                     data-setup="{}"
                 />
-                {
-                     this.props.waveform && this.props.duration ?
-                         <div className="sbte-waveform" hidden={!this.props.waveformVisible}>
-                             <div ref={this.waveformRef} />
-                             <div ref={this.waveformTimelineRef} />
-                         </div>
-                        : null
-                }
+                {/*{*/}
+                {/*     this.props.waveform && this.props.duration ?*/}
+                {/*         <div className="sbte-waveform" hidden={!this.props.waveformVisible}>*/}
+                {/*             <div ref={this.waveformRef} />*/}
+                {/*             <div ref={this.waveformTimelineRef} />*/}
+                {/*         </div>*/}
+                {/*        : null*/}
+                {/*}*/}
             </div>
         );
     }
