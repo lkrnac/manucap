@@ -22,7 +22,7 @@ jest.spyOn(global, "fetch").mockResolvedValue({
     })
 });
 
-describe.skip("VideoPlayer with waveform", () => {
+describe("VideoPlayer with waveform", () => {
     it("initializes wavesurfer with correct options", async () => {
         // GIVEN
         // WHEN
