@@ -33,6 +33,7 @@ describe("VideoPlayer with waveform", () => {
                 waveform="dummyWaveform"
                 duration={20}
                 waveformVisible
+                timecodesUnlocked
                 cues={cues}
                 tracks={tracks}
                 languageCuesArray={[]}
@@ -166,6 +167,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[2].attributes.label).toEqual("Added Caption");
         expect(actualComponent.wavesurfer.regions.list[2].start).toEqual(4);
         expect(actualComponent.wavesurfer.regions.list[2].end).toEqual(6);
+        expect(actualComponent.wavesurfer.regions.list[2].reset).toBeFalsy();
     });
 
     it("updates wavesurfer region when cue is edited", async () => {
@@ -200,6 +202,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Updated Caption");
         expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
         expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(1.123);
+        expect(actualComponent.wavesurfer.regions.list[0].reset).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].formatTimeCallback(0, 1.123)).toEqual("00:00:000-00:01:123");
     });
 
@@ -500,5 +503,37 @@ describe("VideoPlayer with waveform", () => {
         actualComponent.wavesurfer.fireEvent("region-update-end", regionUpdate);
 
         expect(updateCueTimecodes).toHaveBeenCalledWith(0, 0, 2.4567);
+    });
+
+    it("updates wavesurfer regions when timecodes are unlocked", async () => {
+        // GIVEN
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            waveformVisible: true,
+            timecodesUnlocked: false,
+            cues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        // @ts-ignore I only need to update these props
+        actualNode.setProps({ timecodesUnlocked: true });
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[0].resize).toBeTruthy();
+        expect(actualComponent.wavesurfer.regions.list[1].resize).toBeTruthy();
     });
 });

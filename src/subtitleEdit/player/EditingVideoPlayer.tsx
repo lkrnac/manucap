@@ -58,6 +58,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 duration={props.duration}
                 waveformVisible={waveformVisible}
                 updateCueTimecodes={updateCueTimecodes}
+                timecodesUnlocked={editingTrack.timecodesUnlocked}
                 cues={editingCues}
                 tracks={tracks}
                 onTimeChange={props.onTimeChange}

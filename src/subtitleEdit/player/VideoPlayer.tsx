@@ -57,6 +57,7 @@ export interface Props {
     duration?: number;
     waveformVisible?: boolean;
     updateCueTimecodes?: (idx: number, start: number, end: number) => void;
+    timecodesUnlocked?: boolean;
     cues?: CueDto[];
     tracks: Track[];
     onTimeChange?: (time: number) => void;
@@ -199,6 +200,13 @@ class VideoPlayer extends React.Component<Props> {
             this.wavesurfer.destroy();
             this.wavesurfer = undefined;
         }
+        if (this.props.timecodesUnlocked != prevProps.timecodesUnlocked) {
+            this.removeAllRegions();
+            this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
+                this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
+                    randomColor());
+            });
+        }
 
         if (lastCueChange && this.wavesurfer) {
             if (lastCueChange.changeType === "ADD") {
@@ -312,6 +320,7 @@ class VideoPlayer extends React.Component<Props> {
                 attributes: { label: text.replace(/<[^>]*>/g, "") },
                 loop: false,
                 drag: false,
+                resize: this.props.timecodesUnlocked || false,
                 formatTimeCallback: this.formatRegionTime
             });
         }
