@@ -200,7 +200,7 @@ class VideoPlayer extends React.Component<Props> {
             this.wavesurfer.destroy();
             this.wavesurfer = undefined;
         }
-        if (this.props.timecodesUnlocked !== prevProps.timecodesUnlocked) {
+        if (this.props.timecodesUnlocked !== prevProps.timecodesUnlocked && this.wavesurfer) {
             this.removeAllRegions();
             this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
                 this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
