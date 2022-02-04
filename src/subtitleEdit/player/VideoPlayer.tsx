@@ -1,5 +1,5 @@
 import "video.js/dist/video-js.css";
-import { CueChange, CueDto, LanguageCues, Track } from "../model";
+import { CueChange, CueDto, LanguageCues, Track, WaveformRegion } from "../model";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination, triggerMouseTrapAction } from "../utils/shortcutConstants";
@@ -17,6 +17,7 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
 // @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
+import moment from "moment";
 
 const SECOND = 1000;
 const ONE_MILLISECOND = 0.001;
@@ -55,6 +56,8 @@ export interface Props {
     waveform?: string;
     duration?: number;
     waveformVisible?: boolean;
+    updateCueTimecodes?: (idx: number, start: number, end: number) => void;
+    timecodesUnlocked?: boolean;
     cues?: CueDto[];
     tracks: Track[];
     onTimeChange?: (time: number) => void;
@@ -63,7 +66,6 @@ export interface Props {
     resetPlayerTimeChange?: () => void;
     lastCueChange: CueChange | null;
     trackFontSizePercent?: number;
-    updateVttCue?: (idx: number, vttCue: VTTCue, editUuid?: string) => void;
 }
 
 const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, index: number,
@@ -198,6 +200,13 @@ class VideoPlayer extends React.Component<Props> {
             this.wavesurfer.destroy();
             this.wavesurfer = undefined;
         }
+        if (this.props.timecodesUnlocked !== prevProps.timecodesUnlocked) {
+            this.removeAllRegions();
+            this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
+                this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
+                    randomColor());
+            });
+        }
 
         if (lastCueChange && this.wavesurfer) {
             if (lastCueChange.changeType === "ADD") {
@@ -253,6 +262,8 @@ class VideoPlayer extends React.Component<Props> {
                             scrollParent: true,
                             minimap: true,
                             partialRender: true,
+                            cursorColor: "#007bff",
+                            cursorWidth: 2,
                             backend: "MediaElement",
                             removeMediaElementOnDestroy: false,
                             height: 100,
@@ -280,6 +291,12 @@ class VideoPlayer extends React.Component<Props> {
                             this.props.duration
                         );
 
+                        this.wavesurfer.on("region-update-end", (updatedRegion: WaveformRegion) => {
+                            if (this.props.updateCueTimecodes) {
+                                this.props.updateCueTimecodes(updatedRegion.id, updatedRegion.start, updatedRegion.end);
+                            }
+                        });
+
                         this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
                             this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
                                 randomColor());
@@ -288,6 +305,10 @@ class VideoPlayer extends React.Component<Props> {
                 });
         }
     }
+
+    private formatRegionTime = (start: number, end: number) =>
+        (start == end ? [start] : [start, end]).map((time: number) =>
+            moment(parseFloat(time.toFixed(3)) * 1000).format("mm:ss:SSS")).join("-");
 
     private addRegion(index: number, start: number, end: number, text: string, color: string) {
         if (this.props.duration && start <= this.props.duration) {
@@ -299,8 +320,8 @@ class VideoPlayer extends React.Component<Props> {
                 attributes: { label: text.replace(/<[^>]*>/g, "") },
                 loop: false,
                 drag: false,
-                resize: false,
-                showTooltip: false
+                resize: this.props.timecodesUnlocked || false,
+                formatTimeCallback: this.formatRegionTime
             });
         }
     }
