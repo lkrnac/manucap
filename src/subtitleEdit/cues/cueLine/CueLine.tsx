@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import * as React from "react";
 import { CUE_LINE_STATE_CLASSES, CueDto, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
 import CueEdit from "../edit/CueEdit";
@@ -128,6 +128,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const nextTargetCueIndex = findNextTargetCueIndex(props);
     const cueLineEditDisabled = shouldDisableCueLine(props);
 
+    const [glossaryTerm, setGlossaryTerm] = useState(undefined);
     const showGlossaryTermsAndErrors = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
 
@@ -180,6 +181,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
+                                    glossaryTerm={glossaryTerm}
+                                    setGlossaryTerm={setGlossaryTerm}
                                 />
                             );
                         })
@@ -216,6 +219,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             index={targetCue.index}
                                             cue={targetCue.cue}
                                             nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
+                                            glossaryTerm={glossaryTerm}
+                                            setGlossaryTerm={setGlossaryTerm}
                                         />
                                         {
                                             commentsVisible ?
@@ -243,6 +248,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             languageDirection={editingTrack?.language.direction}
                                             sourceCuesIndexes={sourceCuesIndexes}
                                             nextTargetCueIndex={nextTargetCueIndex}
+                                            glossaryTerm={glossaryTerm}
+                                            setGlossaryTerm={setGlossaryTerm}
                                         />
                                         {
                                             commentsVisible ?

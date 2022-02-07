@@ -1,12 +1,10 @@
-import { Dispatch, ReactElement, useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 import { CueDto, GlossaryMatchDto, LanguageDirection } from "../../model";
 import { convertVttToHtml } from "../edit/cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../../utils/timeUtils";
 import sanitizeHtml from "sanitize-html";
 import { useDispatch } from "react-redux";
-import { AppThunk } from "../../subtitleEditReducers";
-import { setGlossaryTerm } from "../edit/cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import ClickCueWrapper from "./ClickCueWrapper";
 import { validateVttCue } from "../cuesList/cuesListActions";
@@ -22,6 +20,8 @@ export interface CueViewProps {
     languageDirection?: LanguageDirection;
     className?: string;
     hideText?: boolean;
+    glossaryTerm?: string;
+    setGlossaryTerm: Function;
 }
 
 const replaceForInsensitiveMatches = (
@@ -63,14 +63,14 @@ const injectGlossaryTerms = (plainText: string, props: CueViewProps, sanitizedHt
     return sanitizedHtml;
 };
 
-const buildContent = (dispatch: Dispatch<AppThunk>, props: CueViewProps): string => {
+const buildContent = (props: CueViewProps): string => {
     const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
     let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
 
     if (props.showGlossaryTerms) {
         // @ts-ignore We need to define function as global, because it will be used
         // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
-        global.pickSetGlossaryTerm = (term: string): void => dispatch(setGlossaryTerm(term));
+        global.pickSetGlossaryTerm = (term: string): void => props.setGlossaryTerm(term);
         sanitizedHtml = injectGlossaryTerms(plainText, props, sanitizedHtml);
     }
     return sanitizedHtml;
@@ -81,7 +81,7 @@ const CueView = (props: CueViewProps): ReactElement => {
 
     const html = props.hideText
         ? ""
-        : buildContent(dispatch, props);
+        : buildContent(props);
     const undefinedSafeClassName = props.className ? `${props.className} ` : "";
 
     useEffect(() => {

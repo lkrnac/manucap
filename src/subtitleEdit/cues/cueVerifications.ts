@@ -127,6 +127,13 @@ export const conformToRules = (
     return cueErrors;
 };
 
+export const conformToSpelling = (cue: CueDto): CueError[] => {
+    const currentErrors = cue.errors ? cue.errors : [];
+    const cueErrors = [...currentErrors];
+    checkSpelling(cueErrors, cue);
+    return cueErrors;
+};
+
 export const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
     subtitleSpecification: SubtitleSpecification | null

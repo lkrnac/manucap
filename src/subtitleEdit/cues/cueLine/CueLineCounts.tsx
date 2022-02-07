@@ -1,11 +1,10 @@
 import { ReactElement } from "react";
 import { EditorState } from "draft-js";
-import { SubtitleEditState } from "../../subtitleEditReducers";
-import { useSelector } from "react-redux";
 
 interface Props {
     cueIndex: number;
     vttCue: VTTCue;
+    editorState: EditorState;
 }
 
 const getCharacterCount = (text: string): number =>
@@ -24,9 +23,7 @@ const getDuration = (vttCue: VTTCue): number => {
 };
 
 const CueLineCounts = (props: Props): ReactElement => {
-    const editorState = useSelector((state: SubtitleEditState) =>
-        state.editorStates.get(props.cueIndex)) as EditorState;
-    const currentContent = editorState && editorState.getCurrentContent();
+    const currentContent = props.editorState && props.editorState.getCurrentContent();
     const text = !currentContent || !currentContent.hasText() ? "" : currentContent.getPlainText();
     const cps = (getCharacterCount(text)/getDuration(props.vttCue)).toFixed(1);
 

@@ -20,6 +20,8 @@ export interface CueEditProps {
     index: number;
     cue: CueDto;
     nextCueLine?: CueLineDto;
+    glossaryTerm?: string;
+    setGlossaryTerm: Function;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEditProps,
@@ -215,6 +217,8 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                     searchReplaceMatches={props.cue.searchReplaceMatches}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcut}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcut}
+                    glossaryTerm={props.glossaryTerm}
+                    setGlossaryTerm={props.setGlossaryTerm}
                 />
             </div>
             <CueActionsPanel

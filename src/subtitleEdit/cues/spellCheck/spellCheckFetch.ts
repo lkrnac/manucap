@@ -3,7 +3,7 @@ import { SpellCheck } from "./model";
 import { SpellcheckerSettings, SubtitleEditAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
 import { cuesSlice } from "../cuesList/cuesListSlices";
-import { checkErrors } from "../cuesList/cuesListActions";
+import { checkSpelling } from "../cuesList/cuesListActions";
 import { Dispatch } from "react";
 
 const SPELLCHECKER_EXCLUDED_RULES = "UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END";
@@ -20,7 +20,7 @@ export const addSpellCheck = (
         };
     }
     dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
-    dispatch(checkErrors({ index, shouldSpellCheck: false }));
+    dispatch(checkSpelling({ index }));
 };
 
 export const fetchSpellCheck = (

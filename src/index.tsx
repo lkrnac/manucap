@@ -22,12 +22,12 @@ const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Lang
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
-const TIME_MATCH_TESTING = false;
+const TIME_MATCH_TESTING = true;
 
-// const mediaChunkStart = undefined;
-// const mediaChunkEnd = undefined;
-const mediaChunkStart = TIME_MATCH_TESTING ? 0 : 13000;
-const mediaChunkEnd = 305000;
+const mediaChunkStart = undefined;
+const mediaChunkEnd = undefined;
+// const mediaChunkStart = TIME_MATCH_TESTING ? 0 : 13000;
+// const mediaChunkEnd = 305000;
 
 // ################## TESTING DATA TWEAKS - END ########################
 
