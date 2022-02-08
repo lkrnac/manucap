@@ -1,5 +1,4 @@
 import "video.js"; // VTTCue definition
-import { EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
 import { v4 as uuidv4 } from "uuid";
@@ -25,7 +24,6 @@ import {
 } from "./cuesListActions";
 import { CueDto, CueError, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateEditorState } from "../edit/editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
@@ -1964,20 +1962,6 @@ describe("cueSlices", () => {
         beforeEach(() => {
             testingStore.dispatch(updateEditingTrack(testingTrack as Track) as {} as AnyAction);
         });
-        it("resets editor states map in Redux", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(
-                addCue(3, []) as {} as AnyAction
-            );
-
-            // THEN
-            expect(testingStore.getState().editorStates.size).toEqual(0);
-        });
 
         it("scrolls to added cue", () => {
             // GIVEN
@@ -2536,20 +2520,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.index).toEqual(2);
         });
 
-        it("removes editor states for certain index from Redux", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(deleteCue(1) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().editorStates.size).toEqual(1);
-            expect(testingStore.getState().editorStates.get(1)).toBeUndefined();
-        });
-
         it("delete all cues in the array leaves one default empty cue", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -2612,21 +2582,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        });
-
-        it("resets subtitle edits states", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-            const replacementCues = [
-                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-
-            // WHEN
-            testingStore.dispatch(updateCues(replacementCues) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().editorStates.size).toEqual(0);
         });
     });
 
@@ -2993,26 +2948,8 @@ describe("cueSlices", () => {
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
             });
 
-            it("clears editor sates on merge", () => {
-                // GIVEN
-                testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-                testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
-                testingStore.dispatch(addCuesToMergeList(
-                    { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
-                testingStore.dispatch(addCuesToMergeList(
-                    { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
-
-                // WHEN
-                testingStore.dispatch(mergeCues() as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().editorStates.size).toEqual(0);
-            });
-
             it("scrolls to merged cue on edit mode on merge", () => {
                 // GIVEN
-                testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-                testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
                 testingStore.dispatch(addCuesToMergeList(
                     { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
                 testingStore.dispatch(addCuesToMergeList(
