@@ -81,6 +81,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -149,6 +150,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -217,6 +219,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -269,6 +272,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -309,6 +313,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -352,6 +357,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -395,6 +401,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -438,6 +445,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -480,6 +488,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -516,6 +525,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -550,6 +560,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -583,6 +594,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -602,6 +614,7 @@ describe("CueView", () => {
                 { source: "Line", replacements: ["lineReplacement1"]}
             ]
         } as CueDto;
+        const setGlossaryTerm = jest.fn();
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
@@ -612,6 +625,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={setGlossaryTerm}
                 />
             </Provider>
         );
@@ -620,7 +634,7 @@ describe("CueView", () => {
         fireEvent.click(actualNode.container.querySelectorAll("span")[0]);
 
         // THEN
-        expect(testingStore.getState().glossaryTerm).toEqual("lineReplacement1");
+        expect(setGlossaryTerm).toBeCalledWith("lineReplacement1");
     });
 
     it("sends composite glossary term to redux when clicked", () => {
@@ -633,6 +647,7 @@ describe("CueView", () => {
                 { source: "Line", replacements: ["lineReplacement1"]}
             ]
         } as CueDto;
+        const setGlossaryTerm = jest.fn();
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
@@ -643,6 +658,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={setGlossaryTerm}
                 />
             </Provider>
         );
@@ -651,7 +667,7 @@ describe("CueView", () => {
         fireEvent.click(actualNode.container.querySelectorAll("span")[1]);
 
         // THEN
-        expect(testingStore.getState().glossaryTerm).toEqual("text replacement1/text replacement2/repl3");
+        expect(setGlossaryTerm).toBeCalledWith("text replacement1/text replacement2/repl3");
     });
 
     it("handles glossary case insensitively", () => {
@@ -680,6 +696,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -716,6 +733,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -756,6 +774,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -796,6 +815,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -821,6 +841,7 @@ describe("CueView", () => {
                     targetCuesLength={8}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -857,6 +878,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -901,6 +923,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -945,6 +968,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -989,6 +1013,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -1031,6 +1056,7 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
