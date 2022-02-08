@@ -21,7 +21,7 @@ export interface CueViewProps {
     className?: string;
     hideText?: boolean;
     glossaryTerm?: string;
-    setGlossaryTerm: Function;
+    setGlossaryTerm?: (glossaryTerm?: string) => void;
 }
 
 const replaceForInsensitiveMatches = (
@@ -70,7 +70,7 @@ const buildContent = (props: CueViewProps): string => {
     if (props.showGlossaryTerms) {
         // @ts-ignore We need to define function as global, because it will be used
         // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
-        global.pickSetGlossaryTerm = (term: string): void => props.setGlossaryTerm(term);
+        global.pickSetGlossaryTerm = (term: string): void => props?.setGlossaryTerm(term);
         sanitizedHtml = injectGlossaryTerms(plainText, props, sanitizedHtml);
     }
     return sanitizedHtml;

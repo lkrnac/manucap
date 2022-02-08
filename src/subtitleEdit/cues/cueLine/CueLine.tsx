@@ -128,7 +128,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const nextTargetCueIndex = findNextTargetCueIndex(props);
     const cueLineEditDisabled = shouldDisableCueLine(props);
 
-    const [glossaryTerm, setGlossaryTerm] = useState(undefined);
+    const [glossaryTerm, setGlossaryTerm] = useState<string | undefined>(undefined);
     const showGlossaryTermsAndErrors = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
 
@@ -248,8 +248,6 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             languageDirection={editingTrack?.language.direction}
                                             sourceCuesIndexes={sourceCuesIndexes}
                                             nextTargetCueIndex={nextTargetCueIndex}
-                                            glossaryTerm={glossaryTerm}
-                                            setGlossaryTerm={setGlossaryTerm}
                                         />
                                         {
                                             commentsVisible ?

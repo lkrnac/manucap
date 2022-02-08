@@ -81,7 +81,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -150,7 +149,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -219,7 +217,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -272,7 +269,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -313,7 +309,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -357,7 +352,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -401,7 +395,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -445,7 +438,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -488,7 +480,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -525,7 +516,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -560,7 +550,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -594,7 +583,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -696,7 +684,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -733,7 +720,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -774,7 +760,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -815,7 +800,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -841,7 +825,6 @@ describe("CueView", () => {
                     targetCuesLength={8}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -878,7 +861,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -923,7 +905,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -968,7 +949,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -1013,7 +993,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -1056,7 +1035,6 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
-                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
