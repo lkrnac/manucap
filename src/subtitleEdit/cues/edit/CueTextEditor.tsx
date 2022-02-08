@@ -34,7 +34,7 @@ import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSl
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { CueError, Track } from "../../model";
+import { CueError, SubtitleEditAction, Track } from "../../model";
 import { validationErrorSlice } from "./cueEditorSlices";
 import { checkLineLimitation } from "../cueVerifications";
 
@@ -235,6 +235,42 @@ const handleApplyEntityIfNeeded = (
     return newEditorState;
 };
 
+const createCorrectSpellingHandler = (
+    currentEditorState: EditorState,
+    oldEditorState: EditorState,
+    subtitleSpecifications: SubtitleSpecification | null,
+    dispatch: Dispatch<SubtitleEditAction>,
+    setEditorState: (value: EditorState) => void
+) => {
+    return (replacement: string, start: number, end: number): void => {
+        let newEditorState = replaceContent(currentEditorState, replacement, start, end);
+        const newVttText = getVttText(newEditorState.getCurrentContent());
+
+
+        const oldVttText = oldEditorState
+            ? getVttText(oldEditorState.getCurrentContent())
+            : "";
+
+        const isNewVttTextCharLimitationOk =
+            checkLineLimitation(newVttText, subtitleSpecifications);
+        const isOldVttTextCharLimitationOk =
+            checkLineLimitation(oldVttText, subtitleSpecifications);
+
+        if (newEditorState
+            && !isNewVttTextCharLimitationOk
+            && isOldVttTextCharLimitationOk
+        ) {
+            dispatch(validationErrorSlice.actions
+                .setValidationErrors([ CueError.LINE_COUNT_EXCEEDED ]));
+            // Force creation of different EditorState instance,
+            // so that CueTextEditor re-renders with old content
+            newEditorState = RichUtils.toggleCode(RichUtils.toggleCode(newEditorState));
+        }
+
+        setEditorState(newEditorState);
+    };
+};
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
@@ -280,33 +316,9 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 component: SpellCheckIssue,
                 props: {
                     spellCheck: props.spellCheck,
-                    correctSpelling: (replacement: string, start: number, end: number): void => {
-                        let newEditorState = replaceContent(decoratedEditorState, replacement, start, end);
-                        const newVttText = getVttText(newEditorState.getCurrentContent());
-
-
-                        const oldVttText = editorState
-                            ? getVttText(editorState.getCurrentContent())
-                            : "";
-
-                        const isNewVttTextCharLimitationOk =
-                            checkLineLimitation(newVttText, subtitleSpecifications);
-                        const isOldVttTextCharLimitationOk =
-                            checkLineLimitation(oldVttText, subtitleSpecifications);
-
-                        if (newEditorState
-                            && !isNewVttTextCharLimitationOk
-                            && isOldVttTextCharLimitationOk
-                        ) {
-                            dispatch(validationErrorSlice.actions
-                                .setValidationErrors([CueError.LINE_COUNT_EXCEEDED]));
-                            // Force creation of different EditorState instance,
-                            // so that CueTextEditor re-renders with old content
-                            newEditorState = RichUtils.toggleCode(RichUtils.toggleCode(newEditorState));
-                        }
-
-                        setEditorState(newEditorState);
-                    },
+                    correctSpelling: createCorrectSpellingHandler(
+                        decoratedEditorState, editorState, subtitleSpecifications, dispatch, setEditorState
+                    ),
                     editorRef,
                     spellCheckerMatchingOffset,
                     setSpellCheckerMatchingOffset,
