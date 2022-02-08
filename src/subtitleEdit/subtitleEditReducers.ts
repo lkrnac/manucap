@@ -1,4 +1,4 @@
-import { Action, combineReducers } from "@reduxjs/toolkit";
+import { Action, combineReducers, createAsyncThunk } from "@reduxjs/toolkit";
 import { cuesSlice, matchedCuesSlice } from "./cues/cuesList/cuesListSlices";
 import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { userSlice } from "./userSlices";
@@ -66,3 +66,5 @@ export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
  * applying ugly cast workaround.
  */
 export type AppThunk = ThunkAction<void, SubtitleEditState, unknown, Action<string>>;
+
+export type ThunkApi = Parameters<Parameters<typeof createAsyncThunk>[1]>[1];

@@ -16,7 +16,7 @@ import {
     SubtitleEditAction, TimeGapLimit,
     Track
 } from "../../model";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState, ThunkApi } from "../../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import {
     applyInvalidChunkRangePreventionEnd,
@@ -26,7 +26,8 @@ import {
     applyLineLimitation,
     applyOverlapPreventionEnd,
     applyOverlapPreventionStart,
-    conformToRules, conformToSpelling,
+    conformToRules,
+    conformToSpelling,
     getTimeGapLimits,
     verifyCueDuration
 } from "../cueVerifications";
@@ -112,10 +113,23 @@ const validateShift = (position: ShiftPosition, cueIndex: number): void => {
     }
 };
 
+const updateCueAndTriggerSave = (
+    thunkApi: ThunkApi,
+    state: SubtitleEditState,
+    cues: CueDto[],
+    index: number
+) => {
+    const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(state, index);
+    thunkApi.dispatch(matchedCuesSlice.actions.updateMatchedCue(
+        { cue: cues[index], targetCuesIndex, editingIndexMatchedCues }
+    ));
+    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
+};
+
 export const applySpellcheckerOnCue = createAsyncThunk(
     "spellchecker/applySpellcheckerOnCue",
-    async (index: number, thunkAPI) => {
-        const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
+    async (index: number, thunkApi) => {
+        const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
         const track = state.editingTrack as Track;
         const currentEditingCue = state.cues[index];
         if (currentEditingCue) {
@@ -124,13 +138,9 @@ export const applySpellcheckerOnCue = createAsyncThunk(
             if (track && track.language?.id && spellCheckerSettings.enabled) {
                 return fetchSpellCheck(text, spellCheckerSettings, track.language.id)
                     .then(spellCheck => {
-                        addSpellCheck(thunkAPI.dispatch, index, spellCheck, track.id);
-                        const freshState: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
-                        const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(freshState, index);
-                        thunkAPI.dispatch(matchedCuesSlice.actions.updateMatchedCue(
-                            { cue: freshState.cues[index], targetCuesIndex, editingIndexMatchedCues }
-                        ));
-                        callSaveTrack(thunkAPI.dispatch, thunkAPI.getState);
+                        addSpellCheck(thunkApi.dispatch, index, spellCheck, track.id);
+                        const freshState: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+                        updateCueAndTriggerSave(thunkApi, state, freshState.cues, index);
                     });
             }
         }
@@ -159,11 +169,7 @@ export const checkSpelling = createAsyncThunk(
                 thunkApi.dispatch(cuesSlice.actions.setErrors(
                     { index: index, errors: cueErrors } as CueErrorsPayload));
                 if (cueErrors.length !== oldErrorsCount) {
-                    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
-                    const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(state, index);
-                    thunkApi.dispatch(matchedCuesSlice.actions.updateMatchedCue(
-                        { cue: cues[index], targetCuesIndex, editingIndexMatchedCues }
-                    ));
+                    updateCueAndTriggerSave(thunkApi, state, cues, index);
                 }
             }
         }
@@ -193,11 +199,7 @@ export const checkErrors = createAsyncThunk(
                 thunkApi.dispatch(cuesSlice.actions.setErrors(
                     { index: index, errors: cueErrors } as CueErrorsPayload));
                 if (cueErrors.length !== oldErrorsCount) {
-                    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
-                    const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(state, index);
-                    thunkApi.dispatch(matchedCuesSlice.actions.updateMatchedCue(
-                        { cue: cues[index], targetCuesIndex, editingIndexMatchedCues }
-                    ));
+                    updateCueAndTriggerSave(thunkApi, state, cues, index);
                 }
             }
         }
