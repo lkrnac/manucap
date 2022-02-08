@@ -112,6 +112,7 @@ describe("CueLine", () => {
                                 index={0}
                                 cue={targetCues[0]}
                                 nextCueLine={matchedCuesCaptioning[1]}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -177,6 +178,7 @@ describe("CueLine", () => {
                                 index={0}
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -240,6 +242,7 @@ describe("CueLine", () => {
                                 index={0}
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cues-errors">• Max Characters Per Line Exceeded<br /></div>
                         </div>
@@ -302,6 +305,7 @@ describe("CueLine", () => {
                                 index={0}
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cues-errors">
                                 {/*eslint-disable-next-line react/jsx-child-element-spacing */}
@@ -372,6 +376,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -444,6 +449,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -510,11 +516,13 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[1]}
                                 nextTargetCueIndex={1}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueEdit
                                 index={1}
                                 cue={targetCues[1]}
                                 nextCueLine={matchedCuesTranslation[2]}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -580,8 +588,9 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[2]}
                                 nextTargetCueIndex={2}
+                                setGlossaryTerm={jest.fn()}
                             />
-                            <CueEdit index={2} cue={targetCues[2]} />
+                            <CueEdit index={2} cue={targetCues[2]} setGlossaryTerm={jest.fn()} />
                         </div>
                     </div>
                 </Provider>
@@ -653,6 +662,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue
@@ -664,6 +674,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -727,6 +738,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={1}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div
                                 style={{ display: "flex" }}
@@ -816,6 +828,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={-1}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div
                                 style={{ display: "flex" }}
@@ -893,6 +906,7 @@ describe("CueLine", () => {
                                 showGlossaryTerms={false}
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={-1}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div
                                 style={{ display: "flex" }}
@@ -985,6 +999,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -1050,6 +1065,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue={false}
@@ -1061,6 +1077,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue={false}
@@ -1072,6 +1089,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
@@ -1084,6 +1102,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -1153,6 +1172,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
@@ -1165,6 +1185,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue
@@ -1176,6 +1197,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue
@@ -1187,6 +1209,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -1252,6 +1275,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue={false}
@@ -1263,6 +1287,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue={false}
@@ -1274,9 +1299,10 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cue-divider-good" />
-                            <CueEdit index={0} cue={targetCues[0]} />
+                            <CueEdit index={0} cue={targetCues[0]} setGlossaryTerm={jest.fn()} />
                         </div>
                     </div>
                 </Provider>
@@ -1345,6 +1371,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
@@ -1357,8 +1384,9 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
-                            <CueEdit index={1} cue={targetCues[1]}  />
+                            <CueEdit index={1} cue={targetCues[1]} setGlossaryTerm={jest.fn()} />
                             <CueView
                                 isTargetCue
                                 targetCueIndex={2}
@@ -1369,6 +1397,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -1452,6 +1481,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cue-divider-error" />
                             <CueView
@@ -1464,6 +1494,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue
@@ -1475,6 +1506,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue
@@ -1486,6 +1518,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                     </div>
@@ -1569,6 +1602,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cue-divider-error" />
                             <CueView
@@ -1581,6 +1615,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueView
                                 isTargetCue
@@ -1592,10 +1627,12 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueEdit
                                 index={2}
                                 cue={corruptedTargetCueWithIndex.cue}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cues-errors">• Max Characters Per Line Exceeded<br /></div>
                         </div>
@@ -1892,6 +1929,7 @@ describe("CueLine", () => {
                                 index={0}
                                 cue={targetCuesWithComments[0]}
                                 nextCueLine={matchedCuesWithCommentsCaptioning[1]}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
                         </div>
@@ -1960,6 +1998,7 @@ describe("CueLine", () => {
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
@@ -1972,6 +2011,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
                             <CueView
@@ -1984,6 +2024,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueComments index={1} cue={targetCuesWithComments[1]} commentAuthor="Linguist" />
                             <CueView
@@ -1996,6 +2037,7 @@ describe("CueLine", () => {
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
+                                setGlossaryTerm={jest.fn()}
                             />
                             <CueComments index={2} cue={targetCuesWithComments[2]} commentAuthor="Linguist" />
                         </div>

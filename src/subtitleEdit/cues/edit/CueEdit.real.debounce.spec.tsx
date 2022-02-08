@@ -39,7 +39,7 @@ describe("CueEdit", () => {
         const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
         const actualNode = render(
             <Provider store={testingStore} >
-                <CueEdit index={0} cue={cue} />
+                <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
             </Provider>
         );
 
