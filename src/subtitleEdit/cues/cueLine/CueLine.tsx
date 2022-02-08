@@ -171,7 +171,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                         ? props.data.sourceCues.map(sourceCue => {
                             return (
                                 <CueView
-                                    key={sourceCue.index}
+                                    key={`sourceCueView-${sourceCue.index}`}
                                     isTargetCue={false}
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
@@ -215,7 +215,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 ? (
                                     <>
                                         <CueEdit
-                                            key={targetCue.index}
+                                            key={`targetCueEdit-${targetCue.index}`}
                                             index={targetCue.index}
                                             cue={targetCue.cue}
                                             nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
@@ -232,13 +232,13 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                                 />
                                                 : null
                                         }
-                                        <CueErrorsList cue={targetCue.cue} />
+                                        <CueErrorsList key={targetCue.index} cue={targetCue.cue} />
                                     </>
                                 )
                                 : (
                                     <>
                                         <CueView
-                                            key={targetCue.index}
+                                            key={`targetCueView-${targetCue.index}`}
                                             isTargetCue
                                             targetCueIndex={targetCue.index}
                                             cue={targetCue.cue}
