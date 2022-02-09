@@ -1972,7 +1972,7 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200E");
-            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+            const currentContent = editorStateFOR_TESTING.getCurrentContent();
             expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200E");
         });
 
@@ -2006,7 +2006,7 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200F");
-            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+            const currentContent = editorStateFOR_TESTING.getCurrentContent();
             expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200F");
         });
 
@@ -2041,7 +2041,7 @@ describe("CueTextEditor", () => {
             actualNode.find(Editor).props().onChange(newState);
 
             // THEN
-            expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual("some text");
+            expect(editorStateFOR_TESTING.getCurrentContent().getPlainText()).toEqual("some text");
         });
 
         /**
@@ -2101,7 +2101,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText())
+        expect(editorStateFOR_TESTING.getCurrentContent().getPlainText())
             .toEqual("initial text\nPaste text");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("initial text\nPaste text");
     });
@@ -2142,13 +2142,12 @@ describe("CueTextEditor", () => {
         });
 
         // WHEN
-        const editorState = testingStore.getState().editorStates.get(0);
-        const contentState = editorState.getCurrentContent();
-        const newState = EditorState.push(editorState, contentState, "apply-entity");
-        actualNode.find(Editor).props().onChange(newState);
+        const contentState = editorStateFOR_TESTING.getCurrentContent();
+        const newState = EditorState.push(editorStateFOR_TESTING, contentState, "apply-entity");
+        setEditorStateFOR_TESTING(newState);
 
         // THEN
-        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText())
+        expect(editorStateFOR_TESTING.getCurrentContent().getPlainText())
             .toEqual("initial text\nPaste text");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("initial text\nPaste text");
     });
