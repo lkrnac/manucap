@@ -21,7 +21,7 @@ export interface CueEditProps {
     cue: CueDto;
     nextCueLine?: CueLineDto;
     glossaryTerm?: string;
-    setGlossaryTerm: Function;
+    setGlossaryTerm: (glossaryTerm?: string) => void;
 }
 
 const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEditProps,

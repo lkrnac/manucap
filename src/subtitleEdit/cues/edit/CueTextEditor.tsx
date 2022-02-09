@@ -169,7 +169,7 @@ export interface CueTextEditorProps {
     bindCueViewModeKeyboardShortcut: () => void;
     unbindCueViewModeKeyboardShortcut: () => void;
     glossaryTerm?: string;
-    setGlossaryTerm: Function;
+    setGlossaryTerm: (glossaryTerm?: string) => void;
 }
 
 const insertGlossaryTermIfNeeded = (editorState: EditorState, glossaryTerm?: string): EditorState => {
@@ -337,7 +337,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         ]);
         decoratedEditorState = EditorState.set(decoratedEditorState, { decorator: newCompositeDecorator });
     }
-
 
     const currentContent = decoratedEditorState.getCurrentContent();
     const currentInlineStyle = decoratedEditorState.getCurrentInlineStyle();
