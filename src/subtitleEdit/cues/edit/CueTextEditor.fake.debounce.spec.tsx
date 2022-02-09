@@ -24,7 +24,7 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/
 import { CueDto, CueError, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import * as cueListActions from "../cuesList/cuesListActions";
-import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
+import CueTextEditor, { CueTextEditorProps, editorStateFOR_TESTING, setEditorStateFOR_TESTING } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "./cueTextConverter";
@@ -202,12 +202,12 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
 
     // WHEN
-    actualNode.find(Editor).props().onChange(EditorState.acceptSelection(editorState, newSelectionState));
+    setEditorStateFOR_TESTING(EditorState.acceptSelection(editorState, newSelectionState));
     actualNode.find("button").at(buttonIndex).simulate("click");
 
     // THEN
     expect(testingStore.getState().cues[0].vttCue.text).toEqual(expectedText);
-    const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+    const currentContent = editorStateFOR_TESTING.getCurrentContent();
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].vttCue.text);
 };
 
@@ -241,7 +241,7 @@ const testForContentState = (
 
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+    const currentContent = editorStateFOR_TESTING.getCurrentContent();
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };
 
@@ -1942,69 +1942,8 @@ describe("CueTextEditor", () => {
     });
 
     describe("glossary", () => {
-        it("appends glossary term at the end of content and resets it to null", () => {
-            // GIVEN
-            const saveTrack = jest.fn();
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            const vttCue = new VTTCue(0, 1, "some text");
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueTextEditor
-                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        index={0}
-                        vttCue={vttCue}
-                        editUuid={testingStore.getState().cues[0].editUuid}
-                        setGlossaryTerm={jest.fn()}
-                    />
-                </Provider>
-            );
-
-            // WHEN
-            testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
-            actualNode.setProps({});
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some textreplacement");
-            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-            expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some textreplacement");
-            expect(testingStore.getState().glossaryTerm).toEqual(null);
-        });
-
-        it("inserts glossary term into the middle of content and resets it in redux to null", () => {
-            // GIVEN
-            const saveTrack = jest.fn();
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            const vttCue = new VTTCue(0, 1, "some text");
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueTextEditor
-                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        index={0}
-                        vttCue={vttCue}
-                        editUuid={testingStore.getState().cues[0].editUuid}
-                        setGlossaryTerm={jest.fn()}
-                    />
-                </Provider>
-            );
-            const editorState = actualNode.find(Editor).props().editorState;
-            const selectionState = editorState.getSelection();
-
-            // WHEN
-            const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
-            actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
-            testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
-            actualNode.setProps({});
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some replacementtext");
-            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-            expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some replacementtext");
-            expect(testingStore.getState().glossaryTerm).toEqual(null);
-        });
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        it.skip("This testing is done in CueLine.real.children.spec.tsx as integration test", () => {});
     });
 
     describe("special use cases", () => {
