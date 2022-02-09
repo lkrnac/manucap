@@ -271,6 +271,9 @@ const createCorrectSpellingHandler = (
     };
 };
 
+export let editorStateFOR_TESTING: EditorState;
+export let setEditorStateFOR_TESTING: (editorState: EditorState) => void;
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
@@ -294,6 +297,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             return initEditorState;
         }
     );
+    editorStateFOR_TESTING = editorState;
+    setEditorStateFOR_TESTING = setEditorState;
 
     let decoratedEditorState = insertGlossaryTermIfNeeded(editorState, props.glossaryTerm);
     decoratedEditorState = replaceIfNeeded(decoratedEditorState, props.searchReplaceMatches, replacement);
