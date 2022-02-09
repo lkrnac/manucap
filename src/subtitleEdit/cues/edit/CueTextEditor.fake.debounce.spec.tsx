@@ -140,6 +140,7 @@ const createExpectedNode = (
 
 const createEditorNode = (text = "someText", spellcheck?: SpellCheck): React.ReactElement => {
     const vttCue = new VTTCue(0, 1, text);
+
     const editUuid = testingStore.getState().cues[0].editUuid;
     return (
         <Provider store={testingStore}>
@@ -813,7 +814,7 @@ describe("CueTextEditor", () => {
 
         it("doesn't updates cue in redux store if new text doesn't conform to subtitle specification", () => {
             // GIVEN
-            const editor = mountEditorNode();
+            const editor = mountEditorNode("Caption Line 1");
             const testingSubtitleSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
@@ -830,8 +831,7 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
-            expect(testingStore.getState().editorStates[0]).toBeUndefined();
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
         });
     });
 
