@@ -2,6 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import InlineStyleButton from "./InlineStyleButton";
 import { createEvent, fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -89,7 +90,7 @@ describe("InlineStyleButton", () => {
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("toggle Italic button if editor's cursor is on italic text", () => {
+    it("toggle Underline button if editor's cursor is on underlined text", () => {
         // GIVEN
         const expectedNode = render(
             <button style={{ marginRight: "5px" }} className="btn btn-secondary">
@@ -164,5 +165,37 @@ describe("InlineStyleButton", () => {
 
         //THEN
         expect(await actualNode.findByText(expectedText)).toBeInTheDocument();
+    });
+
+
+    it("updates editor state when inline style button is clicked", async () => {
+        // GIVEN
+        const processedHTML = convertFromHTML("lala");
+        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+        const setEditorState = jest.fn();
+
+        const actualNode = render(
+            <InlineStyleButton
+                editorIndex={0}
+                inlineStyle={"UNDERLINE"}
+                label={<u>U</u>}
+                setEditorState={setEditorState}
+                editorState={editorState}
+            />
+        );
+        const button = actualNode.container.querySelector("button") as Element;
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(button);
+        });
+
+        // THEN
+        expect(setEditorState.mock.calls.length).toEqual(1);
+        const actualEditorState = setEditorState.mock.calls[0][0];
+        const inlineStyle = actualEditorState.getCurrentInlineStyle();
+        expect(inlineStyle.size).toEqual(1);
+        expect(inlineStyle.get("UNDERLINE")).toEqual("UNDERLINE");
     });
 });
