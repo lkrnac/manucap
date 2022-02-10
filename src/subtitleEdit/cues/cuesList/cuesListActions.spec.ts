@@ -1481,22 +1481,6 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
             });
-
-            it("updates matched cues for undefined editUuid", () => {
-                // GIVEN
-                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(matchedCuesSlice.actions
-                    .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
-                );
-
-                // WHEN
-                testingStore.dispatch(
-                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
-            });
         });
     });
 
