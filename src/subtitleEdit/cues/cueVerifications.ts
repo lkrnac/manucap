@@ -93,7 +93,9 @@ const checkOverlap = (cueErrors: CueError[], vttCue: VTTCue, previousCue?: CueDt
 };
 
 const checkSpelling = (cueErrors: CueError[], cue: CueDto): void => {
-    if (cue.spellCheck?.matches !== undefined && cue.spellCheck.matches.length > 0) {
+    if (cue.spellCheck?.matches !== undefined
+        && cue.spellCheck.matches.length > 0
+        && cueErrors.indexOf(CueError.SPELLCHECK_ERROR) === -1) {
         cueErrors.push(CueError.SPELLCHECK_ERROR);
     }
 };
