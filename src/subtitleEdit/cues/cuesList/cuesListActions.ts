@@ -16,7 +16,7 @@ import {
     SubtitleEditAction, TimeGapLimit,
     Track
 } from "../../model";
-import { AppThunk, SubtitleEditState, ThunkApi } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import {
     applyInvalidChunkRangePreventionEnd,
@@ -113,17 +113,15 @@ const validateShift = (position: ShiftPosition, cueIndex: number): void => {
     }
 };
 
-const updateCueAndTriggerSave = (
-    thunkApi: ThunkApi,
+const updateMatchedCue = (
+    dispatch: Dispatch<SubtitleEditAction>,
     state: SubtitleEditState,
-    cues: CueDto[],
     index: number
 ) => {
     const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(state, index);
-    thunkApi.dispatch(matchedCuesSlice.actions.updateMatchedCue(
-        { cue: cues[index], targetCuesIndex, editingIndexMatchedCues }
+    dispatch(matchedCuesSlice.actions.updateMatchedCue(
+        { cue: state.cues[index], targetCuesIndex, editingIndexMatchedCues }
     ));
-    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
 };
 
 export const applySpellcheckerOnCue = createAsyncThunk(
@@ -140,7 +138,8 @@ export const applySpellcheckerOnCue = createAsyncThunk(
                     .then(spellCheck => {
                         addSpellCheck(thunkApi.dispatch, index, spellCheck, track.id);
                         const freshState: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
-                        updateCueAndTriggerSave(thunkApi, state, freshState.cues, index);
+                        updateMatchedCue(thunkApi.dispatch, freshState, index);
+                        callSaveTrack(thunkApi.dispatch, thunkApi.getState);
                     });
             }
         }
@@ -169,7 +168,8 @@ export const checkSpelling = createAsyncThunk(
                 thunkApi.dispatch(cuesSlice.actions.setErrors(
                     { index: index, errors: cueErrors } as CueErrorsPayload));
                 if (cueErrors.length !== oldErrorsCount) {
-                    updateCueAndTriggerSave(thunkApi, state, cues, index);
+                    updateMatchedCue(thunkApi.dispatch, state, index);
+                    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
                 }
             }
         }
@@ -199,7 +199,8 @@ export const checkErrors = createAsyncThunk(
                 thunkApi.dispatch(cuesSlice.actions.setErrors(
                     { index: index, errors: cueErrors } as CueErrorsPayload));
                 if (cueErrors.length !== oldErrorsCount) {
-                    updateCueAndTriggerSave(thunkApi, state, cues, index);
+                    updateMatchedCue(thunkApi.dispatch, state, index);
+                    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
                 }
             }
         }
@@ -303,6 +304,12 @@ export const updateVttCue = (
 export const validateVttCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         validateCue(dispatch, idx, false);
+        updateMatchedCue(dispatch, getState(), idx);
+
+        const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(getState(), idx);
+        dispatch(matchedCuesSlice.actions.updateMatchedCue(
+            { cue: getState().cues[idx], targetCuesIndex, editingIndexMatchedCues }
+        ));
         callSaveTrack(dispatch, getState);
     };
 

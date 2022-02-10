@@ -1485,7 +1485,7 @@ describe("cueSlices", () => {
     });
 
     describe("validateCue", () => {
-        it("mark cue + surrounding cues as corrupted if they don't conform to rules", () => {
+        it("mark cue as corrupted if it doesn't conform to rules", () => {
             // GIVEN
             const cuesCorrupted = [
                 { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
@@ -1499,7 +1499,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
@@ -1513,11 +1513,10 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
-            expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors)
-                .toEqual([CueError.TIME_GAP_OVERLAP]);
+            expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors).toBeUndefined();
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
@@ -1618,7 +1617,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1642,7 +1641,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1667,7 +1666,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1693,7 +1692,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
