@@ -4,7 +4,6 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
 import { CueError } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
-import { reset } from "./edit/editorStatesSlice";
 import { setValidationErrors } from "./edit/cueEditorSlices";
 import { Alert } from "react-bootstrap";
 import CueErrorAlert from "./CueErrorAlert";
@@ -17,7 +16,6 @@ jest.setTimeout(12000);
 describe("CueErrorAlert", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
     });
 
     it("shows cue errors alert when cue has validation errors", async () => {

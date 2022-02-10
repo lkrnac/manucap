@@ -10,7 +10,6 @@ import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { cleanup, fireEvent, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { reset } from "../../cues/edit/editorStatesSlice";
 import { act } from "react-dom/test-utils";
 
 
@@ -58,7 +57,6 @@ describe("ShiftTimesModal", () => {
     const saveTrack = jest.fn();
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
         jest.clearAllMocks();
