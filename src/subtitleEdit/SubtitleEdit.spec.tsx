@@ -1125,6 +1125,7 @@ describe("SubtitleEdit", () => {
                                     waveform="dummyWaveform"
                                     duration={20}
                                     waveformVisible
+                                    timecodesUnlocked
                                     cues={cues}
                                     tracks={[testingTrack]}
                                     languageCuesArray={[]}

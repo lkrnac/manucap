@@ -4,12 +4,13 @@ import { Provider } from "react-redux";
 import { mount } from "enzyme";
 
 import EditingVideoPlayer from "./EditingVideoPlayer";
-import { CueDto, Track } from "../model";
+import { CueDto, Track, WaveformRegion } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateCues } from "../cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "../trackSlices";
+import { act } from "react-dom/test-utils";
 
 let testingStore = createTestingStore();
 
@@ -24,6 +25,13 @@ const testingCues = [
     { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
+
+// @ts-ignore we are just mocking
+jest.spyOn(global, "fetch").mockResolvedValue({
+    json: jest.fn().mockResolvedValue({
+        data: [0,-1,0,-1,4,-6,4,-3,4,-1,3,-3,3,-5,4,-1,6,-8,1,0,5,-3,0,-2,1,0,4]
+    })
+});
 
 describe("EditingVideoPlayer", () => {
     beforeEach(() => testingStore = createTestingStore());
@@ -182,5 +190,31 @@ describe("EditingVideoPlayer", () => {
 
         // THEN
         expect(testingStore.getState().waveformVisible).toBeFalsy();
+    });
+
+    it("updates cues timecodes when waveform regions are manually updated", async () => {
+        // GIVEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" waveform="dummyWaveform" duration={120} />
+            </Provider>
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        const videoPlayer = actualNode.find(VideoPlayer);
+        const actualComponent = videoPlayer.instance() as VideoPlayer;
+        const regionUpdate = { id: 1, start: 1, end: 3.4567 } as WaveformRegion;
+        actualComponent.wavesurfer.fireEvent("region-update-end", regionUpdate);
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+        expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3.4567);
     });
 });

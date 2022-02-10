@@ -5,6 +5,8 @@ import VideoPlayer from "./VideoPlayer";
 import { playVideoSection } from "./playbackSlices";
 import { clearLastCueChange } from "../cues/edit/cueEditorSlices";
 import { waveformVisibleSlice } from "./waveformSlices";
+import { copyNonConstructorProperties } from "../cues/cueUtils";
+import { updateVttCue } from "../cues/cuesList/cuesListActions";
 
 interface Props {
     mp4: string;
@@ -29,6 +31,13 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];
     const tracks = editingTrack ? [editingTrack] : [];
 
+    const updateCueTimecodes = (cueIndex: number, startTime: number, endTime: number): void => {
+        const existingCue = editingCues[cueIndex];
+        const newCue = new VTTCue(startTime, endTime, existingCue.vttCue.text);
+        copyNonConstructorProperties(newCue, existingCue.vttCue);
+        dispatch(updateVttCue(cueIndex, newCue, existingCue.editUuid));
+    };
+
     useEffect(() => {
         dispatch(clearLastCueChange());
     }, [dispatch, lastCueChange]);
@@ -48,6 +57,8 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 waveform={props.waveform}
                 duration={props.duration}
                 waveformVisible={waveformVisible}
+                updateCueTimecodes={updateCueTimecodes}
+                timecodesUnlocked={editingTrack.timecodesUnlocked}
                 cues={editingCues}
                 tracks={tracks}
                 onTimeChange={props.onTimeChange}
