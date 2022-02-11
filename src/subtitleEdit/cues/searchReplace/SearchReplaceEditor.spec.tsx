@@ -1,4 +1,3 @@
-/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import { ReactElement } from "react";
 import SearchReplaceEditor from "./SearchReplaceEditor";

@@ -1,9 +1,3 @@
-/**  * @jest-environment jsdom-sixteen  */
-// TODO Remove above when we update to react-scripts with Jest 26:
-// https://github.com/facebook/create-react-app/pull/8362
-// eslint-disable-next-line
-// https://stackoverflow.com/questions/61036156/react-typescript-testing-typeerror-mutationobserver-is-not-a-constructor#comment110029314_61039444
-
 import "../../../testUtils/initBrowserEnvironment";
 import { createRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";

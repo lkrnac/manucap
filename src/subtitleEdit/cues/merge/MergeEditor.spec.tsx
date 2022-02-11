@@ -1,4 +1,3 @@
-/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";

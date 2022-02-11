@@ -1,4 +1,3 @@
-/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { ReactElement } from "react";
