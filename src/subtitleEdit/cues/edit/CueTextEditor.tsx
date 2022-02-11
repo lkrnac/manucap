@@ -34,9 +34,7 @@ import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSl
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { CueError, SubtitleEditAction, Track } from "../../model";
-import { validationErrorSlice } from "./cueEditorSlices";
-import { checkLineLimitation } from "../cueVerifications";
+import { Track } from "../../model";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
@@ -235,42 +233,6 @@ const handleApplyEntityIfNeeded = (
     return newEditorState;
 };
 
-const createCorrectSpellingHandler = (
-    currentEditorState: EditorState,
-    oldEditorState: EditorState,
-    subtitleSpecifications: SubtitleSpecification | null,
-    dispatch: Dispatch<SubtitleEditAction>,
-    setEditorState: (value: EditorState) => void
-) => {
-    return (replacement: string, start: number, end: number): void => {
-        let newEditorState = replaceContent(currentEditorState, replacement, start, end);
-        const newVttText = getVttText(newEditorState.getCurrentContent());
-
-
-        const oldVttText = oldEditorState
-            ? getVttText(oldEditorState.getCurrentContent())
-            : "";
-
-        const isNewVttTextCharLimitationOk =
-            checkLineLimitation(newVttText, subtitleSpecifications);
-        const isOldVttTextCharLimitationOk =
-            checkLineLimitation(oldVttText, subtitleSpecifications);
-
-        if (newEditorState
-            && !isNewVttTextCharLimitationOk
-            && isOldVttTextCharLimitationOk
-        ) {
-            dispatch(validationErrorSlice.actions
-                .setValidationErrors([ CueError.LINE_COUNT_EXCEEDED ]));
-            // Force creation of different EditorState instance,
-            // so that CueTextEditor re-renders with old content
-            newEditorState = RichUtils.toggleCode(RichUtils.toggleCode(newEditorState));
-        }
-
-        setEditorState(newEditorState);
-    };
-};
-
 export let editorStateFOR_TESTING: EditorState;
 export let setEditorStateFOR_TESTING: (editorState: EditorState) => void;
 
@@ -288,6 +250,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const imeCompositionRef = useRef<string | null>(null);
     const editorPreviousTextRef = useRef<string | null>(null);
 
+    console.log("render editor");
     const [editorState, setEditorState] = React.useState(
         () => {
             const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -321,9 +284,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 component: SpellCheckIssue,
                 props: {
                     spellCheck: props.spellCheck,
-                    correctSpelling: createCorrectSpellingHandler(
-                        decoratedEditorState, editorState, subtitleSpecifications, dispatch, setEditorState
-                    ),
+                    correctSpelling: (replacement: string, start: number, end: number): void =>
+                        setEditorState(replaceContent(decoratedEditorState, replacement, start, end)),
                     editorRef,
                     spellCheckerMatchingOffset,
                     setSpellCheckerMatchingOffset,
