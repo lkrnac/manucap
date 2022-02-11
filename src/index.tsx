@@ -22,7 +22,7 @@ const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Lang
 const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
-const TIME_MATCH_TESTING = true;
+const TIME_MATCH_TESTING = false;
 
 const mediaChunkStart = undefined;
 const mediaChunkEnd = undefined;
