@@ -160,8 +160,7 @@ export const checkSpelling = createAsyncThunk(
            thunkApi) => {
         if (index !== undefined) {
             const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
-            const cues = state.cues;
-            const currentCue = cues[index];
+            const currentCue = state.cues[index];
             const oldErrorsCount = currentCue.errors?.length || 0;
             if (currentCue !== null) {
                 const cueErrors = conformToSpelling(currentCue);
