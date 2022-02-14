@@ -34,7 +34,9 @@ import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSl
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { Track } from "../../model";
+import { CueError, Track } from "../../model";
+import { checkLineLimitation } from "../cueVerifications";
+import { setValidationErrors } from "./cueEditorSlices";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
@@ -236,6 +238,12 @@ const handleApplyEntityIfNeeded = (
 export let editorStateFOR_TESTING: EditorState;
 export let setEditorStateFOR_TESTING: (editorState: EditorState) => void;
 
+function shouldRevert(editorState: EditorState, subtitleSpecifications: SubtitleSpecification | null) {
+    const vttText = getVttText(editorState.getCurrentContent());
+    return subtitleSpecifications !== null
+        && !checkLineLimitation(vttText, subtitleSpecifications);
+}
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
@@ -249,8 +257,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const unmountContentRef = useRef<ContentState | null>(null);
     const imeCompositionRef = useRef<string | null>(null);
     const editorPreviousTextRef = useRef<string | null>(null);
+    const previousEditorStateRef = useRef<EditorState | null>(null);
 
-    console.log("render editor");
     const [editorState, setEditorState] = React.useState(
         () => {
             const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
@@ -265,6 +273,11 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     let decoratedEditorState = insertGlossaryTermIfNeeded(editorState, props.glossaryTerm);
     decoratedEditorState = replaceIfNeeded(decoratedEditorState, props.searchReplaceMatches, replacement);
+    if (shouldRevert(decoratedEditorState, subtitleSpecifications)
+        && previousEditorStateRef.current !== null) {
+        decoratedEditorState = previousEditorStateRef.current;
+        dispatch(setValidationErrors([CueError.LINE_COUNT_EXCEEDED]));
+    }
 
     // If in composition mode (i.e. for IME input or diacritics), the decorator re-renders cannot
     // happen because it will cause an error in the draft-js composition handler.
@@ -324,6 +337,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 dispatch(setReplacement(""));
                 dispatch(searchNextCues(true));
             }
+            previousEditorStateRef.current = decoratedEditorState;
             setEditorState(decoratedEditorState);
         },
         // It is enough to detect changes on pieces of editor state that indicate content change.

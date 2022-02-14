@@ -11,7 +11,7 @@ import PositionButton from "./PositionButton";
 import TimeEditor from "./TimeEditor";
 import { useDispatch, useSelector } from "react-redux";
 import { playVideoSection } from "../../player/playbackSlices";
-import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
+import { updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { getTimeString } from "../../utils/timeUtils";
 import { TooltipWrapper } from "../../TooltipWrapper";
@@ -50,27 +50,16 @@ const getLockedTimecodeStyle = (): CSSProperties => {
 
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
-    const validationErrors = useSelector((state: SubtitleEditState) => state.validationErrors);
     const currentPlayerTime = useSelector((state: SubtitleEditState) => state.currentPlayerTime);
     const nextSourceCuesIndexes = props.nextCueLine
         ? getCueIndexes(props.nextCueLine.sourceCues)
         : [];
 
-    useEffect(
-        () => {
-            if (validationErrors && validationErrors.length > 0) {
-                setTimeout(() => {
-                    dispatch(setValidationErrors([]));
-                }, 1000);
-            }
-        }, [ dispatch, validationErrors ]
-    );
     const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
 
     const unbindCueViewModeKeyboardShortcut =(): void => {
         Mousetrap.unbind([KeyCombination.ESCAPE, KeyCombination.ENTER]);
     };
-
 
     const bindCueViewModeKeyboardShortcut =(): void => {
         Mousetrap.bind([KeyCombination.ESCAPE], () => dispatch(updateEditingCueIndex(-1)));
@@ -123,13 +112,12 @@ const CueEdit = (props: CueEditProps): ReactElement => {
         });
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
-    const className = (validationErrors && validationErrors.length) > 0 ? "blink-error-bg" : "bg-white";
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const isTranslation = editingTrack?.type === "TRANSLATION";
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
 
     return (
-        <div style={{ display: "flex" }} className={"sbte-bottom-border " + className}>
+        <div style={{ display: "flex" }} className={"sbte-bottom-border bg-white"}>
             <div
                 style={{
                     flex: "1 1 300px",

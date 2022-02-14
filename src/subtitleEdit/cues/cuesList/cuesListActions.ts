@@ -23,7 +23,6 @@ import {
     applyInvalidChunkRangePreventionStart,
     applyInvalidRangePreventionEnd,
     applyInvalidRangePreventionStart,
-    applyLineLimitation,
     applyOverlapPreventionEnd,
     applyOverlapPreventionStart,
     conformToRules,
@@ -273,9 +272,6 @@ export const updateVttCue = (
                 if (applyInvalidChunkRangePreventionEnd(newVttCue, originalCue.vttCue.endTime, track)) {
                     cueErrors.push(CueError.OUT_OF_CHUNK_RAGE);
                 }
-            }
-            if (applyLineLimitation(newVttCue, originalCue, subtitleSpecifications)) {
-                cueErrors.push(CueError.LINE_COUNT_EXCEEDED);
             }
 
             if (shouldBlink(vttCue, newVttCue, textOnly)) {

@@ -1192,26 +1192,6 @@ describe("cueSlices", () => {
         });
 
         describe("character/line count limitation", () => {
-            it("apply line count prevention according to subtitle specs", () => {
-                // GIVEN
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
-                    enabled: true,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
-                } as SubtitleSpecification;
-                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[1].editUuid;
-
-                // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 4, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-                expect(testingStore.getState().validationErrors).toContain(CueError.LINE_COUNT_EXCEEDED);
-            });
-
             it("ignore line count prevention if null in subtitle specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);

@@ -15,7 +15,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
 import { Character } from "../../utils/shortcutConstants";
-import { CueDto, CueError, Language, Track } from "../../model";
+import { CueDto, Language, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
@@ -32,7 +32,7 @@ import { SearchReplaceMatches } from "../searchReplace/model";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
-import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
+import { updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { setCurrentPlayerTime } from "../cuesList/cuesListScrollSlice";
 
@@ -1552,25 +1552,6 @@ describe("CueEdit", () => {
             expect(editingCueIndex).toEqual(2);
             expect(testingStore.getState().cues[lastCueIndex].vttCue.startTime).toEqual(currentPlayer);
             expect(testingStore.getState().cues[lastCueIndex].vttCue.endTime).toEqual(currentPlayer + 3);
-        });
-
-        it("blinks background when when validation error occurs", () => {
-            // GIVEN
-            const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
-            testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
-            const actualNode = mount(
-                <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
-                </Provider>
-            );
-
-            // WHEN
-            testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
-            actualNode.update();
-
-            // THEN
-            expect(testingStore.getState().validationErrors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
-            expect(actualNode.find("div").at(0).hasClass("blink-error-bg")).toBeTruthy();
         });
 
         it("passes down spell check into editor component", () => {

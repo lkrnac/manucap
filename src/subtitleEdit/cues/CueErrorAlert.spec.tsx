@@ -110,4 +110,22 @@ describe("CueErrorAlert", () => {
         // THEN
         expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
+
+    it("auto sets validation error to false after receiving it", (done) => {
+        // GIVEN
+        render(
+            <Provider store={testingStore} >
+                <CueErrorAlert />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
+
+        // THEN
+        setTimeout(() => {
+            expect(testingStore.getState().validationErrors).toEqual([]);
+            done();
+        }, 1100);
+    });
 });
