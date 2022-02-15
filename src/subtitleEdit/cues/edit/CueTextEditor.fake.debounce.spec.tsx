@@ -18,13 +18,12 @@ import {
     removeDraftJsDynamicValues,
     spellCheckOptionPredicate
 } from "../../../testUtils/testUtils";
-import { reset } from "./editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { CueDto, CueError, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import * as cueListActions from "../cuesList/cuesListActions";
-import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
+import CueTextEditor, { CueTextEditorProps, editorStateFOR_TESTING, setEditorStateFOR_TESTING } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "./cueTextConverter";
@@ -35,7 +34,7 @@ import { replaceCurrentMatch, setFind } from "../searchReplace/searchReplaceSlic
 import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
-import { setGlossaryTerm, updateEditingCueIndex } from "./cueEditorSlices";
+import { updateEditingCueIndex } from "./cueEditorSlices";
 
 jest.mock("lodash", () => (
     {
@@ -75,6 +74,7 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
             index={props.props.index}
             vttCue={props.props.vttCue}
             editUuid={props.props.editUuid}
+            setGlossaryTerm={jest.fn()}
         />
     </Provider>
 );
@@ -139,6 +139,7 @@ const createExpectedNode = (
 
 const createEditorNode = (text = "someText", spellcheck?: SpellCheck): React.ReactElement => {
     const vttCue = new VTTCue(0, 1, text);
+
     const editUuid = testingStore.getState().cues[0].editUuid;
     return (
         <Provider store={testingStore}>
@@ -149,6 +150,7 @@ const createEditorNode = (text = "someText", spellcheck?: SpellCheck): React.Rea
                 vttCue={vttCue}
                 editUuid={editUuid}
                 spellCheck={spellcheck}
+                setGlossaryTerm={jest.fn()}
             />
         </Provider>);
 };
@@ -190,6 +192,7 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
+                setGlossaryTerm={jest.fn()}
             />
         </Provider>
     );
@@ -199,12 +202,12 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
     const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
 
     // WHEN
-    actualNode.find(Editor).props().onChange(EditorState.acceptSelection(editorState, newSelectionState));
+    setEditorStateFOR_TESTING(EditorState.acceptSelection(editorState, newSelectionState));
     actualNode.find("button").at(buttonIndex).simulate("click");
 
     // THEN
     expect(testingStore.getState().cues[0].vttCue.text).toEqual(expectedText);
-    const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+    const currentContent = editorStateFOR_TESTING.getCurrentContent();
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(testingStore.getState().cues[0].vttCue.text);
 };
 
@@ -231,13 +234,14 @@ const testForContentState = (
                 index={0}
                 vttCue={vttCue}
                 editUuid={editUuid}
+                setGlossaryTerm={jest.fn()}
             />
         </Provider>
     );
 
     // THEN
     expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
-    const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+    const currentContent = editorStateFOR_TESTING.getCurrentContent();
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };
 
@@ -247,7 +251,6 @@ describe("CueTextEditor", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         // @ts-ignore we are mocking this function
@@ -329,6 +332,7 @@ describe("CueTextEditor", () => {
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         index={0}
                         vttCue={vttCue}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -505,6 +509,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={editUuid}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -550,9 +555,12 @@ describe("CueTextEditor", () => {
                     store={testingStore}
                     props={
                         {
-                            index: 0, vttCue, editUuid,
+                            index: 0,
+                            vttCue,
+                            editUuid,
                             bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                            unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                            unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                            setGlossaryTerm: jest.fn()
                         }
                     }
                 />);
@@ -575,10 +583,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
-
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -600,9 +610,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -624,9 +637,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -648,9 +664,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -671,9 +690,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -694,9 +716,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -717,9 +742,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -740,9 +768,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -763,9 +794,12 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
-                        index: 0, vttCue, editUuid,
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }}
                 />);
 
@@ -779,7 +813,7 @@ describe("CueTextEditor", () => {
 
         it("doesn't updates cue in redux store if new text doesn't conform to subtitle specification", () => {
             // GIVEN
-            const editor = mountEditorNode();
+            const editor = mountEditorNode("Caption Line 1");
             const testingSubtitleSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
@@ -796,8 +830,7 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText");
-            expect(testingStore.getState().editorStates[0]).toBeUndefined();
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
         });
     });
 
@@ -869,6 +902,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -910,6 +944,7 @@ describe("CueTextEditor", () => {
                             vttCue={vttCue}
                             editUuid={editUuid}
                             spellCheck={spellCheck}
+                            setGlossaryTerm={jest.fn()}
                         />
                     </Provider>
                 );
@@ -963,6 +998,7 @@ describe("CueTextEditor", () => {
                             vttCue={vttCue}
                             editUuid={editUuid}
                             spellCheck={spellCheck}
+                            setGlossaryTerm={jest.fn()}
                         />
                     </Provider>
                 );
@@ -1009,6 +1045,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1048,6 +1085,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1087,6 +1125,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1148,6 +1187,7 @@ describe("CueTextEditor", () => {
                         vttCue={testingStore.getState().cues[0].vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1162,7 +1202,6 @@ describe("CueTextEditor", () => {
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(reset() as {} as AnyAction);
             const testingTrack = {
                 type: "CAPTION",
                 language: { id: "en-US", name: "English (US)" } as Language,
@@ -1211,6 +1250,7 @@ describe("CueTextEditor", () => {
                         vttCue={testingStore.getState().cues[0].vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1239,7 +1279,6 @@ describe("CueTextEditor", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const cueText = "skupiając się na śledzeniu \n konwersji offline.";
-            testingStore.dispatch(reset() as {} as AnyAction);
             const testingTrack = {
                 type: "CAPTION",
                 language: { id: "pl-PL", name: "Polish" } as Language,
@@ -1285,6 +1324,7 @@ describe("CueTextEditor", () => {
                         vttCue={testingStore.getState().cues[0].vttCue}
                         editUuid={editUuid}
                         spellCheck={spellCheck}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1339,6 +1379,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1375,6 +1416,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1412,6 +1454,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1452,6 +1495,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1502,6 +1546,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1552,6 +1597,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1605,6 +1651,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1667,6 +1714,7 @@ describe("CueTextEditor", () => {
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1707,6 +1755,7 @@ describe("CueTextEditor", () => {
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1733,6 +1782,7 @@ describe("CueTextEditor", () => {
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1765,6 +1815,7 @@ describe("CueTextEditor", () => {
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1799,6 +1850,7 @@ describe("CueTextEditor", () => {
                             spellCheck={spellCheck}
                             bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                             unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                            setGlossaryTerm={jest.fn()}
                         />
                     </Provider>
                 );
@@ -1833,6 +1885,7 @@ describe("CueTextEditor", () => {
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1877,6 +1930,7 @@ describe("CueTextEditor", () => {
                         spellCheck={spellCheck}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1887,67 +1941,8 @@ describe("CueTextEditor", () => {
     });
 
     describe("glossary", () => {
-        it("appends glossary term at the end of content and resets it in redux to null", () => {
-            // GIVEN
-            const saveTrack = jest.fn();
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            const vttCue = new VTTCue(0, 1, "some text");
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueTextEditor
-                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        index={0}
-                        vttCue={vttCue}
-                        editUuid={testingStore.getState().cues[0].editUuid}
-                    />
-                </Provider>
-            );
-
-            // WHEN
-            testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
-            actualNode.setProps({});
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some textreplacement");
-            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-            expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some textreplacement");
-            expect(testingStore.getState().glossaryTerm).toEqual(null);
-        });
-
-        it("inserts glossary term into the middle of content and resets it in redux to null", () => {
-            // GIVEN
-            const saveTrack = jest.fn();
-            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
-            const vttCue = new VTTCue(0, 1, "some text");
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueTextEditor
-                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        index={0}
-                        vttCue={vttCue}
-                        editUuid={testingStore.getState().cues[0].editUuid}
-                    />
-                </Provider>
-            );
-            const editorState = actualNode.find(Editor).props().editorState;
-            const selectionState = editorState.getSelection();
-
-            // WHEN
-            const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
-            actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
-            testingStore.dispatch(setGlossaryTerm("replacement") as {} as AnyAction);
-            actualNode.setProps({});
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("some replacementtext");
-            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
-            expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some replacementtext");
-            expect(testingStore.getState().glossaryTerm).toEqual(null);
-        });
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        it.skip("This testing is done in CueLine.real.children.spec.tsx as integration test", () => {});
     });
 
     describe("special use cases", () => {
@@ -1965,6 +1960,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={testingStore.getState().cues[0].editUuid}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1975,7 +1971,7 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200E");
-            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+            const currentContent = editorStateFOR_TESTING.getCurrentContent();
             expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200E");
         });
 
@@ -1998,6 +1994,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={testingStore.getState().cues[0].editUuid}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -2008,7 +2005,7 @@ describe("CueTextEditor", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("some text\u200F");
-            const currentContent = testingStore.getState().editorStates.get(0).getCurrentContent();
+            const currentContent = editorStateFOR_TESTING.getCurrentContent();
             expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual("some text\u200F");
         });
 
@@ -2031,6 +2028,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         editUuid={testingStore.getState().cues[0].editUuid}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -2042,7 +2040,7 @@ describe("CueTextEditor", () => {
             actualNode.find(Editor).props().onChange(newState);
 
             // THEN
-            expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText()).toEqual("some text");
+            expect(editorStateFOR_TESTING.getCurrentContent().getPlainText()).toEqual("some text");
         });
 
         /**
@@ -2075,9 +2073,13 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={
-                    { index: 0, vttCue, editUuid,
+                    {
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }
                 }
             />);
@@ -2098,7 +2100,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText())
+        expect(editorStateFOR_TESTING.getCurrentContent().getPlainText())
             .toEqual("initial text\nPaste text");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("initial text\nPaste text");
     });
@@ -2112,9 +2114,13 @@ describe("CueTextEditor", () => {
             <ReduxTestWrapper
                 store={testingStore}
                 props={
-                    { index: 0, vttCue, editUuid,
+                    {
+                        index: 0,
+                        vttCue,
+                        editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
                     }
                 }
             />);
@@ -2135,13 +2141,12 @@ describe("CueTextEditor", () => {
         });
 
         // WHEN
-        const editorState = testingStore.getState().editorStates.get(0);
-        const contentState = editorState.getCurrentContent();
-        const newState = EditorState.push(editorState, contentState, "apply-entity");
-        actualNode.find(Editor).props().onChange(newState);
+        const contentState = editorStateFOR_TESTING.getCurrentContent();
+        const newState = EditorState.push(editorStateFOR_TESTING, contentState, "apply-entity");
+        setEditorStateFOR_TESTING(newState);
 
         // THEN
-        expect(testingStore.getState().editorStates.get(0).getCurrentContent().getPlainText())
+        expect(editorStateFOR_TESTING.getCurrentContent().getPlainText())
             .toEqual("initial text\nPaste text");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("initial text\nPaste text");
     });

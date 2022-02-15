@@ -9,7 +9,6 @@ import { updateCues, updateVttCue } from "./cuesListActions";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import CuesList from "./CuesList";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { reset } from "../edit/editorStatesSlice";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { updateEditingTrack, updateTask } from "../../trackSlices";
 import { changeScrollPosition, scrollPositionSlice } from "./cuesListScrollSlice";
@@ -90,7 +89,6 @@ const sourceCues = matchedCues.map(matchedCue => matchedCue.sourceCues)
 describe("CuesList", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
         jest.resetAllMocks();
     });
 

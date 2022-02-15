@@ -7,7 +7,6 @@ import { Provider } from "react-redux";
 import { mount, ReactWrapper } from "enzyme";
 
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { reset } from "./editorStatesSlice";
 import { CueDto, CueError, Language, Track } from "../../model";
 import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
@@ -47,6 +46,7 @@ const createEditorNode = (text = "someText", index?: number): ReactWrapper => {
                 index={idx}
                 vttCue={vttCue}
                 editUuid={editUuid}
+                setGlossaryTerm={jest.fn()}
             />
         </Provider>
     );
@@ -69,6 +69,7 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
             index={props.props.index}
             vttCue={props.props.vttCue}
             editUuid={props.props.editUuid}
+            setGlossaryTerm={jest.fn()}
         />
     </Provider>
 );
@@ -76,7 +77,6 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
 describe("CueTextEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(matchedCuesSlice.actions.matchCuesByTime({ cues, sourceCues: [], editingCueIndex: 0 }));
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
@@ -135,6 +135,7 @@ describe("CueTextEditor", () => {
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -169,9 +170,13 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={
-                        { index: 0, vttCue, editUuid,
+                        {
+                            index: 0,
+                            vttCue,
+                            editUuid,
                             bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                            unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                            unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                            setGlossaryTerm: jest.fn()
                         }
                     }
                 />);
@@ -232,6 +237,7 @@ describe("CueTextEditor", () => {
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     searchReplaceMatches={searchReplaceMatches}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -272,6 +278,7 @@ describe("CueTextEditor", () => {
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -430,6 +437,7 @@ describe("CueTextEditor", () => {
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );
@@ -481,7 +489,6 @@ describe("CueTextEditor", () => {
         const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(reset() as {} as AnyAction);
         const testingTrack = {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
@@ -530,6 +537,7 @@ describe("CueTextEditor", () => {
                     vttCue={testingStore.getState().cues[0].vttCue}
                     editUuid={editUuid}
                     spellCheck={spellCheck}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>
         );

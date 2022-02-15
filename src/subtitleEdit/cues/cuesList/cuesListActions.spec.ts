@@ -1,5 +1,4 @@
 import "video.js"; // VTTCue definition
-import { EditorState } from "draft-js";
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
 import { v4 as uuidv4 } from "uuid";
@@ -10,7 +9,7 @@ import {
     addCueComment,
     addCuesToMergeList,
     applyShiftTimeByPosition,
-    checkErrors,
+    checkErrors, checkSpelling,
     deleteCue,
     deleteCueComment,
     mergeCues,
@@ -25,7 +24,6 @@ import {
 } from "./cuesListActions";
 import { CueDto, CueError, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateEditorState } from "../edit/editorStatesSlice";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
@@ -1194,26 +1192,6 @@ describe("cueSlices", () => {
         });
 
         describe("character/line count limitation", () => {
-            it("apply line count prevention according to subtitle specs", () => {
-                // GIVEN
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
-                    enabled: true,
-                    maxLinesPerCaption: 2,
-                    maxCharactersPerLine: 30,
-                } as SubtitleSpecification;
-                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[1].editUuid;
-
-                // WHEN
-                testingStore.dispatch(updateVttCue(1, new VTTCue(2, 4, "Dummy \n\nCue"), editUuid) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-                expect(testingStore.getState().validationErrors).toContain(CueError.LINE_COUNT_EXCEEDED);
-            });
-
             it("ignore line count prevention if null in subtitle specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -1483,27 +1461,11 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
             });
-
-            it("updates matched cues for undefined editUuid", () => {
-                // GIVEN
-                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(matchedCuesSlice.actions
-                    .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
-                );
-
-                // WHEN
-                testingStore.dispatch(
-                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
-            });
         });
     });
 
     describe("validateCue", () => {
-        it("mark cue + surrounding cues as corrupted if they don't conform to rules", () => {
+        it("mark cue as corrupted if it doesn't conform to rules", () => {
             // GIVEN
             const cuesCorrupted = [
                 { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
@@ -1517,7 +1479,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
@@ -1531,11 +1493,10 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
-            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toEqual([]);
+            expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
-            expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors)
-                .toEqual([CueError.TIME_GAP_OVERLAP]);
+            expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors).toBeUndefined();
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
@@ -1636,7 +1597,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1660,7 +1621,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1685,7 +1646,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1711,7 +1672,7 @@ describe("cueSlices", () => {
                 enabled: true
             } as SubtitleSpecification;
             testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+            testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(validateVttCue(1) as {} as AnyAction);
@@ -1851,6 +1812,37 @@ describe("cueSlices", () => {
         });
     });
 
+    describe("checkSpelling", () => {
+        it("does not trigger autosave if error count is the same", () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+
+            // WHEN
+            testingStore.dispatch(checkSpelling({ index: 2 }) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+        });
+    });
+
     describe("updateCueCategory", () => {
         it("ignores category update if cue doesn't exist in top level cues", () => {
             // WHEN
@@ -1963,20 +1955,6 @@ describe("cueSlices", () => {
     describe("addCue", () => {
         beforeEach(() => {
             testingStore.dispatch(updateEditingTrack(testingTrack as Track) as {} as AnyAction);
-        });
-        it("resets editor states map in Redux", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(
-                addCue(3, []) as {} as AnyAction
-            );
-
-            // THEN
-            expect(testingStore.getState().editorStates.size).toEqual(0);
         });
 
         it("scrolls to added cue", () => {
@@ -2536,20 +2514,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.index).toEqual(2);
         });
 
-        it("removes editor states for certain index from Redux", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(deleteCue(1) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().editorStates.size).toEqual(1);
-            expect(testingStore.getState().editorStates.get(1)).toBeUndefined();
-        });
-
         it("delete all cues in the array leaves one default empty cue", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -2612,21 +2576,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        });
-
-        it("resets subtitle edits states", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-            const replacementCues = [
-                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE" },
-            ] as CueDto[];
-
-            // WHEN
-            testingStore.dispatch(updateCues(replacementCues) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().editorStates.size).toEqual(0);
         });
     });
 
@@ -2993,26 +2942,8 @@ describe("cueSlices", () => {
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
             });
 
-            it("clears editor sates on merge", () => {
-                // GIVEN
-                testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-                testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
-                testingStore.dispatch(addCuesToMergeList(
-                    { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
-                testingStore.dispatch(addCuesToMergeList(
-                    { index: 1, cues: [{ index: 1, cue: testingCues[1] }]}) as {} as AnyAction);
-
-                // WHEN
-                testingStore.dispatch(mergeCues() as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().editorStates.size).toEqual(0);
-            });
-
             it("scrolls to merged cue on edit mode on merge", () => {
                 // GIVEN
-                testingStore.dispatch(updateEditorState(0, EditorState.createEmpty()) as {} as AnyAction);
-                testingStore.dispatch(updateEditorState(1, EditorState.createEmpty()) as {} as AnyAction);
                 testingStore.dispatch(addCuesToMergeList(
                     { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
                 testingStore.dispatch(addCuesToMergeList(

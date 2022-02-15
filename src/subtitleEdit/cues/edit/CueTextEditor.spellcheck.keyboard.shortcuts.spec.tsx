@@ -82,6 +82,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
                     index={0}
                     vttCue={vttCue}
                     editUuid={editUuid}
+                    setGlossaryTerm={jest.fn()}
                 />
             </Provider>);
     };

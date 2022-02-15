@@ -39,7 +39,9 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
     };
 
     useEffect(() => {
-        dispatch(clearLastCueChange());
+        if (lastCueChange !== null) {
+            dispatch(clearLastCueChange());
+        }
     }, [dispatch, lastCueChange]);
 
     useEffect(() => {

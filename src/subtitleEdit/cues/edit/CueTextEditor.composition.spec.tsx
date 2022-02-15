@@ -9,7 +9,6 @@ import {
     MockedDebouncedFunction,
     removeDraftJsDynamicValues
 } from "../../../testUtils/testUtils";
-import { reset } from "./editorStatesSlice";
 import { CueDto, Track } from "../../model";
 import { updateCues } from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
@@ -57,6 +56,7 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
             vttCue={props.props.vttCue}
             editUuid={props.props.editUuid}
             spellCheck={props.props.spellCheck}
+            setGlossaryTerm={jest.fn()}
         />
     </Provider>
 );
@@ -67,7 +67,6 @@ describe("CueTextEditor", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         // @ts-ignore we are mocking this function
@@ -99,9 +98,14 @@ describe("CueTextEditor", () => {
                 <ReduxTestWrapper
                     store={testingStore}
                     props={
-                        { index: 0, vttCue, editUuid, spellCheck,
+                        {
+                            index: 0,
+                            vttCue,
+                            editUuid,
+                            spellCheck,
                             bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                            unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy
+                            unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                            setGlossaryTerm: jest.fn()
                         }
                     }
                 />);

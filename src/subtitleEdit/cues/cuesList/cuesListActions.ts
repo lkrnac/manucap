@@ -23,10 +23,10 @@ import {
     applyInvalidChunkRangePreventionStart,
     applyInvalidRangePreventionEnd,
     applyInvalidRangePreventionStart,
-    applyLineLimitation,
     applyOverlapPreventionEnd,
     applyOverlapPreventionStart,
     conformToRules,
+    conformToSpelling,
     getTimeGapLimits,
     verifyCueDuration
 } from "../cueVerifications";
@@ -112,10 +112,21 @@ const validateShift = (position: ShiftPosition, cueIndex: number): void => {
     }
 };
 
+const updateMatchedCue = (
+    dispatch: Dispatch<SubtitleEditAction>,
+    state: SubtitleEditState,
+    index: number
+) => {
+    const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(state, index);
+    dispatch(matchedCuesSlice.actions.updateMatchedCue(
+        { cue: state.cues[index], targetCuesIndex, editingIndexMatchedCues }
+    ));
+};
+
 export const applySpellcheckerOnCue = createAsyncThunk(
     "spellchecker/applySpellcheckerOnCue",
-    async (index: number, thunkAPI) => {
-        const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
+    async (index: number, thunkApi) => {
+        const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
         const track = state.editingTrack as Track;
         const currentEditingCue = state.cues[index];
         if (currentEditingCue) {
@@ -124,20 +135,17 @@ export const applySpellcheckerOnCue = createAsyncThunk(
             if (track && track.language?.id && spellCheckerSettings.enabled) {
                 return fetchSpellCheck(text, spellCheckerSettings, track.language.id)
                     .then(spellCheck => {
-                        addSpellCheck(thunkAPI.dispatch, index, spellCheck, track.id);
-                        const freshState: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
-                        const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(freshState, index);
-                        thunkAPI.dispatch(matchedCuesSlice.actions.updateMatchedCue(
-                            { cue: freshState.cues[index], targetCuesIndex, editingIndexMatchedCues }
-                        ));
-                        callSaveTrack(thunkAPI.dispatch, thunkAPI.getState);
+                        addSpellCheck(thunkApi.dispatch, index, spellCheck, track.id);
+                        const freshState: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+                        updateMatchedCue(thunkApi.dispatch, freshState, index);
+                        callSaveTrack(thunkApi.dispatch, thunkApi.getState);
                     });
             }
         }
     }
 );
 
-export const updateMatchedCuesWithLastState =
+export const updateMatchedCues = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): void => {
         const lastState = getState();
         dispatch(matchedCuesSlice.actions.matchCuesByTime(
@@ -145,8 +153,25 @@ export const updateMatchedCuesWithLastState =
         ));
     };
 
-
-export const updateMatchedCues = (): AppThunk => updateMatchedCuesWithLastState;
+export const checkSpelling = createAsyncThunk(
+    "validations/checkErrors",
+    async ({ index }: { index: number },
+           thunkApi) => {
+        if (index !== undefined) {
+            const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+            const currentCue = state.cues[index];
+            const oldErrorsCount = currentCue.errors?.length || 0;
+            if (currentCue !== null) {
+                const cueErrors = conformToSpelling(currentCue);
+                thunkApi.dispatch(cuesSlice.actions.setErrors(
+                    { index: index, errors: cueErrors } as CueErrorsPayload));
+                if (cueErrors.length !== oldErrorsCount) {
+                    updateMatchedCue(thunkApi.dispatch, state, index);
+                    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
+                }
+            }
+        }
+    });
 
 export const checkErrors = createAsyncThunk(
     "validations/checkErrors",
@@ -161,7 +186,7 @@ export const checkErrors = createAsyncThunk(
             const currentCue = cues[index];
             const followingCue = cues[index + 1];
             const oldErrorsCount = currentCue.errors?.length || 0;
-            if (currentCue != null) {
+            if (currentCue !== null) {
                 if (shouldSpellCheck) {
                     thunkApi.dispatch(applySpellcheckerOnCue(index));
                 }
@@ -172,8 +197,8 @@ export const checkErrors = createAsyncThunk(
                 thunkApi.dispatch(cuesSlice.actions.setErrors(
                     { index: index, errors: cueErrors } as CueErrorsPayload));
                 if (cueErrors.length !== oldErrorsCount) {
+                    updateMatchedCue(thunkApi.dispatch, state, index);
                     callSaveTrack(thunkApi.dispatch, thunkApi.getState);
-                    updateMatchedCuesWithLastState(thunkApi.dispatch, thunkApi.getState);
                 }
             }
         }
@@ -182,11 +207,14 @@ export const checkErrors = createAsyncThunk(
 export const validateCue = (
     dispatch: Dispatch<SubtitleEditAction | void>,
     index: number,
-    shouldSpellCheck: boolean
+    shouldSpellCheck: boolean,
+    textOnly?: boolean
 ): void => {
-    dispatch(checkErrors({ index: index - 1, shouldSpellCheck: false }));
+    if (!textOnly) {
+        dispatch(checkErrors({ index: index - 1, shouldSpellCheck: false }));
+        dispatch(checkErrors({ index: index + 1, shouldSpellCheck: false }));
+    }
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
-    dispatch(checkErrors({ index: index + 1, shouldSpellCheck: false }));
 };
 
 export const updateVttCue = (
@@ -245,9 +273,6 @@ export const updateVttCue = (
                     cueErrors.push(CueError.OUT_OF_CHUNK_RAGE);
                 }
             }
-            if (applyLineLimitation(newVttCue, originalCue, subtitleSpecifications)) {
-                cueErrors.push(CueError.LINE_COUNT_EXCEEDED);
-            }
 
             if (shouldBlink(vttCue, newVttCue, textOnly)) {
                 dispatch(validationErrorSlice.actions.setValidationErrors(cueErrors));
@@ -257,8 +282,8 @@ export const updateVttCue = (
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
             updateSearchMatches(dispatch, getState, idx);
-            validateCue(dispatch, idx, true);
-            if (!textOnly || editUuid === undefined) {
+            validateCue(dispatch, idx, true, textOnly);
+            if (!textOnly) {
                 dispatch(updateMatchedCues());
             } else {
                 const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(getState(), idx);
@@ -274,6 +299,12 @@ export const updateVttCue = (
 export const validateVttCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         validateCue(dispatch, idx, false);
+        updateMatchedCue(dispatch, getState(), idx);
+
+        const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(getState(), idx);
+        dispatch(matchedCuesSlice.actions.updateMatchedCue(
+            { cue: getState().cues[idx], targetCuesIndex, editingIndexMatchedCues }
+        ));
         callSaveTrack(dispatch, getState);
     };
 

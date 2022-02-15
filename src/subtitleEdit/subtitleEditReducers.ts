@@ -4,7 +4,6 @@ import { editingTrackSlice, taskSlice } from "./trackSlices";
 import { userSlice } from "./userSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
-import { editorStatesSlice } from "./cues/edit/editorStatesSlice";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 import { saveActionSlice, saveTrackSlice } from "./cues/saveSlices";
@@ -20,7 +19,6 @@ import { spellcheckerSettingsSlice } from "./spellcheckerSettingsSlice";
 import { sourceCuesSlice } from "./cues/view/sourceCueSlices";
 import {
     editingCueIndexSlice,
-    glossaryTermSlice,
     lastCueChangeSlice,
     validationErrorSlice
 } from "./cues/edit/cueEditorSlices";
@@ -32,7 +30,6 @@ export const Reducers = {
     editingTrack: editingTrackSlice.reducer,
     cuesTask: taskSlice.reducer,
     subtitleSpecifications: subtitleSpecificationSlice.reducer,
-    editorStates: editorStatesSlice.reducer,
     sourceCues: sourceCuesSlice.reducer,
     videoSectionToPlay: playVideoSectionSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
@@ -48,7 +45,6 @@ export const Reducers = {
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
     validationErrors: validationErrorSlice.reducer,
-    glossaryTerm: glossaryTermSlice.reducer,
     focusedCueIndex: scrollPositionSlice.reducer,
     matchedCues: matchedCuesSlice.reducer,
     currentPlayerTime: currentPlayerTimeSlice.reducer,

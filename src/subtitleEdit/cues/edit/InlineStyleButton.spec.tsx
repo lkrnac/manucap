@@ -1,12 +1,8 @@
 import "../../../testUtils/initBrowserEnvironment";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
-import { AnyAction } from "@reduxjs/toolkit";
 import InlineStyleButton from "./InlineStyleButton";
-import { Provider } from "react-redux";
-import { mount } from "enzyme";
-import testingStore from "../../../testUtils/testingStore";
-import { updateEditorState } from "./editorStatesSlice";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import { createEvent, fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -17,26 +13,34 @@ jest.mock("lodash", () => ({
 describe("InlineStyleButton", () => {
     it("renders for empty editor state", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button style={{ marginRight: "5px" }} className="btn btn-outline-secondary">
                 <b>B</b>
             </button>
         );
 
+        const processedHTML = convertFromHTML("");
+        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+
         // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
-            </Provider>
+        const actualNode = render(
+            <InlineStyleButton
+                editorIndex={0}
+                inlineStyle={"BOLD"}
+                label={<b>B</b>}
+                setEditorState={jest.fn()}
+                editorState={editorState}
+            />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("toggle Bold button if editor's cursor is on bold text", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button style={{ marginRight: "5px" }} className="btn btn-secondary">
                 <b>B</b>
             </button>
@@ -45,22 +49,24 @@ describe("InlineStyleButton", () => {
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         const editorState = EditorState.createWithContent(contentState);
 
-        testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
-
         // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
-            </Provider>
+        const actualNode = render(
+            <InlineStyleButton
+                editorIndex={0}
+                inlineStyle={"BOLD"}
+                label={<b>B</b>}
+                setEditorState={jest.fn()}
+                editorState={editorState}
+            />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("toggle Italic button if editor's cursor is on italic text", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button style={{ marginRight: "5px" }} className="btn btn-secondary">
                 <i>I</i>
             </button>
@@ -69,22 +75,24 @@ describe("InlineStyleButton", () => {
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         const editorState = EditorState.createWithContent(contentState);
 
-        testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
-
         // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"ITALIC"} label={<i>I</i>} />
-            </Provider>
+        const actualNode = render(
+            <InlineStyleButton
+                editorIndex={0}
+                inlineStyle={"ITALIC"}
+                label={<i>I</i>}
+                setEditorState={jest.fn()}
+                editorState={editorState}
+            />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("toggle Italic button if editor's cursor is on italic text", () => {
+    it("toggle Underline button if editor's cursor is on underlined text", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button style={{ marginRight: "5px" }} className="btn btn-secondary">
                 <u>U</u>
             </button>
@@ -93,53 +101,101 @@ describe("InlineStyleButton", () => {
         const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
         const editorState = EditorState.createWithContent(contentState);
 
-        testingStore.dispatch(updateEditorState(0, editorState) as {} as AnyAction);
-
         // WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"UNDERLINE"} label={<u>U</u>} />
-            </Provider>
+        const actualNode = render(
+            <InlineStyleButton
+                editorIndex={0}
+                inlineStyle={"UNDERLINE"}
+                label={<u>U</u>}
+                setEditorState={jest.fn()}
+                editorState={editorState}
+            />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("it doesn't grab focus from text editor when clicked, so we can change inline style text written next", () => {
         // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <InlineStyleButton editorIndex={0} inlineStyle={"BOLD"} label={<b>B</b>} />
-            </Provider>
+        const processedHTML = convertFromHTML("");
+        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+
+        const actualNode = render(
+            <InlineStyleButton
+                editorIndex={0}
+                inlineStyle={"BOLD"}
+                label={<b>B</b>}
+                setEditorState={jest.fn()}
+                editorState={editorState}
+            />
         );
-        const event = { preventDefault: jest.fn() };
+
+        const button = actualNode.container.querySelector("button") as Element;
+        const event = createEvent.mouseDown(button);
+        const preventDefaultSpy = jest.spyOn(event, "preventDefault");
 
         // WHEN
-        actualNode.find(InlineStyleButton).simulate("mousedown", event);
+        fireEvent(button, event);
 
         // THEN
-        expect(event.preventDefault).toBeCalled();
+        expect(preventDefaultSpy).toBeCalled();
     });
 
-    it("renders overlay with text provided to InlineStyleButton", () => {
+    it("renders overlay with text provided to InlineStyleButton", async () => {
         //GIVEN
         const expectedText = "BOLD";
-        const expectedToolTipId = "BOLD0";
+        const processedHTML = convertFromHTML("");
+        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+        const actualNode = render(
+            <InlineStyleButton
+                editorIndex={0}
+                inlineStyle={expectedText}
+                label={<b>B</b>}
+                setEditorState={jest.fn()}
+                editorState={editorState}
+            />
+        );
+        const button = actualNode.container.querySelector(".btn-outline-secondary") as Element;
 
         //WHEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <InlineStyleButton
-                    editorIndex={0}
-                    inlineStyle={expectedText}
-                    label={<b>B</b>}
-                />
-            </Provider>
-        );
+        fireEvent.mouseOver(button);
 
         //THEN
-        expect(actualNode.find(TooltipWrapper).props().text).toEqual(expectedText);
-        expect(actualNode.find(TooltipWrapper).props().tooltipId).toEqual(expectedToolTipId);
+        expect(await actualNode.findByText(expectedText)).toBeInTheDocument();
+    });
+
+
+    it("updates editor state when inline style button is clicked", async () => {
+        // GIVEN
+        const processedHTML = convertFromHTML("lala");
+        const contentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+        const editorState = EditorState.createWithContent(contentState);
+        const setEditorState = jest.fn();
+
+        const actualNode = render(
+            <InlineStyleButton
+                editorIndex={0}
+                inlineStyle={"UNDERLINE"}
+                label={<u>U</u>}
+                setEditorState={setEditorState}
+                editorState={editorState}
+            />
+        );
+        const button = actualNode.container.querySelector("button") as Element;
+
+        // WHEN
+        await act(async () => {
+            fireEvent.click(button);
+        });
+
+        // THEN
+        expect(setEditorState.mock.calls.length).toEqual(1);
+        const actualEditorState = setEditorState.mock.calls[0][0];
+        const inlineStyle = actualEditorState.getCurrentInlineStyle();
+        expect(inlineStyle.size).toEqual(1);
+        expect(inlineStyle.get("UNDERLINE")).toEqual("UNDERLINE");
     });
 });

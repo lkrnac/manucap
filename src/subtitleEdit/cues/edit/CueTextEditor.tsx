@@ -23,7 +23,6 @@ import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUti
 import { convertVttToHtml, getVttText } from "./cueTextConverter";
 import CueLineCounts from "../cueLine/CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
-import { updateEditorState } from "./editorStatesSlice";
 import { applySpellcheckerOnCue, checkErrors, updateVttCue } from "../cuesList/cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
@@ -35,8 +34,9 @@ import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSl
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { Track } from "../../model";
-import { setGlossaryTerm } from "./cueEditorSlices";
+import { CueError, Track } from "../../model";
+import { checkLineLimitation } from "../cueVerifications";
+import { setValidationErrors } from "./cueEditorSlices";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
@@ -75,11 +75,11 @@ const findExtraCharacters = (subtitleSpecifications: SubtitleSpecification | nul
 
 const handleKeyShortcut = (
     editorState: EditorState,
-    dispatch: Dispatch<AppThunk>,
     props: CueTextEditorProps,
     spellCheckerMatchingOffset: number | null,
     setSpellCheckerMatchingOffset: Function,
-    languageDirection: string | undefined
+    languageDirection: string | undefined,
+    setEditorState: Function
 ) => (shortcut: string): DraftHandleValue => {
     const keyCombination = mousetrapBindings.get(shortcut);
     if (shortcut === "openSpellChecker") {
@@ -98,7 +98,7 @@ const handleKeyShortcut = (
     }
     if (shortcut === "newLine") {
         const newEditorState = RichUtils.insertSoftNewline(editorState);
-        dispatch(updateEditorState(props.index, newEditorState));
+        setEditorState(newEditorState);
         return "handled";
     }
     if (shortcut === "insertBidiCode") {
@@ -106,7 +106,7 @@ const handleKeyShortcut = (
         const bidiChar = languageDirection === "RTL" ? "\u200F" : "\u200E";
         const contentWithBidiCode = Modifier.insertText(content, editorState.getSelection(), bidiChar);
         const newState = EditorState.push(editorState, contentWithBidiCode, "change-block-data");
-        dispatch(updateEditorState(props.index, newState));
+        setEditorState(newState);
         return "handled";
     }
     return "not-handled";
@@ -135,14 +135,6 @@ const getWordCountPerLine = (text: string): number[] => {
     return lines.map((line: string): number => line.match(/\S+/g)?.length || 0);
 };
 
-const createCorrectSpellingHandler = (
-    editorState: EditorState,
-    dispatch: Dispatch<AppThunk>,
-    props: CueTextEditorProps
-) => (replacement: string, start: number, end: number): void => {
-    const newEditorState = replaceContent(editorState, replacement, start, end);
-    dispatch(updateEditorState(props.index, newEditorState));
-};
 
 const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
     (e: React.KeyboardEvent<KeyboardEventHandler>): string | null => {
@@ -176,9 +168,11 @@ export interface CueTextEditorProps {
     searchReplaceMatches?: SearchReplaceMatches;
     bindCueViewModeKeyboardShortcut: () => void;
     unbindCueViewModeKeyboardShortcut: () => void;
+    glossaryTerm?: string;
+    setGlossaryTerm: (glossaryTerm?: string) => void;
 }
 
-const insertGlossaryTermIfNeeded = (editorState: EditorState, glossaryTerm: string | null): EditorState => {
+const insertGlossaryTermIfNeeded = (editorState: EditorState, glossaryTerm?: string): EditorState => {
     if (glossaryTerm) {
         const content = editorState.getCurrentContent();
         const contentWithGlossaryTerm = Modifier.insertText(content, editorState.getSelection(), glossaryTerm);
@@ -241,6 +235,15 @@ const handleApplyEntityIfNeeded = (
     return newEditorState;
 };
 
+export let editorStateFOR_TESTING: EditorState;
+export let setEditorStateFOR_TESTING: (editorState: EditorState) => void;
+
+function shouldRevert(editorState: EditorState, subtitleSpecifications: SubtitleSpecification | null) {
+    const vttText = getVttText(editorState.getCurrentContent());
+    return subtitleSpecifications !== null
+        && !checkLineLimitation(vttText, subtitleSpecifications);
+}
+
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
@@ -251,20 +254,29 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editorRef = useRef(null);
     const dispatch = useDispatch();
     const processedHTML = convertFromHTML(convertVttToHtml(props.vttCue.text));
-    let editorState = useSelector(
-        (state: SubtitleEditState) => state.editorStates.get(props.index) as EditorState,
-        ((left: EditorState) => !left) // don't re-render if previous editorState is defined -> delete action
-    );
-    const glossaryTerm = useSelector((state: SubtitleEditState) => state.glossaryTerm);
-
     const unmountContentRef = useRef<ContentState | null>(null);
     const imeCompositionRef = useRef<string | null>(null);
     const editorPreviousTextRef = useRef<string | null>(null);
+    const previousEditorStateRef = useRef<EditorState | null>(null);
 
-    if (!editorState) {
-        const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
-        editorState = EditorState.createWithContent(initialContentState);
-        editorState = EditorState.moveFocusToEnd(editorState);
+    const [editorState, setEditorState] = React.useState(
+        () => {
+            const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
+            let initEditorState = EditorState.createWithContent(initialContentState);
+            initEditorState = EditorState.moveFocusToEnd(initEditorState);
+
+            return initEditorState;
+        }
+    );
+    editorStateFOR_TESTING = editorState;
+    setEditorStateFOR_TESTING = setEditorState;
+
+    let decoratedEditorState = insertGlossaryTermIfNeeded(editorState, props.glossaryTerm);
+    decoratedEditorState = replaceIfNeeded(decoratedEditorState, props.searchReplaceMatches, replacement);
+    if (shouldRevert(decoratedEditorState, subtitleSpecifications)
+        && previousEditorStateRef.current !== null) {
+        decoratedEditorState = previousEditorStateRef.current;
+        dispatch(setValidationErrors([CueError.LINE_COUNT_EXCEEDED]));
     }
 
     // If in composition mode (i.e. for IME input or diacritics), the decorator re-renders cannot
@@ -285,7 +297,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 component: SpellCheckIssue,
                 props: {
                     spellCheck: props.spellCheck,
-                    correctSpelling: createCorrectSpellingHandler(editorState, dispatch, props),
+                    correctSpelling: (replacement: string, start: number, end: number): void =>
+                        setEditorState(replaceContent(decoratedEditorState, replacement, start, end)),
                     editorRef,
                     spellCheckerMatchingOffset,
                     setSpellCheckerMatchingOffset,
@@ -297,13 +310,11 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 }
             }
         ]);
-        editorState = EditorState.set(editorState, { decorator: newCompositeDecorator });
+        decoratedEditorState = EditorState.set(decoratedEditorState, { decorator: newCompositeDecorator });
     }
 
-    editorState = insertGlossaryTermIfNeeded(editorState, glossaryTerm);
-    editorState = replaceIfNeeded(editorState, props.searchReplaceMatches, replacement);
-    const currentContent = editorState.getCurrentContent();
-    const currentInlineStyle = editorState.getCurrentInlineStyle();
+    const currentContent = decoratedEditorState.getCurrentContent();
+    const currentInlineStyle = decoratedEditorState.getCurrentInlineStyle();
     const charCountPerLine = getCharacterCountPerLine(currentContent.getPlainText());
     const wordCountPerLine = getWordCountPerLine(currentContent.getPlainText());
 
@@ -321,12 +332,13 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     useEffect(
         () => {
-            dispatch(setGlossaryTerm(null));
+            props.setGlossaryTerm(undefined);
             if (replacement !== "") {
                 dispatch(setReplacement(""));
                 dispatch(searchNextCues(true));
             }
-            dispatch(updateEditorState(props.index, editorState));
+            previousEditorStateRef.current = decoratedEditorState;
+            setEditorState(decoratedEditorState);
         },
         // It is enough to detect changes on pieces of editor state that indicate content change.
         // E.g. editorState.getSelection() is not changing content, thus we don't need to store editor state
@@ -387,7 +399,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     padding: "5px 10px 5px 10px"
                 }}
             >
-                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} />
+                <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} editorState={decoratedEditorState} />
             </div>
             <div
                 className="sbte-form-control sbte-bottom-border"
@@ -407,21 +419,27 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     onCompositionEnd={(): void => { imeCompositionRef.current = "end"; }}
                 >
                     <Editor
-                        editorState={editorState}
-                        onChange={(newEditorState: EditorState): AppThunk | undefined => {
+                        editorState={decoratedEditorState}
+                        onChange={(newEditorState: EditorState): void => {
                             if (imeCompositionRef.current === "end") {
                                 imeCompositionRef.current = null;
                             }
                             const newUpdatedState = handleApplyEntityIfNeeded(newEditorState, editorPreviousTextRef);
-                            return dispatch(updateEditorState(props.index, newUpdatedState));
+                            setEditorState(newUpdatedState);
                         }}
                         ref={editorRef}
                         spellCheck={false}
                         keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}
-                        handleKeyCommand={handleKeyShortcut(editorState, dispatch, props,
-                            spellCheckerMatchingOffset,
-                            setSpellCheckerMatchingOffset,
-                            editingTrack?.language.direction)}
+                        handleKeyCommand={
+                            handleKeyShortcut(
+                                decoratedEditorState,
+                                props,
+                                spellCheckerMatchingOffset,
+                                setSpellCheckerMatchingOffset,
+                                editingTrack?.language.direction,
+                                setEditorState
+                            )
+                        }
                     />
                 </div>
                 <div style={{ flex: 0 }}>
@@ -436,9 +454,27 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 </div>
             </div>
             <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
-                <InlineStyleButton editorIndex={props.index} inlineStyle="BOLD" label={<b>B</b>} />
-                <InlineStyleButton editorIndex={props.index} inlineStyle="ITALIC" label={<i>I</i>} />
-                <InlineStyleButton editorIndex={props.index} inlineStyle="UNDERLINE" label={<u>U</u>} />
+                <InlineStyleButton
+                    editorIndex={props.index}
+                    inlineStyle="BOLD"
+                    label={<b>B</b>}
+                    editorState={decoratedEditorState}
+                    setEditorState={setEditorState}
+                />
+                <InlineStyleButton
+                    editorIndex={props.index}
+                    inlineStyle="ITALIC"
+                    label={<i>I</i>}
+                    editorState={decoratedEditorState}
+                    setEditorState={setEditorState}
+                />
+                <InlineStyleButton
+                    editorIndex={props.index}
+                    inlineStyle="UNDERLINE"
+                    label={<u>U</u>}
+                    editorState={decoratedEditorState}
+                    setEditorState={setEditorState}
+                />
             </div>
         </div>
     );

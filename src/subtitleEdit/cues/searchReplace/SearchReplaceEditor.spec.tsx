@@ -11,7 +11,6 @@ import { updateCues } from "../cuesList/cuesListActions";
 import { SaveState, setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../toolbox/ToggleButton";
-import { reset } from "../edit/editorStatesSlice";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 
@@ -51,7 +50,6 @@ const testingCuesWithEditDisabled = [
 describe("SearchReplaceEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
     });
 
@@ -61,10 +59,10 @@ describe("SearchReplaceEditor", () => {
         const expectedNode = render(
             <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
                 <div style={{ display: "flex", flexFlow: "row", width: "50%" }}>
-                    <input type="text" value="" placeholder="Find" className="form-control" />
+                    <input type="text" defaultValue="" placeholder="Find" className="form-control" />
                     <input
                         type="text"
-                        value=""
+                        defaultValue=""
                         placeholder="Replace"
                         className="form-control"
                         style={{ marginLeft: "5px" }}

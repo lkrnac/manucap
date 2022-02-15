@@ -132,19 +132,6 @@ export const lastCueChangeSlice = createSlice({
     }
 });
 
-export const glossaryTermSlice = createSlice({
-    name: "glossaryTerm",
-    initialState: null as string | null,
-    reducers: {
-        setGlossaryTerm: (_state, action: PayloadAction<string | null>): string | null => action.payload
-    },
-});
-
-export const setGlossaryTerm = (term: string | null): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<string | null>>): void => {
-        dispatch(glossaryTermSlice.actions.setGlossaryTerm(term));
-    };
-
 export const clearLastCueChange = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CueChange | null>>): void => {
         dispatch(lastCueChangeSlice.actions.recordCueChange(null));

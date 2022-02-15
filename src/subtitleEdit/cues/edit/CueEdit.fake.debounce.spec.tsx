@@ -9,7 +9,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
 import { Character } from "../../utils/shortcutConstants";
-import { CueDto, CueError, Language, Track } from "../../model";
+import { CueDto, Language, Track } from "../../model";
 import CueEdit from "./CueEdit";
 import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
@@ -26,7 +26,7 @@ import { SearchReplaceMatches } from "../searchReplace/model";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
-import { setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
+import { updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { setCurrentPlayerTime } from "../cuesList/cuesListScrollSlice";
 
@@ -81,6 +81,7 @@ describe("CueEdit", () => {
 
         it("renders for caption task", () => {
             // GIVEN
+            // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
@@ -163,6 +164,7 @@ describe("CueEdit", () => {
                                 vttCue={cues[0].vttCue}
                                 bindCueViewModeKeyboardShortcut={jest.fn()}
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                         <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
@@ -177,6 +179,7 @@ describe("CueEdit", () => {
                     <CueEdit
                         index={0}
                         cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -188,6 +191,7 @@ describe("CueEdit", () => {
 
         it("renders for caption task", () => {
             // GIVEN
+            // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
@@ -270,6 +274,7 @@ describe("CueEdit", () => {
                                 vttCue={cues[0].vttCue}
                                 bindCueViewModeKeyboardShortcut={jest.fn()}
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                         <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
@@ -284,6 +289,7 @@ describe("CueEdit", () => {
                     <CueEdit
                         index={0}
                         cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -374,6 +380,7 @@ describe("CueEdit", () => {
                                 vttCue={cues[0].vttCue}
                                 bindCueViewModeKeyboardShortcut={jest.fn()}
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                         <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
@@ -388,6 +395,7 @@ describe("CueEdit", () => {
                     <CueEdit
                         index={0}
                         cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -402,6 +410,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(
                 updateEditingTrack({ ...testTranslationTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
 
+            // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
                     <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
@@ -484,6 +493,7 @@ describe("CueEdit", () => {
                                 vttCue={cues[0].vttCue}
                                 bindCueViewModeKeyboardShortcut={jest.fn()}
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
+                                setGlossaryTerm={jest.fn()}
                             />
                         </div>
                         <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
@@ -498,6 +508,7 @@ describe("CueEdit", () => {
                     <CueEdit
                         index={0}
                         cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -515,7 +526,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={1} cue={cue} />
+                    <CueEdit index={1} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -535,7 +546,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={1} cue={cue} />
+                    <CueEdit index={1} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -555,7 +566,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -582,7 +593,7 @@ describe("CueEdit", () => {
 
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -602,7 +613,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -629,7 +640,7 @@ describe("CueEdit", () => {
 
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -656,7 +667,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -684,7 +695,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -708,7 +719,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -736,7 +747,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -754,7 +765,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -776,7 +787,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -797,7 +808,7 @@ describe("CueEdit", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -813,7 +824,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0.5) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -834,13 +845,13 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0.5) as {} as AnyAction);
             const { container, rerender } = render(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
             testingStore.dispatch(setCurrentPlayerTime(0.867) as {} as AnyAction);
             rerender(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
             const editor = container.querySelector(".public-DraftEditor-content") as Element;
@@ -861,7 +872,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -882,13 +893,13 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1.0) as {} as AnyAction);
             const { container, rerender } = render(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
             testingStore.dispatch(setCurrentPlayerTime(1.781) as {} as AnyAction);
             rerender(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
             const editor = container.querySelector(".public-DraftEditor-content") as Element;
@@ -911,7 +922,7 @@ describe("CueEdit", () => {
             // WHEN
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -930,7 +941,7 @@ describe("CueEdit", () => {
             // WHEN
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={1} cue={cue} />
+                    <CueEdit index={1} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -948,7 +959,7 @@ describe("CueEdit", () => {
             // WHEN
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
             simulant.fire(
@@ -969,7 +980,7 @@ describe("CueEdit", () => {
             // WHEN
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
             simulant.fire(
@@ -989,7 +1000,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1009,7 +1020,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1029,7 +1040,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1049,7 +1060,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1069,7 +1080,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1100,6 +1111,7 @@ describe("CueEdit", () => {
                         index={0}
                         cue={cue}
                         nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1127,7 +1139,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1151,7 +1163,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1186,6 +1198,7 @@ describe("CueEdit", () => {
                         index={0}
                         cue={cue}
                         nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1225,6 +1238,7 @@ describe("CueEdit", () => {
                         index={0}
                         cue={cue}
                         nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1253,7 +1267,7 @@ describe("CueEdit", () => {
 
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1288,6 +1302,7 @@ describe("CueEdit", () => {
                         index={0}
                         cue={cues[0]}
                         nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1325,6 +1340,7 @@ describe("CueEdit", () => {
                             index={0}
                             cue={cues[0]}
                             nextCueLine={{ sourceCues: [{ index: 1, cue: sourceCues[1] }]}}
+                            setGlossaryTerm={jest.fn()}
                         />
                     </Provider>
                 );
@@ -1353,7 +1369,7 @@ describe("CueEdit", () => {
                 testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
                 mount(
                     <Provider store={testingStore} >
-                        <CueEdit index={0} cue={cues[0]} />
+                        <CueEdit index={0} cue={cues[0]} setGlossaryTerm={jest.fn()} />
                     </Provider>
                 );
 
@@ -1382,6 +1398,7 @@ describe("CueEdit", () => {
                         index={0}
                         cue={cues[0]}
                         nextCueLine={{ targetCues: [{ index: 1, cue: cues[1] }]}}
+                        setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
             );
@@ -1402,7 +1419,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1429,16 +1446,15 @@ describe("CueEdit", () => {
             } as CueDto;
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             const actualNode = render(
-                <Provider store={testingStore}>
-                    <Provider store={testingStore} >
-                        <CueEdit
-                            index={0}
-                            cue={cue}
-                            nextCueLine={{
-                                sourceCues: [{ index: 0, cue: sourceCues[0] }, { index: 1, cue: sourceCues[1] }]
-                            }}
-                        />
-                    </Provider>
+                <Provider store={testingStore} >
+                    <CueEdit
+                        index={0}
+                        cue={cue}
+                        nextCueLine={{
+                            sourceCues: [{ index: 0, cue: sourceCues[0] }, { index: 1, cue: sourceCues[1] }]
+                        }}
+                        setGlossaryTerm={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -1466,7 +1482,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(2) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={2} cue={cues[2]} />
+                    <CueEdit index={2} cue={cues[2]} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1490,7 +1506,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(2) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={2} cue={cues[2]} />
+                    <CueEdit index={2} cue={cues[2]} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1515,7 +1531,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(currentPlayer) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
-                    <CueEdit index={2} cue={cues[2]} />
+                    <CueEdit index={2} cue={cues[2]} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1532,25 +1548,6 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[lastCueIndex].vttCue.endTime).toEqual(currentPlayer + 3);
         });
 
-        it("blinks background when when validation error occurs", () => {
-            // GIVEN
-            const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
-            testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
-            const actualNode = mount(
-                <Provider store={testingStore} >
-                    <CueEdit index={0} cue={cue} />
-                </Provider>
-            );
-
-            // WHEN
-            testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
-            actualNode.update();
-
-            // THEN
-            expect(testingStore.getState().validationErrors).toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED]);
-            expect(actualNode.find("div").at(0).hasClass("blink-error-bg")).toBeTruthy();
-        });
-
         it("passes down spell check into editor component", () => {
             // GIVEN
             const vttCue = new VTTCue(0, 1, "someText");
@@ -1561,7 +1558,7 @@ describe("CueEdit", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1579,7 +1576,7 @@ describe("CueEdit", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1597,7 +1594,7 @@ describe("CueEdit", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1660,7 +1657,7 @@ describe("CueEdit", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} />
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1673,7 +1670,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             const { container } = render(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={testingStore.getState().cues[0]} />
+                    <CueEdit index={0} cue={testingStore.getState().cues[0]} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
@@ -1698,7 +1695,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             const { container } = render(
                 <Provider store={testingStore}>
-                    <CueEdit index={0} cue={testingStore.getState().cues[0]} />
+                    <CueEdit index={0} cue={testingStore.getState().cues[0]} setGlossaryTerm={jest.fn()} />
                 </Provider>
             );
 
