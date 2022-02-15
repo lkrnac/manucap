@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import * as React from "react";
 import { CUE_LINE_STATE_CLASSES, CueDto, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
 import CueEdit from "../edit/CueEdit";
@@ -128,6 +128,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const nextTargetCueIndex = findNextTargetCueIndex(props);
     const cueLineEditDisabled = shouldDisableCueLine(props);
 
+    const [glossaryTerm, setGlossaryTerm] = useState<string | undefined>(undefined);
     const showGlossaryTermsAndErrors = props.data.targetCues !== undefined &&
         props.data.targetCues.some(cueWithIndex => cueWithIndex.index === editingCueIndex);
 
@@ -170,7 +171,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                         ? props.data.sourceCues.map(sourceCue => {
                             return (
                                 <CueView
-                                    key={sourceCue.index}
+                                    key={`sourceCueView-${sourceCue.index}`}
                                     isTargetCue={false}
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
@@ -180,6 +181,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
+                                    glossaryTerm={glossaryTerm}
+                                    setGlossaryTerm={setGlossaryTerm}
                                 />
                             );
                         })
@@ -212,10 +215,12 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 ? (
                                     <>
                                         <CueEdit
-                                            key={targetCue.index}
+                                            key={`targetCueEdit-${targetCue.index}`}
                                             index={targetCue.index}
                                             cue={targetCue.cue}
                                             nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
+                                            glossaryTerm={glossaryTerm}
+                                            setGlossaryTerm={setGlossaryTerm}
                                         />
                                         {
                                             commentsVisible ?
@@ -227,13 +232,13 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                                 />
                                                 : null
                                         }
-                                        <CueErrorsList cue={targetCue.cue} />
+                                        <CueErrorsList key={targetCue.index} cue={targetCue.cue} />
                                     </>
                                 )
                                 : (
                                     <>
                                         <CueView
-                                            key={targetCue.index}
+                                            key={`targetCueView-${targetCue.index}`}
                                             isTargetCue
                                             targetCueIndex={targetCue.index}
                                             cue={targetCue.cue}

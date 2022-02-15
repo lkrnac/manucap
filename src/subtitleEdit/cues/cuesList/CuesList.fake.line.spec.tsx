@@ -13,7 +13,6 @@ import CueLine, { CueLineProps } from "../cueLine/CueLine";
 import { updateCues } from "./cuesListActions";
 import CuesList from "./CuesList";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { reset } from "../edit/editorStatesSlice";
 import { act } from "react-dom/test-utils";
 import { changeScrollPosition } from "./cuesListScrollSlice";
 import { Character, KeyCombination } from "../../utils/shortcutConstants";
@@ -56,7 +55,6 @@ const testingDirectTranslationTrack = {
 describe("CuesList", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
     });
 
     describe("captioning", () => {

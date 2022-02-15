@@ -8,7 +8,6 @@ import { CueDto, Track } from "../../model";
 import { addCuesToMergeList, updateCues } from "../cuesList/cuesListActions";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
-import { reset } from "../edit/editorStatesSlice";
 import { showMerge } from "./mergeSlices";
 import MergeEditor from "./MergeEditor";
 
@@ -23,7 +22,6 @@ const testingCues = [
 describe("MergeEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
     });
 

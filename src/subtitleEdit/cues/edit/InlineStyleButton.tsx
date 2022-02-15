@@ -1,22 +1,18 @@
 import { EditorState, RichUtils } from "draft-js";
 import { ReactElement } from "react";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers";
-import { updateEditorState } from "./editorStatesSlice";
 import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
     editorIndex: number;
     inlineStyle: string;
     label: ReactElement;
+    editorState: EditorState,
+    setEditorState: Function
 }
 
 const InlineStyleButton = (props: Props): ReactElement => {
-    const dispatch = useDispatch();
-    const editorState = useSelector((state: SubtitleEditState) =>
-        state.editorStates.get(props.editorIndex)) as EditorState;
-    const buttonStyle = editorState && editorState.getCurrentInlineStyle().has(props.inlineStyle)
+    const buttonStyle = props.editorState && props.editorState.getCurrentInlineStyle().has(props.inlineStyle)
         ? "btn btn-secondary"
         : "btn btn-outline-secondary";
 
@@ -33,8 +29,8 @@ const InlineStyleButton = (props: Props): ReactElement => {
                 // cursor position. If editor would loose focus, inline style toggle is lost.
                 onMouseDown={(event: React.MouseEvent<HTMLElement>): void => event.preventDefault()}
                 onClick={(): void => {
-                    const newState = RichUtils.toggleInlineStyle(editorState, props.inlineStyle);
-                    dispatch(updateEditorState(props.editorIndex, newState));
+                    const newState = RichUtils.toggleInlineStyle(props.editorState, props.inlineStyle);
+                    props.setEditorState(newState);
                 }}
             >
                 {props.label}

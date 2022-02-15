@@ -24,10 +24,10 @@ const trackType = "TRANSLATION";
 
 const TIME_MATCH_TESTING = false;
 
-// const mediaChunkStart = undefined;
-// const mediaChunkEnd = undefined;
-const mediaChunkStart = TIME_MATCH_TESTING ? 0 : 13000;
-const mediaChunkEnd = 305000;
+const mediaChunkStart = undefined;
+const mediaChunkEnd = undefined;
+// const mediaChunkStart = TIME_MATCH_TESTING ? 0 : 13000;
+// const mediaChunkEnd = 305000;
 
 // ################## TESTING DATA TWEAKS - END ########################
 

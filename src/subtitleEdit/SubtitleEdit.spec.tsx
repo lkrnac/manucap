@@ -25,7 +25,6 @@ import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
-import { reset } from "./cues/edit/editorStatesSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
 import * as cuesListScrollSlice from "./cues/cuesList/cuesListScrollSlice";
@@ -118,7 +117,6 @@ jest.setTimeout(9000);
 describe("SubtitleEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingStore.dispatch(reset() as {} as AnyAction);
     });
     it("renders", () => {
         // GIVEN
