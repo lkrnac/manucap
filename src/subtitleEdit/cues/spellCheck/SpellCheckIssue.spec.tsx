@@ -1,4 +1,3 @@
-/**  * @jest-environment jsdom-sixteen  */
 import "../../../testUtils/initBrowserEnvironment";
 import { CSSProperties, RefObject } from "react";
 import { mount } from "enzyme";
