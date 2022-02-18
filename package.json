@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.22.3",
+  "version": "2.22.4",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -26,7 +26,7 @@
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
-    "react-advanced-timefield": "^3.6.6",
+    "react-advanced-timefield": "^3.6.7",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
     "redux": "^4.0.5"
