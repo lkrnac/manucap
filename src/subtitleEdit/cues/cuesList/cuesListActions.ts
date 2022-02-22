@@ -161,14 +161,12 @@ export const checkSpelling = createAsyncThunk(
             const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
             const currentCue = state.cues[index];
             const oldErrorsCount = currentCue.errors?.length || 0;
-            if (currentCue !== null) {
-                const cueErrors = conformToSpelling(currentCue);
-                thunkApi.dispatch(cuesSlice.actions.setErrors(
-                    { index: index, errors: cueErrors } as CueErrorsPayload));
-                if (cueErrors.length !== oldErrorsCount) {
-                    updateMatchedCue(thunkApi.dispatch, state, index);
-                    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
-                }
+            const cueErrors = conformToSpelling(currentCue);
+            thunkApi.dispatch(cuesSlice.actions.setErrors(
+                { index: index, errors: cueErrors } as CueErrorsPayload));
+            if (cueErrors.length !== oldErrorsCount) {
+                updateMatchedCue(thunkApi.dispatch, state, index);
+                callSaveTrack(thunkApi.dispatch, thunkApi.getState);
             }
         }
     });
@@ -186,20 +184,18 @@ export const checkErrors = createAsyncThunk(
             const currentCue = cues[index];
             const followingCue = cues[index + 1];
             const oldErrorsCount = currentCue.errors?.length || 0;
-            if (currentCue !== null) {
-                if (shouldSpellCheck) {
-                    thunkApi.dispatch(applySpellcheckerOnCue(index));
-                }
-                const cueErrors = conformToRules(
-                    currentCue, subtitleSpecification, previousCue, followingCue,
-                    overlapEnabled
-                );
-                thunkApi.dispatch(cuesSlice.actions.setErrors(
-                    { index: index, errors: cueErrors } as CueErrorsPayload));
-                if (cueErrors.length !== oldErrorsCount) {
-                    updateMatchedCue(thunkApi.dispatch, state, index);
-                    callSaveTrack(thunkApi.dispatch, thunkApi.getState);
-                }
+            if (shouldSpellCheck) {
+                thunkApi.dispatch(applySpellcheckerOnCue(index));
+            }
+            const cueErrors = conformToRules(
+                currentCue, subtitleSpecification, previousCue, followingCue,
+                overlapEnabled
+            );
+            thunkApi.dispatch(cuesSlice.actions.setErrors(
+                { index: index, errors: cueErrors } as CueErrorsPayload));
+            if (cueErrors.length !== oldErrorsCount) {
+                updateMatchedCue(thunkApi.dispatch, state, index);
+                callSaveTrack(thunkApi.dispatch, thunkApi.getState);
             }
         }
     });
@@ -286,10 +282,7 @@ export const updateVttCue = (
             if (!textOnly) {
                 dispatch(updateMatchedCues());
             } else {
-                const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(getState(), idx);
-                dispatch(matchedCuesSlice.actions.updateMatchedCue(
-                    { cue: newCue, targetCuesIndex, editingIndexMatchedCues }
-                ));
+                updateMatchedCue(dispatch, getState(), idx);
             }
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             callSaveTrack(dispatch, getState, multiCuesEdit);
@@ -300,11 +293,6 @@ export const validateVttCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         validateCue(dispatch, idx, false);
         updateMatchedCue(dispatch, getState(), idx);
-
-        const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(getState(), idx);
-        dispatch(matchedCuesSlice.actions.updateMatchedCue(
-            { cue: getState().cues[idx], targetCuesIndex, editingIndexMatchedCues }
-        ));
         callSaveTrack(dispatch, getState);
     };
 
