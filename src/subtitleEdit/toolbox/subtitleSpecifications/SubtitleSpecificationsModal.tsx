@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import TransitionDialog from "../../common/TransitionDialog";
+import { Dialog } from "@headlessui/react";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { SubtitleSpecification } from "../model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
@@ -16,23 +16,27 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
     const subtitleSpecifications = stateSubtitleSpecifications ? stateSubtitleSpecifications :
         {} as SubtitleSpecification;
     return (
-        <Modal show={props.show} onHide={props.onClose} centered dialogClassName="sbte-medium-modal">
-            <Modal.Header closeButton>
-                <Modal.Title>Subtitle Specifications</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <TransitionDialog
+            open={props.show}
+            onClose={props.onClose}
+            dialogClassName="sbte-medium-modal"
+            contentClassname="tw-max-w-lg"
+        >
+            <div className="tw-modal-header tw-modal-header-primary">
+                <Dialog.Title as="h4">Subtitle Specifications</Dialog.Title>
+            </div>
+            <Dialog.Description as="div" className="tw-modal-description">
                 <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    variant="primary"
-                    onClick={props.onClose}
-                    className="dotsub-subtitle-specifications-modal-close-button"
-                >
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
+                <div className="tw-modal-toolbar">
+                    <button
+                        onClick={props.onClose}
+                        className="tw-btn tw-btn-primary dotsub-subtitle-specifications-modal-close-button"
+                    >
+                        Close
+                    </button>
+                </div>
+            </Dialog.Description>
+        </TransitionDialog>
     );
 };
 
