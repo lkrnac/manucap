@@ -289,6 +289,107 @@ describe("cueSlices", () => {
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
             });
 
+            it("does not mark a cue as corrupted if a spell check is fixed", async () => {
+                // GIVEN
+                const testingResponse = { matches: []};
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: trackId } as Track
+                ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() =>
+                        new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
+
+                // WHEN
+                await act(async () => {
+                    testingStore
+                        .dispatch(updateVttCue(2, new VTTCue(4, 6, "Dummy Cue")) as {} as AnyAction);
+                });
+
+                // THEN
+                expect(testingStore.getState().cues[2].errors).toEqual([]);
+            });
+
+            it("retains corrupted mark if spell check problems are added to existing ones", async () => {
+                // GIVEN
+                const testingResponse = {
+                    matches: [
+                        {
+                            message: "There are spelling errors",
+                            replacements: [{ "value": "false" }],
+                            offset: 0,
+                            length: 6,
+                            context: { text: "Dummyx is not a word", length: 6, offset: 0 },
+                            rule: { id: ruleId }
+                        }
+
+                    ]
+                };
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: trackId } as Track
+                ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() =>
+                        new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
+
+                // WHEN
+                await act(async () => {
+                    testingStore
+                        .dispatch(updateVttCue(2, new VTTCue(4, 6, "Dummyx Cue")) as {} as AnyAction);
+                });
+
+                // THEN
+                expect(testingStore.getState().cues[2].errors).toEqual([CueError.SPELLCHECK_ERROR]);
+            });
+
+            it("retains corrupted mark if spell check problems are added to existing ones and cue has other errors",
+                async () => {
+                // GIVEN
+                const testingResponse = {
+                    matches: [
+                        {
+                            message: "There are spelling errors",
+                            replacements: [{ "value": "false" }],
+                            offset: 0,
+                            length: 6,
+                            context: { text: "Dummyx is not a word", length: 6, offset: 0 },
+                            rule: { id: ruleId }
+                        }
+
+                    ]
+                };
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+                testingStore.dispatch(updateEditingTrack(
+                    { language: { id: "en-US" }, id: trackId } as Track
+                ) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+                // @ts-ignore modern browsers does have it
+                global.fetch = jest.fn()
+                    .mockImplementation(() =>
+                        new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
+
+                // WHEN
+                await act(async () => {
+                    testingStore
+                        .dispatch(updateVttCue(2, new VTTCue(3, 3.5, "Dummyx Cue")) as {} as AnyAction);
+                });
+
+                // THEN
+                expect(testingStore.getState().cues[2].errors).toEqual(
+                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
+            });
+
             it("triggers autosave content is changed", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
