@@ -1,7 +1,7 @@
 import { findPositionIcon, Position, PositionIcon, positionIcons } from "../cueUtils";
 import { ReactElement } from "react";
-import { Dropdown } from "react-bootstrap";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import { Menu } from "@headlessui/react";
+import Tooltip from "../../common/Tooltip";
 
 interface Props {
     vttCue: VTTCue;
@@ -9,42 +9,63 @@ interface Props {
 }
 
 const PositionButton = (props: Props): ReactElement => (
-    <Dropdown style={{ marginBottom: "5px", marginRight: "10px" }}>
-        <TooltipWrapper
-            tooltipId="positionBtnTooltip"
-            text="Set the position of this subtitle"
-            placement="top"
-        >
-            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                {findPositionIcon(props.vttCue).iconText} <span className="caret" />
-            </Dropdown.Toggle>
-        </TooltipWrapper>
-        <Dropdown.Menu>
-            <div style={{ minWidth: "210px", width: "210px", display: "flex", flexFlow: "row wrap" }}>
-                {
-                    positionIcons.map((positionIcon: PositionIcon, index: number): ReactElement =>
-                        (
-                            <Dropdown.Item
-                                key={index}
-                                className="sbte-dropdown-item"
-                                style={{
-                                    lineHeight: "38px",
-                                    width: "38px",
-                                    margin: "auto",
-                                    padding: "0px",
-                                    borderRadius: "3px",
-                                    paddingLeft: positionIcon.leftPadding
-                                }}
-                                onClick={(): void => props.changePosition(positionIcon.position)}
-                            >
-                                {positionIcon.iconText}
-                            </Dropdown.Item>
-                        )
-                    )
-                }
-            </div>
-        </Dropdown.Menu>
-    </Dropdown>
+    <Menu
+        as="div"
+        className="md:tw-relative tw-dropdown-wrapper"
+        style={{ marginBottom: "5px", marginRight: "10px" }}
+    >
+        {({ open }): ReactElement => (
+            <>
+                <Tooltip
+                    message="Set the position of this subtitle"
+                    placement="top"
+                >
+                    <Menu.Button as="div">
+                        <button
+                            className={`tw-select-none ${open ? "tw-open-true focus active" : "tw-open-false"}` +
+                                " dropdown-toggle btn btn-outline-secondary"}
+                        >
+                            {findPositionIcon(props.vttCue).iconText}
+                            <span className="caret" />
+                        </button>
+                    </Menu.Button>
+                </Tooltip>
+                <div className={`tw-absolute tw-left0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
+                    <Menu.Items
+                        as="ul"
+                        static
+                        className="tw-dropdown-menu tw-transition-all tw-origin-top-left
+                            tw-duration-300 tw-flex tw-flex-row tw-flex-wrap"
+                    >
+                        {
+                            positionIcons.map((positionIcon: PositionIcon, index: number): ReactElement =>
+                                (
+                                    <Menu.Item
+                                        key={index}
+                                        onClick={(): void => props.changePosition(positionIcon.position)}
+                                    >
+                                        <div
+                                            className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
+                                            style={{
+                                                lineHeight: "38px",
+                                                width: "38px",
+                                                margin: "auto",
+                                                padding: "0px",
+                                                borderRadius: "3px",
+                                                paddingLeft: positionIcon.leftPadding
+                                            }}
+                                        >
+                                            {positionIcon.iconText}
+                                        </div>
+                                    </Menu.Item>
+                                )
+                            )
+                        }
+                    </Menu.Items>
+                </div>
+            </>
+        )}
+    </Menu>
 );
 
 export default PositionButton;

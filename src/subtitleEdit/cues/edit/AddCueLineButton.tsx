@@ -2,7 +2,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { ReactElement } from "react";
 import { addCue } from "../cuesList/cuesListActions";
 import { useDispatch } from "react-redux";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import Tooltip from "../../common/Tooltip";
 
 interface Props {
     cueIndex: number;
@@ -13,13 +13,12 @@ interface Props {
 const AddCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     return (
-        <TooltipWrapper
-            tooltipId="addCueBtnTooltip"
-            text="Insert new subtitle"
+        <Tooltip
+            message="Insert new subtitle"
             placement="left"
         >
             <button
-                style={{ maxHeight: "38px", margin: "5px", height: "100%" }}
+                style={{ maxHeight: "38px", margin: "5px", height: "100%", maxWidth: 40, width: "100%" }}
                 className="btn btn-outline-secondary sbte-add-cue-button"
                 onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1, props.sourceCueIndexes))}
             >
@@ -27,7 +26,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
                     props.text ? <span>{props.text}</span> : <b>+</b>
                 }
             </button>
-        </TooltipWrapper>
+        </Tooltip>
     );
 };
 

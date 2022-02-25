@@ -32,6 +32,13 @@ const themeColors = {
     }
 }
 
+const colorStates = {
+    warning: "#faa700",
+    danger: "#ff4c52",
+    success: "#008c4d",
+    info: "#0b69e3"
+}
+
 module.exports = {
     prefix: "tw-",
     content: [
@@ -39,8 +46,8 @@ module.exports = {
     ],
     theme: {
         extend: {
-            textColor: themeColors,
-            backgroundColor: { ...themeColors, body: "#f1f4f5" },
+            textColor: { ...themeColors, ...colorStates },
+            backgroundColor: { ...themeColors, ...colorStates, body: "#f1f4f5" },
             borderColor: themeColors,
             divide: themeColors,
             zIndex: {

@@ -20,7 +20,7 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
             open={props.show}
             onClose={props.onClose}
             dialogClassName="sbte-medium-modal"
-            contentClassname="tw-max-w-lg"
+            contentClassname="tw-max-w-3xl"
         >
             <div className="tw-modal-header tw-modal-header-primary">
                 <Dialog.Title as="h4">Subtitle Specifications</Dialog.Title>
@@ -30,7 +30,7 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
                 <div className="tw-modal-toolbar">
                     <button
                         onClick={props.onClose}
-                        className="tw-btn tw-btn-primary dotsub-subtitle-specifications-modal-close-button"
+                        className="btn btn-primary dotsub-subtitle-specifications-modal-close-button"
                     >
                         Close
                     </button>

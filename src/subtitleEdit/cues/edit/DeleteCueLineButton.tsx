@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 import { deleteCue } from "../cuesList/cuesListActions";
 import { useDispatch } from "react-redux";
-import { TooltipWrapper } from "../../TooltipWrapper";
 import { AppThunk } from "../../subtitleEditReducers";
+import Tooltip from "../../common/Tooltip";
 
 interface Props {
     cueIndex: number;
@@ -13,9 +13,8 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
 
     return (
         <>
-            <TooltipWrapper
-                tooltipId="deleteBtnTooltip"
-                text="Delete this subtitle"
+            <Tooltip
+                message="Delete this subtitle"
                 placement="left"
             >
                 <button
@@ -25,7 +24,7 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
                 >
                     <i className="fa fa-trash" />
                 </button>
-            </TooltipWrapper>
+            </Tooltip>
         </>
     );
 };

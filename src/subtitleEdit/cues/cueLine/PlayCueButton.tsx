@@ -3,7 +3,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { CueDto } from "../../model";
 import { playVideoSection } from "../../player/playbackSlices";
 import { useDispatch } from "react-redux";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import Tooltip from "../../common/Tooltip";
 import { getShortcutAsText } from "../../utils/shortcutConstants";
 
 interface Props {
@@ -14,9 +14,9 @@ const PlayCueButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const shortcutText = getShortcutAsText("k");
     return (
-        <TooltipWrapper
+        <Tooltip
             tooltipId="playBtnTooltip"
-            text={`Play this subtitle (${shortcutText})`}
+            message={`Play this subtitle (${shortcutText})`}
             placement="left"
         >
             <button
@@ -27,7 +27,7 @@ const PlayCueButton = (props: Props): ReactElement => {
             >
                 <i className="fa fa-play" />
             </button>
-        </TooltipWrapper>
+        </Tooltip>
     );
 };
 

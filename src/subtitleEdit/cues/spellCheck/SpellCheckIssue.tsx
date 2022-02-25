@@ -1,15 +1,14 @@
 import {
     CSSProperties,
-    Dispatch, KeyboardEventHandler,
-    MutableRefObject,
+    Dispatch,
+    KeyboardEventHandler,
     ReactElement,
     RefObject,
     useEffect,
-    useRef,
+    useRef, useState,
 } from "react";
 
 import * as React from "react";
-import { Overlay, Popover } from "react-bootstrap";
 import Select, { OnChangeValue } from "react-select";
 import { Match, SpellCheck } from "./model";
 import { Character } from "../../utils/shortcutConstants";
@@ -22,7 +21,9 @@ import {
 } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
-
+import { Popover, Transition } from "@headlessui/react";
+import { usePopper } from "react-popper";
+import ReactDOM from "react-dom";
 
 interface Props {
     children: ReactElement;
@@ -37,15 +38,6 @@ interface Props {
     unbindCueViewModeKeyboardShortcut: () => void;
     trackId: string;
 }
-
-const popupPlacement = (target: MutableRefObject<null>): boolean => {
-    if (target !== null && target.current !== null) {
-        // @ts-ignore false positive -> we do null check
-        const position = target.current.getBoundingClientRect();
-        return window.innerHeight - position.bottom > 320;
-    }
-    return true;
-};
 
 interface Option {
     value: string;
@@ -92,9 +84,7 @@ const onkeydown = (setSpellCheckerMatchingOffset: Function): KeyboardEventHandle
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const dispatch = useDispatch();
-    const target = useRef(null);
     const selectRef = useRef(null);
-    const showAtBottom = popupPlacement(target);
     const searchReplaceFind = useSelector((state: SubtitleEditState) => state.searchReplace.find);
 
     /**
@@ -112,63 +102,125 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once -> unmount
     );
+
+    const [referenceElement, setReferenceElement] = useState<HTMLSpanElement | null>();
+    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>();
+    const { update, styles, attributes } = usePopper(referenceElement, popperElement, {
+        placement: "bottom",
+        modifiers: [
+            {
+                name: "offset",
+                options: {
+                    offset: [0, 10]
+                },
+            },
+            {
+                name: "preventOverflow",
+                enabled: false
+            },
+            {
+                name: "flip",
+                enabled: false
+            }
+        ]
+    });
+
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
         .pop();
+
     if (!spellCheckMatch) {
         return props.children;
     }
+
     const matchText = getMatchText(spellCheckMatch);
     const selectOptions = spellCheckMatch.replacements
         .filter((replacement) => replacement.value.trim() !== "")
         .map((replacement) => ({ value: replacement.value, label: replacement.value } as Option)
         );
+
     selectOptions.unshift({ value: matchText, label: "Ignore all in this track" });
 
     const customStyles = {
         control: () => ({ visibility: "hidden", height: "0px" }),
         container: (provided: CSSProperties) => ({ ...provided, height: "100%" }),
-        menu: (provided: CSSProperties) => ({ ...provided, position: "static", height: "100%", margin: 0 }),
+        menu: (provided: CSSProperties) => ({
+            ...provided,
+            position: "static",
+            height: "100%",
+            margin: 0,
+            boxShadow: "none",
+            borderRadius: 0,
+            border: "none",
+        }),
         menuList: (provided: CSSProperties) => ({ ...provided, height: "200px" })
     } as StylesConfig<Option, false>;
 
-    return (
-        <span
-            ref={target}
-            className="sbte-text-with-error"
-            onClick={
-                (): void => {
-                    props.setSpellCheckerMatchingOffset(
-                        props.spellCheckerMatchingOffset === props.start ? null : props.start
-                    );
-                }
+    const show = props.spellCheckerMatchingOffset === props.start;
 
-            }
-        >
-            {props.children}
-            {/* TODO fix IJ/TS warnings */}
-            <Overlay
-                onEntering={(): void => onEnterPopover(props, selectRef)}
-                onExiting={(): void => onExitPopover(props)}
-                target={target.current}
-                show={props.spellCheckerMatchingOffset === props.start}
-                placement={showAtBottom ? "bottom" : "top"}
-            >
-                <Popover id="sbte-spell-check-popover">
-                    <Popover.Title>{spellCheckMatch.message}</Popover.Title>
-                    <Popover.Content hidden={selectOptions.length === 0} style={{ padding: 0 }}>
-                        <Select
-                            onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
-                            ref={selectRef}
-                            menuIsOpen
-                            options={selectOptions}
-                            styles={customStyles}
-                            onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
-                            classNamePrefix="spellcheck"
-                        />
-                    </Popover.Content>
-                </Popover>
-            </Overlay>
-        </span>
+    return (
+        <Popover className="tw-inline-block">
+            <Popover.Button className="tw-inline-block tw-outline-none focus:tw-outline-none">
+                <span
+                    ref={setReferenceElement}
+                    className="sbte-text-with-error"
+                    onClick={async (): Promise<void> => {
+                        props.setSpellCheckerMatchingOffset(
+                            props.spellCheckerMatchingOffset === props.start ? null : props.start
+                        );
+                        if (update) {
+                            await update();
+                        }
+                    }}
+                >
+                    {props.children}
+                </span>
+            </Popover.Button>
+            {ReactDOM.createPortal(
+                <Popover.Panel
+                    static
+                    ref={setPopperElement}
+                    style={styles.popper}
+                    {...attributes.popper}
+                    className="tw-z-40 tw-max-w-[276px] tw-popper-wrapper"
+                >
+                    <Transition
+                        unmount={false}
+                        show={show}
+                        className="tw-transition-opacity tw-duration-300 tw-ease-in-out"
+                        enterFrom="tw-opacity-0"
+                        enterTo="tw-opacity-100"
+                        leaveFrom="tw-opacity-100"
+                        leaveTo="tw-opacity-0"
+                        beforeEnter={async (): Promise<void> => {
+                            if (update) await update();
+                        }}
+                        afterEnter={(): void => onEnterPopover(props, selectRef)}
+                        afterLeave={(): void => onExitPopover(props)}
+                    >
+                        <div
+                            className="tw-rounded tw-shadow-lg tw-overflow-hidden
+                                tw-border tw-arrow before:tw-border-b-gray-300 tw-border-gray-300"
+                        >
+                            <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                                {spellCheckMatch.message}
+                            </div>
+                            <div hidden={selectOptions.length === 0}>
+                                <Select
+                                    onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
+                                    ref={selectRef}
+                                    menuIsOpen
+                                    options={selectOptions}
+                                    styles={customStyles}
+                                    onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
+                                    classNamePrefix="spellcheck"
+                                />
+                            </div>
+                        </div>
+                    </Transition>
+                </Popover.Panel>,
+                document.body
+            )}
+        </Popover>
     );
 };

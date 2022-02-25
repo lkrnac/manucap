@@ -2,7 +2,7 @@ import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { ReactElement } from "react";
 import { splitCue } from "../cuesList/cuesListActions";
 import { useDispatch, useSelector } from "react-redux";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import Tooltip from "../../common/Tooltip";
 
 interface Props {
     cueIndex: number;
@@ -13,10 +13,11 @@ const SplitCueLineButton = (props: Props): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
-        <TooltipWrapper
+        <Tooltip
             tooltipId="splitCueBtnTooltip"
-            text="Split this subtitle"
+            message="Split this subtitle"
             placement="left"
+            disabled={!timecodesUnlocked}
         >
             <button
                 style={{ maxHeight: "38px", margin: "5px" }}
@@ -27,7 +28,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
             >
                 <i className="fas fa-cut" />
             </button>
-        </TooltipWrapper>
+        </Tooltip>
     );
 };
 

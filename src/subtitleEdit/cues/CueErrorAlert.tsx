@@ -1,6 +1,6 @@
 import { CueError } from "../model";
 import { ReactElement, useEffect, useState } from "react";
-import { Alert } from "react-bootstrap";
+import Alert from "../common/Alert";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
@@ -46,10 +46,10 @@ const CueErrorAlert = (): ReactElement => {
     return (
         <Alert
             key="cueErrorsAlert"
-            variant="danger"
-            className="sbte-cue-errors-alert"
-            dismissible
+            alertClass="tw-alert-danger sbte-cue-errors-alert"
             show={showCueErrorsAlert}
+            autoClose
+            dismissible
             onClose={(): void => setShowCueErrorsAlert(false)}
         >
             <span>Unable to complete action due to the following error(s):</span><br />

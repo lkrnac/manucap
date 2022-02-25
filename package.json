@@ -51,6 +51,7 @@
     "react-bootstrap": "1.6.4",
     "react-final-form": "^6.5.7",
     "react-markdown": "5.0.3",
+    "react-popper": "^2.2.5",
     "react-select": "^5.2.1",
     "remark-gfm": "1.0.0",
     "sanitize-html": "^2.5.2",

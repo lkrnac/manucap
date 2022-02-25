@@ -1,10 +1,11 @@
 import { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Modal from "react-bootstrap/Modal";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { Field, Form } from "react-final-form";
 import { formatStartOrEndTime } from "../../utils/timeUtils";
+import { Dialog } from "@headlessui/react";
+import TransitionDialog from "../../common/TransitionDialog";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
@@ -42,15 +43,20 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     };
 
     return (
-        <Modal show={props.show} onHide={handleCancelShift} centered dialogClassName="sbte-medium-modal">
-            <Modal.Header closeButton>
-                <Modal.Title>Shift Track Lines Time</Modal.Title>
-            </Modal.Header>
-            <Form
-                onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
-                render={({ handleSubmit, values }): ReactElement => (
-                    <form onSubmit={handleSubmit}>
-                        <Modal.Body>
+        <TransitionDialog
+            open={props.show}
+            onClose={handleCancelShift}
+            dialogClassName="sbte-medium-modal"
+            contentClassname="tw-max-w-3xl"
+        >
+            <div className="tw-modal-header tw-modal-header-primary">
+                <Dialog.Title as="h4">Shift Track Lines Time</Dialog.Title>
+            </div>
+            <Dialog.Description as="div" className="tw-modal-description">
+                <Form
+                    onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
+                    render={({ handleSubmit, values }): ReactElement => (
+                        <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Time Shift in Seconds.Milliseconds</label>
                                 <Field
@@ -104,30 +110,30 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                     </span>
                                 ): null
                             }
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <button
-                                type="submit"
-                                disabled={
-                                    isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
-                                    values.shiftPosition === undefined
-                                }
-                                className="dotsub-shift-modal-apply-button btn btn-primary"
-                            >
-                                Apply
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleCancelShift}
-                                className="dotsub-shift-modal-close-button btn btn-secondary"
-                            >
-                                Close
-                            </button>
-                        </Modal.Footer>
-                    </form>
-                )}
-            />
-        </Modal>
+                            <div className="tw-modal-toolbar">
+                                <button
+                                    type="submit"
+                                    disabled={
+                                        isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
+                                        values.shiftPosition === undefined
+                                    }
+                                    className="dotsub-shift-modal-apply-button btn btn-primary"
+                                >
+                                    Apply
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleCancelShift}
+                                    className="dotsub-shift-modal-close-button btn btn-secondary"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                    )}
+                />
+            </Dialog.Description>
+        </TransitionDialog>
     );
 };
 

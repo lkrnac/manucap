@@ -14,7 +14,7 @@ import { playVideoSection } from "../../player/playbackSlices";
 import { updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { getTimeString } from "../../utils/timeUtils";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import Tooltip from "../../common/Tooltip";
 
 export interface CueEditProps {
     index: number;
@@ -133,24 +133,22 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                         isTranslation && !timecodesUnlocked
                         ? (
                             <>
-                                <TooltipWrapper
-                                    tooltipId="disabledTimecodeTooltip"
-                                    text="Timecodes are locked"
+                                <Tooltip
+                                    message="Timecodes are locked"
                                     placement="right"
                                 >
                                     <div style={getLockedTimecodeStyle()}>
                                         {getTimeString(props.cue.vttCue.startTime)}
                                     </div>
-                                </TooltipWrapper>
-                                <TooltipWrapper
-                                    tooltipId="disabledTimecodeTooltip"
-                                    text="Timecodes are locked"
+                                </Tooltip>
+                                <Tooltip
+                                    message="Timecodes are locked"
                                     placement="right"
                                 >
                                     <div style={getLockedTimecodeStyle()}>
                                         {getTimeString(props.cue.vttCue.endTime)}
                                     </div>
-                                </TooltipWrapper>
+                                </Tooltip>
                             </>
                         )
                         : (

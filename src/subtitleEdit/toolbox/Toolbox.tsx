@@ -1,7 +1,4 @@
 import { ReactElement } from "react";
-import Accordion from "react-bootstrap/Accordion";
-import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import Card from "react-bootstrap/Card";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
@@ -17,6 +14,7 @@ import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
 import TimecodesLockToggle from "./TimecodesLockToggle";
 import WaveformToggle from "./WaveformToggle";
+import { Disclosure, Transition } from "@headlessui/react";
 
 interface Props {
     handleExportFile: () => void;
@@ -29,38 +27,55 @@ const Toolbox = (props: Props): ReactElement => {
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
     return (
-        <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
-            <Card>
-                <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                    Toolbox
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                        <ButtonToolbar className="sbte-button-toolbar">
-                            <KeyboardShortcuts />
-                            <SubtitleSpecificationsButton />
-                            <ShiftTimeButton />
-                            <CaptionOverlapToggle />
-                            { isTranslation ?
-                                <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} /> : null }
-                            <ExportTrackCuesButton
-                                handleExport={props.handleExportFile}
-                            />
-                            <ImportTrackCuesButton
-                                handleImport={props.handleImportFile}
-                                disabled={editingTask?.editDisabled}
-                            />
-                            <SearchReplaceButton />
-                            { isTranslation ? <SyncCuesButton /> : null }
-                            <MergeCuesButton />
-                            <CueCommentsToggle />
-                            { isTranslation ? <TimecodesLockToggle /> : null }
-                            <WaveformToggle />
-                        </ButtonToolbar>
-                    </Card.Body>
-                </Accordion.Collapse>
-            </Card>
-        </Accordion>
+        <Disclosure defaultOpen>
+            <div
+                style={{ marginTop: "10px" }}
+                className="sbte-toolbox"
+            >
+                <div className="card">
+                    <Disclosure.Button className="card-header" as="div">Toolbox</Disclosure.Button>
+                    <Transition
+                        className="tw-overflow-hidden tw-h-full tw-transition-all"
+                        enter="tw-duration-500 tw-ease-out"
+                        enterFrom="tw-max-h-0"
+                        enterTo="tw-max-h-[1000px]"
+                        leave="tw-duration-500 tw-ease-out"
+                        leaveFrom="tw-max-h-[1000px]"
+                        leaveTo="tw-max-h-0"
+                        unmount={false}
+                        appear={false}
+                    >
+                        <Disclosure.Panel static>
+                            <div className="card-body">
+                                <div role="toolbar" className="sbte-button-toolbar btn-toolbar">
+                                    <KeyboardShortcuts />
+                                    <SubtitleSpecificationsButton />
+                                    <ShiftTimeButton />
+                                    <CaptionOverlapToggle />
+                                    { isTranslation ?
+                                        <ExportSourceTrackCuesButton
+                                            handleExport={props.handleExportSourceFile}
+                                        /> : null }
+                                    <ExportTrackCuesButton
+                                        handleExport={props.handleExportFile}
+                                    />
+                                    <ImportTrackCuesButton
+                                        handleImport={props.handleImportFile}
+                                        disabled={editingTask?.editDisabled}
+                                    />
+                                    <SearchReplaceButton />
+                                    { isTranslation ? <SyncCuesButton /> : null }
+                                    <MergeCuesButton />
+                                    <CueCommentsToggle />
+                                    { isTranslation ? <TimecodesLockToggle /> : null }
+                                    <WaveformToggle />
+                                </div>
+                            </div>
+                        </Disclosure.Panel>
+                    </Transition>
+                </div>
+            </div>
+        </Disclosure>
     );
 };
 

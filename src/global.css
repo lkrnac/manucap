@@ -2,193 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/** General Styling **/
-
-@layer base {
-    *,
-    *:active,
-    *:hover,
-    *:focus,
-    *:focus-visible {
-        outline: none !important;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    .h1,
-    .h2,
-    .h3,
-    .h4,
-    .h5,
-    .h6 {
-        @apply tw-font-sans tw-text-blue-grey-700 tw-font-medium tw-leading-5;
-    }
-
-    .h1, h1 {
-        @apply tw-text-5xl;
-    }
-
-    .h2, h2 {
-        @apply tw-text-4xl;
-    }
-
-    .h3, h3 {
-        @apply tw-text-3xl;
-    }
-
-    .h4, h4 {
-        @apply tw-text-lg;
-    }
-
-    .h5, h5 {
-        @apply tw-text-base;
-    }
-
-    .h6, h6 {
-        @apply tw-text-sm;
-    }
-
-    .h1, .h2, .h3, h1, h2, h3 {
-        margin-top: 22px;
-        margin-bottom: 11px;
-    }
-
-    .h4, .h5, .h6, h4, h5, h6 {
-        margin-top: 11px;
-        margin-bottom: 11px;
-    }
-
-    a {
-        @apply tw-text-blue-600 hover:tw-text-blue-500;
-    }
-
-    body {
-        @apply tw-bg-body;
-    }
-}
-
-.tw-icon {
-    @apply tw-antialiased tw-relative tw-not-italic tw-leading-4 tw-translate-x-0 tw-translate-y-0;
-    speak: none;
-}
-
-/** Buttons **/
-
-/** TODO: Remove .btn classes (and its variants) when we get rid of Bootstrap. **/
-
-.btn {
-    @apply tw-border-none;
-}
-
-.tw-btn-pure {
-    width: 8px;
-    height: 8px;
-    @apply tw-rounded-full;
-}
-
-.tw-btn {
-    @apply tw-text-base tw-py-2 tw-px-4 tw-rounded tw-whitespace-nowrap tw-inline-block tw-items-center tw-justify-center tw-transition-all tw-duration-200 tw-ease-linear tw-font-normal tw-text-center tw-select-none;
-}
-
-.tw-btn.tw-btn-lg {
-    @apply tw-py-5 tw-px-7 tw-text-lg;
-}
-
-.tw-btn.tw-btn-outline.tw-btn-outline-default {
-    @apply tw-border tw-border-blue-grey-200 hover:tw-bg-blue-grey-200;
-}
-
-.btn.btn-primary,
-.tw-btn-pure.tw-btn-primary,
-.tw-btn.tw-btn-primary {
-    @apply tw-bg-blue-600 hover:tw-bg-blue-500 tw-text-white;
-}
-
-.btn.btn-danger,
-.tw-btn-pure.tw-btn-danger,
-.tw-btn.tw-btn-danger {
-    @apply tw-bg-red-600 hover:tw-bg-red-500 tw-text-white;
-}
-
-.btn.btn-success,
-.tw-btn-pure.tw-btn-success,
-.tw-btn.tw-btn-success {
-    @apply tw-bg-green-600 hover:tw-bg-green-500 tw-text-white;
-}
-
-.btn.btn-dark,
-.tw-btn-pure.tw-btn-dark,
-.tw-btn.tw-btn-dark {
-    @apply tw-bg-blue-grey-700 hover:tw-bg-blue-grey-500 tw-text-white;
-}
-
-.btn.btn-warning,
-.tw-btn-pure.tw-btn-warning,
-.tw-btn.tw-btn-warning {
-    @apply tw-bg-yellow-600 hover:tw-bg-yellow-500 tw-text-white;
-}
-
-.btn.btn-info,
-.tw-btn-pure.tw-btn-info,
-.tw-btn.tw-btn-info {
-    @apply tw-bg-cyan-600 hover:tw-bg-cyan-500 tw-text-white;
-}
-
-.tw-btn.tw-btn-sm {
-    @apply tw-py-2 tw-px-3.5;
-}
-
-.tw-btn.tw-btn-xs {
-    @apply tw-py-1 tw-px-2 tw-text-sm tw-leading-none;
-}
-
-.btn.btn-flat,
-.tw-btn.tw-btn-flat {
-    @apply tw-bg-transparent tw-border-transparent;
-}
-
-.btn.btn-light,
-.tw-btn.tw-btn-light {
-    @apply tw-bg-white tw-text-blue-grey-600 hover:tw-bg-blue-grey-200 hover:tw-text-blue-grey-600 hover:tw-border-blue-grey-100;
-}
-
-.btn.btn-default,
-.tw-btn.tw-btn-default {
-    @apply tw-bg-blue-grey-200 tw-border-blue-grey-200 tw-text-blue-grey-500 hover:tw-bg-blue-grey-100;
-}
-
-.btn.btn-secondary,
-.tw-btn.tw-btn-secondary {
-    @apply tw-bg-grey-600 tw-border-grey-600 tw-text-white hover:tw-bg-grey-500 hover:tw-border-grey-500;
-}
-
-.tw-btn.tw-btn-outline.tw-btn-outline-secondary,
-.btn.btn-outline-secondary {
-    @apply tw-border tw-border-solid tw-border-grey-600 hover:tw-bg-grey-500 hover:tw-border-grey-500;
-}
-
-.tw-btn-icon {
-    @apply tw-btn tw-leading-none tw-py-2 tw-px-3.5 tw-text-blue-grey-600 hover:tw-bg-blue-grey-200 hover:tw-text-blue-grey-600 hover:tw-border-blue-grey-100;
-}
-
-.tw-btn-icon.tw-btn-sm {
-    @apply tw-py-1 tw-px-2.5 tw-text-xs;
-}
-
-.tw-btn.disabled,
-.tw-btn:disabled {
-    @apply tw-opacity-60 tw-shadow-none tw-pointer-events-none;
-}
-
-.tw-btn-icon.disabled,
-.tw-btn-icon:disabled {
-    @apply tw-opacity-60 tw-shadow-none tw-pointer-events-none;
-}
-
 /** Modal **/
 
 .tw-modal .tw-modal-header {
@@ -225,9 +38,113 @@
 }
 
 .tw-modal .tw-modal-close {
-    @apply tw-absolute tw-right-6 tw-top-5 tw-pt-0.5 tw-text-white tw-opacity-60 hover:tw-opacity-100 tw-transition-colors tw-duration-300 tw-text-2xl tw-font-bold;
+    @apply tw-absolute tw-right-6 tw-top-5 tw-pt-0.5 tw-text-white tw-opacity-60 hover:tw-opacity-100 tw-transition-colors tw-duration-300 tw-text-2xl tw-font-bold tw-outline-none;
 }
 
 .tw-modal .tw-modal-toolbar {
     @apply tw-flex tw-items-center tw-justify-end tw-space-x-2;
+}
+
+/** Alerts **/
+
+.tw-alert {
+    @apply tw-px-7 tw-py-3 tw-leading-none tw-rounded tw-border tw-leading-6;
+}
+
+.tw-alert > *:last-child {
+    @apply tw-mb-0;
+}
+
+.tw-alert p {
+    @apply tw-leading-5;
+}
+
+.tw-alert.tw-alert-danger {
+    @apply tw-text-red-800 tw-bg-red-100 tw-border-red-200;
+}
+
+/** Dropdown **/
+
+.tw-dropdown-menu {
+    @apply tw-border tw-min-w-[160px] tw-border-blue-grey-200 tw-mt-2 tw-text-blue-grey-500 tw-rounded tw-z-50 tw-text-left tw-list-none tw-text-base tw-bg-white tw-shadow-sm tw-select-none tw-py-2;
+}
+
+.tw-dropdown-menu hr {
+    @apply tw-w-full tw-border-blue-grey-200 tw-my-2;
+}
+
+.tw-dropdown-menu .tw-dropdown-header,
+.tw-dropdown-menu .tw-dropdown-item {
+    @apply tw-flex tw-w-full tw-py-2.5 tw-px-4;
+}
+
+.tw-dropdown-menu .tw-dropdown-header {
+    @apply tw-text-blue-grey-700 tw-text-base tw-font-bold;
+}
+
+.tw-dropdown-menu .tw-dropdown-item {
+    @apply tw-font-normal tw-transition-colors tw-duration-300 tw-text-blue-grey-500 tw-whitespace-nowrap hover:tw-bg-blue-grey-100;
+}
+
+.tw-dropdown-wrapper .tw-open-false {
+    @apply tw-pointer-events-none tw-select-none;
+}
+
+.tw-dropdown-wrapper .tw-open-true {
+    @apply tw-pointer-events-auto tw-select-none;
+}
+
+.tw-open-false .tw-dropdown-menu {
+    @apply tw-opacity-0 tw-scale-75 tw-opacity-0;
+}
+
+.tw-open-true .tw-dropdown-menu {
+    @apply tw-opacity-100 tw-scale-100;
+}
+
+/** Tooltips **/
+
+.tw-popper-wrapper .tw-tooltip {
+    @apply tw-pointer-events-none tw-max-w-[200px] tw-select-none tw-p-2 tw-w-max tw-rounded tw-leading-4 tw-shadow-sm tw-bg-blue-grey-700 tw-block tw-text-center tw-text-sm tw-text-white;
+}
+
+/** Arrow **/
+
+.tw-arrow::before {
+    content: "";
+    @apply tw-absolute tw-w-[8px] tw-h-[4px] tw-border-transparent tw-border-solid;
+}
+
+.tw-popper-wrapper[data-popper-placement="bottom"] .tw-arrow::before {
+    border-width: 0 4px 4px;
+    @apply tw--top-[4px] tw--ml-[2px];
+    right: calc(50% - 4px);
+}
+
+.tw-popper-wrapper[data-popper-placement="top"] .tw-arrow::before {
+    border-width: 0 4px 4px;
+    transform: rotate(180deg);
+    @apply tw--bottom-[4px] tw--ml-[2px];
+    right: calc(50% - 4px);
+}
+
+.tw-popper-wrapper[data-popper-placement="top-end"] .tw-arrow::before {
+    border-width: 0 4px 4px;
+    transform: rotate(180deg);
+    @apply tw--bottom-[4px] tw--ml-[2px];
+    left: calc(100% - 12px);
+}
+
+.tw-popper-wrapper[data-popper-placement="right"] .tw-arrow::before {
+    border-width: 0 4px 4px;
+    transform: rotate(270deg);
+    @apply tw--left-[6px];
+    top: calc(50% - 2px);
+}
+
+.tw-popper-wrapper[data-popper-placement="left"] .tw-arrow::before {
+    border-width: 0 4px 4px;
+    transform: rotate(90deg);
+    @apply tw--right-[6px];
+    top: calc(50% - 2px);
 }

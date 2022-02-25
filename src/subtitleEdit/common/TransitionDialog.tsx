@@ -10,7 +10,7 @@ interface Props {
 }
 
 const TransitionDialog = (props: Props): ReactElement => (
-    <Transition show={props.open || false} as={Fragment}>
+    <Transition show={props.open || false} as={Fragment} static>
         <Dialog
             as="div"
             onClose={props.onClose}

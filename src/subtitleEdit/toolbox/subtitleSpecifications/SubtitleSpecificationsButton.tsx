@@ -24,7 +24,6 @@ const SubtitleSpecificationsButton = (): ReactElement => {
             >
                 <i className="far fa-flag" /> Subtitle Specifications
             </button>
-
             <SubtitleSpecificationsModal show={show} onClose={handleClose} />
         </>
     );

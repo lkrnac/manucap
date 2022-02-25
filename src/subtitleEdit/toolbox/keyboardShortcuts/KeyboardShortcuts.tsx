@@ -1,9 +1,9 @@
 import { ReactElement, useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
 import { KeyCombination } from "../../utils/shortcutConstants";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
-import Modal from "react-bootstrap/Modal";
 import Mousetrap from "mousetrap";
+import { Dialog } from "@headlessui/react";
+import TransitionDialog from "../../common/TransitionDialog";
 
 const KeyboardShortcuts = (): ReactElement => {
     const [show, setShow] = useState(false);
@@ -21,15 +21,22 @@ const KeyboardShortcuts = (): ReactElement => {
 
     return (
         <>
-            <Button variant="secondary" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
+            <button
+                className="btn btn-secondary dotsub-keyboard-shortcuts-button"
+                onClick={handleShow}
+            >
                 <i className="far fa-keyboard" /> Keyboard Shortcuts
-            </Button>
-
-            <Modal show={show} onHide={handleClose} centered dialogClassName="sbte-medium-modal">
-                <Modal.Header closeButton>
-                    <Modal.Title>Keyboard Shortcuts</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+            </button>
+            <TransitionDialog
+                open={show}
+                onClose={handleClose}
+                dialogClassName="sbte-medium-modal"
+                contentClassname="tw-max-w-4xl"
+            >
+                <div className="tw-modal-header tw-modal-header-primary">
+                    <Dialog.Title as="h4">Keyboard Shortcuts</Dialog.Title>
+                </div>
+                <Dialog.Description as="div" className="tw-modal-description">
                     <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
                     <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Cue" />
                     <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
@@ -49,13 +56,13 @@ const KeyboardShortcuts = (): ReactElement => {
                         character="b"
                         name="Insert bidirectional text control code"
                     />
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                    <div className="tw-modal-toolbar">
+                        <button className="btn btn-primary" onClick={handleClose}>
+                            Close
+                        </button>
+                    </div>
+                </Dialog.Description>
+            </TransitionDialog>
         </>
     );
 };

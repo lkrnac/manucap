@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { CueCategory } from "../../model";
-import { Dropdown } from "react-bootstrap";
 import { cueCategoryToPrettyName } from "../cueUtils";
+import { Menu } from "@headlessui/react";
 
 interface Props {
     category?: CueCategory;
@@ -9,43 +9,51 @@ interface Props {
 }
 
 const CueCategoryButton = (props: Props): ReactElement => (
-    <Dropdown>
-        <Dropdown.Toggle id="cue-line-category" variant="outline-secondary">
-            {cueCategoryToPrettyName[props.category || "DIALOGUE"]}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-            <Dropdown.Item
-                className="sbte-dropdown-item"
-                style={{ padding: "8px 24px" }}
-                onClick={(): void => props.onChange("DIALOGUE")}
-            >
-                {cueCategoryToPrettyName.DIALOGUE}
-            </Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item
-                className="sbte-dropdown-item"
-                style={{ padding: "8px 24px" }}
-                onClick={(): void => props.onChange("ONSCREEN_TEXT")}
-            >
-                {cueCategoryToPrettyName.ONSCREEN_TEXT}
-            </Dropdown.Item>
-            <Dropdown.Item
-                className="sbte-dropdown-item"
-                style={{ padding: "8px 24px" }}
-                onClick={(): void => props.onChange("AUDIO_DESCRIPTION")}
-            >
-                {cueCategoryToPrettyName.AUDIO_DESCRIPTION}
-            </Dropdown.Item>
-            <Dropdown.Item
-                className="sbte-dropdown-item"
-                style={{ padding: "8px 24px" }}
-                onClick={(): void => props.onChange("LYRICS")}
-            >
-                {cueCategoryToPrettyName.LYRICS}
-            </Dropdown.Item>
-        </Dropdown.Menu>
-    </Dropdown>
+    <Menu as="div" className="md:tw-relative tw-dropdown-wrapper">
+        {({ open }): ReactElement => (
+            <>
+                <Menu.Button as="div">
+                    <button
+                        className={`tw-select-none ${open ? "tw-open-true focus active" : "tw-open-false"}` +
+                            " dropdown-toggle btn btn-outline-secondary"}
+                    >
+                        {cueCategoryToPrettyName[props.category || "DIALOGUE"]}
+                        <span className="caret" />
+                    </button>
+                </Menu.Button>
+                <div className={`tw-absolute tw-left0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
+                    <Menu.Items
+                        as="ul"
+                        static
+                        className="tw-dropdown-menu tw-transition-all tw-origin-top-left
+                            tw-duration-300 tw-flex tw-flex-row tw-flex-wrap"
+                    >
+                        <Menu.Item onClick={(): void => props.onChange("DIALOGUE")}>
+                            <div className="tw-dropdown-item">
+                                {cueCategoryToPrettyName.DIALOGUE}
+                            </div>
+                        </Menu.Item>
+                        <hr />
+                        <Menu.Item onClick={(): void => props.onChange("ONSCREEN_TEXT")}>
+                            <div className="tw-dropdown-item">
+                                {cueCategoryToPrettyName.ONSCREEN_TEXT}
+                            </div>
+                        </Menu.Item>
+                        <Menu.Item onClick={(): void => props.onChange("AUDIO_DESCRIPTION")}>
+                            <div className="tw-dropdown-item">
+                                {cueCategoryToPrettyName.AUDIO_DESCRIPTION}
+                            </div>
+                        </Menu.Item>
+                        <Menu.Item onClick={(): void => props.onChange("LYRICS")}>
+                            <div className="tw-dropdown-item">
+                                {cueCategoryToPrettyName.LYRICS}
+                            </div>
+                        </Menu.Item>
+                    </Menu.Items>
+                </div>
+            </>
+        )}
+    </Menu>
 );
 
 export default CueCategoryButton;

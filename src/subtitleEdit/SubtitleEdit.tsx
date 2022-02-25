@@ -10,7 +10,7 @@ import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
 import { hasDataLoaded } from "./utils/subtitleEditUtils";
 import CuesList from "./cues/cuesList/CuesList";
-import { TooltipWrapper } from "./TooltipWrapper";
+import Tooltip from "./common/Tooltip";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition, setCurrentPlayerTime } from "./cues/cuesList/cuesListScrollSlice";
@@ -125,7 +125,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             <SearchReplaceEditor />
                             <MergeEditor />
                             <CuesList editingTrack={editingTrack} commentAuthor={props.commentAuthor} />
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button
                                     className="btn btn-primary sbte-view-all-tracks-btn"
                                     type="button"
@@ -133,75 +133,66 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 >
                                     View All Tracks
                                 </button>
-                                <TooltipWrapper
-                                    tooltipId="scrollToTopBtnTooltip"
-                                    text="Scroll to top"
+                                <Tooltip
+                                    message="Scroll to top"
                                     placement="top"
                                 >
                                     <button
                                         className="btn btn-secondary sbte-jump-to-first-button"
                                         type="button"
-                                        style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.FIRST));
                                         }}
                                     >
                                         <i className="fa fa-angle-double-up" />
                                     </button>
-                                </TooltipWrapper>
-                                <TooltipWrapper
-                                    tooltipId="scrollToBottomTooltip"
-                                    text="Scroll to bottom"
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to bottom"
                                     placement="top"
                                 >
                                     <button
                                         className="btn btn-secondary sbte-jump-to-last-button"
                                         type="button"
-                                        style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.LAST));
                                         }}
                                     >
                                         <i className="fa fa-angle-double-down" />
                                     </button>
-                                </TooltipWrapper>
-                                <TooltipWrapper
-                                    tooltipId="scrollToEditCueToolTip"
-                                    text="Scroll to currently editing subtitle"
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to currently editing subtitle"
                                     placement="top"
                                 >
                                     <button
                                         data-testid="sbte-jump-to-edit-cue-button"
                                         className="btn btn-secondary"
                                         type="button"
-                                        style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
                                         }}
                                     >
                                         <i className="fa fa-edit" />
                                     </button>
-                                </TooltipWrapper>
-                                <TooltipWrapper
-                                    tooltipId="scrollToPlaybackCueToolTip"
-                                    text="Scroll to subtitle in playback position"
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to subtitle in playback position"
                                     placement="top"
                                 >
                                     <button
                                         data-testid="sbte-jump-to-playback-cue-button"
                                         className="btn btn-secondary"
                                         type="button"
-                                        style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
                                         }}
                                     >
                                         <i className="fa fa-video" />
                                     </button>
-                                </TooltipWrapper>
-                                <TooltipWrapper
-                                    tooltipId="scrollToLastTranslatedCueToolTip"
-                                    text="Scroll to last translated subtitle"
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to last translated subtitle"
                                     placement="top"
                                 >
                                     <button
@@ -209,31 +200,28 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         className="btn btn-secondary"
                                         type="button"
                                         hidden={editingTrack?.type !== "TRANSLATION"}
-                                        style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
                                         }}
                                     >
                                         <i className="fa fa-language" />
                                     </button>
-                                </TooltipWrapper>
-                                <TooltipWrapper
-                                    tooltipId="scrollToErrorCueToolTip"
-                                    text="Scroll to next subtitle error"
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to next subtitle error"
                                     placement="top"
                                 >
                                     <button
                                         data-testid="sbte-jump-error-cue-button"
                                         className="btn btn-secondary"
                                         type="button"
-                                        style={{ marginLeft: "10px" }}
                                         onClick={(): void => {
                                             dispatch(changeScrollPosition(ScrollPosition.ERROR));
                                         }}
                                     >
                                         <i className="fa fa-bug" />
                                     </button>
-                                </TooltipWrapper>
+                                </Tooltip>
                                 <span style={{ flexGrow: 2 }} />
                                 <CompleteButton onComplete={props.onComplete} disabled={editingTask?.editDisabled} />
                             </div>

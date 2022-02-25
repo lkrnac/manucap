@@ -1,7 +1,7 @@
 import { EditorState, RichUtils } from "draft-js";
 import { ReactElement } from "react";
 import * as React from "react";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import Tooltip from "../../common/Tooltip";
 
 interface Props {
     editorIndex: number;
@@ -17,10 +17,11 @@ const InlineStyleButton = (props: Props): ReactElement => {
         : "btn btn-outline-secondary";
 
     return (
-        <TooltipWrapper
-            text={props.inlineStyle}
+        <Tooltip
+            message={props.inlineStyle}
             placement="bottom"
             tooltipId={`${props.inlineStyle}${props.editorIndex}`}
+            toggleClassName="tw-inline-block"
         >
             <button
                 style={{ marginRight: "5px" }}
@@ -35,7 +36,7 @@ const InlineStyleButton = (props: Props): ReactElement => {
             >
                 {props.label}
             </button>
-        </TooltipWrapper>
+        </Tooltip>
 
     );
 };
