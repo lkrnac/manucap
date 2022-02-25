@@ -30,7 +30,7 @@ import { convertVttToHtml } from "./cueTextConverter";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { Overlay } from "react-bootstrap";
-import { replaceCurrentMatch, setFind } from "../searchReplace/searchReplaceSlices";
+import { replaceCurrentMatch, setFind, showSearchReplace } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
@@ -1485,6 +1485,7 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
             render(
                 <Provider store={testingStore}>
@@ -1520,6 +1521,7 @@ describe("CueTextEditor", () => {
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10, 22, 31],
                 offsetIndex: 1,
@@ -1571,6 +1573,7 @@ describe("CueTextEditor", () => {
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10, 22, 31],
                 offsetIndex: 2,
@@ -1625,6 +1628,7 @@ describe("CueTextEditor", () => {
                 language: { id: "1", name: "English", direction: "LTR" }};
             testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("[Text]") as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
             const searchReplaceMatches = {
                 offsets: [10],
                 offsetIndex: 0,
