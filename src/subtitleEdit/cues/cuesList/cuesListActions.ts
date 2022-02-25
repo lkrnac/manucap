@@ -112,11 +112,11 @@ const validateShift = (position: ShiftPosition, cueIndex: number): void => {
     }
 };
 
-const updateMatchedCue = (
+export const updateMatchedCue = (
     dispatch: Dispatch<SubtitleEditAction>,
     state: SubtitleEditState,
     index: number
-) => {
+): void => {
     const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(state, index);
     dispatch(matchedCuesSlice.actions.updateMatchedCue(
         { cue: state.cues[index], targetCuesIndex, editingIndexMatchedCues }
@@ -277,14 +277,16 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
-            updateSearchMatches(dispatch, getState, idx);
+            if (getState().searchReplaceVisible) {
+                updateSearchMatches(dispatch, getState, idx);
+            }
             validateCue(dispatch, idx, true, textOnly);
             if (!textOnly) {
                 dispatch(updateMatchedCues());
+                dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             } else {
                 updateMatchedCue(dispatch, getState(), idx);
             }
-            dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             callSaveTrack(dispatch, getState, multiCuesEdit);
         }
     };
