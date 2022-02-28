@@ -18,10 +18,11 @@ const PlayCueButton = (props: Props): ReactElement => {
             tooltipId="playBtnTooltip"
             message={`Play this subtitle (${shortcutText})`}
             placement="left"
+            toggleClassName="tw-p-1.5"
         >
             <button
-                style={{ maxHeight: "38px", margin: "5px" }}
-                className="btn btn-outline-secondary"
+                style={{ maxHeight: "38px" }}
+                className="btn btn-outline-secondary tw-w-full"
                 onClick={(): AppThunk =>
                     dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime))}
             >

@@ -18,10 +18,11 @@ const SplitCueLineButton = (props: Props): ReactElement => {
             message="Split this subtitle"
             placement="left"
             disabled={!timecodesUnlocked}
+            toggleClassName="tw-p-1.5"
         >
             <button
-                style={{ maxHeight: "38px", margin: "5px" }}
-                className="btn btn-outline-secondary sbte-split-cue-button"
+                style={{ maxHeight: "38px" }}
+                className="btn btn-outline-secondary sbte-split-cue-button tw-w-full"
                 disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}

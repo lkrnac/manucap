@@ -19,7 +19,6 @@ const PositionButton = (props: Props): ReactElement => (
                 <Tooltip
                     message="Set the position of this subtitle"
                     placement="top"
-                    offset={[-14, 10]}
                 >
                     <Menu.Button as="div" className="tw-cursor-pointer">
                         <button

@@ -16,10 +16,11 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
             <Tooltip
                 message="Delete this subtitle"
                 placement="left"
+                toggleClassName="tw-p-1.5"
             >
                 <button
-                    style={{ maxHeight: "38px", margin: "5px" }}
-                    className="btn btn-outline-secondary sbte-delete-cue-button"
+                    style={{ maxHeight: "38px" }}
+                    className="btn btn-outline-secondary sbte-delete-cue-button tw-w-full"
                     onClick={(): AppThunk => dispatch(deleteCue(props.cueIndex))}
                 >
                     <i className="fa fa-trash" />

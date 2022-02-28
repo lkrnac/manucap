@@ -16,10 +16,11 @@ const AddCueLineButton = (props: Props): ReactElement => {
         <Tooltip
             message="Insert new subtitle"
             placement="left"
+            toggleClassName="tw-p-1.5"
         >
             <button
-                style={{ maxHeight: "38px", margin: "5px", height: "100%", maxWidth: 40, width: "100%" }}
-                className="btn btn-outline-secondary sbte-add-cue-button"
+                style={{ maxHeight: "38px", height: "100%" }}
+                className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
                 onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1, props.sourceCueIndexes))}
             >
                 {
