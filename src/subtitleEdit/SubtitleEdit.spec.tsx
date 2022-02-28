@@ -124,7 +124,13 @@ describe("SubtitleEdit", () => {
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        padding: "10px",
+                        height: "100%",
+                        overflow: "hidden"
+                    }}
                 >
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -294,7 +300,13 @@ describe("SubtitleEdit", () => {
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        padding: "10px",
+                        height: "100%",
+                        overflow: "hidden"
+                    }}
                 >
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -446,7 +458,13 @@ describe("SubtitleEdit", () => {
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        padding: "10px",
+                        height: "100%",
+                        overflow: "hidden"
+                    }}
                 >
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -503,7 +521,13 @@ describe("SubtitleEdit", () => {
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        padding: "10px",
+                        height: "100%",
+                        overflow: "hidden"
+                    }}
                 >
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -564,7 +588,13 @@ describe("SubtitleEdit", () => {
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        padding: "10px",
+                        height: "100%",
+                        overflow: "hidden"
+                    }}
                 >
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -736,7 +766,13 @@ describe("SubtitleEdit", () => {
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        padding: "10px",
+                        height: "100%",
+                        overflow: "hidden"
+                    }}
                 >
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -906,7 +942,13 @@ describe("SubtitleEdit", () => {
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        padding: "10px",
+                        height: "100%",
+                        overflow: "hidden"
+                    }}
                 >
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
@@ -1101,7 +1143,13 @@ describe("SubtitleEdit", () => {
             <Provider store={testingStore} >
                 <div
                     className="sbte-subtitle-edit"
-                    style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
+                    style={{
+                        display: "flex",
+                        flexFlow: "column",
+                        padding: "10px",
+                        height: "100%",
+                        overflow: "hidden"
+                    }}
                 >
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
