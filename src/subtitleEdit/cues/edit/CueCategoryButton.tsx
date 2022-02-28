@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { CueCategory } from "../../model";
 import { cueCategoryToPrettyName } from "../cueUtils";
-import { Menu } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 
 interface Props {
     category?: CueCategory;
@@ -21,36 +21,45 @@ const CueCategoryButton = (props: Props): ReactElement => (
                         <span className="caret" />
                     </button>
                 </Menu.Button>
-                <div className={`tw-absolute tw-left-0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
-                    <Menu.Items
-                        as="ul"
-                        static
-                        className="tw-dropdown-menu tw-transition-all tw-origin-top-left
-                            tw-duration-300 tw-flex tw-flex-row tw-flex-wrap"
-                    >
-                        <Menu.Item onClick={(): void => props.onChange("DIALOGUE")}>
-                            <div className="tw-dropdown-item">
-                                {cueCategoryToPrettyName.DIALOGUE}
-                            </div>
-                        </Menu.Item>
-                        <hr />
-                        <Menu.Item onClick={(): void => props.onChange("ONSCREEN_TEXT")}>
-                            <div className="tw-dropdown-item">
-                                {cueCategoryToPrettyName.ONSCREEN_TEXT}
-                            </div>
-                        </Menu.Item>
-                        <Menu.Item onClick={(): void => props.onChange("AUDIO_DESCRIPTION")}>
-                            <div className="tw-dropdown-item">
-                                {cueCategoryToPrettyName.AUDIO_DESCRIPTION}
-                            </div>
-                        </Menu.Item>
-                        <Menu.Item onClick={(): void => props.onChange("LYRICS")}>
-                            <div className="tw-dropdown-item">
-                                {cueCategoryToPrettyName.LYRICS}
-                            </div>
-                        </Menu.Item>
-                    </Menu.Items>
-                </div>
+                <Transition
+                    unmount
+                    show={open}
+                    className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left"
+                    enterFrom="tw-opacity-0 tw-scale-75"
+                    enterTo="tw-opacity-100 tw-scale-100"
+                    leaveFrom="tw-opacity-100 tw-scale-100"
+                    leaveTo="tw-opacity-0 tw-scale-75"
+                >
+                    <div className={`tw-absolute tw-left-0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
+                        <Menu.Items
+                            as="ul"
+                            static
+                            className="tw-dropdown-menu tw-flex tw-flex-row tw-flex-wrap"
+                        >
+                            <Menu.Item onClick={(): void => props.onChange("DIALOGUE")}>
+                                <div className="tw-dropdown-item">
+                                    {cueCategoryToPrettyName.DIALOGUE}
+                                </div>
+                            </Menu.Item>
+                            <hr />
+                            <Menu.Item onClick={(): void => props.onChange("ONSCREEN_TEXT")}>
+                                <div className="tw-dropdown-item">
+                                    {cueCategoryToPrettyName.ONSCREEN_TEXT}
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item onClick={(): void => props.onChange("AUDIO_DESCRIPTION")}>
+                                <div className="tw-dropdown-item">
+                                    {cueCategoryToPrettyName.AUDIO_DESCRIPTION}
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item onClick={(): void => props.onChange("LYRICS")}>
+                                <div className="tw-dropdown-item">
+                                    {cueCategoryToPrettyName.LYRICS}
+                                </div>
+                            </Menu.Item>
+                        </Menu.Items>
+                    </div>
+                </Transition>
             </>
         )}
     </Menu>

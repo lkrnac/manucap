@@ -86,22 +86,6 @@
     @apply tw-font-normal tw-transition-colors tw-duration-300 tw-text-blue-grey-500 tw-whitespace-nowrap hover:tw-bg-blue-grey-100;
 }
 
-.tw-dropdown-wrapper .tw-open-false {
-    @apply tw-pointer-events-none tw-select-none;
-}
-
-.tw-dropdown-wrapper .tw-open-true {
-    @apply tw-pointer-events-auto tw-select-none;
-}
-
-.tw-open-false .tw-dropdown-menu {
-    @apply tw-opacity-0 tw-scale-75 tw-opacity-0;
-}
-
-.tw-open-true .tw-dropdown-menu {
-    @apply tw-opacity-100 tw-scale-100;
-}
-
 /** Tooltips **/
 
 .tw-popper-wrapper .tw-tooltip {
