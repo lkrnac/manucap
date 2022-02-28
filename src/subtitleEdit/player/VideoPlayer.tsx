@@ -201,29 +201,24 @@ class VideoPlayer extends React.Component<Props> {
             this.wavesurfer = undefined;
         }
         if (this.props.timecodesUnlocked !== prevProps.timecodesUnlocked && this.wavesurfer) {
-            this.removeAllRegions();
-            this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
-                this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
-                    randomColor());
-            });
+            this.reloadRegions();
         }
 
         if (lastCueChange && this.wavesurfer) {
-            if (lastCueChange.changeType === "ADD") {
-                this.addRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
-                    lastCueChange.vttCue.text, randomColor());
-            }
             if (lastCueChange.changeType === "EDIT") {
                 this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
                     lastCueChange.vttCue.text);
-            }
-            if (lastCueChange.changeType === "REMOVE" || lastCueChange.changeType === "SPLIT"
+            } else if (lastCueChange.changeType === "ADD") {
+                // if adding at the end we can just add, else we need to remove all then add
+                if (lastCueChange.index >= (this.props.cues?.length || 0) - 1) {
+                    this.addRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
+                        lastCueChange.vttCue.text, randomColor());
+                } else {
+                    this.reloadRegions();
+                }
+            } else if (lastCueChange.changeType === "REMOVE" || lastCueChange.changeType === "SPLIT"
                 || lastCueChange.changeType === "MERGE") {
-                this.removeAllRegions();
-                this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
-                    this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
-                        randomColor());
-                });
+                this.reloadRegions();
             }
         }
 
@@ -336,6 +331,14 @@ class VideoPlayer extends React.Component<Props> {
 
     private removeAllRegions(): void {
         this.wavesurfer.regions.clear();
+    }
+
+    private reloadRegions(): void {
+        this.removeAllRegions();
+        this.props.cues?.forEach((cue: CueDto, cueIndex: number) => {
+            this.addRegion(cueIndex, cue.vttCue.startTime, cue.vttCue.endTime, cue.vttCue.text,
+                randomColor());
+        });
     }
 
     public getTime(): number {
