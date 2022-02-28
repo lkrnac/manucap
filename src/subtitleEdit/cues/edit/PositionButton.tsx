@@ -11,8 +11,7 @@ interface Props {
 const PositionButton = (props: Props): ReactElement => (
     <Menu
         as="div"
-        className="md:tw-relative tw-dropdown-wrapper"
-        style={{ marginBottom: "5px", marginRight: "10px" }}
+        className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]"
     >
         {({ open }): ReactElement => (
             <>
