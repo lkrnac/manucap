@@ -12,7 +12,7 @@ const CueCategoryButton = (props: Props): ReactElement => (
     <Menu as="div" className="md:tw-relative tw-dropdown-wrapper">
         {({ open }): ReactElement => (
             <>
-                <Menu.Button as="div">
+                <Menu.Button as="div" className="tw-cursor-pointer">
                     <button
                         className={`tw-select-none ${open ? "tw-open-true focus active" : "tw-open-false"}` +
                             " dropdown-toggle btn btn-outline-secondary"}
@@ -21,7 +21,7 @@ const CueCategoryButton = (props: Props): ReactElement => (
                         <span className="caret" />
                     </button>
                 </Menu.Button>
-                <div className={`tw-absolute tw-left0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
+                <div className={`tw-absolute tw-left-0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
                     <Menu.Items
                         as="ul"
                         static

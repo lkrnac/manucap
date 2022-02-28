@@ -240,8 +240,7 @@ export let setEditorStateFOR_TESTING: (editorState: EditorState) => void;
 
 function shouldRevert(editorState: EditorState, subtitleSpecifications: SubtitleSpecification | null) {
     const vttText = getVttText(editorState.getCurrentContent());
-    return subtitleSpecifications !== null
-        && !checkLineLimitation(vttText, subtitleSpecifications);
+    return subtitleSpecifications !== null && !checkLineLimitation(vttText, subtitleSpecifications);
 }
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {

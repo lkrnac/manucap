@@ -20,17 +20,17 @@ const PositionButton = (props: Props): ReactElement => (
                     message="Set the position of this subtitle"
                     placement="top"
                 >
-                    <Menu.Button as="div">
+                    <Menu.Button as="div" className="tw-cursor-pointer">
                         <button
-                            className={`tw-select-none ${open ? "tw-open-true focus active" : "tw-open-false"}` +
-                                " dropdown-toggle btn btn-outline-secondary"}
+                            className={"tw-select-none dropdown-toggle btn btn-outline-secondary " +
+                                `${open ? "tw-open-true focus active" : "tw-open-false"}`}
                         >
                             {findPositionIcon(props.vttCue).iconText}
                             <span className="caret" />
                         </button>
                     </Menu.Button>
                 </Tooltip>
-                <div className={`tw-absolute tw-left0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
+                <div className={`tw-absolute tw-left-0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
                     <Menu.Items
                         as="ul"
                         static
