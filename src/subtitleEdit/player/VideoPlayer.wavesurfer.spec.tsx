@@ -135,7 +135,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[2]).toBeUndefined();
     });
 
-    it("creates wavesurfer region when cue is added", async () => {
+    it("creates wavesurfer region when cue is added at the end", async () => {
         // GIVEN
         const properties = {
             poster: "dummyPosterUrl",
@@ -164,7 +164,65 @@ describe("VideoPlayer with waveform", () => {
         // @ts-ignore can't find the correct syntax
         const actualComponent = videoNode.instance() as VideoPlayer;
 
+        expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Caption Line 1");
+        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[1].attributes.label).toEqual("Caption Line 2");
+        expect(actualComponent.wavesurfer.regions.list[1].start).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[1].end).toEqual(4);
         expect(actualComponent.wavesurfer.regions.list[2].attributes.label).toEqual("Added Caption");
+        expect(actualComponent.wavesurfer.regions.list[2].start).toEqual(4);
+        expect(actualComponent.wavesurfer.regions.list[2].end).toEqual(6);
+        expect(actualComponent.wavesurfer.regions.list[2].reset).toBeFalsy();
+    });
+
+    it("creates wavesurfer region when cue is added in the middle", async () => {
+        // GIVEN
+        const testCues = [
+            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+            { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+        ] as CueDto[];
+        const updatedCues = [
+            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+            { vttCue: new VTTCue(2, 4, "Added Caption"), cueCategory: "DIALOGUE", errors: []},
+            { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+        ] as CueDto[];
+
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            duration: 20,
+            waveformVisible: true,
+            cues: testCues,
+            tracks,
+            languageCuesArray: [],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+
+        // WHEN
+        actualNode.setProps(
+            // @ts-ignore I only need to update these props
+            { cues: updatedCues, lastCueChange: {
+                changeType: "ADD", index: 1, vttCue: new VTTCue(2, 4, "Added Caption") }}
+        );
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("Caption Line 1");
+        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[1].attributes.label).toEqual("Added Caption");
+        expect(actualComponent.wavesurfer.regions.list[1].start).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[1].end).toEqual(4);
+        expect(actualComponent.wavesurfer.regions.list[2].attributes.label).toEqual("Caption Line 2");
         expect(actualComponent.wavesurfer.regions.list[2].start).toEqual(4);
         expect(actualComponent.wavesurfer.regions.list[2].end).toEqual(6);
         expect(actualComponent.wavesurfer.regions.list[2].reset).toBeFalsy();
