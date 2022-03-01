@@ -445,8 +445,8 @@ export const syncCues = (): AppThunk =>
         const cues = getState().sourceCues;
         if (cues && cues.length > 0) {
             dispatch(cuesSlice.actions.syncCues({ cues }));
-            callSaveTrack(dispatch, getState, true);
             dispatch(updateMatchedCues());
+            callSaveTrack(dispatch, getState, true);
         }
     };
 
@@ -520,8 +520,8 @@ export const mergeCues = (): AppThunk =>
                     dispatch(changeScrollPosition(ScrollPosition.CURRENT));
                     dispatch(lastCueChangeSlice.actions.recordCueChange(
                         { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
-                    callSaveTrack(dispatch, getState, true);
                     dispatch(updateMatchedCues());
+                    callSaveTrack(dispatch, getState, true);
                     mergeSuccess = true;
                 }
             }
