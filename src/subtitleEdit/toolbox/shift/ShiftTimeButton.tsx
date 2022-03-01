@@ -2,6 +2,7 @@ import { ReactElement, useState } from "react";
 import ShiftTimeModal from "./ShiftTimeModal";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 const ShiftTimeButton = (): ReactElement => {
     const [show, setShow] = useState(false);
@@ -11,15 +12,20 @@ const ShiftTimeButton = (): ReactElement => {
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <>
-            <button
-                onClick={handleShow}
-                type="button"
-                className="btn btn-secondary dotsub-shift-time-button"
-                disabled={!timecodesUnlocked}
-                title="Unlock timecodes to enable"
+            <TooltipWrapper
+                tooltipId="keyboardShortcutsToolboxBtnTooltip"
+                text="Shift Track Time"
+                placement="right"
             >
-                <i className="fas fa-angle-double-right" /> Shift Track Time
-            </button>
+                <button
+                    onClick={handleShow}
+                    type="button"
+                    className="btn dotsub-shift-time-button"
+                    disabled={!timecodesUnlocked}
+                >
+                    <i className="fa-duotone fa-clock-rotate-left fa-2x fa-flip-horizontal" />
+                </button>
+            </TooltipWrapper>
 
             <ShiftTimeModal show={show} onClose={handleClose} />
         </>

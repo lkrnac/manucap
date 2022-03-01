@@ -4,6 +4,7 @@ import { KeyCombination } from "../../utils/shortcutConstants";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import Modal from "react-bootstrap/Modal";
 import Mousetrap from "mousetrap";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 const KeyboardShortcuts = (): ReactElement => {
     const [show, setShow] = useState(false);
@@ -21,9 +22,19 @@ const KeyboardShortcuts = (): ReactElement => {
 
     return (
         <>
-            <Button variant="secondary" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
-                <i className="far fa-keyboard" /> Keyboard Shortcuts
-            </Button>
+            <TooltipWrapper
+                tooltipId="keyboardShortcutsToolboxBtnTooltip"
+                text="Keyboard Shortcuts"
+                placement="right"
+            >
+                <button
+                    className="dotsub-keyboard-shortcuts-button btn"
+                    onClick={handleShow}
+                    type="button"
+                >
+                    <i className="fa-duotone fa-keyboard fa-2x" data-fa-transform="grow-6" />
+                </button>
+            </TooltipWrapper>
 
             <Modal show={show} onHide={handleClose} centered dialogClassName="sbte-medium-modal">
                 <Modal.Header closeButton>

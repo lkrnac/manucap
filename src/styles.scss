@@ -217,7 +217,13 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 .sbte-button-toolbar button {
     margin-right: 10px;
     margin-bottom: 10px;
-    min-width: 200px;
+    background-color: #132441;
+}
+
+.sbte-button-toolbar i {
+    --fa-secondary-opacity: 1.0;
+    --fa-primary-color: #63B1FB;
+    --fa-secondary-color: #425F89;
 }
 
 @media (max-width: 1200px) {

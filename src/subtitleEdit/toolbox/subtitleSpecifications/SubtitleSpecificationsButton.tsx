@@ -2,6 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
@@ -16,14 +17,20 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const handleShow  = (): void => setShow(true);
     return (
         <>
-            <button
-                className="dotsub-subtitle-specifications-button btn btn-secondary"
-                onClick={handleShow}
-                type="button"
-                hidden={subtitleSpecifications == null}
+            <TooltipWrapper
+                tooltipId="keyboardShortcutsToolboxBtnTooltip"
+                text="Subtitle Specifications"
+                placement="right"
             >
-                <i className="far fa-flag" /> Subtitle Specifications
-            </button>
+                <button
+                    className="dotsub-subtitle-specifications-button btn"
+                    onClick={handleShow}
+                    type="button"
+                    hidden={subtitleSpecifications == null}
+                >
+                    <i className="fa-duotone fa-flag fa-2x" />
+                </button>
+            </TooltipWrapper>
 
             <SubtitleSpecificationsModal show={show} onClose={handleClose} />
         </>

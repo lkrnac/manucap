@@ -6,6 +6,7 @@ import { updateEditingTrack } from "../trackSlices";
 import { Track } from "../model";
 import { updateCues } from "../cues/cuesList/cuesListActions";
 import { isPendingSaveState } from "../cues/saveSlices";
+import { TooltipWrapper } from "../TooltipWrapper";
 
 export const CaptionOverlapToggle = (): ReactElement => {
     const dispatch = useDispatch();
@@ -15,7 +16,7 @@ export const CaptionOverlapToggle = (): ReactElement => {
     const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
     return (
         <ToggleButton
-            className="btn btn-secondary"
+            className="btn"
             disabled={isPendingSaveState(saveState)}
             toggled={overlapEnabled}
             onClick={(): void => {
@@ -26,10 +27,24 @@ export const CaptionOverlapToggle = (): ReactElement => {
                 dispatch(updateEditingTrack(track));
                 dispatch(updateCues(cues));
             }}
-            render={(toggle): ReactElement => (
-                toggle ?
-                    <><i className="fas fa-lock" /> Disable Overlapping</> :
-                    <><i className="fas fa-lock-open" /> Enable Overlapping</>
+            render={(toggle): ReactElement => (toggle
+                    ?
+                        <TooltipWrapper
+                            tooltipId="disableOverlapToolboxBtnTooltip"
+                            text="Disable Overlapping"
+                            placement="right"
+                        >
+                            <i className="fa-duotone fa-diagram-venn fa-2x" />
+                        </TooltipWrapper>
+                    :
+                        <TooltipWrapper
+                            tooltipId="disableOverlapToolboxBtnTooltip"
+                            text="Enable Overlapping"
+                            placement="right"
+                        >
+                            <i className="fa-duotone fa-diagram-venn fa-2x" />
+                        </TooltipWrapper>
+
             )}
         />
     );
