@@ -1,5 +1,5 @@
 import "../styles.scss";
-import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
+import "../../node_modules/@fortawesome/fontawesome-pro/css/all.css";
 import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
