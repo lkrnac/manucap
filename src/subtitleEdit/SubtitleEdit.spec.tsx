@@ -115,9 +115,7 @@ const testingCompletedTask = {
 jest.setTimeout(9000);
 
 describe("SubtitleEdit", () => {
-    beforeEach(() => {
-        testingStore = createTestingStore();
-    });
+    beforeEach(() => testingStore = createTestingStore());
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
