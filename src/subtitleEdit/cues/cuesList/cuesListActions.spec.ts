@@ -35,8 +35,11 @@ import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
 import { cuesSlice, matchedCuesSlice } from "./cuesListSlices";
 import * as cuesListScrollSlice from "./cuesListScrollSlice";
+import * as cueEditorSlices from "../edit/cueEditorSlices";
+import { showSearchReplace } from "../searchReplace/searchReplaceSlices";
 
 const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+const updateSearchMatchesSpy = jest.spyOn(cueEditorSlices, "updateSearchMatches");
 
 const testingTrack = {
     type: "CAPTION",
@@ -1572,6 +1575,62 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
                 expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.CURRENT);
+            });
+        });
+
+        describe("search and replace", () => {
+            it("update search matches if search and replace editor is visible", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+                testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({
+                        cues: testingCues,
+                        sourceCues: [{ vttCue: new VTTCue(0, 6, "Source Line 1"), cueCategory: "DIALOGUE" }],
+                        editingCueIndex: 1
+                    })
+                );
+                updateSearchMatchesSpy.mockClear();
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
+
+                // THEN
+                expect(updateSearchMatchesSpy).toBeCalled();
+            });
+
+            it("doesn't update search matches if search and replace editor is not visible", () => {
+                // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+                testingStore.dispatch(showSearchReplace(false) as {} as AnyAction);
+
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+                testingStore.dispatch(matchedCuesSlice.actions
+                    .matchCuesByTime({
+                        cues: testingCues,
+                        sourceCues: [{ vttCue: new VTTCue(0, 6, "Source Line 1"), cueCategory: "DIALOGUE" }],
+                        editingCueIndex: 1
+                    })
+                );
+                updateSearchMatchesSpy.mockClear();
+
+                // WHEN
+                testingStore.dispatch(
+                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
+
+                // THEN
+                expect(updateSearchMatchesSpy).not.toBeCalled();
             });
         });
     });
