@@ -315,6 +315,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(setFind("foo") as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
@@ -374,6 +375,7 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(updateCues(testingCuesWithEditDisabled) as {} as AnyAction);
             testingStore.dispatch(setFind("Caption Line") as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(searchNextCues(false) as {} as AnyAction);
