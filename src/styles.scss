@@ -217,7 +217,10 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 .sbte-button-toolbar button {
     margin-right: 10px;
     margin-bottom: 10px;
-    min-width: 200px;
+}
+
+.btn-toolbar {
+    justify-content: center !important;
 }
 
 @media (max-width: 1200px) {

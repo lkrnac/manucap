@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { TooltipWrapper } from "../TooltipWrapper";
 
 interface Props {
     handleImport: () => void;
@@ -7,14 +8,20 @@ interface Props {
 
 const ImportTrackCuesButton = (props: Props): ReactElement => {
     return (
-        <button
-            type="button"
-            disabled={props.disabled}
-            className="sbte-import-button btn btn-secondary"
-            onClick={(): void => props.handleImport()}
+        <TooltipWrapper
+            tooltipId="importFileBtnTooltip"
+            text="Import File"
+            placement="auto"
         >
-            <i className="fas fa-file-import" /> Import File
-        </button>
+            <button
+                type="button"
+                disabled={props.disabled}
+                className="sbte-import-button btn btn-secondary"
+                onClick={(): void => props.handleImport()}
+            >
+                <i className="fas fa-file-import fa-lg" />
+            </button>
+        </TooltipWrapper>
     );
 };
 
