@@ -98,9 +98,27 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 .sbte-toggled-btn {
-    background-color: $primary !important;
-    border-color: $primary !important;
     outline: none;
+}
+
+.sbte-toggled-badge {
+    font-size: $font-size-small;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 5px;
+    margin: 10px;
+    outline: none;
+    color: white;
+}
+
+.sbte-toggled-badge-on {
+    background-color: #229831;
+    border-color: #229831;
+}
+
+.sbte-toggled-badge-off {
+    background-color: #545D65;
+    border-color: #545D65;
 }
 
 .sbte-count-tag {
@@ -116,6 +134,11 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     padding: 1px 5px !important;
     font-size: $font-size-small !important;
     line-height: 1.5 !important;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    pointer-events: all !important;
 }
 
 // ----- Modal ------
@@ -219,8 +242,19 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     margin-bottom: 10px;
 }
 
-.btn-toolbar {
+.sbte-button-toolbar.btn-toolbar {
     justify-content: center !important;
+}
+
+.sbte-button-toolbar .dropdown-item {
+    margin: 0;
+    padding: 0;
+}
+
+.sbte-button-toolbar .sbte-dropdown-item button {
+    margin: 0;
+    padding: 0;
+    text-align: left;
 }
 
 @media (max-width: 1200px) {
