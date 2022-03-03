@@ -13,12 +13,12 @@ const ShiftTimeButton = (): ReactElement => {
         <>
             <button
                 onClick={handleShow}
-                type="button"
-                className="btn btn-secondary dotsub-shift-time-button"
+                className="dotsub-shift-time-button btn"
                 disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
+                style={{ padding: "10px", width: "100%" }}
             >
-                <i className="fas fa-angle-double-right" /> Shift Track Time
+                Shift Track Time
             </button>
 
             <ShiftTimeModal show={show} onClose={handleClose} />

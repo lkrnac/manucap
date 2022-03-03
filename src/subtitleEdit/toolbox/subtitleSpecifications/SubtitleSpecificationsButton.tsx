@@ -17,12 +17,12 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     return (
         <>
             <button
-                className="dotsub-subtitle-specifications-button btn btn-secondary"
+                className="btn dotsub-subtitle-specifications-button"
                 onClick={handleShow}
-                type="button"
                 hidden={subtitleSpecifications == null}
+                style={{ padding: "10px", width: "100%" }}
             >
-                <i className="far fa-flag" /> Subtitle Specifications
+                Subtitle Specifications
             </button>
 
             <SubtitleSpecificationsModal show={show} onClose={handleClose} />
