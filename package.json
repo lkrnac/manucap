@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.22.6",
+  "version": "2.22.9",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -50,13 +50,13 @@
     "platform": "^1.3.6",
     "react-final-form": "^6.5.7",
     "react-markdown": "5.0.3",
-    "react-popper": "^2.2.5",
+    "remark-gfm": "1.0.0",
     "react-select": "^5.2.1",
     "remark-gfm": "1.0.0",
     "sanitize-html": "^2.5.2",
     "uuid": "^8.3.2",
     "video.js": "7.15.4",
-    "wavesurfer.js": "^5.2.0"
+    "wavesurfer.js": "^6.0.2"
   },
   "devDependencies": {
     "@reduxjs/toolkit": "1.6.2",
