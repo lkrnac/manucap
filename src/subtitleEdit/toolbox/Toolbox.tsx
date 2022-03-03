@@ -40,8 +40,8 @@ const Toolbox = (props: Props): ReactElement => {
                 handleExport={props.handleExportFile}
             />
 
-            <Dropdown>
-                <Dropdown.Toggle id="cue-line-category" variant="outline-secondary">
+            <Dropdown >
+                <Dropdown.Toggle id="cue-line-category" variant="secondary">
                     <i className="fas fa-ellipsis-h" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>

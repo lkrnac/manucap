@@ -27,13 +27,9 @@ export const CaptionOverlapToggle = (): ReactElement => {
                 dispatch(updateCues(cues));
             }}
             render={(toggle): ReactElement => (
-                toggle ?
-                    <>
-                        Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">DISABLE</span>
-                    </> :
-                    <>
-                        Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ENABLE</span>
-                    </>
+                toggle
+                    ? <>Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">DISABLE</span></>
+                    : <>Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ENABLE</span></>
             )}
         />
     );

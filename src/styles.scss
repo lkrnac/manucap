@@ -102,11 +102,11 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 .sbte-toggled-badge {
+    float: right;
     font-size: $font-size-small;
     font-weight: bold;
-    padding: 3px 6px;
+    padding: 2px 6px;
     border-radius: 5px;
-    margin: 10px;
     outline: none;
     color: white;
 }
@@ -117,8 +117,8 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 .sbte-toggled-badge-off {
-    background-color: #545D65;
-    border-color: #545D65;
+    background-color: #59626A;
+    border-color: #59626A;
 }
 
 .sbte-count-tag {
@@ -253,8 +253,12 @@ button:disabled {
 
 .sbte-button-toolbar .sbte-dropdown-item button {
     margin: 0;
-    padding: 0;
+    //padding: 0;
     text-align: left;
+    font-family: Roboto, sans-serif;
+    color: #6c757d;
+    padding: 5px 10px;
+    width: 100%;
 }
 
 @media (max-width: 1200px) {
