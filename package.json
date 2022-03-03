@@ -52,7 +52,6 @@
     "react-markdown": "5.0.3",
     "remark-gfm": "1.0.0",
     "react-select": "^5.2.1",
-    "remark-gfm": "1.0.0",
     "sanitize-html": "^2.5.2",
     "uuid": "^8.3.2",
     "video.js": "7.15.4",
