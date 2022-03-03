@@ -23,7 +23,7 @@ const Testing = ({
     removeHeadlessAttributes,
     getHeadlessDialog,
     renderWithHeadlessPortal
-})
+});
 
 export {
     VideoPlayer,

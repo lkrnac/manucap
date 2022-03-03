@@ -7,7 +7,7 @@ import { mount, ReactWrapper } from "enzyme";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import {
     MockedDebouncedFunction,
-    removeDraftJsDynamicValues
+    removeDraftJsDynamicValues, removeHeadlessAttributes
 } from "../../../testUtils/testUtils";
 import { CueDto, Track } from "../../model";
 import { updateCues } from "../cuesList/cuesListActions";
@@ -89,7 +89,10 @@ describe("CueTextEditor", () => {
         fetchSpellCheck.mockImplementationOnce(() => Promise.resolve({}));
         const expectedContent = "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\">" +
             "<span data-text=\"true\">dd</span></span></span>" +
-            "<span data-offset-key=\"\"><span data-text=\"true\">d</span></span>";
+            "</button><div style=\"position: absolute; left: 0px; top: 0px; transform: translate(0px, 10px);\" " +
+            "class=\"tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-false\" id=\"\" " +
+            "data-popper-reference-hidden=\"true\" data-popper-escaped=\"true\" data-popper-placement=\"bottom\">" +
+            "</div></div><span data-offset-key=\"\"><span data-text=\"true\">d</span></span>";
 
         // WHEN
         let actualNode = {} as ReactWrapper;
@@ -112,7 +115,8 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        let actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+        expect(actual).toContain(expectedContent);
 
         // WHEN
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -136,8 +140,13 @@ describe("CueTextEditor", () => {
         // THEN
         const expectedCompContent = "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\">" +
             "<span data-text=\"true\">dd</span></span></span>" +
-            "<span data-offset-key=\"\"><span data-text=\"true\">dâ</span></span>";
-        expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedCompContent);
+            "</button><div style=\"position: absolute; left: 0px; top: 0px; transform: translate(0px, 10px);\" " +
+            "class=\"tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-false\" id=\"\" " +
+            "data-popper-reference-hidden=\"true\" data-popper-escaped=\"true\" data-popper-placement=\"bottom\">" +
+            "</div></div><span data-offset-key=\"\"><span data-text=\"true\">dâ</span></span>";
+
+        actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+        expect(actual).toContain(expectedCompContent);
 
         // WHEN
         editor.simulate("compositionEnd");

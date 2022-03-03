@@ -48,6 +48,7 @@ const PositionButton = (props: Props): ReactElement => (
                                 positionIcons.map((positionIcon: PositionIcon, index: number): ReactElement =>
                                     (
                                         <Menu.Item
+                                            as="li"
                                             key={index}
                                             onClick={(): void => props.changePosition(positionIcon.position)}
                                         >

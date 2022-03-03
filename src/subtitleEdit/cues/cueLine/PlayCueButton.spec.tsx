@@ -5,6 +5,7 @@ import PlayCueButton from "./PlayCueButton";
 import { Provider } from "react-redux";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 const testCue = { vttCue: new VTTCue(2, 3, "some text"), cueCategory: "DIALOGUE" } as CueDto;
 
@@ -12,12 +13,18 @@ describe("PlayCueButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <button
-                style={{ maxHeight: "38px", margin: "5px" }}
-                className="btn btn-outline-secondary"
+            <div
+                className="tw-p-1.5"
+                id=""
+                aria-expanded="false"
             >
-                <i className="fa fa-play" />
-            </button>
+                <button
+                    style={{ maxHeight: "38px" }}
+                    className="btn btn-outline-secondary tw-w-full"
+                >
+                    <i className="fa fa-play" />
+                </button>
+            </div>
         );
 
         // WHEN
@@ -28,7 +35,9 @@ describe("PlayCueButton", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        const actual = removeHeadlessAttributes(actualNode.html());
+        const expected = removeHeadlessAttributes(expectedNode.html());
+        expect(actual).toEqual(expected);
     });
 
     it("plays cue when play cue button is clicked", () => {

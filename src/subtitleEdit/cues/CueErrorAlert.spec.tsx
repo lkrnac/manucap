@@ -5,9 +5,17 @@ import { fireEvent, render } from "@testing-library/react";
 import { CueError } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { setValidationErrors } from "./edit/cueEditorSlices";
-import { Alert } from "react-bootstrap";
+import Alert from "../common/Alert";
 import CueErrorAlert from "./CueErrorAlert";
 import { act } from "react-dom/test-utils";
+import { ReactElement } from "react";
+
+jest.mock("@headlessui/react", () => ({
+    Transition: ({ show, children }: {
+        children: ReactElement,
+        show?: boolean
+    }): ReactElement | null => show ? children : null
+}));
 
 let testingStore = createTestingStore();
 
@@ -23,7 +31,13 @@ describe("CueErrorAlert", () => {
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
 
         const expectedNode = render(
-            <Alert key="cueErrorsAlert" variant="danger" className="sbte-cue-errors-alert" dismissible show>
+            <Alert
+                key="cueErrorsAlert"
+                alertClass="tw-alert-danger sbte-cue-errors-alert"
+                dismissible
+                autoClose
+                show
+            >
                 <span>Unable to complete action due to the following error(s):</span><br />
                 <div>&#8226; {CueError.LINE_CHAR_LIMIT_EXCEEDED}<br /></div>
             </Alert>
@@ -51,7 +65,7 @@ describe("CueErrorAlert", () => {
         );
 
         // WHEN
-        await fireEvent.click(container.querySelector("button.close") as HTMLElement);
+        await fireEvent.click(container.querySelector("button.tw-alert-close") as HTMLElement);
         await act(async () => new Promise(resolve => setTimeout(resolve, 100)));
 
         // THEN
@@ -84,7 +98,7 @@ describe("CueErrorAlert", () => {
         // GIVEN
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
         const expectedNode = render(
-            <Alert key="cueErrorsAlert" variant="danger" className="sbte-cue-errors-alert" dismissible show>
+            <Alert key="cueErrorsAlert" alertClass="tw-alert-danger sbte-cue-errors-alert" dismissible show>
                 <span>Unable to complete action due to the following error(s):</span><br />
                 <div>&#8226; {CueError.LINE_CHAR_LIMIT_EXCEEDED}<br /></div>
             </Alert>

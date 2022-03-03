@@ -15,7 +15,11 @@ import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { MockedDebouncedFunction, removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
+import {
+    MockedDebouncedFunction,
+    removeDraftJsDynamicValues,
+    removeHeadlessAttributes
+} from "../../../testUtils/testUtils";
 import { updateCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
@@ -133,27 +137,39 @@ describe("CueEdit", () => {
                                 />
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <div className="dropdown">
-                                    <button
+                                <div className="md:tw-relative tw-dropdown-wrapper">
+                                    <div
+                                        id=""
+                                        className="tw-cursor-pointer"
                                         aria-haspopup="true"
                                         aria-expanded="false"
-                                        id="cue-line-category"
-                                        type="button"
-                                        className="dropdown-toggle btn btn-outline-secondary"
                                     >
-                                        Dialogue
-                                    </button>
+                                        <button className="tw-select-none tw-open-false
+                                            dropdown-toggle btn btn-outline-secondary"
+                                        >
+                                            Dialogue<span className="caret" />
+                                        </button>
+                                    </div>
                                 </div>
-                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
-                                    <button
-                                        aria-haspopup="true"
+                                <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
+                                    <div
+                                        id=""
                                         aria-expanded="false"
-                                        id="dropdown-basic"
-                                        type="button"
-                                        className="dropdown-toggle btn btn-outline-secondary"
                                     >
-                                        ↓↓ <span className="caret" />
-                                    </button>
+                                        <div
+                                            className="tw-cursor-pointer"
+                                            id=""
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                        >
+                                            <button
+                                                className="tw-select-none dropdown-toggle btn
+                                                    btn-outline-secondary tw-w-[68px] tw-open-false"
+                                            >
+                                                ↓↓<span className="caret" />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -185,8 +201,9 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html()))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+            expect(actual).toEqual(expected);
         });
 
         it("renders for caption task", () => {
@@ -243,27 +260,39 @@ describe("CueEdit", () => {
                                 />
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <div className="dropdown">
-                                    <button
+                                <div className="md:tw-relative tw-dropdown-wrapper">
+                                    <div
+                                        id=""
+                                        className="tw-cursor-pointer"
                                         aria-haspopup="true"
                                         aria-expanded="false"
-                                        id="cue-line-category"
-                                        type="button"
-                                        className="dropdown-toggle btn btn-outline-secondary"
                                     >
-                                        Dialogue
-                                    </button>
+                                        <button className="tw-select-none tw-open-false
+                                            dropdown-toggle btn btn-outline-secondary"
+                                        >
+                                            Dialogue<span className="caret" />
+                                        </button>
+                                    </div>
                                 </div>
-                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
-                                    <button
-                                        aria-haspopup="true"
+                                <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
+                                    <div
+                                        id=""
                                         aria-expanded="false"
-                                        id="dropdown-basic"
-                                        type="button"
-                                        className="dropdown-toggle btn btn-outline-secondary"
                                     >
-                                        ↓↓ <span className="caret" />
-                                    </button>
+                                        <div
+                                            className="tw-cursor-pointer"
+                                            id=""
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                        >
+                                            <button
+                                                className="tw-select-none dropdown-toggle btn
+                                                    btn-outline-secondary tw-w-[68px] tw-open-false"
+                                            >
+                                                ↓↓<span className="caret" />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -295,8 +324,9 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html()))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+            expect(actual).toEqual(expected);
         });
 
         it("renders for translation task", () => {
@@ -321,55 +351,71 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div style={{
-                                    border: "1px solid",
-                                    borderRadius: "4px",
-                                    width: "110px",
-                                    textAlign: "center",
-                                    padding: "5px",
-                                    backgroundColor: "rgb(224,224,224)",
-                                    marginTop: "5px",
-                                    cursor: "not-allowed"
-                                }}
-                                >
-                                    00:00:00.000
+                                <div id="" aria-expanded="false">
+                                    <div style={{
+                                        border: "1px solid",
+                                        borderRadius: "4px",
+                                        width: "110px",
+                                        textAlign: "center",
+                                        padding: "5px",
+                                        backgroundColor: "rgb(224,224,224)",
+                                        marginTop: "5px",
+                                        cursor: "not-allowed"
+                                    }}
+                                    >
+                                        00:00:00.000
+                                    </div>
                                 </div>
-                                <div style={{
-                                    border: "1px solid",
-                                    borderRadius: "4px",
-                                    width: "110px",
-                                    textAlign: "center",
-                                    padding: "5px",
-                                    backgroundColor: "rgb(224,224,224)",
-                                    marginTop: "5px",
-                                    cursor: "not-allowed"
-                                }}
-                                >
-                                    00:00:02.000
+                                <div id="" aria-expanded="false">
+                                    <div style={{
+                                        border: "1px solid",
+                                        borderRadius: "4px",
+                                        width: "110px",
+                                        textAlign: "center",
+                                        padding: "5px",
+                                        backgroundColor: "rgb(224,224,224)",
+                                        marginTop: "5px",
+                                        cursor: "not-allowed"
+                                    }}
+                                    >
+                                        00:00:02.000
+                                    </div>
                                 </div>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <div className="dropdown">
-                                    <button
+                                <div className="md:tw-relative tw-dropdown-wrapper">
+                                    <div
+                                        id=""
+                                        className="tw-cursor-pointer"
                                         aria-haspopup="true"
                                         aria-expanded="false"
-                                        id="cue-line-category"
-                                        type="button"
-                                        className="dropdown-toggle btn btn-outline-secondary"
                                     >
-                                        Dialogue
-                                    </button>
+                                        <button className="tw-select-none tw-open-false
+                                            dropdown-toggle btn btn-outline-secondary"
+                                        >
+                                            Dialogue<span className="caret" />
+                                        </button>
+                                    </div>
                                 </div>
-                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
-                                    <button
-                                        aria-haspopup="true"
+                                <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
+                                    <div
+                                        id=""
                                         aria-expanded="false"
-                                        id="dropdown-basic"
-                                        type="button"
-                                        className="dropdown-toggle btn btn-outline-secondary"
                                     >
-                                        ↓↓ <span className="caret" />
-                                    </button>
+                                        <div
+                                            className="tw-cursor-pointer"
+                                            id=""
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                        >
+                                            <button
+                                                className="tw-select-none dropdown-toggle btn
+                                                    btn-outline-secondary tw-w-[68px] tw-open-false"
+                                            >
+                                                ↓↓<span className="caret" />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -401,8 +447,9 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html()))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+            expect(actual).toEqual(expected);
         });
 
         it("renders for translation task with timecodes unlocked", () => {
@@ -462,27 +509,39 @@ describe("CueEdit", () => {
                                 />
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <div className="dropdown">
-                                    <button
+                                <div className="md:tw-relative tw-dropdown-wrapper">
+                                    <div
+                                        id=""
+                                        className="tw-cursor-pointer"
                                         aria-haspopup="true"
                                         aria-expanded="false"
-                                        id="cue-line-category"
-                                        type="button"
-                                        className="dropdown-toggle btn btn-outline-secondary"
                                     >
-                                        Dialogue
-                                    </button>
+                                        <button className="tw-select-none tw-open-false
+                                            dropdown-toggle btn btn-outline-secondary"
+                                        >
+                                            Dialogue<span className="caret" />
+                                        </button>
+                                    </div>
                                 </div>
-                                <div style={{ marginBottom: "5px", marginRight: "10px" }} className="dropdown">
-                                    <button
-                                        aria-haspopup="true"
+                                <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
+                                    <div
+                                        id=""
                                         aria-expanded="false"
-                                        id="dropdown-basic"
-                                        type="button"
-                                        className="dropdown-toggle btn btn-outline-secondary"
                                     >
-                                        ↓↓ <span className="caret" />
-                                    </button>
+                                        <div
+                                            className="tw-cursor-pointer"
+                                            id=""
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                        >
+                                            <button
+                                                className="tw-select-none dropdown-toggle btn
+                                                    btn-outline-secondary tw-w-[68px] tw-open-false"
+                                            >
+                                                ↓↓<span className="caret" />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -514,8 +573,9 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html()))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+            expect(actual).toEqual(expected);
         });
 
         it("updates cue in redux store when start time minutes changed", () => {
@@ -770,8 +830,8 @@ describe("CueEdit", () => {
             );
 
             // WHEN
-            actualNode.find("button#cue-line-category").simulate("click");
-            actualNode.find("a.dropdown-item").at(1).simulate("click");
+            actualNode.find("#cue-line-category").simulate("click");
+            actualNode.find(".tw-dropdown-item").at(1).simulate("click");
 
             // THEN
             expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
@@ -792,8 +852,8 @@ describe("CueEdit", () => {
             );
 
             // WHEN
-            actualNode.find("button#cue-line-category").simulate("click");
-            actualNode.find("a.dropdown-item").at(1).simulate("click");
+            actualNode.find("#cue-line-category").simulate("click");
+            actualNode.find(".tw-dropdown-item").at(1).simulate("click");
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -813,7 +873,7 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            expect(actualNode.find("button#cue-line-category").text()).toEqual("On Screen Text");
+            expect(actualNode.find("#cue-line-category").text()).toEqual("On Screen Text");
         });
 
         it("should set player time to video start time on mod+shift+up shortcut", () => {

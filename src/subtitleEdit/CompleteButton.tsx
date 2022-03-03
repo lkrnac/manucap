@@ -62,7 +62,6 @@ const CompleteButton = (props: Props): ReactElement => {
                         </span>
                 }
             </div>
-
             <button
                 type="button"
                 disabled={props.disabled || isPendingSaveState(saveState)}

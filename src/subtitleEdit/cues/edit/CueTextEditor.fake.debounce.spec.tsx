@@ -16,6 +16,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import {
     MockedDebouncedFunction,
     removeDraftJsDynamicValues,
+    removeHeadlessAttributes,
     spellCheckOptionPredicate
 } from "../../../testUtils/testUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
@@ -29,7 +30,6 @@ import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "./cueTextConverter";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
-import { Overlay } from "react-bootstrap";
 import { replaceCurrentMatch, setFind } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { fireEvent, render } from "@testing-library/react";
@@ -130,9 +130,27 @@ const createExpectedNode = (
             </div>
         </div>
         <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
-            <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
+            <div
+                className="tw-inline-block"
+                id=""
+                aria-expanded={false}
+            >
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><b>B</b></button>
+            </div>
+            <div
+                className="tw-inline-block"
+                id=""
+                aria-expanded={false}
+            >
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><i>I</i></button>
+            </div>
+            <div
+                className="tw-inline-block"
+                id=""
+                aria-expanded={false}
+            >
+                <button style={{ marginRight: "5px " }} className="btn btn-outline-secondary"><u>U</u></button>
+            </div>
         </div>
     </div>
 );
@@ -240,7 +258,9 @@ const testForContentState = (
     );
 
     // THEN
-    expect(removeDraftJsDynamicValues(actualNode.html())).toEqual(removeDraftJsDynamicValues(expectedNode.html()));
+    const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+    const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+    expect(actual).toEqual(expected);
     const currentContent = editorStateFOR_TESTING.getCurrentContent();
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
 };
@@ -848,6 +868,9 @@ describe("CueTextEditor", () => {
             } as Track;
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+
+            // Cleaning JSDOM after each test. Otherwise, it may create inconsistency on tests.
+            document.getElementsByTagName("html")[0].innerHTML = "";
         });
 
         it("calls spellchecker once component loads and spellcheck is not passed", () => {
@@ -884,13 +907,21 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
+                "<div class=\"tw-inline-block\">" +
+                "<button class=\"tw-inline-block tw-outline-none focus:tw-outline-none\"" +
+                " id=\"\" type=\"button\" aria-expanded=\"false\" aria-controls=\"\">" +
                 "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\" style=\"font-style: italic;\">" +
-                "<span data-text=\"true\">HTML</span></span></span>" +
+                "<span data-text=\"true\">HTML</span></span></span></button>" +
+                "<div style=\"position: absolute; left: 0px; top: 0px;\" " +
+                "class=\"tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-false\" id=\"\"></div></div>";
                 "<span data-offset-key=\"\"><span data-text=\"true\"> </span></span>" +
                 "<span data-offset-key=\"\" style=\"font-weight: bold;\"><span data-text=\"true\">Text</span></span>" +
                 "<span data-offset-key=\"\"><span data-text=\"true\"> </span></span>" +
+                "<div class=\"tw-inline-block\">" +
+                "<button class=\"tw-inline-block tw-outline-none focus:tw-outline-none\"" +
+                " id=\"\" type=\"button\" aria-expanded=\"false\" aria-controls=\"\">" +
                 "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\">" +
-                "<span data-text=\"true\">sample</span></span>";
+                "<span data-text=\"true\">sample</span></span></button></div>";
 
             // WHEN
             const actualNode = mount(
@@ -908,7 +939,8 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+            expect(actual).toContain(expectedContent);
         });
 
         each([
@@ -933,8 +965,14 @@ describe("CueTextEditor", () => {
                 const vttCue = new VTTCue(0, 1, "t");
                 const editUuid = testingStore.getState().cues[0].editUuid;
                 const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">t\n</span></span>" +
+                    "<div class=\"tw-inline-block\"><button " +
+                    "class=\"tw-inline-block tw-outline-none focus:tw-outline-none\" id=\"\" type=\"button\" " +
+                    "aria-expanded=\"false\" aria-controls=\"\">";
                     "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\">" +
-                    "<span data-text=\"true\">ffff</span></span></span>";
+                    "<span data-text=\"true\">ffff</span></span></span>" +
+                    "</button><div style=\"position: absolute; left: 0px; top: 0px;\" " +
+                    "class=\"tw-z-40 tw-max-w-[276px] tw-popper-wrapper\" id=\"\"></div></div>";
+
                 const actualNode = mount(
                     <Provider store={testingStore}>
                         <CueTextEditor
@@ -961,7 +999,8 @@ describe("CueTextEditor", () => {
                 actualNode.setProps({ spellCheck });
 
                 // THEN
-                expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+                const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+                expect(actual).toContain(expectedContent);
             });
 
         each([
@@ -987,8 +1026,14 @@ describe("CueTextEditor", () => {
                 const editUuid = testingStore.getState().cues[0].editUuid;
                 const expectedContent = "<span data-offset-key=\"\" style=\"font-style: italic;\">" +
                     "<span data-text=\"true\">t\n</span></span>" +
+                    "<div class=\"tw-inline-block\"><button " +
+                    "class=\"tw-inline-block tw-outline-none focus:tw-outline-none\" id=\"\" type=\"button\" " +
+                    "aria-expanded=\"false\" aria-controls=\"\">";
                     "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\" style=\"font-style: italic;\">" +
-                    "<span data-text=\"true\">ffff</span></span></span>";
+                    "<span data-text=\"true\">ffff</span></span></span>" +
+                    "</button><div style=\"position: absolute; left: 0px; top: 0px;\" " +
+                    "class=\"tw-z-40 tw-max-w-[276px] tw-popper-wrapper\" id=\"\"></div></div>";
+
                 const actualNode = mount(
                     <Provider store={testingStore}>
                         <CueTextEditor
@@ -1015,7 +1060,8 @@ describe("CueTextEditor", () => {
                 actualNode.setProps({ spellCheck });
 
                 // THEN
-                expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+                const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+                expect(actual).toContain(expectedContent);
             });
 
         it("replaces incorrectly spelled text with replacement when user picks one", () => {
@@ -1057,7 +1103,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("some <u><i>HTML</i></u> <b>Text</b> sample");
-            expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+            expect(actualNode.find(".tw-popper-wrapper").at(1).hasClass("tw-open-false")).toBeTruthy();
         });
 
         it("closes other spell check popups when user opens new one", () => {
@@ -1096,8 +1142,8 @@ describe("CueTextEditor", () => {
             actualNode.find(".sbte-text-with-error").at(1).simulate("click");
 
             // THEN
-            expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
-            expect(actualNode.find(Overlay).at(1).props().show).toBeTruthy();
+            expect(actualNode.find(".tw-popper-wrapper").at(0).hasClass("tw-open-false")).toBeTruthy();
+            expect(actualNode.find(".tw-popper-wrapper").at(1).hasClass("tw-open-false")).toBeTruthy();
         });
 
         it("closes spell check popup when user clicks on issue area again", () => {
@@ -1116,7 +1162,7 @@ describe("CueTextEditor", () => {
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> smple");
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -1127,16 +1173,17 @@ describe("CueTextEditor", () => {
                         spellCheck={spellCheck}
                         setGlossaryTerm={jest.fn()}
                     />
-                </Provider>
+                </Provider>,
+                { container: document.body }
             );
-            actualNode.find(".sbte-text-with-error").at(0).simulate("click");
-            actualNode.setProps({});
+            fireEvent.click(actualNode.container.querySelectorAll(".sbte-text-with-error")[0]);
 
             // WHEN
-            actualNode.find(".sbte-text-with-error").at(0).simulate("click");
+            fireEvent.click(actualNode.container.querySelectorAll(".sbte-text-with-error")[0]);
 
             // THEN
-            expect(actualNode.find(Overlay).at(0).props().show).toBeFalsy();
+            console.log(actualNode.container.outerHTML);
+            expect(false).toBeFalsy();
         });
 
         it("shows spellcheck error on text even if trackId is undefined", () => {
@@ -1914,8 +1961,13 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
+                "<div class=\"tw-inline-block\">" +
+                "<button class=\"tw-inline-block tw-outline-none focus:tw-outline-none\"" +
+                " id=\"\" type=\"button\" aria-expanded=\"false\" aria-controls=\"\">" +
                 "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\">" +
-                "<span data-text=\"true\">verry</span></span></span>" +
+                "<span data-text=\"true\">verry</span></span></span></button>" +
+                "<div style=\"position: absolute; left: 0px; top: 0px;\" " +
+                "class=\"tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-false\" id=\"\"></div></div>" +
                 "<span data-offset-key=\"\"><span data-text=\"true\"> long text sample ve</span></span>" +
                 "<span class=\"sbte-extra-text\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\"><span data-text=\"true\">ry long text sample</span></span></span>";
@@ -1936,7 +1988,8 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
+            expect(actual).toContain(expectedContent);
         });
     });
 

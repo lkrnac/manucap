@@ -36,7 +36,7 @@ const Alert = (props: Props): ReactElement => {
 
     return (
         <Transition
-            show={props.show}
+            show={props.show || false}
             as={Fragment}
             enter="tw-ease-out tw-duration-300"
             enterFrom="tw-opacity-0"
@@ -52,7 +52,7 @@ const Alert = (props: Props): ReactElement => {
                 {props.dismissible ? (
                     <button
                         className="tw-absolute tw-right-7 tw-top-3 tw-font-bold
-                            tw-text-red-900 tw-text-opacity-60 tw-text-sm"
+                            tw-text-red-900 tw-text-opacity-60 tw-text-sm tw-alert-close"
                         onClick={props.onClose}
                     >
                         <span aria-hidden>x</span>

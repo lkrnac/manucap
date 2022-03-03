@@ -2,9 +2,6 @@ import "../testUtils/initBrowserEnvironment";
 import { createRef, ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
-import Card from "react-bootstrap/Card";
-import Accordion from "react-bootstrap/Accordion";
-import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import { mount } from "enzyme";
 import { fireEvent, render } from "@testing-library/react";
 import ReactDOM from "react-dom";
@@ -14,6 +11,7 @@ import {
     fixVideoPlayerInvalidTime,
     removeBackgroundColorStyle,
     removeDraftJsDynamicValues,
+    removeHeadlessAttributes,
     removeVideoPlayerDynamicValue,
 } from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesList/cuesListActions";
@@ -30,29 +28,28 @@ import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
 import * as cuesListScrollSlice from "./cues/cuesList/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
-import KeyboardShortcuts from "./toolbox/keyboardShortcuts/KeyboardShortcuts";
-import SubtitleSpecificationsButton from "./toolbox/subtitleSpecifications/SubtitleSpecificationsButton";
-import ShiftTimeButton from "./toolbox/shift/ShiftTimeButton";
-import CaptionOverlapToggle from "./toolbox/CaptionOverlapToggle";
-import ExportTrackCuesButton from "./toolbox/export/ExportTrackCuesButton";
-import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
-import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
-import MergeCuesButton from "./toolbox/MergeCuesButton";
 import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { act } from "react-dom/test-utils";
-import CueCommentsToggle from "./toolbox/CueCommentsToggle";
-import WaveformToggle from "./toolbox/WaveformToggle";
+import Tooltip from "./common/Tooltip";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
     isEmpty: jest.requireActual("lodash/isEmpty")
 }));
 
-// eslint-disable-next-line react/display-name
 jest.mock("./cues/CueErrorAlert", () => (): ReactElement => <div>CueErrorAlert</div>);
+jest.mock("./common/TransitionDialog", () => (): ReactElement => <div>TransitionDialog</div>);
+jest.mock("@headlessui/react", () => ({
+    ...(jest.requireActual("@headlessui/react")),
+    Transition: ({ show, children, unmount }: {
+        children: ReactElement,
+        show?: boolean,
+        unmount?: boolean,
+    }): ReactElement | undefined => show || !unmount ? children : undefined
+}));
 
 Element.prototype.scrollIntoView = jest.fn();
 
@@ -117,11 +114,13 @@ jest.setTimeout(9000);
 describe("SubtitleEdit", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+        jest.clearAllMocks();
     });
+
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
@@ -188,63 +187,81 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-first-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                <Tooltip
+                                    message="Scroll to top"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-up" />
-                                </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-last-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to bottom"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-down" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to currently editing subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-edit" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-edit" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to subtitle in playback position"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-video" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-video" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to last translated subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-language" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        hidden={true}
+                                    >
+                                        <i className="fa fa-language" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to next subtitle error"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-bug" />
-                                </button>
+                                    <button
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-bug" />
+                                    </button>
+                                </Tooltip>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -263,7 +280,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -284,14 +301,17 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
+        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML)));
+        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML)));
+        expect(actual).toEqual(expected);
     });
 
     it("renders with no cues and add cue button for CAPTION track", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
@@ -319,9 +339,9 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <Toolbox
+                                handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
-                                handleImportFile={jest.fn()}
                             />
                         </div>
                         <div
@@ -340,63 +360,81 @@ describe("SubtitleEdit", () => {
                                 sourceCueIndexes={[]}
                             />
                             <div style={{ overflow: "auto" }} />
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-first-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                <Tooltip
+                                    message="Scroll to top"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-up" />
-                                </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-last-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to bottom"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-down" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to currently editing subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-edit" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-edit" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to subtitle in playback position"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-video" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-video" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to last translated subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-language" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        hidden={true}
+                                    >
+                                        <i className="fa fa-language" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to next subtitle error"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-bug" />
-                                </button>
+                                    <button
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-bug" />
+                                    </button>
+                                </Tooltip>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -415,7 +453,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -436,14 +474,17 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html())));
+        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html())));
+        expect(actual).toEqual(expected);
     });
 
     it("renders loading data when data is pending load for CAPTION", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
@@ -473,7 +514,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -493,14 +534,17 @@ describe("SubtitleEdit", () => {
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html())));
+        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html())));
+        expect(actual).toEqual(expected);
     });
 
     it("renders loading data when data is pending load for TRANSLATION source cues", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
@@ -533,7 +577,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -554,14 +598,17 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html())));
+        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html())));
+        expect(actual).toEqual(expected);
     });
 
     it("renders with search and replace pane", () => {
         // GIVEN
         const expectedNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
@@ -607,8 +654,8 @@ describe("SubtitleEdit", () => {
                             <SearchReplaceEditor />
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
-                                    rowIndex={0}
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
@@ -618,8 +665,8 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                                 <CueLine
-                                    rowIndex={1}
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
@@ -629,63 +676,81 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-first-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                <Tooltip
+                                    message="Scroll to top"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-up" />
-                                </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-last-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to bottom"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-down" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to currently editing subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-edit" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-edit" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to subtitle in playback position"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-video" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-video" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to last translated subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-language" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        hidden={true}
+                                    >
+                                        <i className="fa fa-language" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to next subtitle error"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-bug" />
-                                </button>
+                                    <button
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-bug" />
+                                    </button>
+                                </Tooltip>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -704,7 +769,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -726,14 +791,17 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
+        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML)));
+        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML)));
+        expect(actual).toEqual(expected);
     });
 
     it("renders with merge pane", () => {
         // GIVEN
         const expectedNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
@@ -779,83 +847,103 @@ describe("SubtitleEdit", () => {
                             <MergeEditor />
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
-                                    rowIndex={0}
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={createRef()}
                                 />
                                 <CueLine
-                                    rowIndex={1}
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-first-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                <Tooltip
+                                    message="Scroll to top"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-up" />
-                                </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-last-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to bottom"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-down" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to currently editing subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-edit" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-edit" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to subtitle in playback position"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-video" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-video" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to last translated subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-language" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        hidden={true}
+                                    >
+                                        <i className="fa fa-language" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to next subtitle error"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-bug" />
-                                </button>
+                                    <button
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-bug" />
+                                    </button>
+                                </Tooltip>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -874,7 +962,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -896,14 +984,17 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(showMerge(true) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
+        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML)));
+        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML)));
+        expect(actual).toEqual(expected);
     });
 
     it("renders for task with edit disabled", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
@@ -930,29 +1021,11 @@ describe("SubtitleEdit", () => {
                                     lastCueChange={null}
                                 />
                             </div>
-                            <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
-                                <Card>
-                                    <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                                        Toolbox
-                                    </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="0">
-                                        <Card.Body>
-                                            <ButtonToolbar className="sbte-button-toolbar">
-                                                <KeyboardShortcuts />
-                                                <SubtitleSpecificationsButton />
-                                                <ShiftTimeButton />
-                                                <CaptionOverlapToggle />
-                                                <ExportTrackCuesButton handleExport={jest.fn()} />
-                                                <ImportTrackCuesButton handleImport={jest.fn()} disabled />
-                                                <SearchReplaceButton />
-                                                <MergeCuesButton />
-                                                <CueCommentsToggle />
-                                                <WaveformToggle />
-                                            </ButtonToolbar>
-                                        </Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                            </Accordion>
+                            <Toolbox
+                                handleImportFile={jest.fn()}
+                                handleExportSourceFile={jest.fn()}
+                                handleExportFile={jest.fn()}
+                            />
                         </div>
                         <div
                             style={{
@@ -966,8 +1039,8 @@ describe("SubtitleEdit", () => {
                         >
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
-                                    rowIndex={0}
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
@@ -977,8 +1050,8 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                                 <CueLine
-                                    rowIndex={1}
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
@@ -988,64 +1061,81 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-first-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                <Tooltip
+                                    message="Scroll to top"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-up" />
-                                </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-last-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to bottom"
+                                    placement="top"
                                 >
-
-                                    <i className="fa fa-angle-double-down" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to currently editing subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-edit" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-edit" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to subtitle in playback position"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-video" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-video" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to last translated subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-language" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        hidden={true}
+                                    >
+                                        <i className="fa fa-language" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to next subtitle error"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-bug" />
-                                </button>
+                                    <button
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-bug" />
+                                    </button>
+                                </Tooltip>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -1064,7 +1154,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1085,8 +1175,11 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html())));
+        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html())));
+        expect(actual).toEqual(expected);
     });
 
     it("renders with waveform", async () => {
@@ -1098,7 +1191,7 @@ describe("SubtitleEdit", () => {
             })
         });
         const expectedNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{ display: "flex", flexFlow: "column", padding: "10px",  height: "100%" }}
@@ -1171,63 +1264,81 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-first-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                <Tooltip
+                                    message="Scroll to top"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-up" />
-                                </button>
-                                <button
-                                    className="btn btn-secondary sbte-jump-to-last-button"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to bottom"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-angle-double-down" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to currently editing subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-edit" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-edit" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to subtitle in playback position"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-video" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-video" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to last translated subtitle"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-language" />
-                                </button>
-                                <button
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
-                                    type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    <button
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        hidden={true}
+                                    >
+                                        <i className="fa fa-language" />
+                                    </button>
+                                </Tooltip>
+                                <Tooltip
+                                    message="Scroll to next subtitle error"
+                                    placement="top"
                                 >
-                                    <i className="fa fa-bug" />
-                                </button>
+                                    <button
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                    >
+                                        <i className="fa fa-bug" />
+                                    </button>
+                                </Tooltip>
                                 <span style={{ flexGrow: 2 }} />
                                 <div
                                     style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
@@ -1246,7 +1357,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1271,17 +1382,18 @@ describe("SubtitleEdit", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(removeBackgroundColorStyle(
-            actualNode.container.outerHTML))))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(removeBackgroundColorStyle(
-                fixVideoPlayerInvalidTime(expectedNode.container.outerHTML)))));
+        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            removeBackgroundColorStyle(actualNode.container.outerHTML))));
+        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            removeBackgroundColorStyle(fixVideoPlayerInvalidTime(expectedNode.container.outerHTML)))));
+        expect(actual).toEqual(expected);
     });
 
     it("calls onViewAllTrack callback when button is clicked", () => {
         // GIVEN
         const mockOnViewAllTracks = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1313,7 +1425,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnComplete = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1346,7 +1458,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnExportFile = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1368,6 +1480,7 @@ describe("SubtitleEdit", () => {
         actualNode.update();
 
         // WHEN
+        console.log(actualNode.html());
         actualNode.find(".sbte-export-button").simulate("click");
 
         // THEN
@@ -1378,7 +1491,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnExportSourceFile = jest.fn();
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1410,7 +1523,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnImportFile = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1450,7 +1563,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1490,7 +1603,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1523,7 +1636,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1561,7 +1674,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1589,7 +1702,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1623,7 +1736,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1658,7 +1771,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1692,7 +1805,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1737,7 +1850,7 @@ describe("SubtitleEdit", () => {
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1805,7 +1918,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"

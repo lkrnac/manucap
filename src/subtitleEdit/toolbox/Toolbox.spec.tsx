@@ -1,8 +1,5 @@
 import "../../testUtils/initBrowserEnvironment";
-import Accordion from "react-bootstrap/Accordion";
 import { AnyAction } from "@reduxjs/toolkit";
-import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import Card from "react-bootstrap/Card";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import { Provider } from "react-redux";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
@@ -24,35 +21,39 @@ import MergeCuesButton from "./MergeCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
 import TimecodesLockToggle from "./TimecodesLockToggle";
 import WaveformToggle from "./WaveformToggle";
+import { removeHeadlessAttributes } from "../../testUtils/testUtils";
 
 describe("Toolbox", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
             <Provider store={testingStore}>
-                <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                            Toolbox
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                                <ButtonToolbar className="sbte-button-toolbar">
-                                    <KeyboardShortcuts />
-                                    <SubtitleSpecificationsButton />
-                                    <ShiftTimeButton />
-                                    <CaptionOverlapToggle />
-                                    <ExportTrackCuesButton handleExport={jest.fn()} />
-                                    <ImportTrackCuesButton handleImport={jest.fn()} />
-                                    <SearchReplaceButton />
-                                    <MergeCuesButton />
-                                    <CueCommentsToggle />
-                                    <WaveformToggle />
-                                </ButtonToolbar>
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                </Accordion>
+                <div
+                    style={{ marginTop: "10px" }}
+                    className="sbte-toolbox"
+                >
+                    <div className="card">
+                        <div className="card-header" id="" aria-expanded aria-controls="">Toolbox</div>
+                        <div className="tw-overflow-hidden tw-h-full tw-transition-all">
+                            <div id="">
+                                <div className="card-body">
+                                    <div role="toolbar" className="sbte-button-toolbar btn-toolbar">
+                                        <KeyboardShortcuts />
+                                        <SubtitleSpecificationsButton />
+                                        <ShiftTimeButton />
+                                        <CaptionOverlapToggle />
+                                        <ExportTrackCuesButton handleExport={jest.fn()} />
+                                        <ImportTrackCuesButton handleImport={jest.fn()} />
+                                        <SearchReplaceButton />
+                                        <MergeCuesButton />
+                                        <CueCommentsToggle />
+                                        <WaveformToggle />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </Provider>
         );
 
@@ -67,8 +68,9 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML)
-            .toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("renders for translation track", () => {
@@ -84,32 +86,35 @@ describe("Toolbox", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                            Toolbox
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                                <ButtonToolbar className="sbte-button-toolbar">
-                                    <KeyboardShortcuts />
-                                    <SubtitleSpecificationsButton />
-                                    <ShiftTimeButton />
-                                    <CaptionOverlapToggle />
-                                    <ExportSourceTrackCuesButton handleExport={jest.fn()} />
-                                    <ExportTrackCuesButton handleExport={jest.fn()} />
-                                    <ImportTrackCuesButton handleImport={jest.fn()} />
-                                    <SearchReplaceButton />
-                                    <SyncCuesButton />
-                                    <MergeCuesButton />
-                                    <CueCommentsToggle />
-                                    <TimecodesLockToggle />
-                                    <WaveformToggle />
-                                </ButtonToolbar>
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                </Accordion>
+                <div
+                    style={{ marginTop: "10px" }}
+                    className="sbte-toolbox"
+                >
+                    <div className="card">
+                        <div className="card-header" id="" aria-expanded aria-controls="">Toolbox</div>
+                        <div className="tw-overflow-hidden tw-h-full tw-transition-all">
+                            <div id="">
+                                <div className="card-body">
+                                    <div role="toolbar" className="sbte-button-toolbar btn-toolbar">
+                                        <KeyboardShortcuts />
+                                        <SubtitleSpecificationsButton />
+                                        <ShiftTimeButton />
+                                        <CaptionOverlapToggle />
+                                        <ExportSourceTrackCuesButton handleExport={jest.fn()} />
+                                        <ExportTrackCuesButton handleExport={jest.fn()} />
+                                        <ImportTrackCuesButton handleImport={jest.fn()} />
+                                        <SearchReplaceButton />
+                                        <SyncCuesButton />
+                                        <MergeCuesButton />
+                                        <CueCommentsToggle />
+                                        <TimecodesLockToggle />
+                                        <WaveformToggle />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </Provider>
         );
 
@@ -121,8 +126,9 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML)
-            .toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("passes exportFile function to export file button", () => {

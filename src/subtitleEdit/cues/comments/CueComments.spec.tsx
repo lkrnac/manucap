@@ -9,6 +9,7 @@ import { updateCues } from "../cuesList/cuesListActions";
 import { userSlice } from "../../userSlices";
 import { Character } from "../../utils/shortcutConstants";
 import DateTime from "../../common/DateTime";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 const testComments = [
     {
@@ -59,62 +60,69 @@ describe("CueComments", () => {
                     marginRight: "2px",
                 }}
             >
-                <div style={{ marginBottom: "8px" }}>
-                    <span
-                        className="sbte-cue-comment-user"
-                        style={{
-                            borderRadius: "5px",
-                            padding: "1px 3px",
-                            whiteSpace: "nowrap",
-                            width: "80px",
-                            marginRight: "5px",
-                            float: "left",
-                            textAlign: "center",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden"
-                        }}
-                    >
-                        Reviewer
-                    </span>
-                    <span> this is the first comment </span>
-                    <span
-                        className="sbte-light-gray-text"
-                        style={{ float: "right", marginRight: "30px" }}
-                    >
-                        <i><DateTime value="2021-01-01T09:24:00.000Z" /></i>
-                    </span>
+                <div style={{ marginBottom: "8px" }} className="tw-flex tw-items-center tw-justify-between">
+                    <div>
+                        <span
+                            className="sbte-cue-comment-user"
+                            style={{
+                                borderRadius: "5px",
+                                padding: "2px 6px",
+                                whiteSpace: "nowrap",
+                                width: "80px",
+                                marginRight: "5px",
+                                textAlign: "center",
+                                textOverflow: "ellipsis",
+                                display: "inline-block"
+                            }}
+                        >
+                            Reviewer
+                        </span>
+                        <span>this is the first comment</span>
+                    </div>
+                    <div className="tw-flex tw-items-center tw-space-x-1.5">
+                        <span className="sbte-light-gray-text">
+                            <i><DateTime value="2021-01-01T09:24:00.000Z" /></i>
+                        </span>
+                    </div>
                 </div>
-                <div style={{ marginBottom: "8px" }}>
-                    <span
-                        className="sbte-cue-comment-user"
-                        style={{
-                            borderRadius: "5px",
-                            padding: "1px 3px",
-                            whiteSpace: "nowrap",
-                            width: "80px",
-                            marginRight: "5px",
-                            float: "left",
-                            textAlign: "center",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden"
-                        }}
-                    >
-                        Linguist
-                    </span>
-                    <span> this is the second comment </span>
-                    <button
-                        data-testid="sbte-delete-cue-comment-button"
-                        style={{ float: "right", marginLeft: "-30px" }}
-                        className="btn btn-outline-secondary sbte-btn-xs"
-                    >
-                        <i className="fa fa-trash" />
-                    </button>
-                    <span
-                        className="sbte-light-gray-text"
-                        style={{ float: "right", marginRight: "30px" }}
-                    >
-                        <i><DateTime value="2021-02-01T09:06:00.000Z" /></i>
-                    </span>
+                <div
+                    style={{ marginBottom: "8px" }}
+                    className="tw-flex tw-items-center tw-justify-between"
+                >
+                    <div>
+                        <span
+                            className="sbte-cue-comment-user"
+                            style={{
+                                    borderRadius: "5px",
+                                    padding: "2px 6px",
+                                    whiteSpace: "nowrap",
+                                    width: "80px",
+                                    marginRight: "5px",
+                                    textAlign: "center",
+                                    textOverflow: "ellipsis",
+                                    display: "inline-block"
+                                }}
+                        >
+                            Linguist
+                        </span>
+                        <span>this is the second comment</span>
+                    </div>
+                    <div className="tw-flex tw-items-center tw-space-x-1.5">
+                        <span className="sbte-light-gray-text">
+                            <i><DateTime value="2021-02-01T09:06:00.000Z" /></i>
+                        </span>
+                        <div
+                            id=""
+                            aria-expanded={false}
+                        >
+                            <button
+                                data-testid="sbte-delete-cue-comment-button"
+                                className="btn btn-outline-secondary sbte-btn-xs"
+                            >
+                                <i className="fa fa-trash" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <hr style={{
                     borderTop: "2px solid lightgray",
@@ -156,7 +164,9 @@ describe("CueComments", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
     it("renders with no comments", () => {
         // GIVEN

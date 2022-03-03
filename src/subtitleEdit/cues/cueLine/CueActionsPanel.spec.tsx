@@ -9,7 +9,7 @@ import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto, Track } from "../../model";
 import DeleteCueLineButton from "../edit/DeleteCueLineButton";
 import PlayCueButton from "./PlayCueButton";
-import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
+import { removeDraftJsDynamicValues, removeHeadlessAttributes } from "../../../testUtils/testUtils";
 import { updateCues } from "../cuesList/cuesListActions";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -60,9 +60,9 @@ describe("CueActionsPanel", () => {
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
-
+        const actual = removeDraftJsDynamicValues(removeHeadlessAttributes(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeHeadlessAttributes(expectedNode.container.outerHTML));
+        expect(actual).toEqual(expected);
     });
 
     it("renders for caption cue in view mode", () => {
@@ -89,8 +89,9 @@ describe("CueActionsPanel", () => {
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(removeHeadlessAttributes(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeHeadlessAttributes(expectedNode.container.outerHTML));
+        expect(actual).toEqual(expected);
     });
 
     it("opens next cue line for editing when add button is clicked", () => {

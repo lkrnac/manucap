@@ -7,6 +7,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { showMerge } from "../merge/mergeSlices";
 import { addCuesToMergeList } from "../cuesList/cuesListActions";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -1050,7 +1051,12 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-comments" />
+                        <div
+                            id=""
+                            aria-expanded={false}
+                        >
+                            <i className="fa fa-comments" />
+                        </div>
                     </div>
                     <div
                         style={{
@@ -1082,7 +1088,9 @@ describe("CueLineFlap", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("renders good disabled cue with 1 comment", () => {
@@ -1142,7 +1150,12 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-comments" />
+                        <div
+                            id=""
+                            aria-expanded={false}
+                        >
+                            <i className="fa fa-comments" />
+                        </div>
                     </div>
                     <div
                         style={{
@@ -1175,7 +1188,9 @@ describe("CueLineFlap", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("renders corrupted disabled cue with 3 comments", () => {
@@ -1235,7 +1250,12 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-comments" />
+                        <div
+                            id=""
+                            aria-expanded={false}
+                        >
+                            <i className="fa fa-comments" />
+                        </div>
                     </div>
                     <div
                         style={{
@@ -1268,6 +1288,8 @@ describe("CueLineFlap", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 });

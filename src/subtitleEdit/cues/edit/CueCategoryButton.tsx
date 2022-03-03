@@ -12,7 +12,7 @@ const CueCategoryButton = (props: Props): ReactElement => (
     <Menu as="div" className="md:tw-relative tw-dropdown-wrapper">
         {({ open }): ReactElement => (
             <>
-                <Menu.Button as="div" className="tw-cursor-pointer">
+                <Menu.Button id="cue-line-category" as="div" className="tw-cursor-pointer">
                     <button
                         className={`tw-select-none ${open ? "tw-open-true focus active" : "tw-open-false"}` +
                             " dropdown-toggle btn btn-outline-secondary"}
@@ -36,23 +36,23 @@ const CueCategoryButton = (props: Props): ReactElement => (
                             static
                             className="tw-dropdown-menu tw-flex tw-flex-row tw-flex-wrap"
                         >
-                            <Menu.Item onClick={(): void => props.onChange("DIALOGUE")}>
+                            <Menu.Item as="li" onClick={(): void => props.onChange("DIALOGUE")}>
                                 <div className="tw-dropdown-item">
                                     {cueCategoryToPrettyName.DIALOGUE}
                                 </div>
                             </Menu.Item>
                             <hr />
-                            <Menu.Item onClick={(): void => props.onChange("ONSCREEN_TEXT")}>
+                            <Menu.Item as="li" onClick={(): void => props.onChange("ONSCREEN_TEXT")}>
                                 <div className="tw-dropdown-item">
                                     {cueCategoryToPrettyName.ONSCREEN_TEXT}
                                 </div>
                             </Menu.Item>
-                            <Menu.Item onClick={(): void => props.onChange("AUDIO_DESCRIPTION")}>
+                            <Menu.Item as="li" onClick={(): void => props.onChange("AUDIO_DESCRIPTION")}>
                                 <div className="tw-dropdown-item">
                                     {cueCategoryToPrettyName.AUDIO_DESCRIPTION}
                                 </div>
                             </Menu.Item>
-                            <Menu.Item onClick={(): void => props.onChange("LYRICS")}>
+                            <Menu.Item as="li" onClick={(): void => props.onChange("LYRICS")}>
                                 <div className="tw-dropdown-item">
                                     {cueCategoryToPrettyName.LYRICS}
                                 </div>

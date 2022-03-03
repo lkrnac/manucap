@@ -14,7 +14,7 @@ import { updateEditingTrack, updateTask } from "../../trackSlices";
 import { changeScrollPosition, scrollPositionSlice } from "./cuesListScrollSlice";
 import { act } from "react-dom/test-utils";
 import CueLine from "../cueLine/CueLine";
-import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
+import { removeDraftJsDynamicValues, removeHeadlessAttributes } from "../../../testUtils/testUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";
 import { matchedCuesSlice } from "./cuesListSlices";
 
@@ -110,8 +110,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.container.outerHTML));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            expect(expected).toEqual(actual);
         });
 
         it("without pagination", () => {
@@ -187,8 +188,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.container.outerHTML));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            expect(expected).toEqual(actual);
         });
 
         it("first page", () => {
@@ -235,8 +237,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.container.outerHTML));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            expect(expected).toEqual(actual);
         });
 
         it("middle page", () => {
@@ -290,8 +293,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.container.outerHTML));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            expect(expected).toEqual(actual);
         });
 
         it("last page", () => {
@@ -338,8 +342,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.container.outerHTML));
+            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            expect(expected).toEqual(actual);
         });
     });
 

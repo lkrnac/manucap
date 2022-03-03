@@ -19,6 +19,7 @@ import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 import CueComments from "../comments/CueComments";
 import { commentsVisibleSlice } from "../comments/commentsSlices";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 // eslint-disable-next-line react/display-name
 jest.mock("../edit/CueEdit", () => (props: CueEditProps): ReactElement => <div>CueEdit: {JSON.stringify(props)}</div>);
@@ -1927,7 +1928,9 @@ describe("CueLine", () => {
             );
 
             // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+            const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+            expect(actual).toEqual(expected);
         });
 
         it("renders translation view line with 3 target cues wit comments", () => {
@@ -2031,7 +2034,9 @@ describe("CueLine", () => {
             );
 
             // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+            const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+            expect(actual).toEqual(expected);
         });
     });
 });

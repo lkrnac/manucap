@@ -3,14 +3,16 @@ import { CSSProperties, RefObject } from "react";
 import { mount } from "enzyme";
 import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";
-import { Overlay } from "react-bootstrap";
-import { spellCheckOptionPredicate } from "../../../testUtils/testUtils";
+import { removeHeadlessAttributes, spellCheckOptionPredicate } from "../../../testUtils/testUtils";
 import Select from "react-select";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 
 jest.mock("react-redux");
+
 const removeSelectCssClass = (htmlString: string): string =>
-    htmlString.replace(/react-select-\d{1,4}-+/g, "");
+    htmlString.replace(/react-select-\d{1,4}-+/g, "")
+        .replace(/css-[a-zA-Z0-9]+-[a-zA-Z0-9]+/g, "")
+        .replace(" spellcheck__option--is-focused", "");
 
 describe("SpellCheckerIssue", () => {
 
@@ -41,9 +43,24 @@ describe("SpellCheckerIssue", () => {
     it("renders without popup", () => {
         // GIVEN
         const expectedNode = mount(
-            <span className="sbte-text-with-error">
-                <div className="text" />
-            </span>
+            <div className="tw-inline-block">
+                <button
+                    className="tw-inline-block tw-outline-none focus:tw-outline-none"
+                    id=""
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls=""
+                >
+                    <span className="sbte-text-with-error">
+                        <div className="text" />
+                    </span>
+                </button>
+                <div
+                    style={{ position: "absolute", left: 0, top: 0 }}
+                    className="tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-false"
+                    id=""
+                />
+            </div>
         );
 
         // WHEN
@@ -65,7 +82,9 @@ describe("SpellCheckerIssue", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        const actual = removeHeadlessAttributes(actualNode.html());
+        const expected = removeHeadlessAttributes(expectedNode.html());
+        expect(actual).toEqual(expected);
     });
 
     it("does not render issue if start doesn't match", () => {
@@ -124,33 +143,33 @@ describe("SpellCheckerIssue", () => {
         // GIVEN
         const expectedNode = mount(
             <div
-                role="tooltip"
-                style={{
-                    position: "absolute",
-                    top: "0px",
-                    left: "0px",
-                    opacity: 0,
-                    pointerEvents: "none",
-                    margin: "0px"
-                }}
-                x-placement="bottom"
-                className="fade show popover bs-popover-bottom"
-                id="sbte-spell-check-popover"
+                style={{ position: "absolute", left: 0, top: 0 }}
+                className="tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-true"
+                id=""
             >
-                <div className="arrow" style={{ margin: "0px" }} />
-                <div className="popover-header">There is error</div>
-                <div style={{ padding: "0px" }} className="popover-body">
-                    <Select
-                        menuIsOpen
-                        styles={customStyles}
-                        options={[
-                            { value: "", label: "Ignore all in this track" },
-                            { value: "repl1", label: "repl1" },
-                            { value: "repl2", label: "repl2" },
-                            { value: "repl3", label: "repl3" }
-                        ]}
-                        classNamePrefix="spellcheck"
-                    />
+                <div className="tw-transition-opacity tw-duration-300 tw-ease-in-out tw-opacity-0">
+                    <div
+                        className="tw-rounded tw-shadow-lg tw-overflow-hidden tw-border tw-arrow
+                            before:tw-border-b-gray-300 tw-border-gray-300"
+                    >
+                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                            There is error
+                        </div>
+                        <div>
+                            <Select
+                                menuIsOpen
+                                autoFocus
+                                styles={customStyles}
+                                options={[
+                                    { value: "", label: "Ignore all in this track" },
+                                    { value: "repl1", label: "repl1" },
+                                    { value: "repl2", label: "repl2" },
+                                    { value: "repl3", label: "repl3" }
+                                ]}
+                                classNamePrefix="spellcheck"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -189,39 +208,41 @@ describe("SpellCheckerIssue", () => {
         actualNode.find(".sbte-text-with-error").simulate("click");
 
         // THEN
-        expect(removeSelectCssClass(actualNode.find("#sbte-spell-check-popover").at(0).html()))
-            .toEqual(removeSelectCssClass(expectedNode.html()));
+        const actual = removeHeadlessAttributes(removeSelectCssClass(
+            actualNode.find("#sbte-spell-check-popover").at(0).html()));
+        const expected = removeHeadlessAttributes(removeSelectCssClass(expectedNode.html()));
+        expect(actual).toEqual(expected);
     });
 
     it("renders popup without options when clicked", () => {
         // GIVEN
         const expectedNode = mount(
             <div
-                role="tooltip"
-                style={{
-                    position: "absolute",
-                    top: "0px",
-                    left: "0px",
-                    opacity: 0,
-                    pointerEvents: "none",
-                    margin: "0px"
-                }}
-                x-placement="bottom"
-                className="fade show popover bs-popover-bottom"
-                id="sbte-spell-check-popover"
+                style={{ position: "absolute", left: 0, top: 0 }}
+                className="tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-true"
+                id=""
             >
-                <div className="arrow" style={{ margin: "0px" }} />
-                <div className="popover-header">There is error</div>
-                <div style={{ padding: "0px" }} className="popover-body">
-                    <Select
-                        menuIsOpen
-                        styles={customStyles}
-                        options={[
-                            { value: "", label: "Ignore all in this track" },
-                            { value: "error", label: "error" }
-                        ]}
-                        classNamePrefix="spellcheck"
-                    />
+                <div className="tw-transition-opacity tw-duration-300 tw-ease-in-out tw-opacity-0">
+                    <div
+                        className="tw-rounded tw-shadow-lg tw-overflow-hidden tw-border tw-arrow
+                            before:tw-border-b-gray-300 tw-border-gray-300"
+                    >
+                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                            There is error
+                        </div>
+                        <div>
+                            <Select
+                                menuIsOpen
+                                autoFocus
+                                styles={customStyles}
+                                options={[
+                                    { value: "", label: "Ignore all in this track" },
+                                    { value: "error", label: "error" }
+                                ]}
+                                classNamePrefix="spellcheck"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -246,8 +267,10 @@ describe("SpellCheckerIssue", () => {
         actualNode.find(".sbte-text-with-error").simulate("click");
 
         // THEN
-        expect(removeSelectCssClass(actualNode.find("#sbte-spell-check-popover").at(0).html()))
-            .toEqual(removeSelectCssClass(expectedNode.html()));
+        const actual = removeHeadlessAttributes(removeSelectCssClass(
+            actualNode.find("#sbte-spell-check-popover").at(0).html()));
+        const expected = removeHeadlessAttributes(removeSelectCssClass(expectedNode.html()));
+        expect(actual).toEqual(expected);
     });
 
     it("calls callback with selection when clicked", () => {
@@ -290,68 +313,5 @@ describe("SpellCheckerIssue", () => {
 
         // THEN
         expect(handler).toBeCalledWith("repl2", 15, 18);
-    });
-
-    it("renders popup on top when there is enough space for in the window", () => {
-        // GIVEN
-        // @ts-ignore
-        // noinspection JSConstantReassignment
-        window.innerHeight = 100;
-        let spellCheckerMatchingOffset = null;
-        const setSpellCheckerMatchingOffset = (id: number | null): void => {
-            spellCheckerMatchingOffset = id;
-        };
-        const actualNode = mount(
-            <SpellCheckIssue
-                trackId={trackId}
-                spellCheck={spellCheck}
-                start={15}
-                end={18}
-                correctSpelling={jest.fn()}
-                setSpellCheckerMatchingOffset={setSpellCheckerMatchingOffset}
-                spellCheckerMatchingOffset={spellCheckerMatchingOffset}
-                editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-            >
-                <div className="text" />
-            </SpellCheckIssue>
-        );
-
-        // WHEN
-        actualNode.find(".sbte-text-with-error").simulate("click");
-        actualNode.setProps({ spellCheckerMatchingOffset: spellCheckerMatchingOffset });
-
-        // THEN
-        expect(actualNode.find(Overlay).at(0).props().placement).toEqual("top");
-    });
-
-    it("renders popup on bottom when there is enough space for in the window", () => {
-        // GIVEN
-        // @ts-ignore
-        // noinspection JSConstantReassignment
-        window.innerHeight = 1000;
-        const actualNode = mount(
-            <SpellCheckIssue
-                trackId={trackId}
-                spellCheck={spellCheck}
-                start={15}
-                end={18}
-                correctSpelling={jest.fn()}
-                setSpellCheckerMatchingOffset={jest.fn()}
-                spellCheckerMatchingOffset={null}
-                editorRef={emptyEditorRef}
-                bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-                unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-            >
-                <div className="text" />
-            </SpellCheckIssue>
-        );
-
-        // WHEN
-        actualNode.find(".sbte-text-with-error").simulate("click");
-
-        // THEN
-        expect(actualNode.find(Overlay).at(0).props().placement).toEqual("bottom");
     });
 });

@@ -9,8 +9,8 @@ import { CueDto, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateCues } from "../cuesList/cuesListActions";
 import { updateSourceCues } from "../view/sourceCueSlices";
-import { Tooltip } from "react-bootstrap";
 import { updateEditingTrack } from "../../trackSlices";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
@@ -24,12 +24,18 @@ describe("AddCueLineButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button
-                style={{ maxHeight: "38px", margin: "5px", height: "100%" }}
-                className="btn btn-outline-secondary sbte-add-cue-button"
+            <div
+                className="tw-p-1.5"
+                id=""
+                aria-expanded="false"
             >
-                <b>+</b>
-            </button>
+                <button
+                    style={{ maxHeight: "38px", height: "100%" }}
+                    className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
+                >
+                    <b>+</b>
+                </button>
+            </div>
         );
 
         // WHEN
@@ -40,18 +46,26 @@ describe("AddCueLineButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("renders with custom text", () => {
         // GIVEN
         const expectedNode = render(
-            <button
-                style={{ maxHeight: "38px", margin: "5px", height: "100%" }}
-                className="btn btn-outline-secondary sbte-add-cue-button"
+            <div
+                className="tw-p-1.5"
+                id=""
+                aria-expanded="false"
             >
-                <span>Add Cue Line</span>
-            </button>
+                <button
+                    style={{ maxHeight: "38px", height: "100%" }}
+                    className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
+                >
+                    <span>Add Cue Line</span>
+                </button>
+            </div>
         );
 
         // WHEN
@@ -62,7 +76,9 @@ describe("AddCueLineButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("adds cue when clicked", () => {
@@ -229,13 +245,35 @@ describe("AddCueLineButton", () => {
     it("shows tooltip when mouse hovers over", async () => {
         // GIVEN
         const expectedNode = render(
-            <Tooltip
-                id="addCueBtnTooltip"
-                placement="left"
-                show
-            >
-                <div className="tooltip-inner">Insert new subtitle</div>
-            </Tooltip>
+            <>
+                <div
+                    className="tw-p-1.5"
+                    id=""
+                    aria-expanded="false"
+                    aria-controls=""
+                >
+                    <button
+                        style={{ maxHeight: 38, height: "100%" }}
+                        className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
+                    >
+                        <b>+</b>
+                    </button>
+                </div>
+                <div
+                    style={{ position: "absolute", left: 0, top: 0 }}
+                    className="tw-z-40 tw-popper-wrapper"
+                    id=""
+                >
+                    <div
+                        className="tw-transition-opacity tw-duration-300
+                            tw-pointer-events-none tw-ease-in-out tw-opacity-0"
+                    >
+                        <div className="tw-tooltip tw-arrow before:tw-border-b-blue-grey-700">
+                            Insert new subtitle
+                        </div>
+                    </div>
+                </div>
+            </>
         );
 
         const actualNode = render(
@@ -248,7 +286,8 @@ describe("AddCueLineButton", () => {
         fireEvent.mouseOver(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
 
         // THEN
-        const tooltip = await actualNode.findByText("Insert new subtitle");
-        expect(tooltip.parentElement?.parentElement?.outerHTML).toEqual(expectedNode.container.innerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 });

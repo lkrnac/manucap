@@ -3,39 +3,53 @@ import "../../../testUtils/initBrowserEnvironment";
 import * as simulant from "simulant";
 import { Character } from "../../utils/shortcutConstants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import Modal from "react-bootstrap/Modal";
 import { Provider } from "react-redux";
 import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
+import TransitionDialog from "../../common/TransitionDialog";
 
 describe("KeyboardShortcuts", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <button type="button" className="dotsub-keyboard-shortcuts-button btn btn-secondary">
+                <button className="btn btn-secondary dotsub-keyboard-shortcuts-button">
                     <i className="far fa-keyboard" /> Keyboard Shortcuts
                 </button>
-                <div className="fade modal-backdrop show" />
                 <div
+                    className="tw-fixed tw-z-200 tw-inset-0 tw-overflow-y-auto tw-modal sbte-medium-modal"
+                    id=""
                     role="dialog"
                     aria-modal="true"
-                    className="fade modal show"
-                    tabIndex={-1}
-                    style={{ display: "block" }}
+                    aria-labelledby=""
+                    aria-describedby=""
                 >
-                    <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <div className="modal-title h4">Keyboard Shortcuts</div>
-                                <button type="button" className="close"><span aria-hidden="true">×</span>
-                                    <span className="sr-only">
-                                        Close
-                                    </span>
-                                </button>
+                    <div
+                        className="tw-fixed tw-inset-0 tw-bg-black tw-ease-out tw-duration-300 tw-opacity-0"
+                        id=""
+                        aria-hidden="true"
+                    />
+                    <div className="tw-flex tw-items-center tw-justify-center tw-p-6 tw-min-h-screen">
+                        <div
+                            className="tw-relative tw-max-w-2xl tw-w-full tw-mx-auto tw-shadow-2xl tw-modal-content
+                                tw-max-w-4xl tw-ease-out tw-duration-300 tw-opacity-0 tw--translate-y-32"
+                        >
+                            <button
+                                type="button"
+                                className="tw-modal-close"
+                            >
+                                <span aria-hidden="true">×</span>
+                                <span className="sr-only">Close</span>
+                            </button>
+                            <div className="tw-modal-header tw-modal-header-primary">
+                                <h4 id="">Keyboard Shortcuts</h4>
                             </div>
-                            <div className="modal-body">
+                            <div
+                                className="tw-modal-description"
+                                id=""
+                            >
                                 <div style={{ "display": "flex", "alignItems": "center" }}>
                                     <div className="d-flex align-items-center justify-content-center">
                                         <h4><span className="badge badge-secondary">Ctrl</span></h4>
@@ -298,9 +312,9 @@ describe("KeyboardShortcuts", () => {
                                         </span>Insert bidirectional text control code
                                     </span>
                                 </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-primary">Close</button>
+                                <div className="tw-modal-toolbar">
+                                    <button className="btn btn-primary">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -318,7 +332,9 @@ describe("KeyboardShortcuts", () => {
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        const actual = removeHeadlessAttributes(actualNode.html());
+        const expected = removeHeadlessAttributes(expectedNode.html());
+        expect(actual).toEqual(expected);
     });
 
     it("opens keyboard shortcuts modal when button is clicked", () => {
@@ -333,7 +349,7 @@ describe("KeyboardShortcuts", () => {
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
 
         // THEN
-        expect(actualNode.find(Modal).props().show).toEqual(true);
+        expect(actualNode.find(TransitionDialog).props().open).toEqual(true);
     });
 
     it("closes keyboard shortcuts modal when X button is clicked", () => {
@@ -346,11 +362,11 @@ describe("KeyboardShortcuts", () => {
 
         // WHEN
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
-        actualNode.find("button.close").simulate("click");
+        actualNode.find(".tw-modal-close").simulate("click");
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(Modal).props().show).toEqual(false);
+        expect(actualNode.find(TransitionDialog).props().open).toEqual(false);
     });
 
     it("closes keyboard shortcuts modal when close button is clicked", () => {
@@ -363,11 +379,11 @@ describe("KeyboardShortcuts", () => {
 
         // WHEN
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
-        actualNode.find(".modal-footer .btn-primary").simulate("click");
+        actualNode.find(".tw-modal-toolbar .btn-primary").simulate("click");
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(Modal).props().show).toEqual(false);
+        expect(actualNode.find(TransitionDialog).props().open).toEqual(false);
     });
 
     it("opens keyboard shortcuts modal on keyboard shortcut", () => {
@@ -386,7 +402,7 @@ describe("KeyboardShortcuts", () => {
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(Modal).props().show).toEqual(true);
+        expect(actualNode.find(TransitionDialog).props().open).toEqual(true);
     });
 
     it("closes keyboard shortcuts modal on keyboard shortcut", () => {
@@ -406,6 +422,6 @@ describe("KeyboardShortcuts", () => {
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(Modal).props().show).toEqual(false);
+        expect(actualNode.find(TransitionDialog).props().open).toEqual(false);
     });
 });

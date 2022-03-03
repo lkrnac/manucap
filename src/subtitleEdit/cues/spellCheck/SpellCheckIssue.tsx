@@ -5,7 +5,8 @@ import {
     ReactElement,
     RefObject,
     useEffect,
-    useRef, useState,
+    useRef,
+    useState,
 } from "react";
 
 import * as React from "react";
@@ -23,7 +24,6 @@ import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 import { Popover, Transition } from "@headlessui/react";
 import { usePopper } from "react-popper";
-import ReactDOM from "react-dom";
 
 interface Props {
     children: ReactElement;
@@ -94,7 +94,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
      */
     useEffect(
         () => (): void => {
-            if(searchReplaceFind === "") {
+            if (searchReplaceFind === "") {
                 props.editorRef?.current?.focus();
             }
             props.bindCueViewModeKeyboardShortcut();
@@ -113,14 +113,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 options: {
                     offset: [0, 10]
                 },
-            },
-            {
-                name: "preventOverflow",
-                enabled: false
-            },
-            {
-                name: "flip",
-                enabled: false
             }
         ]
     });
@@ -164,63 +156,59 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 <span
                     ref={setReferenceElement}
                     className="sbte-text-with-error"
-                    onClick={async (): Promise<void> => {
+                    onClick={(): void => {
                         props.setSpellCheckerMatchingOffset(
                             props.spellCheckerMatchingOffset === props.start ? null : props.start
                         );
-                        if (update) {
-                            await update();
-                        }
                     }}
                 >
                     {props.children}
                 </span>
             </Popover.Button>
-            {ReactDOM.createPortal(
-                <Popover.Panel
-                    static
-                    ref={setPopperElement}
-                    style={styles.popper}
-                    {...attributes.popper}
-                    className="tw-z-40 tw-max-w-[276px] tw-popper-wrapper"
+            <Popover.Panel
+                static
+                ref={setPopperElement}
+                style={styles.popper}
+                {...attributes.popper}
+                className={`tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-${show}`}
+                id="sbte-spell-check-popover"
+            >
+                <Transition
+                    show={show}
+                    className="tw-transition-opacity tw-duration-300 tw-ease-in-out"
+                    enterFrom="tw-opacity-0"
+                    enterTo="tw-opacity-100"
+                    leaveFrom="tw-opacity-100"
+                    leaveTo="tw-opacity-0"
+                    beforeEnter={async (): Promise<void> => {
+                        onEnterPopover(props, selectRef);
+                        if (update) {
+                            await update();
+                        }
+                    }}
+                    beforeLeave={(): void => onExitPopover(props)}
                 >
-                    <Transition
-                        unmount={false}
-                        show={show}
-                        className="tw-transition-opacity tw-duration-300 tw-ease-in-out"
-                        enterFrom="tw-opacity-0"
-                        enterTo="tw-opacity-100"
-                        leaveFrom="tw-opacity-100"
-                        leaveTo="tw-opacity-0"
-                        beforeEnter={async (): Promise<void> => {
-                            if (update) await update();
-                        }}
-                        afterEnter={(): void => onEnterPopover(props, selectRef)}
-                        afterLeave={(): void => onExitPopover(props)}
+                    <div
+                        className="tw-rounded tw-shadow-lg tw-overflow-hidden
+                            tw-border tw-arrow before:tw-border-b-gray-300 tw-border-gray-300"
                     >
-                        <div
-                            className="tw-rounded tw-shadow-lg tw-overflow-hidden
-                                tw-border tw-arrow before:tw-border-b-gray-300 tw-border-gray-300"
-                        >
-                            <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
-                                {spellCheckMatch.message}
-                            </div>
-                            <div hidden={selectOptions.length === 0}>
-                                <Select
-                                    onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
-                                    ref={selectRef}
-                                    menuIsOpen
-                                    options={selectOptions}
-                                    styles={customStyles}
-                                    onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
-                                    classNamePrefix="spellcheck"
-                                />
-                            </div>
+                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                            {spellCheckMatch.message}
                         </div>
-                    </Transition>
-                </Popover.Panel>,
-                document.body
-            )}
+                        <div hidden={selectOptions.length === 0}>
+                            <Select
+                                onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
+                                ref={selectRef}
+                                menuIsOpen
+                                options={selectOptions}
+                                styles={customStyles}
+                                onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
+                                classNamePrefix="spellcheck"
+                            />
+                        </div>
+                    </div>
+                </Transition>
+            </Popover.Panel>
         </Popover>
     );
 };

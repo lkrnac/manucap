@@ -6,39 +6,47 @@ import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../../testUtils/testingStore";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 describe("SubtitleSpecificationsModal", () => {
     it("renders shown", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div className="fade modal-backdrop show" />
                 <div
+                    className="tw-fixed tw-z-200 tw-inset-0 tw-overflow-y-auto tw-modal sbte-medium-modal"
+                    id=""
                     role="dialog"
-                    aria-modal="true"
-                    className="fade modal show"
-                    tabIndex={-1}
-                    style={{ display: "block" }}
+                    aria-modal
+                    aria-labelledby=""
+                    aria-describedby=""
                 >
-                    <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <div className="modal-title h4">Subtitle Specifications</div>
-                                <button type="button" className="close">
-                                    <span aria-hidden="true">×</span>
-                                    <span className="sr-only">Close</span>
-                                </button>
+                    <div
+                        className="tw-fixed tw-inset-0 tw-bg-black"
+                        id=""
+                        aria-hidden
+                    />
+                    <div className="tw-flex tw-items-center tw-justify-center tw-p-6 tw-min-h-screen">
+                        <div
+                            className="tw-relative tw-max-w-2xl tw-w-full tw-mx-auto tw-shadow-2xl
+                                tw-modal-content tw-max-w-3xl"
+                        >
+                            <button type="button" className="tw-modal-close">
+                                <span aria-hidden="true">×</span>
+                                <span className="sr-only">Close</span>
+                            </button>
+                            <div className="tw-modal-header tw-modal-header-primary">
+                                <h4 id="">Subtitle Specifications</h4>
                             </div>
-                            <div className="modal-body">
+                            <div className="tw-modal-description" id="">
                                 <label><strong>Enabled:&nbsp;</strong></label><label>No</label>
-                            </div>
-                            <div className="modal-footer">
-                                <button
-                                    type="button"
-                                    className="dotsub-subtitle-specifications-modal-close-button btn btn-primary"
-                                >
-                                    Close
-                                </button>
+                                <div className="tw-modal-toolbar">
+                                    <button
+                                        className="btn btn-primary dotsub-subtitle-specifications-modal-close-button"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -57,7 +65,8 @@ describe("SubtitleSpecificationsModal", () => {
         );
 
         // THEN
-        expect(actualNode.html())
-            .toEqual(expectedNode.html());
+        const actual = removeHeadlessAttributes(actualNode.html());
+        const expected = removeHeadlessAttributes(expectedNode.html());
+        expect(actual).toEqual(expected);
     });
 });
