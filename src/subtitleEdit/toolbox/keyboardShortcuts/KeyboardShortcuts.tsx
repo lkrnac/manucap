@@ -24,7 +24,7 @@ const KeyboardShortcuts = (): ReactElement => {
             <button
                 onClick={handleShow}
                 className="dotsub-keyboard-shortcuts-button btn"
-                style={{ padding: "10px", width: "100%" }}
+                style={{ padding: "5px 10px", width: "100%" }}
             >
                 Keyboard Shortcuts
             </button>

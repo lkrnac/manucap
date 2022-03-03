@@ -20,7 +20,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
                 className="btn dotsub-subtitle-specifications-button"
                 onClick={handleShow}
                 hidden={subtitleSpecifications == null}
-                style={{ padding: "10px", width: "100%" }}
+                style={{ padding: "5px 10px", width: "100%" }}
             >
                 Subtitle Specifications
             </button>

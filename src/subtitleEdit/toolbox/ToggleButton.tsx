@@ -24,6 +24,7 @@ const ToggleButton: FunctionComponent<Props> = (props: PropsWithChildren<Props>)
             }}
             disabled={props.disabled}
             title={props.title}
+            style={{ padding: "5px 10px", width: "100%" }}
         >
             { props.render(toggle) }
         </button>
