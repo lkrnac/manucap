@@ -24,35 +24,44 @@ import MergeCuesButton from "./MergeCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
 import TimecodesLockToggle from "./TimecodesLockToggle";
 import WaveformToggle from "./WaveformToggle";
+import { Dropdown } from "react-bootstrap";
 
 describe("Toolbox", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
             <Provider store={testingStore}>
-                <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                            Toolbox
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                                <ButtonToolbar className="sbte-button-toolbar">
-                                    <KeyboardShortcuts />
-                                    <SubtitleSpecificationsButton />
-                                    <ShiftTimeButton />
-                                    <CaptionOverlapToggle />
-                                    <ExportTrackCuesButton handleExport={jest.fn()} />
-                                    <ImportTrackCuesButton handleImport={jest.fn()} />
-                                    <SearchReplaceButton />
-                                    <MergeCuesButton />
-                                    <CueCommentsToggle />
-                                    <WaveformToggle />
-                                </ButtonToolbar>
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                </Accordion>
+                <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
+                    <SubtitleSpecificationsButton />
+                    <SearchReplaceButton />
+                    <ImportTrackCuesButton handleImport={jest.fn()} />
+                    <ExportTrackCuesButton handleExport={jest.fn()} />
+                    <Dropdown>
+                        <Dropdown.Toggle id="cue-line-category" variant="secondary">
+                            <i className="fas fa-ellipsis-h" />
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <KeyboardShortcuts />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <ShiftTimeButton />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <CaptionOverlapToggle />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <MergeCuesButton />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <CueCommentsToggle />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <WaveformToggle />
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </ButtonToolbar>
             </Provider>
         );
 
@@ -84,32 +93,44 @@ describe("Toolbox", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                            Toolbox
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                                <ButtonToolbar className="sbte-button-toolbar">
-                                    <KeyboardShortcuts />
-                                    <SubtitleSpecificationsButton />
-                                    <ShiftTimeButton />
-                                    <CaptionOverlapToggle />
-                                    <ExportSourceTrackCuesButton handleExport={jest.fn()} />
-                                    <ExportTrackCuesButton handleExport={jest.fn()} />
-                                    <ImportTrackCuesButton handleImport={jest.fn()} />
-                                    <SearchReplaceButton />
-                                    <SyncCuesButton />
-                                    <MergeCuesButton />
-                                    <CueCommentsToggle />
-                                    <TimecodesLockToggle />
-                                    <WaveformToggle />
-                                </ButtonToolbar>
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                </Accordion>
+                <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
+                    <SubtitleSpecificationsButton />
+                    <SearchReplaceButton />
+                    <ImportTrackCuesButton handleImport={jest.fn()} />
+                    <ExportSourceTrackCuesButton handleExport={jest.fn()} />
+                    <ExportTrackCuesButton handleExport={jest.fn()} />
+                    <Dropdown>
+                        <Dropdown.Toggle id="cue-line-category" variant="secondary">
+                            <i className="fas fa-ellipsis-h" />
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <KeyboardShortcuts />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <ShiftTimeButton />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <CaptionOverlapToggle />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <MergeCuesButton />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <CueCommentsToggle />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <WaveformToggle />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <SyncCuesButton />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <TimecodesLockToggle />
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </ButtonToolbar>
             </Provider>
         );
 
@@ -139,7 +160,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Export File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-export-button") as Element);
 
         // THEN
         expect(mockExportFile).toHaveBeenCalled();
@@ -159,7 +180,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Import File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-import-button") as Element);
 
         // THEN
         expect(mockImportFile).toHaveBeenCalled();
@@ -179,7 +200,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Export Source File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-export-source-button") as Element);
 
         // THEN
         expect(mockExportSourceFile).toHaveBeenCalled();
