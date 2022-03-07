@@ -982,15 +982,18 @@ describe("SubtitleEdit", () => {
                                         <Dropdown.Item className="sbte-dropdown-item">
                                             <KeyboardShortcuts />
                                         </Dropdown.Item>
-                                        <Dropdown.Item className="sbte-dropdown-item">
-                                            <ShiftTimeButton />
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="sbte-dropdown-item">
-                                            <CaptionOverlapToggle />
-                                        </Dropdown.Item>
+                                        <Dropdown.Divider />
                                         <Dropdown.Item className="sbte-dropdown-item">
                                             <MergeCuesButton />
                                         </Dropdown.Item>
+                                        <Dropdown.Item className="sbte-dropdown-item">
+                                            <ShiftTimeButton />
+                                        </Dropdown.Item>
+                                        <Dropdown.Divider />
+                                        <Dropdown.Item className="sbte-dropdown-item">
+                                            <CaptionOverlapToggle />
+                                        </Dropdown.Item>
+                                        <Dropdown.Divider />
                                         <Dropdown.Item className="sbte-dropdown-item">
                                             <CueCommentsToggle />
                                         </Dropdown.Item>

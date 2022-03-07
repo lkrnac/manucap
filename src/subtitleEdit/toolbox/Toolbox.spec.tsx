@@ -42,15 +42,18 @@ describe("Toolbox", () => {
                             <Dropdown.Item className="sbte-dropdown-item">
                                 <KeyboardShortcuts />
                             </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <ShiftTimeButton />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <CaptionOverlapToggle />
-                            </Dropdown.Item>
+                            <Dropdown.Divider />
                             <Dropdown.Item className="sbte-dropdown-item">
                                 <MergeCuesButton />
                             </Dropdown.Item>
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <ShiftTimeButton />
+                            </Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <CaptionOverlapToggle />
+                            </Dropdown.Item>
+                            <Dropdown.Divider />
                             <Dropdown.Item className="sbte-dropdown-item">
                                 <CueCommentsToggle />
                             </Dropdown.Item>
@@ -105,26 +108,29 @@ describe("Toolbox", () => {
                             <Dropdown.Item className="sbte-dropdown-item">
                                 <KeyboardShortcuts />
                             </Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <MergeCuesButton />
+                            </Dropdown.Item>
                             <Dropdown.Item className="sbte-dropdown-item">
                                 <ShiftTimeButton />
                             </Dropdown.Item>
                             <Dropdown.Item className="sbte-dropdown-item">
+                                <SyncCuesButton />
+                            </Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item className="sbte-dropdown-item">
                                 <CaptionOverlapToggle />
                             </Dropdown.Item>
                             <Dropdown.Item className="sbte-dropdown-item">
-                                <MergeCuesButton />
+                                <TimecodesLockToggle />
                             </Dropdown.Item>
+                            <Dropdown.Divider />
                             <Dropdown.Item className="sbte-dropdown-item">
                                 <CueCommentsToggle />
                             </Dropdown.Item>
                             <Dropdown.Item className="sbte-dropdown-item">
                                 <WaveformToggle />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <SyncCuesButton />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <TimecodesLockToggle />
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>

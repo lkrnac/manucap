@@ -49,33 +49,36 @@ const Toolbox = (props: Props): ReactElement => {
                     <Dropdown.Item className="sbte-dropdown-item">
                         <KeyboardShortcuts />
                     </Dropdown.Item>
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <ShiftTimeButton />
-                    </Dropdown.Item>
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <CaptionOverlapToggle />
-                    </Dropdown.Item>
+                    <Dropdown.Divider />
                     <Dropdown.Item className="sbte-dropdown-item">
                         <MergeCuesButton />
                     </Dropdown.Item>
+                    <Dropdown.Item className="sbte-dropdown-item">
+                        <ShiftTimeButton />
+                    </Dropdown.Item>
+                    {isTranslation
+                        ?
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <SyncCuesButton />
+                            </Dropdown.Item>
+                        : null}
+                    <Dropdown.Divider />
+                    <Dropdown.Item className="sbte-dropdown-item">
+                        <CaptionOverlapToggle />
+                    </Dropdown.Item>
+                    { isTranslation
+                        ?
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <TimecodesLockToggle />
+                            </Dropdown.Item>
+                        : null}
+                    <Dropdown.Divider />
                     <Dropdown.Item className="sbte-dropdown-item">
                         <CueCommentsToggle />
                     </Dropdown.Item>
                     <Dropdown.Item className="sbte-dropdown-item">
                         <WaveformToggle />
                     </Dropdown.Item>
-                    { isTranslation
-                        ?
-                            <>
-                                <Dropdown.Item className="sbte-dropdown-item">
-                                    <SyncCuesButton />
-                                </Dropdown.Item>
-                                <Dropdown.Item className="sbte-dropdown-item">
-                                    <TimecodesLockToggle />
-                                </Dropdown.Item>
-                            </>
-                        : null}
-
                 </Dropdown.Menu>
             </Dropdown>
         </ButtonToolbar>
