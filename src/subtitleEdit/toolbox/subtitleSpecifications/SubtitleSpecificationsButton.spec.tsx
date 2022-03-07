@@ -34,11 +34,8 @@ describe("SubtitleSpecificationsButton", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
-                    <button
-                        className="dotsub-subtitle-specifications-button btn btn-secondary"
-                        type="button"
-                    >
-                        <i className="far fa-flag" /> Subtitle Specifications
+                    <button className="dotsub-subtitle-specifications-button btn btn-secondary">
+                        <i className="fas fa-clipboard-list fa-lg" />
                     </button>
 
                     <div>shown</div>
@@ -69,11 +66,8 @@ describe("SubtitleSpecificationsButton", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <>
-                    <button
-                        className="dotsub-subtitle-specifications-button btn btn-secondary"
-                        type="button"
-                    >
-                        <i className="far fa-flag" /> Subtitle Specifications
+                    <button className="dotsub-subtitle-specifications-button btn btn-secondary">
+                        <i className="fas fa-clipboard-list fa-lg" />
                     </button>
 
                     <div />

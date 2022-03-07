@@ -14,8 +14,8 @@ describe("KeyboardShortcuts", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <button type="button" className="dotsub-keyboard-shortcuts-button btn btn-secondary">
-                    <i className="far fa-keyboard" /> Keyboard Shortcuts
+                <button className="dotsub-keyboard-shortcuts-button btn">
+                    Keyboard Shortcuts
                 </button>
                 <div className="fade modal-backdrop show" />
                 <div
