@@ -1,8 +1,6 @@
 import "../../testUtils/initBrowserEnvironment";
-import Accordion from "react-bootstrap/Accordion";
 import { AnyAction } from "@reduxjs/toolkit";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import Card from "react-bootstrap/Card";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import { Provider } from "react-redux";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
