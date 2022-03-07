@@ -261,18 +261,6 @@ button:disabled {
     width: 100%;
 }
 
-@media (max-width: 1200px) {
-    .sbte-button-toolbar {
-        flex-direction: column;
-    }
-    .sbte-button-toolbar button {
-        margin-right: 0;
-    }
-    .sbte-button-toolbar button:last-child {
-        margin-bottom: 0;
-    }
-}
-
 .sbte-form-control {
   color: $sbte-main-text-color;
   border-radius: 0;
