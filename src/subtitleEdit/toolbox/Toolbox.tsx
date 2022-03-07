@@ -29,6 +29,7 @@ const Toolbox = (props: Props): ReactElement => {
     const isTranslation = editingTrack?.type === "TRANSLATION";
     return (
         <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
+            <SubtitleSpecificationsButton />
             <SearchReplaceButton />
             <ImportTrackCuesButton
                 handleImport={props.handleImportFile}
@@ -40,16 +41,13 @@ const Toolbox = (props: Props): ReactElement => {
                 handleExport={props.handleExportFile}
             />
 
-            <Dropdown >
+            <Dropdown>
                 <Dropdown.Toggle id="cue-line-category" variant="secondary">
                     <i className="fas fa-ellipsis-h" />
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
+                <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
                     <Dropdown.Item className="sbte-dropdown-item">
                         <KeyboardShortcuts />
-                    </Dropdown.Item>
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <SubtitleSpecificationsButton />
                     </Dropdown.Item>
                     <Dropdown.Item className="sbte-dropdown-item">
                         <ShiftTimeButton />
