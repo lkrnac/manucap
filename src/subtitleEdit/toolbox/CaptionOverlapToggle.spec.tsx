@@ -30,7 +30,7 @@ describe("CaptionOverlapToggle", () => {
        // GIVEN
        const expectedNode = render(
            <button type="button" className="btn">
-               Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ENABLE</span>
+               Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">NOT ALLOWED</span>
            </button>
        );
 
@@ -49,7 +49,7 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn sbte-toggled-btn">
-                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">DISABLE</span>
+                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ALLOWED</span>
             </button>
         );
 
@@ -69,7 +69,7 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn">
-                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ENABLE</span>
+                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">NOT ALLOWED</span>
             </button>
         );
 

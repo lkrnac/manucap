@@ -22,7 +22,7 @@ describe("TimecodesLockToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn">
-                Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-on">UNLOCK</span>
+                Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-off">LOCKED</span>
             </button>
         );
 
@@ -41,7 +41,7 @@ describe("TimecodesLockToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn sbte-toggled-btn">
-                Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-off">LOCK</span>
+                Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-on">UNLOCKED</span>
             </button>
         );
 

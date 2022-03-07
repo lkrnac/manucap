@@ -16,8 +16,8 @@ export const CueCommentsToggle = (): ReactElement => {
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <>Comments <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDE</span></>
-                    : <>Comments <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOW</span></>
+                    ? <>Comments <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOWN</span></>
+                    : <>Comments <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDDEN</span></>
             )}
         />
     );
