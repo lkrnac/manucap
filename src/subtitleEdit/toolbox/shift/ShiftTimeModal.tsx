@@ -4,7 +4,6 @@ import { SubtitleEditState } from "../../subtitleEditReducers";
 import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { Field, Form } from "react-final-form";
 import { formatStartOrEndTime } from "../../utils/timeUtils";
-import { Dialog } from "@headlessui/react";
 import TransitionDialog from "../../common/TransitionDialog";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
@@ -48,91 +47,87 @@ const ShiftTimeModal = (props: Props): ReactElement => {
             onClose={handleCancelShift}
             dialogClassName="sbte-medium-modal"
             contentClassname="tw-max-w-3xl"
+            title="Shift Track Lines Time"
         >
-            <div className="tw-modal-header tw-modal-header-primary">
-                <Dialog.Title as="h4">Shift Track Lines Time</Dialog.Title>
-            </div>
-            <Dialog.Description as="div" className="tw-modal-description">
-                <Form
-                    onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
-                    render={({ handleSubmit, values }): ReactElement => (
-                        <form onSubmit={handleSubmit}>
-                            <div className="form-group">
-                                <label>Time Shift in Seconds.Milliseconds</label>
+            <Form
+                onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
+                render={({ handleSubmit, values }): ReactElement => (
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label>Time Shift in Seconds.Milliseconds</label>
+                            <Field
+                                name="shiftTime"
+                                component="input"
+                                parse={formatStartOrEndTime}
+                                className="form-control dotsub-track-line-shift margin-right-10"
+                                style={{ width: "120px" }}
+                                type="number"
+                                placeholder="0.000"
+                                step={"0.100"}
+                            />
+                        </div>
+                        <div className="form-check">
+                            <label>
                                 <Field
-                                    name="shiftTime"
+                                    name="shiftPosition"
                                     component="input"
-                                    parse={formatStartOrEndTime}
-                                    className="form-control dotsub-track-line-shift margin-right-10"
-                                    style={{ width: "120px" }}
-                                    type="number"
-                                    placeholder="0.000"
-                                    step={"0.100"}
-                                />
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <Field
-                                        name="shiftPosition"
-                                        component="input"
-                                        type="radio"
-                                        value="all"
-                                        className="form-check-input"
-                                    /> Shift all
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <Field
-                                        component="input"
-                                        type="radio"
-                                        name="shiftPosition"
-                                        value="before"
-                                        className="form-check-input"
-                                    /> Shift all before editing cue
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <Field
-                                        component="input"
-                                        type="radio"
-                                        name="shiftPosition"
-                                        value="after"
-                                        className="form-check-input"
-                                    /> Shift all after editing cue
-                                </label>
-                            </div>
-                            {
-                                errorMessage || isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ? (
-                                    <span className="alert alert-danger" style={{ display: "block" }}>
-                                        {errorMessage || INVALID_SHIFT_MSG}
-                                    </span>
-                                ): null
-                            }
-                            <div className="tw-modal-toolbar">
-                                <button
-                                    type="submit"
-                                    disabled={
-                                        isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
-                                        values.shiftPosition === undefined
-                                    }
-                                    className="dotsub-shift-modal-apply-button btn btn-primary"
-                                >
-                                    Apply
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleCancelShift}
-                                    className="dotsub-shift-modal-close-button btn btn-secondary"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </form>
-                    )}
-                />
-            </Dialog.Description>
+                                    type="radio"
+                                    value="all"
+                                    className="form-check-input"
+                                /> Shift all
+                            </label>
+                        </div>
+                        <div className="form-check">
+                            <label>
+                                <Field
+                                    component="input"
+                                    type="radio"
+                                    name="shiftPosition"
+                                    value="before"
+                                    className="form-check-input"
+                                /> Shift all before editing cue
+                            </label>
+                        </div>
+                        <div className="form-check">
+                            <label>
+                                <Field
+                                    component="input"
+                                    type="radio"
+                                    name="shiftPosition"
+                                    value="after"
+                                    className="form-check-input"
+                                /> Shift all after editing cue
+                            </label>
+                        </div>
+                        {
+                            errorMessage || isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ? (
+                                <span className="alert alert-danger" style={{ display: "block" }}>
+                                    {errorMessage || INVALID_SHIFT_MSG}
+                                </span>
+                            ): null
+                        }
+                        <div className="tw-modal-toolbar">
+                            <button
+                                type="submit"
+                                disabled={
+                                    isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
+                                    values.shiftPosition === undefined
+                                }
+                                className="dotsub-shift-modal-apply-button btn btn-primary"
+                            >
+                                Apply
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleCancelShift}
+                                className="dotsub-shift-modal-close-button btn btn-secondary"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </form>
+                )}
+            />
         </TransitionDialog>
     );
 };

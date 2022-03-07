@@ -5,6 +5,7 @@ interface Props {
     children: ReactNode,
     open?: boolean,
     onClose: () => void,
+    title?: ReactNode,
     dialogClassName?: string
     contentClassname?: string
 }
@@ -51,7 +52,12 @@ const TransitionDialog = (props: Props): ReactElement => (
                             <span aria-hidden="true">×</span>
                             <span className="sr-only">Close</span>
                         </button>
-                        {props.children}
+                        <div className="tw-modal-header tw-modal-header-primary">
+                            <Dialog.Title as="h4">{props.title}</Dialog.Title>
+                        </div>
+                        <Dialog.Description as="div" className="tw-modal-description">
+                            {props.children}
+                        </Dialog.Description>
                     </div>
                 </Transition.Child>
             </div>

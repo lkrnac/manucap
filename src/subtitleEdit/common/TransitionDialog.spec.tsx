@@ -36,6 +36,8 @@ describe("TransitionDialog", () => {
                 id=""
                 role="dialog"
                 aria-modal="true"
+                aria-labelledby=""
+                aria-describedby=""
             >
                 <div
                     className="tw-fixed tw-inset-0 tw-bg-black"
@@ -52,7 +54,12 @@ describe("TransitionDialog", () => {
                             <span aria-hidden="true">×</span>
                             <span className="sr-only">Close</span>
                         </button>
-                        <span>This is a test</span>
+                        <div className="tw-modal-header tw-modal-header-primary">
+                            <h4 id="" />
+                        </div>
+                        <div className="tw-modal-description" id="">
+                            <span>This is a test</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,6 +86,8 @@ describe("TransitionDialog", () => {
                 id=""
                 role="dialog"
                 aria-modal="true"
+                aria-labelledby=""
+                aria-describedby=""
             >
                 <div
                     className="tw-fixed tw-inset-0 tw-bg-black"
@@ -95,7 +104,12 @@ describe("TransitionDialog", () => {
                             <span aria-hidden="true">×</span>
                             <span className="sr-only">Close</span>
                         </button>
-                        <span>This is a test</span>
+                        <div className="tw-modal-header tw-modal-header-primary">
+                            <h4 id="" />
+                        </div>
+                        <div className="tw-modal-description" id="">
+                            <span>This is a test</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,6 +136,8 @@ describe("TransitionDialog", () => {
                 id=""
                 role="dialog"
                 aria-modal="true"
+                aria-labelledby=""
+                aria-describedby=""
             >
                 <div
                     className="tw-fixed tw-inset-0 tw-bg-black"
@@ -141,7 +157,12 @@ describe("TransitionDialog", () => {
                             <span aria-hidden="true">×</span>
                             <span className="sr-only">Close</span>
                         </button>
-                        <span>This is a test</span>
+                        <div className="tw-modal-header tw-modal-header-primary">
+                            <h4 id="" />
+                        </div>
+                        <div className="tw-modal-description" id="">
+                            <span>This is a test</span>
+                        </div>
                     </div>
                 </div>
             </div>

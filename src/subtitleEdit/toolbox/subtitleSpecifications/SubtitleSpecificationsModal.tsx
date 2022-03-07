@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
 import TransitionDialog from "../../common/TransitionDialog";
-import { Dialog } from "@headlessui/react";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { SubtitleSpecification } from "../model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
@@ -21,21 +20,17 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
             onClose={props.onClose}
             dialogClassName="sbte-medium-modal"
             contentClassname="tw-max-w-3xl"
+            title="Subtitle Specifications"
         >
-            <div className="tw-modal-header tw-modal-header-primary">
-                <Dialog.Title as="h4">Subtitle Specifications</Dialog.Title>
+            <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
+            <div className="tw-modal-toolbar">
+                <button
+                    onClick={props.onClose}
+                    className="btn btn-primary dotsub-subtitle-specifications-modal-close-button"
+                >
+                    Close
+                </button>
             </div>
-            <Dialog.Description as="div" className="tw-modal-description">
-                <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
-                <div className="tw-modal-toolbar">
-                    <button
-                        onClick={props.onClose}
-                        className="btn btn-primary dotsub-subtitle-specifications-modal-close-button"
-                    >
-                        Close
-                    </button>
-                </div>
-            </Dialog.Description>
         </TransitionDialog>
     );
 };
