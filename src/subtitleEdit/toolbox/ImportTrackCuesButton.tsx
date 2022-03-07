@@ -11,7 +11,7 @@ const ImportTrackCuesButton = (props: Props): ReactElement => {
         <TooltipWrapper
             tooltipId="importFileBtnTooltip"
             text="Import File"
-            placement="auto"
+            placement="bottom"
         >
             <button
                 type="button"

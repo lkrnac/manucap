@@ -20,7 +20,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
             <TooltipWrapper
                 tooltipId="subtitleSpecsBtnTooltip"
                 text="Subtitle Specifications"
-                placement="auto"
+                placement="bottom"
             >
                 <button
                     className="dotsub-subtitle-specifications-button btn btn-secondary"

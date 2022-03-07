@@ -10,7 +10,7 @@ const SearchReplaceButton = (): ReactElement => {
         <TooltipWrapper
             tooltipId="searchReplaceBtnTooltip"
             text="Search/Replace"
-            placement="auto"
+            placement="bottom"
         >
             <button
                 type="button"

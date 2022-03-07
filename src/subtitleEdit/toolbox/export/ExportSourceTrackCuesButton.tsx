@@ -10,7 +10,7 @@ const ExportSourceTrackCuesButton = (props: Props): ReactElement => {
         <TooltipWrapper
             tooltipId="exportSourceFileBtnTooltip"
             text="Export Source File"
-            placement="auto"
+            placement="bottom"
         >
             <button
                 type="button"
