@@ -1,7 +1,7 @@
 import { CSSProperties, Fragment, ReactElement, ReactNode, useEffect } from "react";
 import { Transition } from "@headlessui/react";
 
-const AUTO_CLOSE_DELAY = 150000000;
+const AUTO_CLOSE_DELAY = 5000;
 
 interface Props {
     show?: boolean,
@@ -32,7 +32,7 @@ const Alert = (props: Props): ReactElement => {
         };
     }, [props.show, props.autoClose, props.onClose, props.autoCloseDelay]);
 
-    const propClassName = `${props.alertClass ? ` ${props.alertClass}` : ""}`;
+    const propClassName = props.alertClass ? ` ${props.alertClass}` : "";
 
     return (
         <Transition

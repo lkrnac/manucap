@@ -63,6 +63,18 @@
     @apply tw-text-red-800 tw-bg-red-100 tw-border-red-200;
 }
 
+.tw-alert.tw-alert-success {
+    @apply tw-text-green-800 tw-bg-green-100 tw-border-green-200;
+}
+
+.tw-alert.tw-alert-warning {
+    @apply tw-text-yellow-800 tw-bg-yellow-100 tw-border-yellow-200;
+}
+
+.tw-alert.tw-alert-info {
+    @apply tw-text-cyan-800 tw-bg-cyan-100 tw-border-cyan-200;
+}
+
 /** Dropdown **/
 
 .tw-dropdown-menu {
