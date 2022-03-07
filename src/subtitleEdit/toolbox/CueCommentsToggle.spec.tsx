@@ -18,8 +18,8 @@ describe("CueCommentsToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary">
-                <i className="fas fa-comments" /> Show Comments
+            <button type="button" className="btn">
+                Comments <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOW</span>
             </button>
         );
 
@@ -37,8 +37,8 @@ describe("CueCommentsToggle", () => {
     it("changes icon/text on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary sbte-toggled-btn">
-                <i className="fas fa-comment-slash" /> Hide Comments
+            <button type="button" className="btn sbte-toggled-btn">
+                Comments <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDE</span>
             </button>
         );
 
