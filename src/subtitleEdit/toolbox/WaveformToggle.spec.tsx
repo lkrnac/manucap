@@ -19,7 +19,7 @@ describe("WaveformToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn">
-                Waveform <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOW</span>
+                Waveform <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDDEN</span>
             </button>
         );
 
@@ -38,7 +38,7 @@ describe("WaveformToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn sbte-toggled-btn">
-                Waveform <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDE</span>
+                Waveform <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOWN</span>
             </button>
         );
 

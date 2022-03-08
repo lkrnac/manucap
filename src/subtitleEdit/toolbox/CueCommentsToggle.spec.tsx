@@ -19,7 +19,7 @@ describe("CueCommentsToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn">
-                Comments <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOW</span>
+                Comments <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDDEN</span>
             </button>
         );
 
@@ -38,7 +38,7 @@ describe("CueCommentsToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="btn sbte-toggled-btn">
-                Comments <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDE</span>
+                Comments <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOWN</span>
             </button>
         );
 

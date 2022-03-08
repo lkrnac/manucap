@@ -16,8 +16,8 @@ export const WaveformToggle = (): ReactElement => {
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <>Waveform <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDE</span></>
-                    : <>Waveform <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOW</span></>
+                    ? <>Waveform <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOWN</span></>
+                    : <>Waveform <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDDEN</span></>
             )}
         />
     );
