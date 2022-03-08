@@ -11,8 +11,7 @@ const SyncCuesButton = (): ReactElement => {
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button
-            type="button"
-            className="sbte-sync-cues-button btn btn-secondary"
+            className="sbte-sync-cues-button btn"
             disabled={!timecodesUnlocked}
             onClick={(): void => {
                 dispatch(syncCues());
@@ -24,7 +23,7 @@ const SyncCuesButton = (): ReactElement => {
                 dispatch(updateEditingTrack(track));
             }}
         >
-            <i className="fas fa-sync" /> Sync Cues
+            Sync Cues
         </button>
     );
 };

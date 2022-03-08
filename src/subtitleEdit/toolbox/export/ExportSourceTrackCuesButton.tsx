@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { TooltipWrapper } from "../../TooltipWrapper";
 
 interface Props {
     handleExport: () => void;
@@ -6,13 +7,19 @@ interface Props {
 
 const ExportSourceTrackCuesButton = (props: Props): ReactElement => {
     return (
-        <button
-            type="button"
-            className="sbte-export-source-button btn btn-secondary"
-            onClick={(): void => props.handleExport()}
+        <TooltipWrapper
+            tooltipId="exportSourceFileBtnTooltip"
+            text="Export Source File"
+            placement="bottom"
         >
-            <i className="fas fa-file-export" /> Export Source File
-        </button>
+            <button
+                type="button"
+                className="sbte-export-source-button btn btn-secondary"
+                onClick={(): void => props.handleExport()}
+            >
+                <i className="fas fa-file-export fa-lg" />
+            </button>
+        </TooltipWrapper>
     );
 };
 

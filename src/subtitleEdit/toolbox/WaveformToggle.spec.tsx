@@ -18,8 +18,8 @@ describe("WaveformToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary sbte-toggled-btn">
-                <i className="fas fa-wave-square" /> Show Waveform
+            <button type="button" className="btn">
+                Waveform <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDDEN</span>
             </button>
         );
 
@@ -37,8 +37,8 @@ describe("WaveformToggle", () => {
     it("changes icon/text on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary">
-                <i className="fas fa-wave-square" /> Hide Waveform
+            <button type="button" className="btn sbte-toggled-btn">
+                Waveform <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOWN</span>
             </button>
         );
 

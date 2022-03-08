@@ -16,7 +16,7 @@ describe("SeachReplaceButton", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="sbte-search-replace-button btn btn-secondary">
-                <i className="fas fa-search-plus" /> Search/Replace
+                <i className="fas fa-search-plus fa-lg" />
             </button>
         );
 
@@ -33,15 +33,14 @@ describe("SeachReplaceButton", () => {
 
     it("sets search replace visible on button click", () => {
         // GIVEN
-        const { getByText } = render(
+        const { container } = render(
             <Provider store={testingStore}>
                 <SearchReplaceButton />
             </Provider>
         );
-        const searchButton = getByText("Search/Replace");
 
         // WHEN
-        fireEvent.click(searchButton);
+        fireEvent.click(container.querySelector(".sbte-search-replace-button") as Element);
 
         // THEN
         expect(testingStore.getState().searchReplaceVisible).toBeTruthy();
@@ -49,14 +48,14 @@ describe("SeachReplaceButton", () => {
 
     it("hides merge on button click", () => {
         // GIVEN
-        const { getByText } = render(
+        const { container, getByText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceButton />
                 <MergeCuesButton />
             </Provider>
         );
         const mergeButton = getByText("Merge Cues");
-        const searchButton = getByText("Search/Replace");
+        const searchButton = container.querySelector(".sbte-search-replace-button") as Element;
 
         // WHEN
         fireEvent.click(mergeButton);

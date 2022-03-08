@@ -11,7 +11,7 @@ export const TimecodesLockToggle = (): ReactElement => {
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <ToggleButton
-            className="btn btn-secondary"
+            className="btn"
             toggled={timecodesUnlocked}
             onClick={(): void => {
                 const track = {
@@ -22,8 +22,8 @@ export const TimecodesLockToggle = (): ReactElement => {
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <><i className="far fa-clock" /> Lock Timecodes</>
-                    : <><i className="fas fa-clock" /> Unlock Timecodes</>
+                    ? <>Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-on">UNLOCKED</span></>
+                    : <>Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-off">LOCKED</span></>
             )}
         />
     );

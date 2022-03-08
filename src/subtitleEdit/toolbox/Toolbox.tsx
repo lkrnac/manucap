@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
-import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import Card from "react-bootstrap/Card";
+import { Dropdown } from "react-bootstrap";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
@@ -29,38 +28,60 @@ const Toolbox = (props: Props): ReactElement => {
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
     return (
-        <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
-            <Card>
-                <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                    Toolbox
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                        <ButtonToolbar className="sbte-button-toolbar">
-                            <KeyboardShortcuts />
-                            <SubtitleSpecificationsButton />
-                            <ShiftTimeButton />
-                            <CaptionOverlapToggle />
-                            { isTranslation ?
-                                <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} /> : null }
-                            <ExportTrackCuesButton
-                                handleExport={props.handleExportFile}
-                            />
-                            <ImportTrackCuesButton
-                                handleImport={props.handleImportFile}
-                                disabled={editingTask?.editDisabled}
-                            />
-                            <SearchReplaceButton />
-                            { isTranslation ? <SyncCuesButton /> : null }
-                            <MergeCuesButton />
-                            <CueCommentsToggle />
-                            { isTranslation ? <TimecodesLockToggle /> : null }
-                            <WaveformToggle />
-                        </ButtonToolbar>
-                    </Card.Body>
-                </Accordion.Collapse>
-            </Card>
-        </Accordion>
+        <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
+            <SubtitleSpecificationsButton />
+            <SearchReplaceButton />
+            <ImportTrackCuesButton
+                handleImport={props.handleImportFile}
+                disabled={editingTask?.editDisabled}
+            />
+            { isTranslation ?
+                <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} /> : null }
+            <ExportTrackCuesButton
+                handleExport={props.handleExportFile}
+            />
+
+            <Dropdown>
+                <Dropdown.Toggle id="cue-line-category" variant="secondary">
+                    <i className="fas fa-ellipsis-h" />
+                </Dropdown.Toggle>
+                <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
+                    <Dropdown.Item className="sbte-dropdown-item">
+                        <KeyboardShortcuts />
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item className="sbte-dropdown-item">
+                        <MergeCuesButton />
+                    </Dropdown.Item>
+                    <Dropdown.Item className="sbte-dropdown-item">
+                        <ShiftTimeButton />
+                    </Dropdown.Item>
+                    {isTranslation
+                        ?
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <SyncCuesButton />
+                            </Dropdown.Item>
+                        : null}
+                    <Dropdown.Divider />
+                    <Dropdown.Item className="sbte-dropdown-item">
+                        <CaptionOverlapToggle />
+                    </Dropdown.Item>
+                    { isTranslation
+                        ?
+                            <Dropdown.Item className="sbte-dropdown-item">
+                                <TimecodesLockToggle />
+                            </Dropdown.Item>
+                        : null}
+                    <Dropdown.Divider />
+                    <Dropdown.Item className="sbte-dropdown-item">
+                        <CueCommentsToggle />
+                    </Dropdown.Item>
+                    <Dropdown.Item className="sbte-dropdown-item">
+                        <WaveformToggle />
+                    </Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+        </ButtonToolbar>
     );
 };
 

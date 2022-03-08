@@ -2,8 +2,6 @@ import "../testUtils/initBrowserEnvironment";
 import { createRef, ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
-import Card from "react-bootstrap/Card";
-import Accordion from "react-bootstrap/Accordion";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import { mount } from "enzyme";
 import { fireEvent, render } from "@testing-library/react";
@@ -45,6 +43,7 @@ import MergeEditor from "./cues/merge/MergeEditor";
 import { act } from "react-dom/test-utils";
 import CueCommentsToggle from "./toolbox/CueCommentsToggle";
 import WaveformToggle from "./toolbox/WaveformToggle";
+import { Dropdown } from "react-bootstrap";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -970,29 +969,40 @@ describe("SubtitleEdit", () => {
                                     lastCueChange={null}
                                 />
                             </div>
-                            <Accordion defaultActiveKey="0" style={{ marginTop: "10px" }} className="sbte-toolbox">
-                                <Card>
-                                    <Accordion.Toggle as={Card.Header} variant="link" eventKey="0">
-                                        Toolbox
-                                    </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="0">
-                                        <Card.Body>
-                                            <ButtonToolbar className="sbte-button-toolbar">
-                                                <KeyboardShortcuts />
-                                                <SubtitleSpecificationsButton />
-                                                <ShiftTimeButton />
-                                                <CaptionOverlapToggle />
-                                                <ExportTrackCuesButton handleExport={jest.fn()} />
-                                                <ImportTrackCuesButton handleImport={jest.fn()} disabled />
-                                                <SearchReplaceButton />
-                                                <MergeCuesButton />
-                                                <CueCommentsToggle />
-                                                <WaveformToggle />
-                                            </ButtonToolbar>
-                                        </Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                            </Accordion>
+                            <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
+                                <SubtitleSpecificationsButton />
+                                <SearchReplaceButton />
+                                <ImportTrackCuesButton handleImport={jest.fn()} disabled />
+                                <ExportTrackCuesButton handleExport={jest.fn()} />
+                                <Dropdown>
+                                    <Dropdown.Toggle id="cue-line-category" variant="secondary">
+                                        <i className="fas fa-ellipsis-h" />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
+                                        <Dropdown.Item className="sbte-dropdown-item">
+                                            <KeyboardShortcuts />
+                                        </Dropdown.Item>
+                                        <Dropdown.Divider />
+                                        <Dropdown.Item className="sbte-dropdown-item">
+                                            <MergeCuesButton />
+                                        </Dropdown.Item>
+                                        <Dropdown.Item className="sbte-dropdown-item">
+                                            <ShiftTimeButton />
+                                        </Dropdown.Item>
+                                        <Dropdown.Divider />
+                                        <Dropdown.Item className="sbte-dropdown-item">
+                                            <CaptionOverlapToggle />
+                                        </Dropdown.Item>
+                                        <Dropdown.Divider />
+                                        <Dropdown.Item className="sbte-dropdown-item">
+                                            <CueCommentsToggle />
+                                        </Dropdown.Item>
+                                        <Dropdown.Item className="sbte-dropdown-item">
+                                            <WaveformToggle />
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </ButtonToolbar>
                         </div>
                         <div
                             style={{
@@ -1446,7 +1456,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Export Source File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-export-source-button") as Element);
 
         // THEN
         expect(mockOnExportSourceFile).toHaveBeenCalled();

@@ -21,9 +21,12 @@ const KeyboardShortcuts = (): ReactElement => {
 
     return (
         <>
-            <Button variant="secondary" onClick={handleShow} className="dotsub-keyboard-shortcuts-button">
-                <i className="far fa-keyboard" /> Keyboard Shortcuts
-            </Button>
+            <button
+                onClick={handleShow}
+                className="dotsub-keyboard-shortcuts-button btn"
+            >
+                Keyboard Shortcuts
+            </button>
 
             <Modal show={show} onHide={handleClose} centered dialogClassName="sbte-medium-modal">
                 <Modal.Header closeButton>
