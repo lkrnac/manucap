@@ -29,8 +29,8 @@ describe("CaptionOverlapToggle", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="btn btn-secondary">
-               <i className="fas fa-lock-open" /> Enable Overlapping
+           <button type="button" className="btn">
+               Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ENABLE</span>
            </button>
        );
 
@@ -48,8 +48,8 @@ describe("CaptionOverlapToggle", () => {
     it("changes icon on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary sbte-toggled-btn">
-                <i className="fas fa-lock" /> Disable Overlapping
+            <button type="button" className="btn sbte-toggled-btn">
+                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">DISABLE</span>
             </button>
         );
 
@@ -68,8 +68,8 @@ describe("CaptionOverlapToggle", () => {
     it("changes icon back on double toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn btn-secondary">
-                <i className="fas fa-lock-open" /> Enable Overlapping
+            <button type="button" className="btn">
+                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ENABLE</span>
             </button>
         );
 

@@ -9,15 +9,15 @@ export const WaveformToggle = (): ReactElement => {
     const waveformVisible = useSelector((state: SubtitleEditState) => state.waveformVisible);
     return (
         <ToggleButton
-            className="btn btn-secondary"
-            toggled={!waveformVisible}
+            className="btn"
+            toggled={waveformVisible}
             onClick={(): void => {
                 dispatch(waveformVisibleSlice.actions.setWaveformVisible(!waveformVisible));
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <><i className="fas fa-wave-square" /> Show Waveform</>
-                    : <><i className="fas fa-wave-square" /> Hide Waveform</>
+                    ? <>Waveform <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDE</span></>
+                    : <>Waveform <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOW</span></>
             )}
         />
     );

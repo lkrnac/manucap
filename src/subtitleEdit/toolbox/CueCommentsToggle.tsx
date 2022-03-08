@@ -9,15 +9,15 @@ export const CueCommentsToggle = (): ReactElement => {
     const commentsVisible = useSelector((state: SubtitleEditState) => state.commentsVisible);
     return (
         <ToggleButton
-            className="btn btn-secondary"
+            className="btn"
             toggled={commentsVisible}
             onClick={(): void => {
                 dispatch(commentsVisibleSlice.actions.setCommentsVisible(!commentsVisible));
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <><i className="fas fa-comment-slash" /> Hide Comments</>
-                    : <><i className="fas fa-comments" /> Show Comments</>
+                    ? <>Comments <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDE</span></>
+                    : <>Comments <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOW</span></>
             )}
         />
     );

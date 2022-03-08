@@ -1,11 +1,11 @@
 import "../../../testUtils/initBrowserEnvironment";
-import { mount, shallow } from "enzyme";
 import ExportTrackCuesButton from "./ExportTrackCuesButton";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import { updateEditingTrack } from "../../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Track } from "../../model";
+import { fireEvent, render } from "@testing-library/react";
 
 const testingTrack = {
     type: "CAPTION",
@@ -22,35 +22,35 @@ describe("ExportTrackCuesButton", () => {
     });
    it("renders", () => {
        // GIVEN
-       const expectedNode = shallow(
+       const expectedNode = render(
            <button type="button" className="sbte-export-button btn btn-secondary">
-               <i className="fas fa-file-export" /> Export File
+               <i className="fas fa-file-download fa-lg" />
            </button>
        );
 
        // WHEN
-       const actualNode = mount(
+       const actualNode = render(
            <Provider store={testingStore}>
                <ExportTrackCuesButton handleExport={jest.fn()} />
            </Provider>
        );
 
        // THEN
-       expect(actualNode.html()).toEqual(expectedNode.html());
+       expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
    });
 
     it("calls handleExport when clicked", () => {
         // GIVEN
         const mockHandleExport = jest.fn();
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ExportTrackCuesButton handleExport={mockHandleExport} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".sbte-export-button").simulate("click");
+        fireEvent.click(actualNode.container.querySelector(".sbte-export-button") as Element);
 
         // THEN
         expect(mockHandleExport).toHaveBeenCalledWith(testingTrack);

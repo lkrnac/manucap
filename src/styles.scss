@@ -98,9 +98,27 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 }
 
 .sbte-toggled-btn {
-    background-color: $primary !important;
-    border-color: $primary !important;
     outline: none;
+}
+
+.sbte-toggled-badge {
+    float: right;
+    font-size: $font-size-small;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 5px;
+    outline: none;
+    color: white;
+}
+
+.sbte-toggled-badge-on {
+    background-color: #229831;
+    border-color: #229831;
+}
+
+.sbte-toggled-badge-off {
+    background-color: #59626A;
+    border-color: #59626A;
 }
 
 .sbte-count-tag {
@@ -116,6 +134,11 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     padding: 1px 5px !important;
     font-size: $font-size-small !important;
     line-height: 1.5 !important;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    pointer-events: all !important;
 }
 
 // ----- Dropdown ------
@@ -211,19 +234,6 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 .sbte-button-toolbar button {
     margin-right: 10px;
     margin-bottom: 10px;
-    min-width: 200px;
-}
-
-@media (max-width: 1200px) {
-    .sbte-button-toolbar {
-        flex-direction: column;
-    }
-    .sbte-button-toolbar button {
-        margin-right: 0;
-    }
-    .sbte-button-toolbar button:last-child {
-        margin-bottom: 0;
-    }
 }
 
 .sbte-form-control {

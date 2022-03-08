@@ -14,7 +14,7 @@ describe("ExportSourceTrackCuesButton", () => {
        // GIVEN
        const expectedNode = render(
            <button type="button" className="sbte-export-source-button btn btn-secondary">
-               <i className="fas fa-file-export" /> Export Source File
+               <i className="fas fa-file-export fa-lg" />
            </button>
        );
 
@@ -39,7 +39,7 @@ describe("ExportSourceTrackCuesButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Export Source File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-export-source-button") as Element);
 
         // THEN
         expect(mockHandleExport).toHaveBeenCalled();

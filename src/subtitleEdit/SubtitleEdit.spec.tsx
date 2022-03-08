@@ -1635,7 +1635,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Export Source File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-export-source-button") as Element);
 
         // THEN
         expect(mockOnExportSourceFile).toHaveBeenCalled();

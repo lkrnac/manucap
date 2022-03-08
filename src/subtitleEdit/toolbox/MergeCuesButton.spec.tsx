@@ -35,11 +35,10 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                type="button"
-                className="btn btn-secondary sbte-merge-cues-button"
+                className="btn sbte-merge-cues-button"
                 title="Unlock timecodes to enable"
             >
-                <i className="fas fa-compress-alt" /> Merge Cues
+                Merge Cues
             </button>
         );
 
@@ -58,11 +57,10 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                type="button"
-                className="btn btn-secondary sbte-merge-cues-button"
+                className="btn sbte-merge-cues-button"
                 title="Unlock timecodes to enable"
             >
-                <i className="fas fa-compress-alt" /> Merge Cues
+                Merge Cues
             </button>
         );
 
@@ -83,12 +81,11 @@ describe("MergeCuesButton", () => {
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
             <button
-                type="button"
-                className="btn btn-secondary sbte-merge-cues-button"
+                className="btn sbte-merge-cues-button"
                 disabled
                 title="Unlock timecodes to enable"
             >
-                <i className="fas fa-compress-alt" /> Merge Cues
+                Merge Cues
             </button>
         );
 
@@ -121,13 +118,13 @@ describe("MergeCuesButton", () => {
 
     it("hides search/replace on button click", () => {
         // GIVEN
-        const { getByText } = render(
+        const { container, getByText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceButton />
                 <MergeCuesButton />
             </Provider>
         );
-        const searchButton = getByText("Search/Replace");
+        const searchButton = container.querySelector(".sbte-search-replace-button") as Element;
         const mergeButton = getByText("Merge Cues");
 
         // WHEN

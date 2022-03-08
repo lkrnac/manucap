@@ -21,7 +21,7 @@ import MergeCuesButton from "./MergeCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
 import TimecodesLockToggle from "./TimecodesLockToggle";
 import WaveformToggle from "./WaveformToggle";
-import { removeHeadlessAttributes } from "../../testUtils/testUtils";
+import { Menu } from "@headlessui/react";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -29,30 +29,50 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    style={{ marginTop: "10px" }}
-                    className="sbte-toolbox"
+                    style={{ marginTop: "20px" }}
+                    className="sbte-button-toolbar"
                 >
-                    <div className="card">
-                        <div className="card-header" id="" aria-expanded aria-controls="">Toolbox</div>
-                        <div className="tw-overflow-hidden tw-h-full tw-transition-all">
-                            <div id="">
-                                <div className="card-body">
-                                    <div role="toolbar" className="sbte-button-toolbar btn-toolbar">
-                                        <KeyboardShortcuts />
-                                        <SubtitleSpecificationsButton />
-                                        <ShiftTimeButton />
-                                        <CaptionOverlapToggle />
-                                        <ExportTrackCuesButton handleExport={jest.fn()} />
-                                        <ImportTrackCuesButton handleImport={jest.fn()} />
-                                        <SearchReplaceButton />
-                                        <MergeCuesButton />
-                                        <CueCommentsToggle />
-                                        <WaveformToggle />
-                                    </div>
+                    <SubtitleSpecificationsButton />
+                    <SearchReplaceButton />
+                    <ImportTrackCuesButton handleImport={jest.fn()} />
+                    <ExportTrackCuesButton handleExport={jest.fn()} />
+                    <Menu>
+                        <Menu.Button id="cue-line-category">
+                            <i className="fas fa-ellipsis-h" />
+                        </Menu.Button>
+                        <Menu.Items style={{ minWidth: "220px", width: "220px" }}>
+                            <Menu.Item as="li">
+                                <div className="tw-dropdown-item">
+                                    <KeyboardShortcuts />
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </Menu.Item>
+                            <Menu.Item as="li">
+                                <div className="tw-dropdown-item">
+                                    <ShiftTimeButton />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li">
+                                <div className="tw-dropdown-item">
+                                    <CaptionOverlapToggle />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li">
+                                <div className="tw-dropdown-item">
+                                    <MergeCuesButton />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li" className="sbte-dropdown-item">
+                                <div className="tw-dropdown-item">
+                                    <CueCommentsToggle />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li" className="sbte-dropdown-item">
+                                <div className="tw-dropdown-item">
+                                    <WaveformToggle />
+                                </div>
+                            </Menu.Item>
+                        </Menu.Items>
+                    </Menu>
                 </div>
             </Provider>
         );
@@ -68,9 +88,8 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML)
+            .toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders for translation track", () => {
@@ -90,30 +109,58 @@ describe("Toolbox", () => {
                     style={{ marginTop: "10px" }}
                     className="sbte-toolbox"
                 >
-                    <div className="card">
-                        <div className="card-header" id="" aria-expanded aria-controls="">Toolbox</div>
-                        <div className="tw-overflow-hidden tw-h-full tw-transition-all">
-                            <div id="">
-                                <div className="card-body">
-                                    <div role="toolbar" className="sbte-button-toolbar btn-toolbar">
-                                        <KeyboardShortcuts />
-                                        <SubtitleSpecificationsButton />
-                                        <ShiftTimeButton />
-                                        <CaptionOverlapToggle />
-                                        <ExportSourceTrackCuesButton handleExport={jest.fn()} />
-                                        <ExportTrackCuesButton handleExport={jest.fn()} />
-                                        <ImportTrackCuesButton handleImport={jest.fn()} />
-                                        <SearchReplaceButton />
-                                        <SyncCuesButton />
-                                        <MergeCuesButton />
-                                        <CueCommentsToggle />
-                                        <TimecodesLockToggle />
-                                        <WaveformToggle />
-                                    </div>
+                    <SubtitleSpecificationsButton />
+                    <SearchReplaceButton />
+                    <ImportTrackCuesButton handleImport={jest.fn()} />
+                    <ExportSourceTrackCuesButton handleExport={jest.fn()} />
+                    <ExportTrackCuesButton handleExport={jest.fn()} />
+                    <Menu>
+                        <Menu.Button id="cue-line-category">
+                            <i className="fas fa-ellipsis-h" />
+                        </Menu.Button>
+                        <Menu.Items style={{ minWidth: "220px", width: "220px" }}>
+                            <Menu.Item as="li">
+                                <div className="tw-dropdown-item">
+                                    <KeyboardShortcuts />
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </Menu.Item>
+                            <Menu.Item as="li">
+                                <div className="tw-dropdown-item">
+                                    <ShiftTimeButton />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li">
+                                <div className="tw-dropdown-item">
+                                    <CaptionOverlapToggle />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li" className="sbte-dropdown-item">
+                                <div className="tw-dropdown-item">
+                                    <SyncCuesButton />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li">
+                                <div className="tw-dropdown-item">
+                                    <MergeCuesButton />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li" className="sbte-dropdown-item">
+                                <div className="tw-dropdown-item">
+                                    <CueCommentsToggle />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li" className="sbte-dropdown-item">
+                                <div className="tw-dropdown-item">
+                                    <TimecodesLockToggle />
+                                </div>
+                            </Menu.Item>
+                            <Menu.Item as="li" className="sbte-dropdown-item">
+                                <div className="tw-dropdown-item">
+                                    <WaveformToggle />
+                                </div>
+                            </Menu.Item>
+                        </Menu.Items>
+                    </Menu>
                 </div>
             </Provider>
         );
@@ -126,9 +173,8 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML)
+            .toEqual(expectedNode.container.outerHTML);
     });
 
     it("passes exportFile function to export file button", () => {
@@ -145,7 +191,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Export File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-export-button") as Element);
 
         // THEN
         expect(mockExportFile).toHaveBeenCalled();
@@ -165,7 +211,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Import File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-import-button") as Element);
 
         // THEN
         expect(mockImportFile).toHaveBeenCalled();
@@ -185,7 +231,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.getByText("Export Source File"));
+        fireEvent.click(actualNode.container.querySelector(".sbte-export-source-button") as Element);
 
         // THEN
         expect(mockExportSourceFile).toHaveBeenCalled();
