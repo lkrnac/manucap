@@ -1280,9 +1280,9 @@ describe("SubtitleEdit", () => {
 
         // THEN
         const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html())));
+            actualNode.html()))).replace(` disabled=""`, "");
         const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html())));
+            expectedNode.html()))).replace(` disabled=""`, "");
         expect(actual).toEqual(expected);
     });
 
