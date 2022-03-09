@@ -72,7 +72,7 @@ describe("Alert", () => {
         // THEN
         await waitFor(() => {
             expect(onCloseCallback).toBeCalled();
-        })
+        });
     });
 
 });

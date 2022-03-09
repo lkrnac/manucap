@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import SearchReplaceButton from "./SearchReplaceButton";
 import { fireEvent, render } from "@testing-library/react";
 import MergeCuesButton from "./MergeCuesButton";
+import { removeHeadlessAttributes } from "../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -15,9 +16,14 @@ describe("SeachReplaceButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="sbte-search-replace-button btn btn-secondary">
-                <i className="fas fa-search-plus fa-lg" />
-            </button>
+            <div
+                id=""
+                aria-expanded={false}
+            >
+                <button type="button" className="sbte-search-replace-button btn btn-secondary">
+                    <i className="fas fa-search-plus fa-lg" />
+                </button>
+            </div>
         );
 
         // WHEN
@@ -28,7 +34,9 @@ describe("SeachReplaceButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("sets search replace visible on button click", () => {

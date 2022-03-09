@@ -29,8 +29,8 @@ describe("CaptionOverlapToggle", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="btn">
-               Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">NOT ALLOWED</span>
+           <button type="button" className="tw-dropdown-item tw-flex tw-items-center tw-justify-between">
+               Overlapping <span className="tw-badge tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
            </button>
        );
 
@@ -48,8 +48,11 @@ describe("CaptionOverlapToggle", () => {
     it("changes icon on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn sbte-toggled-btn">
-                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ALLOWED</span>
+            <button
+                type="button"
+                className="tw-dropdown-item tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+            >
+                Overlapping <span className="tw-badge tw-badge-sm tw-badge-success">ALLOWED</span>
             </button>
         );
 
@@ -59,7 +62,7 @@ describe("CaptionOverlapToggle", () => {
                 <CaptionOverlapToggle />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -68,8 +71,8 @@ describe("CaptionOverlapToggle", () => {
     it("changes icon back on double toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn">
-                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">NOT ALLOWED</span>
+            <button type="button" className="tw-dropdown-item tw-flex tw-items-center tw-justify-between">
+                Overlapping <span className="tw-badge tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
             </button>
         );
 
@@ -79,8 +82,8 @@ describe("CaptionOverlapToggle", () => {
                 <CaptionOverlapToggle />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
+        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -102,7 +105,7 @@ describe("CaptionOverlapToggle", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
 
         // THEN
         expect(testingStore.getState().editingTrack.overlapEnabled).toEqual(true);

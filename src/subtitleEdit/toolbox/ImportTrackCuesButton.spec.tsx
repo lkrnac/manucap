@@ -3,6 +3,7 @@ import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
+import { removeHeadlessAttributes } from "../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -13,9 +14,14 @@ describe("ImportTrackCuesButton", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="sbte-import-button btn btn-secondary">
-               <i className="fas fa-file-import fa-lg" />
-           </button>
+           <div
+               id=""
+               aria-expanded={false}
+           >
+               <button type="button" className="sbte-import-button btn btn-secondary">
+                   <i className="fas fa-file-import fa-lg" />
+               </button>
+           </div>
        );
 
        // WHEN
@@ -26,15 +32,22 @@ describe("ImportTrackCuesButton", () => {
        );
 
        // THEN
-       expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+       const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+       const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+       expect(actual).toEqual(expected);
    });
 
     it("renders disabled", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" disabled className="sbte-import-button btn btn-secondary">
-                <i className="fas fa-file-import fa-lg" />
-            </button>
+            <div
+                id=""
+                aria-expanded={false}
+            >
+                <button type="button" disabled className="sbte-import-button btn btn-secondary">
+                    <i className="fas fa-file-import fa-lg" />
+                </button>
+            </div>
         );
 
         // WHEN
@@ -45,7 +58,9 @@ describe("ImportTrackCuesButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("calls handleImport when clicked", () => {

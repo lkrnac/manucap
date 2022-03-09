@@ -27,18 +27,29 @@ const Toolbox = (props: Props): ReactElement => {
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
     return (
-        <div className="tw-mt-6 tw-flex tw-items-center tw-justify-center sbte-button-toolbar">
-            <SubtitleSpecificationsButton />
-            <SearchReplaceButton />
-            <ImportTrackCuesButton
-                handleImport={props.handleImportFile}
-                disabled={editingTask?.editDisabled}
-            />
-            { isTranslation ?
-                <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} /> : null }
-            <ExportTrackCuesButton
-                handleExport={props.handleExportFile}
-            />
+        <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-justify-center sbte-button-toolbar">
+            <div>
+                <SubtitleSpecificationsButton />
+            </div>
+            <div>
+                <SearchReplaceButton />
+            </div>
+            <div>
+                <ImportTrackCuesButton
+                    handleImport={props.handleImportFile}
+                    disabled={editingTask?.editDisabled}
+                />
+            </div>
+            { isTranslation ? (
+                <div>
+                    <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} />
+                </div>
+            ) : null }
+            <div>
+                <ExportTrackCuesButton
+                    handleExport={props.handleExportFile}
+                />
+            </div>
             <Menu as="div" className="md:tw-relative tw-dropdown-wrapper">
                 {({ open }): ReactElement => (
                     <>
@@ -51,7 +62,7 @@ const Toolbox = (props: Props): ReactElement => {
                             </button>
                         </Menu.Button>
                         <Transition
-                            unmount
+                            unmount={false}
                             show={open}
                             className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left"
                             enterFrom="tw-opacity-0 tw-scale-75"
@@ -59,55 +70,42 @@ const Toolbox = (props: Props): ReactElement => {
                             leaveFrom="tw-opacity-100 tw-scale-100"
                             leaveTo="tw-opacity-0 tw-scale-75"
                         >
-                            <div className={`tw-absolute tw-left-0 tw-open-${open} tw-min-w-[220px] tw-w-[220px]`}>
+                            <div className={`tw-absolute tw-left-0 tw-open-${open} tw-min-w-[240px] tw-w-[240px]`}>
                                 <Menu.Items
                                     as="ul"
                                     static
-                                    className="tw-dropdown-menu tw-flex tw-flex-row tw-flex-wrap"
+                                    className="tw-dropdown-menu"
                                 >
                                     <Menu.Item as="li">
-                                        <div className="tw-dropdown-item">
-                                            <KeyboardShortcuts />
-                                        </div>
+                                        <KeyboardShortcuts />
                                     </Menu.Item>
+                                    <div className="tw-dropdown-separator" />
                                     <Menu.Item as="li">
-                                        <div className="tw-dropdown-item">
-                                            <ShiftTimeButton />
-                                        </div>
-                                    </Menu.Item>
-                                    <Menu.Item as="li">
-                                        <div className="tw-dropdown-item">
-                                            <CaptionOverlapToggle />
-                                        </div>
+                                        <ShiftTimeButton />
                                     </Menu.Item>
                                     {isTranslation ? (
-                                        <Menu.Item as="li" className="sbte-dropdown-item">
-                                            <div className="tw-dropdown-item">
-                                                <SyncCuesButton />
-                                            </div>
+                                        <Menu.Item as="li">
+                                            <SyncCuesButton />
                                         </Menu.Item>
                                     ) : null}
                                     <Menu.Item as="li">
-                                        <div className="tw-dropdown-item">
-                                            <MergeCuesButton />
-                                        </div>
+                                        <MergeCuesButton />
                                     </Menu.Item>
-                                    <Menu.Item as="li" className="sbte-dropdown-item">
-                                        <div className="tw-dropdown-item">
-                                            <CueCommentsToggle />
-                                        </div>
-                                    </Menu.Item>
+                                    <div className="tw-dropdown-separator" />
                                     {isTranslation ? (
-                                        <Menu.Item as="li" className="sbte-dropdown-item">
-                                            <div className="tw-dropdown-item">
-                                                <TimecodesLockToggle />
-                                            </div>
+                                        <Menu.Item as="li">
+                                            <TimecodesLockToggle />
                                         </Menu.Item>
                                     ) : null}
+                                    <Menu.Item as="li">
+                                        <CaptionOverlapToggle />
+                                    </Menu.Item>
+                                    <div className="tw-dropdown-separator" />
                                     <Menu.Item as="li" className="sbte-dropdown-item">
-                                        <div className="tw-dropdown-item">
-                                            <WaveformToggle />
-                                        </div>
+                                        <CueCommentsToggle />
+                                    </Menu.Item>
+                                    <Menu.Item as="li">
+                                        <WaveformToggle />
                                     </Menu.Item>
                                 </Menu.Items>
                             </div>

@@ -3,6 +3,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import ExportSourceTrackCuesButton from "./ExportSourceTrackCuesButton";
 import { fireEvent, render } from "@testing-library/react";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -13,9 +14,14 @@ describe("ExportSourceTrackCuesButton", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="sbte-export-source-button btn btn-secondary">
-               <i className="fas fa-file-export fa-lg" />
-           </button>
+           <div
+               id=""
+               aria-expanded={false}
+           >
+               <button type="button" className="sbte-export-source-button btn btn-secondary">
+                   <i className="fas fa-file-export fa-lg" />
+               </button>
+           </div>
        );
 
        // WHEN
@@ -26,7 +32,9 @@ describe("ExportSourceTrackCuesButton", () => {
        );
 
        // THEN
-       expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+       const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+       const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+       expect(actual).toEqual(expected);
    });
 
     it("calls handleExport when clicked", () => {

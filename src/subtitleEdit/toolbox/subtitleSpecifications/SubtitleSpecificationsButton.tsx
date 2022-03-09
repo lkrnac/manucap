@@ -29,7 +29,6 @@ const SubtitleSpecificationsButton = (): ReactElement => {
                     <i className="fas fa-clipboard-list fa-lg" />
                 </button>
             </Tooltip>
-
             <SubtitleSpecificationsModal show={show} onClose={handleClose} />
         </>
     );

@@ -20,6 +20,7 @@ const testTrack = {
     language: { id: "en-US", name: "English", direction: "LTR" },
     timecodesUnlocked: true
 };
+
 const testTranslationTrack = {
     type: "TRANSLATION",
     language: { id: "fr-FR", name: "French (France)" } as Language,
@@ -37,16 +38,13 @@ describe("ShiftTimeButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <button
-                        className="dotsub-shift-time-button btn"
-                        title="Unlock timecodes to enable"
-                    >
-                        Shift Track Time
-                    </button>
-
-                    <div>shown</div>
-                </>
+                <button
+                    className="dotsub-shift-time-button tw-dropdown-item"
+                    title="Unlock timecodes to enable"
+                >
+                    Shift Track Time
+                </button>
+                <div>shown</div>
             </Provider>
         );
 
@@ -66,16 +64,13 @@ describe("ShiftTimeButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <button
-                        className="dotsub-shift-time-button btn"
-                        title="Unlock timecodes to enable"
-                    >
-                        Shift Track Time
-                    </button>
-
-                    <div />
-                </>
+                <button
+                    className="dotsub-shift-time-button tw-dropdown-item"
+                    title="Unlock timecodes to enable"
+                >
+                    Shift Track Time
+                </button>
+                <div />
             </Provider>
         );
 
@@ -128,7 +123,7 @@ describe("ShiftTimeButton", () => {
             <Provider store={testingStore}>
                 <>
                     <button
-                        className="dotsub-shift-time-button btn"
+                        className="dotsub-shift-time-button tw-dropdown-item"
                         title="Unlock timecodes to enable"
                     >
                         Shift Track Time
@@ -156,17 +151,14 @@ describe("ShiftTimeButton", () => {
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <button
-                        className="dotsub-shift-time-button btn"
-                        disabled
-                        title="Unlock timecodes to enable"
-                    >
-                        Shift Track Time
-                    </button>
-
-                    <div />
-                </>
+                <button
+                    className="dotsub-shift-time-button tw-dropdown-item"
+                    disabled
+                    title="Unlock timecodes to enable"
+                >
+                    Shift Track Time
+                </button>
+                <div />
             </Provider>
         );
 

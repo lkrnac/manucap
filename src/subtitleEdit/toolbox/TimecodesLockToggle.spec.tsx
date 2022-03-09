@@ -21,8 +21,8 @@ describe("TimecodesLockToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn">
-                Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-off">LOCKED</span>
+            <button type="button" className="tw-dropdown-item tw-flex tw-items-center tw-justify-between">
+                Timecodes <span className="tw-badge tw-badge-sm tw-badge-secondary">LOCKED</span>
             </button>
         );
 
@@ -40,8 +40,11 @@ describe("TimecodesLockToggle", () => {
     it("changes icon/text on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn sbte-toggled-btn">
-                Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-on">UNLOCKED</span>
+            <button
+                type="button"
+                className="tw-dropdown-item tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+            >
+                Timecodes <span className="tw-badge tw-badge-sm tw-badge-success">UNLOCKED</span>
             </button>
         );
 
@@ -51,7 +54,8 @@ describe("TimecodesLockToggle", () => {
                 <TimecodesLockToggle />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+
+        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -73,7 +77,7 @@ describe("TimecodesLockToggle", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
 
         // THEN
         expect(testingStore.getState().editingTrack.timecodesUnlocked).toEqual(true);

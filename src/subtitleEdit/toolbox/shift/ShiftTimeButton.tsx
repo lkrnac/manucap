@@ -13,7 +13,7 @@ const ShiftTimeButton = (): ReactElement => {
         <>
             <button
                 onClick={handleShow}
-                className="dotsub-shift-time-button btn"
+                className="dotsub-shift-time-button tw-dropdown-item"
                 disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
             >

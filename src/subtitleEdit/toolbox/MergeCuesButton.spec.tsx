@@ -16,6 +16,7 @@ const testTrack = {
     language: { id: "en-US", name: "English", direction: "LTR" },
     timecodesUnlocked: true
 };
+
 const testTranslationTrack = {
     type: "TRANSLATION",
     language: { id: "fr-FR", name: "French (France)" } as Language,
@@ -35,7 +36,7 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                className="btn sbte-merge-cues-button"
+                className="tw-dropdown-item sbte-merge-cues-button"
                 title="Unlock timecodes to enable"
             >
                 Merge Cues
@@ -57,7 +58,7 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                className="btn sbte-merge-cues-button"
+                className="tw-dropdown-item sbte-merge-cues-button"
                 title="Unlock timecodes to enable"
             >
                 Merge Cues
@@ -81,7 +82,7 @@ describe("MergeCuesButton", () => {
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
             <button
-                className="btn sbte-merge-cues-button"
+                className="tw-dropdown-item sbte-merge-cues-button"
                 disabled
                 title="Unlock timecodes to enable"
             >

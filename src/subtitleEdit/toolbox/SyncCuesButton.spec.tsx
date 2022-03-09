@@ -33,7 +33,7 @@ describe("SyncCuesButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button className="sbte-sync-cues-button btn">
+            <button className="sbte-sync-cues-button tw-dropdown-item">
                 Sync Cues
             </button>
         );
@@ -54,7 +54,7 @@ describe("SyncCuesButton", () => {
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = shallow(
-            <button className="sbte-sync-cues-button btn" disabled>
+            <button className="sbte-sync-cues-button tw-dropdown-item" disabled>
                 Sync Cues
             </button>
         );

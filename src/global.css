@@ -2,6 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    *,
+    *:active,
+    *:hover,
+    *:focus,
+    *:focus-visible {
+        outline: none !important;
+    }
+}
+
+/** Badges **/
+
+.tw-badge {
+    @apply tw-font-bold tw-inline-block tw-text-white tw-leading-none tw-whitespace-nowrap tw-rounded tw-text-center tw-text-base tw-py-1 tw-px-2;
+}
+
+.tw-badge.tw-badge-sm {
+    @apply tw-py-0.5 tw-px-1.5 tw-text-xs;
+}
+
+.tw-badge.tw-badge-success {
+    @apply tw-bg-green-600;
+}
+
+.tw-badge.tw-badge-secondary {
+    @apply tw-bg-blue-grey-600;
+}
+
+.tw-badge.tw-badge-outline {
+    @apply tw-border tw-bg-transparent;
+}
+
+.tw-badge-pill {
+    @apply tw-px-1.5 tw-py-1 tw-rounded-3xl tw-inline-flex tw-items-center tw-justify-center tw-leading-none;
+}
+
+.tw-badge-pill i {
+    @apply tw-text-xs;
+}
+
 /** Modal **/
 
 .tw-modal .tw-modal-header {
@@ -81,13 +121,22 @@
     @apply tw-border tw-min-w-[160px] tw-border-blue-grey-200 tw-mt-2 tw-text-blue-grey-500 tw-rounded tw-z-50 tw-text-left tw-list-none tw-text-base tw-bg-white tw-shadow-sm tw-select-none tw-py-2;
 }
 
+.tw-dropdown-menu .tw-dropdown-separator {
+    @apply tw-bg-blue-grey-200 tw-w-full tw-h-[1px] tw-my-2;
+}
+
 .tw-dropdown-menu hr {
     @apply tw-w-full tw-border-blue-grey-200 tw-my-2;
 }
 
 .tw-dropdown-menu .tw-dropdown-header,
 .tw-dropdown-menu .tw-dropdown-item {
-    @apply tw-flex tw-w-full tw-py-2.5 tw-px-4;
+    @apply tw-flex tw-w-full tw-py-2 tw-px-4;
+}
+
+.tw-dropdown-menu .tw-dropdown-item.disabled,
+.tw-dropdown-menu .tw-dropdown-item:disabled {
+    @apply tw-opacity-60 tw-shadow-none tw-pointer-events-none;
 }
 
 .tw-dropdown-menu .tw-dropdown-header {

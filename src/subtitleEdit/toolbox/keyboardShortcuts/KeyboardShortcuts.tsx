@@ -22,9 +22,9 @@ const KeyboardShortcuts = (): ReactElement => {
         <>
             <button
                 onClick={handleShow}
-                className="dotsub-keyboard-shortcuts-button btn"
+                className="dotsub-keyboard-shortcuts-button tw-dropdown-item"
             >
-                <i className="far fa-keyboard" /> Keyboard Shortcuts
+                Keyboard Shortcuts
             </button>
             <TransitionDialog
                 open={show}

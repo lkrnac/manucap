@@ -1,27 +1,19 @@
 import "../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
-import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import { Provider } from "react-redux";
-import ShiftTimeButton from "./shift/ShiftTimeButton";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
 import Toolbox from "./Toolbox";
 import { readSubtitleSpecification } from "./subtitleSpecifications/subtitleSpecificationSlice";
 import testingStore from "../../testUtils/testingStore";
-import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { Language, Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
-import SyncCuesButton from "./SyncCuesButton";
 import SearchReplaceButton from "./SearchReplaceButton";
-import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import { fireEvent, render } from "@testing-library/react";
-import MergeCuesButton from "./MergeCuesButton";
-import CueCommentsToggle from "./CueCommentsToggle";
-import TimecodesLockToggle from "./TimecodesLockToggle";
-import WaveformToggle from "./WaveformToggle";
-import { Menu } from "@headlessui/react";
+import { removeHeadlessAttributes } from "../../testUtils/testUtils";
+import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 
 describe("Toolbox", () => {
     it("renders", () => {
@@ -29,50 +21,99 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    style={{ marginTop: "20px" }}
-                    className="sbte-button-toolbar"
+                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-justify-center sbte-button-toolbar"
                 >
-                    <SubtitleSpecificationsButton />
-                    <SearchReplaceButton />
-                    <ImportTrackCuesButton handleImport={jest.fn()} />
-                    <ExportTrackCuesButton handleExport={jest.fn()} />
-                    <Menu>
-                        <Menu.Button id="cue-line-category">
-                            <i className="fas fa-ellipsis-h" />
-                        </Menu.Button>
-                        <Menu.Items style={{ minWidth: "220px", width: "220px" }}>
-                            <Menu.Item as="li">
-                                <div className="tw-dropdown-item">
-                                    <KeyboardShortcuts />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li">
-                                <div className="tw-dropdown-item">
-                                    <ShiftTimeButton />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li">
-                                <div className="tw-dropdown-item">
-                                    <CaptionOverlapToggle />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li">
-                                <div className="tw-dropdown-item">
-                                    <MergeCuesButton />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li" className="sbte-dropdown-item">
-                                <div className="tw-dropdown-item">
-                                    <CueCommentsToggle />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li" className="sbte-dropdown-item">
-                                <div className="tw-dropdown-item">
-                                    <WaveformToggle />
-                                </div>
-                            </Menu.Item>
-                        </Menu.Items>
-                    </Menu>
+                    <div>
+                        <SubtitleSpecificationsButton />
+                    </div>
+                    <div>
+                        <SearchReplaceButton />
+                    </div>
+                    <div>
+                        <ImportTrackCuesButton handleImport={jest.fn()} />
+                    </div>
+                    <div>
+                        <ExportTrackCuesButton handleExport={jest.fn()} />
+                    </div>
+                    <div className="md:tw-relative tw-dropdown-wrapper">
+                        <div
+                            id=""
+                            className="tw-cursor-pointer"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            aria-controls=""
+                        >
+                            <button className="tw-select-none tw-open-false dropdown-toggle btn btn-secondary">
+                                <i className="fas fa-ellipsis-h" />
+                            </button>
+                        </div>
+                        <div
+                            className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left
+                                tw-opacity-100 tw-scale-100"
+                            hidden
+                            style={{ display: "none" }}
+                        >
+                            <div className="tw-absolute tw-left-0 tw-open-false tw-min-w-[240px] tw-w-[240px]">
+                                <ul className="tw-dropdown-menu" id="" role="menu" aria-labelledby="">
+                                    <li id="" role="menuitem">
+                                        <button className="dotsub-keyboard-shortcuts-button tw-dropdown-item">
+                                            Keyboard Shortcuts
+                                        </button>
+                                    </li>
+                                    <div className="tw-dropdown-separator" />
+                                    <li id="" role="menuitem">
+                                        <button
+                                            className="dotsub-shift-time-button tw-dropdown-item"
+                                            disabled
+                                            title="Unlock timecodes to enable"
+                                        >
+                                            Shift Track Time
+                                        </button>
+                                    </li>
+                                    <li id="" role="menuitem">
+                                        <button
+                                            className="tw-dropdown-item sbte-merge-cues-button"
+                                            disabled
+                                            title="Unlock timecodes to enable"
+                                        >
+                                            Merge Cues
+                                        </button>
+                                    </li>
+                                    <div className="tw-dropdown-separator" />
+                                    <li id="" role="menuitem">
+                                        <button
+                                            type="button"
+                                            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+                                        >
+                                            Overlapping{" "}
+                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">
+                                                NOT ALLOWED
+                                            </span>
+                                        </button>
+                                    </li>
+                                    <div className="tw-dropdown-separator" />
+                                    <li className="sbte-dropdown-item" id="" role="menuitem">
+                                        <button
+                                            type="button"
+                                            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+                                        >
+                                            Comments{" "}
+                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                                        </button>
+                                    </li>
+                                    <li id="" role="menuitem">
+                                        <button
+                                            type="button"
+                                            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+                                        >
+                                            Waveform{" "}
+                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </Provider>
         );
@@ -88,8 +129,9 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML)
-            .toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("renders for translation track", () => {
@@ -106,61 +148,121 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    style={{ marginTop: "10px" }}
-                    className="sbte-toolbox"
+                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-justify-center sbte-button-toolbar"
                 >
-                    <SubtitleSpecificationsButton />
-                    <SearchReplaceButton />
-                    <ImportTrackCuesButton handleImport={jest.fn()} />
-                    <ExportSourceTrackCuesButton handleExport={jest.fn()} />
-                    <ExportTrackCuesButton handleExport={jest.fn()} />
-                    <Menu>
-                        <Menu.Button id="cue-line-category">
-                            <i className="fas fa-ellipsis-h" />
-                        </Menu.Button>
-                        <Menu.Items style={{ minWidth: "220px", width: "220px" }}>
-                            <Menu.Item as="li">
-                                <div className="tw-dropdown-item">
-                                    <KeyboardShortcuts />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li">
-                                <div className="tw-dropdown-item">
-                                    <ShiftTimeButton />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li">
-                                <div className="tw-dropdown-item">
-                                    <CaptionOverlapToggle />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li" className="sbte-dropdown-item">
-                                <div className="tw-dropdown-item">
-                                    <SyncCuesButton />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li">
-                                <div className="tw-dropdown-item">
-                                    <MergeCuesButton />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li" className="sbte-dropdown-item">
-                                <div className="tw-dropdown-item">
-                                    <CueCommentsToggle />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li" className="sbte-dropdown-item">
-                                <div className="tw-dropdown-item">
-                                    <TimecodesLockToggle />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item as="li" className="sbte-dropdown-item">
-                                <div className="tw-dropdown-item">
-                                    <WaveformToggle />
-                                </div>
-                            </Menu.Item>
-                        </Menu.Items>
-                    </Menu>
+                    <div>
+                        <SubtitleSpecificationsButton />
+                    </div>
+                    <div>
+                        <SearchReplaceButton />
+                    </div>
+                    <div>
+                        <ImportTrackCuesButton handleImport={jest.fn()} />
+                    </div>
+                    <div>
+                        <ExportSourceTrackCuesButton handleExport={jest.fn()} />
+                    </div>
+                    <div>
+                        <ExportTrackCuesButton handleExport={jest.fn()} />
+                    </div>
+                    <div className="md:tw-relative tw-dropdown-wrapper">
+                        <div
+                            id=""
+                            className="tw-cursor-pointer"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            aria-controls=""
+                        >
+                            <button className="tw-select-none tw-open-false dropdown-toggle btn btn-secondary">
+                                <i className="fas fa-ellipsis-h" />
+                            </button>
+                        </div>
+                        <div
+                            className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left
+                                tw-opacity-100 tw-scale-100"
+                            hidden
+                            style={{ display: "none" }}
+                        >
+                            <div className="tw-absolute tw-left-0 tw-open-false tw-min-w-[240px] tw-w-[240px]">
+                                <ul className="tw-dropdown-menu" id="" role="menu" aria-labelledby="">
+                                    <li id="" role="menuitem">
+                                        <button className="dotsub-keyboard-shortcuts-button tw-dropdown-item">
+                                            Keyboard Shortcuts
+                                        </button>
+                                    </li>
+                                    <div className="tw-dropdown-separator" />
+                                    <li id="" role="menuitem">
+                                        <button
+                                            className="dotsub-shift-time-button tw-dropdown-item"
+                                            disabled
+                                            title="Unlock timecodes to enable"
+                                        >
+                                            Shift Track Time
+                                        </button>
+                                    </li>
+                                    <li id="" role="menuitem">
+                                        <button
+                                            className="sbte-sync-cues-button tw-dropdown-item"
+                                            disabled
+                                        >
+                                            Sync Cues
+                                        </button>
+                                    </li>
+                                    <li id="" role="menuitem">
+                                        <button
+                                            className="tw-dropdown-item sbte-merge-cues-button"
+                                            disabled
+                                            title="Unlock timecodes to enable"
+                                        >
+                                            Merge Cues
+                                        </button>
+                                    </li>
+                                    <div className="tw-dropdown-separator" />
+                                    <li id="" role="menuitem">
+                                        <button
+                                            type="button"
+                                            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+                                        >
+                                            Timecodes{" "}
+                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">
+                                                LOCKED
+                                            </span>
+                                        </button>
+                                    </li>
+                                    <li id="" role="menuitem">
+                                        <button
+                                            type="button"
+                                            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+                                        >
+                                            Overlapping{" "}
+                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">
+                                                NOT ALLOWED
+                                            </span>
+                                        </button>
+                                    </li>
+                                    <div className="tw-dropdown-separator" />
+                                    <li className="sbte-dropdown-item" id="" role="menuitem">
+                                        <button
+                                            type="button"
+                                            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+                                        >
+                                            Comments{" "}
+                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                                        </button>
+                                    </li>
+                                    <li id="" role="menuitem">
+                                        <button
+                                            type="button"
+                                            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+                                        >
+                                            Waveform{" "}
+                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </Provider>
         );
@@ -173,8 +275,9 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML)
-            .toEqual(expectedNode.container.outerHTML);
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
+        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("passes exportFile function to export file button", () => {

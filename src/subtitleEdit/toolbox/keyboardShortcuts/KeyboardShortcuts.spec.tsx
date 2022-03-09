@@ -15,8 +15,8 @@ describe("KeyboardShortcuts", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <button className="btn btn-secondary dotsub-keyboard-shortcuts-button">
-                    <i className="far fa-keyboard" /> Keyboard Shortcuts
+                <button className="dotsub-keyboard-shortcuts-button tw-dropdown-item">
+                    Keyboard Shortcuts
                 </button>
                 <div
                     className="tw-fixed tw-z-200 tw-inset-0 tw-overflow-y-auto tw-modal sbte-medium-modal"

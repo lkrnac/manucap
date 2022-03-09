@@ -11,7 +11,7 @@ const SyncCuesButton = (): ReactElement => {
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button
-            className="sbte-sync-cues-button btn"
+            className="sbte-sync-cues-button tw-dropdown-item"
             disabled={!timecodesUnlocked}
             onClick={(): void => {
                 dispatch(syncCues());

@@ -18,8 +18,8 @@ describe("CueCommentsToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn">
-                Comments <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDDEN</span>
+            <button type="button" className="tw-dropdown-item tw-flex tw-items-center tw-justify-between">
+                Comments <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
             </button>
         );
 
@@ -37,8 +37,11 @@ describe("CueCommentsToggle", () => {
     it("changes icon/text on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn sbte-toggled-btn">
-                Comments <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOWN</span>
+            <button
+                type="button"
+                className="tw-dropdown-item tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+            >
+                Comments <span className="tw-badge tw-badge-sm tw-badge-success">SHOWN</span>
             </button>
         );
 
@@ -48,7 +51,7 @@ describe("CueCommentsToggle", () => {
                 <CueCommentsToggle />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -63,7 +66,7 @@ describe("CueCommentsToggle", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
 
         // THEN
         expect(testingStore.getState().commentsVisible).toEqual(true);

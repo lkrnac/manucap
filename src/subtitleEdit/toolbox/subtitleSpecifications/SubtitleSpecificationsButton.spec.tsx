@@ -13,6 +13,7 @@ import { updateCues } from "../../cues/cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import "video.js";
 import { act } from "react-dom/test-utils";
+import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 jest.mock("./SubtitleSpecificationsModal");
 
@@ -33,13 +34,15 @@ describe("SubtitleSpecificationsButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
+                <div
+                    id=""
+                    aria-expanded
+                >
                     <button className="dotsub-subtitle-specifications-button btn btn-secondary">
                         <i className="fas fa-clipboard-list fa-lg" />
                     </button>
-
-                    <div>shown</div>
-                </>
+                </div>
+                <div>shown</div>
             </Provider>
         );
 
@@ -58,20 +61,24 @@ describe("SubtitleSpecificationsButton", () => {
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        const actual = removeHeadlessAttributes(actualNode.html());
+        const expected = removeHeadlessAttributes(expectedNode.html());
+        expect(actual).toEqual(expected);
     });
 
     it("renders with hidden modal", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
+                <div
+                    id=""
+                    aria-expanded={false}
+                >
                     <button className="dotsub-subtitle-specifications-button btn btn-secondary">
                         <i className="fas fa-clipboard-list fa-lg" />
                     </button>
-
-                    <div />
-                </>
+                </div>
+                <div />
             </Provider>
         );
 
@@ -87,7 +94,9 @@ describe("SubtitleSpecificationsButton", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        const actual = removeHeadlessAttributes(actualNode.html());
+        const expected = removeHeadlessAttributes(expectedNode.html());
+        expect(actual).toEqual(expected);
     });
 
     it("opens subtitle specifications modal when button is clicked", () => {
