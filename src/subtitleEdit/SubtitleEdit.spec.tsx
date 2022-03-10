@@ -1971,6 +1971,7 @@ describe("SubtitleEdit", () => {
             { vttCue: new VTTCue(8, 10, "Editing Line 4"), cueCategory: "DIALOGUE", errors: cueError },
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
         const actualNode = render(
             <Provider store={testingStore}>
                 <SubtitleEdit
@@ -1985,6 +1986,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         await act(async () => {
