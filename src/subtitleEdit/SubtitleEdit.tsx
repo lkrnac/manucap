@@ -102,7 +102,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 display: "flex",
                                 flexFlow: "column",
                                 paddingRight: "10px",
-                                zIndex: "10"
+                                zIndex: "20"
                             }}
                         >
                             <div className="video-player-wrapper" key={cuesLoadingCounter}>

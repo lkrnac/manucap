@@ -151,7 +151,7 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 40%",
                                 flexFlow: "column",
                                 paddingRight: "10px",
-                                zIndex: 10
+                                zIndex: 20
                             }}
                         >
                             <div className="video-player-wrapper">
@@ -371,7 +371,7 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 40%",
                                 flexFlow: "column",
                                 paddingRight: "10px",
-                                zIndex: 10
+                                zIndex: 20
                             }}
                         >
                             <div className="video-player-wrapper">
@@ -709,7 +709,7 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 40%",
                                 flexFlow: "column",
                                 paddingRight: "10px",
-                                zIndex: 10
+                                zIndex: 20
                             }}
                         >
                             <div className="video-player-wrapper">
@@ -931,7 +931,7 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 40%",
                                 flexFlow: "column",
                                 paddingRight: "10px",
-                                zIndex: 10
+                                zIndex: 20
                             }}
                         >
                             <div className="video-player-wrapper">
@@ -1153,7 +1153,7 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 40%",
                                 flexFlow: "column",
                                 paddingRight: "10px",
-                                zIndex: 10
+                                zIndex: 20
                             }}
                         >
                             <div className="video-player-wrapper">
@@ -1382,7 +1382,7 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 40%",
                                 flexFlow: "column",
                                 paddingRight: "10px",
-                                zIndex: 10
+                                zIndex: 20
                             }}
                         >
                             <div className="video-player-wrapper">
