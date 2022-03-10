@@ -27,7 +27,7 @@ const Toolbox = (props: Props): ReactElement => {
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
     return (
-        <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-justify-center sbte-button-toolbar">
+        <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-10 tw-justify-center sbte-button-toolbar">
             <div>
                 <SubtitleSpecificationsButton />
             </div>
@@ -55,22 +55,22 @@ const Toolbox = (props: Props): ReactElement => {
                     <>
                         <Menu.Button id="cue-line-category" as="div" className="tw-cursor-pointer">
                             <button
-                                className={`tw-select-none ${open ? "tw-open-true focus active" : "tw-open-false"}` +
+                                className={`tw-select-none${open ? " focus active" : ""}` +
                                     " dropdown-toggle btn btn-secondary"}
                             >
                                 <i className="fas fa-ellipsis-h" />
                             </button>
                         </Menu.Button>
-                        <Transition
-                            unmount={false}
-                            show={open}
-                            className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left"
-                            enterFrom="tw-opacity-0 tw-scale-75"
-                            enterTo="tw-opacity-100 tw-scale-100"
-                            leaveFrom="tw-opacity-100 tw-scale-100"
-                            leaveTo="tw-opacity-0 tw-scale-75"
-                        >
-                            <div className={`tw-absolute tw-left-0 tw-open-${open} tw-min-w-[240px] tw-w-[240px]`}>
+                        <div className="tw-absolute tw-bottom-full tw-left-0 tw-min-w-[240px] tw-w-[240px]">
+                            <Transition
+                                unmount={false}
+                                show={open}
+                                className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-bottom-left"
+                                enterFrom="tw-opacity-0 tw-scale-75"
+                                enterTo="tw-opacity-100 tw-scale-100"
+                                leaveFrom="tw-opacity-100 tw-scale-100"
+                                leaveTo="tw-opacity-0 tw-scale-75"
+                            >
                                 <Menu.Items
                                     as="ul"
                                     static
@@ -108,8 +108,8 @@ const Toolbox = (props: Props): ReactElement => {
                                         <WaveformToggle />
                                     </Menu.Item>
                                 </Menu.Items>
-                            </div>
-                        </Transition>
+                            </Transition>
+                        </div>
                     </>
                 )}
             </Menu>

@@ -15,7 +15,7 @@ describe("CueCategoryButton", () => {
                     aria-haspopup="true"
                     aria-expanded="false"
                 >
-                    <button className="tw-select-none tw-open-false dropdown-toggle btn btn-outline-secondary">
+                    <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
                         Dialogue<span className="caret" />
                     </button>
                 </div>
@@ -43,7 +43,7 @@ describe("CueCategoryButton", () => {
                     aria-haspopup="true"
                     aria-expanded="false"
                 >
-                    <button className="tw-select-none tw-open-false dropdown-toggle btn btn-outline-secondary">
+                    <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
                         Audio Descriptions<span className="caret" />
                     </button>
                 </div>
@@ -73,7 +73,7 @@ describe("CueCategoryButton", () => {
                     aria-controls=""
                 >
                     <button
-                        className="tw-select-none tw-open-true focus active dropdown-toggle btn btn-outline-secondary"
+                        className="tw-select-none focus active dropdown-toggle btn btn-outline-secondary"
                     >
                         Dialogue<span className="caret" />
                     </button>
@@ -82,7 +82,7 @@ describe("CueCategoryButton", () => {
                     className="tw-transition-all tw-duration-300 tw-ease-in-out
                         tw-origin-top-left tw-opacity-0 tw-scale-75"
                 >
-                    <div className="tw-absolute tw-left-0 tw-open-true tw-min-w-[210px] tw-w-[210px]">
+                    <div className="tw-absolute tw-left-0 tw-min-w-[210px] tw-w-[210px]">
                         <ul
                             className="tw-dropdown-menu"
                             aria-labelledby=""

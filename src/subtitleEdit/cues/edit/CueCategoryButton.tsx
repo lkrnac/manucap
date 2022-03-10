@@ -14,7 +14,7 @@ const CueCategoryButton = (props: Props): ReactElement => (
             <>
                 <Menu.Button id="cue-line-category" as="div" className="tw-cursor-pointer">
                     <button
-                        className={`tw-select-none ${open ? "tw-open-true focus active" : "tw-open-false"}` +
+                        className={`tw-select-none${open ? " focus active" : ""}` +
                             " dropdown-toggle btn btn-outline-secondary"}
                     >
                         {cueCategoryToPrettyName[props.category || "DIALOGUE"]}
@@ -30,7 +30,7 @@ const CueCategoryButton = (props: Props): ReactElement => (
                     leaveFrom="tw-opacity-100 tw-scale-100"
                     leaveTo="tw-opacity-0 tw-scale-75"
                 >
-                    <div className={`tw-absolute tw-left-0 tw-open-${open} tw-min-w-[210px] tw-w-[210px]`}>
+                    <div className="tw-absolute tw-left-0 tw-min-w-[210px] tw-w-[210px]">
                         <Menu.Items
                             as="ul"
                             static

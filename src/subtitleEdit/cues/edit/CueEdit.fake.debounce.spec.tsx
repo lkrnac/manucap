@@ -88,7 +88,7 @@ describe("CueEdit", () => {
             // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
+                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
                         <div
                             style={{
                                 flex: "1 1 300px",
@@ -144,9 +144,7 @@ describe("CueEdit", () => {
                                         aria-haspopup="true"
                                         aria-expanded="false"
                                     >
-                                        <button className="tw-select-none tw-open-false
-                                            dropdown-toggle btn btn-outline-secondary"
-                                        >
+                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
                                             Dialogue<span className="caret" />
                                         </button>
                                     </div>
@@ -211,7 +209,7 @@ describe("CueEdit", () => {
             // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
+                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
                         <div
                             style={{
                                 flex: "1 1 300px",
@@ -267,9 +265,7 @@ describe("CueEdit", () => {
                                         aria-haspopup="true"
                                         aria-expanded="false"
                                     >
-                                        <button className="tw-select-none tw-open-false
-                                            dropdown-toggle btn btn-outline-secondary"
-                                        >
+                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
                                             Dialogue<span className="caret" />
                                         </button>
                                     </div>
@@ -334,7 +330,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(updateEditingTrack(testTranslationTrack as Track) as {} as AnyAction);
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
+                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
                         <div
                             style={{
                                 flex: "1 1 300px",
@@ -390,9 +386,7 @@ describe("CueEdit", () => {
                                         aria-haspopup="true"
                                         aria-expanded="false"
                                     >
-                                        <button className="tw-select-none tw-open-false
-                                            dropdown-toggle btn btn-outline-secondary"
-                                        >
+                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
                                             Dialogue<span className="caret" />
                                         </button>
                                     </div>
@@ -460,7 +454,7 @@ describe("CueEdit", () => {
             // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white">
+                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
                         <div
                             style={{
                                 flex: "1 1 300px",
@@ -516,8 +510,7 @@ describe("CueEdit", () => {
                                         aria-haspopup="true"
                                         aria-expanded="false"
                                     >
-                                        <button className="tw-select-none tw-open-false
-                                            dropdown-toggle btn btn-outline-secondary"
+                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary"
                                         >
                                             Dialogue<span className="caret" />
                                         </button>

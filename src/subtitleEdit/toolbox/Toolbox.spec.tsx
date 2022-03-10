@@ -21,7 +21,8 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-justify-center sbte-button-toolbar"
+                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-10
+                        tw-justify-center sbte-button-toolbar"
                 >
                     <div>
                         <SubtitleSpecificationsButton />
@@ -43,17 +44,20 @@ describe("Toolbox", () => {
                             aria-expanded="false"
                             aria-controls=""
                         >
-                            <button className="tw-select-none tw-open-false dropdown-toggle btn btn-secondary">
+                            <button className="tw-select-none dropdown-toggle btn btn-secondary">
                                 <i className="fas fa-ellipsis-h" />
                             </button>
                         </div>
                         <div
-                            className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left
-                                tw-opacity-100 tw-scale-100"
-                            hidden
-                            style={{ display: "none" }}
+                            className="tw-absolute tw-bottom-full tw-left-0
+                                tw-min-w-[240px] tw-w-[240px]"
                         >
-                            <div className="tw-absolute tw-left-0 tw-open-false tw-min-w-[240px] tw-w-[240px]">
+                            <div
+                                className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-bottom-left
+                                    tw-opacity-100 tw-scale-100"
+                                hidden
+                                style={{ display: "none" }}
+                            >
                                 <ul className="tw-dropdown-menu" id="" role="menu" aria-labelledby="">
                                     <li id="" role="menuitem">
                                         <button className="dotsub-keyboard-shortcuts-button tw-dropdown-item">
@@ -148,7 +152,7 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-justify-center sbte-button-toolbar"
+                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-10 tw-justify-center sbte-button-toolbar"
                 >
                     <div>
                         <SubtitleSpecificationsButton />
@@ -173,17 +177,18 @@ describe("Toolbox", () => {
                             aria-expanded="false"
                             aria-controls=""
                         >
-                            <button className="tw-select-none tw-open-false dropdown-toggle btn btn-secondary">
+                            <button className="tw-select-none dropdown-toggle btn btn-secondary">
                                 <i className="fas fa-ellipsis-h" />
                             </button>
                         </div>
-                        <div
-                            className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left
-                                tw-opacity-100 tw-scale-100"
-                            hidden
-                            style={{ display: "none" }}
-                        >
-                            <div className="tw-absolute tw-left-0 tw-open-false tw-min-w-[240px] tw-w-[240px]">
+                        <div className="tw-absolute tw-bottom-full tw-left-0 tw-min-w-[240px] tw-w-[240px]">
+                            <div
+                                className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-bottom-left
+                                    tw-opacity-100 tw-scale-100"
+                                hidden
+                                style={{ display: "none" }}
+                            >
+
                                 <ul className="tw-dropdown-menu" id="" role="menu" aria-labelledby="">
                                     <li id="" role="menuitem">
                                         <button className="dotsub-keyboard-shortcuts-button tw-dropdown-item">

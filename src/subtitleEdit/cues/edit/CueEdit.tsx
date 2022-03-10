@@ -117,7 +117,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
 
     return (
-        <div style={{ display: "flex" }} className={"sbte-bottom-border bg-white"}>
+        <div style={{ display: "flex" }} className={"sbte-bottom-border bg-white tw-z-10"}>
             <div
                 style={{
                     flex: "1 1 300px",
