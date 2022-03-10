@@ -57,9 +57,6 @@ const CueComments = (props: Props): ReactElement => {
                 flexDirection: "column",
                 borderRadius: "5px",
                 padding: "10px 10px 5px 10px",
-                marginBottom: "2px",
-                marginLeft: "2px",
-                marginRight: "2px",
             }}
         >
             {

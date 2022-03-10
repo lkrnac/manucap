@@ -34,7 +34,7 @@ const CueCategoryButton = (props: Props): ReactElement => (
                         <Menu.Items
                             as="ul"
                             static
-                            className="tw-dropdown-menu tw-flex tw-flex-row tw-flex-wrap"
+                            className="tw-dropdown-menu"
                         >
                             <Menu.Item as="li" onClick={(): void => props.onChange("DIALOGUE")}>
                                 <div className="tw-dropdown-item">

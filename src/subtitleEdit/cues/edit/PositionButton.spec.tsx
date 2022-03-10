@@ -72,7 +72,8 @@ describe("PositionButton", () => {
                 >
                     <div className="tw-absolute tw-left-0 tw-min-w-[210px] tw-w-[210px]">
                         <ul
-                            className="tw-dropdown-menu tw-transition-all tw-flex tw-flex-row tw-flex-wrap"
+                            className="tw-dropdown-menu tw-transition-all tw-flex tw-flex-row tw-flex-wrap
+                                tw-justify-between tw-px-2"
                             aria-labelledby=""
                             id=""
                             role="menu"

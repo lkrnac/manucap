@@ -84,7 +84,7 @@ describe("CueCategoryButton", () => {
                 >
                     <div className="tw-absolute tw-left-0 tw-open-true tw-min-w-[210px] tw-w-[210px]">
                         <ul
-                            className="tw-dropdown-menu tw-flex tw-flex-row tw-flex-wrap"
+                            className="tw-dropdown-menu"
                             aria-labelledby=""
                             id=""
                             role="menu"

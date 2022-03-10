@@ -291,14 +291,17 @@ describe("SubtitleEdit", () => {
                                     </Tooltip>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -490,14 +493,17 @@ describe("SubtitleEdit", () => {
                                     </Tooltip>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -844,14 +850,17 @@ describe("SubtitleEdit", () => {
                                     </Tooltip>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1063,14 +1072,17 @@ describe("SubtitleEdit", () => {
                                     </Tooltip>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1281,14 +1293,20 @@ describe("SubtitleEdit", () => {
                                     </Tooltip>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span className="text-success">Edits are disabled, task is already completed</span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span className="text-success">
+                                            Edits are disabled, task is already completed
+                                        </span>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        disabled
+                                        className="btn btn-primary sbte-complete-subtitle-btn"
+                                    >
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1510,14 +1528,17 @@ describe("SubtitleEdit", () => {
                                     </Tooltip>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>

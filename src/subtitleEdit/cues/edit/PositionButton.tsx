@@ -42,7 +42,8 @@ const PositionButton = (props: Props): ReactElement => (
                         <Menu.Items
                             as="ul"
                             static
-                            className="tw-dropdown-menu tw-transition-all tw-flex tw-flex-row tw-flex-wrap"
+                            className="tw-dropdown-menu tw-transition-all tw-flex tw-flex-row
+                                tw-flex-wrap tw-justify-between tw-px-2"
                         >
                             {
                                 positionIcons.map((positionIcon: PositionIcon, index: number): ReactElement =>

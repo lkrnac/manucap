@@ -54,10 +54,7 @@ describe("CueComments", () => {
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: "5px",
-                    padding: "10px 10px 5px 10px",
-                    marginBottom: "2px",
-                    marginLeft: "2px",
-                    marginRight: "2px",
+                    padding: "10px 10px 5px 10px"
                 }}
             >
                 <div style={{ marginBottom: "8px" }} className="tw-flex tw-items-center tw-justify-between">
@@ -168,6 +165,7 @@ describe("CueComments", () => {
         const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
         expect(actual).toEqual(expected);
     });
+
     it("renders with no comments", () => {
         // GIVEN
         const comments = [] as CueComment[];
@@ -185,10 +183,7 @@ describe("CueComments", () => {
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: "5px",
-                    padding: "10px 10px 5px 10px",
-                    marginBottom: "2px",
-                    marginLeft: "2px",
-                    marginRight: "2px",
+                    padding: "10px 10px 5px 10px"
                 }}
             >
                 <div style={{ marginBottom: "8px" }}>No comments</div>
@@ -234,6 +229,7 @@ describe("CueComments", () => {
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
+
     it("renders delete comment button when user is author", () => {
         // GIVEN
         testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
