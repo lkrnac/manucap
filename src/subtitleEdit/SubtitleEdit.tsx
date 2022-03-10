@@ -96,7 +96,15 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     </div>
                     :
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                flex: "1 1 40%",
+                                display: "flex",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: "10"
+                            }}
+                        >
                             <div className="video-player-wrapper" key={cuesLoadingCounter}>
                                 <EditingVideoPlayer
                                     mp4={props.mp4}

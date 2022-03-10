@@ -145,7 +145,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 10
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -354,7 +362,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 10
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -681,7 +697,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 10
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -892,7 +916,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 10
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -1103,7 +1135,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 10
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -1318,7 +1358,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 10
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -1959,6 +2007,7 @@ describe("SubtitleEdit", () => {
             CueError.TIME_GAP_LIMIT_EXCEEDED,
             CueError.TIME_GAP_OVERLAP
         ];
+
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE", errors: cueError },
             { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
@@ -1970,7 +2019,9 @@ describe("SubtitleEdit", () => {
             { vttCue: new VTTCue(7, 8, "Editing Line 4"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(8, 10, "Editing Line 4"), cueCategory: "DIALOGUE", errors: cueError },
         ] as CueDto[];
+
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         const actualNode = render(
             <Provider store={testingStore}>
