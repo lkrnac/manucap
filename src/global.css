@@ -15,7 +15,7 @@
 /** Badges **/
 
 .tw-badge {
-    @apply tw-font-bold tw-inline-block tw-text-white tw-leading-none tw-whitespace-nowrap tw-rounded tw-text-center tw-text-base tw-py-1 tw-px-2;
+    @apply tw-inline-block tw-text-white tw-leading-none tw-whitespace-nowrap tw-rounded tw-text-center tw-text-base tw-py-1 tw-px-2;
 }
 
 .tw-badge.tw-badge-sm {

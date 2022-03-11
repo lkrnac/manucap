@@ -30,7 +30,7 @@ describe("CaptionOverlapToggle", () => {
        // GIVEN
        const expectedNode = render(
            <button type="button" className="tw-dropdown-item tw-flex tw-items-center tw-justify-between">
-               Overlapping <span className="tw-badge tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
+               Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
            </button>
        );
 
@@ -52,7 +52,7 @@ describe("CaptionOverlapToggle", () => {
                 type="button"
                 className="tw-dropdown-item tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
             >
-                Overlapping <span className="tw-badge tw-badge-sm tw-badge-success">ALLOWED</span>
+                Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">ALLOWED</span>
             </button>
         );
 
@@ -72,7 +72,7 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="tw-dropdown-item tw-flex tw-items-center tw-justify-between">
-                Overlapping <span className="tw-badge tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
+                Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
             </button>
         );
 

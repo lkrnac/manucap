@@ -16,8 +16,18 @@ export const WaveformToggle = (): ReactElement => {
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <>Waveform <span className="tw-badge tw-badge-sm tw-badge-success">SHOWN</span></>
-                    : <>Waveform <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span></>
+                    ? (
+                        <>
+                            Waveform{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">SHOWN</span>
+                        </>
+                    )
+                    : (
+                        <>
+                            Waveform{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                        </>
+                    )
             )}
         />
     );

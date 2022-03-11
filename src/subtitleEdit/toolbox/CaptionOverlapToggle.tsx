@@ -28,8 +28,17 @@ export const CaptionOverlapToggle = (): ReactElement => {
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <>Overlapping <span className="tw-badge tw-badge-sm tw-badge-success">ALLOWED</span></>
-                    : <>Overlapping <span className="tw-badge tw-badge-sm tw-badge-secondary">NOT ALLOWED</span></>
+                    ? (
+                        <>
+                            Overlapping{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">ALLOWED</span>
+                        </>
+                    ) : (
+                        <>
+                            Overlapping{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
+                        </>
+                    )
             )}
         />
     );

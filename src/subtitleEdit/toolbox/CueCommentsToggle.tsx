@@ -16,8 +16,18 @@ export const CueCommentsToggle = (): ReactElement => {
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <>Comments <span className="tw-badge tw-badge-sm tw-badge-success">SHOWN</span></>
-                    : <>Comments <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span></>
+                    ? (
+                        <>
+                            Comments{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">SHOWN</span>
+                        </>
+                    )
+                    : (
+                        <>
+                            Comments{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                        </>
+                    )
             )}
         />
     );

@@ -22,8 +22,18 @@ export const TimecodesLockToggle = (): ReactElement => {
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <>Timecodes <span className="tw-badge tw-badge-sm tw-badge-success">UNLOCKED</span></>
-                    : <>Timecodes <span className="tw-badge tw-badge-sm tw-badge-secondary">LOCKED</span></>
+                    ? (
+                        <>
+                            Timecodes{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">UNLOCKED</span>
+                        </>
+                    )
+                    : (
+                        <>
+                            Timecodes{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">LOCKED</span>
+                        </>
+                    )
             )}
         />
     );

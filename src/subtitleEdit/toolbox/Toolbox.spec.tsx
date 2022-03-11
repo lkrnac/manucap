@@ -90,7 +90,7 @@ describe("Toolbox", () => {
                                             className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
                                         >
                                             Overlapping{" "}
-                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">
+                                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">
                                                 NOT ALLOWED
                                             </span>
                                         </button>
@@ -102,7 +102,9 @@ describe("Toolbox", () => {
                                             className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
                                         >
                                             Comments{" "}
-                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">
+                                                HIDDEN
+                                            </span>
                                         </button>
                                     </li>
                                     <li id="" role="menuitem">
@@ -111,7 +113,9 @@ describe("Toolbox", () => {
                                             className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
                                         >
                                             Waveform{" "}
-                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">
+                                                HIDDEN
+                                            </span>
                                         </button>
                                     </li>
                                 </ul>
@@ -229,7 +233,7 @@ describe("Toolbox", () => {
                                             className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
                                         >
                                             Timecodes{" "}
-                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">
+                                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">
                                                 LOCKED
                                             </span>
                                         </button>
@@ -240,7 +244,7 @@ describe("Toolbox", () => {
                                             className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
                                         >
                                             Overlapping{" "}
-                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">
+                                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">
                                                 NOT ALLOWED
                                             </span>
                                         </button>
@@ -252,7 +256,9 @@ describe("Toolbox", () => {
                                             className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
                                         >
                                             Comments{" "}
-                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">
+                                                HIDDEN
+                                            </span>
                                         </button>
                                     </li>
                                     <li id="" role="menuitem">
@@ -261,7 +267,9 @@ describe("Toolbox", () => {
                                             className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
                                         >
                                             Waveform{" "}
-                                            <span className="tw-badge tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">
+                                                HIDDEN
+                                            </span>
                                         </button>
                                     </li>
                                 </ul>
