@@ -118,7 +118,7 @@
 /** Dropdown **/
 
 .tw-dropdown-menu {
-    @apply tw-border tw-min-w-[160px] tw-border-blue-grey-200 tw-mt-2 tw-text-blue-grey-500 tw-rounded tw-z-50 tw-text-left tw-list-none tw-text-base tw-bg-white tw-shadow-sm tw-select-none tw-py-2;
+    @apply tw-border tw-min-w-[160px] tw-border-blue-grey-200 tw-my-2 tw-text-blue-grey-500 tw-rounded tw-z-50 tw-text-left tw-list-none tw-text-base tw-bg-white tw-shadow-sm tw-select-none tw-py-2;
 }
 
 .tw-dropdown-menu .tw-dropdown-separator {
