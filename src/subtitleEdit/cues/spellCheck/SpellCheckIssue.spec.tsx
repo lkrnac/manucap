@@ -143,33 +143,26 @@ describe("SpellCheckerIssue", () => {
         // GIVEN
         const expectedNode = mount(
             <div
-                style={{ position: "absolute", left: 0, top: 0 }}
-                className="tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-true"
-                id=""
+                className="tw-rounded tw-shadow-lg tw-overflow-hidden tw-border tw-arrow
+                    before:tw-border-b-gray-300 tw-border-gray-300"
+                id="sbte-spell-check-popover"
             >
-                <div className="tw-transition-opacity tw-duration-300 tw-ease-in-out tw-opacity-0">
-                    <div
-                        className="tw-rounded tw-shadow-lg tw-overflow-hidden tw-border tw-arrow
-                            before:tw-border-b-gray-300 tw-border-gray-300"
-                    >
-                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
-                            There is error
-                        </div>
-                        <div>
-                            <Select
-                                menuIsOpen
-                                autoFocus
-                                styles={customStyles}
-                                options={[
-                                    { value: "", label: "Ignore all in this track" },
-                                    { value: "repl1", label: "repl1" },
-                                    { value: "repl2", label: "repl2" },
-                                    { value: "repl3", label: "repl3" }
-                                ]}
-                                classNamePrefix="spellcheck"
-                            />
-                        </div>
-                    </div>
+                <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                    There is error
+                </div>
+                <div>
+                    <Select
+                        menuIsOpen
+                        autoFocus
+                        styles={customStyles}
+                        options={[
+                            { value: "", label: "Ignore all in this track" },
+                            { value: "repl1", label: "repl1" },
+                            { value: "repl2", label: "repl2" },
+                            { value: "repl3", label: "repl3" }
+                        ]}
+                        classNamePrefix="spellcheck"
+                    />
                 </div>
             </div>
         );
@@ -218,31 +211,24 @@ describe("SpellCheckerIssue", () => {
         // GIVEN
         const expectedNode = mount(
             <div
-                style={{ position: "absolute", left: 0, top: 0 }}
-                className="tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-true"
-                id=""
+                className="tw-rounded tw-shadow-lg tw-overflow-hidden tw-border tw-arrow
+                    before:tw-border-b-gray-300 tw-border-gray-300"
+                id="sbte-spell-check-popover"
             >
-                <div className="tw-transition-opacity tw-duration-300 tw-ease-in-out tw-opacity-0">
-                    <div
-                        className="tw-rounded tw-shadow-lg tw-overflow-hidden tw-border tw-arrow
-                            before:tw-border-b-gray-300 tw-border-gray-300"
-                    >
-                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
-                            There is error
-                        </div>
-                        <div>
-                            <Select
-                                menuIsOpen
-                                autoFocus
-                                styles={customStyles}
-                                options={[
-                                    { value: "", label: "Ignore all in this track" },
-                                    { value: "error", label: "error" }
-                                ]}
-                                classNamePrefix="spellcheck"
-                            />
-                        </div>
-                    </div>
+                <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                    There is error
+                </div>
+                <div>
+                    <Select
+                        menuIsOpen
+                        autoFocus
+                        styles={customStyles}
+                        options={[
+                            { value: "", label: "Ignore all in this track" },
+                            { value: "error", label: "error" }
+                        ]}
+                        classNamePrefix="spellcheck"
+                    />
                 </div>
             </div>
         );

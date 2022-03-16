@@ -24,7 +24,7 @@ const PositionButton = (props: Props): ReactElement => (
                             className={"tw-select-none dropdown-toggle btn btn-outline-secondary tw-w-[68px] " +
                                 `${open ? "tw-open-true focus active" : "tw-open-false"}`}
                         >
-                            {findPositionIcon(props.vttCue).iconText}
+                            <span>{findPositionIcon(props.vttCue).iconText}</span>
                             <span className="caret" />
                         </button>
                     </Menu.Button>

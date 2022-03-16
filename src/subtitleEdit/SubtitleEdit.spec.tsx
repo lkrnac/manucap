@@ -129,8 +129,7 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -349,8 +348,7 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -551,8 +549,7 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -617,8 +614,7 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -687,8 +683,7 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -909,8 +904,7 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -1131,8 +1125,7 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -1360,8 +1353,7 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>

@@ -156,7 +156,8 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-10 tw-justify-center sbte-button-toolbar"
+                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center
+                        tw-z-10 tw-justify-center sbte-button-toolbar"
                 >
                     <div>
                         <SubtitleSpecificationsButton />
@@ -192,7 +193,6 @@ describe("Toolbox", () => {
                                 hidden
                                 style={{ display: "none" }}
                             >
-
                                 <ul className="tw-dropdown-menu" id="" role="menu" aria-labelledby="">
                                     <li id="" role="menuitem">
                                         <button className="dotsub-keyboard-shortcuts-button tw-dropdown-item">

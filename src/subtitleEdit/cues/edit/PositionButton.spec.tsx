@@ -25,7 +25,8 @@ describe("PositionButton", () => {
                             className="tw-select-none dropdown-toggle btn
                                 btn-outline-secondary tw-w-[68px] tw-open-false"
                         >
-                            ↓↓<span className="caret" />
+                            <span>↓↓</span>
+                            <span className="caret" />
                         </button>
                     </div>
                 </div>
@@ -62,7 +63,8 @@ describe("PositionButton", () => {
                             className="tw-select-none dropdown-toggle btn
                                 btn-outline-secondary tw-w-[68px] tw-open-true focus active"
                         >
-                            ↓↓<span className="caret" />
+                            <span>↓↓</span>
+                            <span className="caret" />
                         </button>
                     </div>
                 </div>

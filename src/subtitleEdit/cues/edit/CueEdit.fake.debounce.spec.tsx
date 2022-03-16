@@ -164,7 +164,7 @@ describe("CueEdit", () => {
                                                 className="tw-select-none dropdown-toggle btn
                                                     btn-outline-secondary tw-w-[68px] tw-open-false"
                                             >
-                                                ↓↓<span className="caret" />
+                                                <span>↓↓</span><span className="caret" />
                                             </button>
                                         </div>
                                     </div>
@@ -285,7 +285,7 @@ describe("CueEdit", () => {
                                                 className="tw-select-none dropdown-toggle btn
                                                     btn-outline-secondary tw-w-[68px] tw-open-false"
                                             >
-                                                ↓↓<span className="caret" />
+                                                <span>↓↓</span><span className="caret" />
                                             </button>
                                         </div>
                                     </div>
@@ -406,7 +406,7 @@ describe("CueEdit", () => {
                                                 className="tw-select-none dropdown-toggle btn
                                                     btn-outline-secondary tw-w-[68px] tw-open-false"
                                             >
-                                                ↓↓<span className="caret" />
+                                                <span>↓↓</span><span className="caret" />
                                             </button>
                                         </div>
                                     </div>
@@ -510,8 +510,7 @@ describe("CueEdit", () => {
                                         aria-haspopup="true"
                                         aria-expanded="false"
                                     >
-                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary"
-                                        >
+                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
                                             Dialogue<span className="caret" />
                                         </button>
                                     </div>
@@ -531,7 +530,7 @@ describe("CueEdit", () => {
                                                 className="tw-select-none dropdown-toggle btn
                                                     btn-outline-secondary tw-w-[68px] tw-open-false"
                                             >
-                                                ↓↓<span className="caret" />
+                                                <span>↓↓</span><span className="caret" />
                                             </button>
                                         </div>
                                     </div>

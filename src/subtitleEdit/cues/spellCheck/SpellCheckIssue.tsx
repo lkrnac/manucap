@@ -171,7 +171,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 style={styles.popper}
                 {...attributes.popper}
                 className={`tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-${show}`}
-                id="sbte-spell-check-popover"
             >
                 <Transition
                     show={show}
@@ -191,6 +190,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                     <div
                         className="tw-rounded tw-shadow-lg tw-overflow-hidden
                             tw-border tw-arrow before:tw-border-b-gray-300 tw-border-gray-300"
+                        id="sbte-spell-check-popover"
                     >
                         <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
                             {spellCheckMatch.message}
