@@ -21,7 +21,7 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-10
+                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100]
                         tw-justify-center sbte-button-toolbar"
                 >
                     <div>
@@ -157,7 +157,7 @@ describe("Toolbox", () => {
             <Provider store={testingStore}>
                 <div
                     className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center
-                        tw-z-10 tw-justify-center sbte-button-toolbar"
+                        tw-z-[100] tw-justify-center sbte-button-toolbar"
                 >
                     <div>
                         <SubtitleSpecificationsButton />

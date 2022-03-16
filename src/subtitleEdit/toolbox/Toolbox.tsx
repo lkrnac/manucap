@@ -27,7 +27,7 @@ const Toolbox = (props: Props): ReactElement => {
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
     return (
-        <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-10 tw-justify-center sbte-button-toolbar">
+        <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100] tw-justify-center sbte-button-toolbar">
             <div>
                 <SubtitleSpecificationsButton />
             </div>

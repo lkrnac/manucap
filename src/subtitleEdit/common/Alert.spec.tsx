@@ -5,16 +5,14 @@ describe("Alert", () => {
     it("renders children with show class if show is true", () => {
         // GIVEN
         const expectedNode = render(
-            <div className="tw-alert tw-alert-component test-class">
+            <div className="tw-alert tw-alert-component">
                 <div>dummyChild</div>
             </div>
         );
 
-        const expResult = true;
-
         // WHEN
         const actualNode = render(
-            <Alert show={expResult} alertClass="test-class">
+            <Alert show>
                 <div>dummyChild</div>
             </Alert>
         );
@@ -29,7 +27,26 @@ describe("Alert", () => {
 
         // WHEN
         const actualNode = render(
-            <Alert show={false} alertClass="test-class">
+            <Alert show={false}>
+                <div>dummyChild</div>
+            </Alert>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toBe(expectedNode.container.outerHTML);
+    });
+
+    it("renders with custom alert class", () => {
+        // GIVEN
+        const expectedNode = render(
+            <div className="tw-alert tw-alert-component test-class">
+                <div>dummyChild</div>
+            </div>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Alert show alertClass="test-class">
                 <div>dummyChild</div>
             </Alert>
         );
