@@ -40,7 +40,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 <div style={{ display: "flex", marginRight: "20px" }}>
                     <div style={{ flex: 1 }}>
                         <div>
-                            <label><strong> Audio Description:&nbsp;</strong></label>
+                            <label><strong> Audio Tags:&nbsp;</strong></label>
                             <label>{props.subTitleSpecifications.audioDescription ? "Yes" : "No"}</label>
                         </div>
                         <div>
@@ -76,7 +76,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                             </label>
                         </div>
                         <div>
-                            <label><strong>Max Characters Per Line:&nbsp;</strong></label>
+                            <label><strong>Max Characters Per Caption Line:&nbsp;</strong></label>
                             <label>
                                 {
                                     props.subTitleSpecifications.maxCharactersPerLine

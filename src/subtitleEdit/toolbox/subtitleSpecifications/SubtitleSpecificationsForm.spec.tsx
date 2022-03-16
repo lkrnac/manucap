@@ -73,7 +73,7 @@ describe("SubtitleSpecificationsForm", () => {
                 <div style={{ display: "flex", marginRight: "20px" }}>
                     <div style={{ flex: 1 }}>
                         <div>
-                            <label><strong> Audio Description:&nbsp;</strong></label>
+                            <label><strong> Audio Tags:&nbsp;</strong></label>
                             <label>Yes</label>
                         </div>
                         <div>
@@ -99,7 +99,7 @@ describe("SubtitleSpecificationsForm", () => {
                             <label>1</label>
                         </div>
                         <div>
-                            <label><strong>Max Characters Per Line:&nbsp;</strong></label>
+                            <label><strong>Max Characters Per Caption Line:&nbsp;</strong></label>
                             <label>40</label>
                         </div>
                         <div>
@@ -169,7 +169,7 @@ describe("SubtitleSpecificationsForm", () => {
                 <div style={{ display: "flex", marginRight: "20px" }}>
                     <div style={{ flex: 1 }}>
                         <div>
-                            <label><strong> Audio Description:&nbsp;</strong></label>
+                            <label><strong> Audio Tags:&nbsp;</strong></label>
                             <label>Yes</label>
                         </div>
                         <div>
@@ -195,7 +195,7 @@ describe("SubtitleSpecificationsForm", () => {
                             <label>n/a</label>
                         </div>
                         <div>
-                            <label><strong>Max Characters Per Line:&nbsp;</strong></label>
+                            <label><strong>Max Characters Per Caption Line:&nbsp;</strong></label>
                             <label>n/a</label>
                         </div>
                         <div>
