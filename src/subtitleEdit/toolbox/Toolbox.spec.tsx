@@ -35,7 +35,7 @@ describe("Toolbox", () => {
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <Dropdown>
-                        <Dropdown.Toggle id="cue-line-category" variant="secondary">
+                        <Dropdown.Toggle id="toolbox-actions" variant="secondary">
                             <i className="fas fa-ellipsis-h" />
                         </Dropdown.Toggle>
                         <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
@@ -101,7 +101,7 @@ describe("Toolbox", () => {
                     <ExportSourceTrackCuesButton handleExport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <Dropdown>
-                        <Dropdown.Toggle id="cue-line-category" variant="secondary">
+                        <Dropdown.Toggle id="toolbox-actions" variant="secondary">
                             <i className="fas fa-ellipsis-h" />
                         </Dropdown.Toggle>
                         <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
