@@ -26,15 +26,6 @@ export interface MockedDebouncedFunction extends Function {
     cancel: Function;
 }
 
-export const findByTextIgnoreTags = (text: string, node: Element): boolean => {
-    const hasText = (node: Element): boolean => node.textContent === text;
-    const nodeHasText = hasText(node);
-    const childrenDontHaveText = Array.from(node.children).every(
-        (child) => !hasText(child)
-    );
-    return nodeHasText && childrenDontHaveText;
-};
-
 export const renderWithHeadlessPortal = (element: ReactElement): RenderResult => {
     const holder = document.createElement("div");
     holder.setAttribute("id", "headlessui-portal-root");

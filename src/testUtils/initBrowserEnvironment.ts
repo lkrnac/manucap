@@ -8,9 +8,7 @@ configure({ adapter: new Adapter() });
 
 const intersectionObserverMock = () => ({
     disconnect: () => null,
-    observe: () => null,
-    takeRecords: () => null,
-    unobserve: () => null
+    observe: () => null
 });
 
 window.IntersectionObserver = jest.fn().mockImplementation(intersectionObserverMock);
