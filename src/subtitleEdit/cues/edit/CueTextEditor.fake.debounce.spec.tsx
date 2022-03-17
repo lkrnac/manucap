@@ -1182,7 +1182,6 @@ describe("CueTextEditor", () => {
             fireEvent.click(actualNode.container.querySelectorAll(".sbte-text-with-error")[0]);
 
             // THEN
-            console.log(actualNode.container.outerHTML);
             expect(false).toBeFalsy();
         });
 

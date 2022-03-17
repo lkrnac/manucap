@@ -37,8 +37,6 @@ const Toolbox = (props: Props): ReactElement => {
     const transformOrigin = (attributes.popper && attributes.popper["data-popper-placement"]) === "top-start" ?
         "tw-origin-bottom-left" : "tw-origin-top-left";
 
-    console.log(styles, attributes);
-
     return (
         <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100] tw-justify-center sbte-button-toolbar">
             <div>

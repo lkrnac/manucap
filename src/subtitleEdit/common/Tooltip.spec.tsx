@@ -16,12 +16,12 @@ describe("Tooltip", () => {
             <div id="" aria-expanded="false">
                 <span>Testing</span>
             </div>
-        )
+        );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML)
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
         expect(actual).toBe(expectedNode.container.outerHTML);
-    })
+    });
 
     it("renders with tooltip on mouseover", () => {
         // GIVEN
@@ -45,7 +45,10 @@ describe("Tooltip", () => {
                     className="tw-z-40 tw-popper-wrapper"
                     id=""
                 >
-                    <div className="tw-transition-opacity tw-duration-300 tw-pointer-events-none tw-ease-in-out tw-opacity-0">
+                    <div
+                        className="tw-transition-opacity tw-duration-300 tw-pointer-events-none
+                            tw-ease-in-out tw-opacity-0"
+                    >
                         <div className="tw-tooltip tw-arrow before:tw-border-b-blue-grey-700">
                             Test message
                         </div>
@@ -58,7 +61,7 @@ describe("Tooltip", () => {
         fireEvent.mouseOver(actualNode.container.querySelector("span") as Element);
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML)
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
         expect(actual).toBe(expectedNode.container.outerHTML);
     });
 
@@ -88,7 +91,10 @@ describe("Tooltip", () => {
                     className="tw-z-40 tw-popper-wrapper"
                     id=""
                 >
-                    <div className="tw-transition-opacity tw-duration-300 tw-pointer-events-none tw-ease-in-out tw-opacity-0">
+                    <div
+                        className="tw-transition-opacity tw-duration-300
+                            tw-pointer-events-none tw-ease-in-out tw-opacity-0"
+                    >
                         <div className="tw-tooltip tw-arrow before:tw-border-b-blue-grey-700">
                             Test message
                         </div>
@@ -101,7 +107,7 @@ describe("Tooltip", () => {
         fireEvent.mouseOver(actualNode.container.querySelector("span") as Element);
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML)
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
         expect(actual).toBe(expectedNode.container.outerHTML);
     });
 
@@ -128,9 +134,9 @@ describe("Tooltip", () => {
         fireEvent.mouseOver(actualNode.container.querySelector("span") as Element);
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML)
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
         expect(actual).toBe(expectedNode.container.outerHTML);
-    })
+    });
 
     it("closes tooltip on mouse leave", () => {
         // GIVEN
@@ -144,14 +150,14 @@ describe("Tooltip", () => {
             <div id="" aria-expanded="false">
                 <span>Testing</span>
             </div>
-        )
+        );
 
         // WHEN
         fireEvent.mouseOver(actualNode.container.querySelector("span") as Element);
         fireEvent.mouseLeave(actualNode.container.querySelector("span") as Element);
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML)
+        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
         expect(actual).toBe(expectedNode.container.outerHTML);
-    })
-})
+    });
+});

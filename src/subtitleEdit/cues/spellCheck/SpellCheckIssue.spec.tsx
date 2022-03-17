@@ -143,7 +143,7 @@ describe("SpellCheckerIssue", () => {
         // GIVEN
         const expectedNode = mount(
             <div
-                className="tw-rounded tw-shadow-lg tw-overflow-hidden tw-border tw-arrow
+                className="tw-rounded tw-shadow-sm tw-overflow-hidden tw-border tw-arrow
                     before:tw-border-b-gray-300 tw-border-gray-300"
                 id="sbte-spell-check-popover"
             >
@@ -211,7 +211,7 @@ describe("SpellCheckerIssue", () => {
         // GIVEN
         const expectedNode = mount(
             <div
-                className="tw-rounded tw-shadow-lg tw-overflow-hidden tw-border tw-arrow
+                className="tw-rounded tw-shadow-sm tw-overflow-hidden tw-border tw-arrow
                     before:tw-border-b-gray-300 tw-border-gray-300"
                 id="sbte-spell-check-popover"
             >

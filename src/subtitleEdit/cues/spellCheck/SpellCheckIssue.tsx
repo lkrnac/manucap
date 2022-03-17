@@ -188,7 +188,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                     beforeLeave={(): void => onExitPopover(props)}
                 >
                     <div
-                        className="tw-rounded tw-shadow-lg tw-overflow-hidden
+                        className="tw-rounded tw-shadow-sm tw-overflow-hidden
                             tw-border tw-arrow before:tw-border-b-gray-300 tw-border-gray-300"
                         id="sbte-spell-check-popover"
                     >

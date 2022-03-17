@@ -1662,8 +1662,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
 
-        // WHEN
-        console.log(actualNode.html());
+        // WHE
         actualNode.find(".sbte-export-button").simulate("click");
 
         // THEN
