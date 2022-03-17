@@ -31,16 +31,13 @@ const Toolbox = (props: Props): ReactElement => {
     const [referenceElement, setReferenceElement] = useState<HTMLElement | null>();
     const [popperElement, setPopperElement] = useState<HTMLElement | null>();
     const { styles, attributes } = usePopper(referenceElement, popperElement, {
-        placement: "bottom-start",
-        modifiers: [
-            {
-                name: "offset",
-                options: {
-                    offset: [0, 10]
-                },
-            }
-        ]
+        placement: "bottom-start"
     });
+
+    const transformOrigin = (attributes.popper && attributes.popper["data-popper-placement"]) === "top-start" ?
+        "tw-origin-bottom-left" : "tw-origin-top-left";
+
+    console.log(styles, attributes);
 
     return (
         <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100] tw-justify-center sbte-button-toolbar">
@@ -87,7 +84,7 @@ const Toolbox = (props: Props): ReactElement => {
                             <Transition
                                 unmount={false}
                                 show={open}
-                                className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-bottom-left"
+                                className={`tw-transition-all tw-duration-300 tw-ease-in-out ${transformOrigin}`}
                                 enterFrom="tw-opacity-0 tw-scale-75"
                                 enterTo="tw-opacity-100 tw-scale-100"
                                 leaveFrom="tw-opacity-100 tw-scale-100"
