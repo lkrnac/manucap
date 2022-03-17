@@ -53,7 +53,7 @@ describe("Toolbox", () => {
                             className="tw-min-w-[240px] tw-w-[240px]"
                         >
                             <div
-                                className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-bottom-left
+                                className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left
                                     tw-opacity-100 tw-scale-100"
                                 hidden
                                 style={{ display: "none" }}
@@ -191,7 +191,7 @@ describe("Toolbox", () => {
                             className="tw-min-w-[240px] tw-w-[240px]"
                         >
                             <div
-                                className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-bottom-left
+                                className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left
                                     tw-opacity-100 tw-scale-100"
                                 hidden
                                 style={{ display: "none" }}
