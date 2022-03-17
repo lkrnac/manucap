@@ -207,7 +207,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                         </button>
                                     </Tooltip>
                                 </div>
-                                <div>
+                                <div hidden={editingTrack?.type !== "TRANSLATION"}>
                                     <Tooltip
                                         message="Scroll to last translated subtitle"
                                         placement="top"
@@ -216,7 +216,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                             data-testid="sbte-jump-to-last-translated-cue-button"
                                             className="btn btn-secondary"
                                             type="button"
-                                            hidden={editingTrack?.type !== "TRANSLATION"}
                                             onClick={(): void => {
                                                 dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
                                             }}

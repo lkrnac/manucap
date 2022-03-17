@@ -260,7 +260,7 @@ describe("SubtitleEdit", () => {
                                         </button>
                                     </Tooltip>
                                 </div>
-                                <div>
+                                <div hidden>
                                     <Tooltip
                                         message="Scroll to last translated subtitle"
                                         placement="top"
@@ -269,7 +269,6 @@ describe("SubtitleEdit", () => {
                                             data-testid="sbte-jump-to-last-translated-cue-button"
                                             className="btn btn-secondary"
                                             type="button"
-                                            hidden
                                         >
                                             <i className="fa fa-language" />
                                         </button>
@@ -461,7 +460,7 @@ describe("SubtitleEdit", () => {
                                         </button>
                                     </Tooltip>
                                 </div>
-                                <div>
+                                <div hidden>
                                     <Tooltip
                                         message="Scroll to last translated subtitle"
                                         placement="top"
@@ -470,7 +469,6 @@ describe("SubtitleEdit", () => {
                                             data-testid="sbte-jump-to-last-translated-cue-button"
                                             className="btn btn-secondary"
                                             type="button"
-                                            hidden
                                         >
                                             <i className="fa fa-language" />
                                         </button>
@@ -815,7 +813,7 @@ describe("SubtitleEdit", () => {
                                         </button>
                                     </Tooltip>
                                 </div>
-                                <div>
+                                <div hidden>
                                     <Tooltip
                                         message="Scroll to last translated subtitle"
                                         placement="top"
@@ -824,7 +822,6 @@ describe("SubtitleEdit", () => {
                                             data-testid="sbte-jump-to-last-translated-cue-button"
                                             className="btn btn-secondary"
                                             type="button"
-                                            hidden
                                         >
                                             <i className="fa fa-language" />
                                         </button>
@@ -1036,7 +1033,7 @@ describe("SubtitleEdit", () => {
                                         </button>
                                     </Tooltip>
                                 </div>
-                                <div>
+                                <div hidden>
                                     <Tooltip
                                         message="Scroll to last translated subtitle"
                                         placement="top"
@@ -1045,7 +1042,6 @@ describe("SubtitleEdit", () => {
                                             data-testid="sbte-jump-to-last-translated-cue-button"
                                             className="btn btn-secondary"
                                             type="button"
-                                            hidden
                                         >
                                             <i className="fa fa-language" />
                                         </button>
@@ -1256,7 +1252,7 @@ describe("SubtitleEdit", () => {
                                         </button>
                                     </Tooltip>
                                 </div>
-                                <div>
+                                <div hidden>
                                     <Tooltip
                                         message="Scroll to last translated subtitle"
                                         placement="top"
@@ -1265,7 +1261,6 @@ describe("SubtitleEdit", () => {
                                             data-testid="sbte-jump-to-last-translated-cue-button"
                                             className="btn btn-secondary"
                                             type="button"
-                                            hidden
                                         >
                                             <i className="fa fa-language" />
                                         </button>
@@ -1490,7 +1485,7 @@ describe("SubtitleEdit", () => {
                                         </button>
                                     </Tooltip>
                                 </div>
-                                <div>
+                                <div hidden>
                                     <Tooltip
                                         message="Scroll to last translated subtitle"
                                         placement="top"
@@ -1499,7 +1494,6 @@ describe("SubtitleEdit", () => {
                                             data-testid="sbte-jump-to-last-translated-cue-button"
                                             className="btn btn-secondary"
                                             type="button"
-                                            hidden
                                         >
                                             <i className="fa fa-language" />
                                         </button>
