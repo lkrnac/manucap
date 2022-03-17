@@ -19,6 +19,7 @@ import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
 import MergeEditor from "./cues/merge/MergeEditor";
+import { waveformVisibleSlice } from "./player/waveformSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -71,6 +72,9 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         (): void => {
             dispatch(changeScrollPosition(ScrollPosition.FIRST));
+            if (props.duration && props.duration <= 1800) {
+                dispatch(waveformVisibleSlice.actions.setWaveformVisible(true));
+            }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once
