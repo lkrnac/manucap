@@ -169,14 +169,14 @@
 .tw-popper-wrapper[data-popper-placement="top"] .tw-arrow::before {
     border-width: 0 4px 4px;
     transform: rotate(180deg);
-    @apply tw--bottom-[4px] tw--ml-[2px];
+    @apply tw-bottom-[4px] tw--ml-[2px];
     right: calc(50% - 4px);
 }
 
 .tw-popper-wrapper[data-popper-placement="top-end"] .tw-arrow::before {
     border-width: 0 4px 4px;
     transform: rotate(180deg);
-    @apply tw--bottom-[4px] tw--ml-[2px];
+    @apply tw-bottom-[4px] tw--ml-[2px];
     left: calc(100% - 12px);
 }
 

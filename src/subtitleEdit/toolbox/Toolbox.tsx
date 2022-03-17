@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
@@ -15,6 +15,7 @@ import WaveformToggle from "./WaveformToggle";
 import { Menu, Transition } from "@headlessui/react";
 import TimecodesLockToggle from "./TimecodesLockToggle";
 import SyncCuesButton from "./SyncCuesButton";
+import { usePopper } from "react-popper";
 
 interface Props {
     handleExportFile: () => void;
@@ -26,6 +27,21 @@ const Toolbox = (props: Props): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
+
+    const [referenceElement, setReferenceElement] = useState<HTMLElement | null>();
+    const [popperElement, setPopperElement] = useState<HTMLElement | null>();
+    const { styles, attributes } = usePopper(referenceElement, popperElement, {
+        placement: "bottom-start",
+        modifiers: [
+            {
+                name: "offset",
+                options: {
+                    offset: [0, 10]
+                },
+            }
+        ]
+    });
+
     return (
         <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100] tw-justify-center sbte-button-toolbar">
             <div>
@@ -55,13 +71,19 @@ const Toolbox = (props: Props): ReactElement => {
                     <>
                         <Menu.Button id="cue-line-category" as="div" className="tw-cursor-pointer">
                             <button
+                                ref={setReferenceElement}
                                 className={`tw-select-none${open ? " focus active" : ""}` +
                                     " dropdown-toggle btn btn-secondary"}
                             >
                                 <i className="fas fa-ellipsis-h" />
                             </button>
                         </Menu.Button>
-                        <div className="tw-absolute tw-bottom-full tw-left-0 tw-min-w-[240px] tw-w-[240px]">
+                        <div
+                            ref={setPopperElement}
+                            style={styles.popper}
+                            {...attributes.popper}
+                            className="tw-min-w-[240px] tw-w-[240px]"
+                        >
                             <Transition
                                 unmount={false}
                                 show={open}

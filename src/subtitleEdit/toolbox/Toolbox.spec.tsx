@@ -49,8 +49,8 @@ describe("Toolbox", () => {
                             </button>
                         </div>
                         <div
-                            className="tw-absolute tw-bottom-full tw-left-0
-                                tw-min-w-[240px] tw-w-[240px]"
+                            style={{ position: "absolute", left: 0, top: 0 }}
+                            className="tw-min-w-[240px] tw-w-[240px]"
                         >
                             <div
                                 className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-bottom-left
@@ -186,7 +186,10 @@ describe("Toolbox", () => {
                                 <i className="fas fa-ellipsis-h" />
                             </button>
                         </div>
-                        <div className="tw-absolute tw-bottom-full tw-left-0 tw-min-w-[240px] tw-w-[240px]">
+                        <div
+                            style={{ position: "absolute", left: 0, top: 0 }}
+                            className="tw-min-w-[240px] tw-w-[240px]"
+                        >
                             <div
                                 className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-bottom-left
                                     tw-opacity-100 tw-scale-100"
