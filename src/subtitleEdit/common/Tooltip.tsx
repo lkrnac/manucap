@@ -62,7 +62,7 @@ const Tooltip = (props: Props): ReactElement => {
                     ref={setPopperElement}
                     style={styles.popper}
                     {...attributes.popper}
-                    className="tw-z-40 tw-popper-wrapper"
+                    className="tw-z-40 tw-popper-wrapper tw-max-w-[200px]"
                 >
                     <Transition
                         show={tooltipOpen}

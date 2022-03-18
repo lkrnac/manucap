@@ -261,7 +261,7 @@ describe("AddCueLineButton", () => {
                 </div>
                 <div
                     style={{ position: "absolute", left: 0, top: 0 }}
-                    className="tw-z-40 tw-popper-wrapper"
+                    className="tw-z-40 tw-popper-wrapper tw-max-w-[200px]"
                     id=""
                 >
                     <div
