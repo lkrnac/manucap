@@ -424,9 +424,10 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>): void => {
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         dispatch(cuesSlice.actions.updateCues({ cues }));
         dispatch(updateMatchedCues());
+        callSaveTrack(dispatch, getState);
     };
 
 export const applyShiftTimeByPosition = (position: string, cueIndex: number, shiftTime: number): AppThunk =>
