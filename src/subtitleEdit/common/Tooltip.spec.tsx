@@ -6,11 +6,11 @@ import Tooltip from "./Tooltip";
 jest.mock("react-popper", () => ({
     ...(jest.requireActual("react-popper")),
     usePopper: () => ({
-        styles: { popper: {} },
-        attributes: { popper: {} },
+        styles: { popper: {}},
+        attributes: { popper: {}},
         update: jest.fn()
     })
-}))
+}));
 
 describe("Tooltip", () => {
     it("renders without tooltip", () => {
