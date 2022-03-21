@@ -39,28 +39,18 @@ const Toolbox = (props: Props): ReactElement => {
 
     return (
         <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100] tw-justify-center sbte-button-toolbar">
-            <div>
-                <SubtitleSpecificationsButton />
-            </div>
-            <div>
-                <SearchReplaceButton />
-            </div>
-            <div>
-                <ImportTrackCuesButton
-                    handleImport={props.handleImportFile}
-                    disabled={editingTask?.editDisabled}
-                />
-            </div>
-            { isTranslation ? (
-                <div>
-                    <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} />
-                </div>
-            ) : null }
-            <div>
-                <ExportTrackCuesButton
-                    handleExport={props.handleExportFile}
-                />
-            </div>
+            <SubtitleSpecificationsButton />
+            <SearchReplaceButton />
+            <ImportTrackCuesButton
+                handleImport={props.handleImportFile}
+                disabled={editingTask?.editDisabled}
+            />
+            {isTranslation ? (
+                <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} />
+            ) : null}
+            <ExportTrackCuesButton
+                handleExport={props.handleExportFile}
+            />
             <Menu as="div" className="md:tw-relative tw-dropdown-wrapper">
                 {({ open }): ReactElement => (
                     <>

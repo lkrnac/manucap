@@ -10,6 +10,7 @@ const SearchReplaceButton = (): ReactElement => {
         <Tooltip
             tooltipId="searchReplaceBtnTooltip"
             message="Search/Replace"
+            offset={[-7, 10]}
         >
             <button
                 type="button"

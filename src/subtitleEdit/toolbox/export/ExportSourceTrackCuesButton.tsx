@@ -10,6 +10,7 @@ const ExportSourceTrackCuesButton = (props: Props): ReactElement => {
         <Tooltip
             tooltipId="exportSourceFileBtnTooltip"
             message="Export Source File"
+            offset={[-7, 10]}
         >
             <button
                 type="button"

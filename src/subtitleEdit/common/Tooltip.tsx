@@ -56,32 +56,36 @@ const Tooltip = (props: Props): ReactElement => {
                     return cloneElement(child as ReactElement, { ref: setReferenceElement });
                 })}
             </Popover.Button>
-            {tooltipOpen && (
-                <Popover.Panel
-                    static
-                    ref={setPopperElement}
-                    style={styles.popper}
-                    {...attributes.popper}
-                    className="tw-z-40 tw-popper-wrapper tw-max-w-[200px]"
-                >
-                    <Transition
-                        show={tooltipOpen}
-                        appear={false}
-                        className="tw-transition-opacity tw-duration-300 tw-pointer-events-none tw-ease-in-out"
-                        enterFrom="tw-opacity-0"
-                        enterTo="tw-opacity-100"
-                        leaveFrom="tw-opacity-100"
-                        leaveTo="tw-opacity-0"
-                        beforeEnter={async (): Promise<void> => {
-                            if (update) await update();
-                        }}
+            {
+                tooltipOpen ? (
+                    <Popover.Panel
+                        static
+                        ref={setPopperElement}
+                        style={styles.popper}
+                        {...attributes.popper}
+                        className="tw-z-40 tw-popper-wrapper tw-max-w-[200px]"
                     >
-                        <div className="tw-tooltip tw-arrow before:tw-border-b-blue-grey-700">
-                            {props.message}
-                        </div>
-                    </Transition>
-                </Popover.Panel>
-            )}
+                        <Transition
+                            show={tooltipOpen}
+                            appear={false}
+                            className="tw-transition-opacity tw-duration-300 tw-pointer-events-none tw-ease-in-out"
+                            enterFrom="tw-opacity-0"
+                            enterTo="tw-opacity-100"
+                            leaveFrom="tw-opacity-100"
+                            leaveTo="tw-opacity-0"
+                            beforeEnter={async (): Promise<void> => {
+                                if (update) {
+                                    await update();
+                                }
+                            }}
+                        >
+                            <div className="tw-tooltip tw-arrow before:tw-border-b-blue-grey-700">
+                                {props.message}
+                            </div>
+                        </Transition>
+                    </Popover.Panel>
+                ) : undefined
+            }
         </Popover>
     );
 };

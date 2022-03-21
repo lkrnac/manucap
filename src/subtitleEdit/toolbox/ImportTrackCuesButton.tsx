@@ -11,6 +11,7 @@ const ImportTrackCuesButton = (props: Props): ReactElement => {
         <Tooltip
             tooltipId="importFileBtnTooltip"
             message="Import File"
+            offset={[-7, 10]}
         >
             <button
                 type="button"

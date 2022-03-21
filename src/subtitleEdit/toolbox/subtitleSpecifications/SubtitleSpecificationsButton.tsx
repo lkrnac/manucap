@@ -20,6 +20,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
             <Tooltip
                 tooltipId="subtitleSpecsBtnTooltip"
                 message="Subtitle Specifications"
+                offset={[-7, 10]}
             >
                 <button
                     className="dotsub-subtitle-specifications-button btn btn-secondary"

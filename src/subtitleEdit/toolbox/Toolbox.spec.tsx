@@ -24,18 +24,10 @@ describe("Toolbox", () => {
                     className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100]
                         tw-justify-center sbte-button-toolbar"
                 >
-                    <div>
-                        <SubtitleSpecificationsButton />
-                    </div>
-                    <div>
-                        <SearchReplaceButton />
-                    </div>
-                    <div>
-                        <ImportTrackCuesButton handleImport={jest.fn()} />
-                    </div>
-                    <div>
-                        <ExportTrackCuesButton handleExport={jest.fn()} />
-                    </div>
+                    <SubtitleSpecificationsButton />
+                    <SearchReplaceButton />
+                    <ImportTrackCuesButton handleImport={jest.fn()} />
+                    <ExportTrackCuesButton handleExport={jest.fn()} />
                     <div className="md:tw-relative tw-dropdown-wrapper">
                         <div
                             id=""
@@ -159,21 +151,11 @@ describe("Toolbox", () => {
                     className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center
                         tw-z-[100] tw-justify-center sbte-button-toolbar"
                 >
-                    <div>
-                        <SubtitleSpecificationsButton />
-                    </div>
-                    <div>
-                        <SearchReplaceButton />
-                    </div>
-                    <div>
-                        <ImportTrackCuesButton handleImport={jest.fn()} />
-                    </div>
-                    <div>
-                        <ExportSourceTrackCuesButton handleExport={jest.fn()} />
-                    </div>
-                    <div>
-                        <ExportTrackCuesButton handleExport={jest.fn()} />
-                    </div>
+                    <SubtitleSpecificationsButton />
+                    <SearchReplaceButton />
+                    <ImportTrackCuesButton handleImport={jest.fn()} />
+                    <ExportSourceTrackCuesButton handleExport={jest.fn()} />
+                    <ExportTrackCuesButton handleExport={jest.fn()} />
                     <div className="md:tw-relative tw-dropdown-wrapper">
                         <div
                             id=""

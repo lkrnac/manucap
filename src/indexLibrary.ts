@@ -9,7 +9,6 @@ import Tooltip from "./subtitleEdit/common/Tooltip";
 import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 import { updateSubtitleUser } from "./subtitleEdit/userSlices";
-import { removeHeadlessAttributes, getHeadlessDialog, renderWithHeadlessPortal } from "./testUtils/testUtils";
 
 const Actions = ({
     updateEditingTrack,
@@ -20,12 +19,6 @@ const Actions = ({
     updateSubtitleUser
 });
 
-const Testing = ({
-    removeHeadlessAttributes,
-    getHeadlessDialog,
-    renderWithHeadlessPortal
-});
-
 export {
     VideoPlayer,
     Reducers,
@@ -33,7 +26,6 @@ export {
     Actions,
     TransitionDialog,
     Tooltip,
-    Alert,
-    Testing
+    Alert
 };
 

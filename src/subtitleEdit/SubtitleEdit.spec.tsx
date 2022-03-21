@@ -40,8 +40,10 @@ jest.mock("lodash", () => ({
     isEmpty: jest.requireActual("lodash/isEmpty")
 }));
 
+// We are mocking here.
 // eslint-disable-next-line react/display-name
 jest.mock("./cues/CueErrorAlert", () => (): ReactElement => <div>CueErrorAlert</div>);
+// We are mocking here.
 // eslint-disable-next-line react/display-name
 jest.mock("./common/TransitionDialog", () => (): ReactElement => <div>TransitionDialog</div>);
 jest.mock("@headlessui/react", () => ({
