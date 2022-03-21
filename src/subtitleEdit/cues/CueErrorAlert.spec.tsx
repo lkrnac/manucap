@@ -5,7 +5,6 @@ import { fireEvent, render } from "@testing-library/react";
 import { CueError } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { setValidationErrors } from "./edit/cueEditorSlices";
-import Alert from "../common/Alert";
 import CueErrorAlert from "./CueErrorAlert";
 import { act } from "react-dom/test-utils";
 
@@ -92,10 +91,16 @@ describe("CueErrorAlert", () => {
         // GIVEN
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
         const expectedNode = render(
-            <Alert key="cueErrorsAlert" alertClass="tw-alert-danger sbte-cue-errors-alert" dismissible show>
+            <div className="tw-alert tw-alert-component tw-alert-danger sbte-cue-errors-alert">
+                <button
+                    className="tw-absolute tw-right-7 tw-top-3 tw-font-bold tw-text-red-900 tw-text-opacity-60
+                        tw-text-sm tw-alert-close"
+                >
+                    <span aria-hidden>x</span>
+                </button>
                 <span>Unable to complete action due to the following error(s):</span><br />
                 <div>&#8226; {CueError.LINE_CHAR_LIMIT_EXCEEDED}<br /></div>
-            </Alert>
+            </div>
         );
         const { container, rerender } = render(
             <Provider store={testingStore}>
