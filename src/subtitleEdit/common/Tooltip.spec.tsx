@@ -2,6 +2,16 @@ import { fireEvent, render } from "@testing-library/react";
 import { removeHeadlessAttributes } from "../../testUtils/testUtils";
 import Tooltip from "./Tooltip";
 
+// @ts-ignore We are mocking here.
+jest.mock("react-popper", () => ({
+    ...(jest.requireActual("react-popper")),
+    usePopper: () => ({
+        styles: { popper: {} },
+        attributes: { popper: {} },
+        update: jest.fn()
+    })
+}))
+
 describe("Tooltip", () => {
     it("renders without tooltip", () => {
         // GIVEN
@@ -41,7 +51,6 @@ describe("Tooltip", () => {
                     <span>Testing</span>
                 </div>
                 <div
-                    style={{ position: "absolute", left: 0, top: 0 }}
                     className="tw-z-40 tw-popper-wrapper tw-max-w-[200px]"
                     id=""
                 >
@@ -87,7 +96,6 @@ describe("Tooltip", () => {
                     <span>Testing</span>
                 </div>
                 <div
-                    style={{ position: "absolute", left: 0, top: 0 }}
                     className="tw-z-40 tw-popper-wrapper tw-max-w-[200px]"
                     id=""
                 >
