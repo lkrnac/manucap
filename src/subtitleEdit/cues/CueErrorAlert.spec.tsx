@@ -24,7 +24,8 @@ describe("CueErrorAlert", () => {
         const expectedNode = render(
             <div
                 className="tw-alert tw-alert-component tw-alert-danger sbte-cue-errors-alert
-                    tw-ease-out tw-duration-300 tw-opacity-0">
+                    tw-ease-out tw-duration-300 tw-opacity-0"
+            >
                 <button
                     className="tw-absolute tw-right-7 tw-top-3 tw-font-bold tw-text-red-900 tw-text-opacity-60
                         tw-text-sm tw-alert-close"
