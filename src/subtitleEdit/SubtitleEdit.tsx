@@ -58,19 +58,9 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     );
 
     useEffect(
-        () => {
-            dispatch(setSaveTrack(props.onSave));
-        }, [ dispatch, props.onSave ]
-    );
-
-    useEffect(
-        () => {
-            dispatch(setSpellCheckDomain(props.spellCheckerDomain));
-        }, [ dispatch, props.spellCheckerDomain ]
-    );
-
-    useEffect(
         (): void => {
+            dispatch(setSaveTrack(props.onSave));
+            dispatch(setSpellCheckDomain(props.spellCheckerDomain));
             dispatch(changeScrollPosition(ScrollPosition.FIRST));
             if (props.duration && props.duration <= 1800) {
                 dispatch(waveformVisibleSlice.actions.setWaveformVisible(true));
