@@ -2,7 +2,6 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { SubtitleEditAction, Task, Track } from "./model";
 import { AppThunk } from "./subtitleEditReducers";
 import { Dispatch } from "react";
-import { callSaveTrack } from "./cues/saveSlices";
 
 interface EditingTrackAction extends SubtitleEditAction {
     editingTrack: Track;
@@ -37,9 +36,8 @@ export const taskSlice = createSlice({
 });
 
 export const updateEditingTrack = (track: Track): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
         dispatch(editingTrackSlice.actions.updateEditingTrack({ editingTrack: track }));
-        callSaveTrack(dispatch, getState);
     };
 
 export const resetEditingTrack = (): AppThunk =>
