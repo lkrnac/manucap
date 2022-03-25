@@ -887,54 +887,6 @@ describe("VideoPlayer tested with fake player", () => {
         expect(videojs.setFormatTime).toBeCalled();
     });
 
-    it("Calls triggerMouseTrapAction on keydown event", () => {
-        // GIVEN
-
-        const triggerMouseTrapActionSpy = jest.spyOn(shortcutConstants, "triggerMouseTrapAction");
-        const handleKeyDownMock = jest.fn();
-
-
-        const textTracks = [
-            {
-                language: "en-US",
-                addCue: jest.fn(),
-                removeCue: jest.fn(),
-                length: 4000,
-                cues: [new VTTCue(0, 1, "Caption Line 1")],
-                dispatchEvent: jest.fn()
-            }
-        ];
-        textTracks["addEventListener"] = jest.fn();
-
-        const playerMock = {
-            textTracks: (): FakeTextTrack[] => textTracks,
-            on: jest.fn()
-        };
-
-        // @ts-ignore - we are mocking the module
-        videojs.mockImplementationOnce(() => playerMock);
-        const properties = {
-            poster: "http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg",
-            mp4: "http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4",
-            tracks: initialTestingTracks,
-            languageCuesArray: initialTestingLanguageCuesArray,
-            lastCueChange: null
-        };
-        const actualNode = mount(
-            React.createElement(props => (<VideoPlayer {...props} />), properties)
-        );
-
-        // WHEN
-        // @ts-ignore I only need to update these props
-        actualNode.setProps({});
-        // @ts-ignore @types/video.js is missing this function rom video.js signature check
-        // https://www.npmjs.com/package/@types/video.js for updates
-        playerMock.handleKeyDown(handleKeyDownMock);
-
-        // THEN
-        expect(triggerMouseTrapActionSpy).toBeCalledWith(handleKeyDownMock);
-    });
-
     describe("customize track position", () => {
         it("does not customize track position if passed an auto position", () => {
             // GIVEN
