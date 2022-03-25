@@ -48,7 +48,7 @@ describe("CaptionOverlapToggle", () => {
     it("changes icon on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn sbte-toggled-btn">
+            <button type="button" className="btn sbte-toggled-btn" disabled>
                 Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ALLOWED</span>
             </button>
         );
@@ -67,8 +67,15 @@ describe("CaptionOverlapToggle", () => {
 
     it("changes icon back on double toggle", () => {
         // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US" },
+            default: true,
+            overlapEnabled: true
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const expectedNode = render(
-            <button type="button" className="btn">
+            <button type="button" className="btn" disabled>
                 Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">NOT ALLOWED</span>
             </button>
         );
@@ -79,7 +86,6 @@ describe("CaptionOverlapToggle", () => {
                 <CaptionOverlapToggle />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
         fireEvent.click(actualNode.container.querySelector(".btn") as Element);
 
         // THEN
