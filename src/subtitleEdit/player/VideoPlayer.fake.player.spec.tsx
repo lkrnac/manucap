@@ -5,7 +5,6 @@ import { LanguageCues, Track } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
 import videojs from "video.js";
-import * as shortcutConstants from "../utils/shortcutConstants";
 import React from "react";
 
 jest.useFakeTimers();
