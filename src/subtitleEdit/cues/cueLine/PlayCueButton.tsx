@@ -3,32 +3,37 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { CueDto } from "../../model";
 import { playVideoSection } from "../../player/playbackSlices";
 import { useDispatch } from "react-redux";
-import Tooltip from "../../common/Tooltip";
 import { getShortcutAsText } from "../../utils/shortcutConstants";
+import { Tooltip } from "primereact/tooltip";
 
 interface Props {
     cue: CueDto;
+    cueIndex: number;
 }
 
 const PlayCueButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const shortcutText = getShortcutAsText("k");
+    const buttonId = `playCueButton-${props.cueIndex}`;
     return (
-        <Tooltip
-            tooltipId="playBtnTooltip"
-            message={`Play this subtitle (${shortcutText})`}
-            placement="left"
-            toggleClassName="tw-p-1.5"
-        >
+        <div className="tw-p-1.5">
             <button
+                id={buttonId}
                 style={{ maxHeight: "38px" }}
                 className="btn btn-outline-secondary tw-w-full"
+                data-pr-tooltip={`Play this subtitle (${shortcutText})`}
+                data-pr-position="left"
+                data-pr-at="left+10 center"
                 onClick={(): AppThunk =>
                     dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime))}
             >
                 <i className="fa fa-play" />
             </button>
-        </Tooltip>
+            <Tooltip
+                id={buttonId + "-Tooltip"}
+                target={`#${buttonId}`}
+            />
+        </div>
     );
 };
 

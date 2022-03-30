@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import TransitionDialog from "../../common/TransitionDialog";
+import { Dialog } from "primereact/dialog";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { SubtitleSpecification } from "../model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
@@ -15,23 +15,22 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
     const subtitleSpecifications = stateSubtitleSpecifications ? stateSubtitleSpecifications :
         {} as SubtitleSpecification;
     return (
-        <TransitionDialog
-            open={props.show}
-            onClose={props.onClose}
-            dialogClassName="sbte-medium-modal"
-            contentClassname="tw-max-w-3xl"
-            title="Subtitle Specifications"
-        >
-            <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
-            <div className="tw-modal-toolbar">
-                <button
-                    onClick={props.onClose}
-                    className="btn btn-primary dotsub-subtitle-specifications-modal-close-button"
-                >
+        <Dialog
+            className="tw-max-w-3xl"
+            visible={props.show}
+            onHide={props.onClose}
+            header="Subtitle Specifications"
+            draggable={false}
+            dismissableMask
+            resizable={false}
+            footer={() => (
+                <button className="btn btn-primary" onClick={props.onClose}>
                     Close
                 </button>
-            </div>
-        </TransitionDialog>
+            )}
+        >
+            <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
+        </Dialog>
     );
 };
 

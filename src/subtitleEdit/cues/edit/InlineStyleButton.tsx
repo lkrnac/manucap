@@ -1,7 +1,7 @@
 import { EditorState, RichUtils } from "draft-js";
 import { ReactElement } from "react";
 import * as React from "react";
-import Tooltip from "../../common/Tooltip";
+import { Tooltip } from "primereact/tooltip";
 
 interface Props {
     editorIndex: number;
@@ -15,15 +15,11 @@ const InlineStyleButton = (props: Props): ReactElement => {
     const buttonStyle = props.editorState && props.editorState.getCurrentInlineStyle().has(props.inlineStyle)
         ? "btn btn-secondary"
         : "btn btn-outline-secondary";
-
+    const buttonId = `inlineStyle-${props.inlineStyle}${props.editorIndex}`;
     return (
-        <Tooltip
-            message={props.inlineStyle}
-            placement="bottom"
-            tooltipId={`${props.inlineStyle}${props.editorIndex}`}
-            toggleClassName="tw-inline-block"
-        >
+        <>
             <button
+                id={buttonId}
                 style={{ marginRight: "5px" }}
                 className={buttonStyle}
                 // Following prevents taking focus from editor, so that we can toggle inline style for current
@@ -33,11 +29,17 @@ const InlineStyleButton = (props: Props): ReactElement => {
                     const newState = RichUtils.toggleInlineStyle(props.editorState, props.inlineStyle);
                     props.setEditorState(newState);
                 }}
+                data-pr-tooltip={props.inlineStyle}
+                data-pr-position="top"
+                data-pr-at="center+5 top-4"
             >
                 {props.label}
             </button>
-        </Tooltip>
-
+            <Tooltip
+                id={`${buttonId}-Tooltip`}
+                target={`#${buttonId}`}
+            />
+        </>
     );
 };
 

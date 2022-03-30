@@ -2,11 +2,11 @@ import {
     CSSProperties,
     Dispatch,
     KeyboardEventHandler,
+    MouseEvent,
     ReactElement,
     RefObject,
     useEffect,
-    useRef,
-    useState,
+    useRef
 } from "react";
 
 import * as React from "react";
@@ -22,8 +22,7 @@ import {
 } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
-import { Popover, Transition } from "@headlessui/react";
-import { usePopper } from "react-popper";
+import { Menu } from "primereact/menu";
 
 interface Props {
     children: ReactElement;
@@ -86,6 +85,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const dispatch = useDispatch();
     const selectRef = useRef(null);
     const searchReplaceFind = useSelector((state: SubtitleEditState) => state.searchReplace.find);
+    const menu = useRef(null);
 
     /**
      * Sometimes Overlay got unmounted before
@@ -102,20 +102,6 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once -> unmount
     );
-
-    const [referenceElement, setReferenceElement] = useState<HTMLSpanElement | null>();
-    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>();
-    const { update, styles, attributes } = usePopper(referenceElement, popperElement, {
-        placement: "bottom",
-        modifiers: [
-            {
-                name: "offset",
-                options: {
-                    offset: [0, 10]
-                },
-            }
-        ]
-    });
 
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
@@ -148,67 +134,61 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         menuList: (provided: CSSProperties) => ({ ...provided, height: "200px" })
     } as StylesConfig<Option, false>;
 
-    const show = props.spellCheckerMatchingOffset === props.start;
+    // Menu Toolbox.
+
+    const toggleMenu = (event: MouseEvent<HTMLElement>) => {
+        if (menu.current) {
+            (menu.current as any).toggle(event);
+        }
+    };
+
+    const spellcheckId = `spellcheckIssue-${props.trackId}-${props.start}-${props.end}`;
 
     return (
-        <Popover className="tw-inline-block">
-            <Popover.Button className="tw-inline-block tw-outline-none focus:tw-outline-none">
-                <span
-                    ref={setReferenceElement}
-                    className="sbte-text-with-error"
-                    onClick={(): void => {
-                        props.setSpellCheckerMatchingOffset(
-                            props.spellCheckerMatchingOffset === props.start ? null : props.start
-                        );
-                    }}
-                >
-                    {props.children}
-                </span>
-            </Popover.Button>
-            <Popover.Panel
-                static
-                ref={setPopperElement}
-                style={styles.popper}
-                {...attributes.popper}
-                className={`tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-${show}`}
+        <>
+            <span
+                className="sbte-text-with-error"
+                onClick={(event): void => {
+                    props.setSpellCheckerMatchingOffset(
+                        props.spellCheckerMatchingOffset === props.start ? null : props.start
+                    );
+                    toggleMenu(event);
+                }}
+                aria-controls={spellcheckId}
+                aria-haspopup
             >
-                <Transition
-                    show={show}
-                    className="tw-transition-opacity tw-duration-300 tw-ease-in-out"
-                    enterFrom="tw-opacity-0"
-                    enterTo="tw-opacity-100"
-                    leaveFrom="tw-opacity-100"
-                    leaveTo="tw-opacity-0"
-                    beforeEnter={async (): Promise<void> => {
-                        onEnterPopover(props, selectRef);
-                        if (update) {
-                            await update();
-                        }
-                    }}
-                    beforeLeave={(): void => onExitPopover(props)}
-                >
-                    <div
-                        className="tw-rounded tw-shadow-sm tw-overflow-hidden
-                            tw-border tw-arrow before:tw-border-b-gray-300 tw-border-gray-300"
-                        id="sbte-spell-check-popover"
-                    >
-                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
-                            {spellCheckMatch.message}
-                        </div>
-                        <div hidden={selectOptions.length === 0}>
-                            <Select
-                                onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
-                                ref={selectRef}
-                                menuIsOpen
-                                options={selectOptions}
-                                styles={customStyles}
-                                onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
-                                classNamePrefix="spellcheck"
-                            />
-                        </div>
-                    </div>
-                </Transition>
-            </Popover.Panel>
-        </Popover>
+                {props.children}
+            </span>
+            <Menu
+                ref={menu}
+                popup
+                id={spellcheckId}
+                className="spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0 tw-shadow-md"
+                model={[
+                    {
+                        template: () => (
+                            <>
+                                <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                                    {spellCheckMatch.message}
+                                </div>
+                                <div hidden={selectOptions.length === 0}>
+                                    <Select
+                                        onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
+                                        ref={selectRef}
+                                        menuIsOpen
+                                        options={selectOptions}
+                                        styles={customStyles}
+                                        onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
+                                        classNamePrefix="spellcheck"
+                                    />
+                                </div>
+                            </>
+                        ),
+                    },
+                ]}
+                onHide={(): void => onExitPopover(props)}
+                onShow={(): void => onEnterPopover(props, selectRef)}
+            />
+        </>
     );
 };

@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import Tooltip from "../../common/Tooltip";
+import { Tooltip } from "primereact/tooltip";
 
 interface Props {
     handleExport: () => void;
@@ -7,19 +7,23 @@ interface Props {
 
 const ExportSourceTrackCuesButton = (props: Props): ReactElement => {
     return (
-        <Tooltip
-            tooltipId="exportSourceFileBtnTooltip"
-            message="Export Source File"
-            offset={[-7, 10]}
-        >
+        <>
             <button
+                id="exportSourceFileBtn"
                 type="button"
                 className="sbte-export-source-button btn btn-secondary"
                 onClick={(): void => props.handleExport()}
+                data-pr-tooltip="Export Source File"
+                data-pr-position="top"
+                data-pr-at="center+2 top-2"
             >
                 <i className="fas fa-file-export fa-lg" />
             </button>
-        </Tooltip>
+            <Tooltip
+                id="exportSourceFileBtn"
+                target="#exportSourceFileBtn"
+            />
+        </>
     );
 };
 

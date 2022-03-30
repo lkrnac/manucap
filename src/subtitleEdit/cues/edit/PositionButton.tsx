@@ -1,81 +1,55 @@
-import { findPositionIcon, Position, PositionIcon, positionIcons } from "../cueUtils";
-import { ReactElement } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import Tooltip from "../../common/Tooltip";
+import { findPositionIcon, Position, positionIcons } from "../cueUtils";
+import { ReactElement, MouseEvent, useRef } from "react";
+import { Menu } from "primereact/menu";
 
 interface Props {
     vttCue: VTTCue;
     changePosition: (position: Position) => void;
 }
 
-const PositionButton = (props: Props): ReactElement => (
-    <Menu
-        as="div"
-        className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]"
-    >
-        {({ open }): ReactElement => (
-            <>
-                <Tooltip
-                    message="Set the position of this subtitle"
-                    placement="top"
-                >
-                    <Menu.Button as="div" className="tw-cursor-pointer">
-                        <button
-                            className={"tw-select-none dropdown-toggle btn btn-outline-secondary tw-w-[68px] " +
-                                `${open ? "tw-open-true focus active" : "tw-open-false"}`}
-                        >
-                            <span>{findPositionIcon(props.vttCue).iconText}</span>
-                            <span className="caret" />
-                        </button>
-                    </Menu.Button>
-                </Tooltip>
-                <Transition
-                    unmount
-                    show={open}
-                    className="tw-transition-all tw-duration-300 tw-ease-in-out tw-origin-top-left"
-                    enterFrom="tw-opacity-0 tw-scale-75"
-                    enterTo="tw-opacity-100 tw-scale-100"
-                    leaveFrom="tw-opacity-100 tw-scale-100"
-                    leaveTo="tw-opacity-0 tw-scale-75"
-                >
-                    <div className="tw-absolute tw-left-0 tw-min-w-[210px] tw-w-[210px]">
-                        <Menu.Items
-                            as="ul"
-                            static
-                            className="tw-dropdown-menu tw-transition-all tw-flex tw-flex-row
-                                tw-flex-wrap tw-justify-between tw-px-2"
-                        >
-                            {
-                                positionIcons.map((positionIcon: PositionIcon, index: number): ReactElement =>
-                                    (
-                                        <Menu.Item
-                                            as="li"
-                                            key={index}
-                                            onClick={(): void => props.changePosition(positionIcon.position)}
-                                        >
-                                            <div
-                                                className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                                style={{
-                                                    lineHeight: "38px",
-                                                    width: "38px",
-                                                    margin: "auto",
-                                                    padding: "0px",
-                                                    borderRadius: "3px",
-                                                    paddingLeft: positionIcon.leftPadding
-                                                }}
-                                            >
-                                                {positionIcon.iconText}
-                                            </div>
-                                        </Menu.Item>
-                                    )
-                                )
-                            }
-                        </Menu.Items>
-                    </div>
-                </Transition>
-            </>
-        )}
-    </Menu>
-);
+const PositionButton = (props: Props): ReactElement => {
+    const menu = useRef(null);
+    const toggleMenu = (event: MouseEvent<HTMLElement>): void => {
+        if (menu.current) {
+            (menu.current as any).toggle(event);
+        }
+    };
+    const menuModel = positionIcons.map(icon => ({
+        template: () => (
+            <span
+                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                    tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                onClick={(event): void => {
+                    props.changePosition(icon.position);
+                    toggleMenu(event);
+                }}
+            >
+                {icon.iconText}
+            </span>
+        )
+    }));
+
+    return (
+        <>
+            <button
+                className="tw-select-none tw-flex tw-items-center tw-justify-center
+                    dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                aria-controls="positionButtonMenu"
+                aria-haspopup
+                onClick={toggleMenu}
+            >
+                <span>{findPositionIcon(props.vttCue).iconText}</span>
+                <span className="caret" />
+            </button>
+            <Menu
+                id="positionButtonMenu"
+                className="position-button-list tw-w-[210px] tw-min-w-[210px]"
+                ref={menu}
+                popup
+                model={menuModel}
+            />
+        </>
+    );
+};
 
 export default PositionButton;

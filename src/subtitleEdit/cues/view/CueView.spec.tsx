@@ -7,7 +7,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import { CueDto, CueError, Language, Task, Track } from "../../model";
 import CueView from "./CueView";
-import { removeDraftJsDynamicValues, removeHeadlessAttributes } from "../../../testUtils/testUtils";
+import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack, updateTask } from "../../trackSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
@@ -222,8 +222,8 @@ describe("CueView", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.container.outerHTML));
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML)
+        const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML)
         expect(actual).toEqual(expected);
     });
 

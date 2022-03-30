@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { Character } from "../../utils/shortcutConstants";
-import Tooltip from "../../common/Tooltip";
+import { Tooltip } from "primereact/tooltip";
 import DateTime from "../../common/DateTime";
 
 interface Props {
@@ -33,18 +33,23 @@ const CueComments = (props: Props): ReactElement => {
     }, [currentUser, dispatch, props.commentAuthor, props.index, text]);
 
     const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
-        <Tooltip
-            message="Delete comment"
-            placement="top-end"
-        >
+        <>
             <button
+                id={`deleteCueCommentButton-${cueIndex}-${commentIndex}`}
                 data-testid="sbte-delete-cue-comment-button"
-                className="btn btn-outline-secondary sbte-btn-xs"
+                className="btn btn-outline-secondary sbte-btn-xs sbte-delete-cue-comment-button"
+                data-pr-tooltip="Delete comment"
+                data-pr-position="left"
+                data-pr-at="left+10 top+10"
                 onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
             >
                 <i className="fa fa-trash" />
             </button>
-        </Tooltip>
+            <Tooltip
+                id={`deleteCueCommentButtonTooltip-${cueIndex}-${commentIndex}`}
+                target={`#deleteCueCommentButton-${cueIndex}-${commentIndex}`}
+            />
+        </>
     );
 
     return (

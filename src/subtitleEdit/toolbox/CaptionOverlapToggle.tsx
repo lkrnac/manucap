@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { MouseEvent, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import ToggleButton from "./ToggleButton";
@@ -7,7 +7,11 @@ import { Track } from "../model";
 import { updateCues } from "../cues/cuesList/cuesListActions";
 import { isPendingSaveState } from "../cues/saveSlices";
 
-export const CaptionOverlapToggle = (): ReactElement => {
+interface Props {
+    onClick: (event: MouseEvent<HTMLElement>) => void
+}
+
+export const CaptionOverlapToggle = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
@@ -15,16 +19,17 @@ export const CaptionOverlapToggle = (): ReactElement => {
     const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
     return (
         <ToggleButton
-            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+            className="tw-flex tw-items-center tw-justify-between"
             disabled={isPendingSaveState(saveState)}
             toggled={overlapEnabled}
-            onClick={(): void => {
+            onClick={(event): void => {
                 const track = {
                     ...editingTrack,
                     overlapEnabled: !overlapEnabled
                 } as Track;
                 dispatch(updateEditingTrack(track));
                 dispatch(updateCues(cues));
+                props.onClick(event);
             }}
             render={(toggle): ReactElement => (
                 toggle

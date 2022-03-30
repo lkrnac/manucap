@@ -18,7 +18,7 @@ describe("WaveformToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="tw-dropdown-item tw-flex tw-items-center tw-justify-between">
+            <button type="button" className="tw-flex tw-items-center tw-justify-between">
                 Waveform <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">HIDDEN</span>
             </button>
         );
@@ -26,7 +26,7 @@ describe("WaveformToggle", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <WaveformToggle />
+                <WaveformToggle onClick={jest.fn()} />
             </Provider>
         );
 
@@ -39,7 +39,7 @@ describe("WaveformToggle", () => {
         const expectedNode = render(
             <button
                 type="button"
-                className="tw-dropdown-item tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+                className="tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
             >
                 Waveform <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">SHOWN</span>
             </button>
@@ -48,11 +48,11 @@ describe("WaveformToggle", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <WaveformToggle />
+                <WaveformToggle onClick={jest.fn()} />
             </Provider>
         );
 
-        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -62,12 +62,12 @@ describe("WaveformToggle", () => {
         // GIVEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <WaveformToggle />
+                <WaveformToggle onClick={jest.fn()} />
             </Provider>
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".tw-dropdown-item") as Element);
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(testingStore.getState().waveformVisible).toEqual(true);

@@ -1,27 +1,23 @@
-import { ReactElement, useState } from "react";
-import ShiftTimeModal from "./ShiftTimeModal";
+import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 
-const ShiftTimeButton = (): ReactElement => {
-    const [show, setShow] = useState(false);
-    const handleClose = (): void => setShow(false);
-    const handleShow = (): void => setShow(true);
+interface Props {
+    onClick: () => void
+}
+
+const ShiftTimeButton = (props: Props): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
-        <>
-            <button
-                onClick={handleShow}
-                className="dotsub-shift-time-button tw-dropdown-item"
-                disabled={!timecodesUnlocked}
-                title="Unlock timecodes to enable"
-            >
-                Shift Track Time
-            </button>
-
-            <ShiftTimeModal show={show} onClose={handleClose} />
-        </>
+        <button
+            onClick={props.onClick}
+            className="dotsub-shift-time-button"
+            disabled={!timecodesUnlocked}
+            title="Unlock timecodes to enable"
+        >
+            Shift Track Time
+        </button>
     );
 };
 

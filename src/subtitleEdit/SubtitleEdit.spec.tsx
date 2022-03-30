@@ -11,7 +11,6 @@ import {
     fixVideoPlayerInvalidTime,
     removeBackgroundColorStyle,
     removeDraftJsDynamicValues,
-    removeHeadlessAttributes,
     removeVideoPlayerDynamicValue,
 } from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesList/cuesListActions";
@@ -33,7 +32,7 @@ import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { act } from "react-dom/test-utils";
-import Tooltip from "./common/Tooltip";
+import { changeScrollPosition } from "./cues/cuesList/cuesListScrollSlice";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -43,17 +42,6 @@ jest.mock("lodash", () => ({
 // We are mocking here.
 // eslint-disable-next-line react/display-name
 jest.mock("./cues/CueErrorAlert", () => (): ReactElement => <div>CueErrorAlert</div>);
-// We are mocking here.
-// eslint-disable-next-line react/display-name
-jest.mock("./common/TransitionDialog", () => (): ReactElement => <div>TransitionDialog</div>);
-jest.mock("@headlessui/react", () => ({
-    ...(jest.requireActual("@headlessui/react")),
-    Transition: ({ show, children, unmount }: {
-        children: ReactElement,
-        show?: boolean,
-        unmount?: boolean,
-    }): ReactElement | undefined => show || !unmount ? children : undefined
-}));
 
 Element.prototype.scrollIntoView = jest.fn();
 
@@ -209,86 +197,80 @@ describe("SubtitleEdit", () => {
                                     View All Tracks
                                 </button>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to top"
-                                        placement="top"
+                                    <button
+                                        id="jumpToFirstButton"
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to top"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-first-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-up" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to bottom"
-                                        placement="top"
+                                    <button
+                                        id="jumpToLastButton"
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to bottom"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-last-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-down" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to currently editing subtitle"
-                                        placement="top"
+                                    <button
+                                        id="editCueButton"
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to currently editing subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-edit-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-edit" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-edit" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to subtitle in playback position"
-                                        placement="top"
+                                    <button
+                                        id="playbackCueButton"
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to subtitle in playback position"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-playback-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-video" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-video" />
+                                    </button>
                                 </div>
                                 <div hidden>
-                                    <Tooltip
-                                        message="Scroll to last translated subtitle"
-                                        placement="top"
+                                    <button
+                                        id="translatedCueButton"
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to last translated subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-last-translated-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-language" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-language" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to next subtitle error"
-                                        placement="top"
+                                    <button
+                                        id="cueErrorButton"
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to next subtitle error"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-error-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-bug" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-bug" />
+                                    </button>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
@@ -332,10 +314,10 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.container.outerHTML)));
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.container.outerHTML)));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
@@ -409,86 +391,80 @@ describe("SubtitleEdit", () => {
                                     View All Tracks
                                 </button>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to top"
-                                        placement="top"
+                                    <button
+                                        id="jumpToFirstButton"
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to top"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-first-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-up" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to bottom"
-                                        placement="top"
+                                    <button
+                                        id="jumpToLastButton"
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to bottom"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-last-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-down" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to currently editing subtitle"
-                                        placement="top"
+                                    <button
+                                        id="editCueButton"
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to currently editing subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-edit-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-edit" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-edit" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to subtitle in playback position"
-                                        placement="top"
+                                    <button
+                                        id="playbackCueButton"
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to subtitle in playback position"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-playback-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-video" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-video" />
+                                    </button>
                                 </div>
                                 <div hidden>
-                                    <Tooltip
-                                        message="Scroll to last translated subtitle"
-                                        placement="top"
+                                    <button
+                                        id="translatedCueButton"
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to last translated subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-last-translated-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-language" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-language" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to next subtitle error"
-                                        placement="top"
+                                    <button
+                                        id="cueErrorButton"
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to next subtitle error"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-error-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-bug" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-bug" />
+                                    </button>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
@@ -532,10 +508,10 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html())));
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html())));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html()));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html()));
         expect(actual).toEqual(expected);
     });
 
@@ -597,10 +573,10 @@ describe("SubtitleEdit", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html())));
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html())));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html()));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html()));
         expect(actual).toEqual(expected);
     });
 
@@ -666,10 +642,10 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html())));
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html())));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html()));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html()));
         expect(actual).toEqual(expected);
     });
 
@@ -762,86 +738,80 @@ describe("SubtitleEdit", () => {
                                     View All Tracks
                                 </button>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to top"
-                                        placement="top"
+                                    <button
+                                        id="jumpToFirstButton"
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to top"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-first-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-up" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to bottom"
-                                        placement="top"
+                                    <button
+                                        id="jumpToLastButton"
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to bottom"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-last-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-down" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to currently editing subtitle"
-                                        placement="top"
+                                    <button
+                                        id="editCueButton"
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to currently editing subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-edit-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-edit" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-edit" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to subtitle in playback position"
-                                        placement="top"
+                                    <button
+                                        id="playbackCueButton"
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to subtitle in playback position"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-playback-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-video" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-video" />
+                                    </button>
                                 </div>
                                 <div hidden>
-                                    <Tooltip
-                                        message="Scroll to last translated subtitle"
-                                        placement="top"
+                                    <button
+                                        id="translatedCueButton"
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to last translated subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-last-translated-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-language" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-language" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to next subtitle error"
-                                        placement="top"
+                                    <button
+                                        id="cueErrorButton"
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to next subtitle error"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-error-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-bug" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-bug" />
+                                    </button>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
@@ -886,10 +856,10 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.container.outerHTML)));
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.container.outerHTML)));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
@@ -982,86 +952,80 @@ describe("SubtitleEdit", () => {
                                     View All Tracks
                                 </button>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to top"
-                                        placement="top"
+                                    <button
+                                        id="jumpToFirstButton"
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to top"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-first-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-up" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to bottom"
-                                        placement="top"
+                                    <button
+                                        id="jumpToLastButton"
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to bottom"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-last-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-down" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to currently editing subtitle"
-                                        placement="top"
+                                    <button
+                                        id="editCueButton"
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to currently editing subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-edit-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-edit" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-edit" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to subtitle in playback position"
-                                        placement="top"
+                                    <button
+                                        id="playbackCueButton"
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to subtitle in playback position"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-playback-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-video" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-video" />
+                                    </button>
                                 </div>
                                 <div hidden>
-                                    <Tooltip
-                                        message="Scroll to last translated subtitle"
-                                        placement="top"
+                                    <button
+                                        id="translatedCueButton"
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to last translated subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-last-translated-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-language" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-language" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to next subtitle error"
-                                        placement="top"
+                                    <button
+                                        id="cueErrorButton"
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to next subtitle error"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-error-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-bug" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-bug" />
+                                    </button>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
@@ -1106,10 +1070,10 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(showMerge(true) as {} as AnyAction);
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.container.outerHTML)));
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.container.outerHTML)));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
@@ -1201,86 +1165,80 @@ describe("SubtitleEdit", () => {
                                     View All Tracks
                                 </button>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to top"
-                                        placement="top"
+                                    <button
+                                        id="jumpToFirstButton"
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to top"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-first-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-up" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to bottom"
-                                        placement="top"
+                                    <button
+                                        id="jumpToLastButton"
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to bottom"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-last-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-down" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to currently editing subtitle"
-                                        placement="top"
+                                    <button
+                                        id="editCueButton"
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to currently editing subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-edit-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-edit" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-edit" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to subtitle in playback position"
-                                        placement="top"
+                                    <button
+                                        id="playbackCueButton"
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to subtitle in playback position"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-playback-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-video" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-video" />
+                                    </button>
                                 </div>
                                 <div hidden>
-                                    <Tooltip
-                                        message="Scroll to last translated subtitle"
-                                        placement="top"
+                                    <button
+                                        id="translatedCueButton"
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to last translated subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-last-translated-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-language" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-language" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to next subtitle error"
-                                        placement="top"
+                                    <button
+                                        id="cueErrorButton"
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to next subtitle error"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-error-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-bug" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-bug" />
+                                    </button>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
@@ -1327,10 +1285,10 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html()))).replace(" disabled=\"\"", "");
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html()))).replace(" disabled=\"\"", "");
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html())).replace(" disabled=\"\"", "");
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html())).replace(" disabled=\"\"", "");
         expect(actual).toEqual(expected);
     });
 
@@ -1434,86 +1392,80 @@ describe("SubtitleEdit", () => {
                                     View All Tracks
                                 </button>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to top"
-                                        placement="top"
+                                    <button
+                                        id="jumpToFirstButton"
+                                        className="btn btn-secondary sbte-jump-to-first-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to top"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-first-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-up" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-up" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to bottom"
-                                        placement="top"
+                                    <button
+                                        id="jumpToLastButton"
+                                        className="btn btn-secondary sbte-jump-to-last-button"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to bottom"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            className="btn btn-secondary sbte-jump-to-last-button"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-angle-double-down" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-angle-double-down" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to currently editing subtitle"
-                                        placement="top"
+                                    <button
+                                        id="editCueButton"
+                                        data-testid="sbte-jump-to-edit-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to currently editing subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-edit-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-edit" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-edit" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to subtitle in playback position"
-                                        placement="top"
+                                    <button
+                                        id="playbackCueButton"
+                                        data-testid="sbte-jump-to-playback-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to subtitle in playback position"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-playback-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-video" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-video" />
+                                    </button>
                                 </div>
                                 <div hidden>
-                                    <Tooltip
-                                        message="Scroll to last translated subtitle"
-                                        placement="top"
+                                    <button
+                                        id="translatedCueButton"
+                                        data-testid="sbte-jump-to-last-translated-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to last translated subtitle"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-to-last-translated-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-language" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-language" />
+                                    </button>
                                 </div>
                                 <div>
-                                    <Tooltip
-                                        message="Scroll to next subtitle error"
-                                        placement="top"
+                                    <button
+                                        id="cueErrorButton"
+                                        data-testid="sbte-jump-error-cue-button"
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        data-pr-tooltip="Scroll to next subtitle error"
+                                        data-pr-position="top"
+                                        data-pr-at="center+5 top-2"
                                     >
-                                        <button
-                                            data-testid="sbte-jump-error-cue-button"
-                                            className="btn btn-secondary"
-                                            type="button"
-                                        >
-                                            <i className="fa fa-bug" />
-                                        </button>
-                                    </Tooltip>
+                                        <i className="fa fa-bug" />
+                                    </button>
                                 </div>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
@@ -1561,10 +1513,10 @@ describe("SubtitleEdit", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // THEN
-        const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            removeBackgroundColorStyle(actualNode.container.outerHTML))));
-        const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            removeBackgroundColorStyle(fixVideoPlayerInvalidTime(expectedNode.container.outerHTML)))));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            removeBackgroundColorStyle(actualNode.container.outerHTML)));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            removeBackgroundColorStyle(fixVideoPlayerInvalidTime(expectedNode.container.outerHTML))));
         expect(actual).toEqual(expected);
     });
 

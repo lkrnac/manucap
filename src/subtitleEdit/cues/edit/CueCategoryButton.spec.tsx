@@ -2,24 +2,19 @@ import "../../../testUtils/initBrowserEnvironment";
 import CueCategoryButton from "./CueCategoryButton";
 import each from "jest-each";
 import { mount } from "enzyme";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
+import { fireEvent, render } from "@testing-library/react";
 
 describe("CueCategoryButton", () => {
     it("renders button for undefined category", () => {
         // GIVEN
         const expectedNode = mount(
-            <div className="md:tw-relative tw-dropdown-wrapper">
-                <div
-                    id=""
-                    className="tw-cursor-pointer"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                >
-                    <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
-                        Dialogue<span className="caret" />
-                    </button>
-                </div>
-            </div>
+            <button
+                className="dropdown-toggle btn btn-outline-secondary"
+                aria-controls="cueCategoryMenu"
+                aria-haspopup="true"
+            >
+                Dialogue
+            </button>
         );
 
         // WHEN
@@ -28,26 +23,19 @@ describe("CueCategoryButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("renders button for already defined category", () => {
         // GIVEN
         const expectedNode = mount(
-            <div className="md:tw-relative tw-dropdown-wrapper">
-                <div
-                    id=""
-                    className="tw-cursor-pointer"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                >
-                    <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
-                        Audio Descriptions<span className="caret" />
-                    </button>
-                </div>
-            </div>
+            <button
+                className="dropdown-toggle btn btn-outline-secondary"
+                aria-controls="cueCategoryMenu"
+                aria-haspopup="true"
+            >
+                Audio Descriptions
+            </button>
         );
 
         // WHEN
@@ -56,74 +44,49 @@ describe("CueCategoryButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("renders with dropdown", () => {
         // GIVEN
-        const expectedNode = mount(
-            <div className="md:tw-relative tw-dropdown-wrapper">
-                <div
-                    id=""
-                    className="tw-cursor-pointer"
+        const expectedNode = render((
+            <>
+                <button
+                    className="dropdown-toggle btn btn-outline-secondary"
+                    aria-controls="cueCategoryMenu"
                     aria-haspopup="true"
-                    aria-expanded="true"
-                    aria-controls=""
                 >
-                    <button
-                        className="tw-select-none focus active dropdown-toggle btn btn-outline-secondary"
-                    >
-                        Dialogue<span className="caret" />
-                    </button>
-                </div>
+                    Dialogue
+                </button>
                 <div
-                    className="tw-transition-all tw-duration-300 tw-ease-in-out
-                        tw-origin-top-left tw-opacity-0 tw-scale-75"
+                    id="cueCategoryMenu"
+                    className="p-menu p-component p-menu-overlay p-connected-overlay-enter
+                        p-connected-overlay-enter-active"
+                    style={{
+                        zIndex: 1001,
+                        visibility: "visible",
+                        display: "none",
+                        transformOrigin: "top",
+                        top: 0,
+                        left: 0
+                    }}
                 >
-                    <div className="tw-absolute tw-left-0 tw-min-w-[210px] tw-w-[210px]">
-                        <ul
-                            className="tw-dropdown-menu"
-                            aria-labelledby=""
-                            id=""
-                            role="menu"
-                        >
-                            <li id="" role="menuitem">
-                                <div className="tw-dropdown-item">
-                                    Dialogue
-                                </div>
-                            </li>
-                            <hr role="none" />
-                            <li id="" role="menuitem">
-                                <div className="tw-dropdown-item">
-                                    On Screen Text
-                                </div>
-                            </li>
-                            <li id="" role="menuitem">
-                                <div className="tw-dropdown-item">
-                                    Audio Descriptions
-                                </div>
-                            </li>
-                            <li id="" role="menuitem">
-                                <div className="tw-dropdown-item">
-                                    Lyrics
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul className="p-menu-list p-reset" role="menu">
+                        <li className="p-menuitem" role="none"><span>Dialogue</span></li>
+                        <li className="p-menuitem" role="none"><span>On Screen Text</span></li>
+                        <li className="p-menuitem" role="none"><span>Audio Descriptions</span></li>
+                        <li className="p-menuitem" role="none"><span>Lyrics</span></li>
+                    </ul>
                 </div>
-            </div>
-        );
+            </>
+        ), { container: document.body });
 
         // WHEN
-        const actualNode = mount(<CueCategoryButton onChange={jest.fn()} />);
-        actualNode.find("button").simulate("click");
+        const actualNode = render(<CueCategoryButton onChange={jest.fn()} />, { container: document.body });
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     describe("CueCategory options", () => {
@@ -143,7 +106,7 @@ describe("CueCategoryButton", () => {
                 // WHEN
                 const actualNode = mount(<CueCategoryButton onChange={onChange} />);
                 actualNode.find("button").simulate("click");
-                actualNode.find("li").at(index).simulate("click");
+                actualNode.find("li").at(index).find("span").simulate("click");
 
                 // THEN
                 expect(onChange).toHaveBeenCalledWith(expectedValue);

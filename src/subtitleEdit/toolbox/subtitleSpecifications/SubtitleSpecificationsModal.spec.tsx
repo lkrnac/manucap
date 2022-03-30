@@ -6,7 +6,6 @@ import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../../testUtils/testingStore";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 describe("SubtitleSpecificationsModal", () => {
     it("renders shown", () => {
@@ -14,40 +13,40 @@ describe("SubtitleSpecificationsModal", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="tw-fixed tw-z-200 tw-inset-0 tw-overflow-y-auto tw-modal sbte-medium-modal"
-                    id=""
-                    role="dialog"
-                    aria-modal
-                    aria-labelledby=""
-                    aria-describedby=""
+                    className="p-dialog-mask p-component-overlay p-component-overlay-enter
+                        p-dialog-visible p-dialog-center"
+                    style={{ zIndex: 1101 }}
                 >
                     <div
-                        className="tw-fixed tw-inset-0 tw-bg-black"
-                        id=""
-                        aria-hidden
-                    />
-                    <div className="tw-flex tw-items-center tw-justify-center tw-p-6 tw-min-h-screen">
-                        <div
-                            className="tw-relative tw-max-w-2xl tw-w-full tw-mx-auto tw-shadow-2xl
-                                tw-modal-content tw-max-w-3xl"
-                        >
-                            <button type="button" className="tw-modal-close">
-                                <span aria-hidden="true">×</span>
-                                <span className="sr-only">Close</span>
-                            </button>
-                            <div className="tw-modal-header tw-modal-header-primary">
-                                <h4 id="">Subtitle Specifications</h4>
+                        id="pr_id_2"
+                        className="p-dialog p-component tw-max-w-3xl p-dialog-enter p-dialog-enter-active"
+                        role="dialog"
+                        aria-labelledby="pr_id_2_header"
+                        aria-describedby="pr_id_2_content"
+                        aria-modal="true"
+                        // @ts-ignore Seems like React Prime injects this into the div.
+                        pr_id_1=""
+                    >
+                        <div className="p-dialog-header">
+                            <div id="pr_id_2_header" className="p-dialog-title">
+                                Subtitle Specifications
                             </div>
-                            <div className="tw-modal-description" id="">
-                                <label><strong>Enabled:&nbsp;</strong></label><label>No</label>
-                                <div className="tw-modal-toolbar">
-                                    <button
-                                        className="btn btn-primary dotsub-subtitle-specifications-modal-close-button"
-                                    >
-                                        Close
-                                    </button>
-                                </div>
+                            <div className="p-dialog-header-icons">
+                                <button
+                                    type="button"
+                                    className="p-dialog-header-icon p-dialog-header-close p-link"
+                                    aria-label="Close"
+                                >
+                                    <span className="p-dialog-header-close-icon pi pi-times" />
+                                </button>
                             </div>
+                        </div>
+                        <div id="pr_id_2_content" className="p-dialog-content">
+                            <label><strong>Enabled:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div className="p-dialog-footer">
+                            <button className="btn btn-primary">Close</button>
                         </div>
                     </div>
                 </div>
@@ -65,8 +64,6 @@ describe("SubtitleSpecificationsModal", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 });

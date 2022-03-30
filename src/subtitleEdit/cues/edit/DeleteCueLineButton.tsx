@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { deleteCue } from "../cuesList/cuesListActions";
 import { useDispatch } from "react-redux";
 import { AppThunk } from "../../subtitleEditReducers";
-import Tooltip from "../../common/Tooltip";
+import { Tooltip } from "primereact/tooltip";
 
 interface Props {
     cueIndex: number;
@@ -10,23 +10,25 @@ interface Props {
 
 const DeleteCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-
+    const buttonId = `deleteCueLineButton${props.cueIndex}`;
     return (
-        <>
-            <Tooltip
-                message="Delete this subtitle"
-                placement="left"
-                toggleClassName="tw-p-1.5"
+        <div className="tw-p-1.5">
+            <button
+                id={buttonId}
+                style={{ maxHeight: "38px" }}
+                className="btn btn-outline-secondary sbte-delete-cue-button tw-w-full"
+                onClick={(): AppThunk => dispatch(deleteCue(props.cueIndex))}
+                data-pr-tooltip="Delete this subtitle"
+                data-pr-position="left"
+                data-pr-at="left+10 center"
             >
-                <button
-                    style={{ maxHeight: "38px" }}
-                    className="btn btn-outline-secondary sbte-delete-cue-button tw-w-full"
-                    onClick={(): AppThunk => dispatch(deleteCue(props.cueIndex))}
-                >
-                    <i className="fa fa-trash" />
-                </button>
-            </Tooltip>
-        </>
+                <i className="fa fa-trash" />
+            </button>
+            <Tooltip
+                id={buttonId + "-Tooltip"}
+                target={`#${buttonId}`}
+            />
+        </div>
     );
 };
 

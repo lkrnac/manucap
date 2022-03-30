@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import SearchReplaceButton from "./SearchReplaceButton";
 import { fireEvent, render } from "@testing-library/react";
 import MergeCuesButton from "./MergeCuesButton";
-import { removeHeadlessAttributes } from "../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -16,14 +15,15 @@ describe("SeachReplaceButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <div
-                id=""
-                aria-expanded={false}
+            <button
+                id="searchReplaceBtn"
+                className="sbte-search-replace-button btn btn-secondary"
+                data-pr-tooltip="Search / Replace"
+                data-pr-position="top"
+                data-pr-at="center+2 top-2"
             >
-                <button type="button" className="sbte-search-replace-button btn btn-secondary">
-                    <i className="fas fa-search-plus fa-lg" />
-                </button>
-            </div>
+                <i className="fas fa-search-plus fa-lg" />
+            </button>
         );
 
         // WHEN
@@ -34,9 +34,7 @@ describe("SeachReplaceButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("sets search replace visible on button click", () => {
@@ -59,7 +57,7 @@ describe("SeachReplaceButton", () => {
         const { container, getByText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceButton />
-                <MergeCuesButton />
+                <MergeCuesButton onClick={jest.fn()} />
             </Provider>
         );
         const mergeButton = getByText("Merge Cues");

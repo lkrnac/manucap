@@ -3,7 +3,7 @@ import { CSSProperties, RefObject } from "react";
 import { mount } from "enzyme";
 import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";
-import { removeHeadlessAttributes, spellCheckOptionPredicate } from "../../../testUtils/testUtils";
+import { spellCheckOptionPredicate } from "../../../testUtils/testUtils";
 import Select from "react-select";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 
@@ -12,7 +12,8 @@ jest.mock("react-redux");
 const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "")
         .replace(/css-[a-zA-Z0-9]+-[a-zA-Z0-9]+/g, "")
-        .replace(" spellcheck__option--is-focused", "");
+        .replace(" spellcheck__option--is-focused", "")
+        .replace(/z-index: ?\d*; ?/g, "");
 
 describe("SpellCheckerIssue", () => {
 
@@ -43,24 +44,13 @@ describe("SpellCheckerIssue", () => {
     it("renders without popup", () => {
         // GIVEN
         const expectedNode = mount(
-            <div className="tw-inline-block">
-                <button
-                    className="tw-inline-block tw-outline-none focus:tw-outline-none"
-                    id=""
-                    type="button"
-                    aria-expanded="false"
-                    aria-controls=""
-                >
-                    <span className="sbte-text-with-error">
-                        <div className="text" />
-                    </span>
-                </button>
-                <div
-                    style={{ position: "absolute", left: 0, top: 0 }}
-                    className="tw-z-40 tw-max-w-[276px] tw-popper-wrapper tw-open-false"
-                    id=""
-                />
-            </div>
+            <span
+                className="sbte-text-with-error"
+                aria-controls="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
+                aria-haspopup="true"
+            >
+                <div className="text" />
+            </span>
         );
 
         // WHEN
@@ -82,9 +72,7 @@ describe("SpellCheckerIssue", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("does not render issue if start doesn't match", () => {
@@ -143,27 +131,39 @@ describe("SpellCheckerIssue", () => {
         // GIVEN
         const expectedNode = mount(
             <div
-                className="tw-rounded tw-shadow-sm tw-overflow-hidden tw-border tw-arrow
-                    before:tw-border-b-gray-300 tw-border-gray-300"
-                id="sbte-spell-check-popover"
+                id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
+                className="p-menu p-component spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0
+                    tw-shadow-md p-menu-overlay p-connected-overlay-enter p-connected-overlay-enter-active"
+                style={{
+                    zIndex: 1001,
+                    visibility: "visible",
+                    display: "none",
+                    transformOrigin: "top",
+                    top: 0,
+                    left: 0
+                }}
             >
-                <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
-                    There is error
-                </div>
-                <div>
-                    <Select
-                        menuIsOpen
-                        autoFocus
-                        styles={customStyles}
-                        options={[
-                            { value: "", label: "Ignore all in this track" },
-                            { value: "repl1", label: "repl1" },
-                            { value: "repl2", label: "repl2" },
-                            { value: "repl3", label: "repl3" }
-                        ]}
-                        classNamePrefix="spellcheck"
-                    />
-                </div>
+                <ul className="p-menu-list p-reset" role="menu">
+                    <li className="p-menuitem" role="none">
+                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                            There is error
+                        </div>
+                        <div>
+                            <Select
+                                menuIsOpen
+                                autoFocus
+                                styles={customStyles}
+                                options={[
+                                    { value: "", label: "Ignore all in this track" },
+                                    { value: "repl1", label: "repl1" },
+                                    { value: "repl2", label: "repl2" },
+                                    { value: "repl3", label: "repl3" }
+                                ]}
+                                classNamePrefix="spellcheck"
+                            />
+                        </div>
+                    </li>
+                </ul>
             </div>
         );
 
@@ -201,9 +201,8 @@ describe("SpellCheckerIssue", () => {
         actualNode.find(".sbte-text-with-error").simulate("click");
 
         // THEN
-        const actual = removeHeadlessAttributes(removeSelectCssClass(
-            actualNode.find("#sbte-spell-check-popover").at(0).html()));
-        const expected = removeHeadlessAttributes(removeSelectCssClass(expectedNode.html()));
+        const actual = removeSelectCssClass(actualNode.find(".spellcheck-menu").at(0).html());
+        const expected = removeSelectCssClass(expectedNode.html());
         expect(actual).toEqual(expected);
     });
 
@@ -211,25 +210,36 @@ describe("SpellCheckerIssue", () => {
         // GIVEN
         const expectedNode = mount(
             <div
-                className="tw-rounded tw-shadow-sm tw-overflow-hidden tw-border tw-arrow
-                    before:tw-border-b-gray-300 tw-border-gray-300"
-                id="sbte-spell-check-popover"
+                id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
+                className="p-menu p-component spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0
+                    tw-shadow-md p-menu-overlay p-connected-overlay-enter p-connected-overlay-enter-active"
+                style={{
+                    visibility: "visible",
+                    display: "none",
+                    transformOrigin: "top",
+                    top: 0,
+                    left: 0
+                }}
             >
-                <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
-                    There is error
-                </div>
-                <div>
-                    <Select
-                        menuIsOpen
-                        autoFocus
-                        styles={customStyles}
-                        options={[
-                            { value: "", label: "Ignore all in this track" },
-                            { value: "error", label: "error" }
-                        ]}
-                        classNamePrefix="spellcheck"
-                    />
-                </div>
+                <ul className="p-menu-list p-reset" role="menu">
+                    <li className="p-menuitem" role="none">
+                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                            There is error
+                        </div>
+                        <div>
+                            <Select
+                                menuIsOpen
+                                autoFocus
+                                styles={customStyles}
+                                options={[
+                                    { value: "", label: "Ignore all in this track" },
+                                    { value: "error", label: "error" }
+                                ]}
+                                classNamePrefix="spellcheck"
+                            />
+                        </div>
+                    </li>
+                </ul>
             </div>
         );
         const actualNode = mount(
@@ -253,9 +263,8 @@ describe("SpellCheckerIssue", () => {
         actualNode.find(".sbte-text-with-error").simulate("click");
 
         // THEN
-        const actual = removeHeadlessAttributes(removeSelectCssClass(
-            actualNode.find("#sbte-spell-check-popover").at(0).html()));
-        const expected = removeHeadlessAttributes(removeSelectCssClass(expectedNode.html()));
+        const actual = removeSelectCssClass(actualNode.find(".spellcheck-menu").at(0).html());
+        const expected = removeSelectCssClass(expectedNode.html());
         expect(actual).toEqual(expected);
     });
 

@@ -7,7 +7,6 @@ import { fireEvent, render } from "@testing-library/react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { showMerge } from "../merge/mergeSlices";
 import { addCuesToMergeList } from "../cuesList/cuesListActions";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -1051,11 +1050,14 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <div
-                            id=""
-                            aria-expanded={false}
-                        >
-                            <i className="fa fa-comments" />
+                        <div>
+                            <i
+                                id="cuelineComment-0"
+                                className="fa fa-comments"
+                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-position="right"
+                                data-pr-at="right+10 top+10"
+                            />
                         </div>
                     </div>
                     <div
@@ -1088,9 +1090,7 @@ describe("CueLineFlap", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders good disabled cue with 1 comment", () => {
@@ -1150,11 +1150,14 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <div
-                            id=""
-                            aria-expanded={false}
-                        >
-                            <i className="fa fa-comments" />
+                        <div>
+                            <i
+                                id="cuelineComment-0"
+                                className="fa fa-comments"
+                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-position="right"
+                                data-pr-at="right+10 top+10"
+                            />
                         </div>
                     </div>
                     <div
@@ -1188,9 +1191,7 @@ describe("CueLineFlap", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders corrupted disabled cue with 3 comments", () => {
@@ -1250,11 +1251,14 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <div
-                            id=""
-                            aria-expanded={false}
-                        >
-                            <i className="fa fa-comments" />
+                        <div>
+                            <i
+                                id="cuelineComment-0"
+                                className="fa fa-comments"
+                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-position="right"
+                                data-pr-at="right+10 top+10"
+                            />
                         </div>
                     </div>
                     <div
@@ -1288,8 +1292,6 @@ describe("CueLineFlap", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 });

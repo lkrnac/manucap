@@ -9,7 +9,6 @@ import { updateCues } from "../cuesList/cuesListActions";
 import { userSlice } from "../../userSlices";
 import { Character } from "../../utils/shortcutConstants";
 import DateTime from "../../common/DateTime";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 const testComments = [
     {
@@ -108,17 +107,16 @@ describe("CueComments", () => {
                         <span className="sbte-light-gray-text">
                             <i><DateTime value="2021-02-01T09:06:00.000Z" /></i>
                         </span>
-                        <div
-                            id=""
-                            aria-expanded={false}
+                        <button
+                            id="deleteCueCommentButton-0-1"
+                            data-testid="sbte-delete-cue-comment-button"
+                            className="btn btn-outline-secondary sbte-btn-xs sbte-delete-cue-comment-button"
+                            data-pr-tooltip="Delete comment"
+                            data-pr-position="left"
+                            data-pr-at="left+10 top+10"
                         >
-                            <button
-                                data-testid="sbte-delete-cue-comment-button"
-                                className="btn btn-outline-secondary sbte-btn-xs"
-                            >
-                                <i className="fa fa-trash" />
-                            </button>
-                        </div>
+                            <i className="fa fa-trash" />
+                        </button>
                     </div>
                 </div>
                 <hr style={{
@@ -161,9 +159,7 @@ describe("CueComments", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with no comments", () => {

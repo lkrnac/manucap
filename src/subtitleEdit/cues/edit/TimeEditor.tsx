@@ -10,7 +10,6 @@ interface Props {
 }
 
 const styles = {
-    marginBottom: "5px",
     width: "110px",
     maxWidth: "200px",
     padding: "5px",
@@ -26,7 +25,7 @@ const TimeEditor = (props: Props): ReactElement => {
     };
     return (
         <TimeField
-            className="sbte-time-input mousetrap"
+            className="sbte-time-input mousetrap tw-block"
             style={styles}
             value={getTimeString(props.time || 0)}
             onChange={handleChange}

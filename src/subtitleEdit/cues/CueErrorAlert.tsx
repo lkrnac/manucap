@@ -1,27 +1,13 @@
-import { CueError } from "../model";
-import { ReactElement, useEffect, useState } from "react";
-import Alert from "../common/Alert";
-import _ from "lodash";
+import { ReactElement, useEffect, useRef } from "react";
+import { Toast } from "primereact/toast";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { setValidationErrors } from "./edit/cueEditorSlices";
 
-const closeCueErrorsAlert = (
-    setShowCueErrorsAlert: Function,
-    setCueErrors: Function
-): void => {
-    setShowCueErrorsAlert(false);
-    setCueErrors([]);
-};
-
-const closeCueErrorsAlertDebounced = _.debounce(closeCueErrorsAlert, 8000);
-
-
 const CueErrorAlert = (): ReactElement => {
     const dispatch = useDispatch();
     const validationErrors = useSelector((state: SubtitleEditState) => state.validationErrors);
-    const [cueErrors, setCueErrors] = useState([] as CueError[]);
-    const [showCueErrorsAlert, setShowCueErrorsAlert] = useState(false);
+    const toast = useRef(null);
 
     useEffect(
         () => {
@@ -30,36 +16,27 @@ const CueErrorAlert = (): ReactElement => {
                     dispatch(setValidationErrors([]));
                 }, 1000);
             }
-        }, [ dispatch, validationErrors ]
+        }, [dispatch, validationErrors]
     );
 
     useEffect(
         () => {
             if (validationErrors && validationErrors.length > 0) {
-                setCueErrors(validationErrors);
-                setShowCueErrorsAlert(true);
-                closeCueErrorsAlertDebounced(setShowCueErrorsAlert, setCueErrors);
+                if (toast.current) {
+                    (toast.current as any).show(validationErrors.map(error => ({
+                        severity: "error",
+                        summary: "Unable to complete action due to the following error(s):",
+                        detail: error,
+                        life: 8000
+                    })));
+                }
             }
-        }, [ validationErrors ]
+        }, [validationErrors]
     );
 
     return (
-        <Alert
-            key="cueErrorsAlert"
-            alertClass="tw-alert-danger sbte-cue-errors-alert"
-            show={showCueErrorsAlert}
-            autoClose
-            dismissible
-            onClose={(): void => setShowCueErrorsAlert(false)}
-        >
-            <span>Unable to complete action due to the following error(s):</span><br />
-            {
-                cueErrors.map((cueError: CueError, index: number): ReactElement =>
-                    <div key={`cueErrorAlert-${index}`}>&#8226; {cueError}<br /></div>)
-            }
-        </Alert>
+        <Toast ref={toast} position="top-center" />
     );
 };
-
 
 export default CueErrorAlert;

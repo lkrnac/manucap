@@ -13,7 +13,6 @@ import { updateCues } from "../../cues/cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import "video.js";
 import { act } from "react-dom/test-utils";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 jest.mock("./SubtitleSpecificationsModal");
 
@@ -34,14 +33,15 @@ describe("SubtitleSpecificationsButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div
-                    id=""
-                    aria-expanded
+                <button
+                    id="subtitleSpecsBtn"
+                    className="dotsub-subtitle-specifications-button btn btn-secondary"
+                    data-pr-tooltip="Subtitle Specifications"
+                    data-pr-position="top"
+                    data-pr-at="center+2 top-2"
                 >
-                    <button className="dotsub-subtitle-specifications-button btn btn-secondary">
-                        <i className="fas fa-clipboard-list fa-lg" />
-                    </button>
-                </div>
+                    <i className="fas fa-clipboard-list fa-lg" />
+                </button>
                 <div>shown</div>
             </Provider>
         );
@@ -61,23 +61,22 @@ describe("SubtitleSpecificationsButton", () => {
         actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("renders with hidden modal", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div
-                    id=""
-                    aria-expanded={false}
+                <button
+                    id="subtitleSpecsBtn"
+                    className="dotsub-subtitle-specifications-button btn btn-secondary"
+                    data-pr-tooltip="Subtitle Specifications"
+                    data-pr-position="top"
+                    data-pr-at="center+2 top-2"
                 >
-                    <button className="dotsub-subtitle-specifications-button btn btn-secondary">
-                        <i className="fas fa-clipboard-list fa-lg" />
-                    </button>
-                </div>
+                    <i className="fas fa-clipboard-list fa-lg" />
+                </button>
                 <div />
             </Provider>
         );
@@ -94,9 +93,7 @@ describe("SubtitleSpecificationsButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("opens subtitle specifications modal when button is clicked", () => {

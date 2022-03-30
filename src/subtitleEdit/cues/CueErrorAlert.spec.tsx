@@ -1,7 +1,7 @@
 import "../../testUtils/initBrowserEnvironment";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CueError } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { setValidationErrors } from "./edit/cueEditorSlices";
@@ -22,18 +22,30 @@ describe("CueErrorAlert", () => {
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
 
         const expectedNode = render(
-            <div
-                className="tw-alert tw-alert-component tw-alert-danger sbte-cue-errors-alert
-                    tw-ease-out tw-duration-300 tw-opacity-0"
-            >
-                <button
-                    className="tw-absolute tw-right-7 tw-top-3 tw-font-bold tw-text-red-900 tw-text-opacity-60
-                        tw-text-sm tw-alert-close"
-                >
-                    <span aria-hidden>x</span>
-                </button>
-                <span>Unable to complete action due to the following error(s):</span><br />
-                <div>&#8226; {CueError.LINE_CHAR_LIMIT_EXCEEDED}<br /></div>
+            <div className="p-toast p-component p-toast-top-center">
+                <div>
+                    <div
+                        className="p-toast-message p-toast-message-error"
+                        role="alert"
+                        aria-live="assertive"
+                        aria-atomic="true"
+                    >
+                        <div className="p-toast-message-content">
+                            <span className="p-toast-message-icon pi pi-times" />
+                            <div className="p-toast-message-text">
+                                <span className="p-toast-summary">
+                                    Unable to complete action due to the following error(s):
+                                </span>
+                                <div className="p-toast-detail">
+                                    Max Characters Per Line Exceeded
+                                </div>
+                            </div>
+                            <button type="button" className="p-toast-icon-close p-link">
+                                <span className="p-toast-icon-close-icon pi pi-times" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
 
@@ -51,7 +63,15 @@ describe("CueErrorAlert", () => {
     it("closes cue errors alert if dismiss button is clicked", async () => {
         // GIVEN
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
-        const expectedNode = render(<></>);
+
+        const expectedNode = render(
+            <>
+                <div className="p-toast p-component p-toast-top-center">
+                    <div />
+                </div>
+            </>
+        );
+
         const { container } = render(
             <Provider store={testingStore}>
                 <CueErrorAlert />
@@ -59,17 +79,26 @@ describe("CueErrorAlert", () => {
         );
 
         // WHEN
-        await fireEvent.click(container.querySelector("button.tw-alert-close") as HTMLElement);
-        await act(async () => new Promise(resolve => setTimeout(resolve, 100)));
+        await fireEvent.click(container.querySelector("button.p-toast-icon-close") as HTMLElement);
 
         // THEN
-        expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        await waitFor(() => {
+            expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        })
     });
 
     it("closes cue errors alert automatically", async () => {
         // GIVEN
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
-        const expectedNode = render(<></>);
+
+        const expectedNode = render(
+            <>
+                <div className="p-toast p-component p-toast-top-center">
+                    <div />
+                </div>
+            </>
+        );
+
         const { container, rerender } = render(
             <Provider store={testingStore}>
                 <CueErrorAlert />
@@ -85,22 +114,39 @@ describe("CueErrorAlert", () => {
         );
 
         // THEN
-        expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        await waitFor(() => {
+            expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        })
     });
 
     it("closes cue errors alert automatically debounced", async () => {
         // GIVEN
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
         const expectedNode = render(
-            <div className="tw-alert tw-alert-component tw-alert-danger sbte-cue-errors-alert">
-                <button
-                    className="tw-absolute tw-right-7 tw-top-3 tw-font-bold tw-text-red-900 tw-text-opacity-60
-                        tw-text-sm tw-alert-close"
-                >
-                    <span aria-hidden>x</span>
-                </button>
-                <span>Unable to complete action due to the following error(s):</span><br />
-                <div>&#8226; {CueError.LINE_CHAR_LIMIT_EXCEEDED}<br /></div>
+            <div className="p-toast p-component p-toast-top-center">
+                <div>
+                    <div
+                        className="p-toast-message p-toast-message-error p-toast-message-enter-done"
+                        role="alert"
+                        aria-live="assertive"
+                        aria-atomic="true"
+                    >
+                        <div className="p-toast-message-content">
+                            <span className="p-toast-message-icon pi pi-times" />
+                            <div className="p-toast-message-text">
+                                <span className="p-toast-summary">
+                                    Unable to complete action due to the following error(s):
+                                </span>
+                                <div className="p-toast-detail">
+                                    Max Characters Per Line Exceeded
+                                </div>
+                            </div>
+                            <button type="button" className="p-toast-icon-close p-link">
+                                <span className="p-toast-icon-close-icon pi pi-times" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
         const { container, rerender } = render(

@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
-import Tooltip from "../../common/Tooltip";
+import { Tooltip } from "primereact/tooltip";
 
 const SubtitleSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
@@ -17,19 +17,21 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const handleShow  = (): void => setShow(true);
     return (
         <>
-            <Tooltip
-                tooltipId="subtitleSpecsBtnTooltip"
-                message="Subtitle Specifications"
-                offset={[-7, 10]}
+            <button
+                id="subtitleSpecsBtn"
+                className="dotsub-subtitle-specifications-button btn btn-secondary"
+                onClick={handleShow}
+                hidden={subtitleSpecifications == null}
+                data-pr-tooltip="Subtitle Specifications"
+                data-pr-position="top"
+                data-pr-at="center+2 top-2"
             >
-                <button
-                    className="dotsub-subtitle-specifications-button btn btn-secondary"
-                    onClick={handleShow}
-                    hidden={subtitleSpecifications == null}
-                >
-                    <i className="fas fa-clipboard-list fa-lg" />
-                </button>
-            </Tooltip>
+                <i className="fas fa-clipboard-list fa-lg" />
+            </button>
+            <Tooltip
+                id="subtitleSpecsBtnTooltip"
+                target="#subtitleSpecsBtn"
+            />
             <SubtitleSpecificationsModal show={show} onClose={handleClose} />
         </>
     );

@@ -9,7 +9,7 @@ import { CueActionsPanel } from "./CueActionsPanel";
 import { CueDto, Track } from "../../model";
 import DeleteCueLineButton from "../edit/DeleteCueLineButton";
 import PlayCueButton from "./PlayCueButton";
-import { removeDraftJsDynamicValues, removeHeadlessAttributes } from "../../../testUtils/testUtils";
+import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { updateCues } from "../cuesList/cuesListActions";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
@@ -45,7 +45,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
                 >
                     <DeleteCueLineButton cueIndex={1} />
-                    <PlayCueButton cue={cues[1]} />
+                    <PlayCueButton cue={cues[1]} cueIndex={1} />
                     <SplitCueLineButton cueIndex={1} />
                     <AddCueLineButton cueIndex={1} sourceCueIndexes={[]} />
                 </div>
@@ -60,8 +60,8 @@ describe("CueActionsPanel", () => {
         );
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeHeadlessAttributes(actualNode.container.outerHTML));
-        const expected = removeDraftJsDynamicValues(removeHeadlessAttributes(expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+        const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
         expect(actual).toEqual(expected);
     });
 
@@ -74,7 +74,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
                 >
                     <div />
-                    <PlayCueButton cue={cues[1]} />
+                    <PlayCueButton cue={cues[1]} cueIndex={1} />
                     <div />
                     <div />
                 </div>
@@ -89,8 +89,8 @@ describe("CueActionsPanel", () => {
         );
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeHeadlessAttributes(actualNode.container.outerHTML));
-        const expected = removeDraftJsDynamicValues(removeHeadlessAttributes(expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+        const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
         expect(actual).toEqual(expected);
     });
 

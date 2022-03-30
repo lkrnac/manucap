@@ -40,15 +40,15 @@ describe("SplitCueLineButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <div
-                className="tw-p-1.5"
-                id=""
-                aria-expanded="false"
-            >
+            <div className="tw-p-1.5">
                 <button
+                    id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
                     className="btn btn-outline-secondary sbte-split-cue-button tw-w-full"
                     title="Unlock timecodes to enable"
+                    data-pr-tooltip="Split this subtitle"
+                    data-pr-position="left"
+                    data-pr-at="left+10 center"
                 >
                     <i className="fas fa-cut" />
                 </button>
@@ -63,23 +63,23 @@ describe("SplitCueLineButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        const actual = actualNode.container.outerHTML;
+        const expected = expectedNode.container.outerHTML;
         expect(actual).toEqual(expected);
     });
 
     it("renders enabled if timecodes are locked but track is caption", () => {
         // GIVEN
         const expectedNode = render(
-            <div
-                className="tw-p-1.5"
-                id=""
-                aria-expanded="false"
-            >
+            <div className="tw-p-1.5">
                 <button
+                    id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
                     className="btn btn-outline-secondary sbte-split-cue-button tw-w-full"
                     title="Unlock timecodes to enable"
+                    data-pr-tooltip="Split this subtitle"
+                    data-pr-position="left"
+                    data-pr-at="left+10 center"
                 >
                     <i className="fas fa-cut" />
                 </button>
@@ -94,8 +94,8 @@ describe("SplitCueLineButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        const actual = actualNode.container.outerHTML;
+        const expected = expectedNode.container.outerHTML;
         expect(actual).toEqual(expected);
     });
 
@@ -104,16 +104,16 @@ describe("SplitCueLineButton", () => {
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
-            <div
-                className="tw-p-1.5"
-                id=""
-                aria-expanded="false"
-            >
+            <div className="tw-p-1.5">
                 <button
+                    id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
                     className="btn btn-outline-secondary sbte-split-cue-button tw-w-full"
                     disabled
                     title="Unlock timecodes to enable"
+                    data-pr-tooltip="Split this subtitle"
+                    data-pr-position="left"
+                    data-pr-at="left+10 center"
                 >
                     <i className="fas fa-cut" />
                 </button>
@@ -128,8 +128,8 @@ describe("SplitCueLineButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
+        const actual = actualNode.container.outerHTML;
+        const expected = expectedNode.container.outerHTML;
         expect(actual).toEqual(expected);
     });
 

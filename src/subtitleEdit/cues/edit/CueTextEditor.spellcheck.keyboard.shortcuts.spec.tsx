@@ -96,7 +96,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         // THEN
-        expect(document.querySelector(".tw-popper-wrapper.tw-open-true")).not.toBeNull();
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
 
     it("hides popover when enter popover show shortcut again while popover is shown already", () => {
@@ -109,7 +109,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         // THEN
-        expect(document.querySelector(".tw-popper-wrapper.tw-open-false")).not.toBeNull();
+        expect(document.querySelector("div.popover.show")).toBeNull();
     });
 
     it("hides popover when enter popover close shortcut", async () => {
@@ -123,7 +123,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
             { keyCode: Character.ESCAPE });
 
         // THEN
-        expect(document.querySelector(".tw-popper-wrapper.tw-open-false")).not.toBeNull();
+        expect(document.querySelector("div.popover.show")).toBeNull();
     });
 
     it("moves between options using the arrow up/down shortcut", () => {
@@ -185,6 +185,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
+
         //WHEN
         fireEvent.keyDown(document.querySelector(".spellcheck__menu") as Element,
             { keyCode: Character.ESCAPE });
@@ -213,7 +214,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(saveTrack).not.toBeCalled();
-        expect(document.querySelector(".tw-popper-wrapper.tw-open-true")).not.toBeNull();
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
 
     it("do nothing when type tab and escape on editor while popover is shown", () => {
@@ -234,7 +235,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(saveTrack).not.toBeCalled();
-        expect(document.querySelector(".tw-popper-wrapper.tw-open-true")).not.toBeNull();
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
 
     it("does not select an option if clicked ctrl space on the dropdown", () => {
@@ -259,7 +260,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(saveTrack).not.toBeCalled();
-        expect(document.querySelector(".tw-popper-wrapper.tw-open-false")).not.toBeNull();
+        expect(document.querySelector("div.popover.show")).toBeNull();
     });
 
     it("handle popover keyboard shortcut if it was passed to editor", () => {
@@ -272,7 +273,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         fireEvent.keyDown(editor as Element, { keyCode: Character.ESCAPE });
 
         // THEN
-        expect(document.querySelector(".tw-popper-wrapper.tw-open-true")).not.toBeNull();
+        expect(document.querySelector("div.popover.show")).not.toBeNull();
     });
 
     it("calls unbindCueViewModeKeyboardShortcut when entering the popover", () => {

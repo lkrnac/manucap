@@ -3,43 +3,28 @@ import "video.js"; // VTTCue type
 import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { mount } from "enzyme";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 describe("PositionButton", () => {
     it("renders button", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "some text");
         const expectedNode = mount(
-            <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
-                <div
-                    id=""
-                    aria-expanded={false}
-                >
-                    <div
-                        className="tw-cursor-pointer"
-                        id=""
-                        aria-haspopup
-                        aria-expanded={false}
-                    >
-                        <button
-                            className="tw-select-none dropdown-toggle btn
-                                btn-outline-secondary tw-w-[68px] tw-open-false"
-                        >
-                            <span>↓↓</span>
-                            <span className="caret" />
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <button
+                className="tw-select-none tw-flex tw-items-center tw-justify-center dropdown-toggle btn
+                    btn-outline-secondary tw-w-[68px]"
+                aria-controls="positionButtonMenu"
+                aria-haspopup="true"
+            >
+                <span>↓↓</span>
+                <span className="caret" />
+            </button>
         );
 
         // WHEN
         const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("renders with dropdown", () => {
@@ -516,9 +501,7 @@ describe("PositionButton", () => {
         actualNode.find("button").simulate("click");
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("changes position", () => {

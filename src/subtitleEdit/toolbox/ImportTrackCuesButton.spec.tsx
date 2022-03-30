@@ -3,7 +3,6 @@ import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
-import { removeHeadlessAttributes } from "../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -14,14 +13,15 @@ describe("ImportTrackCuesButton", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <div
-               id=""
-               aria-expanded={false}
+           <button
+               id="importFileBtn"
+               className="sbte-import-button btn btn-secondary"
+               data-pr-tooltip="Import File"
+               data-pr-position="top"
+               data-pr-at="center+2 top-2"
            >
-               <button type="button" className="sbte-import-button btn btn-secondary">
-                   <i className="fas fa-file-import fa-lg" />
-               </button>
-           </div>
+               <i className="fas fa-file-import fa-lg" />
+           </button>
        );
 
        // WHEN
@@ -32,22 +32,22 @@ describe("ImportTrackCuesButton", () => {
        );
 
        // THEN
-       const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-       const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-       expect(actual).toEqual(expected);
+       expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
    });
 
     it("renders disabled", () => {
         // GIVEN
         const expectedNode = render(
-            <div
-                id=""
-                aria-expanded={false}
+            <button
+                id="importFileBtn"
+                disabled
+                className="sbte-import-button btn btn-secondary"
+                data-pr-tooltip="Import File"
+                data-pr-position="top"
+                data-pr-at="center+2 top-2"
             >
-                <button type="button" disabled className="sbte-import-button btn btn-secondary">
-                    <i className="fas fa-file-import fa-lg" />
-                </button>
-            </div>
+                <i className="fas fa-file-import fa-lg" />
+            </button>
         );
 
         // WHEN
@@ -58,9 +58,7 @@ describe("ImportTrackCuesButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-        const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-        expect(actual).toEqual(expected);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("calls handleImport when clicked", () => {

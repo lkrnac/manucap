@@ -1,18 +1,23 @@
-import { ReactElement } from "react";
+import { MouseEvent, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import ToggleButton from "./ToggleButton";
 import { commentsVisibleSlice } from "../cues/comments/commentsSlices";
 
-export const CueCommentsToggle = (): ReactElement => {
+interface Props {
+    onClick: (event: MouseEvent<HTMLElement>) => void
+}
+
+export const CueCommentsToggle = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const commentsVisible = useSelector((state: SubtitleEditState) => state.commentsVisible);
     return (
         <ToggleButton
-            className="tw-dropdown-item tw-flex tw-items-center tw-justify-between"
+            className="tw-flex tw-items-center tw-justify-between"
             toggled={commentsVisible}
-            onClick={(): void => {
+            onClick={(event): void => {
                 dispatch(commentsVisibleSlice.actions.setCommentsVisible(!commentsVisible));
+                props.onClick(event);
             }}
             render={(toggle): ReactElement => (
                 toggle

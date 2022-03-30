@@ -4,7 +4,7 @@ import { SubtitleEditState } from "../../subtitleEditReducers";
 import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { Field, Form } from "react-final-form";
 import { formatStartOrEndTime } from "../../utils/timeUtils";
-import TransitionDialog from "../../common/TransitionDialog";
+import { Dialog } from "primereact/dialog";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
@@ -42,16 +42,39 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     };
 
     return (
-        <TransitionDialog
-            open={props.show}
-            onClose={handleCancelShift}
-            dialogClassName="sbte-medium-modal"
-            contentClassname="tw-max-w-3xl"
-            title="Shift Track Lines Time"
-        >
-            <Form
-                onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
-                render={({ handleSubmit, values }): ReactElement => (
+        <Form
+            onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
+            render={({ handleSubmit, values }): ReactElement => (
+                <Dialog
+                    visible={props.show}
+                    onHide={handleCancelShift}
+                    className="tw-max-w-3xl"
+                    header="Shift Track Lines Time"
+                    draggable={false}
+                    dismissableMask
+                    resizable={false}
+                    footer={() => (
+                        <>
+                            <button
+                                type="submit"
+                                disabled={
+                                    isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
+                                    values.shiftPosition === undefined
+                                }
+                                className="dotsub-shift-modal-apply-button btn btn-primary"
+                            >
+                                Apply
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleCancelShift}
+                                className="dotsub-shift-modal-close-button btn btn-secondary"
+                            >
+                                Close
+                            </button>
+                        </>
+                    )}
+                >
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label>Time Shift in Seconds.Milliseconds</label>
@@ -106,29 +129,10 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                 </span>
                             ): null
                         }
-                        <div className="tw-modal-toolbar">
-                            <button
-                                type="submit"
-                                disabled={
-                                    isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
-                                    values.shiftPosition === undefined
-                                }
-                                className="dotsub-shift-modal-apply-button btn btn-primary"
-                            >
-                                Apply
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleCancelShift}
-                                className="dotsub-shift-modal-close-button btn btn-secondary"
-                            >
-                                Close
-                            </button>
-                        </div>
                     </form>
-                )}
-            />
-        </TransitionDialog>
+                </Dialog>
+            )}
+        />
     );
 };
 

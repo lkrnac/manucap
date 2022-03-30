@@ -9,7 +9,6 @@ import { updateCues } from "../cuesList/cuesListActions";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -29,14 +28,14 @@ describe("DeleteCueLineButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <div
-                className="tw-p-1.5"
-                id=""
-                aria-expanded="false"
-            >
+            <div className="tw-p-1.5">
                 <button
+                    id="deleteCueLineButton0"
                     style={{ maxHeight: "38px" }}
                     className="btn btn-outline-secondary sbte-delete-cue-button tw-w-full"
+                    data-pr-tooltip="Delete this subtitle"
+                    data-pr-position="left"
+                    data-pr-at="left+10 center"
                 >
                     <i className="fa fa-trash" />
                 </button>
@@ -51,9 +50,7 @@ describe("DeleteCueLineButton", () => {
         );
 
         // THEN
-        const actual = removeHeadlessAttributes(actualNode.html());
-        const expected = removeHeadlessAttributes(expectedNode.html());
-        expect(actual).toEqual(expected);
+        expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
     it("deletes cue when delete cue button is clicked", () => {

@@ -17,8 +17,7 @@ import PositionButton from "./PositionButton";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import {
     MockedDebouncedFunction,
-    removeDraftJsDynamicValues,
-    removeHeadlessAttributes
+    removeDraftJsDynamicValues
 } from "../../../testUtils/testUtils";
 import { updateCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
@@ -94,8 +93,7 @@ describe("CueEdit", () => {
                                 flex: "1 1 300px",
                                 display: "flex",
                                 flexDirection: "column",
-                                paddingLeft: "10px",
-                                paddingTop: "5px",
+                                padding: "5px 10px",
                                 justifyContent: "space-between"
                             }}
                         >
@@ -105,70 +103,53 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <input
-                                    type="text"
-                                    // @ts-ignore custom attribute added by react-advanced-timefield
-                                    colon=":"
-                                    className="sbte-time-input mousetrap"
-                                    style={{
-                                        marginBottom: "5px",
-                                        width: "110px",
-                                        maxWidth: "200px",
-                                        padding: "5px",
-                                        textAlign: "center"
-                                    }}
-                                    value="00:00:00.000"
-                                    onChange={(): void => undefined}
-                                />
-                                <input
-                                    type="text"
-                                    // @ts-ignore custom attribute added by react-advanced-timefield
-                                    colon=":"
-                                    className="sbte-time-input mousetrap"
-                                    style={{
-                                        marginBottom: "5px",
-                                        width: "110px",
-                                        maxWidth: "200px",
-                                        padding: "5px",
-                                        textAlign: "center"
-                                    }}
-                                    value="00:00:02.000"
-                                    onChange={(): void => undefined}
-                                />
+                                <div className="tw-space-y-1">
+                                    <input
+                                        type="text"
+                                        // @ts-ignore custom attribute added by react-advanced-timefield
+                                        colon=":"
+                                        className="sbte-time-input mousetrap tw-block"
+                                        style={{
+                                            width: "110px",
+                                            maxWidth: "200px",
+                                            padding: "5px",
+                                            textAlign: "center"
+                                        }}
+                                        value="00:00:00.000"
+                                        onChange={(): void => undefined}
+                                    />
+                                    <input
+                                        type="text"
+                                        // @ts-ignore custom attribute added by react-advanced-timefield
+                                        colon=":"
+                                        className="sbte-time-input mousetrap tw-block"
+                                        style={{
+                                            width: "110px",
+                                            maxWidth: "200px",
+                                            padding: "5px",
+                                            textAlign: "center"
+                                        }}
+                                        value="00:00:02.000"
+                                        onChange={(): void => undefined}
+                                    />
+                                </div>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <div className="md:tw-relative tw-dropdown-wrapper">
-                                    <div
-                                        id=""
-                                        className="tw-cursor-pointer"
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                    >
-                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
-                                            Dialogue<span className="caret" />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
-                                    <div
-                                        id=""
-                                        aria-expanded="false"
-                                    >
-                                        <div
-                                            className="tw-cursor-pointer"
-                                            id=""
-                                            aria-haspopup="true"
-                                            aria-expanded="false"
-                                        >
-                                            <button
-                                                className="tw-select-none dropdown-toggle btn
-                                                    btn-outline-secondary tw-w-[68px] tw-open-false"
-                                            >
-                                                <span>↓↓</span><span className="caret" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <button
+                                    className="dropdown-toggle btn btn-outline-secondary"
+                                    aria-controls="cueCategoryMenu"
+                                    aria-haspopup
+                                >
+                                    Dialogue
+                                </button>
+                                <button
+                                    className="tw-select-none tw-flex tw-items-center tw-justify-center
+                                        dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                                    aria-controls="positionButtonMenu"
+                                    aria-haspopup
+                                >
+                                    <span>↓↓</span><span className="caret" />
+                                </button>
                             </div>
                         </div>
                         <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
@@ -199,8 +180,8 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
-            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+            const actual = removeDraftJsDynamicValues(actualNode.html());
+            const expected = removeDraftJsDynamicValues(expectedNode.html());
             expect(actual).toEqual(expected);
         });
 
@@ -230,9 +211,8 @@ describe("CueEdit", () => {
                                     type="text"
                                     // @ts-ignore custom attribute added by react-advanced-timefield
                                     colon=":"
-                                    className="sbte-time-input mousetrap"
+                                    className="sbte-time-input mousetrap tw-block"
                                     style={{
-                                        marginBottom: "5px",
                                         width: "110px",
                                         maxWidth: "200px",
                                         padding: "5px",
@@ -245,9 +225,8 @@ describe("CueEdit", () => {
                                     type="text"
                                     // @ts-ignore custom attribute added by react-advanced-timefield
                                     colon=":"
-                                    className="sbte-time-input mousetrap"
+                                    className="sbte-time-input mousetrap tw-block"
                                     style={{
-                                        marginBottom: "5px",
                                         width: "110px",
                                         maxWidth: "200px",
                                         padding: "5px",
@@ -258,38 +237,21 @@ describe("CueEdit", () => {
                                 />
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <div className="md:tw-relative tw-dropdown-wrapper">
-                                    <div
-                                        id=""
-                                        className="tw-cursor-pointer"
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                    >
-                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
-                                            Dialogue<span className="caret" />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
-                                    <div
-                                        id=""
-                                        aria-expanded="false"
-                                    >
-                                        <div
-                                            className="tw-cursor-pointer"
-                                            id=""
-                                            aria-haspopup="true"
-                                            aria-expanded="false"
-                                        >
-                                            <button
-                                                className="tw-select-none dropdown-toggle btn
-                                                    btn-outline-secondary tw-w-[68px] tw-open-false"
-                                            >
-                                                <span>↓↓</span><span className="caret" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <button
+                                    className="dropdown-toggle btn btn-outline-secondary"
+                                    aria-controls="cueCategoryMenu"
+                                    aria-haspopup
+                                >
+                                    Dialogue
+                                </button>
+                                <button
+                                    className="tw-select-none tw-flex tw-items-center tw-justify-center
+                                        dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                                    aria-controls="positionButtonMenu"
+                                    aria-haspopup
+                                >
+                                    <span>↓↓</span><span className="caret" />
+                                </button>
                             </div>
                         </div>
                         <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
@@ -320,8 +282,8 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
-            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+            const actual = removeDraftJsDynamicValues(actualNode.html());
+            const expected = removeDraftJsDynamicValues(expectedNode.html());
             expect(actual).toEqual(expected);
         });
 
@@ -336,81 +298,70 @@ describe("CueEdit", () => {
                                 flex: "1 1 300px",
                                 display: "flex",
                                 flexDirection: "column",
-                                paddingLeft: "10px",
-                                paddingTop: "5px",
+                                padding: "5px 10px",
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div style={{
-                                display: "flex",
-                                flexDirection:"column",
-                                paddingBottom: "15px"
-                            }}
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection:"column",
+                                    paddingBottom: "15px"
+                                }}
                             >
-                                <div id="" aria-expanded="false">
-                                    <div style={{
-                                        border: "1px solid",
-                                        borderRadius: "4px",
-                                        width: "110px",
-                                        textAlign: "center",
-                                        padding: "5px",
-                                        backgroundColor: "rgb(224,224,224)",
-                                        marginTop: "5px",
-                                        cursor: "not-allowed"
-                                    }}
+                                <div className="tw-space-y-1">
+                                    <div
+                                        id="cueEditLine-0-startTime"
+                                        style={{
+                                            border: "1px solid",
+                                            borderRadius: "4px",
+                                            width: "110px",
+                                            textAlign: "center",
+                                            padding: "5px",
+                                            backgroundColor: "rgb(224,224,224)",
+                                            cursor: "not-allowed"
+                                        }}
+                                        data-pr-tooltip="Timecodes are locked"
+                                        data-pr-position="right"
+                                        data-pr-at="right+10 top+18"
                                     >
                                         00:00:00.000
                                     </div>
-                                </div>
-                                <div id="" aria-expanded="false">
-                                    <div style={{
-                                        border: "1px solid",
-                                        borderRadius: "4px",
-                                        width: "110px",
-                                        textAlign: "center",
-                                        padding: "5px",
-                                        backgroundColor: "rgb(224,224,224)",
-                                        marginTop: "5px",
-                                        cursor: "not-allowed"
-                                    }}
+                                    <div
+                                        id="cueEditLine-0-endTime"
+                                        style={{
+                                            border: "1px solid",
+                                            borderRadius: "4px",
+                                            width: "110px",
+                                            textAlign: "center",
+                                            padding: "5px",
+                                            backgroundColor: "rgb(224,224,224)",
+                                            cursor: "not-allowed"
+                                        }}
+                                        data-pr-tooltip="Timecodes are locked"
+                                        data-pr-position="right"
+                                        data-pr-at="right+10 top+18"
                                     >
                                         00:00:02.000
                                     </div>
                                 </div>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <div className="md:tw-relative tw-dropdown-wrapper">
-                                    <div
-                                        id=""
-                                        className="tw-cursor-pointer"
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                    >
-                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
-                                            Dialogue<span className="caret" />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
-                                    <div
-                                        id=""
-                                        aria-expanded="false"
-                                    >
-                                        <div
-                                            className="tw-cursor-pointer"
-                                            id=""
-                                            aria-haspopup="true"
-                                            aria-expanded="false"
-                                        >
-                                            <button
-                                                className="tw-select-none dropdown-toggle btn
-                                                    btn-outline-secondary tw-w-[68px] tw-open-false"
-                                            >
-                                                <span>↓↓</span><span className="caret" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <button
+                                    className="dropdown-toggle btn btn-outline-secondary"
+                                    aria-controls="cueCategoryMenu"
+                                    aria-haspopup
+                                >
+                                    Dialogue
+                                </button>
+                                <button
+                                    className="tw-select-none tw-flex tw-items-center tw-justify-center
+                                        dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                                    aria-controls="positionButtonMenu"
+                                    aria-haspopup
+                                >
+                                    <span>↓↓</span><span className="caret" />
+                                </button>
                             </div>
                         </div>
                         <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
@@ -441,8 +392,8 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
-            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+            const actual = removeDraftJsDynamicValues(actualNode.html());
+            const expected = removeDraftJsDynamicValues(expectedNode.html());
             expect(actual).toEqual(expected);
         });
 
@@ -460,81 +411,64 @@ describe("CueEdit", () => {
                                 flex: "1 1 300px",
                                 display: "flex",
                                 flexDirection: "column",
-                                paddingLeft: "10px",
-                                paddingTop: "5px",
+                                padding: "5px 10px",
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div style={{
-                                display: "flex",
-                                flexDirection:"column",
-                                paddingBottom: "15px"
-                            }}
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection:"column",
+                                    paddingBottom: "15px"
+                                }}
                             >
-                                <input
-                                    type="text"
-                                    // @ts-ignore custom attribute added by react-advanced-timefield
-                                    colon=":"
-                                    className="sbte-time-input mousetrap"
-                                    style={{
-                                        marginBottom: "5px",
-                                        width: "110px",
-                                        maxWidth: "200px",
-                                        padding: "5px",
-                                        textAlign: "center"
-                                    }}
-                                    value="00:00:00.000"
-                                    onChange={(): void => undefined}
-                                />
-                                <input
-                                    type="text"
-                                    // @ts-ignore custom attribute added by react-advanced-timefield
-                                    colon=":"
-                                    className="sbte-time-input mousetrap"
-                                    style={{
-                                        marginBottom: "5px",
-                                        width: "110px",
-                                        maxWidth: "200px",
-                                        padding: "5px",
-                                        textAlign: "center"
-                                    }}
-                                    value="00:00:02.000"
-                                    onChange={(): void => undefined}
-                                />
+                                <div className="tw-space-y-1">
+                                    <input
+                                        type="text"
+                                        // @ts-ignore custom attribute added by react-advanced-timefield
+                                        colon=":"
+                                        className="sbte-time-input mousetrap tw-block"
+                                        style={{
+                                            width: "110px",
+                                            maxWidth: "200px",
+                                            padding: "5px",
+                                            textAlign: "center"
+                                        }}
+                                        value="00:00:00.000"
+                                        onChange={(): void => undefined}
+                                    />
+                                    <input
+                                        type="text"
+                                        // @ts-ignore custom attribute added by react-advanced-timefield
+                                        colon=":"
+                                        className="sbte-time-input mousetrap tw-block"
+                                        style={{
+                                            width: "110px",
+                                            maxWidth: "200px",
+                                            padding: "5px",
+                                            textAlign: "center"
+                                        }}
+                                        value="00:00:02.000"
+                                        onChange={(): void => undefined}
+                                    />
+                                </div>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <div className="md:tw-relative tw-dropdown-wrapper">
-                                    <div
-                                        id=""
-                                        className="tw-cursor-pointer"
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                    >
-                                        <button className="tw-select-none dropdown-toggle btn btn-outline-secondary">
-                                            Dialogue<span className="caret" />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
-                                    <div
-                                        id=""
-                                        aria-expanded="false"
-                                    >
-                                        <div
-                                            className="tw-cursor-pointer"
-                                            id=""
-                                            aria-haspopup="true"
-                                            aria-expanded="false"
-                                        >
-                                            <button
-                                                className="tw-select-none dropdown-toggle btn
-                                                    btn-outline-secondary tw-w-[68px] tw-open-false"
-                                            >
-                                                <span>↓↓</span><span className="caret" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <button
+                                    className="dropdown-toggle btn btn-outline-secondary"
+                                    aria-controls="cueCategoryMenu"
+                                    aria-haspopup
+                                >
+                                    Dialogue
+                                </button>
+                                <button
+                                    className="tw-select-none tw-flex tw-items-center tw-justify-center
+                                        dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                                    aria-controls="positionButtonMenu"
+                                    aria-haspopup
+                                >
+                                    <span>↓↓</span><span className="caret" />
+                                </button>
                             </div>
                         </div>
                         <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
@@ -565,8 +499,8 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            const actual = removeHeadlessAttributes(removeDraftJsDynamicValues(actualNode.html()));
-            const expected = removeHeadlessAttributes(removeDraftJsDynamicValues(expectedNode.html()));
+            const actual = removeDraftJsDynamicValues(actualNode.html());
+            const expected = removeDraftJsDynamicValues(expectedNode.html());
             expect(actual).toEqual(expected);
         });
 
@@ -822,8 +756,8 @@ describe("CueEdit", () => {
             );
 
             // WHEN
-            actualNode.find("#cue-line-category").simulate("click");
-            actualNode.find(".tw-dropdown-item").at(1).simulate("click");
+            actualNode.find("button[aria-controls='cueCategoryMenu']").simulate("click");
+            actualNode.find("#cueCategoryMenu span").at(1).simulate("click");
 
             // THEN
             expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
@@ -844,8 +778,8 @@ describe("CueEdit", () => {
             );
 
             // WHEN
-            actualNode.find("#cue-line-category").simulate("click");
-            actualNode.find(".tw-dropdown-item").at(1).simulate("click");
+            actualNode.find("button[aria-controls='cueCategoryMenu']").simulate("click");
+            actualNode.find("#cueCategoryMenu span").at(1).simulate("click");
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -865,7 +799,8 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            expect(actualNode.find("#cue-line-category").text()).toEqual("On Screen Text");
+            expect(actualNode.find("button[aria-controls='cueCategoryMenu']").text())
+                .toEqual("On Screen Text");
         });
 
         it("should set player time to video start time on mod+shift+up shortcut", () => {

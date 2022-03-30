@@ -1,6 +1,4 @@
 import { ReactWrapper } from "enzyme";
-import { render, RenderResult } from "@testing-library/react";
-import { ReactElement } from "react";
 
 export const removeVideoPlayerDynamicValue =
     (htmlString: string): string => htmlString.replace(/video-player_component_[0-9]+/g, "");
@@ -25,21 +23,3 @@ export const spellCheckOptionPredicate = (optionIndex: number) => (wrapper: Reac
 export interface MockedDebouncedFunction extends Function {
     cancel: Function;
 }
-
-export const renderWithHeadlessPortal = (element: ReactElement): RenderResult => {
-    const holder = document.createElement("div");
-    holder.setAttribute("id", "headlessui-portal-root");
-    document.body.appendChild(holder);
-    return render(<div>{element}</div>, { container: holder });
-};
-
-export const getHeadlessDialog = (element: RenderResult): Element => {
-    return element.container.querySelector(".tw-modal") as Element;
-};
-
-export const removeHeadlessAttributes = (html: string): string => {
-    return html
-        .replace(/headlessui-[a-z-]+\d+/g, "")
-        .replace(/ ?tabindex="-?\d+"+/g, "")
-        .replace(/ ?style=""/g, "");
-};

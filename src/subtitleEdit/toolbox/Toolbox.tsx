@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, MouseEvent, useRef, useState } from "react";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
@@ -12,10 +12,11 @@ import MergeCuesButton from "./MergeCuesButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
 import WaveformToggle from "./WaveformToggle";
-import { Menu, Transition } from "@headlessui/react";
 import TimecodesLockToggle from "./TimecodesLockToggle";
 import SyncCuesButton from "./SyncCuesButton";
-import { usePopper } from "react-popper";
+import { Menu } from "primereact/menu";
+import KeyboardShortcutsModal from "./keyboardShortcuts/KeyboardShortcutsModal";
+import ShiftTimeModal from "./shift/ShiftTimeModal";
 
 interface Props {
     handleExportFile: () => void;
@@ -24,18 +25,26 @@ interface Props {
 }
 
 const Toolbox = (props: Props): ReactElement => {
+
+    // Tracks.
+
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
 
-    const [referenceElement, setReferenceElement] = useState<HTMLElement | null>();
-    const [popperElement, setPopperElement] = useState<HTMLElement | null>();
-    const { styles, attributes } = usePopper(referenceElement, popperElement, {
-        placement: "bottom-start"
-    });
+    // Menu Toolbox.
 
-    const transformOrigin = (attributes.popper && attributes.popper["data-popper-placement"]) === "top-start" ?
-        "tw-origin-bottom-left" : "tw-origin-top-left";
+    const menu = useRef(null);
+    const toggleMenu = (event: MouseEvent<HTMLElement>) => {
+        if (menu.current) {
+            (menu.current as any).toggle(event);
+        }
+    };
+
+    // Modal states.
+
+    const [showShiftTimeModal, setShiftTimeModal] = useState<boolean>(false);
+    const [showKbModal, setKbModal] = useState<boolean>(false);
 
     return (
         <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100] tw-justify-center sbte-button-toolbar">
@@ -51,75 +60,41 @@ const Toolbox = (props: Props): ReactElement => {
             <ExportTrackCuesButton
                 handleExport={props.handleExportFile}
             />
-            <Menu as="div" className="md:tw-relative tw-dropdown-wrapper">
-                {({ open }): ReactElement => (
-                    <>
-                        <Menu.Button id="cue-line-category" as="div" className="tw-cursor-pointer">
-                            <button
-                                ref={setReferenceElement}
-                                className={`tw-select-none${open ? " focus active" : ""}` +
-                                    " dropdown-toggle btn btn-secondary"}
-                            >
-                                <i className="fas fa-ellipsis-h" />
-                            </button>
-                        </Menu.Button>
-                        <div
-                            ref={setPopperElement}
-                            style={styles.popper}
-                            {...attributes.popper}
-                            className="tw-min-w-[240px] tw-w-[240px]"
-                        >
-                            <Transition
-                                unmount={false}
-                                show={open}
-                                className={`tw-transition-all tw-duration-300 tw-ease-in-out ${transformOrigin}`}
-                                enterFrom="tw-opacity-0 tw-scale-75"
-                                enterTo="tw-opacity-100 tw-scale-100"
-                                leaveFrom="tw-opacity-100 tw-scale-100"
-                                leaveTo="tw-opacity-0 tw-scale-75"
-                            >
-                                <Menu.Items
-                                    as="ul"
-                                    static
-                                    className="tw-dropdown-menu"
-                                >
-                                    <Menu.Item as="li">
-                                        <KeyboardShortcuts />
-                                    </Menu.Item>
-                                    <div className="tw-dropdown-separator" />
-                                    <Menu.Item as="li">
-                                        <ShiftTimeButton />
-                                    </Menu.Item>
-                                    {isTranslation ? (
-                                        <Menu.Item as="li">
-                                            <SyncCuesButton />
-                                        </Menu.Item>
-                                    ) : null}
-                                    <Menu.Item as="li">
-                                        <MergeCuesButton />
-                                    </Menu.Item>
-                                    <div className="tw-dropdown-separator" />
-                                    {isTranslation ? (
-                                        <Menu.Item as="li">
-                                            <TimecodesLockToggle />
-                                        </Menu.Item>
-                                    ) : null}
-                                    <Menu.Item as="li">
-                                        <CaptionOverlapToggle />
-                                    </Menu.Item>
-                                    <div className="tw-dropdown-separator" />
-                                    <Menu.Item as="li" className="sbte-dropdown-item">
-                                        <CueCommentsToggle />
-                                    </Menu.Item>
-                                    <Menu.Item as="li">
-                                        <WaveformToggle />
-                                    </Menu.Item>
-                                </Menu.Items>
-                            </Transition>
-                        </div>
-                    </>
-                )}
-            </Menu>
+            <button
+                className="tw-select-none dropdown-toggle btn btn-secondary tw-flex tw-items-center tw-justify-center"
+                onClick={toggleMenu}
+                aria-controls="toolboxMenu"
+                aria-haspopup
+            >
+                <i className="fas fa-ellipsis-h" />
+            </button>
+            <Menu
+                id="toolboxMenu"
+                className="tw-w-[260px] tw-min-w-[260px]"
+                ref={menu}
+                popup
+                model={[
+                    { template: () => <KeyboardShortcuts show setShow={setKbModal} /> },
+                    { separator: true },
+                    { template: () => <ShiftTimeButton onClick={() => setShiftTimeModal(true)} /> },
+                    { template: () => <SyncCuesButton onClick={toggleMenu} /> },
+                    { template: () => <MergeCuesButton onClick={toggleMenu} /> },
+                    { separator: true },
+                    { template: () => <TimecodesLockToggle onClick={toggleMenu} /> },
+                    { template: () => <CaptionOverlapToggle onClick={toggleMenu} /> },
+                    { separator: true },
+                    { template: () => <CueCommentsToggle onClick={toggleMenu} /> },
+                    { template: () => <WaveformToggle onClick={toggleMenu} /> },
+                ]}
+            />
+            <ShiftTimeModal
+                show={showShiftTimeModal}
+                onClose={() => setShiftTimeModal(false)}
+            />
+            <KeyboardShortcutsModal
+                show={showKbModal}
+                onClose={() => setKbModal(false)}
+            />
         </div>
     );
 };

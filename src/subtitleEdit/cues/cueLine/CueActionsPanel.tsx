@@ -25,7 +25,7 @@ export const CueActionsPanel = (props: Props): ReactElement => {
                     ? <DeleteCueLineButton cueIndex={props.index} />
                     : <div />
             }
-            <PlayCueButton cue={props.cue} />
+            <PlayCueButton cue={props.cue} cueIndex={props.index} />
             {
                 props.isEdit
                     ? <SplitCueLineButton cueIndex={props.index} />

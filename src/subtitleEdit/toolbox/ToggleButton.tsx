@@ -1,8 +1,8 @@
-import { FunctionComponent, PropsWithChildren, ReactElement, useEffect, useState } from "react";
+import { FunctionComponent, PropsWithChildren, MouseEvent, ReactElement, useEffect, useState } from "react";
 
 interface Props {
     className?: string;
-    onClick?: () => void;
+    onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
     toggled?: boolean;
     disabled?: boolean;
     title?: string;
@@ -18,9 +18,9 @@ const ToggleButton: FunctionComponent<Props> = (props: PropsWithChildren<Props>)
         <button
             type="button"
             className={(props.className ? props.className : "") + (toggle ? " sbte-toggled-btn" : "")}
-            onClick={(): void => {
+            onClick={(event): void => {
                 setToggle(!toggle);
-                props.onClick && props.onClick();
+                props.onClick && props.onClick(event);
             }}
             disabled={props.disabled}
             title={props.title}

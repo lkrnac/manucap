@@ -8,7 +8,7 @@ import { act } from "react-dom/test-utils";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
-import TransitionDialog from "../../common/TransitionDialog";
+import { Dialog } from "primereact/dialog";
 
 describe("KeyboardShortcuts", () => {
     it("renders", () => {
@@ -349,7 +349,7 @@ describe("KeyboardShortcuts", () => {
         actualNode.find("button.dotsub-keyboard-shortcuts-button").simulate("click");
 
         // THEN
-        expect(actualNode.find(TransitionDialog).props().open).toEqual(true);
+        expect(actualNode.find(Dialog).props().visible).toEqual(true);
     });
 
     it("closes keyboard shortcuts modal when X button is clicked", () => {
@@ -366,7 +366,7 @@ describe("KeyboardShortcuts", () => {
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(TransitionDialog).props().open).toEqual(false);
+        expect(actualNode.find(Dialog).props().visible).toEqual(false);
     });
 
     it("closes keyboard shortcuts modal when close button is clicked", () => {
@@ -383,7 +383,7 @@ describe("KeyboardShortcuts", () => {
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(TransitionDialog).props().open).toEqual(false);
+        expect(actualNode.find(Dialog).props().visible).toEqual(false);
     });
 
     it("opens keyboard shortcuts modal on keyboard shortcut", () => {
@@ -402,7 +402,7 @@ describe("KeyboardShortcuts", () => {
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(TransitionDialog).props().open).toEqual(true);
+        expect(actualNode.find(Dialog).props().visible).toEqual(true);
     });
 
     it("closes keyboard shortcuts modal on keyboard shortcut", () => {
@@ -422,6 +422,6 @@ describe("KeyboardShortcuts", () => {
         actualNode.update();
 
         // THEN
-        expect(actualNode.find(TransitionDialog).props().open).toEqual(false);
+        expect(actualNode.find(Dialog).props().visible).toEqual(false);
     });
 });

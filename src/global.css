@@ -44,45 +44,36 @@
 
 /** Modal **/
 
-.tw-modal .tw-modal-header {
-    @apply tw-rounded-t;
+.p-dialog {
+    @apply tw-shadow-2xl tw-border-none tw-w-full;
 }
 
-.tw-modal .tw-modal-description {
-    @apply tw-bg-white tw-rounded-b;
+.p-dialog .p-dialog-header {
+    @apply tw-bg-blue-600 tw-p-6 tw-rounded-t tw-justify-between;
 }
 
-.tw-modal .tw-modal-header h1,
-.tw-modal .tw-modal-header h2,
-.tw-modal .tw-modal-header h3,
-.tw-modal .tw-modal-header h4,
-.tw-modal .tw-modal-header h5,
-.tw-modal .tw-modal-header h6 {
-    @apply tw-text-white tw-m-0;
-}
-
-.tw-modal .tw-modal-header {
-    @apply tw-pr-14 tw-pl-6 tw-py-6;
-}
-
-.tw-modal .tw-modal-description {
+.p-dialog .p-dialog-content {
     @apply tw-p-6;
 }
 
-.tw-modal .tw-modal-header.tw-modal-header-primary {
-    @apply tw-bg-blue-600;
+.p-dialog .p-dialog-header .p-dialog-title {
+    @apply tw-text-white;
 }
 
-.tw-modal .tw-modal-header.tw-modal-header-danger {
-    @apply tw-bg-red-600;
+.p-dialog .p-dialog-footer {
+    @apply tw-rounded-b tw-px-6 tw-py-4;
 }
 
-.tw-modal .tw-modal-close {
-    @apply tw-absolute tw-right-6 tw-top-5 tw-pt-0.5 tw-text-white tw-opacity-60 hover:tw-opacity-100 tw-transition-colors tw-duration-300 tw-text-2xl tw-font-bold tw-outline-none;
+.p-dialog .p-dialog-footer button:last-child {
+    @apply tw-mr-0;
 }
 
-.tw-modal .tw-modal-toolbar {
-    @apply tw-flex tw-items-center tw-justify-end tw-space-x-2;
+.p-dialog .p-dialog-header .p-dialog-header-icon {
+    @apply tw-w-auto tw-h-[30px] tw-mt-[1px]
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon span {
+    @apply tw-text-white tw-opacity-60 hover:tw-opacity-100 tw-transition-colors tw-duration-300 tw-font-bold tw-outline-none;
 }
 
 /** Alerts **/
@@ -115,81 +106,74 @@
     @apply tw-text-cyan-800 tw-bg-cyan-100 tw-border-cyan-200;
 }
 
-/** Dropdown **/
+/** Toasts **/
 
-.tw-dropdown-menu {
-    @apply tw-border tw-min-w-[160px] tw-border-blue-grey-200 tw-my-2 tw-text-blue-grey-500 tw-rounded tw-z-50 tw-text-left tw-list-none tw-text-base tw-bg-white tw-shadow-sm tw-select-none tw-py-2;
+.p-toast {
+    @apply tw-w-[50vw];
 }
 
-.tw-dropdown-menu .tw-dropdown-separator {
-    @apply tw-bg-blue-grey-200 tw-w-full tw-h-[1px] tw-my-2;
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-icon {
+    @apply tw-hidden;
 }
 
-.tw-dropdown-menu hr {
-    @apply tw-w-full tw-border-blue-grey-200 tw-my-2;
+.p-toast .p-toast-message .p-toast-message-content .p-toast-detail,
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-text {
+    @apply tw-m-0;
 }
 
-.tw-dropdown-menu .tw-dropdown-header,
-.tw-dropdown-menu .tw-dropdown-item {
-    @apply tw-flex tw-w-full tw-py-2 tw-px-4;
+.p-toast .p-toast-message .p-toast-message-content {
+    @apply tw-px-6 tw-py-4;
 }
 
-.tw-dropdown-menu .tw-dropdown-item.disabled,
-.tw-dropdown-menu .tw-dropdown-item:disabled {
-    @apply tw-opacity-60 tw-shadow-none tw-pointer-events-none;
+/** Dropdown / Menu **/
+
+.p-dropdown-panel {
+    @apply tw-border tw-border-blue-grey-200 tw-my-2 tw-text-blue-grey-500 tw-rounded tw-z-50 tw-text-left tw-list-none tw-text-base tw-bg-white tw-shadow-sm tw-select-none tw-py-2;
+    @apply tw-min-w-[160px] !important;
 }
 
-.tw-dropdown-menu .tw-dropdown-header {
-    @apply tw-text-blue-grey-700 tw-text-base tw-font-bold;
+.p-menu.p-menu-overlay {
+    @apply tw-shadow-md tw-my-2;
 }
 
-.tw-dropdown-menu .tw-dropdown-item {
-    @apply tw-font-normal tw-transition-colors tw-duration-300 tw-text-blue-grey-500 tw-whitespace-nowrap hover:tw-bg-blue-grey-100;
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item > *,
+.p-menu:not(.position-button-list):not(.spellcheck-menu) .p-menuitem > * {
+    @apply tw-font-normal tw-flex tw-w-full tw-cursor-pointer tw-transition-colors tw-duration-300 tw-text-blue-grey-500 tw-whitespace-nowrap hover:tw-bg-blue-grey-100 tw-py-2 tw-px-6;
+}
+
+.p-menu .p-menuitem button {
+    @apply tw-w-full tw-text-left;
+}
+
+.p-menu.position-button-list .p-menu-list {
+    @apply tw-flex tw-flex-row tw-flex-wrap tw-justify-between tw-px-2;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item > .disabled,
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item > *:disabled,
+.p-menu .p-menuitem > .disabled,
+.p-menu .p-menuitem > *:disabled {
+    @apply tw-opacity-60 tw-shadow-none tw-pointer-events-none tw-cursor-not-allowed hover:tw-bg-transparent;
 }
 
 /** Tooltips **/
 
-.tw-popper-wrapper .tw-tooltip {
-    @apply tw-pointer-events-none tw-max-w-[200px] tw-select-none tw-p-2 tw-w-max tw-rounded tw-leading-4 tw-shadow-sm tw-bg-blue-grey-700 tw-block tw-text-center tw-text-sm tw-text-white;
+.p-tooltip .p-tooltip-text {
+    @apply tw-shadow-sm tw-bg-blue-grey-700 tw-block tw-text-center tw-text-sm tw-text-white;
 }
 
-/** Arrow **/
-
-.tw-arrow::before {
-    content: "";
-    @apply tw-absolute tw-w-[8px] tw-h-[4px] tw-border-transparent tw-border-solid;
+.p-tooltip.p-tooltip-top .p-tooltip-arrow {
+    @apply tw-border-t-blue-grey-700;
 }
 
-.tw-popper-wrapper[data-popper-placement="bottom"] .tw-arrow::before {
-    border-width: 0 4px 4px;
-    @apply tw--top-[4px] tw--ml-[2px];
-    right: calc(50% - 4px);
+.p-tooltip.p-tooltip-right .p-tooltip-arrow {
+    @apply tw-border-r-blue-grey-700;
 }
 
-.tw-popper-wrapper[data-popper-placement="top"] .tw-arrow::before {
-    border-width: 0 4px 4px;
-    transform: rotate(180deg);
-    @apply tw--bottom-[4px] tw--ml-[2px];
-    right: calc(50% - 4px);
+.p-tooltip.p-tooltip-left .p-tooltip-arrow {
+    @apply tw-border-l-blue-grey-700;
 }
 
-.tw-popper-wrapper[data-popper-placement="top-end"] .tw-arrow::before {
-    border-width: 0 4px 4px;
-    transform: rotate(180deg);
-    @apply tw--bottom-[4px] tw--ml-[2px];
-    left: calc(100% - 12px);
-}
-
-.tw-popper-wrapper[data-popper-placement="right"] .tw-arrow::before {
-    border-width: 0 4px 4px;
-    transform: rotate(270deg);
-    @apply tw--left-[6px];
-    top: calc(50% - 2px);
-}
-
-.tw-popper-wrapper[data-popper-placement="left"] .tw-arrow::before {
-    border-width: 0 4px 4px;
-    transform: rotate(90deg);
-    @apply tw--right-[6px];
-    top: calc(50% - 2px);
+.p-tooltip.p-tooltip-bottom .p-tooltip-arrow {
+    @apply tw-border-b-blue-grey-700;
 }
