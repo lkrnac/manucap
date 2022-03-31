@@ -4,6 +4,7 @@ import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
 import { ReactElement } from "react";
 
+// @ts-ignore We are mocking here.
 jest.mock("./KeyboardShortcutLabel", () => (): ReactElement => <span>ShortcutLabel</span>);
 
 describe("KeyboardShortcutsModal", () => {
@@ -31,7 +32,7 @@ describe("KeyboardShortcutsModal", () => {
                         role="dialog"
                         aria-labelledby=""
                         aria-describedby=""
-                        aria-modal={true}
+                        aria-modal
                     >
                         <div className="p-dialog-header">
                             <div className="p-dialog-title">
@@ -96,5 +97,5 @@ describe("KeyboardShortcutsModal", () => {
 
         // THEN
         expect(onClose).toHaveBeenCalled();
-    })
-})
+    });
+});
