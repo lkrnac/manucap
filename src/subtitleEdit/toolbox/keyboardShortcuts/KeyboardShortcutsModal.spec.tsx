@@ -4,7 +4,8 @@ import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
 import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
 import { ReactElement } from "react";
 
-// @ts-ignore We are mocking here.
+// We are mocking here.
+// eslint-disable-next-line react/display-name
 jest.mock("./KeyboardShortcutLabel", () => (): ReactElement => <span>ShortcutLabel</span>);
 
 describe("KeyboardShortcutsModal", () => {
