@@ -51,6 +51,7 @@ describe("CaptionOverlapToggle", () => {
             <button
                 type="button"
                 className="tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+                disabled
             >
                 Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">ALLOWED</span>
             </button>
@@ -70,8 +71,17 @@ describe("CaptionOverlapToggle", () => {
 
     it("changes icon back on double toggle", () => {
         // GIVEN
+        const testingTrack = {
+            type: "CAPTION",
+            language: { id: "en-US" },
+            default: true,
+            overlapEnabled: true
+        } as Track;
+
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
         const expectedNode = render(
-            <button type="button" className="tw-flex tw-items-center tw-justify-between">
+            <button type="button" className="tw-flex tw-items-center tw-justify-between" disabled>
                 Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
             </button>
         );
@@ -82,6 +92,7 @@ describe("CaptionOverlapToggle", () => {
                 <CaptionOverlapToggle onClick={jest.fn()} />
             </Provider>
         );
+
         fireEvent.click(actualNode.container.querySelector("button") as Element);
         fireEvent.click(actualNode.container.querySelector("button") as Element);
 

@@ -339,6 +339,11 @@ export const deleteCueComment = (idx: number, cueCommentIndex: number): AppThunk
         callSaveTrack(dispatch, getState);
     };
 
+export const saveTrack = (): AppThunk =>
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+        callSaveTrack(dispatch, getState);
+    };
+
 const verifyTimeGapLimit = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) >= timeGapLimit.minGap &&
     (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;

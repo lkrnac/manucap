@@ -11,6 +11,7 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import { updateCues } from "../cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "../trackSlices";
 import { act } from "react-dom/test-utils";
+import { waveformVisibleSlice } from "./waveformSlices";
 
 let testingStore = createTestingStore();
 
@@ -146,29 +147,6 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().playSection).toEqual({ startTime: -1 });
     });
 
-    it("enables waveform for videos shorter or equal than 30 minutes", () => {
-        // GIVEN
-        const handleTimeChange = jest.fn();
-        const actualNode = mount(
-            <Provider store={testingStore} >
-                <EditingVideoPlayer
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    waveform="dummyWaveform"
-                    duration={1800}
-                    onTimeChange={handleTimeChange}
-                />
-            </Provider>
-        );
-
-        // WHEN
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        actualNode.setProps({}); // trigger update + re-render
-
-        // THEN
-        expect(testingStore.getState().waveformVisible).toBeTruthy();
-    });
-
     it("doesn't enable waveform for videos longer than 30 minutes", () => {
         // GIVEN
         const handleTimeChange = jest.fn();
@@ -196,6 +174,7 @@ describe("EditingVideoPlayer", () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingStore.dispatch(waveformVisibleSlice.actions.setWaveformVisible(true));
         const actualNode = mount(
             <Provider store={testingStore} >
                 <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" waveform="dummyWaveform" duration={120} />

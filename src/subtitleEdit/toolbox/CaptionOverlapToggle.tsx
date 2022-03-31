@@ -4,7 +4,7 @@ import { SubtitleEditState } from "../subtitleEditReducers";
 import ToggleButton from "./ToggleButton";
 import { updateEditingTrack } from "../trackSlices";
 import { Track } from "../model";
-import { updateCues } from "../cues/cuesList/cuesListActions";
+import { saveTrack, updateCues } from "../cues/cuesList/cuesListActions";
 import { isPendingSaveState } from "../cues/saveSlices";
 
 interface Props {
@@ -29,6 +29,7 @@ export const CaptionOverlapToggle = (props: Props): ReactElement => {
                 } as Track;
                 dispatch(updateEditingTrack(track));
                 dispatch(updateCues(cues));
+                dispatch(saveTrack());
                 props.onClick(event);
             }}
             render={(toggle): ReactElement => (

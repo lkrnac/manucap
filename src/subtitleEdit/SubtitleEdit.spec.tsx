@@ -2213,4 +2213,58 @@ describe("SubtitleEdit", () => {
         // THEN
         expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
     });
+
+    it("enables waveform for videos shorter or equal than 30 minutes", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    waveform="dummyWaveform"
+                    duration={1800}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        actualNode.setProps({}); // trigger update + re-render
+
+        // THEN
+        expect(testingStore.getState().waveformVisible).toBeTruthy();
+    });
+
+    it("doesn't enable waveform for videos longer than 30 minutes", () => {
+        // GIVEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    waveform="dummyWaveform"
+                    duration={1801}
+                    onViewAllTracks={(): void => undefined}
+                    onSave={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        actualNode.setProps({}); // trigger update + re-render
+
+        // THEN
+        expect(testingStore.getState().waveformVisible).toBeFalsy();
+    });
 });
