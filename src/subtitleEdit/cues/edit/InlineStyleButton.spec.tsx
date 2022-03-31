@@ -191,7 +191,7 @@ describe("InlineStyleButton", () => {
         const button = actualNode.container.querySelector(".btn-outline-secondary") as Element;
 
         //WHEN
-        fireEvent.mouseOver(button);
+        fireEvent.mouseEnter(button);
 
         //THEN
         expect(await actualNode.findByText(expectedText)).toBeInTheDocument();

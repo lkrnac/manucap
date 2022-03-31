@@ -196,8 +196,7 @@ describe("CueEdit", () => {
                                 flex: "1 1 300px",
                                 display: "flex",
                                 flexDirection: "column",
-                                paddingLeft: "10px",
-                                paddingTop: "5px",
+                                padding: "5px 10px",
                                 justifyContent: "space-between"
                             }}
                         >
@@ -207,34 +206,36 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <input
-                                    type="text"
-                                    // @ts-ignore custom attribute added by react-advanced-timefield
-                                    colon=":"
-                                    className="sbte-time-input mousetrap tw-block"
-                                    style={{
-                                        width: "110px",
-                                        maxWidth: "200px",
-                                        padding: "5px",
-                                        textAlign: "center"
-                                    }}
-                                    value="00:00:00.000"
-                                    onChange={(): void => undefined}
-                                />
-                                <input
-                                    type="text"
-                                    // @ts-ignore custom attribute added by react-advanced-timefield
-                                    colon=":"
-                                    className="sbte-time-input mousetrap tw-block"
-                                    style={{
-                                        width: "110px",
-                                        maxWidth: "200px",
-                                        padding: "5px",
-                                        textAlign: "center"
-                                    }}
-                                    value="00:00:02.000"
-                                    onChange={(): void => undefined}
-                                />
+                                <div className="tw-space-y-1">
+                                    <input
+                                        type="text"
+                                        // @ts-ignore custom attribute added by react-advanced-timefield
+                                        colon=":"
+                                        className="sbte-time-input mousetrap tw-block"
+                                        style={{
+                                            width: "110px",
+                                            maxWidth: "200px",
+                                            padding: "5px",
+                                            textAlign: "center"
+                                        }}
+                                        value="00:00:00.000"
+                                        onChange={(): void => undefined}
+                                    />
+                                    <input
+                                        type="text"
+                                        // @ts-ignore custom attribute added by react-advanced-timefield
+                                        colon=":"
+                                        className="sbte-time-input mousetrap tw-block"
+                                        style={{
+                                            width: "110px",
+                                            maxWidth: "200px",
+                                            padding: "5px",
+                                            textAlign: "center"
+                                        }}
+                                        value="00:00:02.000"
+                                        onChange={(): void => undefined}
+                                    />
+                                </div>
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button

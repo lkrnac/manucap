@@ -133,15 +133,7 @@ describe("SpellCheckerIssue", () => {
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
                 className="p-menu p-component spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0
-                    tw-shadow-md p-menu-overlay p-connected-overlay-enter p-connected-overlay-enter-active"
-                style={{
-                    zIndex: 1001,
-                    visibility: "visible",
-                    display: "none",
-                    transformOrigin: "top",
-                    top: 0,
-                    left: 0
-                }}
+                    tw-shadow-md p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
             >
                 <ul className="p-menu-list p-reset" role="menu">
                     <li className="p-menuitem" role="none">
@@ -212,14 +204,7 @@ describe("SpellCheckerIssue", () => {
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
                 className="p-menu p-component spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0
-                    tw-shadow-md p-menu-overlay p-connected-overlay-enter p-connected-overlay-enter-active"
-                style={{
-                    visibility: "visible",
-                    display: "none",
-                    transformOrigin: "top",
-                    top: 0,
-                    left: 0
-                }}
+                    tw-shadow-md p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
             >
                 <ul className="p-menu-list p-reset" role="menu">
                     <li className="p-menuitem" role="none">

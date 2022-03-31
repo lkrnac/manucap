@@ -3,6 +3,7 @@ import "video.js"; // VTTCue type
 import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { mount } from "enzyme";
+import { fireEvent, render } from "@testing-library/react";
 
 describe("PositionButton", () => {
     it("renders button", () => {
@@ -31,477 +32,247 @@ describe("PositionButton", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "some text");
         // noinspection HtmlUnknownAttribute
-        const expectedNode = mount(
-            <div className="md:tw-relative tw-dropdown-wrapper tw-pb-[5px] tw-pr-[10px]">
-                <div
-                    id=""
-                    aria-expanded={false}
+        const expectedNode = render(
+            <>
+                <button
+                    className="tw-select-none tw-flex tw-items-center tw-justify-center dropdown-toggle btn
+                    btn-outline-secondary tw-w-[68px]"
+                    aria-controls="positionButtonMenu"
+                    aria-haspopup="true"
                 >
-                    <div
-                        className="tw-cursor-pointer"
-                        id=""
-                        aria-haspopup
-                        aria-expanded
-                        aria-controls=""
+                    <span>↓↓</span>
+                    <span className="caret" />
+                </button>
+                <div
+                    id="positionButtonMenu"
+                    className="p-menu p-component position-button-list tw-w-[210px] tw-min-w-[210px] p-menu-overlay
+                        p-connected-overlay-enter p-connected-overlay-enter-active"
+                    style={{
+                        zIndex: 1001,
+                        visibility: "visible",
+                        display: "none",
+                        transformOrigin: "top",
+                        top: 0,
+                        left: 0
+                    }}
+                >
+                    <ul
+                        className="p-menu-list p-reset"
+                        role="menu"
                     >
-                        <button
-                            className="tw-select-none dropdown-toggle btn
-                                btn-outline-secondary tw-w-[68px] tw-open-true focus active"
-                        >
-                            <span>↓↓</span>
-                            <span className="caret" />
-                        </button>
-                    </div>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
+                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↖↖
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
+                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↖↑
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
+                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↑↑
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
+                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↑↗
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↗↗
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
+                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↖←
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
+                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↖
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↑
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
+                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↗
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                →↗
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ←←
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                            tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ←
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                •
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                →
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                →→
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↙←
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↙
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↓
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↘
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                →↘
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↙↙
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↙↓
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↓↓
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↓↘
+                            </span>
+                        </li>
+                        <li className="p-menuitem" role="none">
+                            <span
+                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
+                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            >
+                                ↘↘
+                            </span>
+                        </li>
+                    </ul>
                 </div>
-                <div
-                    className="tw-transition-all tw-duration-300 tw-ease-in-out
-                        tw-origin-top-left tw-opacity-0 tw-scale-75"
-                >
-                    <div className="tw-absolute tw-left-0 tw-min-w-[210px] tw-w-[210px]">
-                        <ul
-                            className="tw-dropdown-menu tw-transition-all tw-flex tw-flex-row tw-flex-wrap
-                                tw-justify-between tw-px-2"
-                            aria-labelledby=""
-                            id=""
-                            role="menu"
-                        >
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 6px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↖↖
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 9px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↖↑
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 13px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↑↑
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 11px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↑↗
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 6px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↗↗
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 6px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↖←
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 13px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↖
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 16px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↑
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 13px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↗
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 6px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    →↗
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 5px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ←←
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 12px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ←
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 16px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    •
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 12px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    →
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 5px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    →→
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 6px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↙←
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 13px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↙
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 16px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↓
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 13px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↘
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 6px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    →↘
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 6px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↙↙
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 9px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↙↓
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 13px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↓↓
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 11px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↓↘
-                                </div>
-                            </li>
-                            <li
-                                id=""
-                                role="menuitem"
-                            >
-                                <div
-                                    className="sbte-dropdown-item dropdown-item tw-cursor-pointer"
-                                    style={{
-                                        lineHeight: "38px",
-                                        width: "38px",
-                                        margin: "auto",
-                                        padding: "0px 0px 0px 6px",
-                                        borderRadius: "3px"
-                                    }}
-                                >
-                                    ↘↘
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            </>
         );
 
         // WHEN
-        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
-        actualNode.find("button").simulate("click");
+        const actualNode = render(<PositionButton vttCue={vttCue} changePosition={jest.fn()} />, {
+            container: document.body
+        });
+
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.innerHTML).toEqual(expectedNode.container.innerHTML);
     });
 
     it("changes position", () => {
@@ -512,7 +283,7 @@ describe("PositionButton", () => {
         // WHEN
         const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={changePosition} />);
         actualNode.find("button").simulate("click");
-        actualNode.find("li").at(3).simulate("click");
+        actualNode.find("li").at(3).find("span").simulate("click");
 
         // THEN
         expect(changePosition).toBeCalledWith(Position.Row1Column4);

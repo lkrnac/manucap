@@ -9,11 +9,11 @@ interface Props {
 }
 
 const CueCategoryButton = (props: Props): ReactElement => {
-    const menu = useRef(null);
+    const menu = useRef<Menu>(null);
 
-    const toggleMenu = (event?: MouseEvent<HTMLElement>): void => {
+    const toggleMenu = (event: MouseEvent<HTMLElement>): void => {
         if (menu.current) {
-            (menu.current as any).toggle(event);
+            menu.current.toggle(event);
         }
     };
 

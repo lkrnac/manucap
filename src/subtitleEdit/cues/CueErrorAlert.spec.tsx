@@ -84,7 +84,7 @@ describe("CueErrorAlert", () => {
         // THEN
         await waitFor(() => {
             expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
-        })
+        });
     });
 
     it("closes cue errors alert automatically", async () => {
@@ -116,7 +116,7 @@ describe("CueErrorAlert", () => {
         // THEN
         await waitFor(() => {
             expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
-        })
+        });
     });
 
     it("closes cue errors alert automatically debounced", async () => {

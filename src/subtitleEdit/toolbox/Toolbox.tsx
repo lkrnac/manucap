@@ -34,10 +34,10 @@ const Toolbox = (props: Props): ReactElement => {
 
     // Menu Toolbox.
 
-    const menu = useRef(null);
+    const menu = useRef<Menu>(null);
     const toggleMenu = (event: MouseEvent<HTMLElement>) => {
         if (menu.current) {
-            (menu.current as any).toggle(event);
+            menu.current.toggle(event);
         }
     };
 

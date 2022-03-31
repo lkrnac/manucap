@@ -15,7 +15,7 @@ const KeyboardShortcuts = ({ setShow, show }: Props): ReactElement => {
             });
         };
         registerShortcuts();
-    }, [show]);
+    }, [setShow, show]);
 
     return (
         <button

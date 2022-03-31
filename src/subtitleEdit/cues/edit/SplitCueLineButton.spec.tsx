@@ -9,7 +9,6 @@ import { CueDto, Language, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
 import { updateCues } from "../cuesList/cuesListActions";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 const testTrack = {

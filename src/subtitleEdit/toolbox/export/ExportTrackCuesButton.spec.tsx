@@ -6,7 +6,6 @@ import { updateEditingTrack } from "../../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Track } from "../../model";
 import { fireEvent, render } from "@testing-library/react";
-import { removeHeadlessAttributes } from "../../../testUtils/testUtils";
 
 const testingTrack = {
     type: "CAPTION",
@@ -24,14 +23,15 @@ describe("ExportTrackCuesButton", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <div
-               id=""
-               aria-expanded={false}
+           <button
+               id="exportFileBtn"
+               className="sbte-export-button btn btn-secondary"
+               data-pr-tooltip="Export File"
+               data-pr-position="top"
+               data-pr-at="center+2 top-2"
            >
-               <button type="button" className="sbte-export-button btn btn-secondary">
-                   <i className="fas fa-file-download fa-lg" />
-               </button>
-           </div>
+               <i className="fas fa-file-download fa-lg" />
+           </button>
        );
 
        // WHEN
@@ -42,9 +42,7 @@ describe("ExportTrackCuesButton", () => {
        );
 
        // THEN
-       const actual = removeHeadlessAttributes(actualNode.container.outerHTML);
-       const expected = removeHeadlessAttributes(expectedNode.container.outerHTML);
-       expect(actual).toEqual(expected);
+       expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
    });
 
     it("calls handleExport when clicked", () => {

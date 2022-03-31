@@ -8,10 +8,10 @@ interface Props {
 }
 
 const PositionButton = (props: Props): ReactElement => {
-    const menu = useRef(null);
+    const menu = useRef<Menu>(null);
     const toggleMenu = (event: MouseEvent<HTMLElement>): void => {
         if (menu.current) {
-            (menu.current as any).toggle(event);
+            menu.current.toggle(event);
         }
     };
     const menuModel = positionIcons.map(icon => ({

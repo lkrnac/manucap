@@ -3,7 +3,7 @@ import { createRef, ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import { mount } from "enzyme";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Task, Track, CueError } from "./model";
@@ -32,7 +32,6 @@ import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { act } from "react-dom/test-utils";
-import { changeScrollPosition } from "./cues/cuesList/cuesListScrollSlice";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -2072,7 +2071,7 @@ describe("SubtitleEdit", () => {
         expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
-    it("resets all editing track data when unmounted", () => {
+    it("resets all editing track data when unmounted", async () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -2100,17 +2099,19 @@ describe("SubtitleEdit", () => {
         ReactDOM.unmountComponentAtNode(container);
 
         // THEN
-        expect(testingStore.getState().loadingIndicator.cuesLoaded).toBeFalsy();
-        expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeFalsy();
-        expect(testingStore.getState().editingTrack).toBeNull();
-        expect(testingStore.getState().cues).toEqual([]);
-        expect(testingStore.getState().sourceCues).toEqual([]);
-        expect(testingStore.getState().saveTrack).toBeNull();
-        expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
-        expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-        expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
-        expect(testingStore.getState().pendingSave).toBeFalsy();
-        expect(testingStore.getState().lastCueChange).toEqual(null);
+        await waitFor(() => {
+            expect(testingStore.getState().loadingIndicator.cuesLoaded).toBeFalsy();
+            expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeFalsy();
+            expect(testingStore.getState().editingTrack).toBeNull();
+            expect(testingStore.getState().cues).toEqual([]);
+            expect(testingStore.getState().sourceCues).toEqual([]);
+            expect(testingStore.getState().saveTrack).toBeNull();
+            expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(testingStore.getState().pendingSave).toBeFalsy();
+            expect(testingStore.getState().lastCueChange).toEqual(null);
+        });
     });
 
     it("sets saveTrack when mounted", () => {

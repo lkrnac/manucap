@@ -943,7 +943,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            const actual = removeDraftJsDynamicValues(actualNode.html())
+            const actual = removeDraftJsDynamicValues(actualNode.html());
             expect(actual).toContain(expectedContent);
         });
 

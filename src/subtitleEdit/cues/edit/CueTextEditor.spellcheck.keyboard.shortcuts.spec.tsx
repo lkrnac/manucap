@@ -89,19 +89,19 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
     it("shows popover when popover show keyboard shortcut is entered", () => {
         //GIVEN
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
 
         //WHEN
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         // THEN
-        expect(document.querySelector("div.popover.show")).not.toBeNull();
+        expect(document.querySelector(".p-menu.p-connected-overlay-enter-active")).not.toBeNull();
     });
 
     it("hides popover when enter popover show shortcut again while popover is shown already", () => {
         //GIVEN
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
@@ -109,12 +109,12 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
         // THEN
-        expect(document.querySelector("div.popover.show")).toBeNull();
+        expect(document.querySelector(".p-menu.p-connected-overlay-exit-active")).not.toBeNull();
     });
 
     it("hides popover when enter popover close shortcut", async () => {
         //GIVEN
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
@@ -123,12 +123,12 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
             { keyCode: Character.ESCAPE });
 
         // THEN
-        expect(document.querySelector("div.popover.show")).toBeNull();
+        expect(document.querySelector(".p-menu.p-connected-overlay-exit-active")).not.toBeNull();
     });
 
     it("moves between options using the arrow up/down shortcut", () => {
         //GIVEN
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
@@ -148,7 +148,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML)
-            .toEqual("Somewhat");
+            .toEqual("Sometime");
     });
 
     it("select an option using enter shortcut", () => {
@@ -156,7 +156,8 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
 
-        const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches),
+            { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
             keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
@@ -181,7 +182,8 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
     it("calls bindEnterAndEscKeys when closing the popover", () => {
         //GIVEN
-        const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches),
+            { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
@@ -200,7 +202,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         //GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
             keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
@@ -214,14 +216,14 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(saveTrack).not.toBeCalled();
-        expect(document.querySelector("div.popover.show")).not.toBeNull();
+        expect(document.querySelector(".p-menu.p-connected-overlay-enter-active")).not.toBeNull();
     });
 
     it("do nothing when type tab and escape on editor while popover is shown", () => {
         //GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
             keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
@@ -235,14 +237,14 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(saveTrack).not.toBeCalled();
-        expect(document.querySelector("div.popover.show")).not.toBeNull();
+        expect(document.querySelector(".p-menu.p-connected-overlay-enter-active")).not.toBeNull();
     });
 
     it("does not select an option if clicked ctrl space on the dropdown", () => {
         //GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, {
             keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true
@@ -260,12 +262,12 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(saveTrack).not.toBeCalled();
-        expect(document.querySelector("div.popover.show")).toBeNull();
+        expect(document.querySelector(".p-menu.p-connected-overlay-exit-active")).not.toBeNull();
     });
 
     it("handle popover keyboard shortcut if it was passed to editor", () => {
         //GIVEN
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
         fireEvent.keyDown(editor, { keyCode: Character.SPACE, shiftKey: true, ctrlKey: true, metaKey: true });
 
@@ -273,12 +275,12 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         fireEvent.keyDown(editor as Element, { keyCode: Character.ESCAPE });
 
         // THEN
-        expect(document.querySelector("div.popover.show")).not.toBeNull();
+        expect(document.querySelector(".p-menu.p-connected-overlay-enter-active")).not.toBeNull();
     });
 
     it("calls unbindCueViewModeKeyboardShortcut when entering the popover", () => {
         //GIVEN
-        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches));
+        const { container } = render(createEditorNode("SomeText", spellCheckFakeMatches), { container: document.body });
         const editor = container.querySelector(".public-DraftEditor-content") as Element;
 
         //WHEN

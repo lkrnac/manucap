@@ -222,8 +222,8 @@ describe("CueView", () => {
         );
 
         // THEN
-        const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML)
-        const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML)
+        const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+        const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
         expect(actual).toEqual(expected);
     });
 

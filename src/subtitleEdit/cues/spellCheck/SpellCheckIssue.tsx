@@ -4,7 +4,7 @@ import {
     KeyboardEventHandler,
     MouseEvent,
     ReactElement,
-    RefObject,
+    RefObject, SyntheticEvent,
     useEffect,
     useRef
 } from "react";
@@ -85,13 +85,16 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const dispatch = useDispatch();
     const selectRef = useRef(null);
     const searchReplaceFind = useSelector((state: SubtitleEditState) => state.searchReplace.find);
-    const menu = useRef(null);
+    const menu = useRef<Menu>(null);
+    const spellCheckSpan = useRef(null);
+    const show = props.spellCheckerMatchingOffset === props.start;
 
     /**
      * Sometimes Overlay got unmounted before
      * onExit event got executed so this to ensure
      * onExit logic is done
      */
+
     useEffect(
         () => (): void => {
             if (searchReplaceFind === "") {
@@ -102,6 +105,23 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once -> unmount
     );
+
+    // Since PrimeReact does not accept a "show" prop for the menu, we have to handle the open/close action
+    // coming from the keyboard bindings by using the hide / shown methods that Prime React exposes on the ref val.
+
+    useEffect((): void => {
+        if (menu.current && spellCheckSpan.current) {
+            const event = {
+                ...(new Event("", {
+                    cancelable: true,
+                    bubbles:  true
+                })),
+                target: spellCheckSpan.current,
+                currentTarget: spellCheckSpan.current
+            } as unknown as SyntheticEvent;
+            show ? menu.current.show(event) : menu.current.hide(event);
+        }
+    }, [menu, spellCheckSpan, show]);
 
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
@@ -138,7 +158,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
 
     const toggleMenu = (event: MouseEvent<HTMLElement>) => {
         if (menu.current) {
-            (menu.current as any).toggle(event);
+            menu.current.toggle(event);
         }
     };
 
@@ -156,6 +176,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 }}
                 aria-controls={spellcheckId}
                 aria-haspopup
+                ref={spellCheckSpan}
             >
                 {props.children}
             </span>

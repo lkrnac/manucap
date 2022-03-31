@@ -62,6 +62,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                     values.shiftPosition === undefined
                                 }
                                 className="dotsub-shift-modal-apply-button btn btn-primary"
+                                onClick={handleSubmit}
                             >
                                 Apply
                             </button>

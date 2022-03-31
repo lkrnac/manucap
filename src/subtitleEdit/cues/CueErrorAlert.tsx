@@ -7,7 +7,7 @@ import { setValidationErrors } from "./edit/cueEditorSlices";
 const CueErrorAlert = (): ReactElement => {
     const dispatch = useDispatch();
     const validationErrors = useSelector((state: SubtitleEditState) => state.validationErrors);
-    const toast = useRef(null);
+    const toast = useRef<Toast>(null);
 
     useEffect(
         () => {
@@ -23,7 +23,7 @@ const CueErrorAlert = (): ReactElement => {
         () => {
             if (validationErrors && validationErrors.length > 0) {
                 if (toast.current) {
-                    (toast.current as any).show(validationErrors.map(error => ({
+                    toast.current.show(validationErrors.map(error => ({
                         severity: "error",
                         summary: "Unable to complete action due to the following error(s):",
                         detail: error,
