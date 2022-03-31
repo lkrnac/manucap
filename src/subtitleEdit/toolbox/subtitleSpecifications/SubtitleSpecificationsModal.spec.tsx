@@ -6,6 +6,7 @@ import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../../testUtils/testingStore";
+import { removeIds } from "../../../testUtils/testUtils";
 
 describe("SubtitleSpecificationsModal", () => {
     it("renders shown", () => {
@@ -15,20 +16,16 @@ describe("SubtitleSpecificationsModal", () => {
                 <div
                     className="p-dialog-mask p-component-overlay p-component-overlay-enter
                         p-dialog-visible p-dialog-center"
-                    style={{ zIndex: 1101 }}
                 >
                     <div
-                        id="pr_id_2"
                         className="p-dialog p-component tw-max-w-3xl p-dialog-enter p-dialog-enter-active"
                         role="dialog"
-                        aria-labelledby="pr_id_2_header"
-                        aria-describedby="pr_id_2_content"
+                        aria-labelledby=""
+                        aria-describedby=""
                         aria-modal="true"
-                        // @ts-ignore Seems like React Prime injects this into the div.
-                        pr_id_1=""
                     >
                         <div className="p-dialog-header">
-                            <div id="pr_id_2_header" className="p-dialog-title">
+                            <div className="p-dialog-title">
                                 Subtitle Specifications
                             </div>
                             <div className="p-dialog-header-icons">
@@ -41,7 +38,7 @@ describe("SubtitleSpecificationsModal", () => {
                                 </button>
                             </div>
                         </div>
-                        <div id="pr_id_2_content" className="p-dialog-content">
+                        <div className="p-dialog-content">
                             <label><strong>Enabled:&nbsp;</strong></label>
                             <label>No</label>
                         </div>
@@ -64,6 +61,6 @@ describe("SubtitleSpecificationsModal", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(removeIds(actualNode.html())).toEqual(expectedNode.html());
     });
 });

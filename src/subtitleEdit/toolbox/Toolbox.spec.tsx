@@ -11,10 +11,15 @@ import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { Language, Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import SearchReplaceButton from "./SearchReplaceButton";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 
 describe("Toolbox", () => {
+    afterEach(() => {
+        // Cleaning JSDOM after each test. Otherwise, it may create inconsistency on tests.
+        document.getElementsByTagName("html")[0].innerHTML = "";
+    });
+
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
@@ -156,5 +161,29 @@ describe("Toolbox", () => {
 
         // THEN
         expect(mockExportSourceFile).toHaveBeenCalled();
+    });
+
+    it("renders with toolbox menu open", async () => {
+        // GIVEN
+        const mockExportSourceFile = jest.fn();
+
+        const actualNode = render((
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={mockExportSourceFile}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        ), { container: document.body });
+
+        // WHEN
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+
+        // THEN
+        await waitFor(() => {
+            expect(actualNode.container.querySelector(".p-menu")).not.toBeNull();
+        });
     });
 });

@@ -14,6 +14,7 @@ const KeyboardShortcutsModal = ({ show, onClose }: Props) => (
         header="Keyboard Shortcuts"
         draggable={false}
         dismissableMask
+        appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
         resizable={false}
         footer={() => (
             <button className="btn btn-primary" onClick={onClose}>

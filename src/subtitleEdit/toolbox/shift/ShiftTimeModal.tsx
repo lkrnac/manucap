@@ -49,6 +49,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     visible={props.show}
                     onHide={handleCancelShift}
                     className="tw-max-w-3xl"
+                    appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
                     header="Shift Track Lines Time"
                     draggable={false}
                     dismissableMask
