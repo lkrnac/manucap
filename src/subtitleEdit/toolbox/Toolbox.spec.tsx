@@ -166,12 +166,10 @@ describe("Toolbox", () => {
 
     it("renders with toolbox menu open", async () => {
         // GIVEN
-        const mockExportSourceFile = jest.fn();
-
         const actualNode = renderWithPortal(
             <Provider store={testingStore}>
                 <Toolbox
-                    handleExportSourceFile={mockExportSourceFile}
+                    handleExportSourceFile={jest.fn()}
                     handleExportFile={jest.fn()}
                     handleImportFile={jest.fn()}
                 />
@@ -182,22 +180,18 @@ describe("Toolbox", () => {
         fireEvent.click(
             actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
 
-        console.log(actualNode.container.outerHTML);
-
         // THEN
         await waitFor(() => {
             expect(actualNode.container.querySelector("#toolboxMenu")).not.toBeNull();
         });
     });
 
-    it("opens shift time modal on button click", async () => {
+    it("closes shift time modal on button click", async () => {
         // GIVEN
-        const mockExportSourceFile = jest.fn();
-
         const actualNode = renderWithPortal(
             <Provider store={testingStore}>
                 <Toolbox
-                    handleExportSourceFile={mockExportSourceFile}
+                    handleExportSourceFile={jest.fn()}
                     handleExportFile={jest.fn()}
                     handleImportFile={jest.fn()}
                 />
@@ -217,6 +211,33 @@ describe("Toolbox", () => {
         // Clicking on "Shift Track Time".
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(3) button") as Element);
+        // Clicking on close button
+        fireEvent.click(
+            actualNode.container.querySelector(".dotsub-shift-modal-close-button") as Element);
+
+        // THEN
+        await waitFor(() => {
+            expect(actualNode.container.querySelector(".p-dialog")).toBeNull();
+        });
+    });
+
+    it("opens keyboard shortcut modal on button click", async () => {
+        // GIVEN
+        const actualNode = renderWithPortal(
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={jest.fn()}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+        fireEvent.click(
+            actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
 
         // THEN
         await waitFor(() => {
@@ -224,7 +245,7 @@ describe("Toolbox", () => {
         });
     });
 
-    it("opens keyboard shortcut modal on button click", async () => {
+    it("closes keyboard shortcut modal on button click", async () => {
         // GIVEN
         const mockExportSourceFile = jest.fn();
 
@@ -243,10 +264,12 @@ describe("Toolbox", () => {
             actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
+        fireEvent.click(
+            actualNode.container.querySelector(".p-dialog .btn-primary") as Element);
 
         // THEN
         await waitFor(() => {
-            expect(actualNode.container.querySelector(".p-dialog")).not.toBeNull();
+            expect(actualNode.container.querySelector(".p-dialog")).toBeNull();
         });
     });
 });
