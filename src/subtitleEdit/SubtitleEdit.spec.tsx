@@ -195,82 +195,71 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <div>
-                                    <button
-                                        id="jumpToFirstButton"
-                                        className="btn btn-secondary sbte-jump-to-first-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to top"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-up" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="jumpToLastButton"
-                                        className="btn btn-secondary sbte-jump-to-last-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to bottom"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-down" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="editCueButton"
-                                        data-testid="sbte-jump-to-edit-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to currently editing subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-edit" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="playbackCueButton"
-                                        data-testid="sbte-jump-to-playback-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to subtitle in playback position"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-video" />
-                                    </button>
-                                </div>
-                                <div hidden>
-                                    <button
-                                        id="translatedCueButton"
-                                        data-testid="sbte-jump-to-last-translated-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to last translated subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-language" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="cueErrorButton"
-                                        data-testid="sbte-jump-error-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to next subtitle error"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-bug" />
-                                    </button>
-                                </div>
+                                <button
+                                    id="jumpToFirstButton"
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    id="jumpToLastButton"
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    id="editCueButton"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <button
+                                    id="playbackCueButton"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    hidden
+                                    id="translatedCueButton"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    id="cueErrorButton"
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-bold">
@@ -389,82 +378,71 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <div>
-                                    <button
-                                        id="jumpToFirstButton"
-                                        className="btn btn-secondary sbte-jump-to-first-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to top"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-up" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="jumpToLastButton"
-                                        className="btn btn-secondary sbte-jump-to-last-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to bottom"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-down" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="editCueButton"
-                                        data-testid="sbte-jump-to-edit-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to currently editing subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-edit" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="playbackCueButton"
-                                        data-testid="sbte-jump-to-playback-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to subtitle in playback position"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-video" />
-                                    </button>
-                                </div>
-                                <div hidden>
-                                    <button
-                                        id="translatedCueButton"
-                                        data-testid="sbte-jump-to-last-translated-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to last translated subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-language" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="cueErrorButton"
-                                        data-testid="sbte-jump-error-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to next subtitle error"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-bug" />
-                                    </button>
-                                </div>
+                                <button
+                                    id="jumpToFirstButton"
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    id="jumpToLastButton"
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    id="editCueButton"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <button
+                                    id="playbackCueButton"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    hidden
+                                    id="translatedCueButton"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    id="cueErrorButton"
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-bold">
@@ -736,82 +714,71 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <div>
-                                    <button
-                                        id="jumpToFirstButton"
-                                        className="btn btn-secondary sbte-jump-to-first-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to top"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-up" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="jumpToLastButton"
-                                        className="btn btn-secondary sbte-jump-to-last-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to bottom"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-down" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="editCueButton"
-                                        data-testid="sbte-jump-to-edit-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to currently editing subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-edit" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="playbackCueButton"
-                                        data-testid="sbte-jump-to-playback-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to subtitle in playback position"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-video" />
-                                    </button>
-                                </div>
-                                <div hidden>
-                                    <button
-                                        id="translatedCueButton"
-                                        data-testid="sbte-jump-to-last-translated-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to last translated subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-language" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="cueErrorButton"
-                                        data-testid="sbte-jump-error-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to next subtitle error"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-bug" />
-                                    </button>
-                                </div>
+                                <button
+                                    id="jumpToFirstButton"
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    id="jumpToLastButton"
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    id="editCueButton"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <button
+                                    id="playbackCueButton"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    hidden
+                                    id="translatedCueButton"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    id="cueErrorButton"
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-bold">
@@ -950,82 +917,71 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <div>
-                                    <button
-                                        id="jumpToFirstButton"
-                                        className="btn btn-secondary sbte-jump-to-first-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to top"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-up" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="jumpToLastButton"
-                                        className="btn btn-secondary sbte-jump-to-last-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to bottom"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-down" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="editCueButton"
-                                        data-testid="sbte-jump-to-edit-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to currently editing subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-edit" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="playbackCueButton"
-                                        data-testid="sbte-jump-to-playback-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to subtitle in playback position"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-video" />
-                                    </button>
-                                </div>
-                                <div hidden>
-                                    <button
-                                        id="translatedCueButton"
-                                        data-testid="sbte-jump-to-last-translated-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to last translated subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-language" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="cueErrorButton"
-                                        data-testid="sbte-jump-error-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to next subtitle error"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-bug" />
-                                    </button>
-                                </div>
+                                <button
+                                    id="jumpToFirstButton"
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    id="jumpToLastButton"
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    id="editCueButton"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <button
+                                    id="playbackCueButton"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    hidden
+                                    id="translatedCueButton"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    id="cueErrorButton"
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-bold">
@@ -1163,82 +1119,71 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <div>
-                                    <button
-                                        id="jumpToFirstButton"
-                                        className="btn btn-secondary sbte-jump-to-first-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to top"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-up" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="jumpToLastButton"
-                                        className="btn btn-secondary sbte-jump-to-last-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to bottom"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-down" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="editCueButton"
-                                        data-testid="sbte-jump-to-edit-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to currently editing subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-edit" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="playbackCueButton"
-                                        data-testid="sbte-jump-to-playback-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to subtitle in playback position"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-video" />
-                                    </button>
-                                </div>
-                                <div hidden>
-                                    <button
-                                        id="translatedCueButton"
-                                        data-testid="sbte-jump-to-last-translated-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to last translated subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-language" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="cueErrorButton"
-                                        data-testid="sbte-jump-error-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to next subtitle error"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-bug" />
-                                    </button>
-                                </div>
+                                <button
+                                    id="jumpToFirstButton"
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    id="jumpToLastButton"
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    id="editCueButton"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <button
+                                    id="playbackCueButton"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    hidden
+                                    id="translatedCueButton"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    id="cueErrorButton"
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-bold">
@@ -1390,82 +1335,71 @@ describe("SubtitleEdit", () => {
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
-                                <div>
-                                    <button
-                                        id="jumpToFirstButton"
-                                        className="btn btn-secondary sbte-jump-to-first-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to top"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-up" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="jumpToLastButton"
-                                        className="btn btn-secondary sbte-jump-to-last-button"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to bottom"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-down" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="editCueButton"
-                                        data-testid="sbte-jump-to-edit-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to currently editing subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-edit" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="playbackCueButton"
-                                        data-testid="sbte-jump-to-playback-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to subtitle in playback position"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-video" />
-                                    </button>
-                                </div>
-                                <div hidden>
-                                    <button
-                                        id="translatedCueButton"
-                                        data-testid="sbte-jump-to-last-translated-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to last translated subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-language" />
-                                    </button>
-                                </div>
-                                <div>
-                                    <button
-                                        id="cueErrorButton"
-                                        data-testid="sbte-jump-error-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        data-pr-tooltip="Scroll to next subtitle error"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-bug" />
-                                    </button>
-                                </div>
+                                <button
+                                    id="jumpToFirstButton"
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <button
+                                    id="jumpToLastButton"
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <button
+                                    id="editCueButton"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <button
+                                    id="playbackCueButton"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <button
+                                    hidden
+                                    id="translatedCueButton"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-language" />
+                                </button>
+                                <button
+                                    id="cueErrorButton"
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-bold">

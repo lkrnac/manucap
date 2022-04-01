@@ -139,124 +139,113 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 >
                                     View All Tracks
                                 </button>
-                                <div>
-                                    <button
-                                        id="jumpToFirstButton"
-                                        className="btn btn-secondary sbte-jump-to-first-button"
-                                        type="button"
-                                        onClick={(): void => {
-                                            dispatch(changeScrollPosition(ScrollPosition.FIRST));
-                                        }}
-                                        data-pr-tooltip="Scroll to top"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-up" />
-                                    </button>
-                                    <Tooltip
-                                        id="jumpToFirstButtonTooltip"
-                                        target="#jumpToFirstButton"
-                                    />
-                                </div>
-                                <div>
-                                    <button
-                                        id="jumpToLastButton"
-                                        className="btn btn-secondary sbte-jump-to-last-button"
-                                        type="button"
-                                        onClick={(): void => {
-                                            dispatch(changeScrollPosition(ScrollPosition.LAST));
-                                        }}
-                                        data-pr-tooltip="Scroll to bottom"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-angle-double-down" />
-                                    </button>
-                                    <Tooltip
-                                        id="jumpToLastButtonTooltip"
-                                        target="#jumpToLastButton"
-                                    />
-                                </div>
-                                <div>
-                                    <button
-                                        id="editCueButton"
-                                        data-testid="sbte-jump-to-edit-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        onClick={(): void => {
-                                            dispatch(changeScrollPosition(ScrollPosition.CURRENT));
-                                        }}
-                                        data-pr-tooltip="Scroll to currently editing subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-edit" />
-                                    </button>
-                                    <Tooltip
-                                        id="editCueButtonTooltip"
-                                        target="#editCueButton"
-                                    />
-                                </div>
-                                <div>
-                                    <button
-                                        id="playbackCueButton"
-                                        data-testid="sbte-jump-to-playback-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        onClick={(): void => {
-                                            dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
-                                        }}
-                                        data-pr-tooltip="Scroll to subtitle in playback position"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-video" />
-                                    </button>
-                                    <Tooltip
-                                        id="playbackCueButtonTooltip"
-                                        target="#playbackCueButton"
-                                    />
-                                </div>
-                                <div hidden={editingTrack?.type !== "TRANSLATION"}>
-                                    <button
-                                        id="translatedCueButton"
-                                        data-testid="sbte-jump-to-last-translated-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        onClick={(): void => {
-                                            dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
-                                        }}
-                                        data-pr-tooltip="Scroll to last translated subtitle"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-language" />
-                                    </button>
-                                    <Tooltip
-                                        id="translatedCueButtonTooltip"
-                                        target="#translatedCueButton"
-                                    />
-                                </div>
-                                <div>
-                                    <button
-                                        id="cueErrorButton"
-                                        data-testid="sbte-jump-error-cue-button"
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        onClick={(): void => {
-                                            dispatch(changeScrollPosition(ScrollPosition.ERROR));
-                                        }}
-                                        data-pr-tooltip="Scroll to next subtitle error"
-                                        data-pr-position="top"
-                                        data-pr-at="center+5 top-2"
-                                    >
-                                        <i className="fa fa-bug" />
-                                    </button>
-                                    <Tooltip
-                                        id="cueErrorButtonTooltip"
-                                        target="#cueErrorButton"
-                                    />
-                                </div>
+                                <button
+                                    id="jumpToFirstButton"
+                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(changeScrollPosition(ScrollPosition.FIRST));
+                                    }}
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-up" />
+                                </button>
+                                <Tooltip
+                                    id="jumpToFirstButtonTooltip"
+                                    target="#jumpToFirstButton"
+                                />
+                                <button
+                                    id="jumpToLastButton"
+                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(changeScrollPosition(ScrollPosition.LAST));
+                                    }}
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-angle-double-down" />
+                                </button>
+                                <Tooltip
+                                    id="jumpToLastButtonTooltip"
+                                    target="#jumpToLastButton"
+                                />
+                                <button
+                                    id="editCueButton"
+                                    data-testid="sbte-jump-to-edit-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(changeScrollPosition(ScrollPosition.CURRENT));
+                                    }}
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-edit" />
+                                </button>
+                                <Tooltip
+                                    id="editCueButtonTooltip"
+                                    target="#editCueButton"
+                                />
+                                <button
+                                    id="playbackCueButton"
+                                    data-testid="sbte-jump-to-playback-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
+                                    }}
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-video" />
+                                </button>
+                                <Tooltip
+                                    id="playbackCueButtonTooltip"
+                                    target="#playbackCueButton"
+                                />
+                                <button
+                                    hidden={editingTrack?.type !== "TRANSLATION"}
+                                    id="translatedCueButton"
+                                    data-testid="sbte-jump-to-last-translated-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
+                                    }}
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-language" />
+                                </button>
+                                <Tooltip
+                                    id="translatedCueButtonTooltip"
+                                    target="#translatedCueButton"
+                                />
+                                <button
+                                    id="cueErrorButton"
+                                    data-testid="sbte-jump-error-cue-button"
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(changeScrollPosition(ScrollPosition.ERROR));
+                                    }}
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center+5 top-2"
+                                >
+                                    <i className="fa fa-bug" />
+                                </button>
+                                <Tooltip
+                                    id="cueErrorButtonTooltip"
+                                    target="#cueErrorButton"
+                                />
                                 <span style={{ flexGrow: 2 }} />
                                 <CompleteButton onComplete={props.onComplete} disabled={editingTask?.editDisabled} />
                             </div>

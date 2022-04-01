@@ -76,36 +76,6 @@
     @apply tw-text-white tw-opacity-60 hover:tw-opacity-100 tw-transition-colors tw-duration-300 tw-font-bold tw-outline-none;
 }
 
-/** Alerts **/
-
-.tw-alert {
-    @apply tw-px-7 tw-py-3 tw-leading-none tw-rounded tw-border tw-leading-6;
-}
-
-.tw-alert > *:last-child {
-    @apply tw-mb-0;
-}
-
-.tw-alert p {
-    @apply tw-leading-5;
-}
-
-.tw-alert.tw-alert-danger {
-    @apply tw-text-red-800 tw-bg-red-100 tw-border-red-200;
-}
-
-.tw-alert.tw-alert-success {
-    @apply tw-text-green-800 tw-bg-green-100 tw-border-green-200;
-}
-
-.tw-alert.tw-alert-warning {
-    @apply tw-text-yellow-800 tw-bg-yellow-100 tw-border-yellow-200;
-}
-
-.tw-alert.tw-alert-info {
-    @apply tw-text-cyan-800 tw-bg-cyan-100 tw-border-cyan-200;
-}
-
 /** Toasts **/
 
 .p-toast {

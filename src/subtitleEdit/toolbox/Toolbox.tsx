@@ -47,7 +47,10 @@ const Toolbox = (props: Props): ReactElement => {
     const [showKbModal, setKbModal] = useState<boolean>(false);
 
     return (
-        <div className="tw-mt-6 tw-space-x-2 tw-flex tw-items-center tw-z-[100] tw-justify-center sbte-button-toolbar">
+        <div
+            className="tw-mt-6 tw-space-x-2 tw-flex tw-items-stretch
+                tw-z-[100] tw-justify-center sbte-button-toolbar"
+        >
             <SubtitleSpecificationsButton />
             <SearchReplaceButton />
             <ImportTrackCuesButton
