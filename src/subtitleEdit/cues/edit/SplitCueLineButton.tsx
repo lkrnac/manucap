@@ -23,7 +23,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
                 title="Unlock timecodes to enable"
                 data-pr-tooltip="Split this subtitle"
                 data-pr-position="left"
-                data-pr-at="left+10 center"
+                data-pr-at="left center"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}
             >
                 <i className="fas fa-cut" />

@@ -201,7 +201,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
@@ -211,7 +211,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
@@ -222,7 +222,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
@@ -233,7 +233,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
@@ -245,7 +245,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
@@ -256,7 +256,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
@@ -384,7 +384,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
@@ -394,7 +394,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
@@ -405,7 +405,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
@@ -416,7 +416,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
@@ -428,7 +428,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
@@ -439,7 +439,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
@@ -720,7 +720,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
@@ -730,7 +730,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
@@ -741,7 +741,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
@@ -752,7 +752,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
@@ -764,7 +764,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
@@ -775,7 +775,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
@@ -923,7 +923,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
@@ -933,7 +933,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
@@ -944,7 +944,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
@@ -955,7 +955,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
@@ -967,7 +967,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
@@ -978,7 +978,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
@@ -1125,7 +1125,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
@@ -1135,7 +1135,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
@@ -1146,7 +1146,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
@@ -1157,7 +1157,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
@@ -1169,7 +1169,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
@@ -1180,7 +1180,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
@@ -1341,7 +1341,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
@@ -1351,7 +1351,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
@@ -1362,7 +1362,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
@@ -1373,7 +1373,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
@@ -1385,7 +1385,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
@@ -1396,7 +1396,7 @@ describe("SubtitleEdit", () => {
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
-                                    data-pr-at="center+5 top-2"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>

@@ -35,7 +35,7 @@ describe("DeleteCueLineButton", () => {
                     className="btn btn-outline-secondary sbte-delete-cue-button tw-w-full"
                     data-pr-tooltip="Delete this subtitle"
                     data-pr-position="left"
-                    data-pr-at="left+10 center"
+                    data-pr-at="left center"
                 >
                     <i className="fa fa-trash" />
                 </button>

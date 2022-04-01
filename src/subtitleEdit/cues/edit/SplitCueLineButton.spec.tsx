@@ -47,7 +47,7 @@ describe("SplitCueLineButton", () => {
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
-                    data-pr-at="left+10 center"
+                    data-pr-at="left center"
                 >
                     <i className="fas fa-cut" />
                 </button>
@@ -78,7 +78,7 @@ describe("SplitCueLineButton", () => {
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
-                    data-pr-at="left+10 center"
+                    data-pr-at="left center"
                 >
                     <i className="fas fa-cut" />
                 </button>
@@ -112,7 +112,7 @@ describe("SplitCueLineButton", () => {
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
-                    data-pr-at="left+10 center"
+                    data-pr-at="left center"
                 >
                     <i className="fas fa-cut" />
                 </button>

@@ -23,7 +23,7 @@ const PlayCueButton = (props: Props): ReactElement => {
                 className="btn btn-outline-secondary tw-w-full"
                 data-pr-tooltip={`Play this subtitle (${shortcutText})`}
                 data-pr-position="left"
-                data-pr-at="left+10 center"
+                data-pr-at="left center"
                 onClick={(): AppThunk =>
                     dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime))}
             >

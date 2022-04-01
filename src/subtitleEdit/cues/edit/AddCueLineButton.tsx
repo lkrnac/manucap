@@ -21,8 +21,8 @@ const AddCueLineButton = (props: Props): ReactElement => {
                 className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
                 onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1, props.sourceCueIndexes))}
                 data-pr-tooltip="Insert new subtitle"
-                data-pr-position="left"
-                data-pr-at="left+10 center"
+                data-pr-position={props.text ? "bottom" : "left"}
+                data-pr-at={props.text ? undefined : "left center"}
             >
                 {props.text ? <span>{props.text}</span> : <b>+</b>}
             </button>

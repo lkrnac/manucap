@@ -138,7 +138,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                         style={getLockedTimecodeStyle()}
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
-                                        data-pr-at="right+10 top+18"
+                                        data-pr-at="right top+18"
                                     >
                                         {getTimeString(props.cue.vttCue.startTime)}
                                     </div>
@@ -147,7 +147,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                         style={getLockedTimecodeStyle()}
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
-                                        data-pr-at="right+10 top+18"
+                                        data-pr-at="right top+18"
                                     >
                                         {getTimeString(props.cue.vttCue.endTime)}
                                     </div>

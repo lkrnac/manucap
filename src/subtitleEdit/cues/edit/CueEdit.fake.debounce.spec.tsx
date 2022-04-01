@@ -324,7 +324,7 @@ describe("CueEdit", () => {
                                         }}
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
-                                        data-pr-at="right+10 top+18"
+                                        data-pr-at="right top+18"
                                     >
                                         00:00:00.000
                                     </div>
@@ -341,7 +341,7 @@ describe("CueEdit", () => {
                                         }}
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
-                                        data-pr-at="right+10 top+18"
+                                        data-pr-at="right top+18"
                                     >
                                         00:00:02.000
                                     </div>

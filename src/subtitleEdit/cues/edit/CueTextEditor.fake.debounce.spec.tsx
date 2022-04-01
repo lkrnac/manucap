@@ -135,7 +135,7 @@ const createExpectedNode = (
                 className="btn btn-outline-secondary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
-                data-pr-at="center+5 top-4"
+                data-pr-at="center top-4"
             >
                 <b>B</b>
             </button>
@@ -145,7 +145,7 @@ const createExpectedNode = (
                 className="btn btn-outline-secondary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
-                data-pr-at="center+5 top-4"
+                data-pr-at="center top-4"
             >
                 <i>I</i>
             </button>
@@ -155,7 +155,7 @@ const createExpectedNode = (
                 className="btn btn-outline-secondary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
-                data-pr-at="center+5 top-4"
+                data-pr-at="center top-4"
             >
                 <u>U</u>
             </button>

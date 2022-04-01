@@ -40,7 +40,7 @@ const CueComments = (props: Props): ReactElement => {
                 className="btn btn-outline-secondary sbte-btn-xs sbte-delete-cue-comment-button"
                 data-pr-tooltip="Delete comment"
                 data-pr-position="left"
-                data-pr-at="left+10 top+10"
+                data-pr-at="left top+10"
                 onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
             >
                 <i className="fa fa-trash" />

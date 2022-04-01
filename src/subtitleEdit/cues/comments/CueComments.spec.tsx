@@ -113,7 +113,7 @@ describe("CueComments", () => {
                             className="btn btn-outline-secondary sbte-btn-xs sbte-delete-cue-comment-button"
                             data-pr-tooltip="Delete comment"
                             data-pr-position="left"
-                            data-pr-at="left+10 top+10"
+                            data-pr-at="left top+10"
                         >
                             <i className="fa fa-trash" />
                         </button>

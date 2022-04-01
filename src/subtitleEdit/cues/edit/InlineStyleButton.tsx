@@ -31,7 +31,7 @@ const InlineStyleButton = (props: Props): ReactElement => {
                 }}
                 data-pr-tooltip={props.inlineStyle}
                 data-pr-position="top"
-                data-pr-at="center+5 top-4"
+                data-pr-at="center top-4"
             >
                 {props.label}
             </button>

@@ -30,7 +30,7 @@ describe("AddCueLineButton", () => {
                     className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
                     data-pr-tooltip="Insert new subtitle"
                     data-pr-position="left"
-                    data-pr-at="left+10 center"
+                    data-pr-at="left center"
                 >
                     <b>+</b>
                 </button>
@@ -57,8 +57,7 @@ describe("AddCueLineButton", () => {
                     style={{ maxHeight: "38px", height: "100%" }}
                     className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
                     data-pr-tooltip="Insert new subtitle"
-                    data-pr-position="left"
-                    data-pr-at="left+10 center"
+                    data-pr-position="bottom"
                 >
                     <span>Add Cue Line</span>
                 </button>
@@ -247,7 +246,7 @@ describe("AddCueLineButton", () => {
                     className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
                     data-pr-tooltip="Insert new subtitle"
                     data-pr-position="left"
-                    data-pr-at="left+10 center"
+                    data-pr-at="left center"
                 >
                     <b>+</b>
                 </button>
