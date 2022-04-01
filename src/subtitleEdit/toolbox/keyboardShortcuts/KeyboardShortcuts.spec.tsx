@@ -6,6 +6,7 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Provider } from "react-redux";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
+import { fireEvent, render } from "@testing-library/react";
 
 describe("KeyboardShortcuts", () => {
     it("renders", () => {
@@ -31,17 +32,34 @@ describe("KeyboardShortcuts", () => {
         // GIVEN
         const setShow = jest.fn();
 
-        // WHEN
         mount(
             <Provider store={testingStore}>
                 <KeyboardShortcuts show setShow={setShow} />
             </Provider>
         );
 
+        // WHEN
         simulant.fire(
             document.documentElement, "keydown", { keyCode: Character.SLASH_CHAR, shiftKey: true, altKey: true });
 
         // THEN
         expect(setShow).toHaveBeenCalledWith(false);
     });
+
+    it("calls setShow with true on button click", () => {
+        // GIVEN
+        const setShow = jest.fn();
+
+        const { container } = render(
+            <Provider store={testingStore}>
+                <KeyboardShortcuts show setShow={setShow} />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(container.querySelector("button") as Element);
+
+        // THEN
+        expect(setShow).toHaveBeenCalledWith(true);
+    })
 });

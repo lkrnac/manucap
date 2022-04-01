@@ -13,6 +13,7 @@ import { updateEditingTrack } from "../trackSlices";
 import SearchReplaceButton from "./SearchReplaceButton";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
+import { renderWithPortal } from "../../testUtils/testUtils";
 
 describe("Toolbox", () => {
     afterEach(() => {
@@ -167,7 +168,7 @@ describe("Toolbox", () => {
         // GIVEN
         const mockExportSourceFile = jest.fn();
 
-        const actualNode = render((
+        const actualNode = renderWithPortal(
             <Provider store={testingStore}>
                 <Toolbox
                     handleExportSourceFile={mockExportSourceFile}
@@ -175,15 +176,77 @@ describe("Toolbox", () => {
                     handleImportFile={jest.fn()}
                 />
             </Provider>
-        ), { container: document.body });
+        );
 
         // WHEN
         fireEvent.click(
             actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
 
+        console.log(actualNode.container.outerHTML);
+
         // THEN
         await waitFor(() => {
-            expect(actualNode.container.querySelector(".p-menu")).not.toBeNull();
+            expect(actualNode.container.querySelector("#toolboxMenu")).not.toBeNull();
+        });
+    });
+
+    it("opens shift time modal on button click", async () => {
+        // GIVEN
+        const mockExportSourceFile = jest.fn();
+
+        const actualNode = renderWithPortal(
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={mockExportSourceFile}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        // Opening Toolbox Menu.
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+        // Clicking on "Unlock Time Code Button".
+        fireEvent.click(
+            actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(7) button") as Element);
+        // Opening Toolbox Menu.
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+        // Clicking on "Shift Track Time".
+        fireEvent.click(
+            actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(3) button") as Element);
+
+        // THEN
+        await waitFor(() => {
+            expect(actualNode.container.querySelector(".p-dialog")).not.toBeNull();
+        });
+    });
+
+    it("opens keyboard shortcut modal on button click", async () => {
+        // GIVEN
+        const mockExportSourceFile = jest.fn();
+
+        const actualNode = renderWithPortal(
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={mockExportSourceFile}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+        fireEvent.click(
+            actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
+
+        // THEN
+        await waitFor(() => {
+            expect(actualNode.container.querySelector(".p-dialog")).not.toBeNull();
         });
     });
 });

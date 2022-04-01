@@ -74,6 +74,7 @@ const Toolbox = (props: Props): ReactElement => {
             <Menu
                 id="toolboxMenu"
                 className="tw-w-[260px] tw-min-w-[260px]"
+                appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
                 ref={menu}
                 popup
                 model={[
