@@ -61,5 +61,5 @@ describe("KeyboardShortcuts", () => {
 
         // THEN
         expect(setShow).toHaveBeenCalledWith(true);
-    })
+    });
 });
