@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { MouseEvent, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import ToggleButton from "./ToggleButton";
@@ -7,7 +7,11 @@ import { Track } from "../model";
 import { saveTrack, updateCues } from "../cues/cuesList/cuesListActions";
 import { isPendingSaveState } from "../cues/saveSlices";
 
-export const CaptionOverlapToggle = (): ReactElement => {
+interface Props {
+    onClick: (event: MouseEvent<HTMLElement>) => void
+}
+
+export const CaptionOverlapToggle = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
@@ -15,10 +19,10 @@ export const CaptionOverlapToggle = (): ReactElement => {
     const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
     return (
         <ToggleButton
-            className="btn"
+            className="tw-flex tw-items-center tw-justify-between"
             disabled={isPendingSaveState(saveState)}
             toggled={overlapEnabled}
-            onClick={(): void => {
+            onClick={(event): void => {
                 const track = {
                     ...editingTrack,
                     overlapEnabled: !overlapEnabled
@@ -26,11 +30,21 @@ export const CaptionOverlapToggle = (): ReactElement => {
                 dispatch(updateEditingTrack(track));
                 dispatch(updateCues(cues));
                 dispatch(saveTrack());
+                props.onClick(event);
             }}
             render={(toggle): ReactElement => (
                 toggle
-                    ? <>Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ALLOWED</span></>
-                    : <>Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">NOT ALLOWED</span></>
+                    ? (
+                        <>
+                            Overlapping{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">ALLOWED</span>
+                        </>
+                    ) : (
+                        <>
+                            Overlapping{" "}
+                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
+                        </>
+                    )
             )}
         />
     );

@@ -1050,7 +1050,15 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-comments" />
+                        <div>
+                            <i
+                                id="cuelineComment-0"
+                                className="fa fa-comments"
+                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-position="right"
+                                data-pr-at="right+10 top+10"
+                            />
+                        </div>
                     </div>
                     <div
                         style={{
@@ -1142,7 +1150,15 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-comments" />
+                        <div>
+                            <i
+                                id="cuelineComment-0"
+                                className="fa fa-comments"
+                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-position="right"
+                                data-pr-at="right+10 top+10"
+                            />
+                        </div>
                     </div>
                     <div
                         style={{
@@ -1235,7 +1251,15 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-comments" />
+                        <div>
+                            <i
+                                id="cuelineComment-0"
+                                className="fa fa-comments"
+                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-position="right"
+                                data-pr-at="right+10 top+10"
+                            />
+                        </div>
                     </div>
                     <div
                         style={{

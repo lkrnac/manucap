@@ -15,7 +15,13 @@ describe("SeachReplaceButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="sbte-search-replace-button btn btn-secondary">
+            <button
+                id="searchReplaceBtn"
+                className="sbte-search-replace-button btn btn-secondary"
+                data-pr-tooltip="Search / Replace"
+                data-pr-position="top"
+                data-pr-at="center+2 top-2"
+            >
                 <i className="fas fa-search-plus fa-lg" />
             </button>
         );
@@ -51,7 +57,7 @@ describe("SeachReplaceButton", () => {
         const { container, getByText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceButton />
-                <MergeCuesButton />
+                <MergeCuesButton onClick={jest.fn()} />
             </Provider>
         );
         const mergeButton = getByText("Merge Cues");

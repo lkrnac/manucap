@@ -53,68 +53,71 @@ describe("CueComments", () => {
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: "5px",
-                    padding: "10px 10px 5px 10px",
-                    marginBottom: "2px",
-                    marginLeft: "2px",
-                    marginRight: "2px",
+                    padding: "10px 10px 5px 10px"
                 }}
             >
-                <div style={{ marginBottom: "8px" }}>
-                    <span
-                        className="sbte-cue-comment-user"
-                        style={{
-                            borderRadius: "5px",
-                            padding: "1px 3px",
-                            whiteSpace: "nowrap",
-                            width: "80px",
-                            marginRight: "5px",
-                            float: "left",
-                            textAlign: "center",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden"
-                        }}
-                    >
-                        Reviewer
-                    </span>
-                    <span> this is the first comment </span>
-                    <span
-                        className="sbte-light-gray-text"
-                        style={{ float: "right", marginRight: "30px" }}
-                    >
-                        <i><DateTime value="2021-01-01T09:24:00.000Z" /></i>
-                    </span>
+                <div style={{ marginBottom: "8px" }} className="tw-flex tw-items-center tw-justify-between">
+                    <div>
+                        <span
+                            className="sbte-cue-comment-user"
+                            style={{
+                                borderRadius: "5px",
+                                padding: "2px 6px",
+                                whiteSpace: "nowrap",
+                                width: "80px",
+                                marginRight: "5px",
+                                textAlign: "center",
+                                textOverflow: "ellipsis",
+                                display: "inline-block"
+                            }}
+                        >
+                            Reviewer
+                        </span>
+                        <span>this is the first comment</span>
+                    </div>
+                    <div className="tw-flex tw-items-center tw-space-x-1.5">
+                        <span className="sbte-light-gray-text">
+                            <i><DateTime value="2021-01-01T09:24:00.000Z" /></i>
+                        </span>
+                    </div>
                 </div>
-                <div style={{ marginBottom: "8px" }}>
-                    <span
-                        className="sbte-cue-comment-user"
-                        style={{
-                            borderRadius: "5px",
-                            padding: "1px 3px",
-                            whiteSpace: "nowrap",
-                            width: "80px",
-                            marginRight: "5px",
-                            float: "left",
-                            textAlign: "center",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden"
-                        }}
-                    >
-                        Linguist
-                    </span>
-                    <span> this is the second comment </span>
-                    <button
-                        data-testid="sbte-delete-cue-comment-button"
-                        style={{ float: "right", marginLeft: "-30px" }}
-                        className="btn btn-outline-secondary sbte-btn-xs"
-                    >
-                        <i className="fa fa-trash" />
-                    </button>
-                    <span
-                        className="sbte-light-gray-text"
-                        style={{ float: "right", marginRight: "30px" }}
-                    >
-                        <i><DateTime value="2021-02-01T09:06:00.000Z" /></i>
-                    </span>
+                <div
+                    style={{ marginBottom: "8px" }}
+                    className="tw-flex tw-items-center tw-justify-between"
+                >
+                    <div>
+                        <span
+                            className="sbte-cue-comment-user"
+                            style={{
+                                    borderRadius: "5px",
+                                    padding: "2px 6px",
+                                    whiteSpace: "nowrap",
+                                    width: "80px",
+                                    marginRight: "5px",
+                                    textAlign: "center",
+                                    textOverflow: "ellipsis",
+                                    display: "inline-block"
+                                }}
+                        >
+                            Linguist
+                        </span>
+                        <span>this is the second comment</span>
+                    </div>
+                    <div className="tw-flex tw-items-center tw-space-x-1.5">
+                        <span className="sbte-light-gray-text">
+                            <i><DateTime value="2021-02-01T09:06:00.000Z" /></i>
+                        </span>
+                        <button
+                            id="deleteCueCommentButton-0-1"
+                            data-testid="sbte-delete-cue-comment-button"
+                            className="btn btn-outline-secondary sbte-btn-xs sbte-delete-cue-comment-button"
+                            data-pr-tooltip="Delete comment"
+                            data-pr-position="left"
+                            data-pr-at="left top+10"
+                        >
+                            <i className="fa fa-trash" />
+                        </button>
+                    </div>
                 </div>
                 <hr style={{
                     borderTop: "2px solid lightgray",
@@ -158,6 +161,7 @@ describe("CueComments", () => {
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
+
     it("renders with no comments", () => {
         // GIVEN
         const comments = [] as CueComment[];
@@ -175,10 +179,7 @@ describe("CueComments", () => {
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: "5px",
-                    padding: "10px 10px 5px 10px",
-                    marginBottom: "2px",
-                    marginLeft: "2px",
-                    marginRight: "2px",
+                    padding: "10px 10px 5px 10px"
                 }}
             >
                 <div style={{ marginBottom: "8px" }}>No comments</div>
@@ -224,6 +225,7 @@ describe("CueComments", () => {
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
+
     it("renders delete comment button when user is author", () => {
         // GIVEN
         testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);

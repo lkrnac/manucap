@@ -87,7 +87,8 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         // @ts-ignore we are mocking this function
         fetchSpellCheck.mockImplementationOnce(() => Promise.resolve({}));
-        const expectedContent = "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\">" +
+        const expectedContent = "<span class=\"sbte-text-with-error\" " +
+            "aria-controls=\"spellcheckIssue-undefined-0-2\" aria-haspopup=\"true\"><span data-offset-key=\"\">" +
             "<span data-text=\"true\">dd</span></span></span>" +
             "<span data-offset-key=\"\"><span data-text=\"true\">d</span></span>";
 
@@ -112,7 +113,8 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        let actual = removeDraftJsDynamicValues(actualNode.html());
+        expect(actual).toContain(expectedContent);
 
         // WHEN
         const editor = actualNode.find(".public-DraftEditor-content");
@@ -134,10 +136,13 @@ describe("CueTextEditor", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
 
         // THEN
-        const expectedCompContent = "<span class=\"sbte-text-with-error\"><span data-offset-key=\"\">" +
+        const expectedCompContent = "<span class=\"sbte-text-with-error\" " +
+            "aria-controls=\"spellcheckIssue-undefined-0-2\" aria-haspopup=\"true\"><span data-offset-key=\"\">" +
             "<span data-text=\"true\">dd</span></span></span>" +
             "<span data-offset-key=\"\"><span data-text=\"true\">dâ</span></span>";
-        expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedCompContent);
+
+        actual = removeDraftJsDynamicValues(actualNode.html());
+        expect(actual).toContain(expectedCompContent);
 
         // WHEN
         editor.simulate("compositionEnd");
@@ -158,7 +163,8 @@ describe("CueTextEditor", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
 
         // THEN
-        const expectedContentAfterComp = "<span class=\"sbte-text-with-error\">" +
+        const expectedContentAfterComp = "<span class=\"sbte-text-with-error\" " +
+            "aria-controls=\"spellcheckIssue-undefined-0-4\" aria-haspopup=\"true\">" +
             "<span data-offset-key=\"\"><span data-text=\"true\">dddâ</span></span></span>";
         expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContentAfterComp);
     });

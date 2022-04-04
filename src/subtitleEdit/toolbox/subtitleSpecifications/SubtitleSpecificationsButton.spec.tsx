@@ -33,13 +33,16 @@ describe("SubtitleSpecificationsButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <button className="dotsub-subtitle-specifications-button btn btn-secondary">
-                        <i className="fas fa-clipboard-list fa-lg" />
-                    </button>
-
-                    <div>shown</div>
-                </>
+                <button
+                    id="subtitleSpecsBtn"
+                    className="dotsub-subtitle-specifications-button btn btn-secondary"
+                    data-pr-tooltip="Subtitle Specifications"
+                    data-pr-position="top"
+                    data-pr-at="center+2 top-2"
+                >
+                    <i className="fas fa-clipboard-list fa-lg" />
+                </button>
+                <div>shown</div>
             </Provider>
         );
 
@@ -65,13 +68,16 @@ describe("SubtitleSpecificationsButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <button className="dotsub-subtitle-specifications-button btn btn-secondary">
-                        <i className="fas fa-clipboard-list fa-lg" />
-                    </button>
-
-                    <div />
-                </>
+                <button
+                    id="subtitleSpecsBtn"
+                    className="dotsub-subtitle-specifications-button btn btn-secondary"
+                    data-pr-tooltip="Subtitle Specifications"
+                    data-pr-position="top"
+                    data-pr-at="center+2 top-2"
+                >
+                    <i className="fas fa-clipboard-list fa-lg" />
+                </button>
+                <div />
             </Provider>
         );
 

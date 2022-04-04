@@ -1,51 +1,53 @@
-import { ReactElement } from "react";
+import { MouseEvent, ReactElement, useRef } from "react";
 import { CueCategory } from "../../model";
-import { Dropdown } from "react-bootstrap";
 import { cueCategoryToPrettyName } from "../cueUtils";
+import { Menu } from "primereact/menu";
 
 interface Props {
     category?: CueCategory;
     onChange: (value: CueCategory) => void;
 }
 
-const CueCategoryButton = (props: Props): ReactElement => (
-    <Dropdown>
-        <Dropdown.Toggle id="cue-line-category" variant="outline-secondary">
-            {cueCategoryToPrettyName[props.category || "DIALOGUE"]}
-        </Dropdown.Toggle>
+const CueCategoryButton = (props: Props): ReactElement => {
+    const menu = useRef<Menu>(null);
 
-        <Dropdown.Menu>
-            <Dropdown.Item
-                className="sbte-dropdown-item"
-                style={{ padding: "8px 24px" }}
-                onClick={(): void => props.onChange("DIALOGUE")}
+    const toggleMenu = (event: MouseEvent<HTMLElement>): void => {
+        if (menu.current) {
+            menu.current.toggle(event);
+        }
+    };
+
+    const menuModel = Object.keys(cueCategoryToPrettyName).map(category => ({
+        template: () => (
+            <span
+                onClick={(event) => {
+                    props.onChange(category as CueCategory);
+                    toggleMenu(event);
+                }}
             >
-                {cueCategoryToPrettyName.DIALOGUE}
-            </Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item
-                className="sbte-dropdown-item"
-                style={{ padding: "8px 24px" }}
-                onClick={(): void => props.onChange("ONSCREEN_TEXT")}
+                {cueCategoryToPrettyName[category]}
+            </span>
+        )
+    }));
+
+    return (
+        <>
+            <button
+                className="dropdown-toggle btn btn-outline-secondary"
+                aria-controls="cueCategoryMenu"
+                aria-haspopup
+                onClick={toggleMenu}
             >
-                {cueCategoryToPrettyName.ONSCREEN_TEXT}
-            </Dropdown.Item>
-            <Dropdown.Item
-                className="sbte-dropdown-item"
-                style={{ padding: "8px 24px" }}
-                onClick={(): void => props.onChange("AUDIO_DESCRIPTION")}
-            >
-                {cueCategoryToPrettyName.AUDIO_DESCRIPTION}
-            </Dropdown.Item>
-            <Dropdown.Item
-                className="sbte-dropdown-item"
-                style={{ padding: "8px 24px" }}
-                onClick={(): void => props.onChange("LYRICS")}
-            >
-                {cueCategoryToPrettyName.LYRICS}
-            </Dropdown.Item>
-        </Dropdown.Menu>
-    </Dropdown>
-);
+                {cueCategoryToPrettyName[props.category || "DIALOGUE"]}
+            </button>
+            <Menu
+                id="cueCategoryMenu"
+                ref={menu}
+                popup
+                model={menuModel}
+            />
+        </>
+    );
+};
 
 export default CueCategoryButton;

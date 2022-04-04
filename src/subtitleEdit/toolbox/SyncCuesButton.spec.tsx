@@ -33,7 +33,7 @@ describe("SyncCuesButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button className="sbte-sync-cues-button btn">
+            <button className="sbte-sync-cues-button">
                 Sync Cues
             </button>
         );
@@ -41,7 +41,7 @@ describe("SyncCuesButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SyncCuesButton />
+                <SyncCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
@@ -54,7 +54,7 @@ describe("SyncCuesButton", () => {
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = shallow(
-            <button className="sbte-sync-cues-button btn" disabled>
+            <button className="sbte-sync-cues-button" disabled>
                 Sync Cues
             </button>
         );
@@ -62,7 +62,7 @@ describe("SyncCuesButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SyncCuesButton />
+                <SyncCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
@@ -79,7 +79,7 @@ describe("SyncCuesButton", () => {
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SyncCuesButton />
+                <SyncCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
@@ -94,7 +94,7 @@ describe("SyncCuesButton", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SyncCuesButton />
+                <SyncCuesButton onClick={jest.fn()} />
             </Provider>
         );
 

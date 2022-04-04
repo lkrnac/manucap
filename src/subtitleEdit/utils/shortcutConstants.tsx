@@ -39,7 +39,6 @@ export enum KeyCombination {
     ALT_SHIFT_ESCAPE = "alt+shift+escape"
 }
 
-
 export const mousetrapBindings = new Map<string, KeyCombination>();
 mousetrapBindings.set("togglePlayPause", KeyCombination.MOD_SHIFT_O);
 mousetrapBindings.set("togglePlayPauseCue", KeyCombination.MOD_SHIFT_K);

@@ -38,14 +38,17 @@ describe("CompleteButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <div style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}>
-                        <span hidden className=""> &nbsp;<i className="" /></span>
+                <div className="tw-space-x-4 tw-flex tw-items-center">
+                    <div className="tw-font-bold">
+                        <span hidden className="tw-flex tw-items-center ">
+                            <span className="tw-leading-none"> &nbsp;</span>
+                            <i className="" />
+                        </span>
                     </div>
                     <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
-                </>
+                </div>
             </Provider>
         );
 
@@ -64,14 +67,16 @@ describe("CompleteButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <div style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}>
-                        <span className="text-success">Edits are disabled, task is already completed</span>
+                <div className="tw-space-x-4 tw-flex tw-items-center">
+                    <div className="tw-font-bold">
+                        <span className="text-success">
+                            Edits are disabled, task is already completed
+                        </span>
                     </div>
                     <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
-                </>
+                </div>
             </Provider>
         );
 
@@ -98,16 +103,17 @@ describe("CompleteButton", () => {
             ) as {} as AnyAction);
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <>
-                        <div
-                            style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                        >
-                            <span className="">Saving changes &nbsp;<i className="fas fa-sync fa-spin" /></span>
+                    <div className="tw-space-x-4 tw-flex tw-items-center">
+                        <div className="tw-font-bold">
+                            <span className="tw-flex tw-items-center ">
+                                <span className="tw-leading-none">Saving changes &nbsp;</span>
+                                <i className="fas fa-sync fa-spin" />
+                            </span>
                         </div>
                         <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
                             Complete
                         </button>
-                    </>
+                    </div>
                 </Provider>
             );
 
@@ -129,18 +135,17 @@ describe("CompleteButton", () => {
         ) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <div
-                        style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                    >
-                        <span className="text-success">
-                            All changes saved to server &nbsp;<i className="fa fa-check-circle" />
+                <div className="tw-space-x-4 tw-flex tw-items-center">
+                    <div className="tw-font-bold">
+                        <span className="tw-flex tw-items-center text-success">
+                            <span className="tw-leading-none">All changes saved to server &nbsp;</span>
+                            <i className="fa fa-check-circle" />
                         </span>
                     </div>
                     <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
-                </>
+                </div>
             </Provider>
         );
 
@@ -162,18 +167,17 @@ describe("CompleteButton", () => {
         ) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <>
-                    <div
-                        style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                    >
-                        <span className="text-danger">
-                            Error saving latest changes &nbsp;<i className="fa fa-exclamation-triangle" />
+                <div className="tw-space-x-4 tw-flex tw-items-center">
+                    <div className="tw-font-bold">
+                        <span className="tw-flex tw-items-center text-danger">
+                            <span className="tw-leading-none">Error saving latest changes &nbsp;</span>
+                            <i className="fa fa-exclamation-triangle" />
                         </span>
                     </div>
                     <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
-                </>
+                </div>
             </Provider>
         );
 

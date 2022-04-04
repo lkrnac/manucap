@@ -101,26 +101,6 @@ $background-error-text: rgba(255, 0, 0, 0.2);
     outline: none;
 }
 
-.sbte-toggled-badge {
-    float: right;
-    font-size: $font-size-small;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 5px;
-    outline: none;
-    color: white;
-}
-
-.sbte-toggled-badge-on {
-    background-color: #229831;
-    border-color: #229831;
-}
-
-.sbte-toggled-badge-off {
-    background-color: #59626A;
-    border-color: #59626A;
-}
-
 .sbte-count-tag {
     font-size: $font-size-small;
     background-color: $gray-200;
@@ -139,12 +119,6 @@ $background-error-text: rgba(255, 0, 0, 0.2);
 button:disabled {
     cursor: not-allowed;
     pointer-events: all !important;
-}
-
-// ----- Modal ------
-
-.sbte-medium-modal {
-  max-width: 50% !important;
 }
 
 // ----- Dropdown ------
@@ -213,10 +187,6 @@ button:disabled {
   border: 1px solid $secondary;
 }
 
-#sbte-spell-check-popover {
-  margin-bottom: 8px;
-}
-
 .spellcheck__menu-list {
     padding-top: 0 !important;
 
@@ -229,66 +199,6 @@ button:disabled {
             outline: none;
         }
     }
-}
-
-// ------ Toolbox --------
-
-.sbte-button-toolbar {
-    flex-direction: row;
-}
-
-.sbte-button-toolbar button {
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
-
-.sbte-button-toolbar.btn-toolbar {
-    justify-content: center !important;
-}
-
-.sbte-button-toolbar .dropdown-item {
-    margin: 0;
-    padding: 0;
-}
-
-.sbte-button-toolbar .sbte-dropdown-item button {
-    margin: 0;
-    //padding: 0;
-    text-align: left;
-    font-family: Roboto, sans-serif;
-    color: #6c757d;
-    padding: 5px 10px;
-    width: 100%;
-}
-
-.sbte-form-control {
-  color: $sbte-main-text-color;
-  border-radius: 0;
-}
-
-.sbte-toolbox .card-header {
-  color: white;
-  background-color: $secondary;
-}
-
-.sbte-toolbox .card {
-  border-radius: 0;
-  border: 0;
-}
-
-.sbte-toolbox .btn-toolbar .btn {
-  font-size: 15px;
-}
-
-.sbte-subspec-freeform-text {
-    overflow: auto;
-    height: 18vh;
-}
-
-.sbte-edit-disabled {
-    pointer-events: none;
-    opacity: 0.6;
-    background: #CCC;
 }
 
 // ------ Videojs --------
@@ -320,12 +230,6 @@ button:disabled {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     z-index: 9999;
-}
-
-.sbte-cue-errors-alert button {
-    position: unset !important;
-    padding: unset !important;
-    margin-right: unset !important;
 }
 
 // ------ Cue Errors --------

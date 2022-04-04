@@ -7,14 +7,23 @@ import { act } from "react-dom/test-utils";
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
 }));
+
 /**
  * On click actions are covered by CueTextEditor tests
  */
+
 describe("InlineStyleButton", () => {
     it("renders for empty editor state", () => {
         // GIVEN
         const expectedNode = render(
-            <button style={{ marginRight: "5px" }} className="btn btn-outline-secondary">
+            <button
+                id="inlineStyle-BOLD0"
+                style={{ marginRight: "5px" }}
+                className="btn btn-outline-secondary"
+                data-pr-tooltip="BOLD"
+                data-pr-position="top"
+                data-pr-at="center top-4"
+            >
                 <b>B</b>
             </button>
         );
@@ -41,7 +50,14 @@ describe("InlineStyleButton", () => {
     it("toggle Bold button if editor's cursor is on bold text", () => {
         // GIVEN
         const expectedNode = render(
-            <button style={{ marginRight: "5px" }} className="btn btn-secondary">
+            <button
+                id="inlineStyle-BOLD0"
+                style={{ marginRight: "5px" }}
+                className="btn btn-secondary"
+                data-pr-tooltip="BOLD"
+                data-pr-position="top"
+                data-pr-at="center top-4"
+            >
                 <b>B</b>
             </button>
         );
@@ -67,7 +83,14 @@ describe("InlineStyleButton", () => {
     it("toggle Italic button if editor's cursor is on italic text", () => {
         // GIVEN
         const expectedNode = render(
-            <button style={{ marginRight: "5px" }} className="btn btn-secondary">
+            <button
+                id="inlineStyle-ITALIC0"
+                style={{ marginRight: "5px" }}
+                className="btn btn-secondary"
+                data-pr-tooltip="ITALIC"
+                data-pr-position="top"
+                data-pr-at="center top-4"
+            >
                 <i>I</i>
             </button>
         );
@@ -93,7 +116,14 @@ describe("InlineStyleButton", () => {
     it("toggle Underline button if editor's cursor is on underlined text", () => {
         // GIVEN
         const expectedNode = render(
-            <button style={{ marginRight: "5px" }} className="btn btn-secondary">
+            <button
+                id="inlineStyle-UNDERLINE0"
+                style={{ marginRight: "5px" }}
+                className="btn btn-secondary"
+                data-pr-tooltip="UNDERLINE"
+                data-pr-position="top"
+                data-pr-at="center top-4"
+            >
                 <u>U</u>
             </button>
         );
@@ -157,16 +187,15 @@ describe("InlineStyleButton", () => {
                 setEditorState={jest.fn()}
                 editorState={editorState}
             />
-        );
+        , { container: document.body });
         const button = actualNode.container.querySelector(".btn-outline-secondary") as Element;
 
         //WHEN
-        fireEvent.mouseOver(button);
+        fireEvent.mouseEnter(button);
 
         //THEN
         expect(await actualNode.findByText(expectedText)).toBeInTheDocument();
     });
-
 
     it("updates editor state when inline style button is clicked", async () => {
         // GIVEN

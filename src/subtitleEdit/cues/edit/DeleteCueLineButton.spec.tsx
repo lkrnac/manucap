@@ -28,12 +28,18 @@ describe("DeleteCueLineButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <button
-                style={{ maxHeight: "38px", margin: "5px" }}
-                className="btn btn-outline-secondary sbte-delete-cue-button"
-            >
-                <i className="fa fa-trash" />
-            </button>
+            <div className="tw-p-1.5">
+                <button
+                    id="deleteCueLineButton0"
+                    style={{ maxHeight: "38px" }}
+                    className="btn btn-outline-secondary sbte-delete-cue-button tw-w-full"
+                    data-pr-tooltip="Delete this subtitle"
+                    data-pr-position="left"
+                    data-pr-at="left center"
+                >
+                    <i className="fa fa-trash" />
+                </button>
+            </div>
         );
 
         // WHEN

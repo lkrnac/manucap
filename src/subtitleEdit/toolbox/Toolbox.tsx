@@ -1,21 +1,22 @@
-import { ReactElement } from "react";
-import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import { Dropdown } from "react-bootstrap";
+import { ReactElement, MouseEvent, useRef, useState } from "react";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
-import SyncCuesButton from "./SyncCuesButton";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
 import MergeCuesButton from "./MergeCuesButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import CueCommentsToggle from "./CueCommentsToggle";
-import TimecodesLockToggle from "./TimecodesLockToggle";
 import WaveformToggle from "./WaveformToggle";
+import TimecodesLockToggle from "./TimecodesLockToggle";
+import SyncCuesButton from "./SyncCuesButton";
+import { Menu } from "primereact/menu";
+import KeyboardShortcutsModal from "./keyboardShortcuts/KeyboardShortcutsModal";
+import ShiftTimeModal from "./shift/ShiftTimeModal";
 
 interface Props {
     handleExportFile: () => void;
@@ -24,64 +25,81 @@ interface Props {
 }
 
 const Toolbox = (props: Props): ReactElement => {
+
+    // Tracks.
+
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = editingTrack?.type === "TRANSLATION";
+
+    // Menu Toolbox.
+
+    const menu = useRef<Menu>(null);
+    const toggleMenu = (event: MouseEvent<HTMLElement>) => {
+        if (menu.current) {
+            menu.current.toggle(event);
+        }
+    };
+
+    // Modal states.
+
+    const [showShiftTimeModal, setShiftTimeModal] = useState<boolean>(false);
+    const [showKbModal, setKbModal] = useState<boolean>(false);
+
     return (
-        <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
+        <div
+            className="tw-mt-6 tw-space-x-2 tw-flex tw-items-stretch
+                tw-z-[100] tw-justify-center sbte-button-toolbar"
+        >
             <SubtitleSpecificationsButton />
             <SearchReplaceButton />
             <ImportTrackCuesButton
                 handleImport={props.handleImportFile}
                 disabled={editingTask?.editDisabled}
             />
-            { isTranslation ?
-                <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} /> : null }
+            {isTranslation ? (
+                <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} />
+            ) : null}
             <ExportTrackCuesButton
                 handleExport={props.handleExportFile}
             />
-
-            <Dropdown>
-                <Dropdown.Toggle id="toolbox-actions" variant="secondary">
-                    <i className="fas fa-ellipsis-h" />
-                </Dropdown.Toggle>
-                <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <KeyboardShortcuts />
-                    </Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <MergeCuesButton />
-                    </Dropdown.Item>
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <ShiftTimeButton />
-                    </Dropdown.Item>
-                    {isTranslation
-                        ?
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <SyncCuesButton />
-                            </Dropdown.Item>
-                        : null}
-                    <Dropdown.Divider />
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <CaptionOverlapToggle />
-                    </Dropdown.Item>
-                    { isTranslation
-                        ?
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <TimecodesLockToggle />
-                            </Dropdown.Item>
-                        : null}
-                    <Dropdown.Divider />
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <CueCommentsToggle />
-                    </Dropdown.Item>
-                    <Dropdown.Item className="sbte-dropdown-item">
-                        <WaveformToggle />
-                    </Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
-        </ButtonToolbar>
+            <button
+                className="tw-select-none dropdown-toggle btn btn-secondary tw-flex tw-items-center tw-justify-center"
+                onClick={toggleMenu}
+                aria-controls="toolboxMenu"
+                aria-haspopup
+            >
+                <i className="fas fa-ellipsis-h" />
+            </button>
+            <Menu
+                id="toolboxMenu"
+                className="tw-w-[260px] tw-min-w-[260px]"
+                appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
+                ref={menu}
+                popup
+                model={[
+                    { template: () => <KeyboardShortcuts show setShow={setKbModal} /> },
+                    { separator: true },
+                    { template: () => <ShiftTimeButton onClick={() => setShiftTimeModal(true)} /> },
+                    { template: () => <SyncCuesButton onClick={toggleMenu} /> },
+                    { template: () => <MergeCuesButton onClick={toggleMenu} /> },
+                    { separator: true },
+                    { template: () => <TimecodesLockToggle onClick={toggleMenu} /> },
+                    { template: () => <CaptionOverlapToggle onClick={toggleMenu} /> },
+                    { separator: true },
+                    { template: () => <CueCommentsToggle onClick={toggleMenu} /> },
+                    { template: () => <WaveformToggle onClick={toggleMenu} /> },
+                ]}
+            />
+            <ShiftTimeModal
+                show={showShiftTimeModal}
+                onClose={() => setShiftTimeModal(false)}
+            />
+            <KeyboardShortcutsModal
+                show={showKbModal}
+                onClose={() => setKbModal(false)}
+            />
+        </div>
     );
 };
 

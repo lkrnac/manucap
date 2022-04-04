@@ -12,18 +12,24 @@ describe("PlayCueButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <button
-                style={{ maxHeight: "38px", margin: "5px" }}
-                className="btn btn-outline-secondary"
-            >
-                <i className="fa fa-play" />
-            </button>
+            <div className="tw-p-1.5">
+                <button
+                    id="playCueButton-1"
+                    style={{ maxHeight: "38px" }}
+                    className="btn btn-outline-secondary tw-w-full"
+                    data-pr-tooltip="Play this subtitle (Ctrl/Alt + Shift + k)"
+                    data-pr-position="left"
+                    data-pr-at="left center"
+                >
+                    <i className="fa fa-play" />
+                </button>
+            </div>
         );
 
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <PlayCueButton cue={testCue} />
+                <PlayCueButton cue={testCue} cueIndex={1} />
             </Provider>
         );
 
@@ -35,7 +41,7 @@ describe("PlayCueButton", () => {
         // GIVEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <PlayCueButton cue={testCue} />
+                <PlayCueButton cue={testCue} cueIndex={1} />
             </Provider>
         );
 

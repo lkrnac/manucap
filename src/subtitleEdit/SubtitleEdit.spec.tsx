@@ -2,9 +2,8 @@ import "../testUtils/initBrowserEnvironment";
 import { createRef, ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
-import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import { mount } from "enzyme";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Task, Track, CueError } from "./model";
@@ -28,28 +27,18 @@ import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
 import * as cuesListScrollSlice from "./cues/cuesList/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
-import KeyboardShortcuts from "./toolbox/keyboardShortcuts/KeyboardShortcuts";
-import SubtitleSpecificationsButton from "./toolbox/subtitleSpecifications/SubtitleSpecificationsButton";
-import ShiftTimeButton from "./toolbox/shift/ShiftTimeButton";
-import CaptionOverlapToggle from "./toolbox/CaptionOverlapToggle";
-import ExportTrackCuesButton from "./toolbox/export/ExportTrackCuesButton";
-import ImportTrackCuesButton from "./toolbox/ImportTrackCuesButton";
-import SearchReplaceButton from "./toolbox/SearchReplaceButton";
 import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
-import MergeCuesButton from "./toolbox/MergeCuesButton";
 import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { act } from "react-dom/test-utils";
-import CueCommentsToggle from "./toolbox/CueCommentsToggle";
-import WaveformToggle from "./toolbox/WaveformToggle";
-import { Dropdown } from "react-bootstrap";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
     isEmpty: jest.requireActual("lodash/isEmpty")
 }));
 
+// We are mocking here.
 // eslint-disable-next-line react/display-name
 jest.mock("./cues/CueErrorAlert", () => (): ReactElement => <div>CueErrorAlert</div>);
 
@@ -114,19 +103,22 @@ const testingCompletedTask = {
 jest.setTimeout(9000);
 
 describe("SubtitleEdit", () => {
-    beforeEach(() => testingStore = createTestingStore());
+    beforeEach(() => {
+        testingStore = createTestingStore();
+        jest.clearAllMocks();
+    });
+
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -141,7 +133,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 20
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -191,72 +191,87 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
+                                    id="jumpToFirstButton"
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
+                                    id="jumpToLastButton"
                                     className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
+                                    id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
+                                    id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
+                                    hidden
+                                    id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
                                 <button
+                                    id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -266,7 +281,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -287,22 +302,24 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML));
+        expect(actual).toEqual(expected);
     });
 
     it("renders with no cues and add cue button for CAPTION track", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -317,7 +334,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 20
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -328,9 +353,9 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <Toolbox
+                                handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
-                                handleImportFile={jest.fn()}
                             />
                         </div>
                         <div
@@ -349,72 +374,87 @@ describe("SubtitleEdit", () => {
                                 sourceCueIndexes={[]}
                             />
                             <div style={{ overflow: "auto" }} />
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
+                                    id="jumpToFirstButton"
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
+                                    id="jumpToLastButton"
                                     className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
+                                    id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
+                                    id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
+                                    hidden
+                                    id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
                                 <button
+                                    id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -424,7 +464,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -445,22 +485,24 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html()));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html()));
+        expect(actual).toEqual(expected);
     });
 
     it("renders loading data when data is pending load for CAPTION", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -488,7 +530,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -508,22 +550,24 @@ describe("SubtitleEdit", () => {
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html()));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html()));
+        expect(actual).toEqual(expected);
     });
 
     it("renders loading data when data is pending load for TRANSLATION source cues", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -554,7 +598,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -575,22 +619,24 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html()));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html()));
+        expect(actual).toEqual(expected);
     });
 
     it("renders with search and replace pane", () => {
         // GIVEN
         const expectedNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -605,7 +651,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 20
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -634,8 +688,8 @@ describe("SubtitleEdit", () => {
                             <SearchReplaceEditor />
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
-                                    rowIndex={0}
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
@@ -645,8 +699,8 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                                 <CueLine
-                                    rowIndex={1}
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
@@ -656,72 +710,87 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
+                                    id="jumpToFirstButton"
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
+                                    id="jumpToLastButton"
                                     className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
+                                    id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
+                                    id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
+                                    hidden
+                                    id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
                                 <button
+                                    id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -731,7 +800,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -753,22 +822,24 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML));
+        expect(actual).toEqual(expected);
     });
 
     it("renders with merge pane", () => {
         // GIVEN
         const expectedNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -783,7 +854,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 20
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -812,92 +891,109 @@ describe("SubtitleEdit", () => {
                             <MergeEditor />
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
-                                    rowIndex={0}
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={createRef()}
                                 />
                                 <CueLine
-                                    rowIndex={1}
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
-                                        matchedCues
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
                                     }}
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
+                                    id="jumpToFirstButton"
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
+                                    id="jumpToLastButton"
                                     className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
+                                    id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
+                                    id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
+                                    hidden
+                                    id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
                                 <button
+                                    id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -907,7 +1003,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -929,22 +1025,24 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(showMerge(true) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML)))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML)));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.container.outerHTML));
+        expect(actual).toEqual(expected);
     });
 
     it("renders for task with edit disabled", () => {
         // GIVEN
         const expectedNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -959,7 +1057,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 20
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -969,40 +1075,11 @@ describe("SubtitleEdit", () => {
                                     lastCueChange={null}
                                 />
                             </div>
-                            <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
-                                <SubtitleSpecificationsButton />
-                                <SearchReplaceButton />
-                                <ImportTrackCuesButton handleImport={jest.fn()} disabled />
-                                <ExportTrackCuesButton handleExport={jest.fn()} />
-                                <Dropdown>
-                                    <Dropdown.Toggle id="toolbox-actions" variant="secondary">
-                                        <i className="fas fa-ellipsis-h" />
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
-                                        <Dropdown.Item className="sbte-dropdown-item">
-                                            <KeyboardShortcuts />
-                                        </Dropdown.Item>
-                                        <Dropdown.Divider />
-                                        <Dropdown.Item className="sbte-dropdown-item">
-                                            <MergeCuesButton />
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="sbte-dropdown-item">
-                                            <ShiftTimeButton />
-                                        </Dropdown.Item>
-                                        <Dropdown.Divider />
-                                        <Dropdown.Item className="sbte-dropdown-item">
-                                            <CaptionOverlapToggle />
-                                        </Dropdown.Item>
-                                        <Dropdown.Divider />
-                                        <Dropdown.Item className="sbte-dropdown-item">
-                                            <CueCommentsToggle />
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="sbte-dropdown-item">
-                                            <WaveformToggle />
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </ButtonToolbar>
+                            <Toolbox
+                                handleImportFile={jest.fn()}
+                                handleExportSourceFile={jest.fn()}
+                                handleExportFile={jest.fn()}
+                            />
                         </div>
                         <div
                             style={{
@@ -1016,8 +1093,8 @@ describe("SubtitleEdit", () => {
                         >
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
-                                    rowIndex={0}
                                     data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
@@ -1027,8 +1104,8 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                                 <CueLine
-                                    rowIndex={1}
                                     data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
                                     rowProps={{
                                         targetCuesLength: 2,
                                         withoutSourceCues: true,
@@ -1038,73 +1115,90 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
+                                    id="jumpToFirstButton"
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
+                                    id="jumpToLastButton"
                                     className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
-
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
+                                    id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
+                                    id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
+                                    hidden
+                                    id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
                                 <button
+                                    id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span className="text-success">Edits are disabled, task is already completed</span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span className="text-success">
+                                            Edits are disabled, task is already completed
+                                        </span>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        disabled
+                                        className="btn btn-primary sbte-complete-subtitle-btn"
+                                    >
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1114,7 +1208,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1135,8 +1229,11 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.html())))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.html())));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            actualNode.html())).replace(" disabled=\"\"", "");
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            expectedNode.html())).replace(" disabled=\"\"", "");
+        expect(actual).toEqual(expected);
     });
 
     it("renders with waveform", async () => {
@@ -1148,15 +1245,14 @@ describe("SubtitleEdit", () => {
             })
         });
         const expectedNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <div
                     className="sbte-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%",
-                        overflow: "hidden"
+                        height: "100%"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -1171,7 +1267,15 @@ describe("SubtitleEdit", () => {
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div style={{ display: "flex", flex: "1 1 40%", flexFlow: "column", paddingRight: "10px" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flex: "1 1 40%",
+                                flexFlow: "column",
+                                paddingRight: "10px",
+                                zIndex: 20
+                            }}
+                        >
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -1227,72 +1331,87 @@ describe("SubtitleEdit", () => {
                                     rowRef={createRef()}
                                 />
                             </div>
-                            <div style={{ marginTop: "auto", display: "flex", justifyContent: "flex-end" }}>
+                            <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
+                                    id="jumpToFirstButton"
                                     className="btn btn-secondary sbte-jump-to-first-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to top"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-up" />
                                 </button>
                                 <button
+                                    id="jumpToLastButton"
                                     className="btn btn-secondary sbte-jump-to-last-button"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to bottom"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-angle-double-down" />
                                 </button>
                                 <button
+                                    id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to currently editing subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-edit" />
                                 </button>
                                 <button
+                                    id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to subtitle in playback position"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-video" />
                                 </button>
                                 <button
+                                    hidden
+                                    id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    hidden={testingTrack.type !== "TRANSLATION"}
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to last translated subtitle"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-language" />
                                 </button>
                                 <button
+                                    id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
                                     className="btn btn-secondary"
                                     type="button"
-                                    style={{ marginLeft: "10px" }}
-                                    onClick={(): void => undefined}
+                                    data-pr-tooltip="Scroll to next subtitle error"
+                                    data-pr-position="top"
+                                    data-pr-at="center top-2"
                                 >
                                     <i className="fa fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
-                                <div
-                                    style={{ "textAlign": "center", "margin": "8px 10px 0px 0px", fontWeight: "bold" }}
-                                >
-                                    <span hidden className=""> &nbsp;<i className="" /></span>
+                                <div className="tw-space-x-4 tw-flex tw-items-center">
+                                    <div className="tw-font-bold">
+                                        <span hidden className="tw-flex tw-items-center ">
+                                            <span className="tw-leading-none"> &nbsp;</span>
+                                            <i className="" />
+                                        </span>
+                                    </div>
+                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                        Complete
+                                    </button>
                                 </div>
-                                <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
-                                    Complete
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1302,7 +1421,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1327,17 +1446,18 @@ describe("SubtitleEdit", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // THEN
-        expect(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(removeBackgroundColorStyle(
-            actualNode.container.outerHTML))))
-            .toEqual(removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(removeBackgroundColorStyle(
-                fixVideoPlayerInvalidTime(expectedNode.container.outerHTML)))));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            removeBackgroundColorStyle(actualNode.container.outerHTML)));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
+            removeBackgroundColorStyle(fixVideoPlayerInvalidTime(expectedNode.container.outerHTML))));
+        expect(actual).toEqual(expected);
     });
 
     it("calls onViewAllTrack callback when button is clicked", () => {
         // GIVEN
         const mockOnViewAllTracks = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1369,7 +1489,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnComplete = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1402,7 +1522,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnExportFile = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1423,7 +1543,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
 
-        // WHEN
+        // WHE
         actualNode.find(".sbte-export-button").simulate("click");
 
         // THEN
@@ -1434,7 +1554,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnExportSourceFile = jest.fn();
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1466,7 +1586,7 @@ describe("SubtitleEdit", () => {
         // GIVEN
         const mockOnImportFile = jest.fn();
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1506,7 +1626,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1546,7 +1666,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1579,7 +1699,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1617,7 +1737,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1645,7 +1765,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1679,7 +1799,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1714,7 +1834,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1748,7 +1868,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1780,6 +1900,7 @@ describe("SubtitleEdit", () => {
             CueError.TIME_GAP_LIMIT_EXCEEDED,
             CueError.TIME_GAP_OVERLAP
         ];
+
         const cues = [
             { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE", errors: cueError },
             { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
@@ -1791,9 +1912,12 @@ describe("SubtitleEdit", () => {
             { vttCue: new VTTCue(7, 8, "Editing Line 4"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(8, 10, "Editing Line 4"), cueCategory: "DIALOGUE", errors: cueError },
         ] as CueDto[];
+
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
         const actualNode = render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1806,6 +1930,7 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
+
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         await act(async () => {
@@ -1852,8 +1977,6 @@ describe("SubtitleEdit", () => {
         expect(testingStore.getState().currentCueErrorIndex).toEqual(0);
     });
 
-
-
     it("calls onSave callback on auto save", () => {
         // GIVEN
         const saveTrack = jest.fn();
@@ -1861,7 +1984,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
         mount(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
@@ -1882,7 +2005,7 @@ describe("SubtitleEdit", () => {
         expect(saveTrack).toHaveBeenCalledTimes(1);
     });
 
-    it("resets all editing track data when unmounted", () => {
+    it("resets all editing track data when unmounted", async () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
@@ -1910,17 +2033,19 @@ describe("SubtitleEdit", () => {
         ReactDOM.unmountComponentAtNode(container);
 
         // THEN
-        expect(testingStore.getState().loadingIndicator.cuesLoaded).toBeFalsy();
-        expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeFalsy();
-        expect(testingStore.getState().editingTrack).toBeNull();
-        expect(testingStore.getState().cues).toEqual([]);
-        expect(testingStore.getState().sourceCues).toEqual([]);
-        expect(testingStore.getState().saveTrack).toBeNull();
-        expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
-        expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-        expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
-        expect(testingStore.getState().pendingSave).toBeFalsy();
-        expect(testingStore.getState().lastCueChange).toEqual(null);
+        await waitFor(() => {
+            expect(testingStore.getState().loadingIndicator.cuesLoaded).toBeFalsy();
+            expect(testingStore.getState().loadingIndicator.sourceCuesLoaded).toBeFalsy();
+            expect(testingStore.getState().editingTrack).toBeNull();
+            expect(testingStore.getState().cues).toEqual([]);
+            expect(testingStore.getState().sourceCues).toEqual([]);
+            expect(testingStore.getState().saveTrack).toBeNull();
+            expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(testingStore.getState().pendingSave).toBeFalsy();
+            expect(testingStore.getState().lastCueChange).toEqual(null);
+        });
     });
 
     it("sets saveTrack when mounted", () => {

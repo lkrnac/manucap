@@ -16,6 +16,7 @@ const testTrack = {
     language: { id: "en-US", name: "English", direction: "LTR" },
     timecodesUnlocked: true
 };
+
 const testTranslationTrack = {
     type: "TRANSLATION",
     language: { id: "fr-FR", name: "French (France)" } as Language,
@@ -35,7 +36,7 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                className="btn sbte-merge-cues-button"
+                className="sbte-merge-cues-button"
                 title="Unlock timecodes to enable"
             >
                 Merge Cues
@@ -45,7 +46,7 @@ describe("MergeCuesButton", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <MergeCuesButton />
+                <MergeCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
@@ -57,7 +58,7 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                className="btn sbte-merge-cues-button"
+                className="sbte-merge-cues-button"
                 title="Unlock timecodes to enable"
             >
                 Merge Cues
@@ -67,7 +68,7 @@ describe("MergeCuesButton", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <MergeCuesButton />
+                <MergeCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
@@ -81,7 +82,7 @@ describe("MergeCuesButton", () => {
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
             <button
-                className="btn sbte-merge-cues-button"
+                className="sbte-merge-cues-button"
                 disabled
                 title="Unlock timecodes to enable"
             >
@@ -92,7 +93,7 @@ describe("MergeCuesButton", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <MergeCuesButton />
+                <MergeCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
@@ -104,7 +105,7 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const { getByText } = render(
             <Provider store={testingStore}>
-                <MergeCuesButton />
+                <MergeCuesButton onClick={jest.fn()} />
             </Provider>
         );
         const mergeButton = getByText("Merge Cues");
@@ -121,7 +122,7 @@ describe("MergeCuesButton", () => {
         const { container, getByText } = render(
             <Provider store={testingStore}>
                 <SearchReplaceButton />
-                <MergeCuesButton />
+                <MergeCuesButton onClick={jest.fn()} />
             </Provider>
         );
         const searchButton = container.querySelector(".sbte-search-replace-button") as Element;

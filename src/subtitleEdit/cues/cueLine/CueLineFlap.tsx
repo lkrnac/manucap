@@ -3,7 +3,7 @@ import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineState, CuesWi
 import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { addCuesToMergeList, removeCuesToMergeList } from "../cuesList/cuesListActions";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import { Tooltip } from "primereact/tooltip";
 
 interface Props {
     rowIndex: number;
@@ -15,15 +15,24 @@ interface Props {
     cueCommentsCount?: number;
 }
 
-const getCommentIcon = (index: number): ReactElement => (
-    <TooltipWrapper
-        tooltipId={`cueCommentTooltip-${index}`}
-        text="Subtitle(s) has comments"
-        placement="right"
-    >
-        <i className="fa fa-comments" />
-    </TooltipWrapper>
-);
+const getCommentIcon = (index: number): ReactElement => {
+    const commentIconId = `cuelineComment-${index}`;
+    return (
+        <div key={index}>
+            <i
+                id={commentIconId}
+                className="fa fa-comments"
+                data-pr-tooltip="Subtitle(s) has comments"
+                data-pr-position="right"
+                data-pr-at="right+10 top+10"
+            />
+            <Tooltip
+                id={commentIconId + "-Tooltip"}
+                target={`#${commentIconId}`}
+            />
+        </div>
+    );
+};
 
 const getIconStyle = (bottom: string): CSSProperties => {
     return {

@@ -13,7 +13,13 @@ describe("ImportTrackCuesButton", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="sbte-import-button btn btn-secondary">
+           <button
+               id="importFileBtn"
+               className="sbte-import-button btn btn-secondary"
+               data-pr-tooltip="Import File"
+               data-pr-position="top"
+               data-pr-at="center+2 top-2"
+           >
                <i className="fas fa-file-import fa-lg" />
            </button>
        );
@@ -32,7 +38,14 @@ describe("ImportTrackCuesButton", () => {
     it("renders disabled", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" disabled className="sbte-import-button btn btn-secondary">
+            <button
+                id="importFileBtn"
+                disabled
+                className="sbte-import-button btn btn-secondary"
+                data-pr-tooltip="Import File"
+                data-pr-position="top"
+                data-pr-at="center+2 top-2"
+            >
                 <i className="fas fa-file-import fa-lg" />
             </button>
         );

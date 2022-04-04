@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    *,
+    *:active,
+    *:hover,
+    *:focus,
+    *:focus-visible {
+        outline: none !important;
+    }
+}
+
+/** Badges **/
+
+.tw-badge {
+    @apply tw-inline-block tw-text-white tw-leading-none tw-whitespace-nowrap tw-rounded tw-text-center tw-text-base tw-py-1 tw-px-2;
+}
+
+.tw-badge.tw-badge-sm {
+    @apply tw-py-0.5 tw-px-1.5 tw-text-xs;
+}
+
+.tw-badge.tw-badge-success {
+    @apply tw-bg-green-600;
+}
+
+.tw-badge.tw-badge-secondary {
+    @apply tw-bg-blue-grey-600;
+}
+
+.tw-badge.tw-badge-outline {
+    @apply tw-border tw-bg-transparent;
+}
+
+.tw-badge-pill {
+    @apply tw-px-1.5 tw-py-1 tw-rounded-3xl tw-inline-flex tw-items-center tw-justify-center tw-leading-none;
+}
+
+.tw-badge-pill i {
+    @apply tw-text-xs;
+}
+
+/** Modal **/
+
+.p-dialog {
+    @apply tw-shadow-2xl tw-border-none tw-w-full;
+}
+
+.p-dialog .p-dialog-header {
+    @apply tw-bg-blue-600 tw-p-6 tw-rounded-t tw-justify-between;
+}
+
+.p-dialog .p-dialog-content {
+    @apply tw-p-6;
+}
+
+.p-dialog .p-dialog-header .p-dialog-title {
+    @apply tw-text-white;
+}
+
+.p-dialog .p-dialog-footer {
+    @apply tw-rounded-b tw-px-6 tw-py-4;
+}
+
+.p-dialog .p-dialog-footer button:last-child {
+    @apply tw-mr-0;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon {
+    @apply tw-w-auto tw-h-[30px] tw-mt-[1px]
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon span {
+    @apply tw-text-white tw-opacity-60 hover:tw-opacity-100 tw-transition-colors tw-duration-300 tw-font-bold tw-outline-none;
+}
+
+/** Toasts **/
+
+.p-toast {
+    @apply tw-w-[50vw];
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-icon {
+    @apply tw-hidden;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-detail,
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-text {
+    @apply tw-m-0;
+}
+
+.p-toast .p-toast-message .p-toast-message-content {
+    @apply tw-px-6 tw-py-4;
+}
+
+/** Dropdown / Menu **/
+
+.p-dropdown-panel {
+    @apply tw-border tw-border-blue-grey-200 tw-my-2 tw-text-blue-grey-500 tw-rounded tw-z-50 tw-text-left tw-list-none tw-text-base tw-bg-white tw-shadow-sm tw-select-none tw-py-2;
+    @apply tw-min-w-[160px] !important;
+}
+
+.p-menu.p-menu-overlay {
+    @apply tw-shadow-md tw-my-2;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item > *,
+.p-menu:not(.position-button-list):not(.spellcheck-menu) .p-menuitem > * {
+    @apply tw-font-normal tw-flex tw-w-full tw-cursor-pointer tw-transition-colors tw-duration-300 tw-text-blue-grey-500 tw-whitespace-nowrap hover:tw-bg-blue-grey-100 tw-py-2 tw-px-6;
+}
+
+.p-menu .p-menuitem button {
+    @apply tw-w-full tw-text-left;
+}
+
+.p-menu.position-button-list .p-menu-list {
+    @apply tw-flex tw-flex-row tw-flex-wrap tw-justify-between tw-px-2;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item > .disabled,
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item > *:disabled,
+.p-menu .p-menuitem > .disabled,
+.p-menu .p-menuitem > *:disabled {
+    @apply tw-opacity-60 tw-shadow-none tw-pointer-events-none tw-cursor-not-allowed hover:tw-bg-transparent;
+}
+
+/** Tooltips **/
+
+.p-tooltip .p-tooltip-text {
+    @apply tw-shadow-sm tw-bg-blue-grey-700 tw-block tw-text-center tw-text-sm tw-text-white;
+}
+
+.p-tooltip.p-tooltip-top .p-tooltip-arrow {
+    @apply tw-border-t-blue-grey-700;
+}
+
+.p-tooltip.p-tooltip-right .p-tooltip-arrow {
+    @apply tw-border-r-blue-grey-700;
+}
+
+.p-tooltip.p-tooltip-left .p-tooltip-arrow {
+    @apply tw-border-l-blue-grey-700;
+}
+
+.p-tooltip.p-tooltip-bottom .p-tooltip-arrow {
+    @apply tw-border-b-blue-grey-700;
+}

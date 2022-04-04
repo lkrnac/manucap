@@ -45,7 +45,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
                 >
                     <DeleteCueLineButton cueIndex={1} />
-                    <PlayCueButton cue={cues[1]} />
+                    <PlayCueButton cue={cues[1]} cueIndex={1} />
                     <SplitCueLineButton cueIndex={1} />
                     <AddCueLineButton cueIndex={1} sourceCueIndexes={[]} />
                 </div>
@@ -60,9 +60,9 @@ describe("CueActionsPanel", () => {
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
-
+        const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+        const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("renders for caption cue in view mode", () => {
@@ -74,7 +74,7 @@ describe("CueActionsPanel", () => {
                     className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
                 >
                     <div />
-                    <PlayCueButton cue={cues[1]} />
+                    <PlayCueButton cue={cues[1]} cueIndex={1} />
                     <div />
                     <div />
                 </div>
@@ -89,8 +89,9 @@ describe("CueActionsPanel", () => {
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+        const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("opens next cue line for editing when add button is clicked", () => {

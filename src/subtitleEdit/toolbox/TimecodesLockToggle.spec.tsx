@@ -21,15 +21,15 @@ describe("TimecodesLockToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn">
-                Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-off">LOCKED</span>
+            <button type="button" className="tw-flex tw-items-center tw-justify-between">
+                Timecodes <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">LOCKED</span>
             </button>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <TimecodesLockToggle />
+                <TimecodesLockToggle onClick={jest.fn()} />
             </Provider>
         );
 
@@ -40,18 +40,22 @@ describe("TimecodesLockToggle", () => {
     it("changes icon/text on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn sbte-toggled-btn">
-                Timecodes <span className="sbte-toggled-badge sbte-toggled-badge-on">UNLOCKED</span>
+            <button
+                type="button"
+                className="tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+            >
+                Timecodes <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">UNLOCKED</span>
             </button>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <TimecodesLockToggle />
+                <TimecodesLockToggle onClick={jest.fn()} />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -68,12 +72,12 @@ describe("TimecodesLockToggle", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <TimecodesLockToggle />
+                <TimecodesLockToggle onClick={jest.fn()} />
             </Provider>
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(testingStore.getState().editingTrack.timecodesUnlocked).toEqual(true);

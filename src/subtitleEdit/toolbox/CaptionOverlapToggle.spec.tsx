@@ -29,15 +29,15 @@ describe("CaptionOverlapToggle", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="btn">
-               Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">NOT ALLOWED</span>
+           <button type="button" className="tw-flex tw-items-center tw-justify-between">
+               Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
            </button>
        );
 
        // WHEN
        const actualNode = render(
            <Provider store={testingStore}>
-               <CaptionOverlapToggle />
+               <CaptionOverlapToggle onClick={jest.fn()} />
            </Provider>
        );
 
@@ -48,18 +48,22 @@ describe("CaptionOverlapToggle", () => {
     it("changes icon on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn sbte-toggled-btn" disabled>
-                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-on">ALLOWED</span>
+            <button
+                type="button"
+                className="tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+                disabled
+            >
+                Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">ALLOWED</span>
             </button>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle />
+                <CaptionOverlapToggle onClick={jest.fn()} />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -73,20 +77,24 @@ describe("CaptionOverlapToggle", () => {
             default: true,
             overlapEnabled: true
         } as Track;
+
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
         const expectedNode = render(
-            <button type="button" className="btn" disabled>
-                Overlapping <span className="sbte-toggled-badge sbte-toggled-badge-off">NOT ALLOWED</span>
+            <button type="button" className="tw-flex tw-items-center tw-justify-between" disabled>
+                Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
             </button>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle />
+                <CaptionOverlapToggle onClick={jest.fn()} />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -103,12 +111,12 @@ describe("CaptionOverlapToggle", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle />
+                <CaptionOverlapToggle onClick={jest.fn()} />
             </Provider>
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(testingStore.getState().editingTrack.overlapEnabled).toEqual(true);
@@ -120,7 +128,7 @@ describe("CaptionOverlapToggle", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle />
+                <CaptionOverlapToggle onClick={jest.fn()} />
             </Provider>
         );
 
@@ -137,7 +145,7 @@ describe("CaptionOverlapToggle", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle />
+                <CaptionOverlapToggle onClick={jest.fn()} />
             </Provider>
         );
 
@@ -155,7 +163,7 @@ describe("CaptionOverlapToggle", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle />
+                <CaptionOverlapToggle onClick={jest.fn()} />
             </Provider>
         );
 

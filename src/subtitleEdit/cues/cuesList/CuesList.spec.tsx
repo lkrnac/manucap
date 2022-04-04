@@ -2,7 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import { createRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 
 import { CueDto, Language, ScrollPosition, Task, Track } from "../../model";
 import { updateCues, updateVttCue } from "./cuesListActions";
@@ -110,8 +110,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+            const actual = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
+            expect(expected).toEqual(actual);
         });
 
         it("without pagination", () => {
@@ -187,8 +188,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+            const actual = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
+            expect(expected).toEqual(actual);
         });
 
         it("first page", () => {
@@ -235,8 +237,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+            const actual = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
+            expect(expected).toEqual(actual);
         });
 
         it("middle page", () => {
@@ -290,8 +293,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+            const actual = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
+            expect(expected).toEqual(actual);
         });
 
         it("last page", () => {
@@ -338,8 +342,9 @@ describe("CuesList", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-                .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+            const expected = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+            const actual = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
+            expect(expected).toEqual(actual);
         });
     });
 
@@ -913,7 +918,7 @@ describe("CuesList", () => {
             expect(actualNode.container.outerHTML).toContain("Target Line 0 edited Paste text to end");
         });
 
-        it("renders changed value if user edits and quickly navigates away for newly created caption cue", () => {
+        it("renders changed value if user edits and quickly navigates away for newly created caption cue", async () => {
             // GIVEN
             testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
 
@@ -935,10 +940,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual(" Paste text to end");
-            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
-                .toEqual(" Paste text to end");
-            expect(actualNode.container.outerHTML).toContain(" Paste text to end");
+            await waitFor(() => {
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual(" Paste text to end");
+                expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                    .toEqual(" Paste text to end");
+                expect(actualNode.container.outerHTML).toContain(" Paste text to end");
+            });
         });
 
         it("renders changed value if user edits and quickly navigates away for newly created translated cue", () => {

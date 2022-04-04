@@ -1,10 +1,10 @@
 import { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Modal from "react-bootstrap/Modal";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { Field, Form } from "react-final-form";
 import { formatStartOrEndTime } from "../../utils/timeUtils";
+import { Dialog } from "primereact/dialog";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
@@ -42,70 +42,20 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     };
 
     return (
-        <Modal show={props.show} onHide={handleCancelShift} centered dialogClassName="sbte-medium-modal">
-            <Modal.Header closeButton>
-                <Modal.Title>Shift Track Lines Time</Modal.Title>
-            </Modal.Header>
-            <Form
-                onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
-                render={({ handleSubmit, values }): ReactElement => (
-                    <form onSubmit={handleSubmit}>
-                        <Modal.Body>
-                            <div className="form-group">
-                                <label>Time Shift in Seconds.Milliseconds</label>
-                                <Field
-                                    name="shiftTime"
-                                    component="input"
-                                    parse={formatStartOrEndTime}
-                                    className="form-control dotsub-track-line-shift margin-right-10"
-                                    style={{ width: "120px" }}
-                                    type="number"
-                                    placeholder="0.000"
-                                    step={"0.100"}
-                                />
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <Field
-                                        name="shiftPosition"
-                                        component="input"
-                                        type="radio"
-                                        value="all"
-                                        className="form-check-input"
-                                    /> Shift all
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <Field
-                                        component="input"
-                                        type="radio"
-                                        name="shiftPosition"
-                                        value="before"
-                                        className="form-check-input"
-                                    /> Shift all before editing cue
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <Field
-                                        component="input"
-                                        type="radio"
-                                        name="shiftPosition"
-                                        value="after"
-                                        className="form-check-input"
-                                    /> Shift all after editing cue
-                                </label>
-                            </div>
-                            {
-                                errorMessage || isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ? (
-                                    <span className="alert alert-danger" style={{ display: "block" }}>
-                                        {errorMessage || INVALID_SHIFT_MSG}
-                                    </span>
-                                ): null
-                            }
-                        </Modal.Body>
-                        <Modal.Footer>
+        <Form
+            onSubmit={(values): void => handleApplyShift(values.shiftPosition, values.shiftTime)}
+            render={({ handleSubmit, values }): ReactElement => (
+                <Dialog
+                    visible={props.show}
+                    onHide={handleCancelShift}
+                    className="tw-max-w-3xl"
+                    appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
+                    header="Shift Track Lines Time"
+                    draggable={false}
+                    dismissableMask
+                    resizable={false}
+                    footer={() => (
+                        <>
                             <button
                                 type="submit"
                                 disabled={
@@ -113,6 +63,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                     values.shiftPosition === undefined
                                 }
                                 className="dotsub-shift-modal-apply-button btn btn-primary"
+                                onClick={handleSubmit}
                             >
                                 Apply
                             </button>
@@ -123,11 +74,67 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                             >
                                 Close
                             </button>
-                        </Modal.Footer>
+                        </>
+                    )}
+                >
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label>Time Shift in Seconds.Milliseconds</label>
+                            <Field
+                                name="shiftTime"
+                                component="input"
+                                parse={formatStartOrEndTime}
+                                className="form-control dotsub-track-line-shift margin-right-10"
+                                style={{ width: "120px" }}
+                                type="number"
+                                placeholder="0.000"
+                                step={"0.100"}
+                            />
+                        </div>
+                        <div className="form-check">
+                            <label>
+                                <Field
+                                    name="shiftPosition"
+                                    component="input"
+                                    type="radio"
+                                    value="all"
+                                    className="form-check-input"
+                                /> Shift all
+                            </label>
+                        </div>
+                        <div className="form-check">
+                            <label>
+                                <Field
+                                    component="input"
+                                    type="radio"
+                                    name="shiftPosition"
+                                    value="before"
+                                    className="form-check-input"
+                                /> Shift all before editing cue
+                            </label>
+                        </div>
+                        <div className="form-check">
+                            <label>
+                                <Field
+                                    component="input"
+                                    type="radio"
+                                    name="shiftPosition"
+                                    value="after"
+                                    className="form-check-input"
+                                /> Shift all after editing cue
+                            </label>
+                        </div>
+                        {
+                            errorMessage || isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ? (
+                                <span className="alert alert-danger" style={{ display: "block" }}>
+                                    {errorMessage || INVALID_SHIFT_MSG}
+                                </span>
+                            ): null
+                        }
                     </form>
-                )}
-            />
-        </Modal>
+                </Dialog>
+            )}
+        />
     );
 };
 

@@ -1,15 +1,15 @@
 import {
     CSSProperties,
-    Dispatch, KeyboardEventHandler,
-    MutableRefObject,
+    Dispatch,
+    KeyboardEventHandler,
+    MouseEvent,
     ReactElement,
-    RefObject,
+    RefObject, SyntheticEvent,
     useEffect,
-    useRef,
+    useRef
 } from "react";
 
 import * as React from "react";
-import { Overlay, Popover } from "react-bootstrap";
 import Select, { OnChangeValue } from "react-select";
 import { Match, SpellCheck } from "./model";
 import { Character } from "../../utils/shortcutConstants";
@@ -22,7 +22,7 @@ import {
 } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
-
+import { Menu } from "primereact/menu";
 
 interface Props {
     children: ReactElement;
@@ -37,15 +37,6 @@ interface Props {
     unbindCueViewModeKeyboardShortcut: () => void;
     trackId: string;
 }
-
-const popupPlacement = (target: MutableRefObject<null>): boolean => {
-    if (target !== null && target.current !== null) {
-        // @ts-ignore false positive -> we do null check
-        const position = target.current.getBoundingClientRect();
-        return window.innerHeight - position.bottom > 320;
-    }
-    return true;
-};
 
 interface Option {
     value: string;
@@ -92,19 +83,21 @@ const onkeydown = (setSpellCheckerMatchingOffset: Function): KeyboardEventHandle
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const dispatch = useDispatch();
-    const target = useRef(null);
     const selectRef = useRef(null);
-    const showAtBottom = popupPlacement(target);
     const searchReplaceFind = useSelector((state: SubtitleEditState) => state.searchReplace.find);
+    const menu = useRef<Menu>(null);
+    const spellCheckSpan = useRef(null);
+    const show = props.spellCheckerMatchingOffset === props.start;
 
     /**
      * Sometimes Overlay got unmounted before
      * onExit event got executed so this to ensure
      * onExit logic is done
      */
+
     useEffect(
         () => (): void => {
-            if(searchReplaceFind === "") {
+            if (searchReplaceFind === "") {
                 props.editorRef?.current?.focus();
             }
             props.bindCueViewModeKeyboardShortcut();
@@ -112,63 +105,111 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once -> unmount
     );
+
+    // Since PrimeReact does not accept a "show" prop for the menu, we have to handle the open/close action
+    // coming from the keyboard bindings by using the hide / shown methods that Prime React exposes on the ref val.
+
+    useEffect((): void => {
+        if (menu.current && spellCheckSpan.current) {
+            const event = {
+                ...(new Event("", {
+                    cancelable: true,
+                    bubbles:  true
+                })),
+                target: spellCheckSpan.current,
+                currentTarget: spellCheckSpan.current
+            } as unknown as SyntheticEvent;
+            show ? menu.current.show(event) : menu.current.hide(event);
+        }
+    }, [menu, spellCheckSpan, show]);
+
     const spellCheckMatch = props.spellCheck.matches
         .filter(match => match.offset === props.start && match.offset + match.length === props.end)
         .pop();
+
     if (!spellCheckMatch) {
         return props.children;
     }
+
     const matchText = getMatchText(spellCheckMatch);
     const selectOptions = spellCheckMatch.replacements
         .filter((replacement) => replacement.value.trim() !== "")
         .map((replacement) => ({ value: replacement.value, label: replacement.value } as Option)
         );
+
     selectOptions.unshift({ value: matchText, label: "Ignore all in this track" });
 
     const customStyles = {
         control: () => ({ visibility: "hidden", height: "0px" }),
         container: (provided: CSSProperties) => ({ ...provided, height: "100%" }),
-        menu: (provided: CSSProperties) => ({ ...provided, position: "static", height: "100%", margin: 0 }),
+        menu: (provided: CSSProperties) => ({
+            ...provided,
+            position: "static",
+            height: "100%",
+            margin: 0,
+            boxShadow: "none",
+            borderRadius: 0,
+            border: "none",
+        }),
         menuList: (provided: CSSProperties) => ({ ...provided, height: "200px" })
     } as StylesConfig<Option, false>;
 
+    // Menu Toolbox.
+
+    const toggleMenu = (event: MouseEvent<HTMLElement>) => {
+        if (menu.current) {
+            menu.current.toggle(event);
+        }
+    };
+
+    const spellcheckId = `spellcheckIssue-${props.trackId}-${props.start}-${props.end}`;
+
     return (
-        <span
-            ref={target}
-            className="sbte-text-with-error"
-            onClick={
-                (): void => {
+        <>
+            <span
+                className="sbte-text-with-error"
+                onClick={(event): void => {
                     props.setSpellCheckerMatchingOffset(
                         props.spellCheckerMatchingOffset === props.start ? null : props.start
                     );
-                }
-
-            }
-        >
-            {props.children}
-            {/* TODO fix IJ/TS warnings */}
-            <Overlay
-                onEntering={(): void => onEnterPopover(props, selectRef)}
-                onExiting={(): void => onExitPopover(props)}
-                target={target.current}
-                show={props.spellCheckerMatchingOffset === props.start}
-                placement={showAtBottom ? "bottom" : "top"}
+                    toggleMenu(event);
+                }}
+                aria-controls={spellcheckId}
+                aria-haspopup
+                ref={spellCheckSpan}
             >
-                <Popover id="sbte-spell-check-popover">
-                    <Popover.Title>{spellCheckMatch.message}</Popover.Title>
-                    <Popover.Content hidden={selectOptions.length === 0} style={{ padding: 0 }}>
-                        <Select
-                            onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
-                            ref={selectRef}
-                            menuIsOpen
-                            options={selectOptions}
-                            styles={customStyles}
-                            onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
-                            classNamePrefix="spellcheck"
-                        />
-                    </Popover.Content>
-                </Popover>
-            </Overlay>
-        </span>
+                {props.children}
+            </span>
+            <Menu
+                ref={menu}
+                popup
+                id={spellcheckId}
+                className="spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0 tw-shadow-md"
+                model={[
+                    {
+                        template: () => (
+                            <>
+                                <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                                    {spellCheckMatch.message}
+                                </div>
+                                <div hidden={selectOptions.length === 0}>
+                                    <Select
+                                        onKeyDown={onkeydown(props.setSpellCheckerMatchingOffset)}
+                                        ref={selectRef}
+                                        menuIsOpen
+                                        options={selectOptions}
+                                        styles={customStyles}
+                                        onChange={onOptionSelected(props, spellCheckMatch, matchText, dispatch)}
+                                        classNamePrefix="spellcheck"
+                                    />
+                                </div>
+                            </>
+                        ),
+                    },
+                ]}
+                onHide={(): void => onExitPopover(props)}
+                onShow={(): void => onEnterPopover(props, selectRef)}
+            />
+        </>
     );
 };

@@ -6,40 +6,44 @@ import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { mount } from "enzyme";
 import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
 import testingStore from "../../../testUtils/testingStore";
+import { removeIds } from "../../../testUtils/testUtils";
 
 describe("SubtitleSpecificationsModal", () => {
     it("renders shown", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div className="fade modal-backdrop show" />
                 <div
-                    role="dialog"
-                    aria-modal="true"
-                    className="fade modal show"
-                    tabIndex={-1}
-                    style={{ display: "block" }}
+                    className="p-dialog-mask p-component-overlay p-component-overlay-enter
+                        p-dialog-visible p-dialog-center"
                 >
-                    <div className="modal-dialog sbte-medium-modal modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <div className="modal-title h4">Subtitle Specifications</div>
-                                <button type="button" className="close">
-                                    <span aria-hidden="true">×</span>
-                                    <span className="sr-only">Close</span>
-                                </button>
+                    <div
+                        className="p-dialog p-component tw-max-w-3xl p-dialog-enter p-dialog-enter-active"
+                        role="dialog"
+                        aria-labelledby=""
+                        aria-describedby=""
+                        aria-modal="true"
+                    >
+                        <div className="p-dialog-header">
+                            <div className="p-dialog-title">
+                                Subtitle Specifications
                             </div>
-                            <div className="modal-body">
-                                <label><strong>Enabled:&nbsp;</strong></label><label>No</label>
-                            </div>
-                            <div className="modal-footer">
+                            <div className="p-dialog-header-icons">
                                 <button
                                     type="button"
-                                    className="dotsub-subtitle-specifications-modal-close-button btn btn-primary"
+                                    className="p-dialog-header-icon p-dialog-header-close p-link"
+                                    aria-label="Close"
                                 >
-                                    Close
+                                    <span className="p-dialog-header-close-icon pi pi-times" />
                                 </button>
                             </div>
+                        </div>
+                        <div className="p-dialog-content">
+                            <label><strong>Enabled:&nbsp;</strong></label>
+                            <label>No</label>
+                        </div>
+                        <div className="p-dialog-footer">
+                            <button className="btn btn-primary">Close</button>
                         </div>
                     </div>
                 </div>
@@ -57,7 +61,6 @@ describe("SubtitleSpecificationsModal", () => {
         );
 
         // THEN
-        expect(actualNode.html())
-            .toEqual(expectedNode.html());
+        expect(removeIds(actualNode.html())).toEqual(expectedNode.html());
     });
 });

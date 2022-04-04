@@ -222,8 +222,9 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
-            .toEqual(removeDraftJsDynamicValues(expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+        const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
+        expect(actual).toEqual(expected);
     });
 
     it("renders text in RTL direction", () => {

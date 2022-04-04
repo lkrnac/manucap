@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { Character } from "../../utils/shortcutConstants";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import { Tooltip } from "primereact/tooltip";
 import DateTime from "../../common/DateTime";
 
 interface Props {
@@ -33,20 +33,23 @@ const CueComments = (props: Props): ReactElement => {
     }, [currentUser, dispatch, props.commentAuthor, props.index, text]);
 
     const getDeleteButton = (cueIndex: number, commentIndex: number): ReactElement => (
-        <TooltipWrapper
-            tooltipId={`deleteCueCommentBtnTooltip-${cueIndex}-${commentIndex}`}
-            text="Delete comment"
-            placement="top"
-        >
+        <>
             <button
+                id={`deleteCueCommentButton-${cueIndex}-${commentIndex}`}
                 data-testid="sbte-delete-cue-comment-button"
-                style={{ float: "right", marginLeft: "-30px" }}
-                className="btn btn-outline-secondary sbte-btn-xs"
+                className="btn btn-outline-secondary sbte-btn-xs sbte-delete-cue-comment-button"
+                data-pr-tooltip="Delete comment"
+                data-pr-position="left"
+                data-pr-at="left top+10"
                 onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
             >
                 <i className="fa fa-trash" />
             </button>
-        </TooltipWrapper>
+            <Tooltip
+                id={`deleteCueCommentButtonTooltip-${cueIndex}-${commentIndex}`}
+                target={`#deleteCueCommentButton-${cueIndex}-${commentIndex}`}
+            />
+        </>
     );
 
     return (
@@ -59,42 +62,43 @@ const CueComments = (props: Props): ReactElement => {
                 flexDirection: "column",
                 borderRadius: "5px",
                 padding: "10px 10px 5px 10px",
-                marginBottom: "2px",
-                marginLeft: "2px",
-                marginRight: "2px",
             }}
         >
             {
                 props.cue.comments?.map((comment: CueComment, index: number): ReactElement => (
-                    <div style={{ marginBottom: "8px" }} key={`cueComment-${props.index}-${index}`}>
-                        <span
-                            className="sbte-cue-comment-user"
-                            style={{
-                                borderRadius: "5px",
-                                padding: "1px 3px",
-                                whiteSpace: "nowrap",
-                                width: "80px",
-                                marginRight: "5px",
-                                float: "left",
-                                textAlign: "center",
-                                textOverflow: "ellipsis",
-                                overflow: "hidden"
-                            }}
-                        >
-                            {comment.author}
-                        </span>
-                        <span> {comment.comment} </span>
-                        {
-                            comment.userId === currentUser?.userId
-                                ? getDeleteButton(props.index, index)
-                                : null
-                        }
-                        <span
-                            className="sbte-light-gray-text"
-                            style={{ float: "right", marginRight: "30px" }}
-                        >
-                            <i><DateTime value={comment.date} /></i>
-                        </span>
+                    <div
+                        style={{ marginBottom: "8px" }}
+                        key={`cueComment-${props.index}-${index}`}
+                        className="tw-flex tw-items-center tw-justify-between"
+                    >
+                        <div>
+                            <span
+                                className="sbte-cue-comment-user"
+                                style={{
+                                    borderRadius: "5px",
+                                    padding: "2px 6px",
+                                    whiteSpace: "nowrap",
+                                    width: "80px",
+                                    marginRight: "5px",
+                                    textAlign: "center",
+                                    textOverflow: "ellipsis",
+                                    display: "inline-block"
+                                }}
+                            >
+                                {comment.author}
+                            </span>
+                            <span>{comment.comment}</span>
+                        </div>
+                        <div className="tw-flex tw-items-center tw-space-x-1.5">
+                            <span className="sbte-light-gray-text">
+                                <i><DateTime value={comment.date} /></i>
+                            </span>
+                            {
+                                comment.userId === currentUser?.userId
+                                    ? getDeleteButton(props.index, index)
+                                    : null
+                            }
+                        </div>
                     </div>
                 ))
             }

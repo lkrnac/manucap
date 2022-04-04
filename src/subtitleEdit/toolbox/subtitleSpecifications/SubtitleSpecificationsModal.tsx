@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import { Dialog } from "primereact/dialog";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { SubtitleSpecification } from "../model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
@@ -16,23 +15,22 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
     const subtitleSpecifications = stateSubtitleSpecifications ? stateSubtitleSpecifications :
         {} as SubtitleSpecification;
     return (
-        <Modal show={props.show} onHide={props.onClose} centered dialogClassName="sbte-medium-modal">
-            <Modal.Header closeButton>
-                <Modal.Title>Subtitle Specifications</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    variant="primary"
-                    onClick={props.onClose}
-                    className="dotsub-subtitle-specifications-modal-close-button"
-                >
+        <Dialog
+            className="tw-max-w-3xl"
+            visible={props.show}
+            onHide={props.onClose}
+            header="Subtitle Specifications"
+            draggable={false}
+            dismissableMask
+            resizable={false}
+            footer={() => (
+                <button className="btn btn-primary" onClick={props.onClose}>
                     Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
+                </button>
+            )}
+        >
+            <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
+        </Dialog>
     );
 };
 

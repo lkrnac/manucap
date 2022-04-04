@@ -69,7 +69,7 @@ describe("SubtitleSpecificationsForm", () => {
             <Provider store={testingStore}>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
-                <hr />
+                <hr className="tw-my-4" />
                 <div style={{ display: "flex", marginRight: "20px" }}>
                     <div style={{ flex: 1 }}>
                         <div>
@@ -116,7 +116,7 @@ describe("SubtitleSpecificationsForm", () => {
                         </div>
                     </div>
                 </div>
-                <hr />
+                <hr className="tw-my-4" />
                 <label><strong>Comments:&nbsp;</strong></label>
                 <div className="sbte-subspec-freeform-text sbte-subspec-comments">
                     <p>sample <strong>comment</strong> <del>test</del></p>
@@ -165,7 +165,7 @@ describe("SubtitleSpecificationsForm", () => {
             <Provider store={testingStore}>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>Yes</label>
-                <hr />
+                <hr className="tw-my-4" />
                 <div style={{ display: "flex", marginRight: "20px" }}>
                     <div style={{ flex: 1 }}>
                         <div>
@@ -212,7 +212,7 @@ describe("SubtitleSpecificationsForm", () => {
                         </div>
                     </div>
                 </div>
-                <hr />
+                <hr className="tw-my-4" />
                 <label><strong>Comments:&nbsp;</strong></label>
                 <div className="sbte-subspec-freeform-text sbte-subspec-comments">
                     <p>sample <strong>comment</strong> <del>test</del></p>

@@ -18,15 +18,15 @@ describe("CueCommentsToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn">
-                Comments <span className="sbte-toggled-badge sbte-toggled-badge-off">HIDDEN</span>
+            <button type="button" className="tw-flex tw-items-center tw-justify-between">
+                Comments <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">HIDDEN</span>
             </button>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueCommentsToggle />
+                <CueCommentsToggle onClick={jest.fn()} />
             </Provider>
         );
 
@@ -37,18 +37,21 @@ describe("CueCommentsToggle", () => {
     it("changes icon/text on toggle", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="btn sbte-toggled-btn">
-                Comments <span className="sbte-toggled-badge sbte-toggled-badge-on">SHOWN</span>
+            <button
+                type="button"
+                className="tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+            >
+                Comments <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">SHOWN</span>
             </button>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueCommentsToggle />
+                <CueCommentsToggle onClick={jest.fn()} />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
@@ -58,12 +61,12 @@ describe("CueCommentsToggle", () => {
         // GIVEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CueCommentsToggle />
+                <CueCommentsToggle onClick={jest.fn()} />
             </Provider>
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".btn") as Element);
+        fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
         expect(testingStore.getState().commentsVisible).toEqual(true);

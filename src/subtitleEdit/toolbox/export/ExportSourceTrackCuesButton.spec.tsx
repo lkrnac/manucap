@@ -10,10 +10,18 @@ describe("ExportSourceTrackCuesButton", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
     });
+
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="sbte-export-source-button btn btn-secondary">
+           <button
+               id="exportSourceFileBtn"
+               type="button"
+               className="sbte-export-source-button btn btn-secondary"
+               data-pr-tooltip="Export Source File"
+               data-pr-position="top"
+               data-pr-at="center+2 top-2"
+           >
                <i className="fas fa-file-export fa-lg" />
            </button>
        );

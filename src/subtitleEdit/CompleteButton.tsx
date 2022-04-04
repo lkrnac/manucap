@@ -49,20 +49,20 @@ const CompleteButton = (props: Props): ReactElement => {
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
     return (
-        <>
-            <div
-                style={{ textAlign: "center", margin: "8px 10px 0px 0px", fontWeight: "bold" }}
-            >
+        <div className="tw-space-x-4 tw-flex tw-items-center">
+            <div className="tw-font-bold">
                 {
                     props.disabled ?
                         <span className="text-success">{TASK_COMPLETE_MSG}</span> :
-                        <span hidden={saveState === SaveState.NONE} className={stateCssClasses.get(saveState)}>
-                            {stateMessages.get(saveState)} &nbsp;
+                        <span
+                            hidden={saveState === SaveState.NONE}
+                            className={`tw-flex tw-items-center ${stateCssClasses.get(saveState)}`}
+                        >
+                            <span className="tw-leading-none">{stateMessages.get(saveState)} &nbsp;</span>
                             <i className={stateIconCssClasses.get(saveState)} />
                         </span>
                 }
             </div>
-
             <button
                 type="button"
                 disabled={props.disabled || isPendingSaveState(saveState)}
@@ -70,9 +70,8 @@ const CompleteButton = (props: Props): ReactElement => {
                 onClick={(): void => props.onComplete({ editingTrack, cues })}
             >
                 Complete
-
             </button>
-        </>
+        </div>
     );
 };
 

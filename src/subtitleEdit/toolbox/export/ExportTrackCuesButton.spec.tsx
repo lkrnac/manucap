@@ -23,7 +23,13 @@ describe("ExportTrackCuesButton", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="sbte-export-button btn btn-secondary">
+           <button
+               id="exportFileBtn"
+               className="sbte-export-button btn btn-secondary"
+               data-pr-tooltip="Export File"
+               data-pr-position="top"
+               data-pr-at="center+2 top-2"
+           >
                <i className="fas fa-file-download fa-lg" />
            </button>
        );

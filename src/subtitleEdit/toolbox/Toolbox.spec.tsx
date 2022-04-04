@@ -1,68 +1,47 @@
 import "../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
-import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import { Provider } from "react-redux";
-import ShiftTimeButton from "./shift/ShiftTimeButton";
 import { SubtitleSpecification } from "./model";
 import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
 import Toolbox from "./Toolbox";
 import { readSubtitleSpecification } from "./subtitleSpecifications/subtitleSpecificationSlice";
 import testingStore from "../../testUtils/testingStore";
-import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { Language, Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
-import SyncCuesButton from "./SyncCuesButton";
 import SearchReplaceButton from "./SearchReplaceButton";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
-import { fireEvent, render } from "@testing-library/react";
-import MergeCuesButton from "./MergeCuesButton";
-import CueCommentsToggle from "./CueCommentsToggle";
-import TimecodesLockToggle from "./TimecodesLockToggle";
-import WaveformToggle from "./WaveformToggle";
-import { Dropdown } from "react-bootstrap";
+import { renderWithPortal } from "../../testUtils/testUtils";
 
 describe("Toolbox", () => {
+    afterEach(() => {
+        // Cleaning JSDOM after each test. Otherwise, it may create inconsistency on tests.
+        document.getElementsByTagName("html")[0].innerHTML = "";
+    });
+
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
             <Provider store={testingStore}>
-                <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
+                <div
+                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-stretch tw-z-[100]
+                        tw-justify-center sbte-button-toolbar"
+                >
                     <SubtitleSpecificationsButton />
                     <SearchReplaceButton />
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
-                    <Dropdown>
-                        <Dropdown.Toggle id="toolbox-actions" variant="secondary">
-                            <i className="fas fa-ellipsis-h" />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <KeyboardShortcuts />
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <MergeCuesButton />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <ShiftTimeButton />
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <CaptionOverlapToggle />
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <CueCommentsToggle />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <WaveformToggle />
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </ButtonToolbar>
+                    <button
+                        className="tw-select-none dropdown-toggle btn btn-secondary tw-flex
+                                tw-items-center tw-justify-center"
+                        aria-controls="toolboxMenu"
+                        aria-haspopup="true"
+                    >
+                        <i className="fas fa-ellipsis-h" />
+                    </button>
+                </div>
             </Provider>
         );
 
@@ -77,8 +56,7 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML)
-            .toEqual(expectedNode.container.outerHTML);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders for translation track", () => {
@@ -94,47 +72,24 @@ describe("Toolbox", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <ButtonToolbar className="sbte-button-toolbar" style={{ marginTop: "20px" }}>
+                <div
+                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-stretch
+                        tw-z-[100] tw-justify-center sbte-button-toolbar"
+                >
                     <SubtitleSpecificationsButton />
                     <SearchReplaceButton />
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportSourceTrackCuesButton handleExport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
-                    <Dropdown>
-                        <Dropdown.Toggle id="toolbox-actions" variant="secondary">
-                            <i className="fas fa-ellipsis-h" />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu style={{ minWidth: "220px", width: "220px" }}>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <KeyboardShortcuts />
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <MergeCuesButton />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <ShiftTimeButton />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <SyncCuesButton />
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <CaptionOverlapToggle />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <TimecodesLockToggle />
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <CueCommentsToggle />
-                            </Dropdown.Item>
-                            <Dropdown.Item className="sbte-dropdown-item">
-                                <WaveformToggle />
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </ButtonToolbar>
+                    <button
+                        className="tw-select-none dropdown-toggle btn btn-secondary tw-flex
+                                tw-items-center tw-justify-center"
+                        aria-controls="toolboxMenu"
+                        aria-haspopup="true"
+                    >
+                        <i className="fas fa-ellipsis-h" />
+                    </button>
+                </div>
             </Provider>
         );
 
@@ -146,8 +101,7 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML)
-            .toEqual(expectedNode.container.outerHTML);
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("passes exportFile function to export file button", () => {
@@ -208,5 +162,114 @@ describe("Toolbox", () => {
 
         // THEN
         expect(mockExportSourceFile).toHaveBeenCalled();
+    });
+
+    it("renders with toolbox menu open", async () => {
+        // GIVEN
+        const actualNode = renderWithPortal(
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={jest.fn()}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+
+        // THEN
+        await waitFor(() => {
+            expect(actualNode.container.querySelector("#toolboxMenu")).not.toBeNull();
+        });
+    });
+
+    it("closes shift time modal on button click", async () => {
+        // GIVEN
+        const actualNode = renderWithPortal(
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={jest.fn()}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        // Opening Toolbox Menu.
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+        // Clicking on "Unlock Time Code Button".
+        fireEvent.click(
+            actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(7) button") as Element);
+        // Opening Toolbox Menu.
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+        // Clicking on "Shift Track Time".
+        fireEvent.click(
+            actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(3) button") as Element);
+        // Clicking on close button
+        fireEvent.click(
+            actualNode.container.querySelector(".dotsub-shift-modal-close-button") as Element);
+
+        // THEN
+        await waitFor(() => {
+            expect(actualNode.container.querySelector(".p-dialog")).toBeNull();
+        });
+    });
+
+    it("opens keyboard shortcut modal on button click", async () => {
+        // GIVEN
+        const actualNode = renderWithPortal(
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={jest.fn()}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+        fireEvent.click(
+            actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
+
+        // THEN
+        await waitFor(() => {
+            expect(actualNode.container.querySelector(".p-dialog")).not.toBeNull();
+        });
+    });
+
+    it("closes keyboard shortcut modal on button click", async () => {
+        // GIVEN
+        const mockExportSourceFile = jest.fn();
+
+        const actualNode = renderWithPortal(
+            <Provider store={testingStore}>
+                <Toolbox
+                    handleExportSourceFile={mockExportSourceFile}
+                    handleExportFile={jest.fn()}
+                    handleImportFile={jest.fn()}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        fireEvent.click(
+            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+        fireEvent.click(
+            actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
+        fireEvent.click(
+            actualNode.container.querySelector(".p-dialog .btn-primary") as Element);
+
+        // THEN
+        await waitFor(() => {
+            expect(actualNode.container.querySelector(".p-dialog")).toBeNull();
+        });
     });
 });

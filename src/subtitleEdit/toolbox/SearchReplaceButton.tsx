@@ -2,27 +2,30 @@ import { ReactElement } from "react";
 import { useDispatch } from "react-redux";
 import { showSearchReplace } from "../cues/searchReplace/searchReplaceSlices";
 import { showMerge } from "../cues/merge/mergeSlices";
-import { TooltipWrapper } from "../TooltipWrapper";
+import { Tooltip } from "primereact/tooltip";
 
 const SearchReplaceButton = (): ReactElement => {
     const dispatch = useDispatch();
     return (
-        <TooltipWrapper
-            tooltipId="searchReplaceBtnTooltip"
-            text="Search/Replace"
-            placement="bottom"
-        >
+        <>
             <button
-                type="button"
+                id="searchReplaceBtn"
                 className="sbte-search-replace-button btn btn-secondary"
                 onClick={(): void => {
                     dispatch(showMerge(false));
                     dispatch(showSearchReplace(true));
                 }}
+                data-pr-tooltip="Search / Replace"
+                data-pr-position="top"
+                data-pr-at="center+2 top-2"
             >
                 <i className="fas fa-search-plus fa-lg" />
             </button>
-        </TooltipWrapper>
+            <Tooltip
+                id="searchReplaceBtnTooltip"
+                target="#searchReplaceBtn"
+            />
+        </>
     );
 };
 

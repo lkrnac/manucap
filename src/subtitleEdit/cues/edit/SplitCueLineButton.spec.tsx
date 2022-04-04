@@ -39,13 +39,19 @@ describe("SplitCueLineButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button
-                style={{ maxHeight: "38px", margin: "5px" }}
-                className="btn btn-outline-secondary sbte-split-cue-button"
-                title="Unlock timecodes to enable"
-            >
-                <i className="fas fa-cut" />
-            </button>
+            <div className="tw-p-1.5">
+                <button
+                    id="splitCueLineButton-0"
+                    style={{ maxHeight: "38px" }}
+                    className="btn btn-outline-secondary sbte-split-cue-button tw-w-full"
+                    title="Unlock timecodes to enable"
+                    data-pr-tooltip="Split this subtitle"
+                    data-pr-position="left"
+                    data-pr-at="left center"
+                >
+                    <i className="fas fa-cut" />
+                </button>
+            </div>
         );
 
         // WHEN
@@ -56,19 +62,27 @@ describe("SplitCueLineButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = actualNode.container.outerHTML;
+        const expected = expectedNode.container.outerHTML;
+        expect(actual).toEqual(expected);
     });
 
     it("renders enabled if timecodes are locked but track is caption", () => {
         // GIVEN
         const expectedNode = render(
-            <button
-                style={{ maxHeight: "38px", margin: "5px" }}
-                className="btn btn-outline-secondary sbte-split-cue-button"
-                title="Unlock timecodes to enable"
-            >
-                <i className="fas fa-cut" />
-            </button>
+            <div className="tw-p-1.5">
+                <button
+                    id="splitCueLineButton-0"
+                    style={{ maxHeight: "38px" }}
+                    className="btn btn-outline-secondary sbte-split-cue-button tw-w-full"
+                    title="Unlock timecodes to enable"
+                    data-pr-tooltip="Split this subtitle"
+                    data-pr-position="left"
+                    data-pr-at="left center"
+                >
+                    <i className="fas fa-cut" />
+                </button>
+            </div>
         );
 
         // WHEN
@@ -79,7 +93,9 @@ describe("SplitCueLineButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = actualNode.container.outerHTML;
+        const expected = expectedNode.container.outerHTML;
+        expect(actual).toEqual(expected);
     });
 
     it("renders disabled if timecodes are locked and track is translation", () => {
@@ -87,14 +103,20 @@ describe("SplitCueLineButton", () => {
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
-            <button
-                style={{ maxHeight: "38px", margin: "5px" }}
-                className="btn btn-outline-secondary sbte-split-cue-button"
-                disabled
-                title="Unlock timecodes to enable"
-            >
-                <i className="fas fa-cut" />
-            </button>
+            <div className="tw-p-1.5">
+                <button
+                    id="splitCueLineButton-0"
+                    style={{ maxHeight: "38px" }}
+                    className="btn btn-outline-secondary sbte-split-cue-button tw-w-full"
+                    disabled
+                    title="Unlock timecodes to enable"
+                    data-pr-tooltip="Split this subtitle"
+                    data-pr-position="left"
+                    data-pr-at="left center"
+                >
+                    <i className="fas fa-cut" />
+                </button>
+            </div>
         );
 
         // WHEN
@@ -105,7 +127,9 @@ describe("SplitCueLineButton", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        const actual = actualNode.container.outerHTML;
+        const expected = expectedNode.container.outerHTML;
+        expect(actual).toEqual(expected);
     });
 
     it("splits a cue on split button click", () => {

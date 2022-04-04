@@ -2,7 +2,7 @@ import { AppThunk } from "../../subtitleEditReducers";
 import { ReactElement } from "react";
 import { addCue } from "../cuesList/cuesListActions";
 import { useDispatch } from "react-redux";
-import { TooltipWrapper } from "../../TooltipWrapper";
+import { Tooltip } from "primereact/tooltip";
 
 interface Props {
     cueIndex: number;
@@ -12,22 +12,25 @@ interface Props {
 
 const AddCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
+    const buttonId = `addCuelineButton-${props.cueIndex}`;
     return (
-        <TooltipWrapper
-            tooltipId="addCueBtnTooltip"
-            text="Insert new subtitle"
-            placement="left"
-        >
+        <div className="tw-p-1.5">
             <button
-                style={{ maxHeight: "38px", margin: "5px", height: "100%" }}
-                className="btn btn-outline-secondary sbte-add-cue-button"
+                id={buttonId}
+                style={{ maxHeight: "38px", height: "100%" }}
+                className="btn btn-outline-secondary sbte-add-cue-button tw-w-full"
                 onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1, props.sourceCueIndexes))}
+                data-pr-tooltip="Insert new subtitle"
+                data-pr-position={props.text ? "bottom" : "left"}
+                data-pr-at={props.text ? undefined : "left center"}
             >
-                {
-                    props.text ? <span>{props.text}</span> : <b>+</b>
-                }
+                {props.text ? <span>{props.text}</span> : <b>+</b>}
             </button>
-        </TooltipWrapper>
+            <Tooltip
+                id={buttonId + "-Tooltip"}
+                target={`#${buttonId}`}
+            />
+        </div>
     );
 };
 
