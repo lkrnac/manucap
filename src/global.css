@@ -10,6 +10,10 @@
     *:focus-visible {
         outline: none !important;
     }
+
+    a {
+        @apply tw-text-blue-600 hover:tw-text-blue-500;
+    }
 }
 
 /** Badges **/
@@ -57,7 +61,7 @@
 }
 
 .p-dialog .p-dialog-header .p-dialog-title {
-    @apply tw-text-white;
+    @apply tw-text-white tw-font-medium;
 }
 
 .p-dialog .p-dialog-footer {
