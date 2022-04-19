@@ -10,7 +10,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="sbte-time-input mousetrap tw-block"
+                className="tw-form-control mousetrap tw-block"
                 style={{
                     width: "110px",
                     maxWidth: "200px",
@@ -38,7 +38,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="sbte-time-input mousetrap tw-block"
+                className="tw-form-control mousetrap tw-block"
                 style={{
                     width: "110px",
                     maxWidth: "200px",
@@ -66,7 +66,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="sbte-time-input mousetrap tw-block"
+                className="tw-form-control mousetrap tw-block"
                 style={{
                     width: "110px",
                     maxWidth: "200px",
@@ -94,7 +94,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="sbte-time-input mousetrap tw-block"
+                className="tw-form-control mousetrap tw-block"
                 style={{
                     width: "110px",
                     maxWidth: "200px",
@@ -122,7 +122,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="sbte-time-input mousetrap tw-block"
+                className="tw-form-control mousetrap tw-block"
                 style={{
                     width: "110px",
                     maxWidth: "200px",
@@ -150,7 +150,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="sbte-time-input mousetrap tw-block"
+                className="tw-form-control mousetrap tw-block"
                 style={{
                     width: "110px",
                     maxWidth: "200px",

@@ -66,7 +66,7 @@ const CompleteButton = (props: Props): ReactElement => {
             <button
                 type="button"
                 disabled={props.disabled || isPendingSaveState(saveState)}
-                className="btn btn-primary sbte-complete-subtitle-btn"
+                className="tw-btn tw-btn-primary sbte-complete-subtitle-btn"
                 onClick={(): void => props.onComplete({ editingTrack, cues })}
             >
                 Complete

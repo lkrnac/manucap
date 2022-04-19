@@ -19,7 +19,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
         <>
             <button
                 id="subtitleSpecsBtn"
-                className="dotsub-subtitle-specifications-button btn btn-secondary"
+                className="dotsub-subtitle-specifications-button tw-btn tw-btn-secondary"
                 onClick={handleShow}
                 hidden={subtitleSpecifications == null}
                 data-pr-tooltip="Subtitle Specifications"

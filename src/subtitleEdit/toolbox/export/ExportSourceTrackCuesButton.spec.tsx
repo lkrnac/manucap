@@ -17,7 +17,7 @@ describe("ExportSourceTrackCuesButton", () => {
            <button
                id="exportSourceFileBtn"
                type="button"
-               className="sbte-export-source-button btn btn-secondary"
+               className="sbte-export-source-button tw-btn tw-btn-secondary"
                data-pr-tooltip="Export Source File"
                data-pr-position="top"
                data-pr-at="center+2 top-2"

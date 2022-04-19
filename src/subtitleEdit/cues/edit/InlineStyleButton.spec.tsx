@@ -19,7 +19,7 @@ describe("InlineStyleButton", () => {
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: "5px" }}
-                className="btn btn-outline-secondary"
+                className="tw-btn tw-btn-outline-secondary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -53,7 +53,7 @@ describe("InlineStyleButton", () => {
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: "5px" }}
-                className="btn btn-secondary"
+                className="tw-btn tw-btn-secondary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -86,7 +86,7 @@ describe("InlineStyleButton", () => {
             <button
                 id="inlineStyle-ITALIC0"
                 style={{ marginRight: "5px" }}
-                className="btn btn-secondary"
+                className="tw-btn tw-btn-secondary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -119,7 +119,7 @@ describe("InlineStyleButton", () => {
             <button
                 id="inlineStyle-UNDERLINE0"
                 style={{ marginRight: "5px" }}
-                className="btn btn-secondary"
+                className="tw-btn tw-btn-secondary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top-4"

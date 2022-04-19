@@ -50,7 +50,7 @@ describe("CaptionOverlapToggle", () => {
         const expectedNode = render(
             <button
                 type="button"
-                className="tw-flex tw-items-center tw-justify-between sbte-toggled-btn"
+                className="tw-flex tw-items-center tw-justify-between tw-outline-0"
                 disabled
             >
                 Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">ALLOWED</span>

@@ -64,7 +64,8 @@ const Toolbox = (props: Props): ReactElement => {
                 handleExport={props.handleExportFile}
             />
             <button
-                className="tw-select-none dropdown-toggle btn btn-secondary tw-flex tw-items-center tw-justify-center"
+                className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-secondary tw-flex
+                    tw-items-center tw-justify-center"
                 onClick={toggleMenu}
                 aria-controls="toolboxMenu"
                 aria-haspopup

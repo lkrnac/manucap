@@ -21,7 +21,7 @@ const ClickCueWrapper = (props: CueViewProps): ReactElement => {
     return (
         <div
             style={{ display: "flex" }}
-            className={`${undefinedSafeClassName}sbte-bottom-border sbte-click-cue-wrapper`}
+            className={`${undefinedSafeClassName}tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper`}
             onClick={(): void => {
                 if (props.targetCueIndex !== undefined) {
                     if (props.targetCueIndex >= props.targetCuesLength) {

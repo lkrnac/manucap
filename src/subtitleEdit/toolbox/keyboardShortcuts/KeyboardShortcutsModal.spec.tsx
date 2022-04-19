@@ -71,7 +71,7 @@ describe("KeyboardShortcutsModal", () => {
                             />
                         </div>
                         <div className="p-dialog-footer">
-                            <button className="btn btn-primary" onClick={jest.fn()}>
+                            <button className="tw-btn tw-btn-primary" onClick={jest.fn()}>
                                 Close
                             </button>
                         </div>

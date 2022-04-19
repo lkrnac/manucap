@@ -14,39 +14,40 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
     const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
     return (
         <div style={{ display: "flex", alignItems: "center" }}>
-            <div className={`${props.hideMetaKey? "d-none":"d-flex"} align-items-center justify-content-center`}>
-                <h4><span className="badge badge-secondary">{commandKey}</span></h4>
+            <div className={`${props.hideMetaKey? "tw-hidden" : "tw-flex"} tw-items-center tw-justify-center`}>
+                <h4><span className="tw-badge tw-badge-secondary">{commandKey}</span></h4>
                 <span>&#160;+&#160;</span>
             </div>
 
-            <div className={`${props.hideShiftKey? "d-none":"d-flex"} align-items-center justify-content-center`}>
-                <h4><span className="badge badge-secondary">Shift</span></h4>
+            <div className={`${props.hideShiftKey? "tw-hidden" : "tw-flex"} tw-items-center tw-justify-center`}>
+                <h4><span className="tw-badge tw-badge-secondary">Shift</span></h4>
                 <span>&#160;+&#160;</span>
             </div>
-
-            <div className="d-flex align-items-center justify-content-center">
-                <h4><span className="badge badge-secondary">{props.character}</span></h4>
+            <div className="tw-flex tw-items-center tw-justify-center">
+                <h4><span className="tw-badge tw-badge-secondary">{props.character}</span></h4>
             </div>
-            <div className={`${props.hideAlternativeKey? "d-none":"d-flex"} align-items-center justify-content-center`}>
+            <div
+                className={(props.hideAlternativeKey? "tw-hidden" : "tw-flex") +
+                    " tw-items-center tw-justify-center"}
+            >
                 <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
-                <div className={`${props.hideAltKey? "d-none":"d-flex"} align-items-center justify-content-center`}>
-                    <h4><span className="badge badge-secondary">Alt</span></h4>
+                <div className={`${props.hideAltKey? "tw-hidden" : "tw-flex"} tw-items-center tw-justify-center`}>
+                    <h4><span className="tw-badge tw-badge-secondary">Alt</span></h4>
                     <span>&#160;+&#160;</span>
                 </div>
 
-                <div className={`${props.hideShiftKey? "d-none":"d-flex"} align-items-center justify-content-center`}>
-                    <h4><span className="badge badge-secondary">Shift</span></h4>
+                <div className={`${props.hideShiftKey? "tw-hidden" : "tw-flex"} tw-items-center tw-justify-center`}>
+                    <h4><span className="tw-badge tw-badge-secondary">Shift</span></h4>
                     <span>&#160;+&#160;</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center">
-                    <h4><span className="badge badge-secondary">{props.character}</span></h4>
+                <div className="tw-flex tw-items-center tw-justify-center">
+                    <h4><span className="tw-badge tw-badge-secondary">{props.character}</span></h4>
                 </div>
             </div>
             <span>
                 <span>&#160;&#160;&#160;:&#160;&#160;&#160;</span>
                 {props.name}
             </span>
-
         </div>
     );
 };

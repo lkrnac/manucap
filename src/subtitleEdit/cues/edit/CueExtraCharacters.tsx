@@ -8,7 +8,7 @@ interface Props {
 export const CueExtraCharacters = (props: Props): ReactElement | null => {
     return (
         <span
-            className="sbte-extra-text"
+            className="tw-text-danger"
             data-offset-key={props.offsetKey}
         >
             {props.children}

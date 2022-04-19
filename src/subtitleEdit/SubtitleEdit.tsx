@@ -2,7 +2,7 @@ import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
-import "../styles.scss";
+import "../colors.css";
 import "../global.css";
 
 import { ReactElement, useEffect } from "react";
@@ -133,7 +133,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             <CuesList editingTrack={editingTrack} commentAuthor={props.commentAuthor} />
                             <div className="tw-space-x-2 tw-flex tw-items-center">
                                 <button
-                                    className="btn btn-primary sbte-view-all-tracks-btn"
+                                    className="tw-btn tw-btn-primary sbte-view-all-tracks-btn"
                                     type="button"
                                     onClick={(): void => props.onViewAllTracks()}
                                 >
@@ -141,7 +141,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
-                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     onClick={(): void => {
                                         dispatch(changeScrollPosition(ScrollPosition.FIRST));
@@ -158,7 +158,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 />
                                 <button
                                     id="jumpToLastButton"
-                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     onClick={(): void => {
                                         dispatch(changeScrollPosition(ScrollPosition.LAST));
@@ -176,7 +176,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <button
                                     id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     onClick={(): void => {
                                         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
@@ -194,7 +194,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <button
                                     id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     onClick={(): void => {
                                         dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
@@ -213,7 +213,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     hidden={editingTrack?.type !== "TRANSLATION"}
                                     id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     onClick={(): void => {
                                         dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
@@ -231,7 +231,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <button
                                     id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     onClick={(): void => {
                                         dispatch(changeScrollPosition(ScrollPosition.ERROR));

@@ -22,11 +22,11 @@ const testContentRendered = (
 
     const vttCue = new VTTCue(startTime, endTime, text);
     const expectedNode = mount(
-        <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-            <span>DURATION: <span className="sbte-green-text">{duration}s</span>, </span>
-            <span>CHARACTERS: <span className="sbte-green-text">{characters}</span>, </span>
-            <span>WORDS: <span className="sbte-green-text">{words}</span>, </span>
-            <span>CPS: <span className="sbte-green-text">{cps.toFixed(1)}</span></span>
+        <div className="tw-text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
+            <span>DURATION: <span className="tw-text-success">{duration}s</span>, </span>
+            <span>CHARACTERS: <span className="tw-text-success">{characters}</span>, </span>
+            <span>WORDS: <span className="tw-text-success">{words}</span>, </span>
+            <span>CPS: <span className="tw-text-success">{cps.toFixed(1)}</span></span>
         </div>
     );
 

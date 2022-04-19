@@ -9,7 +9,7 @@ describe("CueCategoryButton", () => {
         // GIVEN
         const expectedNode = mount(
             <button
-                className="dropdown-toggle btn btn-outline-secondary"
+                className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
                 aria-controls="cueCategoryMenu"
                 aria-haspopup="true"
             >
@@ -30,7 +30,7 @@ describe("CueCategoryButton", () => {
         // GIVEN
         const expectedNode = mount(
             <button
-                className="dropdown-toggle btn btn-outline-secondary"
+                className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
                 aria-controls="cueCategoryMenu"
                 aria-haspopup="true"
             >
@@ -52,7 +52,7 @@ describe("CueCategoryButton", () => {
         const expectedNode = render((
             <>
                 <button
-                    className="dropdown-toggle btn btn-outline-secondary"
+                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
                     aria-controls="cueCategoryMenu"
                     aria-haspopup="true"
                 >

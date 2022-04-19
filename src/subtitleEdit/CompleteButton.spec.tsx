@@ -45,7 +45,7 @@ describe("CompleteButton", () => {
                             <i className="" />
                         </span>
                     </div>
-                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
                 </div>
@@ -73,7 +73,7 @@ describe("CompleteButton", () => {
                             Edits are disabled, task is already completed
                         </span>
                     </div>
-                    <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" disabled className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
                 </div>
@@ -110,7 +110,7 @@ describe("CompleteButton", () => {
                                 <i className="fas fa-sync fa-spin" />
                             </span>
                         </div>
-                        <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
+                        <button type="button" disabled className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                             Complete
                         </button>
                     </div>
@@ -142,7 +142,7 @@ describe("CompleteButton", () => {
                             <i className="fa fa-check-circle" />
                         </span>
                     </div>
-                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
                 </div>
@@ -174,7 +174,7 @@ describe("CompleteButton", () => {
                             <i className="fa fa-exclamation-triangle" />
                         </span>
                     </div>
-                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
                 </div>

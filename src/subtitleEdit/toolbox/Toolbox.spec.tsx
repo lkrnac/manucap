@@ -34,7 +34,7 @@ describe("Toolbox", () => {
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <button
-                        className="tw-select-none dropdown-toggle btn btn-secondary tw-flex
+                        className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-secondary tw-flex
                                 tw-items-center tw-justify-center"
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
@@ -82,7 +82,7 @@ describe("Toolbox", () => {
                     <ExportSourceTrackCuesButton handleExport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <button
-                        className="tw-select-none dropdown-toggle btn btn-secondary tw-flex
+                        className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-secondary tw-flex
                                 tw-items-center tw-justify-center"
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
@@ -178,7 +178,7 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
 
         // THEN
         await waitFor(() => {
@@ -201,13 +201,13 @@ describe("Toolbox", () => {
         // WHEN
         // Opening Toolbox Menu.
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
         // Clicking on "Unlock Time Code Button".
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(7) button") as Element);
         // Opening Toolbox Menu.
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
         // Clicking on "Shift Track Time".
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(3) button") as Element);
@@ -235,7 +235,7 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
 
@@ -261,7 +261,7 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
         fireEvent.click(

@@ -92,7 +92,7 @@ describe("ShiftTimesModal", () => {
                             <input
                                 name="shiftTime"
                                 type="number"
-                                className="form-control dotsub-track-line-shift margin-right-10"
+                                className="tw-form-control dotsub-track-line-shift margin-right-10"
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
@@ -135,13 +135,13 @@ describe("ShiftTimesModal", () => {
                 <div className="p-dialog-footer">
                     <button
                         type="submit"
-                        className="dotsub-shift-modal-apply-button btn btn-primary"
+                        className="dotsub-shift-modal-apply-button tw-btn tw-btn-primary"
                     >
                         Apply
                     </button>
                     <button
                         type="button"
-                        className="dotsub-shift-modal-close-button btn btn-secondary"
+                        className="dotsub-shift-modal-close-button tw-btn tw-btn-secondary"
                     >
                         Close
                     </button>
@@ -195,7 +195,7 @@ describe("ShiftTimesModal", () => {
                             <input
                                 name="shiftTime"
                                 type="number"
-                                className="form-control dotsub-track-line-shift margin-right-10"
+                                className="tw-form-control dotsub-track-line-shift margin-right-10"
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
@@ -245,12 +245,12 @@ describe("ShiftTimesModal", () => {
                     <button
                         type="submit"
                         disabled
-                        className="dotsub-shift-modal-apply-button btn btn-primary"
+                        className="dotsub-shift-modal-apply-button tw-btn tw-btn-primary"
                     >Apply
                     </button>
                     <button
                         type="button"
-                        className="dotsub-shift-modal-close-button btn btn-secondary"
+                        className="dotsub-shift-modal-close-button tw-btn tw-btn-secondary"
                     >Close
                     </button>
                 </div>
@@ -306,7 +306,7 @@ describe("ShiftTimesModal", () => {
                                 <input
                                     name="shiftTime"
                                     type="number"
-                                    className="form-control dotsub-track-line-shift margin-right-10"
+                                    className="tw-form-control dotsub-track-line-shift margin-right-10"
                                     style={{ width: "120px" }}
                                     placeholder="0.000"
                                     step="0.100"
@@ -349,12 +349,12 @@ describe("ShiftTimesModal", () => {
                     <div className="p-dialog-footer">
                         <button
                             type="submit"
-                            className="dotsub-shift-modal-apply-button btn btn-primary"
+                            className="dotsub-shift-modal-apply-button tw-btn tw-btn-primary"
                         >Apply
                         </button>
                         <button
                             type="button"
-                            className="dotsub-shift-modal-close-button btn btn-secondary"
+                            className="dotsub-shift-modal-close-button tw-btn tw-btn-secondary"
                         >Close
                         </button>
                     </div>

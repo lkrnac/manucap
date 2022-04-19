@@ -59,17 +59,17 @@ describe("SearchReplaceEditor", () => {
         const expectedNode = render(
             <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
                 <div style={{ display: "flex", flexFlow: "row", width: "50%" }}>
-                    <input type="text" defaultValue="" placeholder="Find" className="form-control" />
+                    <input type="text" defaultValue="" placeholder="Find" className="tw-form-control" />
                     <input
                         type="text"
                         defaultValue=""
                         placeholder="Replace"
-                        className="form-control"
+                        className="tw-form-control"
                         style={{ marginLeft: "5px" }}
                     />
                 </div>
                 <button
-                    className="btn btn-secondary btn-sm sbte-search-next"
+                    className="tw-btn tw-btn-secondary tw-btn-sm sbte-search-next"
                     type="button"
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-next"
@@ -77,25 +77,25 @@ describe("SearchReplaceEditor", () => {
                     <i className="fa fa-arrow-down" />
                 </button>
                 <button
-                    className="btn btn-secondary btn-sm sbte-search-prev"
+                    className="tw-btn tw-btn-secondary tw-btn-sm sbte-search-prev"
                     type="button"
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-prev"
                 >
                     <i className="fa fa-arrow-up" />
                 </button>
-                <button className="btn btn-secondary btn-sm" type="button" disabled style={{ marginLeft: "5px" }}>
+                <button className="tw-btn tw-btn-secondary tw-btn-sm" type="button" disabled style={{ marginLeft: "5px" }}>
                     Replace
                 </button>
                 <button
-                    className="btn btn-secondary btn-sm"
+                    className="tw-btn tw-btn-secondary tw-btn-sm"
                     type="button"
                     style={{ marginLeft: "5px", marginRight: "5px" }}
                 >
                     Replace All
                 </button>
                 <ToggleButton
-                    className="btn btn-secondary"
+                    className="tw-btn tw-btn-secondary"
                     toggled={false}
                     onClick={jest.fn()}
                     render={(): ReactElement => (<span>Aa</span>)}
@@ -103,7 +103,7 @@ describe("SearchReplaceEditor", () => {
                 />
                 <span style={{ flex: 1 }} />
                 <button
-                    className="btn btn-secondary btn-sm"
+                    className="tw-btn tw-btn-secondary tw-btn-sm"
                     type="button"
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-close-search-replace-btn"

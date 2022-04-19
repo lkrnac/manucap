@@ -32,7 +32,7 @@ describe("DeleteCueLineButton", () => {
                 <button
                     id="deleteCueLineButton0"
                     style={{ maxHeight: "38px" }}
-                    className="btn btn-outline-secondary sbte-delete-cue-button tw-w-full"
+                    className="tw-btn tw-btn-outline-secondary sbte-delete-cue-button tw-w-full"
                     data-pr-tooltip="Delete this subtitle"
                     data-pr-position="left"
                     data-pr-at="left center"

@@ -192,12 +192,12 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <div className="tw-space-x-2 tw-flex tw-items-center">
-                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                <button className="tw-btn tw-btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
-                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
@@ -207,7 +207,7 @@ describe("SubtitleEdit", () => {
                                 </button>
                                 <button
                                     id="jumpToLastButton"
-                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
@@ -218,7 +218,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
@@ -229,7 +229,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
@@ -241,7 +241,7 @@ describe("SubtitleEdit", () => {
                                     hidden
                                     id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
@@ -252,7 +252,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
@@ -268,7 +268,7 @@ describe("SubtitleEdit", () => {
                                             <i className="" />
                                         </span>
                                     </div>
-                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                                         Complete
                                     </button>
                                 </div>
@@ -375,12 +375,12 @@ describe("SubtitleEdit", () => {
                             />
                             <div style={{ overflow: "auto" }} />
                             <div className="tw-space-x-2 tw-flex tw-items-center">
-                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                <button className="tw-btn tw-btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
-                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
@@ -390,7 +390,7 @@ describe("SubtitleEdit", () => {
                                 </button>
                                 <button
                                     id="jumpToLastButton"
-                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
@@ -401,7 +401,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
@@ -412,7 +412,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
@@ -424,7 +424,7 @@ describe("SubtitleEdit", () => {
                                     hidden
                                     id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
@@ -435,7 +435,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
@@ -451,7 +451,7 @@ describe("SubtitleEdit", () => {
                                             <i className="" />
                                         </span>
                                     </div>
-                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                                         Complete
                                     </button>
                                 </div>
@@ -711,12 +711,12 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <div className="tw-space-x-2 tw-flex tw-items-center">
-                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                <button className="tw-btn tw-btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
-                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
@@ -726,7 +726,7 @@ describe("SubtitleEdit", () => {
                                 </button>
                                 <button
                                     id="jumpToLastButton"
-                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
@@ -737,7 +737,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
@@ -748,7 +748,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
@@ -760,7 +760,7 @@ describe("SubtitleEdit", () => {
                                     hidden
                                     id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
@@ -771,7 +771,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
@@ -787,7 +787,7 @@ describe("SubtitleEdit", () => {
                                             <i className="" />
                                         </span>
                                     </div>
-                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                                         Complete
                                     </button>
                                 </div>
@@ -914,12 +914,12 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <div className="tw-space-x-2 tw-flex tw-items-center">
-                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                <button className="tw-btn tw-btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
-                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
@@ -929,7 +929,7 @@ describe("SubtitleEdit", () => {
                                 </button>
                                 <button
                                     id="jumpToLastButton"
-                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
@@ -940,7 +940,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
@@ -951,7 +951,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
@@ -963,7 +963,7 @@ describe("SubtitleEdit", () => {
                                     hidden
                                     id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
@@ -974,7 +974,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
@@ -990,7 +990,7 @@ describe("SubtitleEdit", () => {
                                             <i className="" />
                                         </span>
                                     </div>
-                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                                         Complete
                                     </button>
                                 </div>
@@ -1116,12 +1116,12 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <div className="tw-space-x-2 tw-flex tw-items-center">
-                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                <button className="tw-btn tw-btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
-                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
@@ -1131,7 +1131,7 @@ describe("SubtitleEdit", () => {
                                 </button>
                                 <button
                                     id="jumpToLastButton"
-                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
@@ -1142,7 +1142,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
@@ -1153,7 +1153,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
@@ -1165,7 +1165,7 @@ describe("SubtitleEdit", () => {
                                     hidden
                                     id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
@@ -1176,7 +1176,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
@@ -1194,7 +1194,7 @@ describe("SubtitleEdit", () => {
                                     <button
                                         type="button"
                                         disabled
-                                        className="btn btn-primary sbte-complete-subtitle-btn"
+                                        className="tw-btn tw-btn-primary sbte-complete-subtitle-btn"
                                     >
                                         Complete
                                     </button>
@@ -1332,12 +1332,12 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <div className="tw-space-x-2 tw-flex tw-items-center">
-                                <button className="btn btn-primary sbte-view-all-tracks-btn" type="button">
+                                <button className="tw-btn tw-btn-primary sbte-view-all-tracks-btn" type="button">
                                     View All Tracks
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
-                                    className="btn btn-secondary sbte-jump-to-first-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-first-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to top"
                                     data-pr-position="top"
@@ -1347,7 +1347,7 @@ describe("SubtitleEdit", () => {
                                 </button>
                                 <button
                                     id="jumpToLastButton"
-                                    className="btn btn-secondary sbte-jump-to-last-button"
+                                    className="tw-btn tw-btn-secondary sbte-jump-to-last-button"
                                     type="button"
                                     data-pr-tooltip="Scroll to bottom"
                                     data-pr-position="top"
@@ -1358,7 +1358,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="editCueButton"
                                     data-testid="sbte-jump-to-edit-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to currently editing subtitle"
                                     data-pr-position="top"
@@ -1369,7 +1369,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="playbackCueButton"
                                     data-testid="sbte-jump-to-playback-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to subtitle in playback position"
                                     data-pr-position="top"
@@ -1381,7 +1381,7 @@ describe("SubtitleEdit", () => {
                                     hidden
                                     id="translatedCueButton"
                                     data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to last translated subtitle"
                                     data-pr-position="top"
@@ -1392,7 +1392,7 @@ describe("SubtitleEdit", () => {
                                 <button
                                     id="cueErrorButton"
                                     data-testid="sbte-jump-error-cue-button"
-                                    className="btn btn-secondary"
+                                    className="tw-btn tw-btn-secondary"
                                     type="button"
                                     data-pr-tooltip="Scroll to next subtitle error"
                                     data-pr-position="top"
@@ -1408,7 +1408,7 @@ describe("SubtitleEdit", () => {
                                             <i className="" />
                                         </span>
                                     </div>
-                                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                                         Complete
                                     </button>
                                 </div>

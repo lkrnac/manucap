@@ -118,13 +118,13 @@ const CueView = (props: CueViewProps): ReactElement => {
                         <div>{getTimeString(props.cue.vttCue.endTime)}</div>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "5px" }}>
-                        <div className="sbte-small-font">{cueCategoryToPrettyName[props.cue.cueCategory]}</div>
-                        <div className="sbte-small-font" style={{ paddingRight: "10px" }}>
+                        <div className="tw-text-sm">{cueCategoryToPrettyName[props.cue.cueCategory]}</div>
+                        <div className="tw-text-sm" style={{ paddingRight: "10px" }}>
                             {findPositionIcon(props.cue.vttCue).iconText}
                         </div>
                     </div>
                 </div>
-                <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                     <div
                         className="sbte-cue-editor"
                         style={{
@@ -152,8 +152,8 @@ const CueView = (props: CueViewProps): ReactElement => {
                         )
                         : (
                             <div
-                                className={`${undefinedSafeClassName}sbte-left-border`}
-                                style={{ minWidth: "52px" }}
+                                className={`${undefinedSafeClassName}tw-border-l-2 tw-border-blue-grey-200`}
+                                style={{ minWidth: "58px" }}
                             />
                         )
                 }
