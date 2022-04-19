@@ -96,10 +96,10 @@ const createExpectedNode = (
             }}
         >
             <div className="tw-text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-                <span>DURATION: <span className="tw-text-success">{duration}s</span>, </span>
-                <span>CHARACTERS: <span className="tw-text-success">{chars.reduce((a, b) => a + b, 0)}</span>, </span>
-                <span>WORDS: <span className="tw-text-success">{words.reduce((a, b) => a + b, 0)}</span>, </span>
-                <span>CPS: <span className="tw-text-success">{cps.reduce((a, b) => a + b, 0).toFixed(1)}</span></span>
+                <span>DURATION: <span className="tw-tw-text-success">{duration}s</span>, </span>
+                <span>CHARACTERS: <span className="tw-tw-text-success">{chars.reduce((a, b) => a + b, 0)}</span>, </span>
+                <span>WORDS: <span className="tw-tw-text-success">{words.reduce((a, b) => a + b, 0)}</span>, </span>
+                <span>CPS: <span className="tw-tw-text-success">{cps.reduce((a, b) => a + b, 0).toFixed(1)}</span></span>
             </div>
         </div>
         <div

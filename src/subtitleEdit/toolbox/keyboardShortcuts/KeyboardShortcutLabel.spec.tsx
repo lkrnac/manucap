@@ -13,28 +13,28 @@ describe("KeyboardShortcutLabel", () => {
         const expectedNode = mount(
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="tw-flex tw-items-center tw-justify-center">
-                    <h4><span className="tw-badge tw-badge-secondary">{commandKey}</span></h4>
+                    <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">{commandKey}</span></h4>
                     <span>&#160;+&#160;</span>
                 </div>
                 <div className="tw-flex tw-items-center tw-justify-center">
-                    <h4><span className="tw-badge tw-badge-secondary">Shift</span></h4>
+                    <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">Shift</span></h4>
                     <span>&#160;+&#160;</span>
                 </div>
                 <div className="tw-flex tw-items-center tw-justify-center">
-                    <h4><span className="tw-badge tw-badge-secondary">o</span></h4>
+                    <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">o</span></h4>
                 </div>
                 <div className="tw-flex tw-items-center tw-justify-center">
                     <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
                     <div className="tw-flex tw-items-center tw-justify-center">
-                        <h4><span className="tw-badge tw-badge-secondary">Alt</span></h4>
+                        <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">Alt</span></h4>
                         <span>&#160;+&#160;</span>
                     </div>
                     <div className="tw-flex tw-items-center tw-justify-center">
-                        <h4><span className="tw-badge tw-badge-secondary">Shift</span></h4>
+                        <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">Shift</span></h4>
                         <span>&#160;+&#160;</span>
                     </div>
                     <div className="tw-flex tw-items-center tw-justify-center">
-                        <h4><span className="tw-badge tw-badge-secondary">o</span></h4>
+                        <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">o</span></h4>
                     </div>
                 </div>
                 <span>
@@ -62,28 +62,28 @@ describe("KeyboardShortcutLabel", () => {
         const expectedNode = mount(
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="tw-hidden tw-items-center tw-justify-center">
-                    <h4><span className="tw-badge tw-badge-secondary">{commandKey}</span></h4>
+                    <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">{commandKey}</span></h4>
                     <span>&#160;+&#160;</span>
                 </div>
                 <div className="tw-hidden tw-items-center tw-justify-center">
-                    <h4><span className="tw-badge tw-badge-secondary">Shift</span></h4>
+                    <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">Shift</span></h4>
                     <span>&#160;+&#160;</span>
                 </div>
                 <div className="tw-flex tw-items-center tw-justify-center">
-                    <h4><span className="tw-badge tw-badge-secondary">o</span></h4>
+                    <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">o</span></h4>
                 </div>
                 <div className="tw-hidden tw-items-center tw-justify-center">
                     <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
                     <div className="tw-hidden tw-items-center tw-justify-center">
-                        <h4><span className="tw-badge tw-badge-secondary">Alt</span></h4>
+                        <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">Alt</span></h4>
                         <span>&#160;+&#160;</span>
                     </div>
                     <div className="tw-hidden tw-items-center tw-justify-center">
-                        <h4><span className="tw-badge tw-badge-secondary">Shift</span></h4>
+                        <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">Shift</span></h4>
                         <span>&#160;+&#160;</span>
                     </div>
                     <div className="tw-flex tw-items-center tw-justify-center">
-                        <h4><span className="tw-badge tw-badge-secondary">o</span></h4>
+                        <h4 className="tw-m-0"><span className="tw-badge tw-badge-secondary">o</span></h4>
                     </div>
                 </div>
                 <span>

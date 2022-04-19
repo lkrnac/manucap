@@ -40,7 +40,7 @@ const stateCssClasses = new Map([
     [ SaveState.TRIGGERED, "" ],
     [ SaveState.REQUEST_SENT, "" ],
     [ SaveState.RETRY, "" ],
-    [ SaveState.SAVED, "text-success" ],
+    [ SaveState.SAVED, "tw-text-success" ],
     [ SaveState.ERROR, "text-danger" ],
 ]);
 
@@ -53,7 +53,7 @@ const CompleteButton = (props: Props): ReactElement => {
             <div className="tw-font-bold">
                 {
                     props.disabled ?
-                        <span className="text-success">{TASK_COMPLETE_MSG}</span> :
+                        <span className="tw-text-success">{TASK_COMPLETE_MSG}</span> :
                         <span
                             hidden={saveState === SaveState.NONE}
                             className={`tw-flex tw-items-center ${stateCssClasses.get(saveState)}`}
