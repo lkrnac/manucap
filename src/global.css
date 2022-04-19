@@ -100,8 +100,7 @@
     @apply tw-bg-grey-600 tw-border-grey-600 tw-text-white hover:tw-bg-grey-500 hover:tw-border-grey-500;
 }
 
-.tw-btn.tw-btn-outline-secondary,
-.btn.btn-outline-secondary {
+.tw-btn.tw-btn-outline-secondary {
     @apply tw-border tw-border-solid tw-border-grey-600 hover:tw-bg-grey-500 hover:tw-border-grey-500 hover:tw-text-white;
 }
 
