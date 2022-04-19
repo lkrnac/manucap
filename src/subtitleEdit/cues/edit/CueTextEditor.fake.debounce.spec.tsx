@@ -132,7 +132,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: 5 }}
-                className="tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -142,7 +142,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-ITALIC0"
                 style={{ marginRight: 5 }}
-                className="tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -152,7 +152,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-UNDERLINE0"
                 style={{ marginRight: 5 }}
-                className="tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top-4"

@@ -12,6 +12,7 @@ import { cleanup, fireEvent, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
+import { Message } from "primereact/message";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback
@@ -87,8 +88,9 @@ describe("ShiftTimesModal", () => {
                     </div>
                 </div>
                 <div className="p-dialog-content">
-                    <form>
-                        <div className="form-group"><label>Time Shift in Seconds.Milliseconds</label>
+                    <form className="tw-space-y-4">
+                        <div>
+                            <label>Time Shift in Seconds.Milliseconds</label>
                             <input
                                 name="shiftTime"
                                 type="number"
@@ -100,36 +102,38 @@ describe("ShiftTimesModal", () => {
                                 onChange={jest.fn()}
                             />
                         </div>
-                        <div className="form-check">
-                            <label>
-                                <input
-                                    name="shiftPosition"
-                                    type="radio"
-                                    className="form-check-input"
-                                    value="all"
-                                /> Shift all
-                            </label>
-                        </div>
-                        <div className="form-check">
-                            <label>
-                                <input
-                                    name="shiftPosition"
-                                    type="radio"
-                                    className="form-check-input"
-                                    value="before"
-                                /> Shift all before editing cue
-                            </label>
-                        </div>
-                        <div className="form-check">
-                            <label>
-                                <input
-                                    name="shiftPosition"
-                                    type="radio"
-                                    className="form-check-input"
-                                    value="after"
-                                /> Shift all after editing cue
-                            </label>
-                        </div>
+                        <fieldset className="tw-space-y-1">
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="all"
+                                    /> Shift all
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="before"
+                                    /> Shift all before editing cue
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="after"
+                                    /> Shift all after editing cue
+                                </label>
+                            </div>
+                        </fieldset>
                     </form>
                 </div>
                 <div className="p-dialog-footer">
@@ -190,8 +194,9 @@ describe("ShiftTimesModal", () => {
                     </div>
                 </div>
                 <div className="p-dialog-content">
-                    <form>
-                        <div className="form-group"><label>Time Shift in Seconds.Milliseconds</label>
+                    <form className="tw-space-y-4">
+                        <div>
+                            <label>Time Shift in Seconds.Milliseconds</label>
                             <input
                                 name="shiftTime"
                                 type="number"
@@ -203,42 +208,46 @@ describe("ShiftTimesModal", () => {
                                 onChange={jest.fn()}
                             />
                         </div>
-                        <div className="form-check">
-                            <label>
-                                <input
-                                    name="shiftPosition"
-                                    type="radio"
-                                    className="form-check-input"
-                                    value="all"
-                                /> Shift all
-                            </label>
+                        <fieldset className="tw-space-y-1">
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="all"
+                                    /> Shift all
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="before"
+                                    /> Shift all before editing cue
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <input
+                                        name="shiftPosition"
+                                        type="radio"
+                                        className="form-check-input"
+                                        value="after"
+                                    /> Shift all after editing cue
+                                </label>
+                            </div>
+                        </fieldset>
+                        <div>
+                            <Message
+                                severity="error"
+                                className="tw-w-full tw-justify-start"
+                                text="The start time of the first cue plus the shift value must
+                                    be greater or equal to 0"
+                            />
                         </div>
-                        <div className="form-check">
-                            <label>
-                                <input
-                                    name="shiftPosition"
-                                    type="radio"
-                                    className="form-check-input"
-                                    value="before"
-                                /> Shift all before editing cue
-                            </label>
-                        </div>
-                        <div className="form-check">
-                            <label>
-                                <input
-                                    name="shiftPosition"
-                                    type="radio"
-                                    className="form-check-input"
-                                    value="after"
-                                /> Shift all after editing cue
-                            </label>
-                        </div>
-                        <span
-                            className="alert alert-danger"
-                            style={{ display: "block" }}
-                        >
-                            The start time of the first cue plus the shift value must be greater or equal to 0
-                        </span>
                     </form>
                 </div>
                 <div className="p-dialog-footer">
@@ -301,8 +310,9 @@ describe("ShiftTimesModal", () => {
                         </div>
                     </div>
                     <div className="p-dialog-content">
-                        <form>
-                            <div className="form-group"><label>Time Shift in Seconds.Milliseconds</label>
+                        <form className="tw-space-y-4">
+                            <div>
+                                <label>Time Shift in Seconds.Milliseconds</label>
                                 <input
                                     name="shiftTime"
                                     type="number"
@@ -314,36 +324,38 @@ describe("ShiftTimesModal", () => {
                                     onChange={jest.fn()}
                                 />
                             </div>
-                            <div className="form-check">
-                                <label>
-                                    <input
-                                        name="shiftPosition"
-                                        type="radio"
-                                        className="form-check-input"
-                                        value="all"
-                                    /> Shift all
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <input
-                                        name="shiftPosition"
-                                        type="radio"
-                                        className="form-check-input"
-                                        value="before"
-                                    /> Shift all before editing cue
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <input
-                                        name="shiftPosition"
-                                        type="radio"
-                                        className="form-check-input"
-                                        value="after"
-                                    /> Shift all after editing cue
-                                </label>
-                            </div>
+                            <fieldset className="tw-space-y-1">
+                                <div className="form-check">
+                                    <label>
+                                        <input
+                                            name="shiftPosition"
+                                            type="radio"
+                                            className="form-check-input"
+                                            value="all"
+                                        /> Shift all
+                                    </label>
+                                </div>
+                                <div className="form-check">
+                                    <label>
+                                        <input
+                                            name="shiftPosition"
+                                            type="radio"
+                                            className="form-check-input"
+                                            value="before"
+                                        /> Shift all before editing cue
+                                    </label>
+                                </div>
+                                <div className="form-check">
+                                    <label>
+                                        <input
+                                            name="shiftPosition"
+                                            type="radio"
+                                            className="form-check-input"
+                                            value="after"
+                                        /> Shift all after editing cue
+                                    </label>
+                                </div>
+                            </fieldset>
                         </form>
                     </div>
                     <div className="p-dialog-footer">
@@ -423,7 +435,7 @@ describe("ShiftTimesModal", () => {
         fireEvent.click(submitBtn);
 
         // THEN
-        expect(container.querySelectorAll(".alert-danger")[0].innerHTML)
+        expect(container.querySelectorAll(".p-inline-message-text")[0].innerHTML)
             .toEqual("Exceeds media chunk start range");
 
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -451,7 +463,7 @@ describe("ShiftTimesModal", () => {
         fireEvent.click(submitBtn);
 
         // THEN
-        expect(container.querySelectorAll(".alert-danger")[0].innerHTML)
+        expect(container.querySelectorAll(".p-inline-message-text")[0].innerHTML)
             .toEqual("Exceeds media chunk end range");
 
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -501,7 +513,7 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        const closeBtn = container.querySelectorAll(".btn.btn-secondary")[0];
+        const closeBtn = container.querySelectorAll(".tw-btn.tw-btn-secondary")[0];
         fireEvent.click(closeBtn);
 
         // THEN

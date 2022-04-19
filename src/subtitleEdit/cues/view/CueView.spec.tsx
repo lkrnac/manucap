@@ -64,7 +64,7 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
-                    <div className="testingClassName tw-border-l-2 tw-border-blue-grey-200" style={{ minWidth: "52px" }} />
+                    <div className="testingClassName tw-border-l-2 tw-border-blue-grey-200" style={{ minWidth: "58px" }} />
                 </div>
             </Provider>
         );
@@ -133,7 +133,7 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
-                    <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ minWidth: "52px" }} />
+                    <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ minWidth: "58px" }} />
                 </div>
             </Provider>
         );

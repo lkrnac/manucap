@@ -93,7 +93,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                             />
                         </div>
                         <fieldset className="tw-space-y-1">
-                            <div>
+                            <div className="form-check">
                                 <label>
                                     <Field
                                         name="shiftPosition"
@@ -104,7 +104,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                     /> Shift all
                                 </label>
                             </div>
-                            <div>
+                            <div className="form-check">
                                 <label>
                                     <Field
                                         component="input"
@@ -115,7 +115,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                     /> Shift all before editing cue
                                 </label>
                             </div>
-                            <div>
+                            <div className="form-check">
                                 <label>
                                     <Field
                                         component="input"

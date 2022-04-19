@@ -265,7 +265,7 @@ describe("Toolbox", () => {
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
         fireEvent.click(
-            actualNode.container.querySelector(".p-dialog .btn-primary") as Element);
+            actualNode.container.querySelector(".p-dialog .tw-btn-primary") as Element);
 
         // THEN
         await waitFor(() => {

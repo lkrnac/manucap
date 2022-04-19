@@ -119,15 +119,16 @@ describe("CueComments", () => {
                         </button>
                     </div>
                 </div>
-                <hr style={{
-                    borderTop: "2px solid lightgray",
-                    width: "100%",
-                    height: "0px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    marginTop: "0",
-                    marginBottom: "5px"
-                }}
+                <hr
+                    className="tw-border-t-2 tw-border-blue-grey-200"
+                    style={{
+                        width: "100%",
+                        height: "0px",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: "0",
+                        marginBottom: "5px"
+                    }}
                 />
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                     <input
@@ -141,7 +142,7 @@ describe("CueComments", () => {
                     />
                     <button
                         type="button"
-                        className="tw-btn tw-btn-sm tw-btn-outline-secondary"
+                        className="tw-btn tw-btn-xs tw-btn-outline-secondary"
                         style={{ float: "right", marginLeft: "5px" }}
                         disabled
                     >
@@ -183,15 +184,16 @@ describe("CueComments", () => {
                 }}
             >
                 <div style={{ marginBottom: "8px" }}>No comments</div>
-                <hr style={{
-                    borderTop: "2px solid lightgray",
-                    width: "100%",
-                    height: "0px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    marginTop: "0",
-                    marginBottom: "5px"
-                }}
+                <hr
+                    className="tw-border-t-2 tw-border-blue-grey-200"
+                    style={{
+                        width: "100%",
+                        height: "0px",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: "0",
+                        marginBottom: "5px"
+                    }}
                 />
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                     <input
@@ -205,7 +207,7 @@ describe("CueComments", () => {
                     />
                     <button
                         type="button"
-                        className="tw-btn tw-btn-sm tw-btn-outline-secondary"
+                        className="tw-btn tw-btn-xs tw-btn-outline-secondary"
                         style={{ float: "right", marginLeft: "5px" }}
                         disabled
                     >
