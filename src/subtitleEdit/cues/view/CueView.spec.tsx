@@ -27,7 +27,10 @@ describe("CueView", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="testingClassName tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper">
+                <div
+                    style={{ display: "flex" }}
+                    className="testingClassName tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                >
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -64,7 +67,10 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
-                    <div className="testingClassName tw-border-l-2 tw-border-blue-grey-200" style={{ minWidth: "58px" }} />
+                    <div
+                        className="testingClassName tw-border-l-2 tw-border-blue-grey-200"
+                        style={{ minWidth: "58px" }}
+                    />
                 </div>
             </Provider>
         );
@@ -96,7 +102,10 @@ describe("CueView", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper">
+                <div
+                    style={{ display: "flex" }}
+                    className="tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                >
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -164,7 +173,10 @@ describe("CueView", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper">
+                <div
+                    style={{ display: "flex" }}
+                    className="tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                >
                     <div
                         className="sbte-cue-line-left-section"
                         style={{

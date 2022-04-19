@@ -415,7 +415,10 @@ describe("CueEdit", () => {
             // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10">
+                    <div
+                        style={{ display: "flex" }}
+                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                    >
                         <div
                             style={{
                                 flex: "1 1 300px",

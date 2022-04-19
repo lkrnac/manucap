@@ -735,7 +735,8 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200
+                                    sbte-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -824,7 +825,8 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200
+                                    sbte-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -901,7 +903,8 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200
+                                    sbte-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -976,7 +979,8 @@ describe("CueLine", () => {
                         <div className="" style={{ display: "grid", width: "100%" }}>
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200
+                                    sbte-click-cue-wrapper"
                             >
                                 <div style={{ width: "100%", minHeight: "78px" }} />
                             </div>

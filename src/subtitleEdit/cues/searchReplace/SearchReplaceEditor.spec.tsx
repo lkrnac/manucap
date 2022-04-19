@@ -84,7 +84,12 @@ describe("SearchReplaceEditor", () => {
                 >
                     <i className="fa fa-arrow-up" />
                 </button>
-                <button className="tw-btn tw-btn-secondary tw-btn-sm" type="button" disabled style={{ marginLeft: "5px" }}>
+                <button
+                    className="tw-btn tw-btn-secondary tw-btn-sm"
+                    type="button"
+                    disabled
+                    style={{ marginLeft: "5px" }}
+                >
                     Replace
                 </button>
                 <button
