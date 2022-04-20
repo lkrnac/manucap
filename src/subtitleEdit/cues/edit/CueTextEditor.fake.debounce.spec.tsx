@@ -87,7 +87,7 @@ const createExpectedNode = (
 ): ReactWrapper => mount(
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div
-            className="sbte-bottom-border"
+            className="tw-border-b-2 tw-border-blue-grey-200"
             style={{
                 flexBasis: "25%",
                 display: "flex",
@@ -95,15 +95,30 @@ const createExpectedNode = (
                 padding: "5px 10px 5px 10px"
             }}
         >
-            <div className="sbte-small-font" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-                <span>DURATION: <span className="sbte-green-text">{duration}s</span>, </span>
-                <span>CHARACTERS: <span className="sbte-green-text">{chars.reduce((a, b) => a + b, 0)}</span>, </span>
-                <span>WORDS: <span className="sbte-green-text">{words.reduce((a, b) => a + b, 0)}</span>, </span>
-                <span>CPS: <span className="sbte-green-text">{cps.reduce((a, b) => a + b, 0).toFixed(1)}</span></span>
+            <div className="tw-text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
+                <span>DURATION: <span className="tw-tw-text-success">{duration}s</span>, </span>
+                <span>
+                    CHARACTERS:{" "}
+                    <span className="tw-tw-text-success">
+                        {chars.reduce((a, b) => a + b, 0)}
+                    </span>,{" "}
+                </span>
+                <span>
+                    WORDS:{" "}
+                    <span className="tw-tw-text-success">
+                        {words.reduce((a, b) => a + b, 0)}
+                    </span>,{" "}
+                </span>
+                <span>
+                    CPS:{" "}
+                    <span className="tw-tw-text-success">
+                        {cps.reduce((a, b) => a + b, 0).toFixed(1)}
+                    </span>
+                </span>
             </div>
         </div>
         <div
-            className="sbte-form-control sbte-bottom-border"
+            className="sbte-form-control tw-border-b-2 tw-border-blue-grey-200"
             style={{
                 display: "flex",
                 flexDirection: "row",
@@ -132,7 +147,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: 5 }}
-                className="btn btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -142,7 +157,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-ITALIC0"
                 style={{ marginRight: 5 }}
-                className="btn btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -152,7 +167,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-UNDERLINE0"
                 style={{ marginRight: 5 }}
-                className="btn btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -1756,7 +1771,7 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">some very long text sample ver</span></span>" +
-                "<span class=\"sbte-extra-text\" data-offset-key=\"\">" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\"><span data-text=\"true\">y long text sample</span></span>";
 
             // WHEN
@@ -1791,12 +1806,12 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">some very </span></span>" +
-                "<span class=\"sbte-extra-text\" data-offset-key=\"\">" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">long text</span></span></span>" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">\nsample ver</span></span>" +
-                "<span class=\"sbte-extra-text\" data-offset-key=\"\">" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">y long text sample</span></span></span>";
 
@@ -1878,7 +1893,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"sbte-extra-text\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
         });
 
         it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine null", () => {
@@ -1913,7 +1928,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"sbte-extra-text\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
         });
 
         it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine 0", () => {
@@ -1948,7 +1963,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"sbte-extra-text\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
         });
 
         it("renders with too long lines and spell check errors", () => {
@@ -1974,7 +1989,7 @@ describe("CueTextEditor", () => {
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">verry</span></span></span>" +
                 "<span data-offset-key=\"\"><span data-text=\"true\"> long text sample ve</span></span>" +
-                "<span class=\"sbte-extra-text\" data-offset-key=\"\">" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\"><span data-text=\"true\">ry long text sample</span></span></span>";
 
             // WHEN

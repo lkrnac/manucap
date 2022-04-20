@@ -371,7 +371,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCuesWithIndexes[0].cue}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -443,7 +443,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={matchedCuesCaptioningEditDisabled[0].targetCues[0].cue}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -509,7 +509,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={sourceCues[1]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[1]}
@@ -580,7 +580,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={sourceCues[2]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[2]}
@@ -653,7 +653,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -664,7 +664,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={disabledTargetCue}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -727,7 +727,7 @@ describe("CueLine", () => {
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -735,7 +735,8 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="sbte-gray-200-background sbte-bottom-border sbte-click-cue-wrapper"
+                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200
+                                    sbte-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -748,7 +749,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="btn btn-outline-secondary sbte-add-cue-button"
+                                        className="tw-btn tw-btn-outline-secondary sbte-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -816,7 +817,7 @@ describe("CueLine", () => {
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -824,7 +825,8 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="sbte-gray-200-background sbte-bottom-border sbte-click-cue-wrapper"
+                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200
+                                    sbte-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -837,7 +839,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="btn btn-outline-secondary sbte-add-cue-button"
+                                        className="tw-btn tw-btn-outline-secondary sbte-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -894,14 +896,15 @@ describe("CueLine", () => {
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={0}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={-1}
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="sbte-gray-200-background sbte-bottom-border sbte-click-cue-wrapper"
+                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200
+                                    sbte-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -914,7 +917,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="btn btn-outline-secondary sbte-add-cue-button"
+                                        className="tw-btn tw-btn-outline-secondary sbte-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -976,7 +979,8 @@ describe("CueLine", () => {
                         <div className="" style={{ display: "grid", width: "100%" }}>
                             <div
                                 style={{ display: "flex" }}
-                                className="sbte-gray-200-background sbte-bottom-border sbte-click-cue-wrapper"
+                                className="tw-bg-blue-grey-200 tw-border-b-2 tw-border-blue-grey-200
+                                    sbte-click-cue-wrapper"
                             >
                                 <div style={{ width: "100%", minHeight: "78px" }} />
                             </div>
@@ -985,7 +989,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -1050,7 +1054,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1061,7 +1065,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1072,7 +1076,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1084,7 +1088,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1153,7 +1157,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1165,7 +1169,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1176,7 +1180,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1187,7 +1191,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1252,7 +1256,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1263,7 +1267,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1274,7 +1278,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1345,7 +1349,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1357,7 +1361,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1369,7 +1373,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1452,7 +1456,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1464,7 +1468,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1475,7 +1479,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1486,7 +1490,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1569,7 +1573,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1581,7 +1585,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1592,7 +1596,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1962,7 +1966,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-source-cue"
+                                className="tw-bg-grey-100 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1974,7 +1978,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCuesWithComments[0]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1986,7 +1990,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCuesWithComments[1]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1998,7 +2002,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCuesWithComments[2]}
                                 targetCuesLength={3}
-                                className="sbte-gray-100-background sbte-target-cue"
+                                className="tw-bg-grey-100 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}

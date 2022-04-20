@@ -20,7 +20,7 @@ const PlayCueButton = (props: Props): ReactElement => {
             <button
                 id={buttonId}
                 style={{ maxHeight: "38px" }}
-                className="btn btn-outline-secondary tw-w-full"
+                className="tw-btn tw-btn-outline-secondary tw-w-full tw-btn-sm"
                 data-pr-tooltip={`Play this subtitle (${shortcutText})`}
                 data-pr-position="left"
                 data-pr-at="left center"

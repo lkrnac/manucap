@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.23.7",
+  "version": "2.23.8",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -93,7 +93,6 @@
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0",
-    "bootstrap": "4.5.0",
     "cross-env": "^7.0.3",
     "deep-freeze": "latest",
     "enzyme": "^3.11.0",

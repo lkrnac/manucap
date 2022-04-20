@@ -42,7 +42,7 @@ describe("CueActionsPanel", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                    className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
+                    className="sbte-actions-panel tw-bg-grey-100 tw-border-l-2 tw-border-blue-grey-200"
                 >
                     <DeleteCueLineButton cueIndex={1} />
                     <PlayCueButton cue={cues[1]} cueIndex={1} />
@@ -71,7 +71,7 @@ describe("CueActionsPanel", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-                    className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
+                    className="sbte-actions-panel tw-bg-grey-100 tw-border-l-2 tw-border-blue-grey-200"
                 >
                     <div />
                     <PlayCueButton cue={cues[1]} cueIndex={1} />

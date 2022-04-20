@@ -14,7 +14,7 @@ const MergeEditor = (): ReactElement | null => {
                 Select the lines to be merged then click Merge
             </label>
             <button
-                className="btn btn-secondary btn-sm"
+                className="tw-btn tw-btn-secondary tw-btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-prev"
@@ -26,7 +26,7 @@ const MergeEditor = (): ReactElement | null => {
             </button>
             <span style={{ flex: 1 }} />
             <button
-                className="btn btn-secondary btn-sm"
+                className="tw-btn tw-btn-secondary tw-btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-close-merge-btn"

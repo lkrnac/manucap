@@ -43,7 +43,7 @@ describe("SubtitleSpecificationsModal", () => {
                             <label>No</label>
                         </div>
                         <div className="p-dialog-footer">
-                            <button className="btn btn-primary">Close</button>
+                            <button className="tw-btn tw-btn-primary">Close</button>
                         </div>
                     </div>
                 </div>

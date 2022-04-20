@@ -27,7 +27,10 @@ describe("CueView", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="testingClassName sbte-bottom-border sbte-click-cue-wrapper">
+                <div
+                    style={{ display: "flex" }}
+                    className="testingClassName tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                >
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -44,11 +47,11 @@ describe("CueView", () => {
                             <div>00:00:02.000</div>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
-                            <div className="sbte-small-font">Dialogue</div>
-                            <div className="sbte-small-font" style={{ paddingRight: "10px" }}>↓↓</div>
+                            <div className="tw-text-sm">Dialogue</div>
+                            <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
-                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                    <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                         <div
                             className="sbte-cue-editor"
                             style={{
@@ -64,7 +67,10 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
-                    <div className="testingClassName sbte-left-border" style={{ minWidth: "52px" }} />
+                    <div
+                        className="testingClassName tw-border-l-2 tw-border-blue-grey-200"
+                        style={{ minWidth: "58px" }}
+                    />
                 </div>
             </Provider>
         );
@@ -96,7 +102,10 @@ describe("CueView", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="sbte-bottom-border sbte-click-cue-wrapper">
+                <div
+                    style={{ display: "flex" }}
+                    className="tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                >
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -113,11 +122,11 @@ describe("CueView", () => {
                             <div>00:00:02.000</div>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
-                            <div className="sbte-small-font">Dialogue</div>
-                            <div className="sbte-small-font" style={{ paddingRight: "10px" }}>↓↓</div>
+                            <div className="tw-text-sm">Dialogue</div>
+                            <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
-                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                    <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                         <div
                             className="sbte-cue-editor"
                             style={{
@@ -133,7 +142,7 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
-                    <div className="sbte-left-border" style={{ minWidth: "52px" }} />
+                    <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ minWidth: "58px" }} />
                 </div>
             </Provider>
         );
@@ -164,7 +173,10 @@ describe("CueView", () => {
 
         const expectedNode = render(
             <Provider store={testingStore}>
-                <div style={{ display: "flex" }} className="sbte-bottom-border sbte-click-cue-wrapper">
+                <div
+                    style={{ display: "flex" }}
+                    className="tw-border-b-2 tw-border-blue-grey-200 sbte-click-cue-wrapper"
+                >
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
@@ -181,11 +193,11 @@ describe("CueView", () => {
                             <div>00:00:02.000</div>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
-                            <div className="sbte-small-font">Dialogue</div>
-                            <div className="sbte-small-font" style={{ paddingRight: "10px" }}>↓↓</div>
+                            <div className="tw-text-sm">Dialogue</div>
+                            <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
-                    <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                    <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                         <div
                             className="sbte-cue-editor"
                             style={{

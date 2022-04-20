@@ -29,7 +29,7 @@ describe("ToggleButton", () => {
     it("renders toggled", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button type="button" className="btn-secondary sbte-toggled-btn">
+            <button type="button" className="btn-secondary tw-outline-0">
                 Click me!
             </button>
         );
@@ -154,7 +154,7 @@ describe("ToggleButton", () => {
 
         // THEN
         expect(actualNode.find("button").props().className)
-            .toEqual("btn-secondary sbte-toggled-btn");
+            .toEqual("btn-secondary tw-outline-0");
     });
 
     it("passes toggle state to render prop", () => {

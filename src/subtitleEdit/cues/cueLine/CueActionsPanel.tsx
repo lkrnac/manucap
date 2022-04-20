@@ -17,7 +17,7 @@ export const CueActionsPanel = (props: Props): ReactElement => {
     return (
         <div
             style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-            className="sbte-actions-panel sbte-gray-100-background sbte-left-border"
+            className="sbte-actions-panel tw-bg-grey-100 tw-border-l-2 tw-border-blue-grey-200"
             onClick={(event: React.MouseEvent<HTMLElement>): void => event.stopPropagation()}
         >
             {

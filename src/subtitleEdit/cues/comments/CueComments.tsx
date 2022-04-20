@@ -37,7 +37,7 @@ const CueComments = (props: Props): ReactElement => {
             <button
                 id={`deleteCueCommentButton-${cueIndex}-${commentIndex}`}
                 data-testid="sbte-delete-cue-comment-button"
-                className="btn btn-outline-secondary sbte-btn-xs sbte-delete-cue-comment-button"
+                className="tw-btn tw-btn-outline-secondary tw-btn-xs sbte-delete-cue-comment-button"
                 data-pr-tooltip="Delete comment"
                 data-pr-position="left"
                 data-pr-at="left top+10"
@@ -54,7 +54,7 @@ const CueComments = (props: Props): ReactElement => {
 
     return (
         <div
-            className="sbte-medium-font sbte-white-background"
+            className="tw-text-base tw-bg-white"
             style={{
                 position: "relative",
                 flex: "1",
@@ -90,7 +90,7 @@ const CueComments = (props: Props): ReactElement => {
                             <span>{comment.comment}</span>
                         </div>
                         <div className="tw-flex tw-items-center tw-space-x-1.5">
-                            <span className="sbte-light-gray-text">
+                            <span className="tw-text-blue-grey-500">
                                 <i><DateTime value={comment.date} /></i>
                             </span>
                             {
@@ -107,15 +107,16 @@ const CueComments = (props: Props): ReactElement => {
                     ? <div style={{ marginBottom: "8px" }}>No comments</div>
                     : null
             }
-            <hr style={{
-                borderTop: "2px solid lightgray",
-                width: "100%",
-                height: "0px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                marginTop: "0",
-                marginBottom: "5px"
-            }}
+            <hr
+                className="tw-border-t-2 tw-border-blue-grey-200"
+                style={{
+                    width: "100%",
+                    height: "0px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    marginTop: "0",
+                    marginBottom: "5px"
+                }}
             />
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                 <input
@@ -135,7 +136,7 @@ const CueComments = (props: Props): ReactElement => {
                 />
                 <button
                     type="button"
-                    className="btn btn-sm btn-outline-secondary"
+                    className="tw-btn tw-btn-xs tw-btn-outline-secondary"
                     style={{ float: "right", marginLeft: "5px" }}
                     onClick={addNewComment}
                     disabled={!text}

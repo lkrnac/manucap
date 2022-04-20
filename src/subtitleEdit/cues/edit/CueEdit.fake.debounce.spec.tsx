@@ -87,7 +87,10 @@ describe("CueEdit", () => {
             // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
+                    <div
+                        style={{ display: "flex" }}
+                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                    >
                         <div
                             style={{
                                 flex: "1 1 300px",
@@ -108,7 +111,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-time-input mousetrap tw-block"
+                                        className="tw-form-control mousetrap tw-block"
                                         style={{
                                             width: "110px",
                                             maxWidth: "200px",
@@ -122,7 +125,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-time-input mousetrap tw-block"
+                                        className="tw-form-control mousetrap tw-block"
                                         style={{
                                             width: "110px",
                                             maxWidth: "200px",
@@ -136,7 +139,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="dropdown-toggle btn btn-outline-secondary"
+                                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -144,7 +147,7 @@ describe("CueEdit", () => {
                                 </button>
                                 <button
                                     className="tw-select-none tw-flex tw-items-center tw-justify-center
-                                        dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                                        tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -152,7 +155,7 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                        <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -190,7 +193,10 @@ describe("CueEdit", () => {
             // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
+                    <div
+                        style={{ display: "flex" }}
+                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                    >
                         <div
                             style={{
                                 flex: "1 1 300px",
@@ -211,7 +217,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-time-input mousetrap tw-block"
+                                        className="tw-form-control mousetrap tw-block"
                                         style={{
                                             width: "110px",
                                             maxWidth: "200px",
@@ -225,7 +231,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-time-input mousetrap tw-block"
+                                        className="tw-form-control mousetrap tw-block"
                                         style={{
                                             width: "110px",
                                             maxWidth: "200px",
@@ -239,7 +245,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="dropdown-toggle btn btn-outline-secondary"
+                                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -247,7 +253,7 @@ describe("CueEdit", () => {
                                 </button>
                                 <button
                                     className="tw-select-none tw-flex tw-items-center tw-justify-center
-                                        dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                                        tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -255,7 +261,7 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                        <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -293,7 +299,10 @@ describe("CueEdit", () => {
             testingStore.dispatch(updateEditingTrack(testTranslationTrack as Track) as {} as AnyAction);
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
+                    <div
+                        style={{ display: "flex" }}
+                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                    >
                         <div
                             style={{
                                 flex: "1 1 300px",
@@ -349,7 +358,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="dropdown-toggle btn btn-outline-secondary"
+                                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -357,7 +366,7 @@ describe("CueEdit", () => {
                                 </button>
                                 <button
                                     className="tw-select-none tw-flex tw-items-center tw-justify-center
-                                        dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                                        tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -365,7 +374,7 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                        <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -406,7 +415,10 @@ describe("CueEdit", () => {
             // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
+                    <div
+                        style={{ display: "flex" }}
+                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                    >
                         <div
                             style={{
                                 flex: "1 1 300px",
@@ -428,7 +440,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-time-input mousetrap tw-block"
+                                        className="tw-form-control mousetrap tw-block"
                                         style={{
                                             width: "110px",
                                             maxWidth: "200px",
@@ -442,7 +454,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-time-input mousetrap tw-block"
+                                        className="tw-form-control mousetrap tw-block"
                                         style={{
                                             width: "110px",
                                             maxWidth: "200px",
@@ -456,7 +468,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="dropdown-toggle btn btn-outline-secondary"
+                                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -464,7 +476,7 @@ describe("CueEdit", () => {
                                 </button>
                                 <button
                                     className="tw-select-none tw-flex tw-items-center tw-justify-center
-                                        dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                                        tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -472,7 +484,7 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+                        <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                             <CueTextEditor
                                 key={1}
                                 index={0}

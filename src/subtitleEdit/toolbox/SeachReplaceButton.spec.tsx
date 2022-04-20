@@ -17,7 +17,7 @@ describe("SeachReplaceButton", () => {
         const expectedNode = render(
             <button
                 id="searchReplaceBtn"
-                className="sbte-search-replace-button btn btn-secondary"
+                className="sbte-search-replace-button tw-btn tw-btn-secondary"
                 data-pr-tooltip="Search / Replace"
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"

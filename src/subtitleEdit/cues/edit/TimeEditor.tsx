@@ -25,7 +25,7 @@ const TimeEditor = (props: Props): ReactElement => {
     };
     return (
         <TimeField
-            className="sbte-time-input mousetrap tw-block"
+            className="tw-form-control mousetrap tw-block"
             style={styles}
             value={getTimeString(props.time || 0)}
             onChange={handleChange}

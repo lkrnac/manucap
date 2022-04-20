@@ -46,7 +46,7 @@ describe("CueComments", () => {
         testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);
         const expectedNode = render(
             <div
-                className="sbte-medium-font sbte-white-background"
+                className="tw-text-base tw-bg-white"
                 style={{
                     position: "relative",
                     flex: "1",
@@ -76,7 +76,7 @@ describe("CueComments", () => {
                         <span>this is the first comment</span>
                     </div>
                     <div className="tw-flex tw-items-center tw-space-x-1.5">
-                        <span className="sbte-light-gray-text">
+                        <span className="tw-text-blue-grey-500">
                             <i><DateTime value="2021-01-01T09:24:00.000Z" /></i>
                         </span>
                     </div>
@@ -104,13 +104,13 @@ describe("CueComments", () => {
                         <span>this is the second comment</span>
                     </div>
                     <div className="tw-flex tw-items-center tw-space-x-1.5">
-                        <span className="sbte-light-gray-text">
+                        <span className="tw-text-blue-grey-500">
                             <i><DateTime value="2021-02-01T09:06:00.000Z" /></i>
                         </span>
                         <button
                             id="deleteCueCommentButton-0-1"
                             data-testid="sbte-delete-cue-comment-button"
-                            className="btn btn-outline-secondary sbte-btn-xs sbte-delete-cue-comment-button"
+                            className="tw-btn tw-btn-outline-secondary tw-btn-xs sbte-delete-cue-comment-button"
                             data-pr-tooltip="Delete comment"
                             data-pr-position="left"
                             data-pr-at="left top+10"
@@ -119,15 +119,16 @@ describe("CueComments", () => {
                         </button>
                     </div>
                 </div>
-                <hr style={{
-                    borderTop: "2px solid lightgray",
-                    width: "100%",
-                    height: "0px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    marginTop: "0",
-                    marginBottom: "5px"
-                }}
+                <hr
+                    className="tw-border-t-2 tw-border-blue-grey-200"
+                    style={{
+                        width: "100%",
+                        height: "0px",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: "0",
+                        marginBottom: "5px"
+                    }}
                 />
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                     <input
@@ -141,7 +142,7 @@ describe("CueComments", () => {
                     />
                     <button
                         type="button"
-                        className="btn btn-sm btn-outline-secondary"
+                        className="tw-btn tw-btn-xs tw-btn-outline-secondary"
                         style={{ float: "right", marginLeft: "5px" }}
                         disabled
                     >
@@ -172,7 +173,7 @@ describe("CueComments", () => {
         } as CueDto;
         const expectedNode = render(
             <div
-                className="sbte-medium-font sbte-white-background"
+                className="tw-text-base tw-bg-white"
                 style={{
                     position: "relative",
                     flex: "1",
@@ -183,15 +184,16 @@ describe("CueComments", () => {
                 }}
             >
                 <div style={{ marginBottom: "8px" }}>No comments</div>
-                <hr style={{
-                    borderTop: "2px solid lightgray",
-                    width: "100%",
-                    height: "0px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    marginTop: "0",
-                    marginBottom: "5px"
-                }}
+                <hr
+                    className="tw-border-t-2 tw-border-blue-grey-200"
+                    style={{
+                        width: "100%",
+                        height: "0px",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: "0",
+                        marginBottom: "5px"
+                    }}
                 />
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                     <input
@@ -205,7 +207,7 @@ describe("CueComments", () => {
                     />
                     <button
                         type="button"
-                        className="btn btn-sm btn-outline-secondary"
+                        className="tw-btn tw-btn-xs tw-btn-outline-secondary"
                         style={{ float: "right", marginLeft: "5px" }}
                         disabled
                     >

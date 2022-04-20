@@ -33,7 +33,7 @@ const PositionButton = (props: Props): ReactElement => {
         <>
             <button
                 className="tw-select-none tw-flex tw-items-center tw-justify-center
-                    dropdown-toggle btn btn-outline-secondary tw-w-[68px]"
+                    tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
                 aria-controls="positionButtonMenu"
                 aria-haspopup
                 onClick={toggleMenu}

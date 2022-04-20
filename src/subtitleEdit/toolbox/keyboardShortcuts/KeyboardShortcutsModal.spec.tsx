@@ -50,28 +50,30 @@ describe("KeyboardShortcutsModal", () => {
                             </div>
                         </div>
                         <div className="p-dialog-content">
-                            <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
-                            <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Cue" />
-                            <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
-                            <KeyboardShortcutLabel character="→" name="Seek Ahead 1 Second" />
-                            <KeyboardShortcutLabel character="↑" name="Set Cue Start Time" />
-                            <KeyboardShortcutLabel character="↓" name="Set Cue End Time" />
-                            <KeyboardShortcutLabel character="Esc" name="Edit Previous Cue" />
-                            <KeyboardShortcutLabel
-                                hideAlternativeKey
-                                hideAltKey
-                                character="Space"
-                                name="Show a spelling error [You must be stepping on an spelling error word]"
-                            />
-                            <KeyboardShortcutLabel
-                                hideAlternativeKey
-                                hideAltKey
-                                character="b"
-                                name="Insert bidirectional text control code"
-                            />
+                            <div className="tw-space-y-4">
+                                <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
+                                <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Cue" />
+                                <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
+                                <KeyboardShortcutLabel character="→" name="Seek Ahead 1 Second" />
+                                <KeyboardShortcutLabel character="↑" name="Set Cue Start Time" />
+                                <KeyboardShortcutLabel character="↓" name="Set Cue End Time" />
+                                <KeyboardShortcutLabel character="Esc" name="Edit Previous Cue" />
+                                <KeyboardShortcutLabel
+                                    hideAlternativeKey
+                                    hideAltKey
+                                    character="Space"
+                                    name="Show a spelling error [You must be stepping on an spelling error word]"
+                                />
+                                <KeyboardShortcutLabel
+                                    hideAlternativeKey
+                                    hideAltKey
+                                    character="b"
+                                    name="Insert bidirectional text control code"
+                                />
+                            </div>
                         </div>
                         <div className="p-dialog-footer">
-                            <button className="btn btn-primary" onClick={jest.fn()}>
+                            <button className="tw-btn tw-btn-primary" onClick={jest.fn()}>
                                 Close
                             </button>
                         </div>

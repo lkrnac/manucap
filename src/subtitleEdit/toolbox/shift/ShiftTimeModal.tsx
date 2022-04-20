@@ -5,6 +5,7 @@ import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { Field, Form } from "react-final-form";
 import { formatStartOrEndTime } from "../../utils/timeUtils";
 import { Dialog } from "primereact/dialog";
+import { Message } from "primereact/message";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
@@ -62,7 +63,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                     isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
                                     values.shiftPosition === undefined
                                 }
-                                className="dotsub-shift-modal-apply-button btn btn-primary"
+                                className="dotsub-shift-modal-apply-button tw-btn tw-btn-primary"
                                 onClick={handleSubmit}
                             >
                                 Apply
@@ -70,66 +71,72 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                             <button
                                 type="button"
                                 onClick={handleCancelShift}
-                                className="dotsub-shift-modal-close-button btn btn-secondary"
+                                className="dotsub-shift-modal-close-button tw-btn tw-btn-secondary"
                             >
                                 Close
                             </button>
                         </>
                     )}
                 >
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
+                    <form onSubmit={handleSubmit} className="tw-space-y-4">
+                        <div>
                             <label>Time Shift in Seconds.Milliseconds</label>
                             <Field
                                 name="shiftTime"
                                 component="input"
                                 parse={formatStartOrEndTime}
-                                className="form-control dotsub-track-line-shift margin-right-10"
+                                className="tw-form-control dotsub-track-line-shift margin-right-10"
                                 style={{ width: "120px" }}
                                 type="number"
                                 placeholder="0.000"
                                 step={"0.100"}
                             />
                         </div>
-                        <div className="form-check">
-                            <label>
-                                <Field
-                                    name="shiftPosition"
-                                    component="input"
-                                    type="radio"
-                                    value="all"
-                                    className="form-check-input"
-                                /> Shift all
-                            </label>
-                        </div>
-                        <div className="form-check">
-                            <label>
-                                <Field
-                                    component="input"
-                                    type="radio"
-                                    name="shiftPosition"
-                                    value="before"
-                                    className="form-check-input"
-                                /> Shift all before editing cue
-                            </label>
-                        </div>
-                        <div className="form-check">
-                            <label>
-                                <Field
-                                    component="input"
-                                    type="radio"
-                                    name="shiftPosition"
-                                    value="after"
-                                    className="form-check-input"
-                                /> Shift all after editing cue
-                            </label>
-                        </div>
+                        <fieldset className="tw-space-y-1">
+                            <div className="form-check">
+                                <label>
+                                    <Field
+                                        name="shiftPosition"
+                                        component="input"
+                                        type="radio"
+                                        value="all"
+                                        className="form-check-input"
+                                    /> Shift all
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <Field
+                                        component="input"
+                                        type="radio"
+                                        name="shiftPosition"
+                                        value="before"
+                                        className="form-check-input"
+                                    /> Shift all before editing cue
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <label>
+                                    <Field
+                                        component="input"
+                                        type="radio"
+                                        name="shiftPosition"
+                                        value="after"
+                                        className="form-check-input"
+                                    /> Shift all after editing cue
+                                </label>
+                            </div>
+                        </fieldset>
                         {
                             errorMessage || isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ? (
-                                <span className="alert alert-danger" style={{ display: "block" }}>
-                                    {errorMessage || INVALID_SHIFT_MSG}
-                                </span>
-                            ): null
+                                <div>
+                                    <Message
+                                        severity="error"
+                                        className="tw-w-full tw-justify-start"
+                                        text={errorMessage || INVALID_SHIFT_MSG}
+                                    />
+                                </div>
+                            ) : null
                         }
                     </form>
                 </Dialog>

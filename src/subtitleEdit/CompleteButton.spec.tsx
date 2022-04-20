@@ -45,7 +45,7 @@ describe("CompleteButton", () => {
                             <i className="" />
                         </span>
                     </div>
-                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
                 </div>
@@ -69,11 +69,11 @@ describe("CompleteButton", () => {
             <Provider store={testingStore}>
                 <div className="tw-space-x-4 tw-flex tw-items-center">
                     <div className="tw-font-bold">
-                        <span className="text-success">
+                        <span className="tw-text-success">
                             Edits are disabled, task is already completed
                         </span>
                     </div>
-                    <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" disabled className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
                 </div>
@@ -110,7 +110,7 @@ describe("CompleteButton", () => {
                                 <i className="fas fa-sync fa-spin" />
                             </span>
                         </div>
-                        <button type="button" disabled className="btn btn-primary sbte-complete-subtitle-btn">
+                        <button type="button" disabled className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                             Complete
                         </button>
                     </div>
@@ -137,12 +137,12 @@ describe("CompleteButton", () => {
             <Provider store={testingStore}>
                 <div className="tw-space-x-4 tw-flex tw-items-center">
                     <div className="tw-font-bold">
-                        <span className="tw-flex tw-items-center text-success">
+                        <span className="tw-flex tw-items-center tw-text-success">
                             <span className="tw-leading-none">All changes saved to server &nbsp;</span>
                             <i className="fa fa-check-circle" />
                         </span>
                     </div>
-                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
                 </div>
@@ -174,7 +174,7 @@ describe("CompleteButton", () => {
                             <i className="fa fa-exclamation-triangle" />
                         </span>
                     </div>
-                    <button type="button" className="btn btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
                         Complete
                     </button>
                 </div>

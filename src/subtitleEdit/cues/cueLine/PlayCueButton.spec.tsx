@@ -16,7 +16,7 @@ describe("PlayCueButton", () => {
                 <button
                     id="playCueButton-1"
                     style={{ maxHeight: "38px" }}
-                    className="btn btn-outline-secondary tw-w-full"
+                    className="tw-btn tw-btn-outline-secondary tw-w-full tw-btn-sm"
                     data-pr-tooltip="Play this subtitle (Ctrl/Alt + Shift + k)"
                     data-pr-position="left"
                     data-pr-at="left center"

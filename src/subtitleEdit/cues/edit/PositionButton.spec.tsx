@@ -11,8 +11,8 @@ describe("PositionButton", () => {
         const vttCue = new VTTCue(0, 1, "some text");
         const expectedNode = mount(
             <button
-                className="tw-select-none tw-flex tw-items-center tw-justify-center dropdown-toggle btn
-                    btn-outline-secondary tw-w-[68px]"
+                className="tw-select-none tw-flex tw-items-center tw-justify-center tw-dropdown-toggle tw-btn
+                    tw-btn-outline-secondary tw-w-[68px]"
                 aria-controls="positionButtonMenu"
                 aria-haspopup="true"
             >
@@ -35,8 +35,8 @@ describe("PositionButton", () => {
         const expectedNode = render(
             <>
                 <button
-                    className="tw-select-none tw-flex tw-items-center tw-justify-center dropdown-toggle btn
-                    btn-outline-secondary tw-w-[68px]"
+                    className="tw-select-none tw-flex tw-items-center tw-justify-center tw-dropdown-toggle tw-btn
+                    tw-btn-outline-secondary tw-w-[68px]"
                     aria-controls="positionButtonMenu"
                     aria-haspopup="true"
                 >
@@ -301,6 +301,6 @@ describe("PositionButton", () => {
         const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
 
         // THEN
-        expect(actualNode.find(".dropdown-toggle").text()).toEqual("↖");
+        expect(actualNode.find(".tw-dropdown-toggle").text()).toEqual("↖");
     });
 });

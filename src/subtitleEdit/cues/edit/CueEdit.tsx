@@ -117,7 +117,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     const cueLineId = `cueEditLine-${props.index}`;
 
     return (
-        <div style={{ display: "flex" }} className="sbte-bottom-border bg-white tw-z-10">
+        <div style={{ display: "flex" }} className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10">
             <div
                 style={{
                     flex: "1 1 300px",
@@ -204,7 +204,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                     />
                 </div>
             </div>
-            <div className="sbte-left-border" style={{ flex: "1 1 70%" }}>
+            <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
                 <CueTextEditor
                     key={props.index}
                     index={props.index}

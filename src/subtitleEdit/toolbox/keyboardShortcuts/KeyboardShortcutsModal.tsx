@@ -17,30 +17,32 @@ const KeyboardShortcutsModal = ({ show, onClose }: Props) => (
         appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
         resizable={false}
         footer={() => (
-            <button className="btn btn-primary" onClick={onClose}>
+            <button className="tw-btn tw-btn-primary" onClick={onClose}>
                 Close
             </button>
         )}
     >
-        <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
-        <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Cue" />
-        <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
-        <KeyboardShortcutLabel character="→" name="Seek Ahead 1 Second" />
-        <KeyboardShortcutLabel character="↑" name="Set Cue Start Time" />
-        <KeyboardShortcutLabel character="↓" name="Set Cue End Time" />
-        <KeyboardShortcutLabel character="Esc" name="Edit Previous Cue" />
-        <KeyboardShortcutLabel
-            hideAlternativeKey
-            hideAltKey
-            character="Space"
-            name="Show a spelling error [You must be stepping on an spelling error word]"
-        />
-        <KeyboardShortcutLabel
-            hideAlternativeKey
-            hideAltKey
-            character="b"
-            name="Insert bidirectional text control code"
-        />
+        <div className="tw-space-y-4">
+            <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
+            <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Cue" />
+            <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
+            <KeyboardShortcutLabel character="→" name="Seek Ahead 1 Second" />
+            <KeyboardShortcutLabel character="↑" name="Set Cue Start Time" />
+            <KeyboardShortcutLabel character="↓" name="Set Cue End Time" />
+            <KeyboardShortcutLabel character="Esc" name="Edit Previous Cue" />
+            <KeyboardShortcutLabel
+                hideAlternativeKey
+                hideAltKey
+                character="Space"
+                name="Show a spelling error [You must be stepping on an spelling error word]"
+            />
+            <KeyboardShortcutLabel
+                hideAlternativeKey
+                hideAltKey
+                character="b"
+                name="Insert bidirectional text control code"
+            />
+        </div>
     </Dialog>
 );
 
