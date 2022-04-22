@@ -2224,7 +2224,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
             });
 
             it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
@@ -2266,7 +2266,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
             });
 
             it("adds cue to the end of the cue array if in chunk range", () => {
@@ -2494,9 +2494,8 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(3);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
             });
-
 
             it("adds cue to the end of the cue array if in chunk range", () => {
                 // GIVEN
@@ -2565,7 +2564,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(3);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
+                expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
             });
 
             it("picks default step if it less than max gap limit provided by subtitle specs", () => {
