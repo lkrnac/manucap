@@ -124,9 +124,9 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 height: "100%",
                                 paddingLeft: "10px",
                                 display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "space-between"
+                                flexDirection: "column"
                             }}
+                            className="tw-space-y-2"
                         >
                             <SearchReplaceEditor />
                             <MergeEditor />

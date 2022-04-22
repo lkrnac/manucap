@@ -163,9 +163,9 @@ describe("SubtitleEdit", () => {
                                 height: "100%",
                                 paddingLeft: "10px",
                                 display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "space-between"
+                                flexDirection: "column"
                             }}
+                            className="tw-space-y-2"
                         >
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
@@ -364,9 +364,9 @@ describe("SubtitleEdit", () => {
                                 height: "100%",
                                 paddingLeft: "10px",
                                 display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "space-between"
+                                flexDirection: "column"
                             }}
+                            className="tw-space-y-2"
                         >
                             <AddCueLineButton
                                 text="Start Captioning"
@@ -681,9 +681,9 @@ describe("SubtitleEdit", () => {
                                 height: "100%",
                                 paddingLeft: "10px",
                                 display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "space-between"
+                                flexDirection: "column"
                             }}
+                            className="tw-space-y-2"
                         >
                             <SearchReplaceEditor />
                             <div style={{ overflow: "auto" }}>
@@ -884,9 +884,9 @@ describe("SubtitleEdit", () => {
                                 height: "100%",
                                 paddingLeft: "10px",
                                 display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "space-between"
+                                flexDirection: "column"
                             }}
+                            className="tw-space-y-2"
                         >
                             <MergeEditor />
                             <div style={{ overflow: "auto" }}>
@@ -1087,9 +1087,9 @@ describe("SubtitleEdit", () => {
                                 height: "100%",
                                 paddingLeft: "10px",
                                 display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "space-between"
+                                flexDirection: "column"
                             }}
+                            className="tw-space-y-2"
                         >
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
@@ -1303,9 +1303,9 @@ describe("SubtitleEdit", () => {
                                 height: "100%",
                                 paddingLeft: "10px",
                                 display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "space-between"
+                                flexDirection: "column"
                             }}
+                            className="tw-space-y-2"
                         >
                             <div style={{ overflow: "auto" }}>
                                 <CueLine
