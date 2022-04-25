@@ -13,7 +13,7 @@ import {
     GlossaryMatchDto,
     ScrollPosition,
     SpellcheckerSettings,
-    SubtitleEditAction, TimeGapLimit,
+    SubtitleEditAction,
     Track
 } from "../../model";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
@@ -344,10 +344,6 @@ export const saveTrack = (): AppThunk =>
         callSaveTrack(dispatch, getState);
     };
 
-const verifyTimeGapLimit = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
-    (vttCue.endTime - vttCue.startTime) >= timeGapLimit.minGap &&
-    (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
-
 export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         const state: SubtitleEditState = getState();
@@ -358,7 +354,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
         const previousCue = cues[idx - 1] || DEFAULT_CUE;
         const startTime = sourceIndexes !== undefined
             && sourceIndexes[0] !== undefined
-            && state.sourceCues[sourceIndexes[0]].vttCue.startTime >= previousCue.vttCue.endTime
+            && state.sourceCues[sourceIndexes[0]].vttCue.startTime
                 ? state.sourceCues[sourceIndexes[0]].vttCue.startTime
                 : previousCue.vttCue.endTime;
         const endTime = sourceIndexes && sourceIndexes.length > 0
@@ -367,10 +363,12 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
         const cue = createAndAddCue(previousCue, startTime, endTime);
         const overlapCaptionsAllowed = getState().editingTrack?.overlapEnabled;
 
+        let overlapStartPrevented = false;
+        let overlapEndPrevented = false;
         if (!overlapCaptionsAllowed) {
             const followingCue = cues[idx];
-            applyOverlapPreventionStart(cue.vttCue, previousCue);
-            applyOverlapPreventionEnd(cue.vttCue, followingCue);
+            overlapStartPrevented = applyOverlapPreventionStart(cue.vttCue, previousCue);
+            overlapEndPrevented = applyOverlapPreventionEnd(cue.vttCue, followingCue);
         }
 
         const editingTrack = state.editingTrack;
@@ -381,13 +379,12 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             dispatch(updateMatchedCues());
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
         } else {
-            const error = !verifyTimeGapLimit(cue.vttCue, timeGapLimit)
-                ? CueError.TIME_GAP_LIMIT_EXCEEDED
-                : CueError.TIME_GAP_OVERLAP;
+            const error = overlapStartPrevented || overlapEndPrevented
+                ? CueError.TIME_GAP_OVERLAP
+                : CueError.TIME_GAP_LIMIT_EXCEEDED;
             dispatch(validationErrorSlice.actions.setValidationErrors([error]));
         }
     };
-
 
 export const splitCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
