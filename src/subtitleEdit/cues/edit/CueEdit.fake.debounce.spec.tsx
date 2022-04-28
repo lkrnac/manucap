@@ -89,7 +89,7 @@ describe("CueEdit", () => {
                 <Provider store={testingStore}>
                     <div
                         style={{ display: "flex" }}
-                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                        className="tw-border-b tw-border-blue-light/20 tw-bg-white tw-z-10"
                     >
                         <div
                             style={{
@@ -155,7 +155,7 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
+                        <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -195,7 +195,7 @@ describe("CueEdit", () => {
                 <Provider store={testingStore}>
                     <div
                         style={{ display: "flex" }}
-                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                        className="tw-border-b tw-border-blue-light/20 tw-bg-white tw-z-10"
                     >
                         <div
                             style={{
@@ -261,7 +261,7 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
+                        <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -301,7 +301,7 @@ describe("CueEdit", () => {
                 <Provider store={testingStore}>
                     <div
                         style={{ display: "flex" }}
-                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                        className="tw-border-b tw-border-blue-light/20 tw-bg-white tw-z-10"
                     >
                         <div
                             style={{
@@ -374,7 +374,7 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
+                        <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -417,7 +417,7 @@ describe("CueEdit", () => {
                 <Provider store={testingStore}>
                     <div
                         style={{ display: "flex" }}
-                        className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10"
+                        className="tw-border-b tw-border-blue-light/20 tw-bg-white tw-z-10"
                     >
                         <div
                             style={{
@@ -484,7 +484,7 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
+                        <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
                             <CueTextEditor
                                 key={1}
                                 index={0}

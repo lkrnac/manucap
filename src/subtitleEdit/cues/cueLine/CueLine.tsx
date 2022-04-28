@@ -117,8 +117,8 @@ const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => {
 const CueLine = (props: CueLineProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
-    const captionClassName = "tw-bg-grey-100";
-    const translationCueClassName = props.data.targetCues?.length === 0 ? captionClassName : "tw-bg-blue-grey-200";
+    const captionClassName = "tw-bg-gray-0";
+    const translationCueClassName = props.data.targetCues?.length === 0 ? captionClassName : "tw-bg-gray-200";
 
     const cueLineState = findCueLineState(props);
     const dividerClass = CUE_LINE_STATE_CLASSES.get(cueLineState)?.dividerClass;
@@ -163,7 +163,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 cueCommentsCount={cueCommentsCount}
             />
             <div
-                className={cueLineEditDisabled ? "sbte-edit-disabled" : ""}
+                className={"tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r" +
+                    (cueLineEditDisabled ? "sbte-edit-disabled" : "")}
                 style={{ display: "grid", width: "100%" }}
             >
                 {
@@ -268,7 +269,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 <ClickCueWrapper
                                     targetCueIndex={firstTargetCueIndex}
                                     targetCuesLength={props.rowProps.targetCuesLength}
-                                    className={"tw-bg-blue-grey-200"}
+                                    className="tw-bg-gray-0"
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
                                 >

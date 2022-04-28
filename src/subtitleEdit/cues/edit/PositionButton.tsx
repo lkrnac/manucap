@@ -18,7 +18,7 @@ const PositionButton = (props: Props): ReactElement => {
         template: () => (
             <span
                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                    tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                    tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                 onClick={(event): void => {
                     props.changePosition(icon.position);
                     toggleMenu(event);
@@ -33,7 +33,7 @@ const PositionButton = (props: Props): ReactElement => {
         <>
             <button
                 className="tw-select-none tw-flex tw-items-center tw-justify-center
-                    tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
+                    tw-dropdown-toggle tw-btn tw-btn-light tw-w-[68px]"
                 aria-controls="positionButtonMenu"
                 aria-haspopup
                 onClick={toggleMenu}

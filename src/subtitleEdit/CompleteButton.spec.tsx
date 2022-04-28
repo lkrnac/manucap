@@ -69,7 +69,7 @@ describe("CompleteButton", () => {
             <Provider store={testingStore}>
                 <div className="tw-space-x-4 tw-flex tw-items-center">
                     <div className="tw-font-bold">
-                        <span className="tw-text-success">
+                        <span className="tw-text-green-light">
                             Edits are disabled, task is already completed
                         </span>
                     </div>
@@ -137,7 +137,7 @@ describe("CompleteButton", () => {
             <Provider store={testingStore}>
                 <div className="tw-space-x-4 tw-flex tw-items-center">
                     <div className="tw-font-bold">
-                        <span className="tw-flex tw-items-center tw-text-success">
+                        <span className="tw-flex tw-items-center tw-text-green-light">
                             <span className="tw-leading-none">All changes saved to server &nbsp;</span>
                             <i className="fa fa-check-circle" />
                         </span>

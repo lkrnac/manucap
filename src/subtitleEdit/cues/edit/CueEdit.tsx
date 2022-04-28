@@ -1,6 +1,6 @@
 import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
-import { CSSProperties, Dispatch, ReactElement, useEffect } from "react";
+import { Dispatch, ReactElement, useEffect } from "react";
 import { addCue, updateCueCategory, updateVttCue } from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
@@ -34,18 +34,6 @@ const updateCueAndCopyProperties = (dispatch:  Dispatch<AppThunk>, props: CueEdi
 const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
     ? cues.map(sourceCue => sourceCue.index)
     : [];
-
-const getLockedTimecodeStyle = (): CSSProperties => {
-    return {
-        border: "1px solid",
-        borderRadius: "4px",
-        width: "110px",
-        textAlign: "center",
-        padding: "5px",
-        backgroundColor: "rgb(224,224,224)",
-        cursor: "not-allowed"
-    };
-};
 
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
@@ -117,10 +105,11 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     const cueLineId = `cueEditLine-${props.index}`;
 
     return (
-        <div style={{ display: "flex" }} className="tw-border-b-2 tw-border-blue-grey-200 tw-bg-white tw-z-10">
+        <div style={{ display: "flex" }} className="tw-border-b tw-border-blue-light/20 tw-bg-white tw-z-10">
             <div
                 style={{
-                    flex: "1 1 300px",
+                    flex: "1 0 280px",
+                    width: 280,
                     display: "flex",
                     flexDirection: "column",
                     padding: "5px 10px",
@@ -128,14 +117,14 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 }}
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
-                    <div className="tw-space-y-1">
+                    <div className="tw-space-y-1 tw-w-[140px]">
                         {
                             isTranslation && !timecodesUnlocked
                             ? (
                                 <>
                                     <div
                                         id={`${cueLineId}-startTime`}
-                                        style={getLockedTimecodeStyle()}
+                                        className="tw-form-control tw-text-center disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -144,7 +133,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                     </div>
                                     <div
                                         id={`${cueLineId}-endTime`}
-                                        style={getLockedTimecodeStyle()}
+                                        className="tw-form-control tw-text-center disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -204,7 +193,10 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                     />
                 </div>
             </div>
-            <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
+            <div
+                className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
+                style={{ flex: "1 0 calc(100% - 280px)" }}
+            >
                 <CueTextEditor
                     key={props.index}
                     index={props.index}
@@ -217,13 +209,13 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                     glossaryTerm={props.glossaryTerm}
                     setGlossaryTerm={props.setGlossaryTerm}
                 />
+                <CueActionsPanel
+                    index={props.index}
+                    cue={props.cue}
+                    isEdit
+                    sourceCueIndexes={nextSourceCuesIndexes}
+                />
             </div>
-            <CueActionsPanel
-                index={props.index}
-                cue={props.cue}
-                isEdit
-                sourceCueIndexes={nextSourceCuesIndexes}
-            />
         </div>
     );
 };

@@ -76,7 +76,7 @@ describe("CueComments", () => {
                         <span>this is the first comment</span>
                     </div>
                     <div className="tw-flex tw-items-center tw-space-x-1.5">
-                        <span className="tw-text-blue-grey-500">
+                        <span className="tw-text-gray-500">
                             <i><DateTime value="2021-01-01T09:24:00.000Z" /></i>
                         </span>
                     </div>
@@ -104,7 +104,7 @@ describe("CueComments", () => {
                         <span>this is the second comment</span>
                     </div>
                     <div className="tw-flex tw-items-center tw-space-x-1.5">
-                        <span className="tw-text-blue-grey-500">
+                        <span className="tw-text-gray-500">
                             <i><DateTime value="2021-02-01T09:06:00.000Z" /></i>
                         </span>
                         <button
@@ -120,7 +120,7 @@ describe("CueComments", () => {
                     </div>
                 </div>
                 <hr
-                    className="tw-border-t-2 tw-border-blue-grey-200"
+                    className="tw-border-t tw-border-blue-light/20"
                     style={{
                         width: "100%",
                         height: "0px",
@@ -185,7 +185,7 @@ describe("CueComments", () => {
             >
                 <div style={{ marginBottom: "8px" }}>No comments</div>
                 <hr
-                    className="tw-border-t-2 tw-border-blue-grey-200"
+                    className="tw-border-t tw-border-blue-light/20"
                     style={{
                         width: "100%",
                         height: "0px",

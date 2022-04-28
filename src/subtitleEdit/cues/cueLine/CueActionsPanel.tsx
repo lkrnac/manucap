@@ -16,8 +16,14 @@ interface Props {
 export const CueActionsPanel = (props: Props): ReactElement => {
     return (
         <div
-            style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}
-            className="sbte-actions-panel tw-bg-grey-100 tw-border-l-2 tw-border-blue-grey-200"
+            style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "column",
+                flex: "0 0 50px"
+        }}
+            className={"sbte-actions-panel tw-border-l tw-border-blue-light/20" +
+                (props.isEdit ? " tw-bg-white": "tw-bg-gray-0")}
             onClick={(event: React.MouseEvent<HTMLElement>): void => event.stopPropagation()}
         >
             {

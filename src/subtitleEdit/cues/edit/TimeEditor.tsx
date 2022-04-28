@@ -9,13 +9,6 @@ interface Props {
     onChange: (time: number) => void;
 }
 
-const styles = {
-    width: "110px",
-    maxWidth: "200px",
-    padding: "5px",
-    textAlign: "center"
-};
-
 const onChange = (props: Props, time: number): void => props.onChange(time);
 
 const TimeEditor = (props: Props): ReactElement => {
@@ -25,8 +18,7 @@ const TimeEditor = (props: Props): ReactElement => {
     };
     return (
         <TimeField
-            className="tw-form-control mousetrap tw-block"
-            style={styles}
+            className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
             value={getTimeString(props.time || 0)}
             onChange={handleChange}
             showSeconds

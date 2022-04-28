@@ -63,7 +63,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↖↖
                             </span>
@@ -71,7 +71,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↖↑
                             </span>
@@ -79,7 +79,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↑↑
                             </span>
@@ -87,7 +87,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↑↗
                             </span>
@@ -95,7 +95,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↗↗
                             </span>
@@ -103,7 +103,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↖←
                             </span>
@@ -111,7 +111,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↖
                             </span>
@@ -119,7 +119,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↑
                             </span>
@@ -127,7 +127,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↗
                             </span>
@@ -135,7 +135,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 →↗
                             </span>
@@ -143,14 +143,14 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ←←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                            tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                            tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ←
                             </span>
@@ -158,7 +158,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 •
                             </span>
@@ -166,7 +166,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 →
                             </span>
@@ -174,7 +174,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 →→
                             </span>
@@ -182,7 +182,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↙←
                             </span>
@@ -190,7 +190,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↙
                             </span>
@@ -198,7 +198,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↓
                             </span>
@@ -206,7 +206,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↘
                             </span>
@@ -214,7 +214,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 →↘
                             </span>
@@ -222,7 +222,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↙↙
                             </span>
@@ -230,7 +230,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↙↓
                             </span>
@@ -238,7 +238,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↓↓
                             </span>
@@ -246,7 +246,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↓↘
                             </span>
@@ -254,7 +254,7 @@ describe("PositionButton", () => {
                         <li className="p-menuitem" role="none">
                             <span
                                 className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-blue-grey-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-grey-100"
+                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-gray-100"
                             >
                                 ↘↘
                             </span>

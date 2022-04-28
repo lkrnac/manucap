@@ -1187,7 +1187,7 @@ describe("SubtitleEdit", () => {
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-bold">
-                                        <span className="tw-text-success">
+                                        <span className="tw-text-green-light">
                                             Edits are disabled, task is already completed
                                         </span>
                                     </div>

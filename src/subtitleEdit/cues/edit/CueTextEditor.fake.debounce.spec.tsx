@@ -87,7 +87,7 @@ const createExpectedNode = (
 ): ReactWrapper => mount(
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div
-            className="tw-border-b-2 tw-border-blue-grey-200"
+            className="tw-border-b tw-border-blue-light/20"
             style={{
                 flexBasis: "25%",
                 display: "flex",
@@ -96,29 +96,29 @@ const createExpectedNode = (
             }}
         >
             <div className="tw-text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-                <span>DURATION: <span className="tw-tw-text-success">{duration}s</span>, </span>
+                <span>DURATION: <span className="tw-text-green-light">{duration}s</span>, </span>
                 <span>
                     CHARACTERS:{" "}
-                    <span className="tw-tw-text-success">
+                    <span className="tw-text-green-light">
                         {chars.reduce((a, b) => a + b, 0)}
                     </span>,{" "}
                 </span>
                 <span>
                     WORDS:{" "}
-                    <span className="tw-tw-text-success">
+                    <span className="tw-text-green-light">
                         {words.reduce((a, b) => a + b, 0)}
                     </span>,{" "}
                 </span>
                 <span>
                     CPS:{" "}
-                    <span className="tw-tw-text-success">
+                    <span className="tw-text-green-light">
                         {cps.reduce((a, b) => a + b, 0).toFixed(1)}
                     </span>
                 </span>
             </div>
         </div>
         <div
-            className="sbte-form-control tw-border-b-2 tw-border-blue-grey-200"
+            className="sbte-form-control tw-border-b tw-border-blue-light/20"
             style={{
                 display: "flex",
                 flexDirection: "row",
