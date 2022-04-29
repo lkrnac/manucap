@@ -40,6 +40,40 @@
         @apply tw-font-sans tw-text-blue-primary tw-font-medium tw-leading-5;
     }
 
+    .h1, h1 {
+        @apply tw-text-5xl;
+    }
+
+    .h2, h2 {
+        @apply tw-text-4xl;
+    }
+
+    .h3, h3 {
+        @apply tw-text-3xl;
+    }
+
+    .h4, h4 {
+        @apply tw-text-lg;
+    }
+
+    .h5, h5 {
+        @apply tw-text-base;
+    }
+
+    .h6, h6 {
+        @apply tw-text-sm;
+    }
+
+    .h1, .h2, .h3, h1, h2, h3 {
+        margin-top: 22px;
+        margin-bottom: 11px;
+    }
+
+    .h4, .h5, .h6, h4, h5, h6 {
+        margin-top: 11px;
+        margin-bottom: 11px;
+    }
+
     body {
         @apply tw-bg-blue-primary/5 tw-text-left tw-text-gray-700 tw-font-sans tw-font-normal;
     }
@@ -261,9 +295,18 @@
     @apply tw-shadow-md tw-my-2 tw-border-blue-light/20;
 }
 
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item,
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item > *,
 .p-menu:not(.position-button-list):not(.spellcheck-menu) .p-menuitem > * {
     @apply tw-font-normal tw-flex tw-w-full tw-cursor-pointer tw-transition-colors tw-duration-300 tw-text-gray-700 hover:tw-text-blue-light tw-whitespace-nowrap hover:tw-bg-blue-primary/10 tw-py-2 tw-px-6;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+    @apply tw-bg-transparent tw-text-blue-light !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    @apply tw-bg-blue-light/10 tw-text-blue-light;
 }
 
 .p-menu .p-menuitem button {
@@ -358,8 +401,16 @@
     @apply tw-bg-blue-primary/10 tw-border tw-border-blue-light/40 tw-text-blue-primary;
 }
 
-.p-inline-message.p-inline-message-error .p-inline-message-icon {
+.p-inline-message.p-inline-message-info .p-inline-message-icon {
     @apply tw-text-blue-primary;
+}
+
+.p-inline-message.p-inline-message-success {
+    @apply tw-bg-green-primary/10 tw-border tw-border-green-light/40 tw-text-green-primary;
+}
+
+.p-inline-message.p-inline-message-success .p-inline-message-icon {
+    @apply tw-text-green-primary;
 }
 
 /** Forms **/
