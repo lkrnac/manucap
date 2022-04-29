@@ -2041,7 +2041,7 @@ describe("CueTextEditor", () => {
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
 
-        it("renders too many too long lines", () => {
+        it("renders too many lines that are also too long", () => {
             // GIVEN
             const testingSubtitleSpecification = {
                 enabled: true,
