@@ -34,7 +34,8 @@ describe("CueView", () => {
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
-                            flex: "1 1 300px",
+                            flex: "1 0 280px",
+                            width: 280,
                             display: "flex",
                             flexDirection: "column",
                             paddingLeft: "10px",
@@ -51,11 +52,14 @@ describe("CueView", () => {
                             <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
-                    <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
+                    <div
+                        className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
+                        style={{ flex: "1 0 calc(100% - 280px)" }}
+                    >
                         <div
                             className="sbte-cue-editor"
                             style={{
-                                flexBasis: "50%",
+                                flexBasis: "auto",
                                 paddingLeft: "10px",
                                 paddingTop: "5px",
                                 paddingBottom: "5px",
@@ -67,10 +71,6 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
-                    <div
-                        className="testingClassName tw-border-l tw-border-blue-light/20"
-                        style={{ minWidth: "58px" }}
-                    />
                 </div>
             </Provider>
         );
@@ -109,7 +109,8 @@ describe("CueView", () => {
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
-                            flex: "1 1 300px",
+                            flex: "1 0 280px",
+                            width: 280,
                             display: "flex",
                             flexDirection: "column",
                             paddingLeft: "10px",
@@ -126,11 +127,14 @@ describe("CueView", () => {
                             <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
-                    <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
+                    <div
+                        className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
+                        style={{ flex: "1 0 calc(100% - 280px)" }}
+                    >
                         <div
                             className="sbte-cue-editor"
                             style={{
-                                flexBasis: "50%",
+                                flexBasis: "auto",
                                 paddingLeft: "10px",
                                 paddingTop: "5px",
                                 paddingBottom: "5px",
@@ -142,7 +146,6 @@ describe("CueView", () => {
                             Caption Line 1
                         </div>
                     </div>
-                    <div className="tw-border-l tw-border-blue-light/20" style={{ minWidth: "58px" }} />
                 </div>
             </Provider>
         );
@@ -180,7 +183,8 @@ describe("CueView", () => {
                     <div
                         className="sbte-cue-line-left-section"
                         style={{
-                            flex: "1 1 300px",
+                            flex: "1 0 280px",
+                            width: 280,
                             display: "flex",
                             flexDirection: "column",
                             paddingLeft: "10px",
@@ -197,11 +201,14 @@ describe("CueView", () => {
                             <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
-                    <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
+                    <div
+                        className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
+                        style={{ flex: "1 0 calc(100% - 280px)" }}
+                    >
                         <div
                             className="sbte-cue-editor"
                             style={{
-                                flexBasis: "50%",
+                                flexBasis: "auto",
                                 paddingLeft: "10px",
                                 paddingTop: "5px",
                                 paddingBottom: "5px",
@@ -212,8 +219,8 @@ describe("CueView", () => {
                         >
                             Caption Line 1
                         </div>
+                        <CueActionsPanel index={1} cue={cue} isEdit={false} sourceCueIndexes={[]} />
                     </div>
-                    <CueActionsPanel index={1} cue={cue} isEdit={false} sourceCueIndexes={[]} />
                 </div>
             </Provider>
         );
@@ -256,7 +263,7 @@ describe("CueView", () => {
             <div
                 className="sbte-cue-editor"
                 style={{
-                    flexBasis: "50%",
+                    flexBasis: "auto",
                     paddingLeft: "10px",
                     paddingTop: "5px",
                     paddingBottom: "5px",
@@ -298,7 +305,7 @@ describe("CueView", () => {
             <div
                 className="sbte-cue-editor"
                 style={{
-                    flexBasis: "50%",
+                    flexBasis: "auto",
                     paddingLeft: "10px",
                     paddingTop: "5px",
                     paddingBottom: "5px",
@@ -341,7 +348,7 @@ describe("CueView", () => {
             <div
                 className="sbte-cue-editor"
                 style={{
-                    flexBasis: "50%",
+                    flexBasis: "auto",
                     paddingLeft: "10px",
                     paddingTop: "5px",
                     paddingBottom: "5px",
@@ -384,7 +391,7 @@ describe("CueView", () => {
             <div
                 className="sbte-cue-editor"
                 style={{
-                    flexBasis: "50%",
+                    flexBasis: "auto",
                     paddingLeft: "10px",
                     paddingTop: "5px",
                     paddingBottom: "5px",
@@ -427,7 +434,7 @@ describe("CueView", () => {
             <div
                 className="sbte-cue-editor"
                 style={{
-                    flexBasis: "50%",
+                    flexBasis: "auto",
                     paddingLeft: "10px",
                     paddingTop: "5px",
                     paddingBottom: "5px",
@@ -470,7 +477,7 @@ describe("CueView", () => {
             <div
                 className="sbte-cue-editor"
                 style={{
-                    flexBasis: "50%",
+                    flexBasis: "auto",
                     paddingLeft: "10px",
                     paddingTop: "5px",
                     paddingBottom: "5px",

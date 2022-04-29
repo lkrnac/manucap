@@ -125,7 +125,7 @@ const CueView = (props: CueViewProps): ReactElement => {
                     </div>
                 </div>
                 <div
-                    className="tw-border-l tw-border-blue-grey-200 tw-flex tw-items-stretch"
+                    className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
                     style={{ flex: "1 0 calc(100% - 280px)" }}
                 >
                     <div

@@ -164,7 +164,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
             />
             <div
                 className={"tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r" +
-                    (cueLineEditDisabled ? "sbte-edit-disabled" : "")}
+                    (cueLineEditDisabled ? " sbte-edit-disabled" : "")}
                 style={{ display: "grid", width: "100%" }}
             >
                 {

@@ -12,7 +12,7 @@ describe("PositionButton", () => {
         const expectedNode = mount(
             <button
                 className="tw-select-none tw-flex tw-items-center tw-justify-center tw-dropdown-toggle tw-btn
-                    tw-btn-outline-secondary tw-w-[68px]"
+                    tw-btn-light tw-w-[68px]"
                 aria-controls="positionButtonMenu"
                 aria-haspopup="true"
             >
@@ -36,7 +36,7 @@ describe("PositionButton", () => {
             <>
                 <button
                     className="tw-select-none tw-flex tw-items-center tw-justify-center tw-dropdown-toggle tw-btn
-                    tw-btn-outline-secondary tw-w-[68px]"
+                    tw-btn-light tw-w-[68px]"
                     aria-controls="positionButtonMenu"
                     aria-haspopup="true"
                 >

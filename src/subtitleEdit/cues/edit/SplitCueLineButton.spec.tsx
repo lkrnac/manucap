@@ -43,7 +43,7 @@ describe("SplitCueLineButton", () => {
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="tw-btn tw-btn-outline-secondary sbte-split-cue-button tw-w-full tw-btn-sm"
+                    className="tw-btn tw-btn-primary sbte-split-cue-button tw-w-full tw-btn-sm"
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
@@ -74,7 +74,7 @@ describe("SplitCueLineButton", () => {
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="tw-btn tw-btn-outline-secondary sbte-split-cue-button tw-w-full tw-btn-sm"
+                    className="tw-btn tw-btn-primary sbte-split-cue-button tw-w-full tw-btn-sm"
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
@@ -107,7 +107,7 @@ describe("SplitCueLineButton", () => {
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="tw-btn tw-btn-outline-secondary sbte-split-cue-button tw-w-full tw-btn-sm"
+                    className="tw-btn tw-btn-primary sbte-split-cue-button tw-w-full tw-btn-sm"
                     disabled
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"

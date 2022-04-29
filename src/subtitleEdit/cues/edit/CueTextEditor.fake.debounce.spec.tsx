@@ -85,7 +85,7 @@ const createExpectedNode = (
     words: number[],
     cps: number[]
 ): ReactWrapper => mount(
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", flex: "1 1 auto" }}>
         <div
             className="tw-border-b tw-border-blue-light/20"
             style={{
@@ -147,7 +147,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-primary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -157,7 +157,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-ITALIC0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-primary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -167,7 +167,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-UNDERLINE0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-primary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top-4"

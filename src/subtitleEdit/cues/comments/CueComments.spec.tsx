@@ -110,7 +110,7 @@ describe("CueComments", () => {
                         <button
                             id="deleteCueCommentButton-0-1"
                             data-testid="sbte-delete-cue-comment-button"
-                            className="tw-btn tw-btn-outline-secondary tw-btn-xs sbte-delete-cue-comment-button"
+                            className="tw-btn tw-btn-primary tw-btn-xs sbte-delete-cue-comment-button"
                             data-pr-tooltip="Delete comment"
                             data-pr-position="left"
                             data-pr-at="left top+10"
@@ -142,7 +142,7 @@ describe("CueComments", () => {
                     />
                     <button
                         type="button"
-                        className="tw-btn tw-btn-xs tw-btn-outline-secondary"
+                        className="tw-btn tw-btn-xs tw-btn-primary"
                         style={{ float: "right", marginLeft: "5px" }}
                         disabled
                     >
@@ -207,7 +207,7 @@ describe("CueComments", () => {
                     />
                     <button
                         type="button"
-                        className="tw-btn tw-btn-xs tw-btn-outline-secondary"
+                        className="tw-btn tw-btn-xs tw-btn-primary"
                         style={{ float: "right", marginLeft: "5px" }}
                         disabled
                     >

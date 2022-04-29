@@ -93,7 +93,8 @@ describe("CueEdit", () => {
                     >
                         <div
                             style={{
-                                flex: "1 1 300px",
+                                flex: "1 0 280px",
+                                width: 280,
                                 display: "flex",
                                 flexDirection: "column",
                                 padding: "5px 10px",
@@ -106,18 +107,12 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div className="tw-space-y-1">
+                                <div className="tw-space-y-1 tw-w-[140px]">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block"
-                                        style={{
-                                            width: "110px",
-                                            maxWidth: "200px",
-                                            padding: "5px",
-                                            textAlign: "center"
-                                        }}
+                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -125,13 +120,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block"
-                                        style={{
-                                            width: "110px",
-                                            maxWidth: "200px",
-                                            padding: "5px",
-                                            textAlign: "center"
-                                        }}
+                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -139,7 +128,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
+                                    className="tw-dropdown-toggle tw-btn tw-btn-light"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -147,7 +136,7 @@ describe("CueEdit", () => {
                                 </button>
                                 <button
                                     className="tw-select-none tw-flex tw-items-center tw-justify-center
-                                        tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
+                                        tw-dropdown-toggle tw-btn tw-btn-light tw-w-[68px]"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -155,7 +144,10 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
+                        <div
+                            className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
+                            style={{ flex: "1 0 calc(100% - 280px)" }}
+                        >
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -164,8 +156,8 @@ describe("CueEdit", () => {
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
                                 setGlossaryTerm={jest.fn()}
                             />
+                            <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                         </div>
-                        <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                     </div>
                 </Provider>
             );
@@ -199,7 +191,8 @@ describe("CueEdit", () => {
                     >
                         <div
                             style={{
-                                flex: "1 1 300px",
+                                flex: "1 0 280px",
+                                width: 280,
                                 display: "flex",
                                 flexDirection: "column",
                                 padding: "5px 10px",
@@ -212,18 +205,12 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div className="tw-space-y-1">
+                                <div className="tw-space-y-1 tw-w-[140px]">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block"
-                                        style={{
-                                            width: "110px",
-                                            maxWidth: "200px",
-                                            padding: "5px",
-                                            textAlign: "center"
-                                        }}
+                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -231,13 +218,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block"
-                                        style={{
-                                            width: "110px",
-                                            maxWidth: "200px",
-                                            padding: "5px",
-                                            textAlign: "center"
-                                        }}
+                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -245,7 +226,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
+                                    className="tw-dropdown-toggle tw-btn tw-btn-light"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -253,7 +234,7 @@ describe("CueEdit", () => {
                                 </button>
                                 <button
                                     className="tw-select-none tw-flex tw-items-center tw-justify-center
-                                        tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
+                                        tw-dropdown-toggle tw-btn tw-btn-light tw-w-[68px]"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -261,7 +242,10 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
+                        <div
+                            className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
+                            style={{ flex: "1 0 calc(100% - 280px)" }}
+                        >
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -270,8 +254,8 @@ describe("CueEdit", () => {
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
                                 setGlossaryTerm={jest.fn()}
                             />
+                            <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                         </div>
-                        <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                     </div>
                 </Provider>
             );
@@ -305,7 +289,8 @@ describe("CueEdit", () => {
                     >
                         <div
                             style={{
-                                flex: "1 1 300px",
+                                flex: "1 0 280px",
+                                width: 280,
                                 display: "flex",
                                 flexDirection: "column",
                                 padding: "5px 10px",
@@ -319,18 +304,10 @@ describe("CueEdit", () => {
                                     paddingBottom: "15px"
                                 }}
                             >
-                                <div className="tw-space-y-1">
+                                <div className="tw-space-y-1 tw-w-[140px]">
                                     <div
                                         id="cueEditLine-0-startTime"
-                                        style={{
-                                            border: "1px solid",
-                                            borderRadius: "4px",
-                                            width: "110px",
-                                            textAlign: "center",
-                                            padding: "5px",
-                                            backgroundColor: "rgb(224,224,224)",
-                                            cursor: "not-allowed"
-                                        }}
+                                        className="tw-form-control tw-text-center disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -339,15 +316,7 @@ describe("CueEdit", () => {
                                     </div>
                                     <div
                                         id="cueEditLine-0-endTime"
-                                        style={{
-                                            border: "1px solid",
-                                            borderRadius: "4px",
-                                            width: "110px",
-                                            textAlign: "center",
-                                            padding: "5px",
-                                            backgroundColor: "rgb(224,224,224)",
-                                            cursor: "not-allowed"
-                                        }}
+                                        className="tw-form-control tw-text-center disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -358,7 +327,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
+                                    className="tw-dropdown-toggle tw-btn tw-btn-light"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -366,7 +335,7 @@ describe("CueEdit", () => {
                                 </button>
                                 <button
                                     className="tw-select-none tw-flex tw-items-center tw-justify-center
-                                        tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
+                                        tw-dropdown-toggle tw-btn tw-btn-light tw-w-[68px]"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -374,7 +343,10 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
+                        <div
+                            className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
+                            style={{ flex: "1 0 calc(100% - 280px)" }}
+                        >
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -383,8 +355,8 @@ describe("CueEdit", () => {
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
                                 setGlossaryTerm={jest.fn()}
                             />
+                            <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                         </div>
-                        <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                     </div>
                 </Provider>
             );
@@ -421,7 +393,8 @@ describe("CueEdit", () => {
                     >
                         <div
                             style={{
-                                flex: "1 1 300px",
+                                flex: "1 0 280px",
+                                width: 280,
                                 display: "flex",
                                 flexDirection: "column",
                                 padding: "5px 10px",
@@ -435,18 +408,12 @@ describe("CueEdit", () => {
                                     paddingBottom: "15px"
                                 }}
                             >
-                                <div className="tw-space-y-1">
+                                <div className="tw-space-y-1 tw-w-[140px]">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block"
-                                        style={{
-                                            width: "110px",
-                                            maxWidth: "200px",
-                                            padding: "5px",
-                                            textAlign: "center"
-                                        }}
+                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -454,13 +421,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block"
-                                        style={{
-                                            width: "110px",
-                                            maxWidth: "200px",
-                                            padding: "5px",
-                                            textAlign: "center"
-                                        }}
+                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -468,7 +429,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
+                                    className="tw-dropdown-toggle tw-btn tw-btn-light"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -476,7 +437,7 @@ describe("CueEdit", () => {
                                 </button>
                                 <button
                                     className="tw-select-none tw-flex tw-items-center tw-justify-center
-                                        tw-dropdown-toggle tw-btn tw-btn-outline-secondary tw-w-[68px]"
+                                        tw-dropdown-toggle tw-btn tw-btn-light tw-w-[68px]"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -484,7 +445,10 @@ describe("CueEdit", () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="tw-border-l tw-border-blue-light/20" style={{ flex: "1 1 70%" }}>
+                        <div
+                            className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
+                            style={{ flex: "1 0 calc(100% - 280px)" }}
+                        >
                             <CueTextEditor
                                 key={1}
                                 index={0}
@@ -493,8 +457,8 @@ describe("CueEdit", () => {
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
                                 setGlossaryTerm={jest.fn()}
                             />
+                            <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                         </div>
-                        <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
                     </div>
                 </Provider>
             );
