@@ -34,9 +34,7 @@ import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSl
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
-import { CueError, Track } from "../../model";
-import { checkLineLimitation } from "../cueVerifications";
-import { setValidationErrors } from "./cueEditorSlices";
+import { Track } from "../../model";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
@@ -69,6 +67,24 @@ const findExtraCharacters = (subtitleSpecifications: SubtitleSpecification | nul
                 if (line.length > maxCharactersPerLine) {
                     callback(lineStartOffset + maxCharactersPerLine, lineEndOffset);
                 }
+            });
+        }
+    };
+
+const findExtraLines = (subtitleSpecifications: SubtitleSpecification | null) =>
+    (contentBlock: ContentBlock, callback: Function): void => {
+        if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxLinesPerCaption) {
+            const maxLinesPerCaption = subtitleSpecifications.maxLinesPerCaption;
+            const text = contentBlock.getText();
+            const lines = text.split("\n");
+            let charCount = 0;
+            return lines.forEach((line: string, index: number) => {
+                const lineStartOffset = charCount + index;
+                const lineEndOffset = lineStartOffset + line.length;
+                if (index + 1 > maxLinesPerCaption) {
+                    callback(lineStartOffset, lineEndOffset);
+                }
+                charCount += line.length;
             });
         }
     };
@@ -238,11 +254,6 @@ const handleApplyEntityIfNeeded = (
 export let editorStateFOR_TESTING: EditorState;
 export let setEditorStateFOR_TESTING: (editorState: EditorState) => void;
 
-function shouldRevert(editorState: EditorState, subtitleSpecifications: SubtitleSpecification | null) {
-    const vttText = getVttText(editorState.getCurrentContent());
-    return subtitleSpecifications !== null && !checkLineLimitation(vttText, subtitleSpecifications);
-}
-
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
@@ -272,11 +283,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
 
     let decoratedEditorState = insertGlossaryTermIfNeeded(editorState, props.glossaryTerm);
     decoratedEditorState = replaceIfNeeded(decoratedEditorState, props.searchReplaceMatches, replacement);
-    if (shouldRevert(decoratedEditorState, subtitleSpecifications)
-        && previousEditorStateRef.current !== null) {
-        decoratedEditorState = previousEditorStateRef.current;
-        dispatch(setValidationErrors([CueError.LINE_COUNT_EXCEEDED]));
-    }
 
     // If in composition mode (i.e. for IME input or diacritics), the decorator re-renders cannot
     // happen because it will cause an error in the draft-js composition handler.
@@ -288,6 +294,11 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             },
             {
                 strategy: findExtraCharacters(subtitleSpecifications),
+                component: CueExtraCharacters,
+                props: {}
+            },
+            {
+                strategy: findExtraLines(subtitleSpecifications),
                 component: CueExtraCharacters,
                 props: {}
             },
