@@ -16,8 +16,8 @@ module.exports = {
         colors: {
             transparent: "transparent",
             current: "currentColor",
-            white: "#ffffff",
-            black: "#000000",
+            white: withOpacityValue("--white"),
+            black: withOpacityValue("--black"),
             red: {
                 light: withOpacityValue("--red-light"),
                 primary: withOpacityValue("--red-primary"),
