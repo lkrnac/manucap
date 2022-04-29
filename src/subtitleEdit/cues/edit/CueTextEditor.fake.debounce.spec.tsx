@@ -853,28 +853,6 @@ describe("CueTextEditor", () => {
             // THEN
             expect(testingStore.getState().cues[0].vttCue.pauseOnExit).toEqual(true);
         });
-
-        it("doesn't updates cue in redux store if new text doesn't conform to subtitle specification", () => {
-            // GIVEN
-            const editor = mountEditorNode("Caption Line 1");
-            const testingSubtitleSpecification = {
-                enabled: true,
-                maxLinesPerCaption: 2,
-                maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-            // WHEN
-            editor.simulate("paste", {
-                clipboardData: {
-                    types: [ "text/plain" ],
-                    getData: (): string => "\n Paste text \n with few lines",
-                }
-            });
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
-        });
     });
 
     describe("spell checking", () => {
@@ -913,7 +891,6 @@ describe("CueTextEditor", () => {
             // THEN
             expect(fetchSpellCheck).not.toBeCalled();
         });
-
 
         it("renders with html and spell check errors", () => {
             // GIVEN
@@ -1991,6 +1968,282 @@ describe("CueTextEditor", () => {
                 "<span data-offset-key=\"\"><span data-text=\"true\"> long text sample ve</span></span>" +
                 "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\"><span data-text=\"true\">ry long text sample</span></span></span>";
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            const actual = removeDraftJsDynamicValues(actualNode.html());
+            expect(actual).toContain(expectedContent);
+        });
+    });
+
+    describe("too many lines", () => {
+        beforeEach(() => {
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                progress: 50,
+                id: trackId
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        });
+
+        it("renders with too many lines", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            const spellCheck = { matches: []} as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">some very long\ntext sample very long\n</span></span>" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span data-offset-key=\"\"><span data-text=\"true\">text sample</span></span>";
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        });
+
+        it("renders too many lines that are also too long", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 10,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            const spellCheck = { matches: []} as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some very long text\nsample very long text\nsample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">some very </span></span>" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">long text</span></span></span>" +
+                "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">\nsample ver</span></span>" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">y long text</span></span></span>" +
+                "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">\n</span></span>" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">sample</span></span></span>";
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        });
+
+        it("does not render with too many lines decorator with no subtitle specs", () => {
+            // GIVEN
+            const spellCheck = { matches: []} as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">some very long\ntext sample very long\ntext sample</span></span>";
+
+            // WHEN
+            const actualNode = mount(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+        });
+
+        it("does not render with too many lines decorator with subtitle specs disabled", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                enabled: false,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 30,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            const spellCheck = { matches: []} as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">some very long\ntext sample very long\ntext sample</span></span>";
+
+            // WHEN
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(container.outerHTML))
+                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+        });
+
+        it("does not render with too many lines decorator with subtitle specs maxLinesPerCaption null", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: null,
+                maxCharactersPerLine: 40,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            const spellCheck = { matches: []} as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">some very long\ntext sample very long\ntext sample</span></span>";
+
+            // WHEN
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(container.outerHTML))
+                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+        });
+
+        it("does not render with too many lines decorator with subtitle specs maxLinesPerCaption 0", () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 0,
+                maxCharactersPerLine: 40,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            const spellCheck = { matches: []} as SpellCheck;
+            const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">some very long\ntext sample very long\ntext sample</span></span>";
+
+            // WHEN
+            const { container } = render(
+                <Provider store={testingStore}>
+                    <CueTextEditor
+                        index={0}
+                        vttCue={vttCue}
+                        editUuid={editUuid}
+                        spellCheck={spellCheck}
+                        bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                        unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(container.outerHTML))
+                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+        });
+
+        it("renders with too many lines and spell check errors", () => {
+            // GIVEN
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+            const testingSubtitleSpecification = {
+                enabled: true,
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: 40,
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            const spellCheck = {
+                matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
+                    context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },
+                    rule: { id: ruleId }}]
+            } as SpellCheck;
+
+            const vttCue = new VTTCue(0, 1, "some verry long\ntext sample very long\ntext sample");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
+                "<span class=\"sbte-text-with-error\" " +
+                "aria-controls=\"spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-5-10\" aria-haspopup=\"true\">" +
+                "<span data-offset-key=\"\">" +
+                "<span data-text=\"true\">verry</span></span></span>" +
+                "<span data-offset-key=\"\"><span data-text=\"true\"> long\ntext sample very long\n</span></span>" +
+                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span data-offset-key=\"\"><span data-text=\"true\">text sample</span></span></span>";
 
             // WHEN
             const actualNode = mount(
