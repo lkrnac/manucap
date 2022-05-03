@@ -18,7 +18,7 @@ const TimeEditor = (props: Props): ReactElement => {
     };
     return (
         <TimeField
-            className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+            className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
             value={getTimeString(props.time || 0)}
             onChange={handleChange}
             showSeconds

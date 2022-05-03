@@ -93,8 +93,7 @@ describe("CueEdit", () => {
                     >
                         <div
                             style={{
-                                flex: "1 0 280px",
-                                width: 280,
+                               flex: "1 1 300px",
                                 display: "flex",
                                 flexDirection: "column",
                                 padding: "5px 10px",
@@ -107,12 +106,12 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div className="tw-space-y-1 tw-w-[140px]">
+                                <div className="tw-space-y-1 tw-w-[120px]">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                                        className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -120,7 +119,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                                        className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -146,7 +145,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
-                            style={{ flex: "1 0 calc(100% - 280px)" }}
+                            style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
                                 key={1}
@@ -191,8 +190,7 @@ describe("CueEdit", () => {
                     >
                         <div
                             style={{
-                                flex: "1 0 280px",
-                                width: 280,
+                               flex: "1 1 300px",
                                 display: "flex",
                                 flexDirection: "column",
                                 padding: "5px 10px",
@@ -205,12 +203,12 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div className="tw-space-y-1 tw-w-[140px]">
+                                <div className="tw-space-y-1 tw-w-[120px]">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                                        className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -218,7 +216,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                                        className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -244,7 +242,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
-                            style={{ flex: "1 0 calc(100% - 280px)" }}
+                            style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
                                 key={1}
@@ -289,8 +287,7 @@ describe("CueEdit", () => {
                     >
                         <div
                             style={{
-                                flex: "1 0 280px",
-                                width: 280,
+                               flex: "1 1 300px",
                                 display: "flex",
                                 flexDirection: "column",
                                 padding: "5px 10px",
@@ -304,10 +301,11 @@ describe("CueEdit", () => {
                                     paddingBottom: "15px"
                                 }}
                             >
-                                <div className="tw-space-y-1 tw-w-[140px]">
+                                <div className="tw-space-y-1 tw-w-[120px]">
                                     <div
                                         id="cueEditLine-0-startTime"
-                                        className="tw-form-control tw-text-center !tw-border-blue-light/20 disabled"
+                                        className="tw-form-control tw-text-center !tw-border-blue-light/20
+                                            !tw-text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -316,7 +314,8 @@ describe("CueEdit", () => {
                                     </div>
                                     <div
                                         id="cueEditLine-0-endTime"
-                                        className="tw-form-control tw-text-center !tw-border-blue-light/20 disabled"
+                                        className="tw-form-control tw-text-center !tw-border-blue-light/20
+                                            !tw-text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -345,7 +344,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
-                            style={{ flex: "1 0 calc(100% - 280px)" }}
+                            style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
                                 key={1}
@@ -393,8 +392,7 @@ describe("CueEdit", () => {
                     >
                         <div
                             style={{
-                                flex: "1 0 280px",
-                                width: 280,
+                               flex: "1 1 300px",
                                 display: "flex",
                                 flexDirection: "column",
                                 padding: "5px 10px",
@@ -408,12 +406,12 @@ describe("CueEdit", () => {
                                     paddingBottom: "15px"
                                 }}
                             >
-                                <div className="tw-space-y-1 tw-w-[140px]">
+                                <div className="tw-space-y-1 tw-w-[120px]">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                                        className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -421,7 +419,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                                        className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -447,7 +445,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
-                            style={{ flex: "1 0 calc(100% - 280px)" }}
+                            style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
                                 key={1}

@@ -108,8 +108,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
         <div style={{ display: "flex" }} className="tw-border-b tw-border-blue-light/20 tw-bg-white tw-z-10">
             <div
                 style={{
-                    flex: "1 0 280px",
-                    width: 280,
+                    flex: "1 1 300px",
                     display: "flex",
                     flexDirection: "column",
                     padding: "5px 10px",
@@ -117,14 +116,15 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 }}
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
-                    <div className="tw-space-y-1 tw-w-[140px]">
+                    <div className="tw-space-y-1 tw-w-[120px]">
                         {
                             isTranslation && !timecodesUnlocked
                             ? (
                                 <>
                                     <div
                                         id={`${cueLineId}-startTime`}
-                                        className="tw-form-control tw-text-center !tw-border-blue-light/20 disabled"
+                                        className="tw-form-control tw-text-center !tw-border-blue-light/20
+                                            !tw-text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -133,7 +133,8 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                     </div>
                                     <div
                                         id={`${cueLineId}-endTime`}
-                                        className="tw-form-control tw-text-center !tw-border-blue-light/20 disabled"
+                                        className="tw-form-control tw-text-center !tw-border-blue-light/20
+                                            !tw-text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -195,7 +196,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
             </div>
             <div
                 className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
-                style={{ flex: "1 0 calc(100% - 280px)" }}
+                style={{ flex: "1 1 70%" }}
             >
                 <CueTextEditor
                     key={props.index}

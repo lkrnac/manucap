@@ -41,8 +41,8 @@ describe("CompleteButton", () => {
                 <div className="tw-space-x-4 tw-flex tw-items-center">
                     <div className="tw-font-medium">
                         <span hidden className="tw-flex tw-items-center ">
-                            <span className="tw-leading-none"> &nbsp;</span>
-                            <i className="" />
+                            <span className="tw-leading-none" />
+                            <i className="tw-ml-1" />
                         </span>
                     </div>
                     <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
@@ -106,8 +106,8 @@ describe("CompleteButton", () => {
                     <div className="tw-space-x-4 tw-flex tw-items-center">
                         <div className="tw-font-medium">
                             <span className="tw-flex tw-items-center ">
-                                <span className="tw-leading-none">Saving changes &nbsp;</span>
-                                <i className="fas fa-sync fa-spin" />
+                                <span className="tw-leading-none">Saving changes</span>
+                                <i className="tw-ml-1 fas fa-sync fa-spin" />
                             </span>
                         </div>
                         <button type="button" disabled className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
@@ -138,8 +138,8 @@ describe("CompleteButton", () => {
                 <div className="tw-space-x-4 tw-flex tw-items-center">
                     <div className="tw-font-medium">
                         <span className="tw-flex tw-items-center tw-text-green-light">
-                            <span className="tw-leading-none">All changes saved to server &nbsp;</span>
-                            <i className="fa fa-check-circle" />
+                            <span className="tw-leading-none">All changes saved to server</span>
+                            <i className="tw-ml-1 fa fa-check-circle" />
                         </span>
                     </div>
                     <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
@@ -170,8 +170,8 @@ describe("CompleteButton", () => {
                 <div className="tw-space-x-4 tw-flex tw-items-center">
                     <div className="tw-font-medium">
                         <span className="tw-flex tw-items-center text-danger">
-                            <span className="tw-leading-none">Error saving latest changes &nbsp;</span>
-                            <i className="fa fa-exclamation-triangle" />
+                            <span className="tw-leading-none">Error saving latest changes</span>
+                            <i className="tw-ml-1 fa fa-exclamation-triangle" />
                         </span>
                     </div>
                     <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">

@@ -104,8 +104,7 @@ const CueView = (props: CueViewProps): ReactElement => {
                 <div
                     className="sbte-cue-line-left-section"
                     style={{
-                        flex: "1 0 280px",
-                        width: 280,
+                        flex: "1 1 300px",
                         display: "flex",
                         flexDirection: "column",
                         paddingLeft: "10px",
@@ -126,7 +125,7 @@ const CueView = (props: CueViewProps): ReactElement => {
                 </div>
                 <div
                     className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
-                    style={{ flex: "1 0 calc(100% - 280px)" }}
+                    style={{ flex: "1 1 70%" }}
                 >
                     <div
                         className="sbte-cue-editor"

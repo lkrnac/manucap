@@ -48,6 +48,7 @@ const CompleteButton = (props: Props): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
+    const stateIconClass = stateIconCssClasses.get(saveState);
     return (
         <div className="tw-space-x-4 tw-flex tw-items-center">
             <div className="tw-font-medium">
@@ -58,8 +59,8 @@ const CompleteButton = (props: Props): ReactElement => {
                             hidden={saveState === SaveState.NONE}
                             className={`tw-flex tw-items-center ${stateCssClasses.get(saveState)}`}
                         >
-                            <span className="tw-leading-none">{stateMessages.get(saveState)} &nbsp;</span>
-                            <i className={stateIconCssClasses.get(saveState)} />
+                            <span className="tw-leading-none">{stateMessages.get(saveState)}</span>
+                            <i className={`tw-ml-1${stateIconClass ? ` ${stateIconClass}` : ""}`} />
                         </span>
                 }
             </div>

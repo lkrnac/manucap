@@ -78,6 +78,10 @@
         @apply tw-bg-blue-primary/5 tw-text-left tw-text-gray-700 tw-font-sans tw-font-normal;
     }
 
+    html {
+        @apply tw-text-sm;
+    }
+
     [hidden] {
         @apply tw-hidden !important;
     }
@@ -528,5 +532,5 @@ region.wavesurfer-region:before {
 }
 
 .sbte-count-tag {
-    @apply tw-text-xs tw-bg-gray-0 tw-border tw-border-gray-100 tw-mr-[2px] tw-rounded-lg tw-py-[2px] tw-px-[6px] tw-whitespace-nowrap;
+    @apply tw-text-xs tw-inline-block tw-bg-gray-0 tw-border tw-border-gray-100 tw-mr-[2px] tw-rounded-lg tw-py-[2px] tw-px-[6px] tw-mb-[4px] tw-whitespace-nowrap;
 }

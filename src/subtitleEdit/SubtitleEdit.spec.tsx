@@ -264,8 +264,8 @@ describe("SubtitleEdit", () => {
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-medium">
                                         <span hidden className="tw-flex tw-items-center ">
-                                            <span className="tw-leading-none"> &nbsp;</span>
-                                            <i className="" />
+                                            <span className="tw-leading-none" />
+                                            <i className="tw-ml-1" />
                                         </span>
                                     </div>
                                     <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
@@ -447,8 +447,8 @@ describe("SubtitleEdit", () => {
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-medium">
                                         <span hidden className="tw-flex tw-items-center ">
-                                            <span className="tw-leading-none"> &nbsp;</span>
-                                            <i className="" />
+                                            <span className="tw-leading-none" />
+                                            <i className="tw-ml-1" />
                                         </span>
                                     </div>
                                     <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
@@ -783,8 +783,8 @@ describe("SubtitleEdit", () => {
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-medium">
                                         <span hidden className="tw-flex tw-items-center ">
-                                            <span className="tw-leading-none"> &nbsp;</span>
-                                            <i className="" />
+                                            <span className="tw-leading-none" />
+                                            <i className="tw-ml-1" />
                                         </span>
                                     </div>
                                     <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
@@ -986,8 +986,8 @@ describe("SubtitleEdit", () => {
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-medium">
                                         <span hidden className="tw-flex tw-items-center ">
-                                            <span className="tw-leading-none"> &nbsp;</span>
-                                            <i className="" />
+                                            <span className="tw-leading-none" />
+                                            <i className="tw-ml-1" />
                                         </span>
                                     </div>
                                     <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
@@ -1404,8 +1404,8 @@ describe("SubtitleEdit", () => {
                                 <div className="tw-space-x-4 tw-flex tw-items-center">
                                     <div className="tw-font-medium">
                                         <span hidden className="tw-flex tw-items-center ">
-                                            <span className="tw-leading-none"> &nbsp;</span>
-                                            <i className="" />
+                                            <span className="tw-leading-none" />
+                                            <i className="tw-ml-1" />
                                         </span>
                                     </div>
                                     <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">

@@ -10,7 +10,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                 value="00:00:00.000"
                 onChange={(): void => undefined}
             />
@@ -32,7 +32,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                 value="00:00:01.000"
                 onChange={(): void => undefined}
             />
@@ -54,7 +54,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                 value="00:05:00.000"
                 onChange={(): void => undefined}
             />
@@ -76,7 +76,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                 value="02:00:35.976"
                 onChange={(): void => undefined}
             />
@@ -98,7 +98,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                 value="99:59:59.999"
                 onChange={(): void => undefined}
             />
@@ -120,7 +120,7 @@ describe("TimeEditor", () => {
                 type="text"
                 // @ts-ignore custom attribute added by react-advanced-timefield
                 colon=":"
-                className="tw-form-control mousetrap tw-block tw-w-[140px] tw-text-center"
+                className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"
                 value="01:59:59.025"
                 onChange={(): void => undefined}
             />
