@@ -2,20 +2,20 @@
 
 :root {
     --white: 255, 255, 255;
-    --black: 255, 255, 255;
+    --black: 0, 0, 0;
     --blue-light: 49, 118, 148;
     --blue-primary: 22, 103, 138;
     --blue-dark: 6, 68, 92;
     --blue-darker: 2, 48, 66;
-    --red-light: 235, 87, 71;
-    --red-primary: 219, 44, 26;
-    --red-dark: 174, 27, 12;
-    --yellow-light: 235, 193, 71;
-    --yellow-primary: 219, 170, 26;
-    --yellow-dark: 174, 132, 12;
-    --green-light: 64, 190, 57;
-    --green-primary: 29, 177, 21;
-    --green-dark: 16, 141, 9;
+    --red-light: 233, 87, 72;
+    --red-primary: 217, 46, 28;
+    --red-dark: 173, 28, 13;
+    --yellow-light: 233, 192, 72;
+    --yellow-primary: 217, 169, 28;
+    --yellow-dark: 173, 132, 13;
+    --green-light: 54, 176, 81;
+    --green-primary: 21, 164, 53;
+    --green-dark: 10, 131, 37;
     --gray-0: 249, 249, 250;
     --gray-1: 236, 238, 238;
     --gray-2: 223, 225, 226;

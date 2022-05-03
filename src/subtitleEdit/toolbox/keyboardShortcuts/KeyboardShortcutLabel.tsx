@@ -16,10 +16,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
         <div style={{ display: "flex", alignItems: "center" }}>
             <div className={`${props.hideMetaKey? "tw-hidden" : "tw-flex"} tw-items-center tw-justify-center`}>
                 <h4 className="tw-m-0">
-                    <span
-                        className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border tw-font-medium
-                             !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors !tw-font-medium"
-                    >
+                    <span className="tw-keyboard-label">
                         {commandKey}
                     </span>
                 </h4>
@@ -28,10 +25,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
 
             <div className={`${props.hideShiftKey? "tw-hidden" : "tw-flex"} tw-items-center tw-justify-center`}>
                 <h4 className="tw-m-0">
-                    <span
-                        className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border tw-font-medium
-                             !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors !tw-font-medium"
-                    >
+                    <span className="tw-keyboard-label">
                         Shift
                     </span>
                 </h4>
@@ -39,10 +33,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
             </div>
             <div className="tw-flex tw-items-center tw-justify-center">
                 <h4 className="tw-m-0">
-                    <span
-                        className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border tw-font-medium
-                             !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors !tw-font-medium"
-                    >
+                    <span className="tw-keyboard-label">
                         {props.character}
                     </span>
                 </h4>
@@ -54,10 +45,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
                 <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
                 <div className={`${props.hideAltKey? "tw-hidden" : "tw-flex"} tw-items-center tw-justify-center`}>
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border tw-font-medium
-                             !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             Alt
                         </span>
                     </h4>
@@ -65,10 +53,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
                 </div>
                 <div className={`${props.hideShiftKey? "tw-hidden" : "tw-flex"} tw-items-center tw-justify-center`}>
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border tw-font-medium
-                             !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             Shift
                         </span>
                     </h4>
@@ -76,10 +61,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
                 </div>
                 <div className="tw-flex tw-items-center tw-justify-center">
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border tw-font-medium
-                             !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             {props.character}
                         </span>
                     </h4>

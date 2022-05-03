@@ -118,10 +118,12 @@ const CueLine = (props: CueLineProps): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const captionClassName = "tw-bg-gray-0";
-    const translationCueClassName = props.data.targetCues?.length === 0 ? captionClassName : "tw-bg-gray-200";
+    const translationCueClassName = props.data.targetCues?.length === 0 ? captionClassName : "tw-bg-gray-0";
 
     const cueLineState = findCueLineState(props);
     const dividerClass = CUE_LINE_STATE_CLASSES.get(cueLineState)?.dividerClass;
+    const hasMultipleCues = (props.data.targetCues?.length && props.data.targetCues?.length > 1)
+        || (props.data.sourceCues?.length && props.data.sourceCues?.length > 1);
 
     const firstTargetCueIndex = props.data.targetCues?.length ? props.data.targetCues[0].index : undefined;
     const sourceCuesIndexes = getCueIndexes(props.data.sourceCues);
@@ -203,12 +205,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                             )
                         )
                 }
-                {
-                    (props.data.targetCues?.length && props.data.targetCues?.length > 1)
-                    || (props.data.sourceCues?.length && props.data.sourceCues?.length > 1)
-                        ? <div className={dividerClass} />
-                        : null
-                }
+                {hasMultipleCues ? <div className={dividerClass} /> : null}
                 {
                     props.data.targetCues && props.data.targetCues.length > 0
                         ? props.data.targetCues.map(targetCue => {

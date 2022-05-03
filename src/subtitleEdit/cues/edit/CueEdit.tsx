@@ -124,7 +124,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                 <>
                                     <div
                                         id={`${cueLineId}-startTime`}
-                                        className="tw-form-control tw-text-center disabled"
+                                        className="tw-form-control tw-text-center !tw-border-blue-light/20 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -133,7 +133,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                     </div>
                                     <div
                                         id={`${cueLineId}-endTime`}
-                                        className="tw-form-control tw-text-center disabled"
+                                        className="tw-form-control tw-text-center !tw-border-blue-light/20 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"

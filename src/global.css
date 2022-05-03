@@ -77,6 +77,10 @@
     body {
         @apply tw-bg-blue-primary/5 tw-text-left tw-text-gray-700 tw-font-sans tw-font-normal;
     }
+
+    [hidden] {
+        @apply tw-hidden !important;
+    }
 }
 
 /** Buttons **/
@@ -190,6 +194,12 @@
 
 .tw-badge-pill i {
     @apply tw-text-xs;
+}
+
+/** Keyboard Shortcut Label **/
+
+.tw-keyboard-label {
+    @apply tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border tw-font-medium !tw-text-blue-primary tw-transition-colors !tw-font-medium;
 }
 
 /** Modal **/
@@ -450,11 +460,11 @@
 }
 
 .sbte-cue-divider-error {
-    @apply tw-border tw-border-red-dark;
+    @apply tw-border-none tw-bg-red-dark/80 tw-h-[1px] tw--mt-[1px];
 }
 
 .sbte-cue-divider-good {
-    @apply tw-border tw-border-green-dark;
+    @apply tw-border-none tw-bg-green-dark/80 tw-h-[1px] tw--mt-[1px];
 }
 
 .sbte-cue-divider {
@@ -467,13 +477,12 @@
 
 .sbte-cues-errors {
     @apply tw-bg-red-primary/10 tw-border-b tw-border-red-dark/10 tw-text-red-light tw-p-[10px];
-
 }
 
 /** Glossary Matches **/
 
 .sbte-glossary-match {
-    @apply tw-bg-white tw-cursor-pointer tw-shadow-md tw-shadow-gray-300/60 tw-px-1 tw-rounded tw-border tw-border-gray-200;
+    @apply tw-bg-blue-primary/10 tw-text-blue-light tw-cursor-pointer tw-shadow-sm tw-border tw-border-blue-light/20 tw-shadow-blue-primary/40 tw-px-1 tw-rounded tw-border tw-border-gray-200;
 }
 
 /** Waveform **/
@@ -515,7 +524,7 @@ region.wavesurfer-region:before {
 /** Misc **/
 
 .sbte-text-with-error {
-    @apply tw-bg-red-primary tw-bg-opacity-20;
+    @apply tw-bg-red-primary tw-bg-opacity-20 tw-text-gray-900/60;
 }
 
 .sbte-count-tag {

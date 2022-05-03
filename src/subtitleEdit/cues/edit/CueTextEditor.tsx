@@ -425,6 +425,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             >
                 <div
                     style={{ flex: 1 }}
+                    className="tw-pr-2"
                     onCompositionStart={(): void => { imeCompositionRef.current = "start"; }}
                     onCompositionEnd={(): void => { imeCompositionRef.current = "end"; }}
                 >
