@@ -129,7 +129,7 @@ const createExpectedNode = (
                 minHeight: "54px"
             }}
         >
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1 }} className="tw-pr-2">
                 <Editor editorState={editorState} onChange={jest.fn} spellCheck={false} />
             </div>
             <div style={{ flex: 0 }}>

@@ -1012,7 +1012,7 @@ describe("CueLine", () => {
                         >
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-gray-200 tw-border-b tw-border-blue-light/20
+                                className="tw-bg-gray-0 tw-border-b tw-border-blue-light/20
                                     sbte-click-cue-wrapper"
                             >
                                 <div style={{ width: "100%", minHeight: "78px" }} />

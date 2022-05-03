@@ -307,7 +307,7 @@ describe("CueEdit", () => {
                                 <div className="tw-space-y-1 tw-w-[140px]">
                                     <div
                                         id="cueEditLine-0-startTime"
-                                        className="tw-form-control tw-text-center disabled"
+                                        className="tw-form-control tw-text-center !tw-border-blue-light/20 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -316,7 +316,7 @@ describe("CueEdit", () => {
                                     </div>
                                     <div
                                         id="cueEditLine-0-endTime"
-                                        className="tw-form-control tw-text-center disabled"
+                                        className="tw-form-control tw-text-center !tw-border-blue-light/20 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"

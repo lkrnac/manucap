@@ -14,11 +14,7 @@ describe("KeyboardShortcutLabel", () => {
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="tw-flex tw-items-center tw-justify-center">
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             {commandKey}
                         </span>
                     </h4>
@@ -26,11 +22,7 @@ describe("KeyboardShortcutLabel", () => {
                 </div>
                 <div className="tw-flex tw-items-center tw-justify-center">
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             Shift
                         </span>
                     </h4>
@@ -38,11 +30,7 @@ describe("KeyboardShortcutLabel", () => {
                 </div>
                 <div className="tw-flex tw-items-center tw-justify-center">
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             o
                         </span>
                     </h4>
@@ -51,11 +39,7 @@ describe("KeyboardShortcutLabel", () => {
                     <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
                     <div className="tw-flex tw-items-center tw-justify-center">
                         <h4 className="tw-m-0">
-                            <span
-                                className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                            >
+                            <span className="tw-keyboard-label">
                                 Alt
                             </span>
                         </h4>
@@ -63,11 +47,7 @@ describe("KeyboardShortcutLabel", () => {
                     </div>
                     <div className="tw-flex tw-items-center tw-justify-center">
                         <h4 className="tw-m-0">
-                            <span
-                                className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                            >
+                            <span className="tw-keyboard-label">
                                 Shift
                             </span>
                         </h4>
@@ -75,11 +55,7 @@ describe("KeyboardShortcutLabel", () => {
                     </div>
                     <div className="tw-flex tw-items-center tw-justify-center">
                         <h4 className="tw-m-0">
-                            <span
-                                className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                            >
+                            <span className="tw-keyboard-label">
                                 o
                             </span>
                         </h4>
@@ -111,11 +87,7 @@ describe("KeyboardShortcutLabel", () => {
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="tw-hidden tw-items-center tw-justify-center">
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             {commandKey}
                         </span>
                     </h4>
@@ -123,11 +95,7 @@ describe("KeyboardShortcutLabel", () => {
                 </div>
                 <div className="tw-hidden tw-items-center tw-justify-center">
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             Shift
                         </span>
                     </h4>
@@ -135,11 +103,7 @@ describe("KeyboardShortcutLabel", () => {
                 </div>
                 <div className="tw-flex tw-items-center tw-justify-center">
                     <h4 className="tw-m-0">
-                        <span
-                            className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                        >
+                        <span className="tw-keyboard-label">
                             o
                         </span>
                     </h4>
@@ -148,11 +112,7 @@ describe("KeyboardShortcutLabel", () => {
                     <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
                     <div className="tw-hidden tw-items-center tw-justify-center">
                         <h4 className="tw-m-0">
-                            <span
-                                className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                            >
+                            <span className="tw-keyboard-label">
                                 Alt
                             </span>
                         </h4>
@@ -160,11 +120,7 @@ describe("KeyboardShortcutLabel", () => {
                     </div>
                     <div className="tw-hidden tw-items-center tw-justify-center">
                         <h4 className="tw-m-0">
-                            <span
-                                className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                            >
+                            <span className="tw-keyboard-label">
                                 Shift
                             </span>
                         </h4>
@@ -172,11 +128,7 @@ describe("KeyboardShortcutLabel", () => {
                     </div>
                     <div className="tw-flex tw-items-center tw-justify-center">
                         <h4 className="tw-m-0">
-                            <span
-                                className="tw-badge tw-bg-gray-0 tw-shadow-sm tw-border-gray-200 tw-border
-                                tw-font-medium !tw-text-blue-primary hover:!tw-text-blue-light tw-transition-colors
-                                !tw-font-medium"
-                            >
+                            <span className="tw-keyboard-label">
                                 o
                             </span>
                         </h4>
