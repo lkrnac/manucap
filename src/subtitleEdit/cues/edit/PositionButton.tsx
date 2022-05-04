@@ -14,6 +14,9 @@ const PositionButton = (props: Props): ReactElement => {
             menu.current.toggle(event);
         }
     };
+
+    // TODO: Get rid of Tailwind preprocessed value: [38px]
+
     const menuModel = positionIcons.map(icon => ({
         template: () => (
             <span
@@ -31,6 +34,7 @@ const PositionButton = (props: Props): ReactElement => {
 
     return (
         <>
+            {/** TODO: Get rid of Tailwind preprocessed value: [68px] **/}
             <button
                 className="tw-select-none tw-flex tw-items-center tw-justify-center
                     tw-dropdown-toggle tw-btn tw-btn-light tw-w-[68px]"
@@ -41,6 +45,7 @@ const PositionButton = (props: Props): ReactElement => {
                 <span>{findPositionIcon(props.vttCue).iconText}</span>
                 <span className="caret" />
             </button>
+            {/** TODO: Get rid of Tailwind preprocessed value: [210px] **/}
             <Menu
                 id="positionButtonMenu"
                 className="position-button-list tw-w-[210px] tw-min-w-[210px]"

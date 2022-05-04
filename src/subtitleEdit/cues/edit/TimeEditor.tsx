@@ -16,6 +16,8 @@ const TimeEditor = (props: Props): ReactElement => {
         const time = getTimeFromString(timeString);
         onChange(props, time);
     };
+
+    // TODO: Get rid of Tailwind preprocessed value: [120px]
     return (
         <TimeField
             className="tw-form-control mousetrap tw-block tw-w-[120px] tw-text-center"

@@ -149,6 +149,8 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
             margin: 0,
             boxShadow: "none",
             borderRadius: 0,
+            // Exception: Each color in palette. Since I cannot add classNames to react-select,
+            // I need to specify the CSS var inside this Style Obj.
             borderColor: "rgb(var(--gray-1))",
         }),
         menuList: (provided: CSSProperties) => ({ ...provided, height: "200px" })

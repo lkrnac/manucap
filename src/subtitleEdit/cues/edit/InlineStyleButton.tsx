@@ -18,6 +18,7 @@ const InlineStyleButton = (props: Props): ReactElement => {
     const buttonId = `inlineStyle-${props.inlineStyle}${props.editorIndex}`;
     return (
         <>
+            {/** TODO: Get rid of Tailwind preprocessed value: [44px] **/}
             <button
                 id={buttonId}
                 style={{ marginRight: "5px" }}
