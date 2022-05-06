@@ -587,22 +587,6 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
         });
 
-        it("strip out html content on paste", () => {
-            // GIVEN
-            const editor = mountEditorNode();
-
-            // WHEN
-            editor.simulate("paste", {
-                clipboardData: {
-                    types: [ "text/plain" ],
-                    getData: (): string => "<a href=\"https://www.example.com/max-payne.html\">Max Payne</a>",
-                }
-            });
-
-            // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Max Payne");
-        });
-
         it.skip("updates cue in Redux if position property is changed", () => {
             // GIVEN
             const vttCue = new VTTCue(0, 1, "someText");
