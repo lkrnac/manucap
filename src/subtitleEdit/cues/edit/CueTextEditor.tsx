@@ -440,6 +440,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                         ref={editorRef}
                         spellCheck={false}
                         keyBindingFn={keyShortcutBindings(spellCheckerMatchingOffset)}
+                        stripPastedStyles
                         handleKeyCommand={
                             handleKeyShortcut(
                                 decoratedEditorState,
