@@ -272,30 +272,30 @@
 }
 
 .p-toast-message.p-toast-message-error .p-toast-message-content {
-    @apply tw-bg-red-primary/10 tw-border tw-border-red-light/20 tw-text-red-light !important;
+    @apply tw-bg-red-primary/10 tw-border tw-border-red-light/40 tw-text-red-primary !important;
 }
 
 .p-toast-message.p-toast-message-error .p-toast-message-icon,
 .p-toast-message.p-toast-message-error .p-toast-icon-close {
-    @apply tw-text-red-light !important;
+    @apply tw-text-red-primary !important;
 }
 
 .p-toast-message.p-toast-message-warn .p-toast-message-content {
-    @apply tw-bg-yellow-primary/10 tw-border tw-border-yellow-light/20 tw-text-yellow-light !important;
+    @apply tw-bg-yellow-primary/10 tw-border tw-border-yellow-light/40 tw-text-yellow-primary !important;
 }
 
 .p-toast-message.p-toast-message-warn .p-toast-message-icon,
 .p-toast-message.p-toast-message-warn .p-toast-icon-close {
-    @apply tw-text-yellow-light !important;
+    @apply tw-text-yellow-primary !important;
 }
 
 .p-toast-message.p-toast-message-success .p-toast-message-content {
-    @apply tw-bg-green-primary/10 tw-border tw-border-green-light/20 tw-text-green-light !important;
+    @apply tw-bg-green-primary/10 tw-border tw-border-green-light/40 tw-text-green-primary !important;
 }
 
 .p-toast-message.p-toast-message-success .p-toast-message-icon,
 .p-toast-message.p-toast-message-success .p-toast-icon-close {
-    @apply tw-text-green-light !important;
+    @apply tw-text-green-primary !important;
 }
 
 /** Dropdown / Menu **/
