@@ -374,7 +374,7 @@
 /** Tooltips **/
 
 .p-tooltip .p-tooltip-text {
-    @apply tw-shadow-sm tw-bg-blue-light tw-block tw-text-center tw-text-sm tw-text-white tw-shadow-blue-primary/40 tw-shadow-md;
+    @apply tw-shadow-md tw-bg-blue-light tw-block tw-text-center tw-text-sm tw-text-white tw-shadow-blue-primary/20;
 }
 
 .p-tooltip.p-tooltip-top .p-tooltip-arrow {
