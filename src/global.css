@@ -176,6 +176,32 @@
     @apply opacity-40 shadow-none pointer-events-none;
 }
 
+.sbte-btn-pure {
+    width: 8px;
+    height: 8px;
+    @apply rounded-full bg-gray-200;
+}
+
+.sbte-btn-pure.sbte-btn-primary  {
+    @apply bg-blue-dark hover:bg-blue-primary text-white;
+}
+
+.sbte-btn-pure.sbte-btn-danger {
+    @apply bg-red-primary hover:bg-red-light text-white;
+}
+
+.sbte-btn-pure.sbte-btn-success {
+    @apply bg-green-primary hover:bg-green-light text-white;
+}
+
+.sbte-btn-pure.sbte-btn-dark {
+    @apply bg-gray-700 hover:bg-gray-500 text-white;
+}
+
+.sbte-btn-pure.sbte-btn-warning {
+    @apply bg-yellow-primary hover:bg-yellow-light text-white;
+}
+
 /** Badges **/
 
 .sbte-badge {
@@ -445,6 +471,15 @@
 .sbte-form-control[disabled],
 .sbte-form-control.disabled {
     @apply bg-gray-0 opacity-100;
+}
+
+textarea.sbte-form-control {
+    @apply h-auto;
+    min-height: 100px;
+}
+
+label.sbte-form-control {
+    @apply mb-0;
 }
 
 /** Cue Lines **/
