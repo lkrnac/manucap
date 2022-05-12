@@ -186,12 +186,12 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 ref={menu}
                 popup
                 id={spellcheckId}
-                className="spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0 tw-shadow-md"
+                className="spellcheck-menu w-[260px] min-w-[260px] p-0 shadow-md"
                 model={[
                     {
                         template: () => (
                             <>
-                                <div className="tw-border-b tw-border-b-gray-300 tw-bg-gray-0 tw-text-700 tw-p-2">
+                                <div className="border-b border-b-gray-300 bg-gray-0 text-700 p-2">
                                     {spellCheckMatch.message}
                                 </div>
                                 <div hidden={selectOptions.length === 0}>

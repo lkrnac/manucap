@@ -16,7 +16,7 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
         {} as SubtitleSpecification;
     return (
         <Dialog
-            className="tw-max-w-3xl"
+            className="max-w-3xl"
             visible={props.show}
             onHide={props.onClose}
             header="Subtitle Specifications"
@@ -24,7 +24,7 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
             dismissableMask
             resizable={false}
             footer={() => (
-                <button className="tw-btn tw-btn-primary" onClick={props.onClose}>
+                <button className="sbte-btn sbte-btn-primary" onClick={props.onClose}>
                     Close
                 </button>
             )}

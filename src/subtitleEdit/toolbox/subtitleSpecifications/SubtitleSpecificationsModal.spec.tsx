@@ -18,7 +18,7 @@ describe("SubtitleSpecificationsModal", () => {
                         p-dialog-visible p-dialog-center"
                 >
                     <div
-                        className="p-dialog p-component tw-max-w-3xl p-dialog-enter p-dialog-enter-active"
+                        className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
                         role="dialog"
                         aria-labelledby=""
                         aria-describedby=""
@@ -43,7 +43,7 @@ describe("SubtitleSpecificationsModal", () => {
                             <label>No</label>
                         </div>
                         <div className="p-dialog-footer">
-                            <button className="tw-btn tw-btn-primary">Close</button>
+                            <button className="sbte-btn sbte-btn-primary">Close</button>
                         </div>
                     </div>
                 </div>

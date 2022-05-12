@@ -47,7 +47,7 @@ describe("CueActionsPanel", () => {
                         flexDirection: "column",
                         flex: "0 0 50px"
                     }}
-                    className="sbte-actions-panel tw-border-l tw-border-blue-light/20 tw-bg-white"
+                    className="sbte-actions-panel border-l border-blue-light/20 bg-white"
                 >
                     <DeleteCueLineButton cueIndex={1} />
                     <PlayCueButton cue={cues[1]} cueIndex={1} />
@@ -81,7 +81,7 @@ describe("CueActionsPanel", () => {
                         flexDirection: "column",
                         flex: "0 0 50px"
                     }}
-                    className="sbte-actions-panel tw-border-l tw-border-blue-light/20 tw-bg-gray-0"
+                    className="sbte-actions-panel border-l border-blue-light/20 bg-gray-0"
                 >
                     <div />
                     <PlayCueButton cue={cues[1]} cueIndex={1} />

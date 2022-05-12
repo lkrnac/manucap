@@ -15,7 +15,7 @@ describe("ImportTrackCuesButton", () => {
        const expectedNode = render(
            <button
                id="importFileBtn"
-               className="sbte-import-button tw-btn tw-btn-light"
+               className="sbte-import-button sbte-btn sbte-btn-light"
                data-pr-tooltip="Import File"
                data-pr-position="top"
                data-pr-at="center+2 top-2"
@@ -41,7 +41,7 @@ describe("ImportTrackCuesButton", () => {
             <button
                 id="importFileBtn"
                 disabled
-                className="sbte-import-button tw-btn tw-btn-light"
+                className="sbte-import-button sbte-btn sbte-btn-light"
                 data-pr-tooltip="Import File"
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"

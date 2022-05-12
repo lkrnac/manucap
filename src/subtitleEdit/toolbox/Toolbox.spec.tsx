@@ -26,16 +26,16 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-stretch tw-z-[100]
-                        tw-justify-center sbte-button-toolbar"
+                    className="mt-6 space-x-2 flex items-stretch z-[100]
+                        justify-center sbte-button-toolbar"
                 >
                     <SubtitleSpecificationsButton />
                     <SearchReplaceButton />
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <button
-                        className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-light tw-flex
-                                tw-items-center tw-justify-center"
+                        className="select-none sbte-dropdown-toggle sbte-btn sbte-btn-light flex
+                                items-center justify-center"
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
                     >
@@ -73,8 +73,8 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="tw-mt-6 tw-space-x-2 tw-flex tw-items-stretch
-                        tw-z-[100] tw-justify-center sbte-button-toolbar"
+                    className="mt-6 space-x-2 flex items-stretch
+                        z-[100] justify-center sbte-button-toolbar"
                 >
                     <SubtitleSpecificationsButton />
                     <SearchReplaceButton />
@@ -82,8 +82,8 @@ describe("Toolbox", () => {
                     <ExportSourceTrackCuesButton handleExport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <button
-                        className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-light tw-flex
-                                tw-items-center tw-justify-center"
+                        className="select-none sbte-dropdown-toggle sbte-btn sbte-btn-light flex
+                                items-center justify-center"
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
                     >
@@ -178,7 +178,7 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
 
         // THEN
         await waitFor(() => {
@@ -201,13 +201,13 @@ describe("Toolbox", () => {
         // WHEN
         // Opening Toolbox Menu.
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
         // Clicking on "Unlock Time Code Button".
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(7) button") as Element);
         // Opening Toolbox Menu.
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
         // Clicking on "Shift Track Time".
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(3) button") as Element);
@@ -235,7 +235,7 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
 
@@ -261,11 +261,11 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .tw-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
         fireEvent.click(
-            actualNode.container.querySelector(".p-dialog .tw-btn-primary") as Element);
+            actualNode.container.querySelector(".p-dialog .sbte-btn-primary") as Element);
 
         // THEN
         await waitFor(() => {

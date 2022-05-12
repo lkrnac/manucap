@@ -220,7 +220,7 @@ describe("CuesList", () => {
                         }
                         <button
                             style={{ width: "100%", paddingTop: "5px" }}
-                            className="tw-btn tw-btn-primary sbte-next-button"
+                            className="sbte-btn sbte-btn-primary sbte-next-button"
                             onClick={jest.fn()}
                         >
                             Load Next Cues
@@ -253,7 +253,7 @@ describe("CuesList", () => {
                     <div style={{ overflow: "auto" }}>
                         <button
                             style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
-                            className="tw-btn tw-btn-primary sbte-previous-button"
+                            className="sbte-btn sbte-btn-primary sbte-previous-button"
                             onClick={jest.fn()}
                         >
                             Load Previous Cues
@@ -276,7 +276,7 @@ describe("CuesList", () => {
                         }
                         <button
                             style={{ width: "100%", paddingTop: "5px" }}
-                            className="tw-btn tw-btn-primary sbte-next-button"
+                            className="sbte-btn sbte-btn-primary sbte-next-button"
                             onClick={jest.fn()}
                         >
                             Load Next Cues
@@ -309,7 +309,7 @@ describe("CuesList", () => {
                     <div style={{ overflow: "auto" }}>
                         <button
                             style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
-                            className="tw-btn tw-btn-primary sbte-previous-button"
+                            className="sbte-btn sbte-btn-primary sbte-previous-button"
                             onClick={jest.fn()}
                         >
                             Load Previous Cues

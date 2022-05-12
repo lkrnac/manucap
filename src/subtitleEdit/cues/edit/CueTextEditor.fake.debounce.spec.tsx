@@ -87,7 +87,7 @@ const createExpectedNode = (
 ): ReactWrapper => mount(
     <div style={{ display: "flex", flexDirection: "column", height: "100%", flex: "1 1 auto" }}>
         <div
-            className="tw-border-b tw-border-blue-light/20"
+            className="border-b border-blue-light/20"
             style={{
                 flexBasis: "25%",
                 display: "flex",
@@ -95,30 +95,30 @@ const createExpectedNode = (
                 padding: "5px 10px 5px 10px"
             }}
         >
-            <div className="tw-text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-                <span>DURATION: <span className="tw-text-green-light">{duration}s</span>, </span>
+            <div className="text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
+                <span>DURATION: <span className="text-green-light">{duration}s</span>, </span>
                 <span>
                     CHARACTERS:{" "}
-                    <span className="tw-text-green-light">
+                    <span className="text-green-light">
                         {chars.reduce((a, b) => a + b, 0)}
                     </span>,{" "}
                 </span>
                 <span>
                     WORDS:{" "}
-                    <span className="tw-text-green-light">
+                    <span className="text-green-light">
                         {words.reduce((a, b) => a + b, 0)}
                     </span>,{" "}
                 </span>
                 <span>
                     CPS:{" "}
-                    <span className="tw-text-green-light">
+                    <span className="text-green-light">
                         {cps.reduce((a, b) => a + b, 0).toFixed(1)}
                     </span>
                 </span>
             </div>
         </div>
         <div
-            className="sbte-form-control tw-border-b tw-border-blue-light/20"
+            className="sbte-sbte-form-control border-b border-blue-light/20"
             style={{
                 display: "flex",
                 flexDirection: "row",
@@ -129,7 +129,7 @@ const createExpectedNode = (
                 minHeight: "54px"
             }}
         >
-            <div style={{ flex: 1 }} className="tw-pr-2">
+            <div style={{ flex: 1 }} className="pr-2">
                 <Editor editorState={editorState} onChange={jest.fn} spellCheck={false} />
             </div>
             <div style={{ flex: 0 }}>
@@ -147,7 +147,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-primary"
+                className="w-[44px] sbte-btn sbte-btn-primary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -157,7 +157,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-ITALIC0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-primary"
+                className="w-[44px] sbte-btn sbte-btn-primary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -167,7 +167,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-UNDERLINE0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-primary"
+                className="w-[44px] sbte-btn sbte-btn-primary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -1748,7 +1748,7 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">some very long text sample ver</span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\"><span data-text=\"true\">y long text sample</span></span>";
 
             // WHEN
@@ -1783,12 +1783,12 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">some very </span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">long text</span></span></span>" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">\nsample ver</span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">y long text sample</span></span></span>";
 
@@ -1870,7 +1870,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"text-danger\" data-offset-key=\"\">");
         });
 
         it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine null", () => {
@@ -1905,7 +1905,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"text-danger\" data-offset-key=\"\">");
         });
 
         it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine 0", () => {
@@ -1940,7 +1940,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"text-danger\" data-offset-key=\"\">");
         });
 
         it("renders with too long lines and spell check errors", () => {
@@ -1966,7 +1966,7 @@ describe("CueTextEditor", () => {
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">verry</span></span></span>" +
                 "<span data-offset-key=\"\"><span data-text=\"true\"> long text sample ve</span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\"><span data-text=\"true\">ry long text sample</span></span></span>";
 
             // WHEN
@@ -2019,7 +2019,7 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">some very long\ntext sample very long\n</span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\"><span data-text=\"true\">text sample</span></span>";
 
             // WHEN
@@ -2054,17 +2054,17 @@ describe("CueTextEditor", () => {
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">some very </span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">long text</span></span></span>" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">\nsample ver</span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">y long text</span></span></span>" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">\n</span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">sample</span></span></span>";
 
@@ -2146,7 +2146,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"text-danger\" data-offset-key=\"\">");
         });
 
         it("does not render with too many lines decorator with subtitle specs maxLinesPerCaption null", () => {
@@ -2181,7 +2181,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"text-danger\" data-offset-key=\"\">");
         });
 
         it("does not render with too many lines decorator with subtitle specs maxLinesPerCaption 0", () => {
@@ -2216,7 +2216,7 @@ describe("CueTextEditor", () => {
             // THEN
             expect(removeDraftJsDynamicValues(container.outerHTML)).toContain(expectedContent);
             expect(removeDraftJsDynamicValues(container.outerHTML))
-                .not.toContain("<span class=\"tw-text-danger\" data-offset-key=\"\">");
+                .not.toContain("<span class=\"text-danger\" data-offset-key=\"\">");
         });
 
         it("renders with too many lines and spell check errors", () => {
@@ -2242,7 +2242,7 @@ describe("CueTextEditor", () => {
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">verry</span></span></span>" +
                 "<span data-offset-key=\"\"><span data-text=\"true\"> long\ntext sample very long\n</span></span>" +
-                "<span class=\"tw-text-danger\" data-offset-key=\"\">" +
+                "<span class=\"text-danger\" data-offset-key=\"\">" +
                 "<span data-offset-key=\"\"><span data-text=\"true\">text sample</span></span></span>";
 
             // WHEN

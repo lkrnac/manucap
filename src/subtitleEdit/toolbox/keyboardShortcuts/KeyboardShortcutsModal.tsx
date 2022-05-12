@@ -10,19 +10,19 @@ const KeyboardShortcutsModal = ({ show, onClose }: Props) => (
     <Dialog
         visible={show}
         onHide={onClose}
-        className="tw-max-w-4xl"
+        className="max-w-4xl"
         header="Keyboard Shortcuts"
         draggable={false}
         dismissableMask
         appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
         resizable={false}
         footer={() => (
-            <button className="tw-btn tw-btn-primary" onClick={onClose}>
+            <button className="sbte-btn sbte-btn-primary" onClick={onClose}>
                 Close
             </button>
         )}
     >
-        <div className="tw-space-y-4">
+        <div className="space-y-4">
             <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
             <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Cue" />
             <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />

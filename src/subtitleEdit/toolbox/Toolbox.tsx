@@ -50,8 +50,8 @@ const Toolbox = (props: Props): ReactElement => {
 
     return (
         <div
-            className="tw-mt-6 tw-space-x-2 tw-flex tw-items-stretch
-                tw-z-[100] tw-justify-center sbte-button-toolbar"
+            className="mt-6 space-x-2 flex items-stretch
+                z-[100] justify-center sbte-button-toolbar"
         >
             <SubtitleSpecificationsButton />
             <SearchReplaceButton />
@@ -66,8 +66,8 @@ const Toolbox = (props: Props): ReactElement => {
                 handleExport={props.handleExportFile}
             />
             <button
-                className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-light tw-flex
-                    tw-items-center tw-justify-center"
+                className="select-none sbte-dropdown-toggle sbte-btn sbte-btn-light flex
+                    items-center justify-center"
                 onClick={toggleMenu}
                 aria-controls="toolboxMenu"
                 aria-haspopup
@@ -77,7 +77,7 @@ const Toolbox = (props: Props): ReactElement => {
             {/** TODO: Get rid of Tailwind preprocessed value: [260px] **/}
             <Menu
                 id="toolboxMenu"
-                className="tw-w-[260px] tw-min-w-[260px]"
+                className="w-[260px] min-w-[260px]"
                 appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
                 ref={menu}
                 popup

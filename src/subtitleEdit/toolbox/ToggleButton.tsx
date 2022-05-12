@@ -17,7 +17,7 @@ const ToggleButton: FunctionComponent<Props> = (props: PropsWithChildren<Props>)
     return (
         <button
             type="button"
-            className={(props.className ? props.className : "") + (toggle ? " tw-outline-0 active" : "")}
+            className={(props.className ? props.className : "") + (toggle ? " outline-0 active" : "")}
             onClick={(event): void => {
                 setToggle(!toggle);
                 props.onClick && props.onClick(event);

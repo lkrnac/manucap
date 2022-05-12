@@ -49,7 +49,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                 <Dialog
                     visible={props.show}
                     onHide={handleCancelShift}
-                    className="tw-max-w-3xl"
+                    className="max-w-3xl"
                     appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
                     header="Shift Track Lines Time"
                     draggable={false}
@@ -63,7 +63,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                     isShiftTimeValid(values.shiftTime, firstTrackTime, isMediaChunk) ||
                                     values.shiftPosition === undefined
                                 }
-                                className="dotsub-shift-modal-apply-button tw-btn tw-btn-primary"
+                                className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
                                 onClick={handleSubmit}
                             >
                                 Apply
@@ -71,28 +71,28 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                             <button
                                 type="button"
                                 onClick={handleCancelShift}
-                                className="dotsub-shift-modal-close-button tw-btn tw-btn-secondary"
+                                className="dotsub-shift-modal-close-button sbte-btn sbte-btn-secondary"
                             >
                                 Close
                             </button>
                         </>
                     )}
                 >
-                    <form onSubmit={handleSubmit} className="tw-space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label>Time Shift in Seconds.Milliseconds</label>
                             <Field
                                 name="shiftTime"
                                 component="input"
                                 parse={formatStartOrEndTime}
-                                className="tw-form-control dotsub-track-line-shift margin-right-10"
+                                className="sbte-form-control dotsub-track-line-shift margin-right-10"
                                 style={{ width: "120px" }}
                                 type="number"
                                 placeholder="0.000"
                                 step={"0.100"}
                             />
                         </div>
-                        <fieldset className="tw-space-y-1">
+                        <fieldset className="space-y-1">
                             <div className="form-check">
                                 <label>
                                     <Field
@@ -132,7 +132,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                 <div>
                                     <Message
                                         severity="error"
-                                        className="tw-w-full tw-justify-start"
+                                        className="w-full justify-start"
                                         text={errorMessage || INVALID_SHIFT_MSG}
                                     />
                                 </div>

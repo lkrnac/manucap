@@ -25,7 +25,7 @@ describe("ExportTrackCuesButton", () => {
        const expectedNode = render(
            <button
                id="exportFileBtn"
-               className="sbte-export-button tw-btn tw-btn-light"
+               className="sbte-export-button sbte-btn sbte-btn-light"
                data-pr-tooltip="Export File"
                data-pr-position="top"
                data-pr-at="center+2 top-2"

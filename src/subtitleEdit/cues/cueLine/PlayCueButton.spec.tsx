@@ -12,11 +12,11 @@ describe("PlayCueButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <div className="tw-p-1.5">
+            <div className="p-1.5">
                 <button
                     id="playCueButton-1"
                     style={{ maxHeight: "38px" }}
-                    className="tw-btn tw-btn-primary tw-w-full tw-btn-sm"
+                    className="sbte-btn sbte-btn-primary w-full sbte-btn-sm"
                     data-pr-tooltip="Play this subtitle (Ctrl/Alt + Shift + k)"
                     data-pr-position="left"
                     data-pr-at="left center"

@@ -38,14 +38,14 @@ describe("CompleteButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div className="tw-space-x-4 tw-flex tw-items-center">
-                    <div className="tw-font-medium">
-                        <span hidden className="tw-flex tw-items-center ">
-                            <span className="tw-leading-none" />
-                            <i className="tw-ml-1" />
+                <div className="space-x-4 flex items-center">
+                    <div className="font-medium">
+                        <span hidden className="flex items-center ">
+                            <span className="leading-none" />
+                            <i className="ml-1" />
                         </span>
                     </div>
-                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn">
                         Complete
                     </button>
                 </div>
@@ -67,13 +67,17 @@ describe("CompleteButton", () => {
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div className="tw-space-x-4 tw-flex tw-items-center">
-                    <div className="tw-font-medium">
-                        <span className="tw-text-green-light">
+                <div className="space-x-4 flex items-center">
+                    <div className="font-medium">
+                        <span className="text-green-light">
                             Edits are disabled, task is already completed
                         </span>
                     </div>
-                    <button type="button" disabled className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
+                    <button
+                        type="button"
+                        disabled
+                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                    >
                         Complete
                     </button>
                 </div>
@@ -103,14 +107,18 @@ describe("CompleteButton", () => {
             ) as {} as AnyAction);
             const expectedNode = mount(
                 <Provider store={testingStore}>
-                    <div className="tw-space-x-4 tw-flex tw-items-center">
-                        <div className="tw-font-medium">
-                            <span className="tw-flex tw-items-center ">
-                                <span className="tw-leading-none">Saving changes</span>
-                                <i className="tw-ml-1 fas fa-sync fa-spin" />
+                    <div className="space-x-4 flex items-center">
+                        <div className="font-medium">
+                            <span className="flex items-center ">
+                                <span className="leading-none">Saving changes</span>
+                                <i className="ml-1 fas fa-sync fa-spin" />
                             </span>
                         </div>
-                        <button type="button" disabled className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
+                        <button
+                            type="button"
+                            disabled
+                            className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                        >
                             Complete
                         </button>
                     </div>
@@ -135,14 +143,14 @@ describe("CompleteButton", () => {
         ) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div className="tw-space-x-4 tw-flex tw-items-center">
-                    <div className="tw-font-medium">
-                        <span className="tw-flex tw-items-center tw-text-green-light">
-                            <span className="tw-leading-none">All changes saved to server</span>
-                            <i className="tw-ml-1 fa fa-check-circle" />
+                <div className="space-x-4 flex items-center">
+                    <div className="font-medium">
+                        <span className="flex items-center text-green-light">
+                            <span className="leading-none">All changes saved to server</span>
+                            <i className="ml-1 fa fa-check-circle" />
                         </span>
                     </div>
-                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn">
                         Complete
                     </button>
                 </div>
@@ -167,14 +175,14 @@ describe("CompleteButton", () => {
         ) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
-                <div className="tw-space-x-4 tw-flex tw-items-center">
-                    <div className="tw-font-medium">
-                        <span className="tw-flex tw-items-center text-danger">
-                            <span className="tw-leading-none">Error saving latest changes</span>
-                            <i className="tw-ml-1 fa fa-exclamation-triangle" />
+                <div className="space-x-4 flex items-center">
+                    <div className="font-medium">
+                        <span className="flex items-center text-danger">
+                            <span className="leading-none">Error saving latest changes</span>
+                            <i className="ml-1 fa fa-exclamation-triangle" />
                         </span>
                     </div>
-                    <button type="button" className="tw-btn tw-btn-primary sbte-complete-subtitle-btn">
+                    <button type="button" className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn">
                         Complete
                     </button>
                 </div>
@@ -204,7 +212,7 @@ describe("CompleteButton", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-complete-subtitle-btn").simulate("click");
+        actualNode.find(".sbte-complete-subtitle-sbte-btn").simulate("click");
 
         // THEN
         expect(mockOnComplete).toHaveBeenCalledWith(

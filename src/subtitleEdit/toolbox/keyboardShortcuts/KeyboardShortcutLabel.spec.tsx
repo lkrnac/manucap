@@ -12,50 +12,50 @@ describe("KeyboardShortcutLabel", () => {
         const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
         const expectedNode = mount(
             <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="tw-flex tw-items-center tw-justify-center">
-                    <h4 className="tw-m-0">
-                        <span className="tw-keyboard-label">
+                <div className="flex items-center justify-center">
+                    <h4 className="m-0">
+                        <span className="sbte-keyboard-label">
                             {commandKey}
                         </span>
                     </h4>
                     <span>&#160;+&#160;</span>
                 </div>
-                <div className="tw-flex tw-items-center tw-justify-center">
-                    <h4 className="tw-m-0">
-                        <span className="tw-keyboard-label">
+                <div className="flex items-center justify-center">
+                    <h4 className="m-0">
+                        <span className="sbte-keyboard-label">
                             Shift
                         </span>
                     </h4>
                     <span>&#160;+&#160;</span>
                 </div>
-                <div className="tw-flex tw-items-center tw-justify-center">
-                    <h4 className="tw-m-0">
-                        <span className="tw-keyboard-label">
+                <div className="flex items-center justify-center">
+                    <h4 className="m-0">
+                        <span className="sbte-keyboard-label">
                             o
                         </span>
                     </h4>
                 </div>
-                <div className="tw-flex tw-items-center tw-justify-center">
+                <div className="flex items-center justify-center">
                     <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
-                    <div className="tw-flex tw-items-center tw-justify-center">
-                        <h4 className="tw-m-0">
-                            <span className="tw-keyboard-label">
+                    <div className="flex items-center justify-center">
+                        <h4 className="m-0">
+                            <span className="sbte-keyboard-label">
                                 Alt
                             </span>
                         </h4>
                         <span>&#160;+&#160;</span>
                     </div>
-                    <div className="tw-flex tw-items-center tw-justify-center">
-                        <h4 className="tw-m-0">
-                            <span className="tw-keyboard-label">
+                    <div className="flex items-center justify-center">
+                        <h4 className="m-0">
+                            <span className="sbte-keyboard-label">
                                 Shift
                             </span>
                         </h4>
                         <span>&#160;+&#160;</span>
                     </div>
-                    <div className="tw-flex tw-items-center tw-justify-center">
-                        <h4 className="tw-m-0">
-                            <span className="tw-keyboard-label">
+                    <div className="flex items-center justify-center">
+                        <h4 className="m-0">
+                            <span className="sbte-keyboard-label">
                                 o
                             </span>
                         </h4>
@@ -85,50 +85,50 @@ describe("KeyboardShortcutLabel", () => {
         const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
         const expectedNode = mount(
             <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="tw-hidden tw-items-center tw-justify-center">
-                    <h4 className="tw-m-0">
-                        <span className="tw-keyboard-label">
+                <div className="hidden items-center justify-center">
+                    <h4 className="m-0">
+                        <span className="sbte-keyboard-label">
                             {commandKey}
                         </span>
                     </h4>
                     <span>&#160;+&#160;</span>
                 </div>
-                <div className="tw-hidden tw-items-center tw-justify-center">
-                    <h4 className="tw-m-0">
-                        <span className="tw-keyboard-label">
+                <div className="hidden items-center justify-center">
+                    <h4 className="m-0">
+                        <span className="sbte-keyboard-label">
                             Shift
                         </span>
                     </h4>
                     <span>&#160;+&#160;</span>
                 </div>
-                <div className="tw-flex tw-items-center tw-justify-center">
-                    <h4 className="tw-m-0">
-                        <span className="tw-keyboard-label">
+                <div className="flex items-center justify-center">
+                    <h4 className="m-0">
+                        <span className="sbte-keyboard-label">
                             o
                         </span>
                     </h4>
                 </div>
-                <div className="tw-hidden tw-items-center tw-justify-center">
+                <div className="hidden items-center justify-center">
                     <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
-                    <div className="tw-hidden tw-items-center tw-justify-center">
-                        <h4 className="tw-m-0">
-                            <span className="tw-keyboard-label">
+                    <div className="hidden items-center justify-center">
+                        <h4 className="m-0">
+                            <span className="sbte-keyboard-label">
                                 Alt
                             </span>
                         </h4>
                         <span>&#160;+&#160;</span>
                     </div>
-                    <div className="tw-hidden tw-items-center tw-justify-center">
-                        <h4 className="tw-m-0">
-                            <span className="tw-keyboard-label">
+                    <div className="hidden items-center justify-center">
+                        <h4 className="m-0">
+                            <span className="sbte-keyboard-label">
                                 Shift
                             </span>
                         </h4>
                         <span>&#160;+&#160;</span>
                     </div>
-                    <div className="tw-flex tw-items-center tw-justify-center">
-                        <h4 className="tw-m-0">
-                            <span className="tw-keyboard-label">
+                    <div className="flex items-center justify-center">
+                        <h4 className="m-0">
+                            <span className="sbte-keyboard-label">
                                 o
                             </span>
                         </h4>
