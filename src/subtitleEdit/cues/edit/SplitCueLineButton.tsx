@@ -18,7 +18,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
             <button
                 id={buttonId}
                 style={{ maxHeight: "38px" }}
-                className="tw-btn tw-btn-outline-secondary sbte-split-cue-button tw-w-full tw-btn-sm"
+                className="tw-btn tw-btn-primary sbte-split-cue-button tw-w-full tw-btn-sm"
                 disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
                 data-pr-tooltip="Split this subtitle"

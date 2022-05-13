@@ -105,7 +105,7 @@ const CuesList = (props: Props): ReactElement => {
                         ? (
                             <button
                                 style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
-                                className="tw-btn tw-btn-outline-secondary sbte-previous-button shadow-none"
+                                className="tw-btn tw-btn-primary sbte-previous-button"
                                 onClick={(): void => {
                                     dispatch(changeScrollPosition(
                                         ScrollPosition.PREVIOUS_PAGE,
@@ -142,7 +142,7 @@ const CuesList = (props: Props): ReactElement => {
                         ? (
                             <button
                                 style={{ width: "100%", paddingTop: "5px" }}
-                                className="tw-btn tw-btn-outline-secondary sbte-next-button shadow-none"
+                                className="tw-btn tw-btn-primary sbte-next-button"
                                 onClick={(): void => {
                                     dispatch(changeScrollPosition(
                                         ScrollPosition.NEXT_PAGE,

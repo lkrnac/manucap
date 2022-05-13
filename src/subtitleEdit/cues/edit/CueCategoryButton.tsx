@@ -33,7 +33,7 @@ const CueCategoryButton = (props: Props): ReactElement => {
     return (
         <>
             <button
-                className="tw-dropdown-toggle tw-btn tw-btn-outline-secondary"
+                className="tw-dropdown-toggle tw-btn tw-btn-light"
                 aria-controls="cueCategoryMenu"
                 aria-haspopup
                 onClick={toggleMenu}

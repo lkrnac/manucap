@@ -85,9 +85,9 @@ const createExpectedNode = (
     words: number[],
     cps: number[]
 ): ReactWrapper => mount(
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", flex: "1 1 auto" }}>
         <div
-            className="tw-border-b-2 tw-border-blue-grey-200"
+            className="tw-border-b tw-border-blue-light/20"
             style={{
                 flexBasis: "25%",
                 display: "flex",
@@ -96,29 +96,29 @@ const createExpectedNode = (
             }}
         >
             <div className="tw-text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-                <span>DURATION: <span className="tw-tw-text-success">{duration}s</span>, </span>
+                <span>DURATION: <span className="tw-text-green-light">{duration}s</span>, </span>
                 <span>
                     CHARACTERS:{" "}
-                    <span className="tw-tw-text-success">
+                    <span className="tw-text-green-light">
                         {chars.reduce((a, b) => a + b, 0)}
                     </span>,{" "}
                 </span>
                 <span>
                     WORDS:{" "}
-                    <span className="tw-tw-text-success">
+                    <span className="tw-text-green-light">
                         {words.reduce((a, b) => a + b, 0)}
                     </span>,{" "}
                 </span>
                 <span>
                     CPS:{" "}
-                    <span className="tw-tw-text-success">
+                    <span className="tw-text-green-light">
                         {cps.reduce((a, b) => a + b, 0).toFixed(1)}
                     </span>
                 </span>
             </div>
         </div>
         <div
-            className="sbte-form-control tw-border-b-2 tw-border-blue-grey-200"
+            className="sbte-form-control tw-border-b tw-border-blue-light/20"
             style={{
                 display: "flex",
                 flexDirection: "row",
@@ -129,7 +129,7 @@ const createExpectedNode = (
                 minHeight: "54px"
             }}
         >
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1 }} className="tw-pr-2">
                 <Editor editorState={editorState} onChange={jest.fn} spellCheck={false} />
             </div>
             <div style={{ flex: 0 }}>
@@ -147,7 +147,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-primary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -157,7 +157,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-ITALIC0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-primary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -167,7 +167,7 @@ const createExpectedNode = (
             <button
                 id="inlineStyle-UNDERLINE0"
                 style={{ marginRight: 5 }}
-                className="tw-w-[44px] tw-btn tw-btn-outline-secondary"
+                className="tw-w-[44px] tw-btn tw-btn-primary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top-4"

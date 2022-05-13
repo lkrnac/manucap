@@ -82,7 +82,6 @@ const CueView = (props: CueViewProps): ReactElement => {
     const html = props.hideText
         ? ""
         : buildContent(props);
-    const undefinedSafeClassName = props.className ? `${props.className} ` : "";
 
     useEffect(() => {
         if (props.isTargetCue
@@ -124,11 +123,14 @@ const CueView = (props: CueViewProps): ReactElement => {
                         </div>
                     </div>
                 </div>
-                <div className="tw-border-l-2 tw-border-blue-grey-200" style={{ flex: "1 1 70%" }}>
+                <div
+                    className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
+                    style={{ flex: "1 1 70%" }}
+                >
                     <div
                         className="sbte-cue-editor"
                         style={{
-                            flexBasis: "50%",
+                            flexBasis: "auto",
                             paddingLeft: "10px",
                             paddingTop: "5px",
                             paddingBottom: "5px",
@@ -139,24 +141,19 @@ const CueView = (props: CueViewProps): ReactElement => {
                         dir={props.languageDirection}
                         dangerouslySetInnerHTML={{ __html: html }}
                     />
+                    {
+                        props.targetCueIndex !== undefined && props.isTargetCue
+                            ? (
+                                <CueActionsPanel
+                                    index={props.targetCueIndex}
+                                    cue={props.cue}
+                                    isEdit={false}
+                                    sourceCueIndexes={props.sourceCuesIndexes}
+                                />
+                            )
+                            : null
+                    }
                 </div>
-                {
-                    props.targetCueIndex !== undefined && props.isTargetCue
-                        ? (
-                            <CueActionsPanel
-                                index={props.targetCueIndex}
-                                cue={props.cue}
-                                isEdit={false}
-                                sourceCueIndexes={props.sourceCuesIndexes}
-                            />
-                        )
-                        : (
-                            <div
-                                className={`${undefinedSafeClassName}tw-border-l-2 tw-border-blue-grey-200`}
-                                style={{ minWidth: "58px" }}
-                            />
-                        )
-                }
             </>
         </ClickCueWrapper>
     );
