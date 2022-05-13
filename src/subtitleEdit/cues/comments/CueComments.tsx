@@ -37,7 +37,7 @@ const CueComments = (props: Props): ReactElement => {
             <button
                 id={`deleteCueCommentButton-${cueIndex}-${commentIndex}`}
                 data-testid="sbte-delete-cue-comment-button"
-                className="tw-btn tw-btn-outline-secondary tw-btn-xs sbte-delete-cue-comment-button"
+                className="tw-btn tw-btn-primary tw-btn-xs sbte-delete-cue-comment-button"
                 data-pr-tooltip="Delete comment"
                 data-pr-position="left"
                 data-pr-at="left top+10"
@@ -90,7 +90,7 @@ const CueComments = (props: Props): ReactElement => {
                             <span>{comment.comment}</span>
                         </div>
                         <div className="tw-flex tw-items-center tw-space-x-1.5">
-                            <span className="tw-text-blue-grey-500">
+                            <span className="tw-text-gray-500">
                                 <i><DateTime value={comment.date} /></i>
                             </span>
                             {
@@ -108,7 +108,7 @@ const CueComments = (props: Props): ReactElement => {
                     : null
             }
             <hr
-                className="tw-border-t-2 tw-border-blue-grey-200"
+                className="tw-border-t tw-border-blue-light/20"
                 style={{
                     width: "100%",
                     height: "0px",
@@ -136,7 +136,7 @@ const CueComments = (props: Props): ReactElement => {
                 />
                 <button
                     type="button"
-                    className="tw-btn tw-btn-xs tw-btn-outline-secondary"
+                    className="tw-btn tw-btn-xs tw-btn-primary"
                     style={{ float: "right", marginLeft: "5px" }}
                     onClick={addNewComment}
                     disabled={!text}

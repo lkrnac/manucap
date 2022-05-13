@@ -34,7 +34,7 @@ describe("Toolbox", () => {
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <button
-                        className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-secondary tw-flex
+                        className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-light tw-flex
                                 tw-items-center tw-justify-center"
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
@@ -82,7 +82,7 @@ describe("Toolbox", () => {
                     <ExportSourceTrackCuesButton handleExport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <button
-                        className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-secondary tw-flex
+                        className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-light tw-flex
                                 tw-items-center tw-justify-center"
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"

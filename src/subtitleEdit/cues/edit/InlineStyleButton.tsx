@@ -13,11 +13,12 @@ interface Props {
 
 const InlineStyleButton = (props: Props): ReactElement => {
     const buttonStyle = props.editorState && props.editorState.getCurrentInlineStyle().has(props.inlineStyle)
-        ? "tw-btn tw-btn-secondary"
-        : "tw-btn tw-btn-outline-secondary";
+        ? "tw-btn tw-btn-primary active"
+        : "tw-btn tw-btn-primary";
     const buttonId = `inlineStyle-${props.inlineStyle}${props.editorIndex}`;
     return (
         <>
+            {/** TODO: Get rid of Tailwind preprocessed value: [44px] **/}
             <button
                 id={buttonId}
                 style={{ marginRight: "5px" }}

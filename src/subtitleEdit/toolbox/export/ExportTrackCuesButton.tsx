@@ -14,7 +14,7 @@ const ExportTrackCuesButton = (props: Props): ReactElement => {
         <>
             <button
                 id="exportFileBtn"
-                className="sbte-export-button tw-btn tw-btn-secondary"
+                className="sbte-export-button tw-btn tw-btn-light"
                 onClick={(): void => props.handleExport(editingTrack)}
                 data-pr-tooltip="Export File"
                 data-pr-position="top"

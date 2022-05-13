@@ -137,7 +137,7 @@ describe("SpellCheckerIssue", () => {
             >
                 <ul className="p-menu-list p-reset" role="menu">
                     <li className="p-menuitem" role="none">
-                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-gray-0 tw-text-700 tw-p-2">
                             There is error
                         </div>
                         <div>
@@ -208,7 +208,7 @@ describe("SpellCheckerIssue", () => {
             >
                 <ul className="p-menu-list p-reset" role="menu">
                     <li className="p-menuitem" role="none">
-                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-grey-100 tw-p-2">
+                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-gray-0 tw-text-700 tw-p-2">
                             There is error
                         </div>
                         <div>
