@@ -39,7 +39,7 @@ describe("CueCommentsToggle", () => {
         const expectedNode = render(
             <button
                 type="button"
-                className="tw-flex tw-items-center tw-justify-between tw-outline-0"
+                className="tw-flex tw-items-center tw-justify-between tw-outline-0 active"
             >
                 Comments <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">SHOWN</span>
             </button>

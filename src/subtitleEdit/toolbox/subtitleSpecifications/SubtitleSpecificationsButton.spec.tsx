@@ -35,7 +35,7 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <button
                     id="subtitleSpecsBtn"
-                    className="dotsub-subtitle-specifications-button tw-btn tw-btn-secondary"
+                    className="dotsub-subtitle-specifications-button tw-btn tw-btn-light"
                     data-pr-tooltip="Subtitle Specifications"
                     data-pr-position="top"
                     data-pr-at="center+2 top-2"
@@ -70,7 +70,7 @@ describe("SubtitleSpecificationsButton", () => {
             <Provider store={testingStore}>
                 <button
                     id="subtitleSpecsBtn"
-                    className="dotsub-subtitle-specifications-button tw-btn tw-btn-secondary"
+                    className="dotsub-subtitle-specifications-button tw-btn tw-btn-light"
                     data-pr-tooltip="Subtitle Specifications"
                     data-pr-position="top"
                     data-pr-at="center+2 top-2"

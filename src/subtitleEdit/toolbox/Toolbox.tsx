@@ -46,6 +46,8 @@ const Toolbox = (props: Props): ReactElement => {
     const [showShiftTimeModal, setShiftTimeModal] = useState<boolean>(false);
     const [showKbModal, setKbModal] = useState<boolean>(false);
 
+    // TODO: Get rid of Tailwind preprocessed value: [100]
+
     return (
         <div
             className="tw-mt-6 tw-space-x-2 tw-flex tw-items-stretch
@@ -64,7 +66,7 @@ const Toolbox = (props: Props): ReactElement => {
                 handleExport={props.handleExportFile}
             />
             <button
-                className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-secondary tw-flex
+                className="tw-select-none tw-dropdown-toggle tw-btn tw-btn-light tw-flex
                     tw-items-center tw-justify-center"
                 onClick={toggleMenu}
                 aria-controls="toolboxMenu"
@@ -72,6 +74,7 @@ const Toolbox = (props: Props): ReactElement => {
             >
                 <i className="fas fa-ellipsis-h" />
             </button>
+            {/** TODO: Get rid of Tailwind preprocessed value: [260px] **/}
             <Menu
                 id="toolboxMenu"
                 className="tw-w-[260px] tw-min-w-[260px]"

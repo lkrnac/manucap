@@ -29,10 +29,10 @@ const CueLineCounts = (props: Props): ReactElement => {
 
     return (
         <div className="tw-text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-            <span>DURATION: <span className="tw-tw-text-success">{getDuration(props.vttCue)}s</span>, </span>
-            <span>CHARACTERS: <span className="tw-tw-text-success">{getCharacterCount(text)}</span>, </span>
-            <span>WORDS: <span className="tw-tw-text-success">{getWordCount(text)}</span>, </span>
-            <span>CPS: <span className="tw-tw-text-success">{cps}</span></span>
+            <span>DURATION: <span className="tw-text-green-light">{getDuration(props.vttCue)}s</span>, </span>
+            <span>CHARACTERS: <span className="tw-text-green-light">{getCharacterCount(text)}</span>, </span>
+            <span>WORDS: <span className="tw-text-green-light">{getWordCount(text)}</span>, </span>
+            <span>CPS: <span className="tw-text-green-light">{cps}</span></span>
         </div>
     );
 };
