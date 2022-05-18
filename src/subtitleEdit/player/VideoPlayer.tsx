@@ -3,8 +3,8 @@ import { CueChange, CueDto, LanguageCues, Track, WaveformRegion } from "../model
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../utils/shortcutConstants";
-import * as React from "react";
 import { ReactElement, RefObject } from "react";
+import * as React from "react";
 import { convertToTextTrackOptions } from "./textTrackOptionsConversion";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
 import { getTimeString } from "../utils/timeUtils";
@@ -91,10 +91,7 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack, trackF
 };
 
 const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
-
-    console.log("Should edit", lastCueChange);
     if (lastCueChange.changeType === "EDIT" && vttCue) {
-        console.log("Editing Cue....");
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
@@ -105,9 +102,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFo
 
 const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
                               trackFontSizePercent?: number): void => {
-
     if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
-        console.log("Adding Cue....");
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
             cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
@@ -182,7 +177,6 @@ class VideoPlayer extends React.Component<Props> {
     componentDidUpdate(prevProps: Props): void {
         const lastCueChange = this.props.lastCueChange;
         const videoJsTrack = (this.player.textTracks())[0];
-        console.log(lastCueChange?.changeType);
         if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
             handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
                 prevProps.trackFontSizePercent);
@@ -383,14 +377,14 @@ class VideoPlayer extends React.Component<Props> {
                     data-setup="{}"
                 />
                 {
-                    this.props.waveform && this.props.duration ?
-                        <div
-                            className="sbte-waveform tw-overflow-hidden"
-                            hidden={!this.props.waveformVisible}
-                        >
-                            <div ref={this.waveformRef} />
-                            <div ref={this.waveformTimelineRef} />
-                        </div>
+                     this.props.waveform && this.props.duration ?
+                         <div
+                             className="sbte-waveform tw-overflow-hidden"
+                             hidden={!this.props.waveformVisible}
+                         >
+                             <div ref={this.waveformRef} />
+                             <div ref={this.waveformTimelineRef} />
+                         </div>
                         : null
                 }
             </div>
