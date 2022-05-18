@@ -82,8 +82,8 @@ export interface SpellcheckerSettings {
 }
 
 export interface Task {
-    readonly type: "TASK_CAPTION" | "TASK_TRANSLATE" | "TASK_DIRECT_TRANSLATE" | "TASK_REVIEW" | "TASK_POST_EDITING"
-        | "TASK_PROOF_READING" | "TASK_SIGN_OFF";
+    readonly type: "TASK_CAPTION" | "TASK_TRANSLATE" | "TASK_DIRECT_TRANSLATE" | "TASK_PIVOT_TRANSLATE" | "TASK_REVIEW"
+        | "TASK_POST_EDITING" | "TASK_PROOF_READING" | "TASK_SIGN_OFF";
     readonly projectName: string;
     readonly dueDate: string;
     readonly editDisabled: boolean;
