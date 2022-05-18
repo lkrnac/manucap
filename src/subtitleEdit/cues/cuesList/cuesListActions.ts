@@ -387,7 +387,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     };
 
 export const splitCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
+    async (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): Promise<void> => {
         const state: SubtitleEditState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
@@ -407,9 +407,13 @@ export const splitCue = (idx: number): AppThunk =>
             const updatedCue = { ...originalCue, idx, vttCue: updatedVttCue, editUuid: originalCue.editUuid };
             dispatch(cuesSlice.actions.updateVttCue(updatedCue));
             dispatch(cuesSlice.actions.addCue({ idx: idx + 1, cue: splitCue }));
+            await dispatch(lastCueChangeSlice.actions.recordCueChange(
+                { changeType: "EDIT", index: idx, vttCue: updatedCue.vttCue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange(
                 { changeType: "SPLIT", index: idx, vttCue: originalCue.vttCue }));
             dispatch(updateMatchedCues());
+            dispatch(lastCueChangeSlice.actions.recordCueChange(
+                { changeType: "ADD" , index: (idx + 1), vttCue: splitCue.vttCue }));
             callSaveTrack(dispatch, getState, true);
         } else {
             dispatch(validationErrorSlice.actions.setValidationErrors([CueError.SPLIT_ERROR]));
