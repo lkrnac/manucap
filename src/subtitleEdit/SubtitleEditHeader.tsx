@@ -71,6 +71,7 @@ const getTrackDescription = (task: Task, track: Track): ReactElement => {
     }
     const trackDescriptions = {
         TASK_TRANSLATE: <div>Translation from {getLanguageDescription(track)} {getTrackLength(track)}</div>,
+        TASK_PIVOT_TRANSLATE: <div>Translation from {getLanguageDescription(track)} {getTrackLength(track)}</div>,
         TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}</div>,
         TASK_REVIEW: getReviewHeader(task, track),
         TASK_POST_EDITING: getReviewHeader(task, track),
