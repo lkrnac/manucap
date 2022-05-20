@@ -50,7 +50,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fas fa-cut"/>
+                    <i className="fas fa-cut" />
                 </button>
             </div>
         );
@@ -58,7 +58,7 @@ describe("SplitCueLineButton", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SplitCueLineButton cueIndex={0}/>
+                <SplitCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -81,7 +81,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fas fa-cut"/>
+                    <i className="fas fa-cut" />
                 </button>
             </div>
         );
@@ -89,7 +89,7 @@ describe("SplitCueLineButton", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SplitCueLineButton cueIndex={0}/>
+                <SplitCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -115,7 +115,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fas fa-cut"/>
+                    <i className="fas fa-cut" />
                 </button>
             </div>
         );
@@ -123,7 +123,7 @@ describe("SplitCueLineButton", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SplitCueLineButton cueIndex={0}/>
+                <SplitCueLineButton cueIndex={0} />
             </Provider>
         );
 
@@ -142,7 +142,7 @@ describe("SplitCueLineButton", () => {
 
         const actualNode = render(
             <Provider store={testingStore}>
-                <SplitCueLineButton cueIndex={0}/>
+                <SplitCueLineButton cueIndex={0} />
             </Provider>
         );
 
