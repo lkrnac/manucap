@@ -11,8 +11,8 @@ describe("PositionButton", () => {
         const vttCue = new VTTCue(0, 1, "some text");
         const expectedNode = mount(
             <button
-                className="tw-select-none tw-flex tw-items-center tw-justify-center tw-dropdown-toggle tw-btn
-                    tw-btn-light tw-w-[68px]"
+                className="select-none flex items-center justify-center sbte-dropdown-toggle sbte-btn
+                    sbte-btn-light w-[68px]"
                 aria-controls="positionButtonMenu"
                 aria-haspopup="true"
             >
@@ -35,8 +35,8 @@ describe("PositionButton", () => {
         const expectedNode = render(
             <>
                 <button
-                    className="tw-select-none tw-flex tw-items-center tw-justify-center tw-dropdown-toggle tw-btn
-                    tw-btn-light tw-w-[68px]"
+                    className="select-none flex items-center justify-center sbte-dropdown-toggle sbte-btn
+                    sbte-btn-light w-[68px]"
                     aria-controls="positionButtonMenu"
                     aria-haspopup="true"
                 >
@@ -45,7 +45,7 @@ describe("PositionButton", () => {
                 </button>
                 <div
                     id="positionButtonMenu"
-                    className="p-menu p-component position-button-list tw-w-[210px] tw-min-w-[210px] p-menu-overlay
+                    className="p-menu p-component position-button-list w-[210px] min-w-[210px] p-menu-overlay
                         p-connected-overlay-enter p-connected-overlay-enter-active"
                     style={{
                         zIndex: 1001,
@@ -62,224 +62,224 @@ describe("PositionButton", () => {
                     >
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center
+                                p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↖↖
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center
+                                p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↖↑
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center
+                                p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↑↑
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center
+                                p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↑↗
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↗↗
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center
+                                p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↖←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center
+                                p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↖
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↑
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center
-                                tw-p-2 tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center
+                                p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↗
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 →↗
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ←←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                            tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                            hover:tw-text-blue-light"
+                            <span className="w-[38px] inline-flex items-center justify-center p-2
+                            text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                            hover:text-blue-light"
                             >
                                 ←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 •
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 →
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 →→
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↙←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↙
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↓
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↘
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 →↘
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↙↙
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↙↓
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↓↓
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↓↘
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
                             <span
-                                className="tw-w-[38px] tw-inline-flex tw-items-center tw-justify-center tw-p-2
-                                tw-text-gray-700 tw-rounded tw-cursor-pointer hover:tw-bg-blue-light/10
-                                hover:tw-text-blue-light"
+                                className="w-[38px] inline-flex items-center justify-center p-2
+                                text-gray-700 rounded cursor-pointer hover:bg-blue-light/10
+                                hover:text-blue-light"
                             >
                                 ↘↘
                             </span>
@@ -326,6 +326,6 @@ describe("PositionButton", () => {
         const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
 
         // THEN
-        expect(actualNode.find(".tw-dropdown-toggle").text()).toEqual("↖");
+        expect(actualNode.find(".sbte-dropdown-toggle").text()).toEqual("↖");
     });
 });

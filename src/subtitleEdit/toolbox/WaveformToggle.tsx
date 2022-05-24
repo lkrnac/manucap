@@ -13,7 +13,7 @@ export const WaveformToggle = (props: Props): ReactElement => {
     const waveformVisible = useSelector((state: SubtitleEditState) => state.waveformVisible);
     return (
         <ToggleButton
-            className="tw-flex tw-items-center tw-justify-between"
+            className="flex items-center justify-between"
             toggled={waveformVisible}
             onClick={(event): void => {
                 dispatch(waveformVisibleSlice.actions.setWaveformVisible(!waveformVisible));
@@ -24,13 +24,13 @@ export const WaveformToggle = (props: Props): ReactElement => {
                     ? (
                         <>
                             Waveform{" "}
-                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">SHOWN</span>
+                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">SHOWN</span>
                         </>
                     )
                     : (
                         <>
                             Waveform{" "}
-                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">HIDDEN</span>
+                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
                         </>
                     )
             )}

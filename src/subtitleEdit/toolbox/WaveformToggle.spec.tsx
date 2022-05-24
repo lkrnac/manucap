@@ -18,8 +18,8 @@ describe("WaveformToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="tw-flex tw-items-center tw-justify-between">
-                Waveform <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">HIDDEN</span>
+            <button type="button" className="flex items-center justify-between">
+                Waveform <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
             </button>
         );
 
@@ -39,9 +39,9 @@ describe("WaveformToggle", () => {
         const expectedNode = render(
             <button
                 type="button"
-                className="tw-flex tw-items-center tw-justify-between tw-outline-0 active"
+                className="flex items-center justify-between outline-0 active"
             >
-                Waveform <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">SHOWN</span>
+                Waveform <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">SHOWN</span>
             </button>
         );
 

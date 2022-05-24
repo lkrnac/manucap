@@ -12,11 +12,11 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const buttonId = `deleteCueLineButton${props.cueIndex}`;
     return (
-        <div className="tw-p-1.5">
+        <div className="p-1.5">
             <button
                 id={buttonId}
                 style={{ maxHeight: "38px" }}
-                className="tw-btn tw-btn-primary tw-btn-sm sbte-delete-cue-button tw-w-full"
+                className="sbte-btn sbte-btn-primary sbte-btn-sm sbte-delete-cue-button w-full"
                 onClick={(): AppThunk => dispatch(deleteCue(props.cueIndex))}
                 data-pr-tooltip="Delete this subtitle"
                 data-pr-position="left"

@@ -19,7 +19,7 @@ export const CaptionOverlapToggle = (props: Props): ReactElement => {
     const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
     return (
         <ToggleButton
-            className="tw-flex tw-items-center tw-justify-between"
+            className="flex items-center justify-between"
             disabled={isPendingSaveState(saveState)}
             toggled={overlapEnabled}
             onClick={(event): void => {
@@ -37,12 +37,12 @@ export const CaptionOverlapToggle = (props: Props): ReactElement => {
                     ? (
                         <>
                             Overlapping{" "}
-                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">ALLOWED</span>
+                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">ALLOWED</span>
                         </>
                     ) : (
                         <>
                             Overlapping{" "}
-                            <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
+                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">NOT ALLOWED</span>
                         </>
                     )
             )}

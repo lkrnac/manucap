@@ -39,11 +39,11 @@ describe("SplitCueLineButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <div className="tw-p-1.5">
+            <div className="p-1.5">
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="tw-btn tw-btn-primary sbte-split-cue-button tw-w-full tw-btn-sm"
+                    className="sbte-btn sbte-btn-primary sbte-split-cue-button w-full sbte-btn-sm"
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
@@ -70,11 +70,11 @@ describe("SplitCueLineButton", () => {
     it("renders enabled if timecodes are locked but track is caption", () => {
         // GIVEN
         const expectedNode = render(
-            <div className="tw-p-1.5">
+            <div className="p-1.5">
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="tw-btn tw-btn-primary sbte-split-cue-button tw-w-full tw-btn-sm"
+                    className="sbte-btn sbte-btn-primary sbte-split-cue-button w-full sbte-btn-sm"
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
@@ -103,11 +103,11 @@ describe("SplitCueLineButton", () => {
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
-            <div className="tw-p-1.5">
+            <div className="p-1.5">
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="tw-btn tw-btn-primary sbte-split-cue-button tw-w-full tw-btn-sm"
+                    className="sbte-btn sbte-btn-primary sbte-split-cue-button w-full sbte-btn-sm"
                     disabled
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"

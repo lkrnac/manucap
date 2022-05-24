@@ -29,7 +29,7 @@ describe("KeyboardShortcutsModal", () => {
                         p-dialog-visible p-dialog-center"
                 >
                     <div
-                        className="p-dialog p-component tw-max-w-4xl p-dialog-enter p-dialog-enter-active"
+                        className="p-dialog p-component max-w-4xl p-dialog-enter p-dialog-enter-active"
                         role="dialog"
                         aria-labelledby=""
                         aria-describedby=""
@@ -50,7 +50,7 @@ describe("KeyboardShortcutsModal", () => {
                             </div>
                         </div>
                         <div className="p-dialog-content">
-                            <div className="tw-space-y-4">
+                            <div className="space-y-4">
                                 <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
                                 <KeyboardShortcutLabel character="k" name="Toggle Play / Pause Current Cue" />
                                 <KeyboardShortcutLabel character="←" name="Seek Back 1 Second" />
@@ -73,7 +73,7 @@ describe("KeyboardShortcutsModal", () => {
                             </div>
                         </div>
                         <div className="p-dialog-footer">
-                            <button className="tw-btn tw-btn-primary" onClick={jest.fn()}>
+                            <button className="sbte-btn sbte-btn-primary" onClick={jest.fn()}>
                                 Close
                             </button>
                         </div>

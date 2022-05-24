@@ -69,7 +69,7 @@ describe("ShiftTimesModal", () => {
         // GIVEN
         const expectedNode = render(
             <div
-                className="p-dialog p-component tw-max-w-3xl p-dialog-enter p-dialog-enter-active"
+                className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
                 role="dialog"
                 aria-labelledby=""
                 aria-describedby=""
@@ -88,13 +88,13 @@ describe("ShiftTimesModal", () => {
                     </div>
                 </div>
                 <div className="p-dialog-content">
-                    <form className="tw-space-y-4">
+                    <form className="space-y-4">
                         <div>
                             <label>Time Shift in Seconds.Milliseconds</label>
                             <input
                                 name="shiftTime"
                                 type="number"
-                                className="tw-form-control dotsub-track-line-shift margin-right-10"
+                                className="sbte-form-control dotsub-track-line-shift margin-right-10"
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
@@ -102,7 +102,7 @@ describe("ShiftTimesModal", () => {
                                 onChange={jest.fn()}
                             />
                         </div>
-                        <fieldset className="tw-space-y-1">
+                        <fieldset className="space-y-1">
                             <div className="form-check">
                                 <label>
                                     <input
@@ -139,13 +139,13 @@ describe("ShiftTimesModal", () => {
                 <div className="p-dialog-footer">
                     <button
                         type="submit"
-                        className="dotsub-shift-modal-apply-button tw-btn tw-btn-primary"
+                        className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
                     >
                         Apply
                     </button>
                     <button
                         type="button"
-                        className="dotsub-shift-modal-close-button tw-btn tw-btn-secondary"
+                        className="dotsub-shift-modal-close-button sbte-btn sbte-btn-secondary"
                     >
                         Close
                     </button>
@@ -175,7 +175,7 @@ describe("ShiftTimesModal", () => {
 
         const expectedNode = render(
             <div
-                className="p-dialog p-component tw-max-w-3xl p-dialog-enter p-dialog-enter-active"
+                className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
                 role="dialog"
                 aria-labelledby=""
                 aria-describedby=""
@@ -194,13 +194,13 @@ describe("ShiftTimesModal", () => {
                     </div>
                 </div>
                 <div className="p-dialog-content">
-                    <form className="tw-space-y-4">
+                    <form className="space-y-4">
                         <div>
                             <label>Time Shift in Seconds.Milliseconds</label>
                             <input
                                 name="shiftTime"
                                 type="number"
-                                className="tw-form-control dotsub-track-line-shift margin-right-10"
+                                className="sbte-form-control dotsub-track-line-shift margin-right-10"
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
@@ -208,7 +208,7 @@ describe("ShiftTimesModal", () => {
                                 onChange={jest.fn()}
                             />
                         </div>
-                        <fieldset className="tw-space-y-1">
+                        <fieldset className="space-y-1">
                             <div className="form-check">
                                 <label>
                                     <input
@@ -243,7 +243,7 @@ describe("ShiftTimesModal", () => {
                         <div>
                             <Message
                                 severity="error"
-                                className="tw-w-full tw-justify-start"
+                                className="w-full justify-start"
                                 text="The start time of the first cue plus the shift value must
                                     be greater or equal to 0"
                             />
@@ -254,12 +254,12 @@ describe("ShiftTimesModal", () => {
                     <button
                         type="submit"
                         disabled
-                        className="dotsub-shift-modal-apply-button tw-btn tw-btn-primary"
+                        className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
                     >Apply
                     </button>
                     <button
                         type="button"
-                        className="dotsub-shift-modal-close-button tw-btn tw-btn-secondary"
+                        className="dotsub-shift-modal-close-button sbte-btn sbte-btn-secondary"
                     >Close
                     </button>
                 </div>
@@ -291,7 +291,7 @@ describe("ShiftTimesModal", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="p-dialog p-component tw-max-w-3xl p-dialog-enter p-dialog-enter-active"
+                    className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
                     role="dialog"
                     aria-labelledby=""
                     aria-describedby=""
@@ -310,13 +310,13 @@ describe("ShiftTimesModal", () => {
                         </div>
                     </div>
                     <div className="p-dialog-content">
-                        <form className="tw-space-y-4">
+                        <form className="space-y-4">
                             <div>
                                 <label>Time Shift in Seconds.Milliseconds</label>
                                 <input
                                     name="shiftTime"
                                     type="number"
-                                    className="tw-form-control dotsub-track-line-shift margin-right-10"
+                                    className="sbte-form-control dotsub-track-line-shift margin-right-10"
                                     style={{ width: "120px" }}
                                     placeholder="0.000"
                                     step="0.100"
@@ -324,7 +324,7 @@ describe("ShiftTimesModal", () => {
                                     onChange={jest.fn()}
                                 />
                             </div>
-                            <fieldset className="tw-space-y-1">
+                            <fieldset className="space-y-1">
                                 <div className="form-check">
                                     <label>
                                         <input
@@ -361,12 +361,12 @@ describe("ShiftTimesModal", () => {
                     <div className="p-dialog-footer">
                         <button
                             type="submit"
-                            className="dotsub-shift-modal-apply-button tw-btn tw-btn-primary"
+                            className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
                         >Apply
                         </button>
                         <button
                             type="button"
-                            className="dotsub-shift-modal-close-button tw-btn tw-btn-secondary"
+                            className="dotsub-shift-modal-close-button sbte-btn sbte-btn-secondary"
                         >Close
                         </button>
                     </div>
@@ -513,7 +513,7 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        const closeBtn = container.querySelectorAll(".tw-btn.tw-btn-secondary")[0];
+        const closeBtn = container.querySelectorAll(".sbte-btn.sbte-btn-secondary")[0];
         fireEvent.click(closeBtn);
 
         // THEN

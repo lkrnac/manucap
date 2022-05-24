@@ -18,8 +18,8 @@ describe("CueCommentsToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="tw-flex tw-items-center tw-justify-between">
-                Comments <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">HIDDEN</span>
+            <button type="button" className="flex items-center justify-between">
+                Comments <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
             </button>
         );
 
@@ -39,9 +39,9 @@ describe("CueCommentsToggle", () => {
         const expectedNode = render(
             <button
                 type="button"
-                className="tw-flex tw-items-center tw-justify-between tw-outline-0 active"
+                className="flex items-center justify-between outline-0 active"
             >
-                Comments <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">SHOWN</span>
+                Comments <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">SHOWN</span>
             </button>
         );
 

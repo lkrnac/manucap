@@ -132,12 +132,12 @@ describe("SpellCheckerIssue", () => {
         const expectedNode = mount(
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
-                className="p-menu p-component spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0
-                    tw-shadow-md p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
+                className="p-menu p-component spellcheck-menu w-[260px] min-w-[260px] p-0
+                    shadow-md p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
             >
                 <ul className="p-menu-list p-reset" role="menu">
                     <li className="p-menuitem" role="none">
-                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-gray-0 tw-text-700 tw-p-2">
+                        <div className="border-b border-b-gray-300 bg-gray-0 text-700 p-2">
                             There is error
                         </div>
                         <div>
@@ -203,12 +203,12 @@ describe("SpellCheckerIssue", () => {
         const expectedNode = mount(
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
-                className="p-menu p-component spellcheck-menu tw-w-[260px] tw-min-w-[260px] tw-p-0
-                    tw-shadow-md p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
+                className="p-menu p-component spellcheck-menu w-[260px] min-w-[260px] p-0
+                    shadow-md p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
             >
                 <ul className="p-menu-list p-reset" role="menu">
                     <li className="p-menuitem" role="none">
-                        <div className="tw-border-b tw-border-b-gray-300 tw-bg-gray-0 tw-text-700 tw-p-2">
+                        <div className="border-b border-b-gray-300 bg-gray-0 text-700 p-2">
                             There is error
                         </div>
                         <div>

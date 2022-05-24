@@ -6,7 +6,7 @@ describe("CueExtraCharacters", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = mount(
-            <span className="tw-text-danger">
+            <span className="text-danger">
                 <div className="text">sample text</div>
             </span>
         );

@@ -117,14 +117,14 @@ const CueView = (props: CueViewProps): ReactElement => {
                         <div>{getTimeString(props.cue.vttCue.endTime)}</div>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "5px" }}>
-                        <div className="tw-text-sm">{cueCategoryToPrettyName[props.cue.cueCategory]}</div>
-                        <div className="tw-text-sm" style={{ paddingRight: "10px" }}>
+                        <div className="text-sm">{cueCategoryToPrettyName[props.cue.cueCategory]}</div>
+                        <div className="text-sm" style={{ paddingRight: "10px" }}>
                             {findPositionIcon(props.cue.vttCue).iconText}
                         </div>
                     </div>
                 </div>
                 <div
-                    className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
+                    className="border-l border-blue-light/20 flex items-stretch"
                     style={{ flex: "1 1 70%" }}
                 >
                     <div

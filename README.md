@@ -1,6 +1,6 @@
 # vtms-subtitle-edit-ui
 
-> 
+>
 
 [![NPM](https://img.shields.io/npm/v/vtms-subtitle-edit-ui.svg)](https://www.npmjs.com/package/vtms-subtitle-edit-ui) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -35,7 +35,7 @@ npm run autoreload
 ```
 
 ### Auto-build library
-When code is changed, it will automatically create distribution package  
+When code is changed, it will automatically create distribution package
 ```bash
 npm start
 ```

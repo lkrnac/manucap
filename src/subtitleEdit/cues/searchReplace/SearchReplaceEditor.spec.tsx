@@ -59,17 +59,17 @@ describe("SearchReplaceEditor", () => {
         const expectedNode = render(
             <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
                 <div style={{ display: "flex", flexFlow: "row", width: "50%" }}>
-                    <input type="text" defaultValue="" placeholder="Find" className="tw-form-control !tw-h-full" />
+                    <input type="text" defaultValue="" placeholder="Find" className="sbte-form-control !h-full" />
                     <input
                         type="text"
                         defaultValue=""
                         placeholder="Replace"
-                        className="tw-form-control !tw-h-full"
+                        className="sbte-form-control !h-full"
                         style={{ marginLeft: "5px" }}
                     />
                 </div>
                 <button
-                    className="tw-btn tw-btn-light tw-btn-sm sbte-search-next"
+                    className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-next"
                     type="button"
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-next"
@@ -77,7 +77,7 @@ describe("SearchReplaceEditor", () => {
                     <i className="fa fa-arrow-down" />
                 </button>
                 <button
-                    className="tw-btn tw-btn-light tw-btn-sm sbte-search-prev"
+                    className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-prev"
                     type="button"
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-prev"
@@ -85,7 +85,7 @@ describe("SearchReplaceEditor", () => {
                     <i className="fa fa-arrow-up" />
                 </button>
                 <button
-                    className="tw-btn tw-btn-light tw-btn-sm"
+                    className="sbte-btn sbte-btn-light sbte-btn-sm"
                     type="button"
                     disabled
                     style={{ marginLeft: "5px" }}
@@ -93,14 +93,14 @@ describe("SearchReplaceEditor", () => {
                     Replace
                 </button>
                 <button
-                    className="tw-btn tw-btn-light tw-btn-sm"
+                    className="sbte-btn sbte-btn-light sbte-btn-sm"
                     type="button"
                     style={{ marginLeft: "5px", marginRight: "5px" }}
                 >
                     Replace All
                 </button>
                 <ToggleButton
-                    className="tw-btn tw-btn-light"
+                    className="sbte-btn sbte-btn-light"
                     toggled={false}
                     onClick={jest.fn()}
                     render={(): ReactElement => (<span>Aa</span>)}
@@ -108,10 +108,10 @@ describe("SearchReplaceEditor", () => {
                 />
                 <span style={{ flex: 1 }} />
                 <button
-                    className="tw-btn tw-btn-danger tw-btn-sm"
+                    className="sbte-btn sbte-btn-danger sbte-btn-sm"
                     type="button"
                     style={{ marginLeft: "5px" }}
-                    data-testid="sbte-close-search-replace-btn"
+                    data-testid="sbte-close-search-replace-sbte-btn"
                 >
                     <i className="far fa-times-circle" />
                 </button>
@@ -189,7 +189,7 @@ describe("SearchReplaceEditor", () => {
                 <SearchReplaceEditor />
             </Provider>
         );
-        const closeButton = getByTestId("sbte-close-search-replace-btn");
+        const closeButton = getByTestId("sbte-close-search-replace-sbte-btn");
 
         // WHEN
         fireEvent.click(closeButton);

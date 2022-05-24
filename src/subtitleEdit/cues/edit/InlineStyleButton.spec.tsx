@@ -19,7 +19,7 @@ describe("InlineStyleButton", () => {
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: "5px" }}
-                className="tw-w-[44px] tw-btn tw-btn-primary"
+                className="w-[44px] sbte-btn sbte-btn-primary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -53,7 +53,7 @@ describe("InlineStyleButton", () => {
             <button
                 id="inlineStyle-BOLD0"
                 style={{ marginRight: "5px" }}
-                className="tw-w-[44px] tw-btn tw-btn-primary active"
+                className="w-[44px] sbte-btn sbte-btn-primary active"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -86,7 +86,7 @@ describe("InlineStyleButton", () => {
             <button
                 id="inlineStyle-ITALIC0"
                 style={{ marginRight: "5px" }}
-                className="tw-w-[44px] tw-btn tw-btn-primary active"
+                className="w-[44px] sbte-btn sbte-btn-primary active"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -119,7 +119,7 @@ describe("InlineStyleButton", () => {
             <button
                 id="inlineStyle-UNDERLINE0"
                 style={{ marginRight: "5px" }}
-                className="tw-w-[44px] tw-btn tw-btn-primary active"
+                className="w-[44px] sbte-btn sbte-btn-primary active"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top-4"
@@ -188,7 +188,7 @@ describe("InlineStyleButton", () => {
                 editorState={editorState}
             />
         , { container: document.body });
-        const button = actualNode.container.querySelector(".tw-btn-primary") as Element;
+        const button = actualNode.container.querySelector(".sbte-btn-primary") as Element;
 
         //WHEN
         fireEvent.mouseEnter(button);
