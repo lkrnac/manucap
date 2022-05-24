@@ -46,8 +46,6 @@ const Toolbox = (props: Props): ReactElement => {
     const [showShiftTimeModal, setShiftTimeModal] = useState<boolean>(false);
     const [showKbModal, setKbModal] = useState<boolean>(false);
 
-    // TODO: Get rid of Tailwind preprocessed value: [100]
-
     return (
         <div
             className="mt-6 space-x-2 flex items-stretch

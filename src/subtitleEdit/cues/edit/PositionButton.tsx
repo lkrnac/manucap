@@ -15,8 +15,6 @@ const PositionButton = (props: Props): ReactElement => {
         }
     };
 
-    // TODO: Get rid of Tailwind preprocessed value: [38px]
-
     const menuModel = positionIcons.map(icon => ({
         template: () => (
             <span
