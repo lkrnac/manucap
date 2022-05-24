@@ -51,7 +51,7 @@ const Toolbox = (props: Props): ReactElement => {
     return (
         <div
             className="mt-6 space-x-2 flex items-stretch
-                z-[100] justify-center sbte-button-toolbar"
+                z-100 justify-center sbte-button-toolbar"
         >
             <SubtitleSpecificationsButton />
             <SearchReplaceButton />
@@ -74,10 +74,9 @@ const Toolbox = (props: Props): ReactElement => {
             >
                 <i className="fas fa-ellipsis-h" />
             </button>
-            {/** TODO: Get rid of Tailwind preprocessed value: [260px] **/}
             <Menu
                 id="toolboxMenu"
-                className="w-[260px] min-w-[260px]"
+                className="sbte-big-menu"
                 appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
                 ref={menu}
                 popup

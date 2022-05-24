@@ -116,8 +116,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 }}
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
-                    {/** TODO: Get rid of Tailwind preprocessed value: [120px] **/}
-                    <div className="space-y-1 w-[120px]">
+                    <div className="sbte-time-editors">
                         {
                             isTranslation && !timecodesUnlocked
                             ? (

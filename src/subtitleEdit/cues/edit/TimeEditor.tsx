@@ -20,7 +20,7 @@ const TimeEditor = (props: Props): ReactElement => {
     // TODO: Get rid of Tailwind preprocessed value: [120px]
     return (
         <TimeField
-            className="sbte-form-control mousetrap block w-[120px] text-center"
+            className="sbte-form-control mousetrap block text-center"
             value={getTimeString(props.time || 0)}
             onChange={handleChange}
             showSeconds

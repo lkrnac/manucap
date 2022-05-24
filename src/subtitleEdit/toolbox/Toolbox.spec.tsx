@@ -26,7 +26,7 @@ describe("Toolbox", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="mt-6 space-x-2 flex items-stretch z-[100]
+                    className="mt-6 space-x-2 flex items-stretch z-100
                         justify-center sbte-button-toolbar"
                 >
                     <SubtitleSpecificationsButton />
@@ -74,7 +74,7 @@ describe("Toolbox", () => {
             <Provider store={testingStore}>
                 <div
                     className="mt-6 space-x-2 flex items-stretch
-                        z-[100] justify-center sbte-button-toolbar"
+                        z-100 justify-center sbte-button-toolbar"
                 >
                     <SubtitleSpecificationsButton />
                     <SearchReplaceButton />

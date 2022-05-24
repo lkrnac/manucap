@@ -143,34 +143,34 @@ const createExpectedNode = (
                 )) }
             </div>
         </div>
-        <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
+        <div
+            className="space-x-2"
+            style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}
+        >
             <button
                 id="inlineStyle-BOLD0"
-                style={{ marginRight: 5 }}
-                className="w-[44px] sbte-btn sbte-btn-primary"
+                className="sbte-inline-style-btn sbte-btn sbte-btn-primary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
-                data-pr-at="center top-4"
+                data-pr-at="center top"
             >
                 <b>B</b>
             </button>
             <button
                 id="inlineStyle-ITALIC0"
-                style={{ marginRight: 5 }}
-                className="w-[44px] sbte-btn sbte-btn-primary"
+                className="sbte-inline-style-btn sbte-btn sbte-btn-primary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
-                data-pr-at="center top-4"
+                data-pr-at="center top"
             >
                 <i>I</i>
             </button>
             <button
                 id="inlineStyle-UNDERLINE0"
-                style={{ marginRight: 5 }}
-                className="w-[44px] sbte-btn sbte-btn-primary"
+                className="sbte-inline-style-btn sbte-btn sbte-btn-primary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
-                data-pr-at="center top-4"
+                data-pr-at="center top"
             >
                 <u>U</u>
             </button>

@@ -465,7 +465,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     )) }
                 </div>
             </div>
-            <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
+            <div
+                className="space-x-2"
+                style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}
+            >
                 <InlineStyleButton
                     editorIndex={props.index}
                     inlineStyle="BOLD"

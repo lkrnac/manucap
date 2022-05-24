@@ -106,12 +106,12 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div className="space-y-1 w-[120px]">
+                                <div className="sbte-time-editors">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-form-control mousetrap block w-[120px] text-center"
+                                        className="sbte-form-control mousetrap block text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -119,7 +119,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-form-control mousetrap block w-[120px] text-center"
+                                        className="sbte-form-control mousetrap block text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -134,8 +134,8 @@ describe("CueEdit", () => {
                                     Dialogue
                                 </button>
                                 <button
-                                    className="select-none flex items-center justify-center
-                                        sbte-dropdown-toggle sbte-btn sbte-btn-light w-[68px]"
+                                    className="sbte-position-toggle-button
+                                        sbte-dropdown-toggle sbte-btn sbte-btn-light"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -203,12 +203,12 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div className="space-y-1 w-[120px]">
+                                <div className="sbte-time-editors">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-form-control mousetrap block w-[120px] text-center"
+                                        className="sbte-form-control mousetrap block text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -216,7 +216,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-form-control mousetrap block w-[120px] text-center"
+                                        className="sbte-form-control mousetrap block text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -231,8 +231,8 @@ describe("CueEdit", () => {
                                     Dialogue
                                 </button>
                                 <button
-                                    className="select-none flex items-center justify-center
-                                        sbte-dropdown-toggle sbte-btn sbte-btn-light w-[68px]"
+                                    className="sbte-position-toggle-button
+                                        sbte-dropdown-toggle sbte-btn sbte-btn-light"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -301,7 +301,7 @@ describe("CueEdit", () => {
                                     paddingBottom: "15px"
                                 }}
                             >
-                                <div className="space-y-1 w-[120px]">
+                                <div className="sbte-time-editors">
                                     <div
                                         id="cueEditLine-0-startTime"
                                         className="sbte-form-control text-center !border-blue-light/20
@@ -333,8 +333,8 @@ describe("CueEdit", () => {
                                     Dialogue
                                 </button>
                                 <button
-                                    className="select-none flex items-center justify-center
-                                        sbte-dropdown-toggle sbte-btn sbte-btn-light w-[68px]"
+                                    className="sbte-position-toggle-button
+                                        sbte-dropdown-toggle sbte-btn sbte-btn-light"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -406,12 +406,12 @@ describe("CueEdit", () => {
                                     paddingBottom: "15px"
                                 }}
                             >
-                                <div className="space-y-1 w-[120px]">
+                                <div className="sbte-time-editors">
                                     <input
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-form-control mousetrap block w-[120px] text-center"
+                                        className="sbte-form-control mousetrap block text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
@@ -419,7 +419,7 @@ describe("CueEdit", () => {
                                         type="text"
                                         // @ts-ignore custom attribute added by react-advanced-timefield
                                         colon=":"
-                                        className="sbte-form-control mousetrap block w-[120px] text-center"
+                                        className="sbte-form-control mousetrap block text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -434,8 +434,8 @@ describe("CueEdit", () => {
                                     Dialogue
                                 </button>
                                 <button
-                                    className="select-none flex items-center justify-center
-                                        sbte-dropdown-toggle sbte-btn sbte-btn-light w-[68px]"
+                                    className="sbte-position-toggle-button
+                                        sbte-dropdown-toggle sbte-btn sbte-btn-light"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >

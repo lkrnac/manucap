@@ -132,8 +132,8 @@ describe("SpellCheckerIssue", () => {
         const expectedNode = mount(
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
-                className="p-menu p-component spellcheck-menu w-[260px] min-w-[260px] p-0
-                    shadow-md p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
+                className="p-menu p-component spellcheck-menu sbte-big-menu p-0 shadow-md
+                    p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
             >
                 <ul className="p-menu-list p-reset" role="menu">
                     <li className="p-menuitem" role="none">
@@ -193,7 +193,7 @@ describe("SpellCheckerIssue", () => {
         actualNode.find(".sbte-text-with-error").simulate("click");
 
         // THEN
-        const actual = removeSelectCssClass(actualNode.find(".spellcheck-menu").at(0).html());
+        const actual = removeSelectCssClass(actualNode.find( ".spellcheck-menu").at(0).html());
         const expected = removeSelectCssClass(expectedNode.html());
         expect(actual).toEqual(expected);
     });
@@ -203,8 +203,8 @@ describe("SpellCheckerIssue", () => {
         const expectedNode = mount(
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
-                className="p-menu p-component spellcheck-menu w-[260px] min-w-[260px] p-0
-                    shadow-md p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
+                className="p-menu p-component spellcheck-menu sbte-big-menu p-0 shadow-md
+                    p-menu-overlay p-connected-overlay-exit p-connected-overlay-exit-active"
             >
                 <ul className="p-menu-list p-reset" role="menu">
                     <li className="p-menuitem" role="none">
@@ -248,7 +248,7 @@ describe("SpellCheckerIssue", () => {
         actualNode.find(".sbte-text-with-error").simulate("click");
 
         // THEN
-        const actual = removeSelectCssClass(actualNode.find(".spellcheck-menu").at(0).html());
+        const actual = removeSelectCssClass(actualNode.find( ".spellcheck-menu").at(0).html());
         const expected = removeSelectCssClass(expectedNode.html());
         expect(actual).toEqual(expected);
     });
