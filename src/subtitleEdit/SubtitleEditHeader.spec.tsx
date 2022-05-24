@@ -102,6 +102,48 @@ describe("SubtitleEditHeader", () => {
             .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
     });
 
+    it("renders Pivot Translation", () => {
+        // GIVEN
+        const testingTrack = {
+            type: "TRANSLATION",
+            language: { id: "it-IT", name: "Italian" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+        } as Track;
+        const testingTask = {
+            type: "TASK_PIVOT_TRANSLATE",
+            projectName: "Project One",
+            dueDate: "2019/12/30 10:00AM",
+            editDisabled: false
+        } as Task;
+        const expectedNode = mount(
+            <header style={{ display: "flex", paddingBottom: "10px" }}>
+                <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
+                    <div><b>This is the video title</b> <i>Project One</i></div>
+                    <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span> <i /></div>
+                </div>
+                <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div />
+                </div>
+            </header>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <SubtitleEditHeader />
+            </Provider>
+        );
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
+        // THEN
+        expect(removeVideoPlayerDynamicValue(actualNode.html()))
+            .toEqual(removeVideoPlayerDynamicValue(expectedNode.html()));
+    });
+
     it("renders Direct Translation", () => {
         // GIVEN
         const testingTrack = {
