@@ -182,9 +182,7 @@
 }
 
 .sbte-btn-pure {
-    width: 8px;
-    height: 8px;
-    @apply rounded-full bg-gray-200;
+    @apply w-0.5 h-0.5 rounded-full bg-gray-200;
 }
 
 .sbte-btn-pure.sbte-btn-primary  {
