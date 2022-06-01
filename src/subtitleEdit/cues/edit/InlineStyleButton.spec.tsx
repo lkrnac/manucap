@@ -18,11 +18,10 @@ describe("InlineStyleButton", () => {
         const expectedNode = render(
             <button
                 id="inlineStyle-BOLD0"
-                style={{ marginRight: "5px" }}
-                className="w-[44px] sbte-btn sbte-btn-primary"
+                className="sbte-inline-style-btn sbte-btn sbte-btn-primary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
-                data-pr-at="center top-4"
+                data-pr-at="center top"
             >
                 <b>B</b>
             </button>
@@ -52,11 +51,10 @@ describe("InlineStyleButton", () => {
         const expectedNode = render(
             <button
                 id="inlineStyle-BOLD0"
-                style={{ marginRight: "5px" }}
-                className="w-[44px] sbte-btn sbte-btn-primary active"
+                className="sbte-inline-style-btn sbte-btn sbte-btn-primary active"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
-                data-pr-at="center top-4"
+                data-pr-at="center top"
             >
                 <b>B</b>
             </button>
@@ -85,11 +83,10 @@ describe("InlineStyleButton", () => {
         const expectedNode = render(
             <button
                 id="inlineStyle-ITALIC0"
-                style={{ marginRight: "5px" }}
-                className="w-[44px] sbte-btn sbte-btn-primary active"
+                className="sbte-inline-style-btn sbte-btn sbte-btn-primary active"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
-                data-pr-at="center top-4"
+                data-pr-at="center top"
             >
                 <i>I</i>
             </button>
@@ -118,11 +115,10 @@ describe("InlineStyleButton", () => {
         const expectedNode = render(
             <button
                 id="inlineStyle-UNDERLINE0"
-                style={{ marginRight: "5px" }}
-                className="w-[44px] sbte-btn sbte-btn-primary active"
+                className="sbte-inline-style-btn sbte-btn sbte-btn-primary active"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
-                data-pr-at="center top-4"
+                data-pr-at="center top"
             >
                 <u>U</u>
             </button>

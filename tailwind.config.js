@@ -52,6 +52,9 @@ module.exports = {
             }
         },
         extend: {
+            width: {
+                "half": "50vh"
+            },
             zIndex: {
                 "100": "100",
                 "200": "200"

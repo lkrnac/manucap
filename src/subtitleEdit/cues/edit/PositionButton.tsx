@@ -15,13 +15,10 @@ const PositionButton = (props: Props): ReactElement => {
         }
     };
 
-    // TODO: Get rid of Tailwind preprocessed value: [38px]
-
     const menuModel = positionIcons.map(icon => ({
         template: () => (
             <span
-                className="w-[38px] inline-flex items-center justify-center p-2
-                    text-gray-700 rounded cursor-pointer hover:bg-blue-light/10 hover:text-blue-light"
+                className="sbte-position-button-option"
                 onClick={(event): void => {
                     props.changePosition(icon.position);
                     toggleMenu(event);
@@ -34,10 +31,8 @@ const PositionButton = (props: Props): ReactElement => {
 
     return (
         <>
-            {/** TODO: Get rid of Tailwind preprocessed value: [68px] **/}
             <button
-                className="select-none flex items-center justify-center
-                    sbte-dropdown-toggle sbte-btn sbte-btn-light w-[68px]"
+                className="sbte-position-toggle-button sbte-dropdown-toggle sbte-btn sbte-btn-light"
                 aria-controls="positionButtonMenu"
                 aria-haspopup
                 onClick={toggleMenu}
@@ -45,10 +40,9 @@ const PositionButton = (props: Props): ReactElement => {
                 <span>{findPositionIcon(props.vttCue).iconText}</span>
                 <span className="caret" />
             </button>
-            {/** TODO: Get rid of Tailwind preprocessed value: [210px] **/}
             <Menu
                 id="positionButtonMenu"
-                className="position-button-list w-[210px] min-w-[210px]"
+                className="sbte-position-button-list"
                 ref={menu}
                 popup
                 model={menuModel}

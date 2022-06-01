@@ -9,6 +9,11 @@
     .sbte-transition {
         @apply duration-300 ease-in-out transition-colors;
     }
+
+    .sbte-big-menu {
+        width: 260px;
+        min-width: 260px;
+    }
 }
 
 @layer base {
@@ -177,9 +182,7 @@
 }
 
 .sbte-btn-pure {
-    width: 8px;
-    height: 8px;
-    @apply rounded-full bg-gray-200;
+    @apply w-0.5 h-0.5 rounded-full bg-gray-200;
 }
 
 .sbte-btn-pure.sbte-btn-primary  {
@@ -269,7 +272,8 @@
 }
 
 .p-dialog .p-dialog-header .p-dialog-header-icon {
-    @apply w-auto h-[30px] mt-[1px]
+    @apply w-auto mt-px;
+    height: 30px;
 }
 
 .p-dialog .p-dialog-header .p-dialog-header-icon span {
@@ -283,7 +287,7 @@
 /** Toasts **/
 
 .p-toast {
-    @apply w-[50vw] border-none overflow-hidden !important;
+    @apply w-half border-none overflow-hidden !important;
 }
 
 .p-toast-message {
@@ -334,7 +338,7 @@
 
 .p-dropdown-panel {
     @apply border border-gray-200 my-2 text-gray-500 rounded z-50 text-left list-none text-base bg-white shadow-sm select-none py-2;
-    @apply min-w-[160px] !important;
+    min-width: 160px !important;
 }
 
 .p-menu.p-menu-overlay {
@@ -343,7 +347,7 @@
 
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item,
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item > *,
-.p-menu:not(.position-button-list):not(.spellcheck-menu) .p-menuitem > * {
+.p-menu:not(.sbte-position-button-list):not(.spellcheck-menu) .p-menuitem > * {
     @apply font-normal flex w-full cursor-pointer sbte-transition text-gray-700 hover:text-blue-light whitespace-nowrap hover:bg-blue-primary/10 py-2 px-6;
 }
 
@@ -359,7 +363,7 @@
     @apply w-full text-left;
 }
 
-.p-menu.position-button-list .p-menu-list {
+.p-menu.sbte-position-button-list .p-menu-list {
     @apply flex flex-row flex-wrap justify-between px-2;
 }
 
@@ -501,15 +505,15 @@ label.sbte-form-control {
 }
 
 .sbte-cue-line-flap-checkbox {
-    @apply bg-transparent border-0 mr-[10px];
+    @apply bg-transparent border-0 mr-2.5;
 }
 
 .sbte-cue-divider-error {
-    @apply border-none bg-red-dark/80 h-[1px] -mt-[1px];
+    @apply border-none bg-red-dark/80 h-px -mt-px;
 }
 
 .sbte-cue-divider-good {
-    @apply border-none bg-green-dark/80 h-[1px] -mt-[1px];
+    @apply border-none bg-green-dark/80 h-px -mt-px;
 }
 
 .sbte-cue-divider {
@@ -521,7 +525,37 @@ label.sbte-form-control {
 }
 
 .sbte-cues-errors {
-    @apply bg-red-primary/10 border-b border-red-dark/10 text-red-light p-[10px];
+    @apply bg-red-primary/10 border-b border-red-dark/10 text-red-light p-2.5;
+}
+
+/** Time Editors **/
+
+.sbte-time-editors {
+    @apply space-y-1;
+    width: 120px;
+}
+
+/** Position Buttons **/
+
+.sbte-position-button-option {
+    @apply inline-flex items-center justify-center p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10 hover:text-blue-light;
+    width: 38px;
+}
+
+.sbte-position-toggle-button {
+    @apply select-none flex items-center justify-center;
+    width: 68px;
+}
+
+.sbte-position-button-list {
+    width: 210px;
+    min-width: 210px;
+}
+
+/** Inline Style Button **/
+
+.sbte-inline-style-btn {
+    width: 44px;
 }
 
 /** Glossary Matches **/
@@ -567,5 +601,5 @@ region.wavesurfer-region:before {
 }
 
 .sbte-count-tag {
-    @apply text-xs inline-block bg-gray-0 border border-gray-100 mr-[2px] rounded-lg py-[2px] px-[6px] mb-[4px] whitespace-nowrap;
+    @apply text-xs inline-block bg-gray-0 border border-gray-100 mr-0.5 rounded-lg py-0.5 px-1.5 mb-1 whitespace-nowrap;
 }
