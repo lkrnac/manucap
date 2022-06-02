@@ -32,7 +32,7 @@
     "redux": "^4.0.5"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "@types/crypto-js": "^4.0.2",
     "@types/lodash": "^4.14.175",
     "bowser": "^2.11.0",
