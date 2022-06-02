@@ -364,7 +364,7 @@
     @apply flex flex-row flex-wrap justify-between px-2;
 }
 
-..p-menu .p-menu-separator {
+.p-menu .p-menu-separator {
     @apply border-t border-blue-light/20 !important;
 }
 
