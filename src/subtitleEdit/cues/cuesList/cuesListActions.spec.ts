@@ -31,7 +31,7 @@ import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
-import { updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
 import { cuesSlice, matchedCuesSlice } from "./cuesListSlices";
 import * as cuesListScrollSlice from "./cuesListScrollSlice";
@@ -2704,6 +2704,20 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.line).toEqual("auto");
             expect(testingStore.getState().cues[0].vttCue.position).toEqual("auto");
             expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("auto");
+        });
+
+        it("record an edit change when removing last cue", () => {
+            // GIVEN
+            const recordCueChangeSpy = jest.spyOn(lastCueChangeSlice.actions, "recordCueChange");
+            const cue0 = testingCues[0];
+            testingStore.dispatch(updateCues([cue0]) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(deleteCue(0) as {} as AnyAction);
+
+            // THEN
+            expect(recordCueChangeSpy).toBeCalledWith({"changeType": "EDIT", "index": 0, "vttCue": new VTTCue(0, 0, "")}
+        );
         });
     });
 

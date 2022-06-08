@@ -422,9 +422,15 @@ export const splitCue = (idx: number): AppThunk =>
 
 export const deleteCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | null>, getState): void => {
+        const cuesLength = getState().cues.length;
         dispatch(cuesSlice.actions.deleteCue({ idx }));
+
         dispatch(lastCueChangeSlice.actions
-            .recordCueChange({ changeType: "REMOVE", index: idx, vttCue: new VTTCue(0, 0, "") }));
+            .recordCueChange({
+                changeType: cuesLength === 1 ? "EDIT" : "REMOVE",
+                index: idx, vttCue: new VTTCue(0, 0, "")
+            }
+            ));
         dispatch(updateMatchedCues());
         callSaveTrack(dispatch, getState);
     };
