@@ -36,7 +36,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
         <label>{props.subTitleSpecifications.enabled ? "Yes" : "No"}</label>
         {props.subTitleSpecifications.enabled ? (
             <>
-                <hr className="tw-my-4" />
+                <hr className="my-4" />
                 <div style={{ display: "flex", marginRight: "20px" }}>
                     <div style={{ flex: 1 }}>
                         <div>
@@ -109,7 +109,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                         </div>
                     </div>
                 </div>
-                <hr className="tw-my-4" />
+                <hr className="my-4" />
                 <label><strong>Comments:&nbsp;</strong></label>
                 <ReactMarkdown
                     renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}

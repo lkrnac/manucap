@@ -84,20 +84,20 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     type="text"
                     value={searchReplace?.find}
                     placeholder="Find"
-                    className="tw-form-control !tw-h-full"
+                    className="sbte-form-control !h-full"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): AppThunk => dispatch(setFind(e.target.value))}
                 />
                 <input
                     type="text"
                     value={replacement}
                     placeholder="Replace"
-                    className="tw-form-control !tw-h-full"
+                    className="sbte-form-control !h-full"
                     style={{ marginLeft: "5px" }}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setReplacement(e.target.value)}
                 />
             </div>
             <button
-                className="tw-btn tw-btn-light tw-btn-sm sbte-search-next"
+                className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-next"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-next"
@@ -108,7 +108,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 <i className="fa fa-arrow-down" />
             </button>
             <button
-                className="tw-btn tw-btn-light tw-btn-sm sbte-search-prev"
+                className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-prev"
                 type="button"
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-prev"
@@ -119,7 +119,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 <i className="fa fa-arrow-up" />
             </button>
             <button
-                className="tw-btn tw-btn-light tw-btn-sm"
+                className="sbte-btn sbte-btn-light sbte-btn-sm"
                 type="button"
                 disabled={editingCueIndex === -1}
                 style={{ marginLeft: "5px" }}
@@ -130,7 +130,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 Replace
             </button>
             <button
-                className="tw-btn tw-btn-light tw-btn-sm"
+                className="sbte-btn sbte-btn-light sbte-btn-sm"
                 type="button"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
                 onClick={(): void => searchReplaceAll(dispatch, cues, searchReplace, replacement)}
@@ -138,7 +138,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 Replace All
             </button>
             <ToggleButton
-                className="tw-btn tw-btn-light"
+                className="sbte-btn sbte-btn-light"
                 toggled={searchReplace.matchCase}
                 onClick={(): void => {
                     dispatch(setMatchCase(!searchReplace.matchCase));
@@ -148,10 +148,10 @@ const SearchReplaceEditor = (): ReactElement | null => {
             />
             <span style={{ flex: 1 }} />
             <button
-                className="tw-btn tw-btn-danger tw-btn-sm"
+                className="sbte-btn sbte-btn-danger sbte-btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
-                data-testid="sbte-close-search-replace-btn"
+                data-testid="sbte-close-search-replace-sbte-btn"
                 onClick={(): void => {
                     dispatch(showSearchReplace(false));
                 }}

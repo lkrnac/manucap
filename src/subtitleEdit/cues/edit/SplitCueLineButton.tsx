@@ -14,11 +14,11 @@ const SplitCueLineButton = (props: Props): ReactElement => {
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     const buttonId = `splitCueLineButton-${props.cueIndex}`;
     return (
-        <div className="tw-p-1.5">
+        <div className="p-1.5">
             <button
                 id={buttonId}
                 style={{ maxHeight: "38px" }}
-                className="tw-btn tw-btn-primary sbte-split-cue-button tw-w-full tw-btn-sm"
+                className="sbte-btn sbte-btn-primary sbte-split-cue-button w-full sbte-btn-sm"
                 disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
                 data-pr-tooltip="Split this subtitle"

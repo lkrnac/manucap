@@ -40,7 +40,7 @@ const stateCssClasses = new Map([
     [ SaveState.TRIGGERED, "" ],
     [ SaveState.REQUEST_SENT, "" ],
     [ SaveState.RETRY, "" ],
-    [ SaveState.SAVED, "tw-text-green-light" ],
+    [ SaveState.SAVED, "text-green-light" ],
     [ SaveState.ERROR, "text-danger" ],
 ]);
 
@@ -50,24 +50,24 @@ const CompleteButton = (props: Props): ReactElement => {
     const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
     const stateIconClass = stateIconCssClasses.get(saveState);
     return (
-        <div className="tw-space-x-4 tw-flex tw-items-center">
-            <div className="tw-font-medium">
+        <div className="space-x-4 flex items-center">
+            <div className="font-medium">
                 {
                     props.disabled ?
-                        <span className="tw-text-green-light">{TASK_COMPLETE_MSG}</span> :
+                        <span className="text-green-light">{TASK_COMPLETE_MSG}</span> :
                         <span
                             hidden={saveState === SaveState.NONE}
-                            className={`tw-flex tw-items-center ${stateCssClasses.get(saveState)}`}
+                            className={`flex items-center ${stateCssClasses.get(saveState)}`}
                         >
-                            <span className="tw-leading-none">{stateMessages.get(saveState)}</span>
-                            <i className={`tw-ml-1${stateIconClass ? ` ${stateIconClass}` : ""}`} />
+                            <span className="leading-none">{stateMessages.get(saveState)}</span>
+                            <i className={`ml-1${stateIconClass ? ` ${stateIconClass}` : ""}`} />
                         </span>
                 }
             </div>
             <button
                 type="button"
                 disabled={props.disabled || isPendingSaveState(saveState)}
-                className="tw-btn tw-btn-primary sbte-complete-subtitle-btn"
+                className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
                 onClick={(): void => props.onComplete({ editingTrack, cues })}
             >
                 Complete

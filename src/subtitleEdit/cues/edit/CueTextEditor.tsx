@@ -401,7 +401,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100%", flex: "1 1 auto" }}>
             <div
-                className="tw-border-b tw-border-blue-light/20"
+                className="border-b border-blue-light/20"
                 style={{
                     flexBasis: "25%",
                     display: "flex",
@@ -412,7 +412,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} editorState={decoratedEditorState} />
             </div>
             <div
-                className="sbte-form-control tw-border-b tw-border-blue-light/20"
+                className="sbte-sbte-form-control border-b border-blue-light/20"
                 style={{
                     display: "flex",
                     flexDirection: "row",
@@ -425,7 +425,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             >
                 <div
                     style={{ flex: 1 }}
-                    className="tw-pr-2"
+                    className="pr-2"
                     onCompositionStart={(): void => { imeCompositionRef.current = "start"; }}
                     onCompositionEnd={(): void => { imeCompositionRef.current = "end"; }}
                 >
@@ -465,7 +465,10 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                     )) }
                 </div>
             </div>
-            <div style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}>
+            <div
+                className="space-x-2"
+                style={{ flexBasis: "25%", padding: "5px 10px 5px 10px" }}
+            >
                 <InlineStyleButton
                     editorIndex={props.index}
                     inlineStyle="BOLD"

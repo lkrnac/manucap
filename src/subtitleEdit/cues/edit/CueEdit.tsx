@@ -105,7 +105,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     const cueLineId = `cueEditLine-${props.index}`;
 
     return (
-        <div style={{ display: "flex" }} className="tw-border-b tw-border-blue-light/20 tw-bg-white tw-z-10">
+        <div style={{ display: "flex" }} className="border-b border-blue-light/20 bg-white z-10">
             <div
                 style={{
                     flex: "1 1 300px",
@@ -116,16 +116,15 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 }}
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
-                    {/** TODO: Get rid of Tailwind preprocessed value: [120px] **/}
-                    <div className="tw-space-y-1 tw-w-[120px]">
+                    <div className="sbte-time-editors">
                         {
                             isTranslation && !timecodesUnlocked
                             ? (
                                 <>
                                     <div
                                         id={`${cueLineId}-startTime`}
-                                        className="tw-form-control tw-text-center !tw-border-blue-light/20
-                                            !tw-text-gray-700 disabled"
+                                        className="sbte-form-control text-center !border-blue-light/20
+                                            !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -134,8 +133,8 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                     </div>
                                     <div
                                         id={`${cueLineId}-endTime`}
-                                        className="tw-form-control tw-text-center !tw-border-blue-light/20
-                                            !tw-text-gray-700 disabled"
+                                        className="sbte-form-control text-center !border-blue-light/20
+                                            !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
                                         data-pr-at="right top+18"
@@ -196,7 +195,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 </div>
             </div>
             <div
-                className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-center"
+                className="border-l border-blue-light/20 flex items-center"
                 style={{ flex: "1 1 70%" }}
             >
                 <CueTextEditor

@@ -8,7 +8,6 @@ function withOpacityValue(variable) {
 }
 
 module.exports = {
-    prefix: "tw-",
     content: [
         "./src/**/*.{js,jsx,ts,tsx,html}"
     ],
@@ -53,6 +52,9 @@ module.exports = {
             }
         },
         extend: {
+            width: {
+                "half": "50vw"
+            },
             zIndex: {
                 "100": "100",
                 "200": "200"

@@ -29,7 +29,7 @@ describe("ToggleButton", () => {
     it("renders toggled", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button type="button" className="btn-secondary tw-outline-0 active">
+            <button type="button" className="sbte-btn-secondary outline-0 active">
                 Click me!
             </button>
         );
@@ -37,7 +37,7 @@ describe("ToggleButton", () => {
         // WHEN
         const actualNode = mount(
             <ToggleButton
-                className="btn-secondary"
+                className="sbte-btn-secondary"
                 toggled
                 render={(): ReactElement => (
                     <>Click me!</>
@@ -52,7 +52,7 @@ describe("ToggleButton", () => {
     it("renders with class", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button type="button" className="btn-secondary">
+            <button type="button" className="sbte-btn-secondary">
                 Click me!
             </button>
         );
@@ -60,7 +60,7 @@ describe("ToggleButton", () => {
         // WHEN
         const actualNode = mount(
             <ToggleButton
-                className="btn-secondary"
+                className="sbte-btn-secondary"
                 render={(): ReactElement => (
                     <>Click me!</>
                 )}
@@ -96,7 +96,7 @@ describe("ToggleButton", () => {
     it("renders disabled", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button type="button" className="btn-secondary" disabled>
+            <button type="button" className="sbte-btn-secondary" disabled>
                 Click me!
             </button>
         );
@@ -104,7 +104,7 @@ describe("ToggleButton", () => {
         // WHEN
         const actualNode = mount(
             <ToggleButton
-                className="btn-secondary"
+                className="sbte-btn-secondary"
                 disabled
                 render={(): ReactElement => (
                     <>Click me!</>
@@ -122,7 +122,7 @@ describe("ToggleButton", () => {
         const actualNode = mount(
             <ToggleButton
                 onClick={mockOnClick}
-                className="btn-secondary"
+                className="sbte-btn-secondary"
                 render={(): ReactElement => (
                     <>Click me!</>
                 )}
@@ -142,7 +142,7 @@ describe("ToggleButton", () => {
         const actualNode = mount(
             <ToggleButton
                 onClick={mockOnClick}
-                className="btn-secondary"
+                className="sbte-btn-secondary"
                 render={(): ReactElement => (
                     <>Click me!</>
                 )}
@@ -154,7 +154,7 @@ describe("ToggleButton", () => {
 
         // THEN
         expect(actualNode.find("button").props().className)
-            .toEqual("btn-secondary tw-outline-0 active");
+            .toEqual("sbte-btn-secondary outline-0 active");
     });
 
     it("passes toggle state to render prop", () => {

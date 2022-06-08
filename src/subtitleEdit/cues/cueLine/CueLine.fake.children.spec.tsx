@@ -108,7 +108,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -177,7 +177,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -244,7 +244,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -310,7 +310,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -378,7 +378,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -386,7 +386,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCuesWithIndexes[0].cue}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -450,7 +450,7 @@ describe("CueLine", () => {
                             editDisabled
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r sbte-edit-disabled"
+                            className="border-t border-r border-blue-light/20 rounded-r sbte-edit-disabled"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -458,7 +458,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={matchedCuesCaptioningEditDisabled[0].targetCues[0].cue}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -519,7 +519,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[1] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -527,7 +527,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={sourceCues[1]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[1]}
@@ -593,7 +593,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[2] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -601,7 +601,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={sourceCues[2]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[2]}
@@ -666,7 +666,7 @@ describe("CueLine", () => {
                             editDisabled
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r sbte-edit-disabled"
+                            className="border-t border-r border-blue-light/20 rounded-r sbte-edit-disabled"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -674,7 +674,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -685,7 +685,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={disabledTargetCue}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -744,14 +744,14 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -759,7 +759,7 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-gray-0 tw-border-b tw-border-blue-light/20
+                                className="bg-gray-0 border-b border-blue-light/20
                                     sbte-click-cue-wrapper"
                             >
                                 <div
@@ -773,7 +773,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="tw-btn tw-btn-primary sbte-add-cue-button"
+                                        className="sbte-btn sbte-btn-primary sbte-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -837,14 +837,14 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -852,7 +852,7 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-gray-0 tw-border-b tw-border-blue-light/20
+                                className="bg-gray-0 border-b border-blue-light/20
                                     sbte-click-cue-wrapper"
                             >
                                 <div
@@ -866,7 +866,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="tw-btn tw-btn-primary sbte-add-cue-button"
+                                        className="sbte-btn sbte-btn-primary sbte-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -919,21 +919,21 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={0}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={-1}
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-gray-0 tw-border-b tw-border-blue-light/20
+                                className="bg-gray-0 border-b border-blue-light/20
                                     sbte-click-cue-wrapper"
                             >
                                 <div
@@ -947,7 +947,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="tw-btn tw-btn-primary sbte-add-cue-button"
+                                        className="sbte-btn sbte-btn-primary sbte-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -1007,12 +1007,12 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <div
                                 style={{ display: "flex" }}
-                                className="tw-bg-gray-0 tw-border-b tw-border-blue-light/20
+                                className="bg-gray-0 border-b border-blue-light/20
                                     sbte-click-cue-wrapper"
                             >
                                 <div style={{ width: "100%", minHeight: "78px" }} />
@@ -1022,7 +1022,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -1082,7 +1082,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1090,7 +1090,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1101,7 +1101,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1112,7 +1112,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1124,7 +1124,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1188,7 +1188,7 @@ describe("CueLine", () => {
                             ]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1196,7 +1196,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1208,7 +1208,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1219,7 +1219,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1230,7 +1230,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1290,7 +1290,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1298,7 +1298,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1309,7 +1309,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1320,7 +1320,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1386,7 +1386,7 @@ describe("CueLine", () => {
                             ]}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1394,7 +1394,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1406,7 +1406,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1418,7 +1418,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1496,7 +1496,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1504,7 +1504,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1516,7 +1516,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1527,7 +1527,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1538,7 +1538,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1616,7 +1616,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1624,7 +1624,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -1636,7 +1636,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1647,7 +1647,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1949,7 +1949,7 @@ describe("CueLine", () => {
                             cueCommentsCount={3}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -2015,7 +2015,7 @@ describe("CueLine", () => {
                             cueCommentsCount={6}
                         />
                         <div
-                            className="tw-border-t tw-border-r tw-border-blue-light/20 tw-rounded-r"
+                            className="border-t border-r border-blue-light/20 rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -2023,7 +2023,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 sbte-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -2035,7 +2035,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCuesWithComments[0]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -2047,7 +2047,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCuesWithComments[1]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -2059,7 +2059,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCuesWithComments[2]}
                                 targetCuesLength={3}
-                                className="tw-bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 sbte-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}

@@ -29,8 +29,8 @@ describe("CaptionOverlapToggle", () => {
    it("renders", () => {
        // GIVEN
        const expectedNode = render(
-           <button type="button" className="tw-flex tw-items-center tw-justify-between">
-               Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
+           <button type="button" className="flex items-center justify-between">
+               Overlapping <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">NOT ALLOWED</span>
            </button>
        );
 
@@ -50,10 +50,10 @@ describe("CaptionOverlapToggle", () => {
         const expectedNode = render(
             <button
                 type="button"
-                className="tw-flex tw-items-center tw-justify-between tw-outline-0 active"
+                className="flex items-center justify-between outline-0 active"
                 disabled
             >
-                Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-success">ALLOWED</span>
+                Overlapping <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">ALLOWED</span>
             </button>
         );
 
@@ -81,8 +81,8 @@ describe("CaptionOverlapToggle", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         const expectedNode = render(
-            <button type="button" className="tw-flex tw-items-center tw-justify-between" disabled>
-                Overlapping <span className="tw-badge tw-font-bold tw-badge-sm tw-badge-secondary">NOT ALLOWED</span>
+            <button type="button" className="flex items-center justify-between" disabled>
+                Overlapping <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">NOT ALLOWED</span>
             </button>
         );
 

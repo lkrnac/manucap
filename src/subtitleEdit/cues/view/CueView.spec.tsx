@@ -29,7 +29,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="testingClassName tw-border-b tw-border-blue-light/20 sbte-click-cue-wrapper"
+                    className="testingClassName border-b border-blue-light/20 sbte-click-cue-wrapper"
                 >
                     <div
                         className="sbte-cue-line-left-section"
@@ -47,12 +47,12 @@ describe("CueView", () => {
                             <div>00:00:02.000</div>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
-                            <div className="tw-text-sm">Dialogue</div>
-                            <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
+                            <div className="text-sm">Dialogue</div>
+                            <div className="text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
                     <div
-                        className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
+                        className="border-l border-blue-light/20 flex items-stretch"
                         style={{ flex: "1 1 70%" }}
                     >
                         <div
@@ -103,7 +103,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="tw-border-b tw-border-blue-light/20 sbte-click-cue-wrapper"
+                    className="border-b border-blue-light/20 sbte-click-cue-wrapper"
                 >
                     <div
                         className="sbte-cue-line-left-section"
@@ -121,12 +121,12 @@ describe("CueView", () => {
                             <div>00:00:02.000</div>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
-                            <div className="tw-text-sm">Dialogue</div>
-                            <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
+                            <div className="text-sm">Dialogue</div>
+                            <div className="text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
                     <div
-                        className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
+                        className="border-l border-blue-light/20 flex items-stretch"
                         style={{ flex: "1 1 70%" }}
                     >
                         <div
@@ -176,7 +176,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="tw-border-b tw-border-blue-light/20 sbte-click-cue-wrapper"
+                    className="border-b border-blue-light/20 sbte-click-cue-wrapper"
                 >
                     <div
                         className="sbte-cue-line-left-section"
@@ -194,12 +194,12 @@ describe("CueView", () => {
                             <div>00:00:02.000</div>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between",  paddingBottom: "5px" }} >
-                            <div className="tw-text-sm">Dialogue</div>
-                            <div className="tw-text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
+                            <div className="text-sm">Dialogue</div>
+                            <div className="text-sm" style={{ paddingRight: "10px" }}>↓↓</div>
                         </div>
                     </div>
                     <div
-                        className="tw-border-l tw-border-blue-light/20 tw-flex tw-items-stretch"
+                        className="border-l border-blue-light/20 flex items-stretch"
                         style={{ flex: "1 1 70%" }}
                     >
                         <div
