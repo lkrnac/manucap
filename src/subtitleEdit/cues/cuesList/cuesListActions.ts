@@ -387,7 +387,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     };
 
 export const splitCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
+    async (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): Promise<void> => {
         const state: SubtitleEditState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
@@ -407,9 +407,13 @@ export const splitCue = (idx: number): AppThunk =>
             const updatedCue = { ...originalCue, idx, vttCue: updatedVttCue, editUuid: originalCue.editUuid };
             dispatch(cuesSlice.actions.updateVttCue(updatedCue));
             dispatch(cuesSlice.actions.addCue({ idx: idx + 1, cue: splitCue }));
+            await dispatch(lastCueChangeSlice.actions.recordCueChange(
+                { changeType: "EDIT", index: idx, vttCue: updatedCue.vttCue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange(
                 { changeType: "SPLIT", index: idx, vttCue: originalCue.vttCue }));
             dispatch(updateMatchedCues());
+            dispatch(lastCueChangeSlice.actions.recordCueChange(
+                { changeType: "ADD" , index: (idx + 1), vttCue: splitCue.vttCue }));
             callSaveTrack(dispatch, getState, true);
         } else {
             dispatch(validationErrorSlice.actions.setValidationErrors([CueError.SPLIT_ERROR]));
@@ -418,9 +422,15 @@ export const splitCue = (idx: number): AppThunk =>
 
 export const deleteCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | null>, getState): void => {
+        const cuesLength = getState().cues.length;
         dispatch(cuesSlice.actions.deleteCue({ idx }));
+
         dispatch(lastCueChangeSlice.actions
-            .recordCueChange({ changeType: "REMOVE", index: idx, vttCue: new VTTCue(0, 0, "") }));
+            .recordCueChange({
+                changeType: cuesLength === 1 ? "EDIT" : "REMOVE",
+                index: idx, vttCue: new VTTCue(0, 0, "")
+            }
+            ));
         dispatch(updateMatchedCues());
         callSaveTrack(dispatch, getState);
     };
