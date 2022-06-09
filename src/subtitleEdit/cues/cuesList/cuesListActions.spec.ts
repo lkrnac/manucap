@@ -2716,8 +2716,9 @@ describe("cueSlices", () => {
             testingStore.dispatch(deleteCue(0) as {} as AnyAction);
 
             // THEN
-            expect(recordCueChangeSpy).toBeCalledWith({"changeType": "EDIT", "index": 0, "vttCue": new VTTCue(0, 0, "")}
-        );
+            expect(recordCueChangeSpy).toBeCalledWith(
+                { "changeType": "EDIT", "index": 0,
+                    "vttCue": new VTTCue(0, 0, "") });
         });
     });
 
