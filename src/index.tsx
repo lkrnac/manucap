@@ -1,3 +1,7 @@
+import "@fortawesome/fontawesome-free/css/all.css";
+import "primeicons/primeicons.css";
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
 import { Provider, useDispatch } from "react-redux";
 import { ReactElement, useEffect } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
@@ -16,8 +20,8 @@ import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
 // const language = { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language;
 
-// const trackType = "TRANSLATION";
-const trackType = "CAPTION";
+const trackType = "TRANSLATION";
+// const trackType = "CAPTION";
 
 const TIME_MATCH_TESTING = false;
 
@@ -119,7 +123,7 @@ const TestApp = (): ReactElement => {
             }
 
             let endTime = START_SHIFT;
-            for (let idx = 0; idx < 1; idx++) {
+            for (let idx = 0; idx < 9999; idx++) {
                 const randomStart = TIME_MATCH_TESTING ? endTime + randomTime(1) : idx * 3;
                 const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
                 const withinChunkRange = inChunkRange(randomStart, randomEnd);
@@ -212,7 +216,7 @@ const TestApp = (): ReactElement => {
         }
 
         let endTime = START_SHIFT;
-        for (let idx = 0; idx < 1; idx++) {
+        for (let idx = 0; idx < 9999; idx++) {
             const randomContent = Math.random().toString(36).slice(Math.floor(Math.random() * 10));
             let text = `<i>Editing <b>Line</b></i> ${idx + 1}\n${randomContent} Wrapped text and text a text`;
             // @ts-ignore since it can be updated manually
