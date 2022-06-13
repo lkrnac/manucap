@@ -6,6 +6,7 @@ import VideoPlayer from "./subtitleEdit/player/VideoPlayer";
 import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 import { updateSubtitleUser } from "./subtitleEdit/userSlices";
+import { matchedCuesToCsv } from "./subtitleEdit/cues/cuesList/cuesListTimeMatching";
 
 const Actions = ({
     updateEditingTrack,
@@ -13,7 +14,8 @@ const Actions = ({
     updateCues,
     updateSourceCues,
     setAutoSaveSuccess,
-    updateSubtitleUser
+    updateSubtitleUser,
+    matchedCuesToCsv
 });
 
 export {
