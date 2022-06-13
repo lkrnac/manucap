@@ -19,19 +19,20 @@ const CueErrorAlert = (): ReactElement => {
         }, [dispatch, validationErrors]
     );
 
-    useEffect(
-        () => {
-            if (validationErrors && validationErrors.length > 0) {
-                if (toast.current) {
-                    toast.current.show(validationErrors.map(error => ({
-                        severity: "error",
-                        summary: "Unable to complete action due to the following error(s):",
-                        detail: error,
-                        life: 8000
-                    })));
-                }
-            }
-        }, [validationErrors]
+    //@ts-ignore
+    useEffect(async () => {
+             if (validationErrors && validationErrors.length > 0) {
+                 if (toast.current) {
+                     await toast.current.clear();
+                     toast.current.show(validationErrors.map(error => ({
+                         severity: "error",
+                         summary: "Unable to complete action due to the following error(s):",
+                         detail: error,
+                         life: 8000
+                     })));
+                 }
+             }
+         }, [validationErrors]
     );
 
     return (
