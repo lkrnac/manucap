@@ -14,6 +14,13 @@ describe("indexLibrary", () => {
         expect(indexLibrary.Reducers).toBeDefined();
     });
 
+    it("exports all the necessary hooks", () => {
+        // WHEN import of indexLibrary
+
+        // THEN
+        expect(indexLibrary.Hooks.useMatchedCuesAsCsv).toBeDefined();
+    });
+
     it("exports all the necessary components", () => {
         // WHEN import of indexLibrary
 
