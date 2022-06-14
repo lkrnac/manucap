@@ -63,7 +63,11 @@ describe("SubtitleEditHeader", () => {
 
     it("renders Translation", () => {
         // GIVEN
-        const testingCues = [{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
+        const testingCues = [
+            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 4, "Caption Text Number 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(4, 6, "Caption 3"), cueCategory: "DIALOGUE" }
+        ] as CueDto[];
         const testingTrack = {
             type: "TRANSLATION",
             language: { id: "it-IT", name: "Italian" } as Language,
@@ -78,7 +82,7 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM",
             editDisabled: false
         } as Task;
-        const length = <span><i>2 minutes, 3 words</i></span>;
+        const length = <span><i>2 minutes, 9 words</i></span>;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
