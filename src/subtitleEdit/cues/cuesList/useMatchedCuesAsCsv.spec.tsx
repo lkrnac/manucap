@@ -26,12 +26,12 @@ describe("useMatchedCuesAsCsv", () => {
             <Provider store={testingStore}>{children}</Provider>
         );
         const targetCues = [
-            { vttCue: new VTTCue(0, 1, "Target Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(0, 1, "Target \"Line\" 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Target Line 2"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(2, 3, "Target Line 3"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
         const sourceCues = [
-            { vttCue: new VTTCue(0, 1, "Source Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(0, 1, "Source \"Line\" 1"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(1, 2, "Source Line 2"), cueCategory: "DIALOGUE" },
             { vttCue: new VTTCue(2, 3, "Source Line 3"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
@@ -45,7 +45,7 @@ describe("useMatchedCuesAsCsv", () => {
 
         // THEN
         expect(actualCuesCsv).toEqual(
-            "00:00:00.000,00:00:01.000,\"Source Line 1\",00:00:00.000,00:00:01.000,\"Target Line 1\"\r\n" +
+            "00:00:00.000,00:00:01.000,\"Source \"\"Line\"\" 1\",00:00:00.000,00:00:01.000,\"Target \"\"Line\"\" 1\"\r\n" +
         "00:00:01.000,00:00:02.000,\"Source Line 2\",00:00:01.000,00:00:02.000,\"Target Line 2\"\r\n" +
         "00:00:02.000,00:00:03.000,\"Source Line 3\",00:00:02.000,00:00:03.000,\"Target Line 3\""
         );
