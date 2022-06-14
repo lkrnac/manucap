@@ -2,6 +2,7 @@ import { CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { getTimeString } from "../../utils/timeUtils";
 
 const OVERLAP_RATIO = 0.65;
+const CSV_HEADER = "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n"
 
 export interface MatchedCuesWithEditingFocus {
     matchedCues: CueLineDto[];
@@ -174,5 +175,5 @@ export const matchedCuesToCsv = (matchedCues: Array<CueLineDto>): string => {
             return output.map(lineArray => lineArray.join(","));
         }
     );
-    return result.flat().join("\r\n");
+    return `${CSV_HEADER}${result.flat().join("\r\n")}`;
 };

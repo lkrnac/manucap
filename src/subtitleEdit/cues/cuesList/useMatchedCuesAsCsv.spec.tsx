@@ -45,7 +45,8 @@ describe("useMatchedCuesAsCsv", () => {
 
         // THEN
         expect(actualCuesCsv).toEqual(
-            "00:00:00.000,00:00:01.000,\"Source \"\"Line\"\" 1\",00:00:00.000,00:00:01.000,\"Target \"\"Line\"\" 1\"\r\n" +
+            "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n" +
+        "00:00:00.000,00:00:01.000,\"Source \"\"Line\"\" 1\",00:00:00.000,00:00:01.000,\"Target \"\"Line\"\" 1\"\r\n" +
         "00:00:01.000,00:00:02.000,\"Source Line 2\",00:00:01.000,00:00:02.000,\"Target Line 2\"\r\n" +
         "00:00:02.000,00:00:03.000,\"Source Line 3\",00:00:02.000,00:00:03.000,\"Target Line 3\""
         );
@@ -74,6 +75,7 @@ describe("useMatchedCuesAsCsv", () => {
 
         // THEN
         expect(actualCuesCsv).toEqual(
+            "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n" +
             "00:00:00.000,00:00:03.000,\"Source Line 1\",00:00:00.000,00:00:01.000,\"Target Line 1\"\r\n" +
             "00:00:00.000,00:00:03.000,\"Source Line 1\",00:00:01.000,00:00:02.000,\"Target Line 2\"\r\n" +
             "00:00:00.000,00:00:03.000,\"Source Line 1\",00:00:02.000,00:00:03.000,\"Target Line 3\""
@@ -104,6 +106,7 @@ describe("useMatchedCuesAsCsv", () => {
 
         // THEN
         expect(actualCuesCsv).toEqual(
+            "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n" +
             "00:00:00.000,00:00:01.000,\"Source Line 1\",00:00:00.000,00:00:02.000,\"Target Line 1\"\r\n" +
             "00:00:01.000,00:00:02.000,\"Source Line 2\",00:00:00.000,00:00:02.000,\"Target Line 1\"\r\n" +
             "00:00:02.000,00:00:03.000,\"Source Line 3\",00:00:02.000,00:00:03.000,\"Target Line 3\""
@@ -131,6 +134,7 @@ describe("useMatchedCuesAsCsv", () => {
 
         // THEN
         expect(actualCuesCsv).toEqual(
+            "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n" +
             ",,,00:00:00.000,00:00:01.000,\"Target Line 1\"\r\n" +
             ",,,00:00:01.000,00:00:02.000,\"Target Line 2\"\r\n" +
             ",,,00:00:02.000,00:00:03.000,\"Target Line 3\""
@@ -158,6 +162,7 @@ describe("useMatchedCuesAsCsv", () => {
 
         // THEN
         expect(actualCuesCsv).toEqual(
+            "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n" +
             "00:00:00.000,00:00:01.000,\"Source Line 1\",,,\r\n" +
             "00:00:01.000,00:00:02.000,\"Source Line 2\",,,\r\n" +
             "00:00:02.000,00:00:03.000,\"Source Line 3\",,,"
@@ -180,7 +185,9 @@ describe("useMatchedCuesAsCsv", () => {
         const actualCuesCsv = result.current();
 
         // THEN
-        expect(actualCuesCsv).toEqual("");
+        expect(actualCuesCsv).toEqual(
+            "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n"
+        );
     });
 
 });
