@@ -4,6 +4,7 @@ import { SubtitleEditState } from "./subtitleEditReducers";
 import { humanizer } from "humanize-duration";
 import { useSelector } from "react-redux";
 import { hasDataLoaded } from "./utils/subtitleEditUtils";
+import { getWordCount } from "./cues/cueUtils";
 
 const REVIEW_LABEL_MAP = new Map([
     ["TASK_REVIEW", ""],
@@ -42,13 +43,16 @@ const getMediaChunkRange = (track: Track): ReactElement | null => {
     return null;
 };
 
-const getTrackLength = (track: Track): ReactElement => {
+const getTrackLength = (track: Track, sourceCuesWordCount?: number): ReactElement => {
     if (!track || !track.mediaLength || track.mediaLength <= 0) {
         return <i />;
     }
     return (
         <span>
-            <i>{humanizer({ delimiter: " ", round: true })(track.mediaLength)}</i>
+            <i>
+                {humanizer({ delimiter: " ", round: true })(track.mediaLength)}
+                {sourceCuesWordCount ? `, ${sourceCuesWordCount} words` : null}
+            </i>
             {getMediaChunkRange(track)}
         </span>
     );
@@ -65,13 +69,17 @@ const getReviewHeader = (task: Task, track: Track): ReactElement => (
     </div>
 );
 
-const getTrackDescription = (task: Task, track: Track): ReactElement => {
+const getTrackDescription = (task: Task, track: Track, sourceWordCount: number): ReactElement => {
     if (!task || !task.type || !track) {
         return <div />;
     }
     const trackDescriptions = {
-        TASK_TRANSLATE: <div>Translation from {getLanguageDescription(track)} {getTrackLength(track)}</div>,
-        TASK_PIVOT_TRANSLATE: <div>Translation from {getLanguageDescription(track)} {getTrackLength(track)}</div>,
+        TASK_TRANSLATE: (
+            <div>Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}</div>
+        ),
+        TASK_PIVOT_TRANSLATE:(
+            <div>Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}</div>
+        ),
         TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}</div>,
         TASK_REVIEW: getReviewHeader(task, track),
         TASK_POST_EDITING: getReviewHeader(task, track),
@@ -97,13 +105,16 @@ const SubtitleEditHeader = (): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const stateTask = useSelector((state: SubtitleEditState) => state.cuesTask);
+    const sourceCues = useSelector((state: SubtitleEditState) => state.sourceCues);
+    const sourCuesWordCount = sourceCues.map(cue => getWordCount(cue.vttCue.text))
+        .reduce((total, count) => total + count, 0);
     const track = editingTrack ? editingTrack : {} as Track;
     const task = stateTask ? stateTask : {} as Task;
     return (
         <header style={{ display: "flex", paddingBottom: "10px" }}>
             <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                 <div><b>{track.mediaTitle}</b> <i>{task.projectName}</i></div>
-                {getTrackDescription(task, track)}
+                {getTrackDescription(task, track, sourCuesWordCount)}
             </div>
             <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
