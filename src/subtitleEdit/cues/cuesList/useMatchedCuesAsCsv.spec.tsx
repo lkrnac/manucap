@@ -18,7 +18,7 @@ interface WrapperProps {
 describe("useMatchedCuesAsCsv", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-    })
+    });
 
     it("returns CSV for exact match cues", () => {
         // GIVEN

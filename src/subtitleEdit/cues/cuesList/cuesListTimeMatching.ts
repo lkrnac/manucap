@@ -2,7 +2,7 @@ import { CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { getTimeString } from "../../utils/timeUtils";
 
 const OVERLAP_RATIO = 0.65;
-const CSV_HEADER = "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n"
+const CSV_HEADER = "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n";
 
 export interface MatchedCuesWithEditingFocus {
     matchedCues: CueLineDto[];
@@ -155,7 +155,7 @@ export const matchCuesByTime = (
     return { matchedCues, editingFocusIndex: indexes.editingFocus };
 };
 
-const encodeText = (value: string): string => `"${value.replace(/"/g, '""')}"`;
+const encodeText = (value: string): string => `"${value.replace(/"/g, "\"\"")}"`;
 
 const getCueCsvArray = (cues: Array<CueDtoWithIndex> | undefined) =>
     cues?.length ? cues.map(cueDto => [
