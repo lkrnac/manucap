@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import { CueDtoWithIndex, CueLineDto } from "../../model";
-import { getTimeString} from "../../utils/timeUtils";
+import { getTimeString } from "../../utils/timeUtils";
 
 const CSV_HEADER = "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n";
 
