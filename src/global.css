@@ -608,3 +608,27 @@ region.wavesurfer-region:before {
 .sbte-count-tag {
     @apply text-xs inline-block bg-gray-0 border border-gray-100 mr-0.5 rounded-lg py-0.5 px-1.5 mb-1 whitespace-nowrap;
 }
+
+/** Loading Icon **/
+
+.sbte-spinner-icon {
+    @apply w-16 h-16 border-b-transparent inline-block rounded-full;
+    border: 5px solid;
+    box-sizing: border-box;
+    animation: sbte-rotation 1s linear infinite;
+}
+
+.sbte-subtitle-edit .sbte-spinner-icon {
+    @apply border-x-blue-primary border-t-blue-primary border-b-transparent;
+}
+
+/** Animations **/
+
+@keyframes sbte-rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -83,9 +83,11 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
                         backgroundColor: "white" }}
                     >
-                        <div style={{ width: "350px", height: "25px", display: "flex", alignItems: "center" }}>
-                            <i className="fas fa-sync fa-spin" style={{ fontSize: "3em", fontWeight: 900 }} />
-                            <span style={{ marginLeft: "15px" }}>Hang in there, we&apos;re loading the track...</span>
+                        <div className="text-center space-y-4">
+                            <div className="sbte-spinner-icon" />
+                            <p className="font-medium text-blue-light m-0">
+                                Hang in there, we&apos;re loading the track...
+                            </p>
                         </div>
                     </div>
                     :
