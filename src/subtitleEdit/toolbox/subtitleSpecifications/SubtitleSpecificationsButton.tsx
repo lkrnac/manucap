@@ -9,7 +9,8 @@ const SubtitleSpecificationsButton = (): ReactElement => {
     const [show, setShow] = useState(false);
     useEffect(
         () => {
-            setShow(subtitleSpecifications != null && subtitleSpecifications.enabled);
+            setShow(subtitleSpecifications != null &&
+                (subtitleSpecifications.enabled || !!subtitleSpecifications.mediaNotes));
         }, [subtitleSpecifications]
     );
 
