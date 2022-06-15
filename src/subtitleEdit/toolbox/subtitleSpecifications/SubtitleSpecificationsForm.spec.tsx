@@ -31,6 +31,54 @@ describe("SubtitleSpecificationsForm", () => {
             <Provider store={testingStore}>
                 <label><strong>Enabled:&nbsp;</strong></label>
                 <label>No</label>
+                <hr className="my-4" />
+                <div style={{ marginTop: "10px" }}>
+                    <label><strong>Media Notes:&nbsp;</strong></label>
+                    <div className="sbte-subspec-freeform-text sbte-media-notes" />
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
+
+    it("renders disabled with media notes", () => {
+        // GIVEN
+        const subTitleSpecifications: SubtitleSpecification = {
+            subtitleSpecificationId: "",
+            projectId: "",
+            enabled: false,
+            audioDescription: false,
+            onScreenText: false,
+            spokenAudio: false,
+            speakerIdentification: "",
+            dialogueStyle: "",
+            maxLinesPerCaption: 0,
+            maxCharactersPerLine: 0,
+            minCaptionDurationInMillis: 0,
+            maxCaptionDurationInMillis: 0,
+            maxCharactersPerSecondPerCaption: 0,
+            comments: "",
+            mediaNotes: "test notes"
+        };
+
+        const expectedNode = render(
+            <Provider store={testingStore}>
+                <label><strong>Enabled:&nbsp;</strong></label>
+                <label>No</label>
+                <hr className="my-4" />
+                <div style={{ marginTop: "10px" }}>
+                    <label><strong>Media Notes:&nbsp;</strong></label>
+                    <div className="sbte-subspec-freeform-text sbte-media-notes"><p>test notes</p></div>
+                </div>
             </Provider>
         );
 
@@ -121,10 +169,11 @@ describe("SubtitleSpecificationsForm", () => {
                 <div className="sbte-subspec-freeform-text sbte-subspec-comments">
                     <p>sample <strong>comment</strong> <del>test</del></p>
                 </div>
-                <br />
-                <label><strong>Media Notes:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text sbte-media-notes">
-                    <p>media <strong>notes</strong> <del>test</del></p>
+                <div style={{ marginTop: "10px" }}>
+                    <label><strong>Media Notes:&nbsp;</strong></label>
+                    <div className="sbte-subspec-freeform-text sbte-media-notes">
+                        <p>media <strong>notes</strong> <del>test</del></p>
+                    </div>
                 </div>
             </Provider>
         );
@@ -217,10 +266,11 @@ describe("SubtitleSpecificationsForm", () => {
                 <div className="sbte-subspec-freeform-text sbte-subspec-comments">
                     <p>sample <strong>comment</strong> <del>test</del></p>
                 </div>
-                <br />
-                <label><strong>Media Notes:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text sbte-media-notes">
-                    <p>media <strong>notes</strong> <del>test</del></p>
+                <div style={{ marginTop: "10px" }}>
+                    <label><strong>Media Notes:&nbsp;</strong></label>
+                    <div className="sbte-subspec-freeform-text sbte-media-notes">
+                        <p>media <strong>notes</strong> <del>test</del></p>
+                    </div>
                 </div>
             </Provider>
         );
