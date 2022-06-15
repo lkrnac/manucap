@@ -528,9 +528,7 @@ describe("SubtitleEdit", () => {
                             <div />
                         </div>
                     </header>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white" }}
-                    >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                         <div className="text-center space-y-4">
                             <div className="sbte-spinner-icon" />
                             <p className="font-medium text-blue-light m-0">
@@ -598,9 +596,7 @@ describe("SubtitleEdit", () => {
                             <div />
                         </div>
                     </header>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white" }}
-                    >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                         <div className="text-center space-y-4">
                             <div className="sbte-spinner-icon" />
                             <p className="font-medium text-blue-light m-0">

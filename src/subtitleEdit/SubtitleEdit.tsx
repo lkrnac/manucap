@@ -80,8 +80,13 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             <SubtitleEditHeader />
             {
                 !hasDataLoaded(editingTrack, loadingIndicator) ?
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%",
-                        backgroundColor: "white" }}
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            height: "100%"
+                        }}
                     >
                         <div className="text-center space-y-4">
                             <div className="sbte-spinner-icon" />
