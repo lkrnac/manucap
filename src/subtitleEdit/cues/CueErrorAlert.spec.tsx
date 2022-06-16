@@ -1,12 +1,13 @@
 import "../../testUtils/initBrowserEnvironment";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
 import { CueError } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { setValidationErrors } from "./edit/cueEditorSlices";
 import CueErrorAlert from "./CueErrorAlert";
 import { act } from "react-dom/test-utils";
+import { removeIds } from "../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -14,6 +15,7 @@ jest.setTimeout(15000);
 
 describe("CueErrorAlert", () => {
     beforeEach(() => {
+        jest.clearAllMocks();
         testingStore = createTestingStore();
     });
 
@@ -25,7 +27,8 @@ describe("CueErrorAlert", () => {
             <div className="p-toast p-component p-toast-top-center">
                 <div>
                     <div
-                        className="p-toast-message p-toast-message-error"
+                        className="p-toast-message p-toast-message-error
+                        p-toast-message-enter p-toast-message-enter-active"
                         role="alert"
                         aria-live="assertive"
                         aria-atomic="true"
@@ -49,15 +52,20 @@ describe("CueErrorAlert", () => {
             </div>
         );
 
-        // WHEN
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <CueErrorAlert />
-            </Provider>
-        );
+        let actualNode: RenderResult;
+
+        //WHEN
+        await act(async () => {
+            actualNode = render(
+                <Provider store={testingStore}>
+                    <CueErrorAlert />
+                </Provider>
+            );
+        });
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        //@ts-ignore value should not be null
+        expect(removeIds(actualNode.container.outerHTML)).toEqual(expectedNode.container.outerHTML);
     });
 
     it("closes cue errors alert if dismiss button is clicked", async () => {
@@ -72,18 +80,24 @@ describe("CueErrorAlert", () => {
             </>
         );
 
-        const { container } = render(
-            <Provider store={testingStore}>
-                <CueErrorAlert />
-            </Provider>
-        );
+        let actualNode: RenderResult;
+
+        //WHEN
+        await act(async () => {
+            actualNode = render(
+                <Provider store={testingStore}>
+                    <CueErrorAlert />
+                </Provider>
+            );
+        });
 
         // WHEN
-        await fireEvent.click(container.querySelector("button.p-toast-icon-close") as HTMLElement);
+        //@ts-ignore value should not be null
+        await fireEvent.click(actualNode.container.querySelector("button.p-toast-icon-close") as HTMLElement);
 
         // THEN
         await waitFor(() => {
-            expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            expect(removeIds(actualNode.container.outerHTML)).toEqual(expectedNode.container.outerHTML);
         });
     });
 
@@ -98,16 +112,21 @@ describe("CueErrorAlert", () => {
                 </div>
             </>
         );
+        let actualNode: RenderResult;
 
-        const { container, rerender } = render(
-            <Provider store={testingStore}>
-                <CueErrorAlert />
-            </Provider>
-        );
+        //WHEN
+        await act(async () => {
+            actualNode = render(
+                <Provider store={testingStore}>
+                    <CueErrorAlert />
+                </Provider>
+            );
+        });
         await act(async () => new Promise(resolve => setTimeout(resolve, 8100)));
 
         // WHEN
-        rerender(
+        //@ts-ignore value should not be null
+        actualNode.rerender(
             <Provider store={testingStore}>
                 <CueErrorAlert />
             </Provider>
@@ -115,7 +134,7 @@ describe("CueErrorAlert", () => {
 
         // THEN
         await waitFor(() => {
-            expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            expect(removeIds(actualNode.container.outerHTML)).toEqual(expectedNode.container.outerHTML);
         });
     });
 
@@ -123,7 +142,7 @@ describe("CueErrorAlert", () => {
         // GIVEN
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
         const expectedNode = render(
-            <div className="p-toast p-component p-toast-top-center">
+            <div className="p-toast p-component p-toast-top-center" style={{ "zIndex": 1201 }}>
                 <div>
                     <div
                         className="p-toast-message p-toast-message-error p-toast-message-enter-done"
@@ -174,7 +193,7 @@ describe("CueErrorAlert", () => {
     it("auto sets validation error to false after receiving it", (done) => {
         // GIVEN
         render(
-            <Provider store={testingStore} >
+            <Provider store={testingStore}>
                 <CueErrorAlert />
             </Provider>
         );
