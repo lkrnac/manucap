@@ -34,9 +34,9 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
     <>
         <label><strong>Enabled:&nbsp;</strong></label>
         <label>{props.subTitleSpecifications.enabled ? "Yes" : "No"}</label>
+        <hr className="my-4" />
         {props.subTitleSpecifications.enabled ? (
             <>
-                <hr className="my-4" />
                 <div style={{ display: "flex", marginRight: "20px" }}>
                     <div style={{ flex: 1 }}>
                         <div>
@@ -118,18 +118,18 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                     plugins={[remarkGfm]}
                     className="sbte-subspec-freeform-text sbte-subspec-comments"
                 />
-                <br />
-                <label><strong>Media Notes:&nbsp;</strong></label>
-
-                <ReactMarkdown
-                    renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
-                    source={props.subTitleSpecifications.mediaNotes ? props.subTitleSpecifications.mediaNotes : ""}
-                    disallowedTypes={["html"]}
-                    plugins={[remarkGfm]}
-                    className="sbte-subspec-freeform-text sbte-media-notes"
-                />
             </>
         ) : null}
+        <div style={{ marginTop: "10px" }}>
+            <label><strong>Media Notes:&nbsp;</strong></label>
+            <ReactMarkdown
+                renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
+                source={props.subTitleSpecifications.mediaNotes ? props.subTitleSpecifications.mediaNotes : ""}
+                disallowedTypes={["html"]}
+                plugins={[remarkGfm]}
+                className="sbte-subspec-freeform-text sbte-media-notes"
+            />
+        </div>
     </>
 );
 

@@ -9,6 +9,7 @@ import { createTestingStore } from "../testUtils/testingStore";
 import { mount } from "enzyme";
 import { removeVideoPlayerDynamicValue } from "../testUtils/testUtils";
 import { updateCues } from "./cues/cuesList/cuesListActions";
+import { updateSourceCues } from "./cues/view/sourceCueSlices";
 
 let testingStore = createTestingStore();
 
@@ -62,12 +63,18 @@ describe("SubtitleEditHeader", () => {
 
     it("renders Translation", () => {
         // GIVEN
+        const testingCues = [
+            { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 4, "Caption Text Number 2"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(4, 6, "Caption 3"), cueCategory: "DIALOGUE" }
+        ] as CueDto[];
         const testingTrack = {
             type: "TRANSLATION",
             language: { id: "it-IT", name: "Italian" } as Language,
             default: true,
             mediaTitle: "This is the video title",
             sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+            mediaLength: 120000
         } as Track;
         const testingTask = {
             type: "TASK_TRANSLATE",
@@ -75,11 +82,12 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM",
             editDisabled: false
         } as Task;
+        const length = <span><i>2 minutes, 9 words</i></span>;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span> <i /></div>
+                    <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span> {length}</div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -94,6 +102,7 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
+        testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
@@ -104,12 +113,14 @@ describe("SubtitleEditHeader", () => {
 
     it("renders Pivot Translation", () => {
         // GIVEN
+        const testingCues = [{ vttCue: new VTTCue(0, 2, "Test Line 4 words"), cueCategory: "DIALOGUE" }] as CueDto[];
         const testingTrack = {
             type: "TRANSLATION",
             language: { id: "it-IT", name: "Italian" } as Language,
             default: true,
             mediaTitle: "This is the video title",
             sourceLanguage: { id: "en-US", name: "English (US)" } as Language,
+            mediaLength: 150000
         } as Track;
         const testingTask = {
             type: "TASK_PIVOT_TRANSLATE",
@@ -117,11 +128,12 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM",
             editDisabled: false
         } as Task;
+        const length = <span><i>2 minutes 30 seconds, 4 words</i></span>;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span> <i /></div>
+                    <div>Translation from <span><b>English (US)</b> to <b>Italian</b></span> {length}</div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -136,6 +148,7 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
+        testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
@@ -146,11 +159,13 @@ describe("SubtitleEditHeader", () => {
 
     it("renders Direct Translation", () => {
         // GIVEN
+        const testingCues = [{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
         const testingTrack = {
             type: "TRANSLATION",
             language: { id: "it-IT", name: "Italian" } as Language,
             default: true,
-            mediaTitle: "This is the video title"
+            mediaTitle: "This is the video title",
+            mediaLength: 180000
         } as Track;
         const testingTask = {
             type: "TASK_DIRECT_TRANSLATE",
@@ -158,11 +173,12 @@ describe("SubtitleEditHeader", () => {
             dueDate: "2019/12/30 10:00AM",
             editDisabled: false
         } as Task;
+        const length = <span><i>3 minutes</i></span>;
         const expectedNode = mount(
             <header style={{ display: "flex", paddingBottom: "10px" }}>
                 <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
                     <div><b>This is the video title</b> <i>Project One</i></div>
-                    <div>Direct Translation <span> to <b>Italian</b></span> <i /></div>
+                    <div>Direct Translation <span> to <b>Italian</b></span> {length}</div>
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
@@ -177,6 +193,7 @@ describe("SubtitleEditHeader", () => {
                 <SubtitleEditHeader />
             </Provider>
         );
+        testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 

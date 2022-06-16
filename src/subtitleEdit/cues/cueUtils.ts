@@ -186,3 +186,8 @@ export const cueCategoryToPrettyName = {
     AUDIO_DESCRIPTION: "Audio Descriptions",
     LYRICS: "Lyrics"
 };
+
+export const getWordCount = (text: string): number => {
+    const matches = text ? text.match(/\S+/g) : [];
+    return matches ? matches.length : 0;
+};

@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { EditorState } from "draft-js";
+import { getWordCount } from "../cueUtils";
 
 interface Props {
     cueIndex: number;
@@ -9,11 +10,6 @@ interface Props {
 
 const getCharacterCount = (text: string): number =>
     text ? text.replace(/(\r\n|\n|\r)/gm, "").length : 0;
-
-const getWordCount = (text: string): number => {
-    const matches = text ? text.match(/\S+/g) : [];
-    return matches ? matches.length : 0;
-};
 
 const NUM_DECIMAL = 3;
 
