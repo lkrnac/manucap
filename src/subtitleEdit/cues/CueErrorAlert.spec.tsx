@@ -7,7 +7,6 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import { setValidationErrors } from "./edit/cueEditorSlices";
 import CueErrorAlert from "./CueErrorAlert";
 import { act } from "react-dom/test-utils";
-import React from "react";
 
 let testingStore = createTestingStore();
 
@@ -190,22 +189,24 @@ describe("CueErrorAlert", () => {
         }, 1100);
     });
 
-    it("clears calls toast clear", async () => {
+    it("clears all toasts and only show one", async () => {
         // GIVEN
-        const clearMock = jest.fn();
-        const toastClearSpy = jest.spyOn(React, "useRef").mockReturnValueOnce({ current: { clear: clearMock }});
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
+        const component = <Provider store={testingStore}> <CueErrorAlert /> </Provider>;
 
-
-        // WHEN
-        render(
-            <Provider store={testingStore}>
-                <CueErrorAlert />
-            </Provider>
-        );
+        //WHEN
+        await act(async () => {
+            const node = await render(component);
+            await node.rerender(component);
+            await node.rerender(component);
+            await node.rerender(component);
+            await node.rerender(component);
+        });
 
         // THEN
-        expect(clearMock).toBeCalled();
-
+        await waitFor(async () => {
+            await expect(document.body.querySelectorAll(".p-toast-message")
+                .length).toEqual(1);
+        });
     });
 });
