@@ -1,7 +1,7 @@
 import "../../testUtils/initBrowserEnvironment";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
-import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CueError } from "../model";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { setValidationErrors } from "./edit/cueEditorSlices";
@@ -52,16 +52,12 @@ describe("CueErrorAlert", () => {
             </div>
         );
 
-        let actualNode: RenderResult;
-
         //WHEN
-        await act(async () => {
-            actualNode = render(
-                <Provider store={testingStore}>
-                    <CueErrorAlert />
-                </Provider>
-            );
-        });
+        const actualNode = await render(
+            <Provider store={testingStore}>
+                <CueErrorAlert />
+            </Provider>
+        );
 
         // THEN
         //@ts-ignore value should not be null
@@ -80,16 +76,12 @@ describe("CueErrorAlert", () => {
             </>
         );
 
-        let actualNode: RenderResult;
-
         //WHEN
-        await act(async () => {
-            actualNode = render(
-                <Provider store={testingStore}>
-                    <CueErrorAlert />
-                </Provider>
-            );
-        });
+        const actualNode = await render(
+            <Provider store={testingStore}>
+                <CueErrorAlert />
+            </Provider>
+        );
 
         // WHEN
         //@ts-ignore value should not be null
@@ -112,16 +104,13 @@ describe("CueErrorAlert", () => {
                 </div>
             </>
         );
-        let actualNode: RenderResult;
 
         //WHEN
-        await act(async () => {
-            actualNode = render(
-                <Provider store={testingStore}>
-                    <CueErrorAlert />
-                </Provider>
-            );
-        });
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueErrorAlert />
+            </Provider>
+        );
         await act(async () => new Promise(resolve => setTimeout(resolve, 8100)));
 
         // WHEN
@@ -214,13 +203,11 @@ describe("CueErrorAlert", () => {
         const component = <Provider store={testingStore}> <CueErrorAlert /> </Provider>;
 
         //WHEN
-        await act(async () => {
-            const node = await render(component);
-            await node.rerender(component);
-            await node.rerender(component);
-            await node.rerender(component);
-            await node.rerender(component);
-        });
+        const node = render(component);
+        node.rerender(component);
+        node.rerender(component);
+        node.rerender(component);
+        node.rerender(component);
 
         // THEN
         await waitFor(async () => {
