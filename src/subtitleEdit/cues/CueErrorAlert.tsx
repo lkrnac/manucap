@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { setValidationErrors } from "./edit/cueEditorSlices";
 
+const DEFAULT_TIME_OUT = 100;
+
 const CueErrorAlert = (): ReactElement => {
     const dispatch = useDispatch();
     const validationErrors = useSelector((state: SubtitleEditState) => state.validationErrors);
@@ -20,6 +22,7 @@ const CueErrorAlert = (): ReactElement => {
     );
 
     useEffect(() => {
+        const timeout = setTimeout(() => {
             if (validationErrors && validationErrors.length > 0) {
                 const clearAndShowToast = async () => {
                     if (toast.current) {
@@ -34,6 +37,8 @@ const CueErrorAlert = (): ReactElement => {
                 };
                 clearAndShowToast();
             }
+        }, DEFAULT_TIME_OUT);
+        return () => clearTimeout(timeout);
         }, [validationErrors]
     );
 

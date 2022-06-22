@@ -61,7 +61,9 @@ describe("CueErrorAlert", () => {
 
         // THEN
         //@ts-ignore value should not be null
-        expect(removeIds(actualNode.container.outerHTML)).toEqual(expectedNode.container.outerHTML);
+        await waitFor(async () => {
+            expect(removeIds(actualNode.container.outerHTML)).toEqual(expectedNode.container.outerHTML);
+        });
     });
 
     it("closes cue errors alert if dismiss button is clicked", async () => {
@@ -82,6 +84,7 @@ describe("CueErrorAlert", () => {
                 <CueErrorAlert />
             </Provider>
         );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // WHEN
         //@ts-ignore value should not be null
@@ -106,12 +109,11 @@ describe("CueErrorAlert", () => {
         );
 
         //WHEN
-        const actualNode = render(
+        const actualNode = await render(
             <Provider store={testingStore}>
                 <CueErrorAlert />
             </Provider>
         );
-        await act(async () => new Promise(resolve => setTimeout(resolve, 8100)));
 
         // WHEN
         //@ts-ignore value should not be null
