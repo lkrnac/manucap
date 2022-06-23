@@ -339,6 +339,12 @@
     @apply text-green-primary;
 }
 
+.p-toast-message-exit-active {
+    transition: none !important;
+    margin-bottom: initial;
+    overflow: initial;
+}
+
 /** Dropdown / Menu **/
 
 .p-dropdown-panel {
