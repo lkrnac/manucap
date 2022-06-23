@@ -3,7 +3,7 @@ import { SubtitleEditState } from "../../subtitleEditReducers";
 import { CueDtoWithIndex, CueLineDto } from "../../model";
 import { getTimeString } from "../../utils/timeUtils";
 
-const CSV_HEADER = "Source Start,Source End,Source Test,Target Start,Target End,Target Text\r\n";
+const CSV_HEADER = "Source Start,Source End,Source Text,Target Start,Target End,Target Text\r\n";
 
 const encodeText = (value: string): string => `"${value.replace(/"/g, "\"\"")}"`;
 
