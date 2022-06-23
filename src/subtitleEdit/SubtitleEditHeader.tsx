@@ -62,10 +62,10 @@ const getChunkReviewType = (task: Task): string => {
     return task.finalChunkReview ? "Final Chunk " : "";
 };
 
-const getReviewHeader = (task: Task, track: Track): ReactElement => (
+const getReviewHeader = (task: Task, track: Track, sourceWordCount: number): ReactElement => (
     <div>
         {getChunkReviewType(task)}{REVIEW_LABEL_MAP.get(task.type)}Review of {getLanguageDescription(track)}{" "}
-        {getTrackType(track)} {getTrackLength(track)}
+        {getTrackType(track)} {getTrackLength(track, sourceWordCount)}
     </div>
 );
 
@@ -81,10 +81,10 @@ const getTrackDescription = (task: Task, track: Track, sourceWordCount: number):
             <div>Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}</div>
         ),
         TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}</div>,
-        TASK_REVIEW: getReviewHeader(task, track),
-        TASK_POST_EDITING: getReviewHeader(task, track),
-        TASK_PROOF_READING: getReviewHeader(task, track),
-        TASK_SIGN_OFF: getReviewHeader(task, track),
+        TASK_REVIEW: getReviewHeader(task, track, sourceWordCount),
+        TASK_POST_EDITING: getReviewHeader(task, track, sourceWordCount),
+        TASK_PROOF_READING: getReviewHeader(task, track, sourceWordCount),
+        TASK_SIGN_OFF: getReviewHeader(task, track, sourceWordCount),
         TASK_CAPTION: <div>Caption in: {getLanguageDescription(track)} {getTrackLength(track)}</div>
     };
     return trackDescriptions[task.type] ? trackDescriptions[task.type] : <div />;
