@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import { setValidationErrors } from "./edit/cueEditorSlices";
 
+const DEFAULT_TIME_OUT = 100;
+
 const CueErrorAlert = (): ReactElement => {
     const dispatch = useDispatch();
     const validationErrors = useSelector((state: SubtitleEditState) => state.validationErrors);
@@ -19,18 +21,24 @@ const CueErrorAlert = (): ReactElement => {
         }, [dispatch, validationErrors]
     );
 
-    useEffect(
-        () => {
+    useEffect(() => {
+        const timeout = setTimeout(() => {
             if (validationErrors && validationErrors.length > 0) {
-                if (toast.current) {
-                    toast.current.show(validationErrors.map(error => ({
-                        severity: "error",
-                        summary: "Unable to complete action due to the following error(s):",
-                        detail: error,
-                        life: 8000
-                    })));
-                }
+                const clearAndShowToast = async () => {
+                    if (toast.current) {
+                        await toast.current.clear();
+                        toast.current.show(validationErrors.map(error => ({
+                            severity: "error",
+                            summary: "Unable to complete action due to the following error(s):",
+                            detail: error,
+                            life: 8000
+                        })));
+                    }
+                };
+                clearAndShowToast();
             }
+        }, DEFAULT_TIME_OUT);
+        return () => clearTimeout(timeout);
         }, [validationErrors]
     );
 
