@@ -1,6 +1,8 @@
 /** Default Color Palette **/
 
-:root {
+:root,
+::before,
+::after {
     --white: 255, 255, 255;
     --black: 0, 0, 0;
     --blue-light: 49, 118, 148;
