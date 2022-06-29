@@ -2140,6 +2140,26 @@ describe("cueSlices", () => {
         });
 
         describe("without source cues", () => {
+            it("uses min duration value as step if default step value is lower", () => {
+                // GIVEN
+                testingStore.dispatch(
+                    readSubtitleSpecification({
+                        minCaptionDurationInMillis: 5000,
+                        enabled: true
+                    } as SubtitleSpecification) as {} as AnyAction
+                );
+                testingStore.dispatch(updateCues([]) as {} as AnyAction);
+
+                // WHEN
+                testingStore.dispatch(
+                    addCue(0, []) as {} as AnyAction
+                );
+
+                // THEN
+                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(5);
+            });
+
             it("adds first cue to the cue array", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues([]) as {} as AnyAction);
