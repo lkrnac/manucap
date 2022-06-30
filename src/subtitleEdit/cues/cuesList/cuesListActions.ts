@@ -349,7 +349,10 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
         const state: SubtitleEditState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
-        const step = Math.min(timeGapLimit.maxGap, NEW_ADDED_CUE_DEFAULT_STEP);
+        let step = Math.min(timeGapLimit.maxGap, NEW_ADDED_CUE_DEFAULT_STEP);
+        if (timeGapLimit.minGap > step) {
+            step = timeGapLimit.minGap;
+        }
         const cues = state.cues;
         const previousCue = cues[idx - 1] || DEFAULT_CUE;
         const startTime = sourceIndexes !== undefined
