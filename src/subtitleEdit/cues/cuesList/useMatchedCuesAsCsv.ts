@@ -30,17 +30,15 @@ export const matchedCuesToCsv = (matchedCues: Array<CueLineDto>, isTranslationTr
             return output.map(lineArray => lineArray.join(","));
         }
     );
-    const TRACK_MATCHED_CSV_HEADER = `${isTranslationTrack ? CSV_HEADER_SOURCE_AND_TARGET : CSV_HEADER_SOURCE_ONLY}`;
-    return `${TRACK_MATCHED_CSV_HEADER + result.flat().join("\r\n")}`;
+    const trackMatchedCsvHeader = `${isTranslationTrack ? CSV_HEADER_SOURCE_AND_TARGET : CSV_HEADER_SOURCE_ONLY}`;
+    return `${trackMatchedCsvHeader + result.flat().join("\r\n")}`;
 };
 
 const useMatchedCuesAsCsv = (): Function => {
     const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues.matchedCues);
     const track = useSelector((state: SubtitleEditState) => state.editingTrack);
     return () => {
-
         const isTranslationTrack = track?.type === "TRANSLATION" && !isDirectTranslationTrack(track);
-        console.log("isTranslationTrack ", isTranslationTrack, track);
         return matchedCuesToCsv(matchedCues, isTranslationTrack);
     };
 };
