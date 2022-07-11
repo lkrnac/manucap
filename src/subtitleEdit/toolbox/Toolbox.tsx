@@ -30,7 +30,7 @@ const Toolbox = (props: Props): ReactElement => {
 
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
-    const isTranslation = editingTrack?.sourceLanguage != null;
+    const isTranslation = editingTrack?.type === "TRANSLATION";
 
     // Menu Toolbox.
 
