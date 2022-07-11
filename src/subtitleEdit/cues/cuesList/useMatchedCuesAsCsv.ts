@@ -30,7 +30,7 @@ export const matchedCuesToCsv = (matchedCues: Array<CueLineDto>, isTranslationTr
             return output.map(lineArray => lineArray.join(","));
         }
     );
-    const trackMatchedCsvHeader = `${isTranslationTrack ? CSV_HEADER_SOURCE_AND_TARGET : CSV_HEADER_SOURCE_ONLY}`;
+    const trackMatchedCsvHeader = isTranslationTrack ? CSV_HEADER_SOURCE_AND_TARGET : CSV_HEADER_SOURCE_ONLY;
     return `${trackMatchedCsvHeader + result.flat().join("\r\n")}`;
 };
 
