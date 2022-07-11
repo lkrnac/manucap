@@ -19,6 +19,16 @@ interface WrapperProps {
 describe("useMatchedCuesAsCsv", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+        const testingTrack = {
+            type: "TRANSLATION",
+            language: { id: "en-US", name: "English (US)" } as Language,
+            default: true,
+            mediaTitle: "This is the video title",
+            mediaLength: 4000,
+            progress: 50,
+            sourceLanguage: { id: "ar-SA", name: "Arabic" } as Language
+        } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
     });
 
     it("returns CSV for exact match cues", () => {
@@ -152,7 +162,7 @@ describe("useMatchedCuesAsCsv", () => {
             default: true,
             mediaTitle: "This is the video title",
             mediaLength: 4000,
-            progress: 50
+            progress: 50,
         } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const wrapper = ({ children }: WrapperProps): ReactElement => ( // eslint-disable-line react/prop-types
@@ -171,7 +181,7 @@ describe("useMatchedCuesAsCsv", () => {
 
         // THEN
         expect(actualCuesCsv).toEqual(
-            "Target Start,Target End,Target Text\r\n" +
+            "Start,End,Text\r\n" +
             "00:00:00.000,00:00:02.000,\"Target Line 1\"\r\n" +
             "00:00:02.000,00:00:03.000,\"Target Line 3\""
         );
@@ -204,7 +214,7 @@ describe("useMatchedCuesAsCsv", () => {
 
         // THEN
         expect(actualCuesCsv).toEqual(
-            "Target Start,Target End,Target Text\r\n" +
+            "Start,End,Text\r\n" +
             "00:00:00.000,00:00:02.000,\"Target Line 1\"\r\n" +
             "00:00:02.000,00:00:03.000,\"Target Line 3\""
         );

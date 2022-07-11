@@ -4,7 +4,7 @@ import { CueDtoWithIndex, CueLineDto } from "../../model";
 import { getTimeString } from "../../utils/timeUtils";
 import { isDirectTranslationTrack } from "../../utils/subtitleEditUtils";
 
-const CSV_HEADER_SOURCE_ONLY = "Target Start,Target End,Target Text\r\n";
+const CSV_HEADER_SOURCE_ONLY = "Start,End,Text\r\n";
 const CSV_HEADER_SOURCE_AND_TARGET = "Source Start,Source End,Source Text,Target Start,Target End,Target Text\r\n";
 
 const encodeText = (value: string): string => `"${value.replace(/"/g, "\"\"")}"`;
@@ -19,26 +19,29 @@ const getCueCsvArray = (cues: Array<CueDtoWithIndex> | undefined) =>
 const cartesian = (sourceArray: Array<Array<string>>, targetArray: Array<Array<string>>) =>
     sourceArray.flatMap(source => targetArray.map(target => [source, target].flat()));
 
-export const matchedCuesToCsv = (matchedCues: Array<CueLineDto>, isSourceOnlyTrack: boolean): string => {
+export const matchedCuesToCsv = (matchedCues: Array<CueLineDto>, isTranslationTrack: boolean): string => {
     const result = matchedCues.map(cueLineDto => {
             const targetArray = getCueCsvArray(cueLineDto.targetCues);
             let output = targetArray;
-            if (!isSourceOnlyTrack) {
+            if (isTranslationTrack) {
                 const sourceArray = getCueCsvArray(cueLineDto.sourceCues);
                 output = cartesian(sourceArray, targetArray);
             }
             return output.map(lineArray => lineArray.join(","));
         }
     );
-    return `${isSourceOnlyTrack ? CSV_HEADER_SOURCE_ONLY : CSV_HEADER_SOURCE_AND_TARGET}${result.flat().join("\r\n")}`;
+    const TRACK_MATCHED_CSV_HEADER = `${isTranslationTrack ? CSV_HEADER_SOURCE_AND_TARGET : CSV_HEADER_SOURCE_ONLY}`;
+    return `${TRACK_MATCHED_CSV_HEADER + result.flat().join("\r\n")}`;
 };
 
 const useMatchedCuesAsCsv = (): Function => {
     const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues.matchedCues);
     const track = useSelector((state: SubtitleEditState) => state.editingTrack);
     return () => {
-        const isSourceOnlyTrack = track?.type === "CAPTION" || isDirectTranslationTrack(track);
-        return matchedCuesToCsv(matchedCues, isSourceOnlyTrack);
+
+        const isTranslationTrack = track?.type === "TRANSLATION" && !isDirectTranslationTrack(track);
+        console.log("isTranslationTrack ", isTranslationTrack, track);
+        return matchedCuesToCsv(matchedCues, isTranslationTrack);
     };
 };
 
