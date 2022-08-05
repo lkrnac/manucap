@@ -85,7 +85,6 @@ const sourceCues = matchedCues.map(matchedCue => matchedCue.sourceCues)
     .flat()
     .map(cueWithIndex => cueWithIndex.cue);
 
-
 describe("CuesList", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -219,8 +218,7 @@ describe("CuesList", () => {
                             ))
                         }
                         <button
-                            style={{ width: "100%", paddingTop: "5px" }}
-                            className="sbte-btn sbte-btn-primary sbte-next-button"
+                            className="sbte-btn sbte-btn-primary sbte-next-button w-full"
                             onClick={jest.fn()}
                         >
                             Load Next Cues
@@ -252,8 +250,8 @@ describe("CuesList", () => {
                 <Provider store={testingStore}>
                     <div style={{ overflow: "auto" }}>
                         <button
-                            style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
-                            className="sbte-btn sbte-btn-primary sbte-previous-button"
+                            style={{ marginBottom: 5 }}
+                            className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
                             onClick={jest.fn()}
                         >
                             Load Previous Cues
@@ -275,8 +273,7 @@ describe("CuesList", () => {
                             ))
                         }
                         <button
-                            style={{ width: "100%", paddingTop: "5px" }}
-                            className="sbte-btn sbte-btn-primary sbte-next-button"
+                            className="sbte-btn sbte-btn-primary sbte-next-button w-full"
                             onClick={jest.fn()}
                         >
                             Load Next Cues
@@ -308,8 +305,8 @@ describe("CuesList", () => {
                 <Provider store={testingStore}>
                     <div style={{ overflow: "auto" }}>
                         <button
-                            style={{ maxHeight: "38px", width: "100%", marginBottom: "5px" }}
-                            className="sbte-btn sbte-btn-primary sbte-previous-button"
+                            style={{ marginBottom: 5 }}
+                            className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
                             onClick={jest.fn()}
                         >
                             Load Previous Cues
