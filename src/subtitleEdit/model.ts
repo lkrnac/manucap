@@ -88,6 +88,7 @@ export interface Task {
     readonly dueDate: string;
     readonly editDisabled: boolean;
     readonly finalChunkReview?: boolean;
+    readonly lastUpdatedTrackTime?: string;
 }
 
 export interface User {

@@ -304,6 +304,7 @@ const TestApp = (): ReactElement => {
                 projectName: "Project One",
                 dueDate: "2019/12/30 10:00AM",
                 editDisabled: false,
+                lastUpdatedTrackTime: "2020/08/30 10:42AM"
             })),
             500
         );

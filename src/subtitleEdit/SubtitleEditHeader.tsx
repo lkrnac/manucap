@@ -100,6 +100,12 @@ const getDueDate = (task: Task): ReactElement => {
 const getProgress = (track: Track, cuesDataLoaded: boolean | null): ReactElement =>
     cuesDataLoaded ? (<div>Completed: <b>{track.progress}%</b></div>) : <div />;
 
+const getTrackLastUpdatedTime = (task: Task): ReactElement => {
+    if (!task || !task.type) {
+        return <div />;
+    }
+    return <span>Last Edit: <b>{task.lastUpdatedTrackTime}</b></span>;
+};
 
 const SubtitleEditHeader = (): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
@@ -118,6 +124,7 @@ const SubtitleEditHeader = (): ReactElement => {
             </div>
             <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
+                {getTrackLastUpdatedTime(task)}
                 {getProgress(track, hasDataLoaded(editingTrack, loadingIndicator))}
             </div>
         </header>
