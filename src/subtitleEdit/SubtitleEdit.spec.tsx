@@ -134,7 +134,7 @@ describe("SubtitleEdit", () => {
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Last Edit<i
                                 id="lastCueUpdatedTimeInfo"
-                                data-pr-tooltip="Updated each 10 minutes"
+                                data-pr-tooltip="Updated every 10 minutes"
                                 data-pr-position="left"
                                 data-pr-at="left center"
                                 className="fas fa-info-circle"
@@ -349,7 +349,7 @@ describe("SubtitleEdit", () => {
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Last Edit<i
                                 id="lastCueUpdatedTimeInfo"
-                                data-pr-tooltip="Updated each 10 minutes"
+                                data-pr-tooltip="Updated every 10 minutes"
                                 data-pr-position="left"
                                 data-pr-at="left center"
                                 className="fas fa-info-circle"
@@ -546,7 +546,7 @@ describe("SubtitleEdit", () => {
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Last Edit<i
                                 id="lastCueUpdatedTimeInfo"
-                                data-pr-tooltip="Updated each 10 minutes"
+                                data-pr-tooltip="Updated every 10 minutes"
                                 data-pr-position="left"
                                 data-pr-at="left center"
                                 className="fas fa-info-circle"
@@ -622,7 +622,7 @@ describe("SubtitleEdit", () => {
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Last Edit<i
                                 id="lastCueUpdatedTimeInfo"
-                                data-pr-tooltip="Updated each 10 minutes"
+                                data-pr-tooltip="Updated every 10 minutes"
                                 data-pr-position="left"
                                 data-pr-at="left center"
                                 className="fas fa-info-circle"
@@ -696,7 +696,7 @@ describe("SubtitleEdit", () => {
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Last Edit<i
                                 id="lastCueUpdatedTimeInfo"
-                                data-pr-tooltip="Updated each 10 minutes"
+                                data-pr-tooltip="Updated every 10 minutes"
                                 data-pr-position="left"
                                 data-pr-at="left center"
                                 className="fas fa-info-circle"
@@ -913,7 +913,7 @@ describe("SubtitleEdit", () => {
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Last Edit<i
                                 id="lastCueUpdatedTimeInfo"
-                                data-pr-tooltip="Updated each 10 minutes"
+                                data-pr-tooltip="Updated every 10 minutes"
                                 data-pr-position="left"
                                 data-pr-at="left center"
                                 className="fas fa-info-circle"
@@ -1130,7 +1130,7 @@ describe("SubtitleEdit", () => {
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Last Edit<i
                                 id="lastCueUpdatedTimeInfo"
-                                data-pr-tooltip="Updated each 10 minutes"
+                                data-pr-tooltip="Updated every 10 minutes"
                                 data-pr-position="left"
                                 data-pr-at="left center"
                                 className="fas fa-info-circle"
@@ -1351,7 +1351,7 @@ describe("SubtitleEdit", () => {
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
                             <div>Last Edit<i
                                 id="lastCueUpdatedTimeInfo"
-                                data-pr-tooltip="Updated each 10 minutes"
+                                data-pr-tooltip="Updated every 10 minutes"
                                 data-pr-position="left"
                                 data-pr-at="left center"
                                 className="fas fa-info-circle"
