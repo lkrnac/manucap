@@ -42,13 +42,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div>Completed: <b>0%</b></div>
                 </div>
@@ -101,13 +101,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -156,13 +156,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -210,13 +210,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -263,13 +263,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -318,13 +318,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -372,13 +372,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -423,13 +423,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -473,13 +473,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -523,13 +523,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -573,13 +573,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -668,13 +668,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -721,13 +721,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -774,13 +774,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div />
                 </div>
@@ -893,13 +893,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div>Completed: <b>50%</b></div>
                 </div>
@@ -950,13 +950,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div>Completed: <b>0%</b></div>
                 </div>
@@ -1003,13 +1003,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div>Completed: <b>0%</b></div>
                 </div>
@@ -1056,13 +1056,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div>Completed: <b>0%</b></div>
                 </div>
@@ -1109,13 +1109,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div>Completed: <b>0%</b></div>
                 </div>
@@ -1172,13 +1172,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div>Completed: <b>0%</b></div>
                 </div>
@@ -1236,13 +1236,13 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div>Last Edit<i
+                    <div>Last Edit&nbsp;<i
                         id="lastCueUpdatedTimeInfo"
                         data-pr-tooltip="Updated every 10 minutes"
                         data-pr-position="left"
                         data-pr-at="left center"
                         className="fas fa-info-circle"
-                                  />: <b>2020/12/30 10:30AM</b>
+                                        />: <b>2020/12/30 10:30AM</b>
                     </div>
                     <div>Completed: <b>0%</b></div>
                 </div>

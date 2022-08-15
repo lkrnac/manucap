@@ -107,14 +107,13 @@ const getTrackLastUpdatedTime = (task: Task): ReactElement => {
     }
     return (
         <div>
-            Last Edit
-            <i
+            Last Edit&nbsp;<i
                 id="lastCueUpdatedTimeInfo"
-                data-pr-tooltip="Updated each 10 minutes"
+                data-pr-tooltip="Updated every 10 minutes"
                 data-pr-position="left"
                 data-pr-at="left center"
                 className="fas fa-info-circle"
-            />
+                           />
             <Tooltip
                 id="lastCueUpdatedTimeInfoTooltip"
                 target="#lastCueUpdatedTimeInfo"
