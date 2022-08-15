@@ -83,6 +83,7 @@ const testingTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM",
+    lastUpdatedTrackTime: "2020/12/30 10:30AM",
     editDisabled: false
 } as Task;
 
@@ -90,6 +91,7 @@ const testingTranslationTask = {
     type: "TASK_TRANSLATE",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM",
+    lastUpdatedTrackTime: "2020/12/30 10:30AM",
     editDisabled: false
 } as Task;
 
@@ -97,6 +99,7 @@ const testingCompletedTask = {
     type: "TASK_CAPTION",
     projectName: "Project One",
     dueDate: "2019/12/30 10:00AM",
+    lastUpdatedTrackTime: "2020/12/30 10:30AM",
     editDisabled: true
 } as Task;
 
@@ -129,6 +132,7 @@ describe("SubtitleEdit", () => {
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                             <div>Completed: <b>50%</b></div>
                         </div>
                     </header>
@@ -336,6 +340,7 @@ describe("SubtitleEdit", () => {
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                             <div>Completed: <b>0%</b></div>
                         </div>
                     </header>
@@ -525,6 +530,7 @@ describe("SubtitleEdit", () => {
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                             <div />
                         </div>
                     </header>
@@ -593,6 +599,7 @@ describe("SubtitleEdit", () => {
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                             <div />
                         </div>
                     </header>
@@ -659,6 +666,7 @@ describe("SubtitleEdit", () => {
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                             <div>Completed: <b>50%</b></div>
                         </div>
                     </header>
@@ -868,6 +876,7 @@ describe("SubtitleEdit", () => {
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                             <div>Completed: <b>50%</b></div>
                         </div>
                     </header>
@@ -1077,6 +1086,7 @@ describe("SubtitleEdit", () => {
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                             <div>Completed: <b>50%</b></div>
                         </div>
                     </header>
@@ -1290,6 +1300,7 @@ describe("SubtitleEdit", () => {
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
                             <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                             <div>Completed: <b>50%</b></div>
                         </div>
                     </header>
