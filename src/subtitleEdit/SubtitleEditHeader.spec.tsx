@@ -31,6 +31,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -41,6 +42,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div>Completed: <b>0%</b></div>
                 </div>
             </header>
@@ -80,6 +82,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_TRANSLATE",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const length = <span><i>2 minutes, 9 words</i></span>;
@@ -91,6 +94,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -126,6 +130,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_PIVOT_TRANSLATE",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const length = <span><i>2 minutes 30 seconds, 4 words</i></span>;
@@ -137,6 +142,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -171,6 +177,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_DIRECT_TRANSLATE",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const length = <span><i>3 minutes</i></span>;
@@ -182,6 +189,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -215,6 +223,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_DIRECT_TRANSLATE",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const length = <span><i>3 minutes</i></span>;
@@ -226,6 +235,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -261,6 +271,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_REVIEW",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const length = <span><i>2 minutes 30 seconds, 4 words</i></span>;
@@ -272,6 +283,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -306,6 +318,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_REVIEW",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const length = <span><i>2 minutes 30 seconds</i></span>;
@@ -317,6 +330,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -349,6 +363,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_REVIEW",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -359,6 +374,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -390,6 +406,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_POST_EDITING",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -400,6 +417,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -431,6 +449,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_PROOF_READING",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -441,6 +460,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -472,6 +492,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_SIGN_OFF",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -482,6 +503,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -556,6 +578,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_POST_EDITING",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -568,6 +591,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -600,6 +624,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_PROOF_READING",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -612,6 +637,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -644,6 +670,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_SIGN_OFF",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -656,6 +683,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div />
                 </div>
             </header>
@@ -684,6 +712,7 @@ describe("SubtitleEditHeader", () => {
                     <div />
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div />
                     <div />
                     <div />
                 </div>
@@ -717,6 +746,7 @@ describe("SubtitleEditHeader", () => {
                     <div />
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
+                    <div />
                     <div />
                     <div />
                 </div>
@@ -754,6 +784,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -764,6 +795,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div>Completed: <b>50%</b></div>
                 </div>
             </header>
@@ -802,6 +834,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -812,6 +845,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div>Completed: <b>0%</b></div>
                 </div>
             </header>
@@ -846,6 +880,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -856,6 +891,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div>Completed: <b>0%</b></div>
                 </div>
             </header>
@@ -890,6 +926,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -900,6 +937,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div>Completed: <b>0%</b></div>
                 </div>
             </header>
@@ -934,6 +972,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -944,6 +983,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div>Completed: <b>0%</b></div>
                 </div>
             </header>
@@ -980,6 +1020,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_CAPTION",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -998,6 +1039,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div>Completed: <b>0%</b></div>
                 </div>
             </header>
@@ -1034,6 +1076,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_REVIEW",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false,
             finalChunkReview: true
         } as Task;
@@ -1053,6 +1096,7 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                    <div>Last Edit: <b>2020/12/30 10:30AM</b></div>
                     <div>Completed: <b>0%</b></div>
                 </div>
             </header>

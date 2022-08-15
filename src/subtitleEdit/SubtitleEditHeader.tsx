@@ -104,7 +104,7 @@ const getTrackLastUpdatedTime = (task: Task): ReactElement => {
     if (!task || !task.type) {
         return <div />;
     }
-    return <span>Last Edit: <b>{task.lastUpdatedTrackTime}</b></span>;
+    return <div>Last Edit: <b>{task.lastUpdatedTrackTime}</b></div>;
 };
 
 const SubtitleEditHeader = (): ReactElement => {
