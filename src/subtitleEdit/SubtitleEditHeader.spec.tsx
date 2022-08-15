@@ -613,6 +613,7 @@ describe("SubtitleEditHeader", () => {
             type: "TASK_REVIEW",
             projectName: "Project One",
             dueDate: "2019/12/30 10:00AM",
+            lastUpdatedTrackTime: "2020/12/30 10:30AM",
             editDisabled: false
         } as Task;
         const expectedNode = mount(
@@ -623,7 +624,14 @@ describe("SubtitleEditHeader", () => {
                 </div>
                 <div style={{ display: "flex", flexFlow: "column" }}>
                     <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                    <div />
+                    <div>Last Edit&nbsp;<i
+                        id="lastCueUpdatedTimeInfo"
+                        data-pr-tooltip="Updated every 10 minutes"
+                        data-pr-position="left"
+                        data-pr-at="left center"
+                        className="fas fa-info-circle"
+                                        />: <b>2020/12/30 10:30AM</b>
+                    </div>
                 </div>
             </header>
         );
