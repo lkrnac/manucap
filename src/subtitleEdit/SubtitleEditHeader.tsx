@@ -5,6 +5,7 @@ import { humanizer } from "humanize-duration";
 import { useSelector } from "react-redux";
 import { hasDataLoaded } from "./utils/subtitleEditUtils";
 import { getWordCount } from "./cues/cueUtils";
+import { Tooltip } from "primereact/tooltip";
 
 const REVIEW_LABEL_MAP = new Map([
     ["TASK_REVIEW", ""],
@@ -77,7 +78,7 @@ const getTrackDescription = (task: Task, track: Track, sourceWordCount: number):
         TASK_TRANSLATE: (
             <div>Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}</div>
         ),
-        TASK_PIVOT_TRANSLATE:(
+        TASK_PIVOT_TRANSLATE: (
             <div>Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}</div>
         ),
         TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}</div>,
@@ -104,7 +105,21 @@ const getTrackLastUpdatedTime = (task: Task): ReactElement => {
     if (!task || !task.type) {
         return <div />;
     }
-    return <div>Last Edit: <b>{task.lastUpdatedTrackTime}</b></div>;
+    return (
+        <div>
+            Last Edit
+            <i
+                id="lastCueUpdatedTimeInfo"
+                data-pr-tooltip="Updated each 10 minutes"
+                data-pr-position="left"
+                data-pr-at="left center"
+                className="fas fa-info-circle"
+            />
+            <Tooltip
+                id="lastCueUpdatedTimeInfoTooltip"
+                target="#lastCueUpdatedTimeInfo"
+            />: <b>{task.lastUpdatedTrackTime}</b>
+        </div>);
 };
 
 const SubtitleEditHeader = (): ReactElement => {
@@ -122,6 +137,7 @@ const SubtitleEditHeader = (): ReactElement => {
                 <div><b>{track.mediaTitle}</b> <i>{task.projectName}</i></div>
                 {getTrackDescription(task, track, sourCuesWordCount)}
             </div>
+
             <div style={{ display: "flex", flexFlow: "column" }}>
                 {getDueDate(task)}
                 {getTrackLastUpdatedTime(task)}
