@@ -633,6 +633,8 @@ describe("SubtitleEditHeader", () => {
                                         />: <b>2020/12/30 10:30AM</b>
                     </div>
                 </div>
+                <div>
+                </div>
             </header>
         );
 
