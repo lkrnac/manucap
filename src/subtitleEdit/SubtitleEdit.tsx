@@ -140,7 +140,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     type="button"
                                     onClick={(): void => props.onViewAllTracks()}
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"

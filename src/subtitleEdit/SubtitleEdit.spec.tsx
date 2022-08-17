@@ -196,7 +196,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -385,7 +385,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -727,7 +727,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -936,7 +936,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -1144,7 +1144,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -1363,7 +1363,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
