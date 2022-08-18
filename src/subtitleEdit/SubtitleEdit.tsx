@@ -32,7 +32,7 @@ export interface SubtitleEditProps {
     poster: string;
     waveform?: string;
     duration?: number;
-    onViewAllTracks: () => void;
+    onViewTrackHistory: () => void;
     onSave: () => void;
     onComplete: () => void;
     onExportFile: () => void;
@@ -138,9 +138,9 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
-                                    onClick={(): void => props.onViewAllTracks()}
+                                    onClick={(): void => props.onViewTrackHistory()}
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"

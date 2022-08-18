@@ -338,7 +338,7 @@ const TestApp = (): ReactElement => {
             poster="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.jpeg"
             mp4="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.mp4"
             waveform="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.json"
-            onViewAllTracks={(): void => undefined}
+            onViewTrackHistory={(): void => undefined}
             onSave={(): void => {
                 setTimeout(
                     () => {

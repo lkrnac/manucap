@@ -196,7 +196,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -291,7 +291,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -385,7 +385,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -480,7 +480,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -546,7 +546,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -614,7 +614,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -727,7 +727,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -822,7 +822,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -936,7 +936,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -1031,7 +1031,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -1144,7 +1144,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -1239,7 +1239,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -1363,7 +1363,7 @@ describe("SubtitleEdit", () => {
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
                                 >
-                                    View All Tracks
+                                    View Track History
                                 </button>
                                 <button
                                     id="jumpToFirstButton"
@@ -1460,7 +1460,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     waveform="dummyWaveform"
                     duration={20}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -1488,13 +1488,13 @@ describe("SubtitleEdit", () => {
 
     it("calls onViewAllTrack callback when button is clicked", () => {
         // GIVEN
-        const mockOnViewAllTracks = jest.fn();
+        const mockonViewTrackHistory = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={mockOnViewAllTracks}
+                    onViewTrackHistory={mockonViewTrackHistory}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -1515,7 +1515,7 @@ describe("SubtitleEdit", () => {
         actualNode.find("button.sbte-view-all-tracks-sbte-btn").simulate("click");
 
         // THEN
-        expect(mockOnViewAllTracks.mock.calls.length).toBe(1);
+        expect(mockonViewTrackHistory.mock.calls.length).toBe(1);
     });
 
     it("calls onComplete callback when button is clicked", () => {
@@ -1526,7 +1526,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={mockOnComplete}
                     onExportSourceFile={(): void => undefined}
@@ -1559,7 +1559,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -1591,7 +1591,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={mockOnExportSourceFile}
@@ -1623,7 +1623,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -1665,7 +1665,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -1705,7 +1705,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -1738,7 +1738,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -1776,7 +1776,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -1804,7 +1804,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -1838,7 +1838,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -1873,7 +1873,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -1907,7 +1907,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -1956,7 +1956,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
@@ -2021,7 +2021,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={saveTrack}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -2052,7 +2052,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -2088,7 +2088,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -2109,7 +2109,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -2131,7 +2131,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -2160,7 +2160,7 @@ describe("SubtitleEdit", () => {
                 <SubtitleEdit
                     mp4="dummyMp4"
                     poster="dummyPoster"
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -2190,7 +2190,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     waveform="dummyWaveform"
                     duration={1800}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
@@ -2217,7 +2217,7 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     waveform="dummyWaveform"
                     duration={1801}
-                    onViewAllTracks={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
                     onSave={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
