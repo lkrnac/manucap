@@ -844,10 +844,11 @@ describe("SubtitleEditHeader", () => {
                     </div>
                     <div className="flex items-center space-x-2">
                         Review of{" "}
-                        <span className="font-medium text-blue-light ml-1">
-                            English (US)
-                        </span>
-                        {" "}Caption{" "}
+                        <span className="inline-flex items-center space-x-2 ml-1 font-medium text-blue-light">
+                            <span>English (US)</span>
+                            <i className="fa-duotone fa-arrow-right-arrow-left" />
+                            <span>Italian</span>
+                        </span>{" "}Translation{" "}
                         <i />
                     </div>
                 </div>
