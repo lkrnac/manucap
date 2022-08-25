@@ -23,14 +23,20 @@ export const CueCommentsToggle = (props: Props): ReactElement => {
                 toggle
                     ? (
                         <>
-                            Comments{" "}
-                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">SHOWN</span>
+                            <span>
+                                <i className="w-7 fa-duotone fa-comments text-blue-primary" />
+                                <span>Comments</span>
+                            </span>
+                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">SHOWN</span>
                         </>
                     )
                     : (
                         <>
-                            Comments{" "}
-                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
+                            <span>
+                                <i className="w-7 fa-duotone fa-comments text-blue-primary" />
+                                <span>Comments</span>
+                            </span>
+                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
                         </>
                     )
             )}

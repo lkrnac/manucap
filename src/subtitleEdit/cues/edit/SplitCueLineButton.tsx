@@ -26,7 +26,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
                 data-pr-at="left center"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}
             >
-                <i className="fas fa-cut" />
+                <i className="fa-duotone fa-cut" />
             </button>
             <Tooltip
                 id={buttonId + "-Tooltip"}

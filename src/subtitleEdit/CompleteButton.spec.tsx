@@ -42,7 +42,7 @@ describe("CompleteButton", () => {
                     <div className="font-medium">
                         <span hidden className="flex items-center ">
                             <span className="leading-none" />
-                            <i className="ml-1" />
+                            <i className="ml-2" />
                         </span>
                     </div>
                     <button type="button" className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn">
@@ -111,7 +111,7 @@ describe("CompleteButton", () => {
                         <div className="font-medium">
                             <span className="flex items-center ">
                                 <span className="leading-none">Saving changes</span>
-                                <i className="ml-1 fas fa-sync fa-spin" />
+                                <i className="ml-2 fa-duotone fa-sync fa-spin" />
                             </span>
                         </div>
                         <button
@@ -147,7 +147,7 @@ describe("CompleteButton", () => {
                     <div className="font-medium">
                         <span className="flex items-center text-green-light">
                             <span className="leading-none">All changes saved to server</span>
-                            <i className="ml-1 fa fa-check-circle" />
+                            <i className="ml-2 fa-duotone fa-check-circle" />
                         </span>
                     </div>
                     <button type="button" className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn">
@@ -179,7 +179,7 @@ describe("CompleteButton", () => {
                     <div className="font-medium">
                         <span className="flex items-center text-danger">
                             <span className="leading-none">Error saving latest changes</span>
-                            <i className="ml-1 fa fa-exclamation-triangle" />
+                            <i className="ml-2 fa-duotone fa-exclamation-triangle" />
                         </span>
                     </div>
                     <button type="button" className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn">

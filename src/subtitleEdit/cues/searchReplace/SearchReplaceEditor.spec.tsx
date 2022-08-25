@@ -74,7 +74,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-next"
                 >
-                    <i className="fa fa-arrow-down" />
+                    <i className="fa-duotone fa-arrow-down" />
                 </button>
                 <button
                     className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-prev"
@@ -82,7 +82,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-prev"
                 >
-                    <i className="fa fa-arrow-up" />
+                    <i className="fa-duotone fa-arrow-up" />
                 </button>
                 <button
                     className="sbte-btn sbte-btn-light sbte-btn-sm"
@@ -113,7 +113,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-close-search-replace-sbte-btn"
                 >
-                    <i className="far fa-times-circle" />
+                    <i className="fa-duotone fa-times-circle" />
                 </button>
             </div>
         );

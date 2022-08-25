@@ -29,14 +29,20 @@ export const TimecodesLockToggle = (props: Props): ReactElement => {
                 toggle
                     ? (
                         <>
-                            Timecodes{" "}
-                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">UNLOCKED</span>
+                            <span>
+                                <i className="w-7 fa-duotone fa-clock text-blue-primary" />
+                                <span>Timecodes</span>
+                            </span>
+                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">UNLOCKED</span>
                         </>
                     )
                     : (
                         <>
-                            Timecodes{" "}
-                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">LOCKED</span>
+                            <span>
+                                <i className="w-7 fa-duotone fa-clock text-blue-primary" />
+                                <span>Timecodes</span>
+                            </span>
+                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">LOCKED</span>
                         </>
                     )
             )}

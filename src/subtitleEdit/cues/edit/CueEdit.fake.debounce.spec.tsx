@@ -127,7 +127,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -224,7 +224,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -326,7 +326,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
@@ -427,7 +427,7 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >

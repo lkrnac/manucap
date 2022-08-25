@@ -34,7 +34,7 @@ const MergeEditor = (): ReactElement | null => {
                     dispatch(showMerge(false));
                 }}
             >
-                <i className="far fa-times-circle" />
+                <i className="fa-duotone fa-times-circle" />
             </button>
         </div>
     ) : null;

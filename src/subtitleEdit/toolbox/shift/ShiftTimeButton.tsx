@@ -12,11 +12,12 @@ const ShiftTimeButton = (props: Props): ReactElement => {
     return (
         <button
             onClick={props.onClick}
-            className="dotsub-shift-time-button"
+            className="dotsub-shift-time-button flex items-center"
             disabled={!timecodesUnlocked}
             title="Unlock timecodes to enable"
         >
-            Shift Track Time
+            <i className="w-7 fa-duotone fa-arrow-right-arrow-left text-blue-primary" />
+            <span>Shift Track Time</span>
         </button>
     );
 };

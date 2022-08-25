@@ -40,7 +40,7 @@ describe("SubtitleSpecificationsButton", () => {
                     data-pr-position="top"
                     data-pr-at="center+2 top-2"
                 >
-                    <i className="fas fa-clipboard-list fa-lg" />
+                    <i className="fa-duotone fa-clipboard-list fa-lg" />
                 </button>
                 <div>shown</div>
             </Provider>
@@ -75,7 +75,7 @@ describe("SubtitleSpecificationsButton", () => {
                     data-pr-position="top"
                     data-pr-at="center+2 top-2"
                 >
-                    <i className="fas fa-clipboard-list fa-lg" />
+                    <i className="fa-duotone fa-clipboard-list fa-lg" />
                 </button>
                 <div />
             </Provider>

@@ -20,10 +20,20 @@ const getTrackType = (track: Track): string => {
 const getLanguageDescription = (track: Track): ReactElement => {
     const languageNameNullSafe = track.language ? track.language.name : "";
     if (track.type === "TRANSLATION") {
-        const sourceLanguage = track.sourceLanguage ? <b>{track.sourceLanguage.name}</b> : null;
-        return <span>{sourceLanguage} to <b>{languageNameNullSafe}</b></span>;
+        const sourceLanguage = track.sourceLanguage ? track.sourceLanguage.name : null;
+        return (
+            <span className="inline-flex items-center space-x-2 ml-1 font-medium text-blue-light">
+                {sourceLanguage ? (
+                    <>
+                        <span>{sourceLanguage}</span>
+                        <i className="fa-duotone fa-arrow-right-arrow-left" />
+                    </>
+                ) : undefined}
+                <span>{languageNameNullSafe}</span>
+            </span>
+        );
     }
-    return <b>{languageNameNullSafe}</b>;
+    return <span className="font-medium text-blue-light ml-1">{languageNameNullSafe}</span>;
 };
 
 const getSecondsInHMS = (seconds: number): string =>
@@ -32,12 +42,12 @@ const getSecondsInHMS = (seconds: number): string =>
 const getMediaChunkRange = (track: Track): ReactElement | null => {
     if ((track.mediaChunkStart || track.mediaChunkStart === 0) && track.mediaChunkEnd) {
         return (
-            <b>
+            <span>
                 <span>{" "}(Media Chunk Range{" "}</span>
                 <span>{getSecondsInHMS(track.mediaChunkStart)}</span>
                 <span> to </span>
                 <span>{getSecondsInHMS(track.mediaChunkEnd)})</span>
-            </b>
+            </span>
         );
     }
     return null;
@@ -63,7 +73,7 @@ const getChunkReviewType = (task: Task): string => {
 };
 
 const getReviewHeader = (task: Task, track: Track, sourceWordCount: number): ReactElement => (
-    <div>
+    <div className="flex items-center space-x-2">
         {getChunkReviewType(task)}{REVIEW_LABEL_MAP.get(task.type)}Review of {getLanguageDescription(track)}{" "}
         {getTrackType(track)} {getTrackLength(track, sourceWordCount)}
     </div>
@@ -75,17 +85,29 @@ const getTrackDescription = (task: Task, track: Track, sourceWordCount: number):
     }
     const trackDescriptions = {
         TASK_TRANSLATE: (
-            <div>Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}</div>
+            <div className="flex items-center space-x-2">
+                Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}
+            </div>
         ),
-        TASK_PIVOT_TRANSLATE:(
-            <div>Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}</div>
+        TASK_PIVOT_TRANSLATE: (
+            <div className="flex items-center space-x-2">
+                Translation from {getLanguageDescription(track)} {getTrackLength(track, sourceWordCount)}
+            </div>
         ),
-        TASK_DIRECT_TRANSLATE: <div>Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}</div>,
+        TASK_DIRECT_TRANSLATE: (
+            <div className="flex items-center space-x-2">
+                Direct Translation {getLanguageDescription(track)} {getTrackLength(track)}
+            </div>
+        ),
         TASK_REVIEW: getReviewHeader(task, track, sourceWordCount),
         TASK_POST_EDITING: getReviewHeader(task, track, sourceWordCount),
         TASK_PROOF_READING: getReviewHeader(task, track, sourceWordCount),
         TASK_SIGN_OFF: getReviewHeader(task, track, sourceWordCount),
-        TASK_CAPTION: <div>Caption in: {getLanguageDescription(track)} {getTrackLength(track)}</div>
+        TASK_CAPTION: (
+            <div className="flex items-center space-x-2">
+                Caption in: {getLanguageDescription(track)} {getTrackLength(track)}
+            </div>
+        )
     };
     return trackDescriptions[task.type] ? trackDescriptions[task.type] : <div />;
 };
@@ -94,12 +116,31 @@ const getDueDate = (task: Task): ReactElement => {
     if (!task || !task.type) {
         return <div />;
     }
-    return <div>Due Date: <b>{task.dueDate}</b></div>;
+    return (
+        <div className="flex items-center space-x-2">
+            <span>
+                <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                <span className="font-medium text-blue-light">
+                    Due Date:
+                </span>
+            </span>
+            <span>{task.dueDate}</span>
+        </div>
+    );
 };
 
 const getProgress = (track: Track, cuesDataLoaded: boolean | null): ReactElement =>
-    cuesDataLoaded ? (<div>Completed: <b>{track.progress}%</b></div>) : <div />;
-
+    cuesDataLoaded ? (
+        <div className="flex items-center space-x-2">
+            <span>
+                <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
+                <span className="font-medium text-blue-light">
+                    Completed:
+                </span>
+            </span>
+            <span>{track.progress}%</span>
+        </div>
+    ) : <div />;
 
 const SubtitleEditHeader = (): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
@@ -113,7 +154,26 @@ const SubtitleEditHeader = (): ReactElement => {
     return (
         <header style={{ display: "flex", paddingBottom: "10px" }}>
             <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                <div><b>{track.mediaTitle}</b> <i>{task.projectName}</i></div>
+                <div className="space-x-2 flex items-center">
+                    <div className="space-x-1">
+                        <span>
+                            <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                            <span className="font-medium text-blue-light">
+                                Video:
+                            </span>
+                        </span>
+                        <span>{track.mediaTitle}</span>
+                    </div>
+                    <div className="space-x-1">
+                        <span>
+                            <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                            <span className="font-medium text-blue-light">
+                                Project:
+                            </span>
+                        </span>
+                        <span>{task.projectName}</span>
+                    </div>
+                </div>
                 {getTrackDescription(task, track, sourCuesWordCount)}
             </div>
             <div style={{ display: "flex", flexFlow: "column" }}>

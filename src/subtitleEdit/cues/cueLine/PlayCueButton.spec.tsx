@@ -21,7 +21,7 @@ describe("PlayCueButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fa fa-play" />
+                    <i className="fa-duotone fa-play" />
                 </button>
             </div>
         );

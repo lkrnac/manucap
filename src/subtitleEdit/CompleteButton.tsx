@@ -28,11 +28,11 @@ const stateMessages = new Map([
 
 const stateIconCssClasses = new Map([
     [ SaveState.NONE, "" ],
-    [ SaveState.TRIGGERED, "fas fa-sync fa-spin" ],
-    [ SaveState.REQUEST_SENT, "fas fa-sync fa-spin" ],
-    [ SaveState.RETRY, "fas fa-sync fa-spin" ],
-    [ SaveState.SAVED, "fa fa-check-circle" ],
-    [ SaveState.ERROR, "fa fa-exclamation-triangle" ],
+    [ SaveState.TRIGGERED, "fa-duotone fa-sync fa-spin" ],
+    [ SaveState.REQUEST_SENT, "fa-duotone fa-sync fa-spin" ],
+    [ SaveState.RETRY, "fa-duotone fa-sync fa-spin" ],
+    [ SaveState.SAVED, "fa-duotone fa-check-circle" ],
+    [ SaveState.ERROR, "fa-duotone fa-exclamation-triangle" ],
 ]);
 
 const stateCssClasses = new Map([
@@ -60,7 +60,7 @@ const CompleteButton = (props: Props): ReactElement => {
                             className={`flex items-center ${stateCssClasses.get(saveState)}`}
                         >
                             <span className="leading-none">{stateMessages.get(saveState)}</span>
-                            <i className={`ml-1${stateIconClass ? ` ${stateIconClass}` : ""}`} />
+                            <i className={`ml-2${stateIconClass ? ` ${stateIconClass}` : ""}`} />
                         </span>
                 }
             </div>

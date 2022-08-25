@@ -19,7 +19,7 @@ const SearchReplaceButton = (): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fas fa-search-plus fa-lg" />
+                <i className="fa-duotone fa-search-plus fa-lg" />
             </button>
             <Tooltip
                 id="searchReplaceBtnTooltip"

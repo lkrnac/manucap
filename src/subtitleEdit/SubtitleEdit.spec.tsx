@@ -124,12 +124,41 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                            <div className="space-x-2 flex items-center">
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Video:</span>
+                                    </span>
+                                    <span>This is the video title</span>
+                                </div>
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Project:</span>
+                                    </span>
+                                    <span>Project One</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
+                                <span><i>4 seconds</i></span>
+                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Due Date:</span>
+                                </span><span>2019/12/30 10:00AM</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Completed:</span>
+                                </span>
+                                <span>50%</span>
+                            </div>
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
@@ -206,7 +235,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -216,7 +245,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -227,7 +256,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -238,7 +267,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -250,7 +279,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -261,14 +290,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button
@@ -331,12 +360,41 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                            <div className="space-x-2 flex items-center">
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Video:</span>
+                                    </span>
+                                    <span>This is the video title</span>
+                                </div>
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Project:</span>
+                                    </span>
+                                    <span>Project One</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
+                                <span><i>4 seconds</i></span>
+                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>0%</b></div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Due Date:</span>
+                                </span><span>2019/12/30 10:00AM</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Completed:</span>
+                                </span>
+                                <span>0%</span>
+                            </div>
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
@@ -395,7 +453,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -405,7 +463,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -416,7 +474,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -427,7 +485,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -439,7 +497,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -450,14 +508,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button
@@ -520,11 +578,34 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                            <div className="space-x-2 flex items-center">
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Video:</span>
+                                    </span>
+                                    <span>This is the video title</span>
+                                </div>
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Project:</span>
+                                    </span>
+                                    <span>Project One</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
+                                <span><i>4 seconds</i></span>
+                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Due Date:</span>
+                                </span><span>2019/12/30 10:00AM</span>
+                            </div>
                             <div />
                         </div>
                     </header>
@@ -585,14 +666,43 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>
-                                Translation from <span><b>English (US)</b> to <b>French (France)</b></span>{" "}
-                                <span><i>4 seconds</i></span>
+                            <div className="space-x-2 flex items-center">
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Video:</span>
+                                    </span>
+                                    <span>This is the video title</span>
+                                </div>
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Project:</span>
+                                    </span>
+                                    <span>Project One</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                Translation from{" "}
+                                <span className="inline-flex items-center space-x-2 ml-1 font-medium text-blue-light">
+                                    <span>English (US)</span>
+                                    <i className="fa-duotone fa-arrow-right-arrow-left" />
+                                    <span>French (France)</span>
+                                </span>
+                                {" "}
+                                <span>
+                                    <i>4 seconds</i>
+                                </span>
                             </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Due Date:</span>
+                                </span>
+                                <span>2019/12/30 10:00AM</span>
+                            </div>
                             <div />
                         </div>
                     </header>
@@ -652,14 +762,45 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
+                    <header style={{ display: "flex", paddingBottom: 10 }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                            <div className="space-x-2 flex items-center">
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Video:</span>
+                                    </span>
+                                    <span>This is the video title</span>
+                                </div>
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Project:</span>
+                                    </span>
+                                    <span>Project One</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                Caption in:{" "}
+                                <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
+                                <span><i>4 seconds</i></span>
+                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Due Date:</span>
+                                </span>
+                                <span>2019/12/30 10:00AM</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Completed:</span>
+                                </span>
+                                <span>50%</span>
+                            </div>
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
@@ -737,7 +878,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -747,7 +888,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -758,7 +899,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -769,7 +910,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -781,7 +922,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -792,14 +933,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button
@@ -863,12 +1004,41 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                            <div className="space-x-2 flex items-center">
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Video:</span>
+                                    </span>
+                                    <span>This is the video title</span>
+                                </div>
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Project:</span>
+                                    </span>
+                                    <span>Project One</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
+                                <span><i>4 seconds</i></span>
+                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Due Date:</span>
+                                </span><span>2019/12/30 10:00AM</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Completed:</span>
+                                </span>
+                                <span>50%</span>
+                            </div>
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
@@ -946,7 +1116,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -956,7 +1126,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -967,7 +1137,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -978,7 +1148,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -990,7 +1160,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -1001,14 +1171,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button
@@ -1072,12 +1242,41 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                            <div className="space-x-2 flex items-center">
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Video:</span>
+                                    </span>
+                                    <span>This is the video title</span>
+                                </div>
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Project:</span>
+                                    </span>
+                                    <span>Project One</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
+                                <span><i>4 seconds</i></span>
+                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Due Date:</span>
+                                </span><span>2019/12/30 10:00AM</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Completed:</span>
+                                </span>
+                                <span>50%</span>
+                            </div>
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
@@ -1154,7 +1353,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -1164,7 +1363,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -1175,7 +1374,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -1186,7 +1385,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -1198,7 +1397,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -1209,7 +1408,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
@@ -1285,12 +1484,41 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <header style={{ display: "flex", paddingBottom: "10px" }}>
                         <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
+                            <div className="space-x-2 flex items-center">
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Video:</span>
+                                    </span>
+                                    <span>This is the video title</span>
+                                </div>
+                                <div className="space-x-1">
+                                    <span>
+                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
+                                        <span className="font-medium text-blue-light">Project:</span>
+                                    </span>
+                                    <span>Project One</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
+                                <span><i>4 seconds</i></span>
+                            </div>
                         </div>
                         <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Due Date:</span>
+                                </span><span>2019/12/30 10:00AM</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <span>
+                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
+                                    <span className="font-medium text-blue-light">Completed:</span>
+                                </span>
+                                <span>50%</span>
+                            </div>
                         </div>
                     </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
@@ -1373,7 +1601,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -1383,7 +1611,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -1394,7 +1622,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -1405,7 +1633,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -1417,7 +1645,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -1428,14 +1656,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button

@@ -115,7 +115,7 @@ describe("CueComments", () => {
                             data-pr-position="left"
                             data-pr-at="left top+10"
                         >
-                            <i className="fa fa-trash" />
+                            <i className="fa-duotone fa-trash" />
                         </button>
                     </div>
                 </div>

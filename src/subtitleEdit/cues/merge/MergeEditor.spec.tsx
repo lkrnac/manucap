@@ -47,7 +47,7 @@ describe("MergeEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-close-merge-sbte-btn"
                 >
-                    <i className="far fa-times-circle" />
+                    <i className="fa-duotone fa-times-circle" />
                 </button>
             </div>
         );

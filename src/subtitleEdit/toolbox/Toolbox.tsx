@@ -70,7 +70,7 @@ const Toolbox = (props: Props): ReactElement => {
                 aria-controls="toolboxMenu"
                 aria-haspopup
             >
-                <i className="fas fa-ellipsis-h" />
+                <i className="fa-duotone fa-ellipsis-h" />
             </button>
             <Menu
                 id="toolboxMenu"

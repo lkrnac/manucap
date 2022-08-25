@@ -105,7 +105,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(searchNextCues(false));
                 }}
             >
-                <i className="fa fa-arrow-down" />
+                <i className="fa-duotone fa-arrow-down" />
             </button>
             <button
                 className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-prev"
@@ -116,7 +116,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(searchPreviousCues());
                 }}
             >
-                <i className="fa fa-arrow-up" />
+                <i className="fa-duotone fa-arrow-up" />
             </button>
             <button
                 className="sbte-btn sbte-btn-light sbte-btn-sm"
@@ -156,7 +156,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(showSearchReplace(false));
                 }}
             >
-                <i className="far fa-times-circle" />
+                <i className="fa-duotone fa-times-circle" />
             </button>
         </div>
     ) : null;

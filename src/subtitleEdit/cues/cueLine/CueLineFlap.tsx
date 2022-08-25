@@ -21,7 +21,7 @@ const getCommentIcon = (index: number): ReactElement => {
         <div key={index}>
             <i
                 id={commentIconId}
-                className="fa fa-comments"
+                className="fa-duotone fa-comments"
                 data-pr-tooltip="Subtitle(s) has comments"
                 data-pr-position="right"
                 data-pr-at="right+10 top+10"
@@ -109,7 +109,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                 <div style={getIconStyle(showCommentsIcon ? "50px" : "30px")}>
                     {
                         props.editDisabled
-                            ? <i className="fa fa-lock" />
+                            ? <i className="fa-duotone fa-lock" />
                             : null
                     }
                 </div>
@@ -123,12 +123,12 @@ const CueLineFlap = (props: Props): ReactElement => {
                 <div style={getIconStyle("10px")}>
                     {
                         props.cueLineState === CueLineState.ERROR
-                            ? <i className="fas fa-exclamation-triangle" />
+                            ? <i className="fa-duotone fa-exclamation-triangle" />
                             : null
                     }
                     {
                         props.cueLineState === CueLineState.GOOD
-                            ? <i className="fa fa-check" />
+                            ? <i className="fa-duotone fa-check" />
                             : null
                     }
                 </div>
