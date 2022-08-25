@@ -6,7 +6,7 @@ env:
   - NODE_OPTIONS=--max_old_space_size=8192
 
 before_install:
-    - echo "/@fortawesome:registry=https://npm.fontawesome.com/" > ./vtms-web/.npmrc
+    - echo "@fortawesome:registry=https://npm.fontawesome.com/" > ./vtms-web/.npmrc
     - echo "//npm.fontawesome.com/:_authToken==${FONTAWESOME_TOKEN}" > ./vtms-web/.npmrc
 
 notifications:
