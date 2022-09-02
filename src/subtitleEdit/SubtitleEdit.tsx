@@ -4,7 +4,6 @@ import "../global.css";
 import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
-import SubtitleEditHeader from "./SubtitleEditHeader";
 import { AppThunk, SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
@@ -77,7 +76,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
             <CueErrorAlert />
-            <SubtitleEditHeader />
             {
                 !hasDataLoaded(editingTrack, loadingIndicator) ?
                     <div

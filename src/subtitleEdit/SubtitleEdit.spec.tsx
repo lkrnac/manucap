@@ -122,16 +122,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -329,16 +319,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>0%</b></div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -518,16 +498,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div />
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                         <div className="text-center space-y-4">
                             <div className="sbte-spinner-icon" />
@@ -583,19 +553,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>
-                                Translation from <span><b>English (US)</b> to <b>French (France)</b></span>{" "}
-                                <span><i>4 seconds</i></span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div />
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                         <div className="text-center space-y-4">
                             <div className="sbte-spinner-icon" />
@@ -652,16 +609,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -861,16 +808,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -1070,16 +1007,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -1283,16 +1210,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div><b>This is the video title</b> <i>Project One</i></div>
-                            <div>Caption in: <b>English (US)</b> <span><i>4 seconds</i></span></div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div>Due Date: <b>2019/12/30 10:00AM</b></div>
-                            <div>Completed: <b>50%</b></div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
