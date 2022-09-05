@@ -33,7 +33,7 @@ describe("MergeEditor", () => {
                     Select the lines to be merged then click Merge
                 </label>
                 <button
-                    className="sbte-btn sbte-btn-light sbte-btn-sm"
+                    className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
                     type="button"
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-prev"
@@ -47,7 +47,7 @@ describe("MergeEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-close-merge-sbte-btn"
                 >
-                    <i className="far fa-times-circle" />
+                    <i className="fa-duotone fa-times-circle" />
                 </button>
             </div>
         );

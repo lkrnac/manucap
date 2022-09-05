@@ -22,7 +22,7 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
                 data-pr-position="left"
                 data-pr-at="left center"
             >
-                <i className="fa fa-trash" />
+                <i className="fa-duotone fa-trash" />
             </button>
             <Tooltip
                 id={buttonId + "-Tooltip"}

@@ -19,7 +19,11 @@ describe("CueCommentsToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="flex items-center justify-between">
-                Comments <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
+                <span>
+                    <i className="w-7 fa-duotone fa-comments text-blue-primary" />
+                    <span>Comments</span>
+                </span>
+                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
             </button>
         );
 
@@ -41,7 +45,11 @@ describe("CueCommentsToggle", () => {
                 type="button"
                 className="flex items-center justify-between outline-0 active"
             >
-                Comments <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">SHOWN</span>
+                <span>
+                    <i className="w-7 fa-duotone fa-comments text-blue-primary" />
+                    <span>Comments</span>
+                </span>
+                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">SHOWN</span>
             </button>
         );
 

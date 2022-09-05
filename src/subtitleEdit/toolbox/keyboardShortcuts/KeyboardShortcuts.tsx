@@ -20,9 +20,10 @@ const KeyboardShortcuts = ({ setShow, show }: Props): ReactElement => {
     return (
         <button
             onClick={() => setShow(true)}
-            className="dotsub-keyboard-shortcuts-button"
+            className="dotsub-keyboard-shortcuts-button flex items-center"
         >
-            Keyboard Shortcuts
+            <i className="w-7 fa-duotone fa-keyboard text-blue-primary" />
+            <span>Keyboard Shortcuts</span>
         </button>
     );
 };

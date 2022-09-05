@@ -71,7 +71,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                             <button
                                 type="button"
                                 onClick={handleCancelShift}
-                                className="dotsub-shift-modal-close-button sbte-btn sbte-btn-secondary"
+                                className="dotsub-shift-modal-close-button sbte-btn sbte-btn-light"
                             >
                                 Close
                             </button>
@@ -85,14 +85,14 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                 name="shiftTime"
                                 component="input"
                                 parse={formatStartOrEndTime}
-                                className="sbte-form-control dotsub-track-line-shift margin-right-10"
+                                className="sbte-form-control dotsub-track-line-shift mt-2"
                                 style={{ width: "120px" }}
                                 type="number"
                                 placeholder="0.000"
                                 step={"0.100"}
                             />
                         </div>
-                        <fieldset className="space-y-1">
+                        <fieldset className="space-y-2">
                             <div className="form-check">
                                 <label>
                                     <Field
@@ -100,7 +100,6 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                         component="input"
                                         type="radio"
                                         value="all"
-                                        className="form-check-input"
                                     /> Shift all
                                 </label>
                             </div>
@@ -111,7 +110,6 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                         type="radio"
                                         name="shiftPosition"
                                         value="before"
-                                        className="form-check-input"
                                     /> Shift all before editing cue
                                 </label>
                             </div>
@@ -122,7 +120,6 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                                         type="radio"
                                         name="shiftPosition"
                                         value="after"
-                                        className="form-check-input"
                                     /> Shift all after editing cue
                                 </label>
                             </div>

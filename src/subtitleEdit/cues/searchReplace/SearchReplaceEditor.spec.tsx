@@ -74,7 +74,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-next"
                 >
-                    <i className="fa fa-arrow-down" />
+                    <i className="fa-duotone fa-arrow-down" />
                 </button>
                 <button
                     className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-prev"
@@ -82,10 +82,10 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-search-prev"
                 >
-                    <i className="fa fa-arrow-up" />
+                    <i className="fa-duotone fa-arrow-up" />
                 </button>
                 <button
-                    className="sbte-btn sbte-btn-light sbte-btn-sm"
+                    className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
                     type="button"
                     disabled
                     style={{ marginLeft: "5px" }}
@@ -93,14 +93,14 @@ describe("SearchReplaceEditor", () => {
                     Replace
                 </button>
                 <button
-                    className="sbte-btn sbte-btn-light sbte-btn-sm"
+                    className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
                     type="button"
                     style={{ marginLeft: "5px", marginRight: "5px" }}
                 >
                     Replace All
                 </button>
                 <ToggleButton
-                    className="sbte-btn sbte-btn-light"
+                    className="sbte-btn sbte-btn-light !text-blue-light"
                     toggled={false}
                     onClick={jest.fn()}
                     render={(): ReactElement => (<span>Aa</span>)}
@@ -113,7 +113,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="sbte-close-search-replace-sbte-btn"
                 >
-                    <i className="far fa-times-circle" />
+                    <i className="fa-duotone fa-times-circle" />
                 </button>
             </div>
         );

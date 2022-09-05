@@ -153,7 +153,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -212,7 +212,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-lock" />
+                        <i className="fa-duotone fa-lock" />
                     </div>
                     <div
                         style={{
@@ -236,7 +236,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -318,7 +318,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fas fa-exclamation-triangle" />
+                        <i className="fa-duotone fa-exclamation-triangle" />
                     </div>
                 </div>
             </div>
@@ -378,7 +378,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-lock" />
+                        <i className="fa-duotone fa-lock" />
                     </div>
                     <div
                         style={{
@@ -402,7 +402,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fas fa-exclamation-triangle" />
+                        <i className="fa-duotone fa-exclamation-triangle" />
                     </div>
                 </div>
             </div>
@@ -489,7 +489,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -554,7 +554,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-lock" />
+                        <i className="fa-duotone fa-lock" />
                     </div>
                     <div
                         style={{
@@ -578,7 +578,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -668,7 +668,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -756,7 +756,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -845,7 +845,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -974,7 +974,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -1053,7 +1053,7 @@ describe("CueLineFlap", () => {
                         <div>
                             <i
                                 id="cuelineComment-0"
-                                className="fa fa-comments"
+                                className="fa-duotone fa-comments"
                                 data-pr-tooltip="Subtitle(s) has comments"
                                 data-pr-position="right"
                                 data-pr-at="right+10 top+10"
@@ -1071,7 +1071,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -1137,7 +1137,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-lock" />
+                        <i className="fa-duotone fa-lock" />
                     </div>
                     <div
                         style={{
@@ -1153,7 +1153,7 @@ describe("CueLineFlap", () => {
                         <div>
                             <i
                                 id="cuelineComment-0"
-                                className="fa fa-comments"
+                                className="fa-duotone fa-comments"
                                 data-pr-tooltip="Subtitle(s) has comments"
                                 data-pr-position="right"
                                 data-pr-at="right+10 top+10"
@@ -1171,7 +1171,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-check" />
+                        <i className="fa-duotone fa-check" />
                     </div>
                 </div>
             </div>
@@ -1238,7 +1238,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa fa-lock" />
+                        <i className="fa-duotone fa-lock" />
                     </div>
                     <div
                         style={{
@@ -1254,7 +1254,7 @@ describe("CueLineFlap", () => {
                         <div>
                             <i
                                 id="cuelineComment-0"
-                                className="fa fa-comments"
+                                className="fa-duotone fa-comments"
                                 data-pr-tooltip="Subtitle(s) has comments"
                                 data-pr-position="right"
                                 data-pr-at="right+10 top+10"
@@ -1272,7 +1272,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fas fa-exclamation-triangle" />
+                        <i className="fa-duotone fa-exclamation-triangle" />
                     </div>
                 </div>
             </div>

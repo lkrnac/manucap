@@ -22,7 +22,7 @@ describe("ExportSourceTrackCuesButton", () => {
                data-pr-position="top"
                data-pr-at="center+2 top-2"
            >
-               <i className="fas fa-file-export fa-lg" />
+               <i className="fa-duotone fa-file-export fa-lg" />
            </button>
        );
 

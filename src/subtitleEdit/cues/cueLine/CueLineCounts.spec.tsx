@@ -23,10 +23,10 @@ const testContentRendered = (
     const vttCue = new VTTCue(startTime, endTime, text);
     const expectedNode = mount(
         <div className="text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-            <span>DURATION: <span className="text-green-light">{duration}s</span>, </span>
-            <span>CHARACTERS: <span className="text-green-light">{characters}</span>, </span>
-            <span>WORDS: <span className="text-green-light">{words}</span>, </span>
-            <span>CPS: <span className="text-green-light">{cps.toFixed(1)}</span></span>
+            <span>DURATION: <span className="text-green-dark">{duration}s</span>, </span>
+            <span>CHARACTERS: <span className="text-green-dark">{characters}</span>, </span>
+            <span>WORDS: <span className="text-green-dark">{words}</span>, </span>
+            <span>CPS: <span className="text-green-dark">{cps.toFixed(1)}</span></span>
         </div>
     );
 

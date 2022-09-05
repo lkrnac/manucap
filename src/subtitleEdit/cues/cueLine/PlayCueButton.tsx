@@ -27,7 +27,7 @@ const PlayCueButton = (props: Props): ReactElement => {
                 onClick={(): AppThunk =>
                     dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime))}
             >
-                <i className="fa fa-play" />
+                <i className="fa-duotone fa-play" />
             </button>
             <Tooltip
                 id={buttonId + "-Tooltip"}

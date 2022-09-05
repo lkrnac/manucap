@@ -153,7 +153,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <Tooltip
                                     id="jumpToFirstButtonTooltip"
@@ -170,7 +170,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <Tooltip
                                     id="jumpToLastButtonTooltip"
@@ -188,7 +188,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <Tooltip
                                     id="editCueButtonTooltip"
@@ -206,7 +206,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <Tooltip
                                     id="playbackCueButtonTooltip"
@@ -225,7 +225,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <Tooltip
                                     id="translatedCueButtonTooltip"
@@ -243,7 +243,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <Tooltip
                                     id="cueErrorButtonTooltip"

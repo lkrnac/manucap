@@ -50,7 +50,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fas fa-cut" />
+                    <i className="fa-duotone fa-cut" />
                 </button>
             </div>
         );
@@ -81,7 +81,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fas fa-cut" />
+                    <i className="fa-duotone fa-cut" />
                 </button>
             </div>
         );
@@ -115,7 +115,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fas fa-cut" />
+                    <i className="fa-duotone fa-cut" />
                 </button>
             </div>
         );
